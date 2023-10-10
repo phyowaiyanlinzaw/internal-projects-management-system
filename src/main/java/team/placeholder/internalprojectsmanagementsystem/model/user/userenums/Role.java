@@ -2,5 +2,11 @@ package team.placeholder.internalprojectsmanagementsystem.model.user.userenums;
 
 public enum Role {
 
-    //TODO: Implement Role Enum
+    PMO,
+    SDQC,
+    DEPARTMENT_HEAD,
+    PROJECT_MANAGER,
+    EMPLOYEE,
+    CONTRACT,
+    FOC
 }
