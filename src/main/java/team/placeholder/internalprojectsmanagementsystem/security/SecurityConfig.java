@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //TODO:implement security config
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -29,34 +28,8 @@ public class SecurityConfig {
                                 "/layout/**",
                                 "/login"
                         ).permitAll()
-                        .requestMatchers(
-                                "/dashboard",
-                                "/project/**",
-                                "/department/**",
-                                "/user/list/**",
-                                "/issues/**",
-                                "/report/**"
-                        ).hasAnyRole("PMO","SDQC")
-                        .requestMatchers(
-                                "/dashboard",
-                                "/project/**",
-                                "/user/list/**",
-                                "/issues/**",
-                                "/report/**"
-                        ).hasAnyRole("DEPARTMENT_HEAD")
-                        .requestMatchers(
-                                "/dashboard",
-                                "/project/**",
-                                "/user/list/**",
-                                "/issues/**",
-                                "/report/**"
-                        ).hasAnyRole("PROJECT_MANAGER")
-                        .requestMatchers(
-                                "/dashboard",
-                                "/project/**",
-                                "/user/**",
-                                "/issues/**"
-                        ).hasAnyRole("EMPLOYEE","CONTRACT","FOC")
+                        .requestMatchers("/dashboard").authenticated()
+                        .requestMatchers("/department").hasRole("PMO")
                         .requestMatchers("/").authenticated()
                         .anyRequest().authenticated()
 
