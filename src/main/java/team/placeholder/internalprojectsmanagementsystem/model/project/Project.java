@@ -1,6 +1,11 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
-public class Project {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-    //TODO: Implement Project Entity
+@Entity
+public class Project {
+    @Id
+    private Long id;
+
 }
