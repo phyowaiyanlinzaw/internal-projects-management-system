@@ -12,7 +12,4 @@ public class Department {
 
     @Id
     private Long id;
-
-
-    //TODO: Implement Department Entity
 }
