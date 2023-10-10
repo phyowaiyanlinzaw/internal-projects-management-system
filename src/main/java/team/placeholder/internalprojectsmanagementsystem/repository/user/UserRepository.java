@@ -6,4 +6,6 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     //TODO: Implement User Repository
+    User findByEmail(String email);
+    User findByName(String name);
 }
