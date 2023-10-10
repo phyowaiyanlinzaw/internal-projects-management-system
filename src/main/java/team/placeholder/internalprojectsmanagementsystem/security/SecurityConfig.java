@@ -18,22 +18,25 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(
-                (auth) -> auth
-                        .requestMatchers(
-                                "/resources/**",
-                                "/js/**",
-                                "/css/**",
-                                "/images/**",
-                                "/fragments/**",
-                                "/layout/**",
-                                "/login"
-                        ).permitAll()
-                        .requestMatchers("/dashboard").authenticated()
-                        .requestMatchers("/department").hasRole("PMO")
-                        .requestMatchers("/").authenticated()
-                        .anyRequest().authenticated()
+                        (auth) -> auth
+                                .requestMatchers(
+                                        "/resources/**",
+                                        "/js/**",
+                                        "/css/**",
+                                        "/images/**",
+                                        "/fragments/**",
+                                        "/layout/**",
+                                        "/login"
+                                ).permitAll()
+                                .requestMatchers("/department/list").hasAnyRole("PMO","SDQC")
+                                .requestMatchers("/department/**").hasAnyRole("PMO","SDQC","DEPARTMENT_HEAD")
+                                .requestMatchers("/project/list").hasAnyRole("PMO","SDQC","PROJECT_MANAGER")
+                                .requestMatchers("/project/**").hasAnyRole("PMO","SDQC","EMPLOYEE","FOC","CONTRACT")
+                                .requestMatchers("/task", "/issues", "/profile").authenticated()
+                                .anyRequest().authenticated()
 
-        ).exceptionHandling(
+
+                ).exceptionHandling(
                 (exceptionHandling) -> exceptionHandling
                         .accessDeniedPage("/accessDenied")
         )
