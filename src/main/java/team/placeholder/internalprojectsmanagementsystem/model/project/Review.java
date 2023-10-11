@@ -17,7 +17,7 @@ public class Review implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int internal_review_count;
-    private int eternal_review_count;
+    private int external_review_count;
 
     @ManyToOne
     @JoinColumn(name="project_id")

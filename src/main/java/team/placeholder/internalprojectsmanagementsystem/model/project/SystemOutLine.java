@@ -21,7 +21,7 @@ public class SystemOutLine implements Serializable {
     private boolean coding;
     private boolean testing;
     private boolean deploy;
-    private boolean maintenence;
+    private boolean maintenance;
     private boolean document;
 
     @ManyToOne
