@@ -3,6 +3,7 @@ package team.placeholder.internalprojectsmanagementsystem.model.department;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ class DepartmentTest {
 
     @MockBean
     private Department department;
+
+    @MockBean
+    private Project project;
 
     @BeforeEach
     void setUp() {
@@ -60,6 +64,29 @@ class DepartmentTest {
         users.remove(user1);
         department.setUsers(users);
         assertFalse(department.getUsers().contains(user1));
+    }
+
+    @Test
+    public void testProjects() {
+        List<Project> projects = new ArrayList<>();
+        Project project1 = new Project();
+        Project project2 = new Project();
+
+        // Test adding projects to the department
+        department.setProjects(projects);
+        assertEquals(projects, department.getProjects());
+
+        // Test adding individual projects
+        projects.add(project1);
+        projects.add(project2);
+        department.setProjects(projects);
+        assertTrue(department.getProjects().contains(project1));
+        assertTrue(department.getProjects().contains(project2));
+
+        // Test removing projects
+        projects.remove(project1);
+        department.setProjects(projects);
+        assertFalse(department.getProjects().contains(project1));
     }
 
 }
