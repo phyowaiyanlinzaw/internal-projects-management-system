@@ -2,7 +2,7 @@ package team.placeholder.internalprojectsmanagementsystem.model.project.projecte
 
 import java.util.stream.Stream;
 
-public enum Status {
-    STARTED , IN_PROGRESS, FINISHED;
+public enum Development_phase {
+    A,B;
 
 }
