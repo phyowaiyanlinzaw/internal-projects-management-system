@@ -9,4 +9,5 @@ public class Issue {
     private Long id;
 
     //TODO: Implement Issue Entity
+
 }
