@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
@@ -41,12 +42,24 @@ public class User implements Serializable {
     private Department department;
 
     @ManyToMany
-    @JoinTable(name="",
+    @JoinTable(name="user_project",
                 joinColumns = @JoinColumn(name="user_id"),
                 inverseJoinColumns = @JoinColumn(name="project_id"))
     private Set<Project> projects = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> tasks;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Project> project;
+
+    @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<User> user_upload;
+
+    @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> user_pm;
 
 }

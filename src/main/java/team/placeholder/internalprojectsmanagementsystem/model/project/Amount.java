@@ -24,4 +24,6 @@ public class Amount implements Serializable {
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
+
+    
 }

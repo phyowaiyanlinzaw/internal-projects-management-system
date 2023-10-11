@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
@@ -31,13 +32,6 @@ public class Project implements Serializable {
     private Date end_date;
     private String objective;
 
-    @ManyToOne
-    @JoinColumn(name="client_id")
-    private Client client;
-
-    @ManyToMany
-    private Set<User> users = new HashSet<>();
-
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
@@ -53,8 +47,32 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Amount> amount ;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectStatus> projectStatuses;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Issue> issues;
+
+    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Architecture> architectures;
+
     @ManyToOne
     @JoinColumn(name="department_id")
     private Department department;
+
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    private Client client;
+
+    @ManyToOne
+    @JoinColumn(name="pm_id")
+    private Project project;
+
+    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
+    private Set<User> users = new HashSet<>();
+
+
+
+
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.io.Serializable;
 @Entity
@@ -21,4 +22,9 @@ public class Review implements Serializable {
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
 }

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -32,6 +35,18 @@ public class Issue implements Serializable {
     @ManyToOne
     @JoinColumn(name="issueCategory_id")
     private IssueCategory issueCategory;
+
+    @ManyToOne
+    @JoinColumn(name="project_id")
+    private Project project;
+
+    @ManyToOne
+    @JoinColumn(name="uploader_id")
+    private User user_uploader;
+
+    @ManyToOne
+    @JoinColumn(name="pic_id")
+    private User user_pic;
 
 
 
