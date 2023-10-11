@@ -19,11 +19,10 @@ public class CustomerUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = Role.stream()
+
+        return Role.stream()
                 .map((role) -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());
-
-        return authorities;
     }
 
     @Override
