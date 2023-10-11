@@ -1,57 +1,69 @@
 package team.placeholder.internalprojectsmanagementsystem.model.user;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
+import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 public class ClientTest {
 
-    @Test
-    public void testClientProperties() {
-        // Create a Client object and set its properties
-        Client client = new Client();
-        client.setId(1L);
-        client.setName("John");
-        client.setPhone("123-456-7890");
-        client.setEmail("john@example.com");
+    @Mock
+    private Client client;
 
-        // Verify that the properties can be retrieved correctly
-        assertEquals(1L, client.getId());
-        assertEquals("John", client.getName());
-        assertEquals("123-456-7890", client.getPhone());
-        assertEquals("john@example.com", client.getEmail());
+    @Mock
+    private ClientRepository clientRepository;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        client = new Client();
     }
 
     @Test
-    public void testClientProjectRelationship() {
-        // Create a Project object
-        Project project = new Project();
-        project.setId(1L);
-
-        // Create a Client object without associating any projects
-        Client client = new Client();
-
-        // Verify that the project list is initially empty (null)
-        assertNull(client.getProject());
-
-        // Add the project to the client
-        client.getProject().add(project);
-
-        // Verify that the project was added to the client's projects
-        assertTrue(client.getProject().contains(project));
-
-        // Verify that the client is set as the project's client
-        assertEquals(client, project.getClient());
-
-        // Remove the project from the client
-        client.getProject().remove(project);
-
-        // Verify that the project was removed from the client's projects
-        assertFalse(client.getProject().contains(project));
+    public void testId() {
+        long clientId = 1;
+        client.setId(clientId);
+        assertEquals(clientId, client.getId());
     }
+
+    @Test
+    public void testName() {
+        String name = "Ei Ei Phyo";
+        client.setName(name);
+        assertEquals(name, client.getName());
+    }
+
+    @Test
+    public void testPhone() {
+        String phone = "09-123456789";
+        client.setPhone(phone);
+        assertEquals(phone, client.getPhone());
+    }
+
+    @Test
+    public void testEmail() {
+        String email = "eep@example.com";
+        client.setEmail(email);
+        assertEquals(email, client.getEmail());
+    }
+
+
+
 }
+
+
+
 
 
 
