@@ -1,8 +1,12 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue;
 
-import java.io.Serializable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-public class Issue implements Serializable {
+@Entity
+public class Issue {
+    @Id
+    private Long id;
 
     //TODO: Implement Issue Entity
 }
