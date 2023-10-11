@@ -34,11 +34,22 @@ public class Project implements Serializable {
     @JoinColumn(name="client_id")
     private Client client;
 
-
     @ManyToMany
     private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tasks> tasks;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SystemOutLine> systemOutLines ;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Deliverable> deliverable ;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Amount> amount ;
 
 }
