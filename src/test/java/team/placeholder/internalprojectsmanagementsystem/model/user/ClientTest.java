@@ -2,31 +2,23 @@ package team.placeholder.internalprojectsmanagementsystem.model.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
-import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 
 public class ClientTest {
 
-    @Mock
+    @MockBean
     private Client client;
-
-    @Mock
-    private ClientRepository clientRepository;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         client = new Client();
     }
 
@@ -53,17 +45,25 @@ public class ClientTest {
 
     @Test
     public void testEmail() {
-        String email = "eep@example.com";
+        String email = "eep@gmail.com";
         client.setEmail(email);
         assertEquals(email, client.getEmail());
     }
 
+    @Test
+    public void testProjects() {
+        List<Project> projects = new ArrayList<>();
+        Project project1 = new Project();
+        Project project2 = new Project();
 
+        projects.add(project1);
+        projects.add(project2);
 
+        client.setProject(projects);
+        assertEquals(projects, client.getProject());
+
+        // Test cascade and orphan removal
+        client.setProject(new ArrayList<>());
+        assertTrue(client.getProject().isEmpty());
+    }
 }
-
-
-
-
-
-
