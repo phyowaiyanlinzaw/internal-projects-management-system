@@ -38,7 +38,7 @@ public class User {
     private Department department;
 
     @ManyToMany
-    @JoinTable(name="",
+    @JoinTable(name="user_project",
                 joinColumns = @JoinColumn(name="user_id"),
                 inverseJoinColumns = @JoinColumn(name="project_id"))
 
