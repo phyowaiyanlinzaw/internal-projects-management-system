@@ -14,53 +14,29 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //TODO:implement security config
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(
-                (auth) -> auth
-                        .requestMatchers(
-                                "/resources/**",
-                                "/js/**",
-                                "/css/**",
-                                "/images/**",
-                                "/fragments/**",
-                                "/layout/**",
-                                "/login"
-                        ).permitAll()
-                        .requestMatchers(
-                                "/dashboard",
-                                "/project/**",
-                                "/department/**",
-                                "/user/list/**",
-                                "/issues/**",
-                                "/report/**"
-                        ).hasAnyRole("PMO","SDQC")
-                        .requestMatchers(
-                                "/dashboard",
-                                "/project/**",
-                                "/user/list/**",
-                                "/issues/**",
-                                "/report/**"
-                        ).hasAnyRole("DEPARTMENT_HEAD")
-                        .requestMatchers(
-                                "/dashboard",
-                                "/project/**",
-                                "/user/list/**",
-                                "/issues/**",
-                                "/report/**"
-                        ).hasAnyRole("PROJECT_MANAGER")
-                        .requestMatchers(
-                                "/dashboard",
-                                "/project/**",
-                                "/user/**",
-                                "/issues/**"
-                        ).hasAnyRole("EMPLOYEE","CONTRACT","FOC")
-                        .requestMatchers("/").authenticated()
-                        .anyRequest().authenticated()
+                        (auth) -> auth
+                                .requestMatchers(
+                                        "/resources/**",
+                                        "/js/**",
+                                        "/css/**",
+                                        "/images/**",
+                                        "/fragments/**",
+                                        "/layout/**",
+                                        "/login"
+                                ).permitAll()
+                                .requestMatchers("/department/list").hasAnyRole("PMO","SDQC")
+                                .requestMatchers("/department/**").hasAnyRole("PMO","SDQC","DEPARTMENT_HEAD")
+                                .requestMatchers("/project/list").hasAnyRole("PMO","SDQC","PROJECT_MANAGER")
+                                .requestMatchers("/project/**").hasAnyRole("PMO","SDQC","EMPLOYEE","FOC","CONTRACT")
+                                .requestMatchers("/task", "/issues", "/profile").authenticated()
+                                .anyRequest().authenticated()
 
-        ).exceptionHandling(
+
+                ).exceptionHandling(
                 (exceptionHandling) -> exceptionHandling
                         .accessDeniedPage("/accessDenied")
         )

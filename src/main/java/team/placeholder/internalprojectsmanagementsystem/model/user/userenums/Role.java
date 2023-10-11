@@ -1,5 +1,9 @@
 package team.placeholder.internalprojectsmanagementsystem.model.user.userenums;
 
+import io.micrometer.observation.ObservationFilter;
+
+import java.util.stream.Stream;
+
 public enum Role {
 
     PMO,
@@ -8,5 +12,9 @@ public enum Role {
     PROJECT_MANAGER,
     EMPLOYEE,
     CONTRACT,
-    FOC
+    FOC;
+
+    public static Stream<Role> stream() {
+        return Stream.of(Role.values());
+    }
 }
