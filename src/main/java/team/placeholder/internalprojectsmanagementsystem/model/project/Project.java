@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
@@ -51,5 +52,9 @@ public class Project implements Serializable {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Amount> amount ;
+
+    @ManyToOne
+    @JoinColumn(name="department_id")
+    private Department department;
 
 }
