@@ -1,6 +1,8 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue;
 
-public class Issue {
+import java.io.Serializable;
+
+public class Issue implements Serializable {
 
     //TODO: Implement Issue Entity
 }
