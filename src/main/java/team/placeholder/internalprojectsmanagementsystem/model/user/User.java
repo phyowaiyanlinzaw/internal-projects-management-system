@@ -2,13 +2,17 @@ package team.placeholder.internalprojectsmanagementsystem.model.user;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@Table(name="user")
 public class User {
 
     @Id
@@ -26,6 +30,7 @@ public class User {
     private Role role;
 
     @ManyToOne
+    @JoinColumn(name = "")
     private Department department;
 
 }

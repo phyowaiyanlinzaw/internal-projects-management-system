@@ -1,4 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
-public class Architecture {
+import java.io.Serializable;
+
+public class Architecture implements Serializable {
 }
