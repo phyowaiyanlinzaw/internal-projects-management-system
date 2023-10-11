@@ -5,9 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="project")
@@ -16,9 +20,11 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Project implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String name;
-    private String backgroung;
+    private String background;
     private int duration;
     private Date start_date;
     private Date end_date;
@@ -27,5 +33,12 @@ public class Project implements Serializable {
     @ManyToOne
     @JoinColumn(name="client_id")
     private Client client;
+
+
+    @ManyToMany
+    private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
 
 }
