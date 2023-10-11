@@ -72,10 +72,12 @@ class SecurityConfigTest {
 
     @BeforeEach
     void setUp() {
+
+        String  password = passwordEncoder.encode("user123");
         // Define a mock UserDetails object
         UserDetails userDetails = User.builder()
                 .username("user")
-                .password("user123")
+                .password(password)
                 .roles("PMO")
                 .build();
 
