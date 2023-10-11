@@ -1,6 +1,11 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project.projectenums;
 
-public enum Status {
+import java.util.stream.Stream;
 
-    //TODO: Implement Status Enum
+public enum Status {
+    STARTED , IN_PROGRESS, FINISHED;
+
+    public static Stream<Status> stream(){
+        return Stream.of(Status.values());
+    }
 }

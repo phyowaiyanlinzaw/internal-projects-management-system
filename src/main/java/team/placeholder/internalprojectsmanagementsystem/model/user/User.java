@@ -6,7 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,7 +34,14 @@ public class User {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "")
+    @JoinColumn(name = "department_id")
     private Department department;
+
+    @ManyToMany
+    @JoinTable(name="",
+                joinColumns = @JoinColumn(name="user_id"),
+                inverseJoinColumns = @JoinColumn(name="project_id"))
+
+    private Set<Project> projects = new HashSet<>();
 
 }

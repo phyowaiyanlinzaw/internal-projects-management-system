@@ -4,23 +4,21 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Status;
 
 import java.io.Serializable;
 @Entity
-@Table(name="architecture")
+@Table(name="review")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Architecture implements Serializable {
+public class Review implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private Status tech_name;
+    private int internal_review_count;
+    private int eternal_review_count;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name="project_id")
     private Project project;
 }
