@@ -9,23 +9,5 @@ import team.placeholder.internalprojectsmanagementsystem.service.user.UserServic
 @RequestMapping("/api/user/")
 public class UserController {
 
-    private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity getUserById(@PathVariable Long id) {
-        List<UserDto> users = userService.getUserById(id);
-        if(users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(users);
-    }
-
-    @PostMapping("create")
-    public String create (@RequestBody String user)
-
 
 }
