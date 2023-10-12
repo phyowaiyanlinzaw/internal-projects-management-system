@@ -16,6 +16,8 @@ import java.util.Set;
 @Setter
 public class Notification implements Serializable {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -36,5 +38,7 @@ public class Notification implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 
 }

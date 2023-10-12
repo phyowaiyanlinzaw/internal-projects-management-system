@@ -43,6 +43,18 @@ public class Tasks implements Serializable {
             inverseJoinColumns = @JoinColumn(name="notification_id"))
     private Set<Notification> notifications = new HashSet<>();
 
+    // Add a method to add a notification
+    public void addNotification(Notification notification) {
+        notifications.add(notification);
+        notification.getTasks().add(this);
+    }
+
+    // Add a method to remove a notification
+    public void removeNotification(Notification notification) {
+        notifications.remove(notification);
+        notification.getTasks().remove(this);
+    }
+
     // In your Tasks class
     @Override
     public boolean equals(Object o) {
