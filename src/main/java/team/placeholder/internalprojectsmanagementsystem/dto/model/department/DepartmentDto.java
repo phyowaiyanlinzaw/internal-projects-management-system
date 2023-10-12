@@ -1,6 +1,11 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.department;
 
-public class DepartmentDto {
+import lombok.Getter;
+import lombok.Setter;
 
-    //TODO: Implement Department DTO
+@Getter
+@Setter
+public class DepartmentDto {
+    private long id;
+    private String name;
 }

@@ -1,6 +1,13 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.user;
 
-public class UserDto {
+import lombok.Getter;
+import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
-    //TODO: Implement User DTO
+@Getter
+@Setter
+public class UserDto {
+    private long id;
+    private String name,email,password,confirmPassword;
+    private Role role;
 }
