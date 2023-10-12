@@ -4,27 +4,27 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
+import java.io.Serial;
 import java.io.Serializable;
 @Entity
-@Table(name="review")
+@Table(name="system_outline")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Review implements Serializable {
+public class SystemOutLine implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private int internal_review_count;
-    private int external_review_count;
+    private long id;
+    private boolean analysis;
+    private boolean sys_design;
+    private boolean coding;
+    private boolean testing;
+    private boolean deploy;
+    private boolean maintenance;
+    private boolean document;
 
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
 }

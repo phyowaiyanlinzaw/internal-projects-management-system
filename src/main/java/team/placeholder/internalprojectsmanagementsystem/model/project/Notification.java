@@ -7,24 +7,22 @@ import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-@Table(name="review")
+@Table(name="notification")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Review implements Serializable {
+public class Notification implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private int internal_review_count;
-    private int external_review_count;
+    private long id;
+    private String description;
 
-    @ManyToOne
-    @JoinColumn(name="project_id")
-    private Project project;
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+    @ManyToMany(mappedBy = "notifications",cascade = CascadeType.ALL)
+    private Set<Tasks> tasks = new HashSet<>();
 
 }
