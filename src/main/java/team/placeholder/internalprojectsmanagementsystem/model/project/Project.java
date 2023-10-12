@@ -68,7 +68,7 @@ public class Project implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="pm_id")
-    private Project project;
+    private User user;
 
     @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
     private Set<User> users = new HashSet<>();

@@ -22,4 +22,16 @@ class StatusTest {
         assertEquals(Status.FINISHED, values[2]);
     }
 
+    @Test
+    public void testGetPhaseName() {
+        // Arrange
+        Status enumInstance = Status.FINISHED; // Replace with your actual enum value
+
+        // Act
+        String phaseName = enumInstance.getStatus_Name();
+
+        // Assert
+        assertEquals("FINISHED", phaseName); // Verify that the method returns the correct name
+    }
+
 }
