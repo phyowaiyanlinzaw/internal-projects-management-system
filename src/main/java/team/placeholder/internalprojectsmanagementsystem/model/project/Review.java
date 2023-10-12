@@ -7,6 +7,8 @@ import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.io.Serializable;
+import java.util.Objects;
+
 @Entity
 @Table(name="review")
 @NoArgsConstructor
@@ -26,5 +28,18 @@ public class Review implements Serializable {
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Review other = (Review) o;
+        return id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }

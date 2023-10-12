@@ -5,7 +5,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
-
 import java.sql.Timestamp;
 import java.sql.Time;
 import java.util.HashSet;
@@ -25,6 +24,9 @@ public class TasksTest {
     @Mock
     private Set<Notification> notifications;
 
+    @Mock
+    private long currentTimeStamp = (123);
+
 
 
     @BeforeEach
@@ -39,8 +41,9 @@ public class TasksTest {
         String title = "Sample Task";
         String description = "This is a sample task description";
         String status = "In Progress";
-        Timestamp startTime = new Timestamp(2023-10-12-08:00:00);
-        Timestamp endTime = new Timestamp(2023-10-12-17:00:00);
+
+        Timestamp startTime = new Timestamp(currentTimeStamp);
+        Timestamp endTime = new Timestamp(currentTimeStamp);
         Time expectedMM = Time.valueOf("08:30:00");
         Time actualMM = Time.valueOf("06:45:00");
 
@@ -84,13 +87,13 @@ public class TasksTest {
 
     @Test
     public void testStartTime() {
-        Timestamp startTime = new Timestamp(System.currentTimeMillis());
+        Timestamp startTime = new Timestamp(currentTimeStamp);
         assertEquals(startTime, task.getStart_time());
     }
 
     @Test
     public void testEndTime() {
-        Timestamp endTime = new Timestamp(System.currentTimeMillis());
+        Timestamp endTime = new Timestamp(currentTimeStamp);
         assertEquals(endTime, task.getEnd_time());
     }
 
