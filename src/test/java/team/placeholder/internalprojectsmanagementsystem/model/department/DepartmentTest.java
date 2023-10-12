@@ -1,6 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.model.department;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
@@ -11,82 +10,96 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DepartmentTest {
+public class DepartmentTest {
 
     @MockBean
     private Department department;
 
-    @MockBean
-    private Project project;
-
-    @BeforeEach
-    void setUp() {
-        department = new Department();
-    }
-
     @Test
-    public void testConstructor() {
+    public void testDepartmentConstructor() {
+        Department department = new Department();
         assertNotNull(department);
     }
 
     @Test
-    public void testId() {
-        long departmentId = 1;
-        department.setId(departmentId);
-        assertEquals(departmentId, department.getId());
+    public void testDepartmentGettersAndSetters() {
+        Department department = new Department();
+        department.setId(1L);
+        department.setName("Department 1");
+
+        assertEquals(1L, department.getId());
+        assertEquals("Department 1", department.getName());
     }
 
     @Test
-    public void testName() {
-        String name = "Department 1";
-        department.setName(name);
-        assertEquals(name, department.getName());
-    }
-
-    @Test
-    public void testUsers() {
-        List<User> users = new ArrayList<>();
+    public void testDepartmentUsers() {
+        Department department = new Department();
         User user1 = new User();
         User user2 = new User();
 
-        // Test adding users to the department
-        department.setUsers(users);
-        assertEquals(users, department.getUsers());
-
-        // Test adding individual users
+        List<User> users = new ArrayList<>();
         users.add(user1);
         users.add(user2);
-        department.setUsers(users);
-        assertTrue(department.getUsers().contains(user1));
-        assertTrue(department.getUsers().contains(user2));
 
-        // Test removing users
-        users.remove(user1);
         department.setUsers(users);
-        assertFalse(department.getUsers().contains(user1));
+
+        assertEquals(users, department.getUsers());
     }
 
     @Test
-    public void testProjects() {
-        List<Project> projects = new ArrayList<>();
+    public void testDepartmentProjects() {
+        Department department = new Department();
         Project project1 = new Project();
         Project project2 = new Project();
 
-        // Test adding projects to the department
-        department.setProjects(projects);
-        assertEquals(projects, department.getProjects());
-
-        // Test adding individual projects
+        List<Project> projects = new ArrayList<>();
         projects.add(project1);
         projects.add(project2);
-        department.setProjects(projects);
-        assertTrue(department.getProjects().contains(project1));
-        assertTrue(department.getProjects().contains(project2));
 
-        // Test removing projects
-        projects.remove(project1);
         department.setProjects(projects);
-        assertFalse(department.getProjects().contains(project1));
+
+        assertEquals(projects, department.getProjects());
     }
 
+    @Test
+    public void testEquals() {
+        // Create two department instances with the same ID
+        Department department1 = new Department();
+        department1.setId(1L);
+
+        Department department2 = new Department();
+        department2.setId(1L);
+
+        // Verify that they are equal
+        assertTrue(department1.equals(department2));
+        assertTrue(department2.equals(department1));
+    }
+
+    @Test
+    public void testNotEquals() {
+        // Create two department instances with different IDs
+        Department department1 = new Department();
+        department1.setId(1L);
+
+        Department department2 = new Department();
+        department2.setId(2L);
+
+        // Verify that they are not equal
+        assertFalse(department1.equals(department2));
+        assertFalse(department2.equals(department1));
+    }
+
+    @Test
+    public void testHashCode() {
+        // Create a department instance with a specific ID
+        Department department = new Department();
+        department.setId(1L);
+
+        // Create another department instance with the same ID
+        Department sameIdDepartment = new Department();
+        sameIdDepartment.setId(1L);
+
+        // Verify that both instances have the same hash code
+        assertEquals(department.hashCode(), sameIdDepartment.hashCode());
+    }
 }

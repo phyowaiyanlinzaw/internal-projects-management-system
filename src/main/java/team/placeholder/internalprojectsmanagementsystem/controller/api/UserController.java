@@ -1,12 +1,13 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
 @RestController
 @RequestMapping("/api/user/")
 public class UserController {
+
 
 }
