@@ -7,7 +7,7 @@ import java.sql.Date;
 
 @Getter
 @Setter
-public class DeliveraleDto {
+public class DeliverableDto {
     private long id;
     private String description;
     private String name;
