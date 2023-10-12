@@ -5,9 +5,11 @@ import jdk.jfr.Enabled;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name="issue_category")
@@ -23,4 +25,17 @@ public class IssueCategory implements Serializable {
 
     @OneToMany(mappedBy = "issueCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Issue> issues;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IssueCategory other = (IssueCategory) o;
+        return id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
