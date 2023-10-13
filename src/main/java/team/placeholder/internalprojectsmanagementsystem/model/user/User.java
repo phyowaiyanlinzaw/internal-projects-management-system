@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Deliverable;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
@@ -57,10 +58,10 @@ public class User implements Serializable {
     private List<Project> project;
 
     @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<User> user_upload;
+    private List<Issue> uploader;
 
     @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> user_pm;
+    private List<Issue> pm;
 
     @Override
     public boolean equals(Object o) {
