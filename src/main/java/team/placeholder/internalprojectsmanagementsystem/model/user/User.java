@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Deliverable;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
@@ -43,8 +44,8 @@ public class User implements Serializable {
 
     @ManyToMany
     @JoinTable(name="user_project",
-                joinColumns = @JoinColumn(name="user_id"),
-                inverseJoinColumns = @JoinColumn(name="project_id"))
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="project_id"))
     private Set<Project> projects = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,10 +58,10 @@ public class User implements Serializable {
     private List<Project> project;
 
     @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<User> user_upload;
+    private List<Issue> uploader;
 
     @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> user_pm;
+    private List<Issue> pm;
 
     @Override
     public boolean equals(Object o) {
@@ -74,5 +75,6 @@ public class User implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 
 }
