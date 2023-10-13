@@ -8,7 +8,7 @@ import java.util.List;
 public interface IssueRepository extends JpaRepository<Issue, Long> {
 
     //TODO: Implement Issue Repository
-    List<Issue> selectAllIssue();
+    List<Issue> findAll();
 
     Issue findByTitle(String title);
     Issue findById(long id);

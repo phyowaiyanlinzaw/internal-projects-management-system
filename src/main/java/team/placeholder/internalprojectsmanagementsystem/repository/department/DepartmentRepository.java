@@ -12,7 +12,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     Department findByName(String name);
 
-    List<Department> selectAllDepartment();
+    List<Department> findAll();
 
 
 }

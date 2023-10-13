@@ -57,22 +57,7 @@ public class DepartmentRepositoryTest {
         assertEquals(name, result.getName());
     }
 
-    @Test
-    public void testSelectAllDepartment() {
-        // Arrange
-        List<Department> departments = new ArrayList<>();
-        departments.add(new Department());
-        departments.add(new Department());
 
-        // Mock the behavior of departmentRepository.selectAllDepartment
-        when(departmentRepository.selectAllDepartment()).thenReturn(departments);
-
-        // Act
-        List<Department> result = departmentRepository.selectAllDepartment();
-
-        // Assert
-        assertEquals(departments.size(), result.size());
-    }
 
 
 }

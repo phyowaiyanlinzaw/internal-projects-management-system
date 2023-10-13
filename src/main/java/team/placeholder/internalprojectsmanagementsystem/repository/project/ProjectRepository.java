@@ -9,7 +9,7 @@ import java.util.List;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     //TODO: Implement Project Repository
-    List<Project> selectAllProject();
+    List<Project> findAll();
     Project findById(long id);
     Project findByName(String name);
 
