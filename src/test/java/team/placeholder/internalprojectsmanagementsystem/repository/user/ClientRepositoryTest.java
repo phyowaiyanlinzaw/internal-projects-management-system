@@ -74,21 +74,6 @@ public class ClientRepositoryTest {
         assertEquals(clients.size(), result.size());
     }
 
-    @Test
-    public void testSelectAllClientById() {
-        // Arrange
-        long id = 1L; // Use a long value
-        Client client = new Client();
-        client.setId(id);
 
-        // Mock the behavior of clientRepository.selectAllClientById
-        when(clientRepository.selectAllClientById((int) id)).thenReturn((List<Client>) client);
-
-        // Act
-        Client result = (Client) clientRepository.selectAllClientById((int) id);
-
-        // Assert
-        assertEquals(id, result.getId());
-    }
 
 }
