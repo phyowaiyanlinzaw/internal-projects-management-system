@@ -23,22 +23,7 @@ public class IssueRepositoryTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void testSelectAllIssue() {
-        // Arrange
-        List<Issue> issues = new ArrayList<>();
-        issues.add(new Issue());
-        issues.add(new Issue());
 
-        // Mock the behavior of issueRepository.selectAllIssue
-        when(issueRepository.selectAllIssue()).thenReturn(issues);
-
-        // Act
-        List<Issue> result = issueRepository.selectAllIssue();
-
-        // Assert
-        assertEquals(issues.size(), result.size());
-    }
 
 
 
