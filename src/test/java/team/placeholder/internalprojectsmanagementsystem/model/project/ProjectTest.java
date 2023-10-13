@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.IssueTest;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Development_phase;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;

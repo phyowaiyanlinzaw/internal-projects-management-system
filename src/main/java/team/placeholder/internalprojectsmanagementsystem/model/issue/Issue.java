@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
-
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;

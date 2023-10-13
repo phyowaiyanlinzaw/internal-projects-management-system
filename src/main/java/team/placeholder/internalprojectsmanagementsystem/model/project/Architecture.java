@@ -16,8 +16,6 @@ public class Architecture implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private String tech_name;
 
     @ManyToOne
