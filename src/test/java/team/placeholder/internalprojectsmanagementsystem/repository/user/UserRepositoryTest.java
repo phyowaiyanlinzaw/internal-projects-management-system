@@ -8,6 +8,10 @@ import org.mockito.MockitoAnnotations;
 
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -56,7 +60,57 @@ public class UserRepositoryTest {
         assertEquals(name, result.getName());
     }
 
+    @Test
+    public void testSelectAllUser() {
+        // Arrange
+        List<User> users = new ArrayList<>();
+        users.add(new User());
+        users.add(new User());
 
+        // Mock the behavior of userRepository.selectAllUser
+        when(userRepository.selectAllUser()).thenReturn(users);
+
+        // Act
+        List<User> result = userRepository.selectAllUser();
+
+        // Assert
+        assertEquals(users.size(), result.size());
+    }
+
+    @Test
+    public void testFindById() {
+        // Arrange
+        long id = 1L;
+        User user = new User();
+        user.setId(id);
+
+        // Mock the behavior of userRepository.findById
+        when(userRepository.findById(id)).thenReturn(user);
+
+        // Act
+        User result = userRepository.findById(id);
+
+        // Assert
+        assertEquals(id, result.getId());
+    }
+
+
+    @Test
+    public void testSelectAllUserById() {
+        // Arrange
+        long id = 1L; // Use a long value
+        User user = new User();
+        user.setId(id);
+
+        // Mock the behavior of userRepository.selectAllUserById
+        when(userRepository.selectAllUserById((int) id)).thenReturn(user);
+
+        // Act
+        User result = userRepository.selectAllUserById((int) id);
+
+        // Assert
+        assertEquals(id, result.getId());
+    }
 
 
 }
