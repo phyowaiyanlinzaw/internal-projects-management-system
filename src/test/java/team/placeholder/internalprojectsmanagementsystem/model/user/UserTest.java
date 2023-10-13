@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
@@ -18,7 +19,7 @@ public class UserTest {
 
     @Mock
     private Department department;
-
+    @Mock
     private User user;
 
     @BeforeEach
@@ -41,17 +42,17 @@ public class UserTest {
         Set<Project> projects = new HashSet<>();
         // Initialize projects with mock data
 
-        List<User> userUpload = new ArrayList<>();
+        List<Issue> uploader = new ArrayList<>();
         // Initialize user upload list with mock data
 
-        List<User> userPM = new ArrayList<>();
+        List<Issue> pm = new ArrayList<>();
         // Initialize user PM list with mock data
 
         user.setTasks(tasks);
         user.setReviews(reviews);
         user.setProjects(projects);
-        user.setUser_upload(userUpload);
-        user.setUser_pm(userPM);
+        user.setUploader(uploader);
+        user.setPm(pm);
     }
 
     @Test
@@ -112,23 +113,23 @@ public class UserTest {
     @Test
     public void testUserUploadList() {
         // Test the userUpload list
-        List<User> userUpload = new ArrayList<>();
+        List<Issue> uploader = new ArrayList<>();
         // Initialize userUpload with mock data
 
-        user.setUser_upload(userUpload);
+        user.setUploader(uploader);
 
-        assertEquals(userUpload, user.getUser_upload());
+        assertEquals(uploader, user.getUploader());
     }
 
     @Test
     public void testUserPMList() {
         // Test the userPM list
-        List<User> userPM = new ArrayList<>();
+        List<Issue> pm = new ArrayList<>();
         // Initialize userPM with mock data
 
-        user.setUser_pm(userPM);
+        user.setPm(pm);
 
-        assertEquals(userPM, user.getUser_pm());
+        assertEquals(pm, user.getPm());
     }
 
     @Test
