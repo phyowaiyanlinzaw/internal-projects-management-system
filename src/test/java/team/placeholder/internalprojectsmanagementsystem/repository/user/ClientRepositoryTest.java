@@ -1,9 +1,94 @@
 package team.placeholder.internalprojectsmanagementsystem.repository.user;
 
-import org.glassfish.jaxb.core.v2.TODO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 
-class ClientRepositoryTest {
-    //TODO: Implement User Testing
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class ClientRepositoryTest {
+
+    @Mock
+    private ClientRepository clientRepository;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testFindById() {
+        // Arrange
+        long id = 1L;
+        Client client = new Client();
+        client.setId(id);
+
+        // Mock the behavior of clientRepository.findById
+        when(clientRepository.findById(id)).thenReturn(client);
+
+        // Act
+        Client result = clientRepository.findById(id);
+
+        // Assert
+        assertEquals(id, result.getId());
+    }
+
+    @Test
+    public void testFindByName() {
+        // Arrange
+        String name = "TestClient";
+        Client client = new Client();
+        client.setName(name);
+
+        // Mock the behavior of clientRepository.findByName
+        when(clientRepository.findByName(name)).thenReturn(client);
+
+        // Act
+        Client result = clientRepository.findByName(name);
+
+        // Assert
+        assertEquals(name, result.getName());
+    }
+
+    @Test
+    public void testSelectAllUser() {
+        // Arrange
+        List<Client> clients = new ArrayList<>();
+        clients.add(new Client());
+        clients.add(new Client());
+
+        // Mock the behavior of clientRepository.selectAllUser
+        when(clientRepository.selectAllUser()).thenReturn(clients);
+
+        // Act
+        List<Client> result = clientRepository.selectAllUser();
+
+        // Assert
+        assertEquals(clients.size(), result.size());
+    }
+
+    @Test
+    public void testSelectAllClientById() {
+        // Arrange
+        long id = 1L; // Use a long value
+        Client client = new Client();
+        client.setId(id);
+
+        // Mock the behavior of clientRepository.selectAllClientById
+        when(clientRepository.selectAllClientById((int) id)).thenReturn((List<Client>) client);
+
+        // Act
+        Client result = (Client) clientRepository.selectAllClientById((int) id);
+
+        // Assert
+        assertEquals(id, result.getId());
+    }
+
 }
