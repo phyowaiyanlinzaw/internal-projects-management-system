@@ -10,7 +10,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Ro
 @Setter
 public class UserDto {
     private long id;
-    private String name,email,password,confirmPassword;
+    private String name,email,password;
     private Role role;
     private Department department;
 
