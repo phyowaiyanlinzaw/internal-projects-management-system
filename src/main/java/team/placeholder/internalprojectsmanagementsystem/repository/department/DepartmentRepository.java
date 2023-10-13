@@ -11,5 +11,5 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     Department findById(long id);
     Department findByName(String name);
     List<Department> selectAllDepartment();
-    List<Department> selectAllDepartmentById(int id);
+    List<Department> selectAllDepartmentById(long id);
 }

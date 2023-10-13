@@ -9,7 +9,7 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
 
     //TODO: Implement Issue Repository
     List<Issue> selectAllIssue();
-    List<Issue> selectAlIssueById(int id);
+    List<Issue> selectAlIssueById(long id);
     Issue findByTitle(String title);
     Issue findById(long id);
 }

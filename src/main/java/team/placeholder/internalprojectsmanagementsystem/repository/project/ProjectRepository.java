@@ -13,6 +13,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Project findById(long id);
     Project findByName(String name);
 
-    List<Project> selectAllProjectById(int id);
+    List<Project> selectAllProjectById(long id);
 
 }
