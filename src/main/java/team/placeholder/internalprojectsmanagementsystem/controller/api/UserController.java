@@ -25,5 +25,19 @@ public class UserController {
 
     }
 
+    @PostMapping("create")
+    public ResponseEntity<String> save(User user){
+        userRepository.save(user);
+        return ResponseEntity.ok("OK");
+    }
+
+//    @GetMapping("/list/{id}")
+//    public ResponseEntity<User>> getUsersById(@PathVariable long id) {
+//        List<User> user = (List<User>) userRepository.findById(id);
+//
+//        return ResponseEntity.ok(user);
+//
+//    }
+
 
 }
