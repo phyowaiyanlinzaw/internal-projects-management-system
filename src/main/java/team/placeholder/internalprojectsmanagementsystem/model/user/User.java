@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Deliverable;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
