@@ -2,6 +2,7 @@ package team.placeholder.internalprojectsmanagementsystem.service.user;
 
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface UserService {
 
     UserDto getUserByEmail(String email);
 
-    List<UserDto> getAllUsers();
+    List<User> getAllUsers();
 
     UserDto updateProfile(UserDto userDto);
 

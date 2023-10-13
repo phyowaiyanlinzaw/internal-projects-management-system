@@ -2,7 +2,6 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -16,9 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
+    private final UserRepository userRepository;
 
     @Override
     public UserDto save(UserDto userDto) {
+//        User user = new User();
+//        user.set
         return null;
     }
 
@@ -33,8 +35,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return null;
+    public List<User> getAllUsers() {
+
+        return userRepository.findAll();
+
     }
 
     @Override
