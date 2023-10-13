@@ -9,7 +9,10 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     //TODO: Implement Department Repository
     Department findById(long id);
+
     Department findByName(String name);
-    List<Department> selectAllDepartment();
-    List<Department> selectAllDepartmentById(long id);
+
+    List<Department> findAll();
+
+
 }

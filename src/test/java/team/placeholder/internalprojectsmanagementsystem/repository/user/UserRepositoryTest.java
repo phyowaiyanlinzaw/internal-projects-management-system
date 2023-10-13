@@ -60,22 +60,7 @@ public class UserRepositoryTest {
         assertEquals(name, result.getName());
     }
 
-    @Test
-    public void testSelectAllUser() {
-        // Arrange
-        List<User> users = new ArrayList<>();
-        users.add(new User());
-        users.add(new User());
 
-        // Mock the behavior of userRepository.selectAllUser
-        when(userRepository.selectAllUser()).thenReturn(users);
-
-        // Act
-        List<User> result = userRepository.selectAllUser();
-
-        // Assert
-        assertEquals(users.size(), result.size());
-    }
 
     @Test
     public void testFindById() {
@@ -95,22 +80,6 @@ public class UserRepositoryTest {
     }
 
 
-    @Test
-    public void testSelectAllUserById() {
-        // Arrange
-        long id = 1L; // Use a long value
-        User user = new User();
-        user.setId(id);
-
-        // Mock the behavior of userRepository.selectAllUserById
-        when(userRepository.selectAllUserById((int) id)).thenReturn(user);
-
-        // Act
-        User result = userRepository.selectAllUserById((int) id);
-
-        // Assert
-        assertEquals(id, result.getId());
-    }
 
 
 }

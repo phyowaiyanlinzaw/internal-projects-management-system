@@ -44,8 +44,8 @@ public class User implements Serializable {
 
     @ManyToMany
     @JoinTable(name="user_project",
-                joinColumns = @JoinColumn(name="user_id"),
-                inverseJoinColumns = @JoinColumn(name="project_id"))
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="project_id"))
     private Set<Project> projects = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -75,5 +75,6 @@ public class User implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 
 }
