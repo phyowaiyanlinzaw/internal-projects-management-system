@@ -79,4 +79,7 @@ public class User implements Serializable {
     }
 
 
+    public User orElse(Object o) {
+        return null;
+    }
 }

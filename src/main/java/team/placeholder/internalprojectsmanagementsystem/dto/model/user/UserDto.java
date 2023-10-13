@@ -15,14 +15,5 @@ public class UserDto {
     private Department department;
 
 
-    public static UserDto fromUser(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setRole(user.getRole());
-        userDto.setDepartment(user.getDepartment());
-        return userDto;
-    }
+
 }

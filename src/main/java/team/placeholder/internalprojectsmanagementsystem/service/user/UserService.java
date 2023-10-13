@@ -10,11 +10,11 @@ public interface UserService {
     //TODO: Implement User Service
     UserDto save(UserDto userDto);
 
-    UserDto getUserById(int id);
+    UserDto getUserById(long id);
 
     UserDto getUserByEmail(String email);
 
-    List<User> getAllUsers();
+    List<UserDto> getAllUsers();
 
     UserDto updateProfile(UserDto userDto);
 

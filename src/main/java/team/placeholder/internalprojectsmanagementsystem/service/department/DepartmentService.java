@@ -1,13 +1,13 @@
 package team.placeholder.internalprojectsmanagementsystem.service.department;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 
 import java.util.List;
 
 public interface DepartmentService {
     //TODO: Implement Department Service
-
-    DepartmentDto save(DepartmentDto departmentDto);
+    DepartmentDto save(Department departmentDto);
 
     List<DepartmentDto> getAllDepartments();
 
@@ -20,9 +20,5 @@ public interface DepartmentService {
     void deleteDepartment(DepartmentDto departmentDto);
 
 
-
-
-
-
-
+    List<Department> findAll();
 }
