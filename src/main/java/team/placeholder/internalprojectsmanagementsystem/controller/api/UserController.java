@@ -7,33 +7,37 @@ import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user/")
 public class UserController {
 
-   // private final UserService userService;
-
 
     private final UserRepository userRepository;
 
+    private final UserServiceImpl userService;
+
 
     @GetMapping("allUsers")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return new ResponseEntity<> (users, HttpStatus.OK);
-
+        List<UserDto> userDtos = users.stream()
+                .map(UserDto::fromUser)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(userDtos, HttpStatus.OK);
     }
 
-//    @PostMapping("create")
-//    public ResponseEntity<String> save(@RequestBody UserDto user) {
-//        userRepository.save(user);
-//        return ResponseEntity.ok("User saved successfully");
-//    }
+    @PostMapping("/save")
+    public ResponseEntity<String> save(@RequestBody UserDto userDto) {
+        userService.save(userDto);
+        return ResponseEntity.ok("User saved successfully");
+    }
 
 
 //    @GetMapping("/list/{id}")

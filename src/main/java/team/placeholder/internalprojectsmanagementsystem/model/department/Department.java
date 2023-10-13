@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.department;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class Department {
     private Long id;
     private String name;
 
+
+    @JsonBackReference
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users;
 
