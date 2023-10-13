@@ -95,22 +95,6 @@ public class UserRepositoryTest {
     }
 
 
-    @Test
-    public void testSelectAllUserById() {
-        // Arrange
-        long id = 1L; // Use a long value
-        User user = new User();
-        user.setId(id);
-
-        // Mock the behavior of userRepository.selectAllUserById
-        when(userRepository.selectAllUserById((int) id)).thenReturn(user);
-
-        // Act
-        User result = userRepository.selectAllUserById((int) id);
-
-        // Assert
-        assertEquals(id, result.getId());
-    }
 
 
 }
