@@ -8,21 +8,21 @@ public class ViewController {
 
     @GetMapping("/login")
     public String loginFormView(){
-        return "index";
+        return "login";
     }
 
     @GetMapping("/profile")
     public String profile(){
-        return "index"; //TODO:Change to Profile Actual View
+        return "login"; //TODO:Change to Profile Actual View
     }
 
     @GetMapping("/issues")
     public String issues(){
-        return "index";//TODO:Change to Issues View
+        return "login";//TODO:Change to Issues View
     }
 
     @GetMapping("/task")
     public String task(){
-        return "index";//TODO:Change to Task View
+        return "login";//TODO:Change to Task View
     }
 }
