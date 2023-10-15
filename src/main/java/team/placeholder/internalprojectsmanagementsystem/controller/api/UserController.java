@@ -26,6 +26,7 @@ public class UserController {
 
     }
 
+
     @PostMapping("create")
     public ResponseEntity<String> save(@RequestBody UserDto user) {
         userService.save(user);
