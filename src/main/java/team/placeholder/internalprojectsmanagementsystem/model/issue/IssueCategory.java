@@ -38,4 +38,8 @@ public class IssueCategory implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public IssueCategory orElse(Object o) {
+        return null;
+    }
 }

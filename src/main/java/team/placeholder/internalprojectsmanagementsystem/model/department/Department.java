@@ -42,4 +42,8 @@ public class Department {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public Department orElse(Object o) {
+        return null;
+    }
 }

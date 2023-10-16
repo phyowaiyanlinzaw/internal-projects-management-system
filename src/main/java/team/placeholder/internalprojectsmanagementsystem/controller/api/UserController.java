@@ -5,21 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
-import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
+
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user/")
 public class UserController {
-
-
-    private final UserRepository userRepository;
 
     private final UserServiceImpl userService;
 
