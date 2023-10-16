@@ -54,7 +54,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public IssueDto getIssueById(long id) {
-        Issue issue = issueRepository.findById(id).orElse(null);
+        Issue issue = issueRepository.findById(id);
         if(issue != null) {
             return IssueMapper.toIssueDto(issue);
         }else {
@@ -74,7 +74,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public IssueDto updateIssue(IssueDto issueDto) {
-        Issue issue = issueRepository.findById(issueDto.getId()).orElse(null);
+        Issue issue = issueRepository.findById(issueDto.getId());
         if(issue != null) {
             issue.setTitle(issueDto.getTitle());
             issue.setDescription(issueDto.getDescription());
@@ -101,7 +101,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public void deleteIssue(IssueDto issueDto) {
-        Issue issue = issueRepository.findById(issueDto.getId()).orElse(null);
+        Issue issue = issueRepository.findById(issueDto.getId());
         if(issue != null) {
             issueRepository.delete(issue);
         }else{

@@ -12,25 +12,25 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user/")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserServiceImpl userService;
 
 
-    @GetMapping("lists")
+    @GetMapping("/lists")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> userDtos = userService.getAllUsers();
         return new ResponseEntity<>(userDtos, HttpStatus.OK);
     }
 
-    @PostMapping("save")
-    public ResponseEntity<String> save(@RequestBody UserDto userDto) {
-        UserDto savedUser = userService.save(userDto);
+    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> createUser(@RequestBody UserDto user) {
+        UserDto savedUser = userService.save(user);
         if (savedUser != null) {
-            return ResponseEntity.ok("User saved successfully");
+            return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         } else {
-            return ResponseEntity.badRequest().body("Failed to save user");
+            return ResponseEntity.badRequest().body("Failed to create user");
         }
     }
 

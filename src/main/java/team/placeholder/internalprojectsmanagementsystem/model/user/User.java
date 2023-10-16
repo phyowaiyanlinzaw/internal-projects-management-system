@@ -78,8 +78,4 @@ public class User implements Serializable {
         return Objects.hash(id);
     }
 
-
-    public User orElse(Object o) {
-        return null;
-    }
 }

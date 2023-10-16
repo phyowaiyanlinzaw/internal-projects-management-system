@@ -62,7 +62,4 @@ public class Issue implements Serializable {
     }
 
 
-    public Issue orElse(Object o) {
-        return null;
-    }
 }

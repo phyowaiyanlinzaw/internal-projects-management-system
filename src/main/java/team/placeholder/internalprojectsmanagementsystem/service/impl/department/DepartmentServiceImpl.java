@@ -42,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto getDepartmentById(long id) {
-        Department department = departmentRepository.findById(id).orElse(null);
+        Department department = departmentRepository.findById(id);
         if(department != null) {
             return DepartmentMapper.toDepartmentDto(department);
         }else{

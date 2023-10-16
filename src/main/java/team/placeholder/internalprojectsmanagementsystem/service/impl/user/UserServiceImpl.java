@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto getUserById(long id) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id);
         if(user != null) {
             return UserMapper.toUserDto(user);
         }else{
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto updateProfile(UserDto userDto) {
-        User user = userRepository.findById(userDto.getId()).orElse(null);
+        User user = userRepository.findById(userDto.getId());
         if(user != null) {
             user.setName(userDto.getName());
             user.setEmail(userDto.getEmail());
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto changePassword(UserDto userDto, String newPassword) {
-        User user = userRepository.findById(userDto.getId()).orElse(null);
+        User user = userRepository.findById(userDto.getId());
         if(user != null) {
             user.setPassword(newPassword);
             user = userRepository.save(user);

@@ -40,7 +40,7 @@ public class IssueCategoryServiceImpl implements IssueCategoryService {
 
     @Override
     public IssueCategoryDto findById(long id) {
-        IssueCategory issue = issueCategoryRepository.findById(id).orElse(null);
+        IssueCategory issue = issueCategoryRepository.findById(id);
         if(issue != null) {
             return IssueCategoryMapper.toIssueCategoryDto(issue);
         }else {

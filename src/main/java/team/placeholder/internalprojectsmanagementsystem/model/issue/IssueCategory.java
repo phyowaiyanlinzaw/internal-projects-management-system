@@ -39,7 +39,5 @@ public class IssueCategory implements Serializable {
         return Objects.hash(id);
     }
 
-    public IssueCategory orElse(Object o) {
-        return null;
-    }
+
 }
