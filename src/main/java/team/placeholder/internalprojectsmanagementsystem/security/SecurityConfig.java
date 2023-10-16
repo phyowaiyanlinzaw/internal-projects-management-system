@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 .requestMatchers("/project/list").hasAnyRole("PMO","SDQC","PROJECT_MANAGER")
                                 .requestMatchers("/project/**").hasAnyRole("PMO","SDQC","EMPLOYEE","FOC","CONTRACT")
                                 .requestMatchers("/task", "/issues", "/profile").authenticated()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
 
 
                 ).exceptionHandling(

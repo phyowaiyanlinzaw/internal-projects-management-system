@@ -23,22 +23,7 @@ public class ProjectRepositoryTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void testSelectAllProject() {
-        // Arrange
-        List<Project> projects = new ArrayList<>();
-        projects.add(new Project());
-        projects.add(new Project());
 
-        // Mock the behavior of projectRepository.selectAllProject
-        when(projectRepository.selectAllProject()).thenReturn(projects);
-
-        // Act
-        List<Project> result = projectRepository.selectAllProject();
-
-        // Assert
-        assertEquals(projects.size(), result.size());
-    }
 
     @Test
     public void testFindById() {

@@ -1,48 +1,46 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
-
+import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
 
-    @GetMapping("/lists")
+    @GetMapping("lists")
     public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> userDtos = userService.getAllUsers();
-        return new ResponseEntity<>(userDtos, HttpStatus.OK);
+        List<UserDto> users = userService.getAllUsers();
+        return new ResponseEntity<> (users, HttpStatus.OK);
+
     }
 
-    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> createUser(@RequestBody UserDto user) {
-        UserDto savedUser = userService.save(user);
-        if (savedUser != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to create user");
-        }
+    @PostMapping("create")
+    public ResponseEntity<String> save(@RequestBody UserDto user) {
+        userService.save(user);
+        return ResponseEntity.ok("User saved successfully");
     }
 
 
-    @GetMapping("/lists/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
-        UserDto user = userService.getUserById((int) id);
+    @GetMapping("/list/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable int id) {
+        UserDto user = userService.getUserById(id);
 
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
-           return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -76,6 +74,8 @@ public class UserController {
             return ResponseEntity.badRequest().body("Failed to change password");
         }
     }
+
+
 
 
 }
