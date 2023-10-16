@@ -1,18 +1,18 @@
 package team.placeholder.internalprojectsmanagementsystem.service.project;
 
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TaskDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
 
 public interface TaskService {
 
-    TaskDto save(TaskDto taskDto);
+    TasksDto save(TasksDto taskDto);
 
-    TaskDto getTaskById(int id);
+    TasksDto getTaskById(int id);
 
-    TaskDto getTaskByName(String name);
+    TasksDto getTaskByName(String name);
 
-    TaskDto updateTask(TaskDto taskDto);
+    TasksDto updateTask(TasksDto taskDto);
 
-    void deleteTask(TaskDto taskDto);
+    void deleteTask(TasksDto taskDto);
 
 
 }
