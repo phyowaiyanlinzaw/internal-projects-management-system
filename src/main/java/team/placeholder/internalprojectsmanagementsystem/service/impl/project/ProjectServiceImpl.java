@@ -57,7 +57,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto updateProject(ProjectDto projectDto) {
-        return null;
+
+        Project project = projectMapper.toProject(projectDto);
+        if (projectRepository.existsById(project.getId())) {
+
+            Project updatedProject = projectRepository.save(project);
+
+            return projectMapper.toProjectDto(updatedProject);
+        } else {
+
+            return null;
+        }
     }
 
     @Override
