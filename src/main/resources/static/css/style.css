@@ -1,0 +1,547 @@
+/********** Template CSS **********/
+:root {
+    --primary: #009cff;
+    --light: #f3f6f9;
+    --dark: #191c24;
+}
+
+.back-to-top {
+    position: fixed;
+    display: none;
+    right: 45px;
+    bottom: 45px;
+    z-index: 99;
+}
+
+/*** Spinner ***/
+#spinner {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
+    z-index: 99999;
+}
+
+#spinner.show {
+    transition: opacity 0.5s ease-out, visibility 0s linear 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+/*** Button ***/
+.btn {
+    transition: 0.5s;
+}
+
+.btn.btn-primary {
+    color: #ffffff;
+}
+
+.btn-square {
+    width: 38px;
+    height: 38px;
+}
+
+.btn-sm-square {
+    width: 32px;
+    height: 32px;
+}
+
+.btn-lg-square {
+    width: 48px;
+    height: 48px;
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: normal;
+    border-radius: 50px;
+}
+
+/*** Layout ***/
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--light);
+    transition: 0.5s;
+    z-index: 999;
+}
+
+.content {
+    margin-left: 250px;
+    min-height: 100vh;
+    background: #ffffff;
+    transition: 0.5s;
+}
+
+@media (min-width: 992px) {
+    .sidebar {
+        margin-left: 0;
+    }
+
+    .sidebar.open {
+        margin-left: -250px;
+    }
+
+    .content {
+        width: calc(100% - 250px);
+    }
+
+    .content.open {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        margin-left: -250px;
+    }
+
+    .sidebar.open {
+        margin-left: 0;
+    }
+
+    .content {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+/*** Navbar ***/
+.sidebar .navbar .navbar-nav .nav-link {
+    padding: 7px 20px;
+    color: var(--dark);
+    font-weight: 500;
+    border-left: 3px solid var(--light);
+    border-radius: 0 30px 30px 0;
+    outline: none;
+}
+
+.sidebar .navbar .navbar-nav .nav-link:hover,
+.sidebar .navbar .navbar-nav .nav-link.active {
+    color: var(--primary);
+    background: #ffffff;
+    border-color: var(--primary);
+}
+
+.sidebar .navbar .navbar-nav .nav-link i {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 40px;
+}
+
+.sidebar .navbar .navbar-nav .nav-link:hover i,
+.sidebar .navbar .navbar-nav .nav-link.active i {
+    background: var(--light);
+}
+
+.sidebar .navbar .dropdown-toggle::after {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    transition: 0.5s;
+}
+
+.sidebar .navbar .dropdown-toggle[aria-expanded="true"]::after {
+    transform: rotate(-180deg);
+}
+
+.sidebar .navbar .dropdown-item {
+    padding-left: 25px;
+    border-radius: 0 30px 30px 0;
+}
+
+.content .navbar .navbar-nav .nav-link {
+    margin-left: 25px;
+    padding: 12px 0;
+    color: var(--dark);
+    outline: none;
+}
+
+.content .navbar .navbar-nav .nav-link:hover,
+.content .navbar .navbar-nav .nav-link.active {
+    color: var(--primary);
+}
+
+.content .navbar .sidebar-toggler,
+.content .navbar .navbar-nav .nav-link i {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 40px;
+}
+
+.content .navbar .dropdown-toggle::after {
+    margin-left: 6px;
+    vertical-align: middle;
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    transition: 0.5s;
+}
+
+.content .navbar .dropdown-toggle[aria-expanded="true"]::after {
+    transform: rotate(-180deg);
+}
+
+@media (max-width: 575.98px) {
+    .content .navbar .navbar-nav .nav-link {
+        margin-left: 15px;
+    }
+}
+
+/*** Date Picker ***/
+.bootstrap-datetimepicker-widget.bottom {
+    top: auto !important;
+}
+
+.bootstrap-datetimepicker-widget .table * {
+    border-bottom-width: 0px;
+}
+
+.bootstrap-datetimepicker-widget .table th {
+    font-weight: 500;
+}
+
+.bootstrap-datetimepicker-widget.dropdown-menu {
+    padding: 10px;
+    border-radius: 2px;
+}
+
+.bootstrap-datetimepicker-widget table td.active,
+.bootstrap-datetimepicker-widget table td.active:hover {
+    background: var(--primary);
+}
+
+.bootstrap-datetimepicker-widget table td.today::before {
+    border-bottom-color: var(--primary);
+}
+
+/*** Testimonial ***/
+.progress .progress-bar {
+    width: 0px;
+    transition: 2s;
+}
+
+/*** Testimonial ***/
+.testimonial-carousel .owl-dots {
+    margin-top: 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.testimonial-carousel .owl-dot {
+    position: relative;
+    display: inline-block;
+    margin: 0 5px;
+    width: 15px;
+    height: 15px;
+    border: 5px solid var(--primary);
+    border-radius: 15px;
+    transition: 0.5s;
+}
+
+.testimonial-carousel .owl-dot.active {
+    background: var(--dark);
+    border-color: var(--primary);
+}
+
+.sort-btn {
+    cursor: pointer;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    color: white;
+}
+
+.sort-btn:hover {
+    border: 1px solid lightgreen;
+    color: rgb(222, 222, 222);
+}
+
+.sort-btn:active {
+    background-color: #57c565;
+}
+
+.iq-media-group .iq-media {
+    margin-left: -20px;
+    position: relative;
+    z-index: 0;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.iq-media-group .iq-media:hover {
+    z-index: 9;
+}
+
+.iq-media-group .iq-media img {
+    border: 2px solid #e0e2db;
+}
+
+.iq-media-group .iq-media:first-child {
+    margin-left: 0;
+}
+
+.iq-media-group .iq-media.border {
+    border: 2px solid #e0e2db;
+}
+
+.iq-media {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.iq-media:hover {
+    text-decoration: none;
+}
+
+@media (max-width: 575px) {
+    .overview-progress .iq-media-group {
+        text-align: left !important;
+    }
+}
+
+.circle-progress-value {
+    stroke-width: 6px;
+    stroke: #5773ff;
+}
+
+.circle-progress-circle {
+    stroke-width: 6px;
+    stroke: #d0d8ff;
+}
+
+.circle-progress > svg {
+    height: 100px;
+    width: 100px;
+}
+
+.circle-progress.sidebar-circle > svg {
+    height: 130px;
+    width: 130px;
+}
+
+.circle-progress-primary svg .circle-progress-value {
+    stroke: #5773ff;
+    stroke-linecap: round;
+}
+
+.circle-progress-primary svg .circle-progress-circle {
+    stroke: #f0f3ff !important;
+}
+
+.circle-progress-primary svg .circle-progress-text {
+    fill: #5773ff;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-secondary svg .circle-progress-value {
+    stroke: #f35421;
+    stroke-linecap: round;
+}
+
+.circle-progress-secondary svg .circle-progress-circle {
+    stroke: #fbc4b2 !important;
+}
+
+.circle-progress-secondary svg .circle-progress-text {
+    fill: #f35421;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-success svg .circle-progress-value {
+    stroke: #50c6b4;
+    stroke-linecap: round;
+}
+
+.circle-progress-success svg .circle-progress-circle {
+    stroke: #c3ece5 !important;
+}
+
+.circle-progress-success svg .circle-progress-text {
+    fill: #50c6b4;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-info svg .circle-progress-value {
+    stroke: #51bbfe;
+    stroke-linecap: round;
+}
+
+.circle-progress-info svg .circle-progress-circle {
+    stroke: #e9f6ff !important;
+}
+
+.circle-progress-info svg .circle-progress-text {
+    fill: #51bbfe;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-warning svg .circle-progress-value {
+    stroke: #ffcf52;
+    stroke-linecap: round;
+}
+
+.circle-progress-warning svg .circle-progress-circle {
+    stroke: #fff9eb !important;
+}
+
+.circle-progress-warning svg .circle-progress-text {
+    fill: #ffcf52;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-danger svg .circle-progress-value {
+    stroke: #931f1d;
+    stroke-linecap: round;
+}
+
+.circle-progress-danger svg .circle-progress-circle {
+    stroke: #e16a68 !important;
+}
+
+.circle-progress-danger svg .circle-progress-text {
+    fill: #931f1d;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-light svg .circle-progress-value {
+    stroke: #c7cbd3;
+    stroke-linecap: round;
+}
+
+.circle-progress-light svg .circle-progress-circle {
+    stroke: white !important;
+}
+
+.circle-progress-light svg .circle-progress-text {
+    fill: #c7cbd3;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-dark svg .circle-progress-value {
+    stroke: #01041b;
+    stroke-linecap: round;
+}
+
+.circle-progress-dark svg .circle-progress-circle {
+    stroke: #061aaf !important;
+}
+
+.circle-progress-dark svg .circle-progress-text {
+    fill: #01041b;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-orange svg .circle-progress-value {
+    stroke: #f35421;
+    stroke-linecap: round;
+}
+
+.circle-progress-orange svg .circle-progress-circle {
+    stroke: #fbc4b2 !important;
+}
+
+.circle-progress-orange svg .circle-progress-text {
+    fill: #f35421;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-purple svg .circle-progress-value {
+    stroke: #4731b6;
+    stroke-linecap: round;
+}
+
+.circle-progress-purple svg .circle-progress-circle {
+    stroke: #a89ce4 !important;
+}
+
+.circle-progress-purple svg .circle-progress-text {
+    fill: #4731b6;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-skyblue svg .circle-progress-value {
+    stroke: #158df7;
+    stroke-linecap: round;
+}
+
+.circle-progress-skyblue svg .circle-progress-circle {
+    stroke: #a9d5fc !important;
+}
+
+.circle-progress-skyblue svg .circle-progress-text {
+    fill: #158df7;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-light-gray svg .circle-progress-value {
+    stroke: #f4f5fa;
+    stroke-linecap: round;
+}
+
+.circle-progress-light-gray svg .circle-progress-circle {
+    stroke: white !important;
+}
+
+.circle-progress-light-gray svg .circle-progress-text {
+    fill: #f4f5fa;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
+
+.circle-progress-white svg .circle-progress-value {
+    stroke: #fff;
+    stroke-linecap: round;
+}
+
+.circle-progress-white svg .circle-progress-circle {
+    stroke: white !important;
+}
+
+.circle-progress-white svg .circle-progress-text {
+    fill: #fff;
+    font-size: 23px;
+    font-family: "Manrope", sans-serif;
+}
