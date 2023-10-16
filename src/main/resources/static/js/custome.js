@@ -1,6 +1,8 @@
 $(document).ready(function () {
-    let sortIcon = $(".sort-btn");
 
+    //  ======================== SORTING DEPARTMENT AND PROJECT START ========================
+
+    let sortIcon = $(".sort-btn");
     function sortCards(order) {
         let departmentContainer = $("#sort-container");
         let departments = departmentContainer.children().toArray();
@@ -46,8 +48,21 @@ $(document).ready(function () {
             });
         }
     });
+
+    // ======================== SORT DEPARTMENT AND PROJECT END HERE ========================
+
+    // ======================== FORM VALIDATION START HERE ========================
+
+    /* =======================================
+    *   form must have an id='login-form'
+    *   must have data-type='type'
+    *   type = email (done), password (done)
+    *  =======================================
+    */
+
     let form = $("#login-form");
 
+    // email validation
     function validateEmail(email) {
         const emailRegex =
             /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -55,6 +70,7 @@ $(document).ready(function () {
         return emailRegex.test(email);
     }
 
+    // password validation
     function validatePassword(password) {
         // Minimum length of 8 characters
         const minLength = 8;
@@ -67,6 +83,7 @@ $(document).ready(function () {
         return password.length >= minLength && containsAlphanumeric;
     }
 
+    // check if the email and password are validated or not on submit
     form.on("submit", function (e) {
         let email = $(this).find("#emailInput");
         let password = $(this).find("#floatingPassword");
@@ -88,11 +105,15 @@ $(document).ready(function () {
         }
     });
 
+    // check the validation every time when use enter value in input
+    // TODO :: SHOULD VALIDATE OTHER DATA-TYPE
     form.on("input", function (e) {
         let target = $(e.target);
         let parent = target.parent();
         let type = target.attr("data-type").toLowerCase();
         switch (type) {
+
+            // for data-type='email'
             case "email":
                 console.log(validateEmail(target.val()));
                 let p1 = $("<p>")
@@ -121,6 +142,8 @@ $(document).ready(function () {
                     parent.addClass("was-validated");
                 }
                 break;
+
+            // for data-type='password'
             case "password":
                 parent.removeClass("was-validated");
                 let p = $("<p>")
@@ -154,6 +177,10 @@ $(document).ready(function () {
         }
     });
 
+    // ======================== FORM VALIDATION END HERE ========================
+
+    // ======================== SEARCH BAR BEHAVIOR START HERE ========================
+
     const dDSBtn = $("#drop-down-search-btn");
     const dDSbar = $("#dropdrown-search-bar");
 
@@ -164,7 +191,7 @@ $(document).ready(function () {
       }
     });
 
-    // Add click event listener to toggle visibility on button click
+    // toggle search bar when click the search button
     dDSBtn.on("click", function() {
       console.log(dDSbar.hasClass('d-none', 'd-sm-none'))
       if (dDSbar.hasClass('d-none', 'd-sm-none')) {
@@ -177,8 +204,10 @@ $(document).ready(function () {
       }
     });
 
+    // close search bar when window width < 768
     if (window.innerWidth < 768) {
-      // Screen size less than 768px, hide the element
       dDSbar.addClass("d-none d-sm-none");
     }
+
+    // ======================== SEARCH BEHAVIOR END HERE ========================
 });
