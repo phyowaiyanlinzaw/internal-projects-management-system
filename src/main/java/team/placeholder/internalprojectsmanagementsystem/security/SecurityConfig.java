@@ -38,7 +38,8 @@ public class SecurityConfig {
                                 .requestMatchers("/project/list").hasAnyRole("PMO","SDQC","PROJECT_MANAGER")
                                 .requestMatchers("/project/**").hasAnyRole("PMO","SDQC","EMPLOYEE","FOC","CONTRACT")
                                 .requestMatchers("/task", "/issues", "/profile").authenticated()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/").authenticated()
+                                .anyRequest().authenticated()
 
 
                 ).exceptionHandling(
@@ -48,6 +49,7 @@ public class SecurityConfig {
 
                 .formLogin(
                         (formLogin) -> formLogin
+                                .loginPage("/login")
                                 .loginProcessingUrl("/processLogin")
                                 .successHandler(
                                         (request, response, authentication) -> {

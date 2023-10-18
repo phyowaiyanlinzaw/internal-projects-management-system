@@ -6,6 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
+    @GetMapping("/")
+    public String index(){
+        return "dashboard";
+    }
+
+    @GetMapping("/accessDenied")
+    public String accessDenied(){
+        return "404";
+    }
+
     @GetMapping("/login")
     public String loginFormView(){
         return "login";
