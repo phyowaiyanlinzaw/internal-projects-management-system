@@ -2,48 +2,96 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
+    private final UserRepository userRepository;
 
     @Override
-    public UserDto save(UserDto userDto) {
-        return null;
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
+
     }
 
     @Override
-    public UserDto getUserById(int id) {
-        return null;
+    public UserDto save(UserDto userDto) {
+      User user = new User();
+      user.setName(userDto.getName());
+      user.setEmail(userDto.getEmail());
+      user.setPassword(userDto.getPassword());
+      user.setRole(userDto.getRole());
+      user.setDepartment(userDto.getDepartment());
+      userRepository.save(user);
+      return UserMapper.toUserDto(userRepository.save(user));
+    }
+
+    @Override
+    public UserDto getUserById(long id) {
+        User user = userRepository.findById(id);
+        if(user != null) {
+            return UserMapper.toUserDto(user);
+        }else{
+            return null;
+        }
+
     }
 
     @Override
     public UserDto getUserByEmail(String email) {
-        return null;
+       User user= userRepository.findByEmail(email);
+         if(user != null) {
+             return UserMapper.toUserDto(user);
+         }else{
+             return null;
+         }
+
     }
 
-    @Override
-    public List<UserDto> getAllUsers() {
-        return null;
-    }
+
 
     @Override
     public UserDto updateProfile(UserDto userDto) {
-        return null;
+        User user = userRepository.findById(userDto.getId());
+        if(user != null) {
+            user.setName(userDto.getName());
+            user.setEmail(userDto.getEmail());
+            user.setPassword(userDto.getPassword());
+            user.setRole(userDto.getRole());
+            user.setDepartment(userDto.getDepartment());
+            userRepository.save(user);
+            return UserMapper.toUserDto(user);
+        }else{
+            return null;
+        }
+
     }
 
     @Override
     public UserDto changePassword(UserDto userDto, String newPassword) {
-        return null;
+        User user = userRepository.findById(userDto.getId());
+        if(user != null) {
+            user.setPassword(newPassword);
+            user = userRepository.save(user);
+            return UserMapper.toUserDto(user);
+        }else{
+            return null;
+        }
+
+
     }
 }

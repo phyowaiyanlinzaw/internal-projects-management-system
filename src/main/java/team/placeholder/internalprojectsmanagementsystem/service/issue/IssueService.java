@@ -12,13 +12,13 @@ public interface IssueService {
 
     List<IssueDto> getAllIssues();
 
-    IssueDto getIssueById(int id);
+    IssueDto getIssueById(long id);
 
     IssueDto getIssueByName(String name);
 
     IssueDto updateIssue(IssueDto issueDto);
 
-    void deleteIssue(IssueDto issueDto);
+    public void deleteIssue(IssueDto issueDto);
 
 
 }

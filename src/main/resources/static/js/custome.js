@@ -1,13 +1,12 @@
 $(document).ready(function () {
-
     //  ======================== SORTING DEPARTMENT AND PROJECT START ========================
-
     let sortIcon = $(".sort-btn");
     function sortCards(order) {
-        let departmentContainer = $("#sort-container");
-        let departments = departmentContainer.children().toArray();
 
-        departments.sort(function (a, b) {
+        let sortableContainer = $("#sort-container");
+        let sortableElement = sortableContainer.children().toArray();
+
+        sortableElement.sort(function (a, b) {
             var nameA = $(a).find(".card-title").text().toUpperCase();
             var nameB = $(b).find(".card-title").text().toUpperCase();
 
@@ -24,8 +23,8 @@ $(document).ready(function () {
             }
         });
 
-        $.each(departments, function (_, department) {
-            departmentContainer.append(department);
+        $.each(sortableElement, function (_, department) {
+            sortableContainer.append(department);
         });
     }
 
@@ -38,6 +37,18 @@ $(document).ready(function () {
         const maxValue = $(this).attr("data-max-value");
         const value = $(this).attr("data-value");
         const type = $(this).attr("data-type");
+
+        console.log(this.id)
+        console.log(value);
+        console.log(maxValue)
+
+        if (value < 40) {
+            this.classList.add("circle-progress-secondary");
+        } else if (value < 70) {
+            this.classList.add("circle-progress-primary");
+        } else if (value > 69) {
+            this.classList.add("circle-progress-success");
+        }
 
         if (this.id !== "" && this.id !== null) {
             new CircleProgress("#" + this.id, {
@@ -54,11 +65,11 @@ $(document).ready(function () {
     // ======================== FORM VALIDATION START HERE ========================
 
     /* =======================================
-    *   form must have an id='login-form'
-    *   must have data-type='type'
-    *   type = email (done), password (done)
-    *  =======================================
-    */
+     *   form must have an id='login-form'
+     *   must have data-type='type'
+     *   type = email (done), password (done)
+     *  =======================================
+     */
 
     let form = $("#login-form");
 
@@ -112,7 +123,6 @@ $(document).ready(function () {
         let parent = target.parent();
         let type = target.attr("data-type").toLowerCase();
         switch (type) {
-
             // for data-type='email'
             case "email":
                 console.log(validateEmail(target.val()));
@@ -184,30 +194,102 @@ $(document).ready(function () {
     const dDSBtn = $("#drop-down-search-btn");
     const dDSbar = $("#dropdrown-search-bar");
 
-    $(window).on("resize", function() {
-      if (window.innerWidth > 768) {
-        // Screen size greater than 768px, hide the element
-        dDSbar.addClass("d-none d-sm-none");
-      }
+    $(window).on("resize", function () {
+        if (window.innerWidth > 768) {
+            // Screen size greater than 768px, hide the element
+            dDSbar.addClass("d-none d-sm-none");
+        }
     });
 
     // toggle search bar when click the search button
-    dDSBtn.on("click", function() {
-      console.log(dDSbar.hasClass('d-none', 'd-sm-none'))
-      if (dDSbar.hasClass('d-none', 'd-sm-none')) {
-        // Classes are present, so show the element
-        dDSbar.removeClass("d-none d-sm-none");
-      } else {
-        console.log('false so should add classes')
-        // Classes are not present, so hide the element
-        dDSbar.addClass("d-none d-sm-none");
-      }
+    dDSBtn.on("click", function () {
+        console.log(dDSbar.hasClass("d-none", "d-sm-none"));
+        if (dDSbar.hasClass("d-none", "d-sm-none")) {
+            // Classes are present, so show the element
+            dDSbar.removeClass("d-none d-sm-none");
+        } else {
+            console.log("false so should add classes");
+            // Classes are not present, so hide the element
+            dDSbar.addClass("d-none d-sm-none");
+        }
     });
 
     // close search bar when window width < 768
     if (window.innerWidth < 768) {
-      dDSbar.addClass("d-none d-sm-none");
+        dDSbar.addClass("d-none d-sm-none");
     }
 
     // ======================== SEARCH BEHAVIOR END HERE ========================
+
+    // ======================== SIDE NAV LINK BEHAVIOR START ========================
+
+    let urlPath = window.location.href;
+
+    const sidebarLink = document
+        .querySelector(".navbar")
+        .querySelector(".navbar-nav").children;
+
+    console.log(urlPath);
+    console.log(sidebarLink[0]);
+    console.log(urlPath.includes("dashboard"));
+
+    if (urlPath.includes("dashboard")) {
+        sidebarLink[0].classList.add("bg-primary", "text-white");
+        sidebarLink[0].firstChild.classList.add("bg-primary");
+    } else if (urlPath.includes("department", "text-white")) {
+        sidebarLink[1].classList.add("bg-primary", "text-white");
+        sidebarLink[1].firstChild.classList.add("bg-primary");
+    } else if (urlPath.includes("project")) {
+        sidebarLink[2].classList.add("bg-primary", "text-white");
+        sidebarLink[2].firstChild.classList.add("bg-primary");
+    }
+
+    // ======================== SIDE NAV LINK BEHAVIOR END ========================
+
+    // ======================== change modal title automatic =======================
+
+    let sortableContainer = document.querySelector("#sort-container");
+    const modal = document.querySelector('div[id$="-details"]')
+
+    // recursive function to search paremtn element that contain data-bs-toggle
+    function hasDataBsToggleAttribute(element) {
+
+        if (element && element.hasAttribute('data-bs-toggle')) {
+            return element;
+        }
+
+        if (element && element.parentElement) {
+            return hasDataBsToggleAttribute(element.parentElement);
+        }
+
+        return null
+    }
+
+    sortableContainer.addEventListener('click', function (e) {
+
+        let target = e.target
+
+        if (e.target === this || target.classList.contains('swim-lane') || target.classList.contains('lane')) return
+
+        if (e.target.tagName === 'button') return
+
+        console.log('true')
+
+        const grandpaDiv = hasDataBsToggleAttribute(target)
+
+        if (grandpaDiv === null) return
+
+        if (grandpaDiv.getAttribute('data-bs-toggle') !== 'modal') return
+
+        if (!['#project-details', '#department-details', '#task-details'].includes(grandpaDiv.getAttribute('data-bs-target'))) return;
+
+        console.log(grandpaDiv)
+        console.log(grandpaDiv.tagName)
+
+        modal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
+
+    }, false)
+
+    // ======================== change modal title automatic =======================
 });
+
