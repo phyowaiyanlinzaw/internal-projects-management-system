@@ -36,5 +36,10 @@ public class ViewController {
         return "login";//TODO:Change to Task View
     }
 
+    @GetMapping("/project/all")
+    public String project(){
+        return "projects";
+    }
+
 
 }

@@ -30,6 +30,8 @@ public class SecurityConfig {
                                         "/css/**",
                                         "/images/**",
                                         "/fragments/**",
+                                        "/font/**",
+                                        "/lib/**",
                                         "/layout/**"
                                 ).permitAll()
                                 .requestMatchers("/login").permitAll()
