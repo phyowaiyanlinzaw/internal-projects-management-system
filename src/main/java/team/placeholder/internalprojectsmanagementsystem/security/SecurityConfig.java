@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.SecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,10 +20,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-
-
-        http.authorizeHttpRequests(
+        http    .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers(
                                         "/resources/**",
@@ -30,23 +30,16 @@ public class SecurityConfig {
                                         "/css/**",
                                         "/images/**",
                                         "/fragments/**",
-                                        "/layout/**",
-                                        "/login"
+                                        "/layout/**"
                                 ).permitAll()
-                                .requestMatchers("/department/list").hasAnyRole("PMO","SDQC")
+                                .requestMatchers("/login").permitAll()
                                 .requestMatchers("/department/**").hasAnyRole("PMO","SDQC","DEPARTMENT_HEAD")
-                                .requestMatchers("/project/list").hasAnyRole("PMO","SDQC","PROJECT_MANAGER")
-                                .requestMatchers("/project/**").hasAnyRole("PMO","SDQC","EMPLOYEE","FOC","CONTRACT")
-                                .requestMatchers("/task", "/issues", "/profile").authenticated()
                                 .requestMatchers("/").authenticated()
                                 .anyRequest().authenticated()
-
-
                 ).exceptionHandling(
                 (exceptionHandling) -> exceptionHandling
                         .accessDeniedPage("/accessDenied")
         )
-
                 .formLogin(
                         (formLogin) -> formLogin
                                 .loginPage("/login")
@@ -58,7 +51,16 @@ public class SecurityConfig {
                                 .permitAll()
                 )
                 .logout(
-                        (logout) -> logout.logoutUrl("/logout").permitAll()
+                        (logout) -> logout
+
+                                .invalidateHttpSession(true)
+                                .clearAuthentication(true)
+                                .deleteCookies("JSESSIONID")
+                                .logoutSuccessHandler(
+                                        (request, response, authentication) -> {
+                                            response.sendRedirect("/login");
+                                        })
+                                .permitAll()
                 );
         return http.build();
 
