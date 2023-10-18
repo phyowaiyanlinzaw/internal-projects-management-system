@@ -1,5 +1,8 @@
 $(document).ready(function () {
     //  ======================== SORTING DEPARTMENT AND PROJECT START ========================
+
+
+
     let sortIcon = $(".sort-btn");
     function sortCards(order) {
 
