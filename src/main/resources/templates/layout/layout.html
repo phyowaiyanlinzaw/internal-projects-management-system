@@ -22,13 +22,15 @@
 <!-- ============================================================== -->
 <div id="main-wrapper">
     <!-- Topbar header - style you can find in pages.scss -->
-    <div th:replace="fragments/navigation :: navigation"></div>
+
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <div th:replace="fragments/sidebar :: sidebar"></div>
 
     <!-- Page wrapper  -->
     <div class="page-wrapper" id="mainContent">
-        <div layout:fragment="content"></div>
+        <div layout:fragment="content">
+
+        </div>
         <!-- modal for department's details -->
         <div class="modal fade" id="department-details" data-bs-keyboard="true">
             <div
