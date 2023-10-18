@@ -545,3 +545,155 @@
     font-size: 23px;
     font-family: "Manrope", sans-serif;
 }
+
+[data-bs-target="#department-details"] {
+    cursor: pointer;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+    background: #b7acef;
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+    background: #917aff;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+.board {
+    width: 100%;
+    overflow: scroll;
+}
+
+.board::-webkit-scrollbar, .lanes::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* ---- BOARD ---- */
+.lanes {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    gap: 16px;
+
+    padding: 24px 32px;
+
+    overflow: scroll;
+
+    height: 100%;
+}
+
+.lane {
+    width: 225px;
+}
+
+.heading {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.swim-lane {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+    overflow: auto;
+    max-width: 225px;
+    row-gap: 12px;
+    max-height: 480px;
+    flex-shrink: 0;
+    overflow-x: hidden;
+}
+
+.task {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    cursor: grab;
+}
+
+.is-dragging {
+    scale: 1.01;
+    cursor: grabbing;
+}
+
+.task:active {
+    cursor: grabbing;
+}
+
+.active-card {
+    cursor: pointer;
+}
+
+.active-card:hover > .card {
+    border-radius: 20px;
+    border: 1px solid black;
+    transition-duration: .20s;
+    transition-property: border-radius;
+}
+
+.active-card:active > .card {
+    border: 2px solid rgb(0, 0, 0);
+    background-color: rgba(240, 240, 240, 0.8);
+}
+
+.bi-trash3-fill {
+    cursor: pointer;
+}
+
+.bi-trash3-fill:hover {
+    color: red;
+}
+
+/* Bordered Tabs */
+.nav-tabs-bordered {
+    border-bottom: 2px solid #ebeef4;
+}
+
+.nav-tabs-bordered .nav-link {
+    margin-bottom: -2px;
+    border: none;
+    color: #2c384e;
+}
+
+.nav-tabs-bordered .nav-link:hover,
+.nav-tabs-bordered .nav-link:focus {
+    color: #4154f1;
+}
+
+.nav-tabs-bordered .nav-link.active {
+    background-color: #fff;
+    color: #4154f1;
+    border-bottom: 2px solid #4154f1;
+}
+
+.profile-card .social-links a {
+    font-size: 20px;
+    display: inline-block;
+    color: rgba(1, 41, 112, 0.5);
+    line-height: 0;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+.profile-card .social-links a:hover {
+    color: #012970;
+}

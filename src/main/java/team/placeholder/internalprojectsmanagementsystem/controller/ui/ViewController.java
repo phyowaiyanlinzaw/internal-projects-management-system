@@ -6,9 +6,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
+    @GetMapping("/accessDenied")
+    public String accessDenied(){
+        return "404";
+    }
+
     @GetMapping("/login")
     public String loginFormView(){
         return "login";
+    }
+
+    @GetMapping("/")
+    public String home(){
+        return "dashboard"; //TODO:Change to Home Actual View
     }
 
     @GetMapping("/profile")
