@@ -26,12 +26,11 @@ public class SecurityConfig {
                         (auth) -> auth
                                 .requestMatchers(
                                         "/resources/**",
-                                        "/js/**",
-                                        "/css/**",
-                                        "/images/**",
-                                        "/fragments/**",
-                                        "/layout/**",
-                                        "/login"
+                                        "/resources/static/js/**",
+                                        "/resources/static/css/**",
+                                        "/resources/static/images/**",
+                                        "/resources/static/font/**",
+                                        "/resources/static/font/lib/**"
                                 ).permitAll()
                                 .requestMatchers("/department/list").hasAnyRole("PMO","SDQC")
                                 .requestMatchers("/department/**").hasAnyRole("PMO","SDQC","DEPARTMENT_HEAD")
@@ -48,6 +47,7 @@ public class SecurityConfig {
 
                 .formLogin(
                         (formLogin) -> formLogin
+                                .loginPage("/login")
                                 .loginProcessingUrl("/processLogin")
                                 .successHandler(
                                         (request, response, authentication) -> {
