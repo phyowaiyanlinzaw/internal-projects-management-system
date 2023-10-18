@@ -9,7 +9,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.project.Project
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/project/")
+@RequestMapping("/api/project")
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
