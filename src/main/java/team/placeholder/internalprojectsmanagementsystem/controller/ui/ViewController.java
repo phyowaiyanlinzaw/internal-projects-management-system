@@ -18,7 +18,7 @@ public class ViewController {
 
     @GetMapping("/")
     public String home(){
-        return "project"; //TODO:Change to Home Actual View
+        return "dashboard"; //TODO:Change to Home Actual View
     }
 
     @GetMapping("/profile")

@@ -313,6 +313,125 @@
 
         return closestTask;
     };
+
+    let sortableContainer = document.querySelector("#sort-container");
+    const modal = document.querySelector('div[id$="-details"]');
+
+    // recursive function to search paremtn element that contain data-bs-toggle
+    function hasDataBsToggleAttribute(element) {
+        if (element && element.hasAttribute("data-bs-toggle")) {
+            return element;
+        }
+
+        if (element && element.parentElement) {
+            return hasDataBsToggleAttribute(element.parentElement);
+        }
+    }
+
+    sortableContainer.addEventListener(
+        "click",
+        function (e) {
+            const grandpaDiv = hasDataBsToggleAttribute(e.target);
+            console.log("hihi");
+            if (grandpaDiv) {
+                modal.querySelector(".modal-title").innerText =
+                    grandpaDiv.querySelector(
+                        ".modal-detail-title"
+                    ).innerText;
+            }
+        },
+        false
+    );
+
+        const ctx = document.getElementById("department-projects-chart");
+
+        const firstChart = new Chart(ctx, {
+        type: "line",
+        data: {
+        labels: [
+        "January",
+        "February",
+        "March",
+        "Apirl",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        ],
+
+        datasets: [
+    {
+        label: "project one",
+        backgroundColor: "rgba(255, 111, 200, 0.5)",
+        data: [0, 0, 3, 5, 2, 3],
+        fill: true,
+        borderColor: "rgb(255, 111, 200)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+    {
+        label: "project two",
+        backgroundColor: "rgba(100, 111, 200, 0.5)",
+        data: [20, 10, 58, 12],
+        fill: true,
+        borderColor: "rgb(100, 111, 200)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+    {
+        label: "project one",
+        backgroundColor: "rgba(255, 0, 0, 0.5)",
+        data: [23, 85, 10, 5, 25, 7, 65, 77, 10],
+        fill: true,
+        borderColor: "rgb(255, 0, 0)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+    {
+        label: "project one",
+        backgroundColor: "rgba(0, 255, 0, 0.5)",
+        data: [5, 50, 10, 5, 54, 3, 65],
+        fill: true,
+        borderColor: "rgb(0, 255, 0)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+    {
+        label: "project one",
+        backgroundColor: "rgba(0, 0, 255, 0.5)",
+        data: [
+        89, 45, 33, 15, 25, 3, 34, 44, 58, 89, 45, 33,
+        ],
+        fill: true,
+        borderColor: "rgb(0, 0, 255)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+        ],
+    },
+        options: {
+        scales: {
+        y: {
+        beginAtZero: true,
+    },
+    },
+        animation: {
+        duration: 2000,
+    },
+        legend: {
+        display: true,
+    },
+        responsive: false
+    },
+    });
+
+        console.log(firstChart);
+        firstChart.config.options.animation.duration = 5000;
+
 </script>
 </body>
 </html>
