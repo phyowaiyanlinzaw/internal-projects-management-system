@@ -9,9 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class ClientRepositoryTest {
 
