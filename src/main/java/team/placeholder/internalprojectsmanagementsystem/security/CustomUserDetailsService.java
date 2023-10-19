@@ -27,6 +27,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             if (user == null) {
                 throw new UsernameNotFoundException("User not found");
             }
+
+            return new CustomerUserDetails(user);
         }
         User user = userRepository.findByName(username);
 
@@ -34,6 +36,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
 
         }
+
         return new CustomerUserDetails(user);
+
     }
 }

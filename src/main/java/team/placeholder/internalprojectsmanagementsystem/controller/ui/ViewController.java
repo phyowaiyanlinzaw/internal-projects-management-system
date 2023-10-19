@@ -6,9 +6,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
+    @GetMapping("/accessDenied")
+    public String accessDenied(){
+        return "dashboard";
+    }
+
     @GetMapping("/login")
     public String loginFormView(){
         return "login";
+    }
+
+    @GetMapping("/")
+    public String home(){
+        return "dashboard"; //TODO:Change to Home Actual View
+    }
+
+    @GetMapping("/department")
+    public String department(){
+        return "department"; //TODO:Change to Department Actual View
     }
 
     @GetMapping("/profile")
@@ -24,6 +39,26 @@ public class ViewController {
     @GetMapping("/task")
     public String task(){
         return "login";//TODO:Change to Task View
+    }
+
+    @GetMapping("/project/all")
+    public String project(){
+        return "projects";
+    }
+
+    @GetMapping("/department")
+    public String department(){
+        return "department";
+    }
+
+    @GetMapping("/projects")
+    public String projects(){
+        return "project";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(){
+        return "redirect:/";
     }
 
 
