@@ -21,6 +21,11 @@ public class ViewController {
         return "dashboard"; //TODO:Change to Home Actual View
     }
 
+    @GetMapping("/department")
+    public String department(){
+        return "department"; //TODO:Change to Department Actual View
+    }
+
     @GetMapping("/profile")
     public String profile(){
         return "login"; //TODO:Change to Profile Actual View
