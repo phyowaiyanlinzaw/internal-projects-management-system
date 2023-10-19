@@ -20,7 +20,7 @@ public interface UserService {
 
     UserDto changePassword(UserDto userDto, String newPassword);
 
-
+    void sendEmail(String to);
 
 
 
