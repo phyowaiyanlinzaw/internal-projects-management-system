@@ -3,38 +3,46 @@ $(document).ready(function () {
 
 
 
-    let sortIcon = $(".sort-btn");
-    function sortCards(order) {
+    let sortIcon = document.querySelector(".sort-btn");
 
-        let sortableContainer = $("#sort-container");
-        let sortableElement = sortableContainer.children().toArray();
+    function sortCards(btn, order) {
+        let sortableContainer = document.getElementById("sort-container");
+        let sortableElement = Array.from(sortableContainer.children);
+
+        console.log(sortableElement)
+
+        console.log(btn, order)
 
         sortableElement.sort(function (a, b) {
-            var nameA = $(a).find(".card-title").text().toUpperCase();
-            var nameB = $(b).find(".card-title").text().toUpperCase();
+            console.log('in sort')
+            var nameA = a.querySelector(".card-title").textContent.toUpperCase();
+            var nameB = b.querySelector(".card-title").textContent.toUpperCase();
 
             if (order) {
-                sortIcon
-                    .removeClass("bi-sort-alpha-down")
-                    .addClass("bi-sort-alpha-up");
+                btn.classList.remove("bi-sort-alpha-down");
+                btn.classList.add("bi-sort-alpha-up");
+                console.log("it true")
                 return nameA.localeCompare(nameB);
             } else {
-                sortIcon
-                    .addClass("bi-sort-alpha-down")
-                    .removeClass("bi-sort-alpha-up");
+                console.log("it false")
+                console.log(btn, order)
+                btn.classList.add("bi-sort-alpha-down");
+                btn.classList.remove("bi-sort-alpha-up");
                 return nameB.localeCompare(nameA);
             }
         });
 
-        $.each(sortableElement, function (_, department) {
-            sortableContainer.append(department);
+        sortableElement.forEach(function (department) {
+            sortableContainer.appendChild(department);
         });
     }
-
-    sortIcon.on("click", function () {
-        let isAsc = sortIcon.hasClass("bi-sort-alpha-down");
-        sortCards(isAsc);
-    });
+    if (sortIcon != null) {
+        sortIcon.addEventListener("click", function () {
+            let isAsc = sortIcon.classList.contains("bi-sort-alpha-down");
+            console.log(isAsc)
+            sortCards(this, isAsc);
+        });
+    }
     $(".circle-progress").each(function () {
         const minValue = $(this).attr("data-min-value");
         const maxValue = $(this).attr("data-max-value");
@@ -98,97 +106,99 @@ $(document).ready(function () {
     }
 
     // check if the email and password are validated or not on submit
-    form.on("submit", function (e) {
-        let email = $(this).find("#emailInput");
-        let password = $(this).find("#floatingPassword");
+    if (form != null) {
+        form.on("submit", function (e) {
+            let email = $(this).find("#emailInput");
+            let password = $(this).find("#floatingPassword");
 
-        if (!validateEmail(email.val()) || !validatePassword(password.val())) {
-            email.parent().addClass("was-validated");
-            if (validateEmail(email.val())) {
+            if (!validateEmail(email.val()) || !validatePassword(password.val())) {
                 email.parent().addClass("was-validated");
-            }
-            if (password.length === 0) {
-                return;
-            }
-            if (password.val() < 1) {
-                password.parent().addClass("was-validated");
-            }
-            e.preventDefault();
-            e.stopPropagation();
-            console.log("either email or password is not valid");
-        }
-    });
-
-    // check the validation every time when use enter value in input
-    // TODO :: SHOULD VALIDATE OTHER DATA-TYPE
-    form.on("input", function (e) {
-        let target = $(e.target);
-        let parent = target.parent();
-        let type = target.attr("data-type").toLowerCase();
-        switch (type) {
-            // for data-type='email'
-            case "email":
-                console.log(validateEmail(target.val()));
-                let p1 = $("<p>")
-                    .addClass("text-danger fs-6")
-                    .text("Not a valid email");
-
-                if (!validateEmail(target.val())) {
-                    parent.removeClass("was-validated");
-                    if (parent.find("p").length === 0) {
-                        parent.append(p1);
-                    }
-                } else {
-                    let existingP = parent.find("p");
-                    if (existingP.length > 0) {
-                        existingP.remove();
-                    }
-                    if (
-                        parent.find(".valid-feedback").length === 0 &&
-                        validateEmail(target.val())
-                    ) {
-                        existingP = $("<div>")
-                            .addClass("valid-feedback")
-                            .text("good");
-                        parent.append(existingP);
-                    }
-                    parent.addClass("was-validated");
+                if (validateEmail(email.val())) {
+                    email.parent().addClass("was-validated");
                 }
-                break;
-
-            // for data-type='password'
-            case "password":
-                parent.removeClass("was-validated");
-                let p = $("<p>")
-                    .addClass("text-danger fs-6")
-                    .text(
-                        "The password can only contain numbers and alphabets with a minimum length of 8 characters"
-                    );
-
-                if (!validatePassword(target.val())) {
-                    parent.removeClass("was-validated");
-                    if (parent.find("p").length === 0) {
-                        parent.append(p);
-                    }
-                } else {
-                    let existingP = parent.find("p");
-                    if (existingP.length > 0) {
-                        existingP.remove();
-                    }
-                    if (
-                        parent.find(".valid-feedback").length === 0 &&
-                        validatePassword(target.val())
-                    ) {
-                        existingP = $("<div>")
-                            .addClass("valid-feedback")
-                            .text("good");
-                        parent.append(existingP);
-                    }
-                    parent.addClass("was-validated");
+                if (password.length === 0) {
+                    return;
                 }
-                break;
-        }
-    });
+                if (password.val() < 1) {
+                    password.parent().addClass("was-validated");
+                }
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("either email or password is not valid");
+            }
+        });
+
+        // check the validation every time when use enter value in input
+        // TODO :: SHOULD VALIDATE OTHER DATA-TYPE
+        form.on("input", function (e) {
+            let target = $(e.target);
+            let parent = target.parent();
+            let type = target.attr("data-type").toLowerCase();
+            switch (type) {
+                // for data-type='email'
+                case "email":
+                    console.log(validateEmail(target.val()));
+                    let p1 = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Not a valid email");
+
+                    if (!validateEmail(target.val())) {
+                        parent.removeClass("was-validated");
+                        if (parent.find("p").length === 0) {
+                            parent.append(p1);
+                        }
+                    } else {
+                        let existingP = parent.find("p");
+                        if (existingP.length > 0) {
+                            existingP.remove();
+                        }
+                        if (
+                            parent.find(".valid-feedback").length === 0 &&
+                            validateEmail(target.val())
+                        ) {
+                            existingP = $("<div>")
+                                .addClass("valid-feedback")
+                                .text("good");
+                            parent.append(existingP);
+                        }
+                        parent.addClass("was-validated");
+                    }
+                    break;
+
+                // for data-type='password'
+                case "password":
+                    parent.removeClass("was-validated");
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "The password can only contain numbers and alphabets with a minimum length of 8 characters"
+                        );
+
+                    if (!validatePassword(target.val())) {
+                        parent.removeClass("was-validated");
+                        if (parent.find("p").length === 0) {
+                            parent.append(p);
+                        }
+                    } else {
+                        let existingP = parent.find("p");
+                        if (existingP.length > 0) {
+                            existingP.remove();
+                        }
+                        if (
+                            parent.find(".valid-feedback").length === 0 &&
+                            validatePassword(target.val())
+                        ) {
+                            existingP = $("<div>")
+                                .addClass("valid-feedback")
+                                .text("good");
+                            parent.append(existingP);
+                        }
+                        parent.addClass("was-validated");
+                    }
+                    break;
+            }
+        });
+    }
 
     // ======================== FORM VALIDATION END HERE ========================
 
@@ -204,18 +214,20 @@ $(document).ready(function () {
         }
     });
 
-    // toggle search bar when click the search button
-    dDSBtn.on("click", function () {
-        console.log(dDSbar.hasClass("d-none", "d-sm-none"));
-        if (dDSbar.hasClass("d-none", "d-sm-none")) {
-            // Classes are present, so show the element
-            dDSbar.removeClass("d-none d-sm-none");
-        } else {
-            console.log("false so should add classes");
-            // Classes are not present, so hide the element
-            dDSbar.addClass("d-none d-sm-none");
-        }
-    });
+    if (dDSBtn != null) {
+        // toggle search bar when click the search button
+        dDSBtn.on("click", function () {
+            console.log(dDSbar.hasClass("d-none", "d-sm-none"));
+            if (dDSbar.hasClass("d-none", "d-sm-none")) {
+                // Classes are present, so show the element
+                dDSbar.removeClass("d-none d-sm-none");
+            } else {
+                console.log("false so should add classes");
+                // Classes are not present, so hide the element
+                dDSbar.addClass("d-none d-sm-none");
+            }
+        });
+    }
 
     // close search bar when window width < 768
     if (window.innerWidth < 768) {
@@ -227,25 +239,46 @@ $(document).ready(function () {
     // ======================== SIDE NAV LINK BEHAVIOR START ========================
 
     let urlPath = window.location.href;
+    let currentAtag;
 
-    const sidebarLink = document
-        .querySelector(".navbar")
-        .querySelector(".navbar-nav").children;
+    // const sidebarLink = document
+    //     .querySelector(".navbar")
+    //     .querySelector(".navbar-nav").children;
+
+    const  sidebarLink = [...document.querySelector('.navbar').querySelector('.navbar-nav').children]
+    console.log(sidebarLink);
+    currentAtag = sidebarLink.find(a => urlPath.includes(a.getAttribute("href")))
 
     console.log(urlPath);
-    console.log(sidebarLink[0]);
-    console.log(urlPath.includes("dashboard"));
+    console.log(currentAtag.classList)
+    currentAtag.classList.add('bg-primary', 'text-white')
+    currentAtag.firstChild.classList.add('bg-primary')
 
-    if (urlPath.includes("dashboard")) {
-        sidebarLink[0].classList.add("bg-primary", "text-white");
-        sidebarLink[0].firstChild.classList.add("bg-primary");
-    } else if (urlPath.includes("department", "text-white")) {
-        sidebarLink[1].classList.add("bg-primary", "text-white");
-        sidebarLink[1].firstChild.classList.add("bg-primary");
-    } else if (urlPath.includes("project")) {
-        sidebarLink[2].classList.add("bg-primary", "text-white");
-        sidebarLink[2].firstChild.classList.add("bg-primary");
+    console.log(urlPath.includes("dashboard"));
+    console.log(currentAtag)
+
+    switch (urlPath) {
+        case "http://localhost:8080/project/all":
+
+            break
+        case "http://localhost:8080/department":
+            console.log("url is : ", urlPath)
+            break
+        case "http://localhost:8080/project":
+            console.log("url is :", urlPath)
+            break
     }
+
+    // if (urlPath.includes("dashboard")) {
+    //     sidebarLink[0].classList.add("bg-primary", "text-white");
+    //     sidebarLink[0].firstChild.classList.add("bg-primary");
+    // } else if (urlPath.includes("department", "text-white")) {
+    //     sidebarLink[1].classList.add("bg-primary", "text-white");
+    //     sidebarLink[1].firstChild.classList.add("bg-primary");
+    // } else if (urlPath.includes("project")) {
+    //     sidebarLink[2].classList.add("bg-primary", "text-white");
+    //     sidebarLink[2].firstChild.classList.add("bg-primary");
+    // }
 
     // ======================== SIDE NAV LINK BEHAVIOR END ========================
 
@@ -267,32 +300,32 @@ $(document).ready(function () {
 
         return null
     }
+    if (sortableContainer != null) {
+        sortableContainer.addEventListener('click', function (e) {
 
-    sortableContainer.addEventListener('click', function (e) {
+            let target = e.target
 
-        let target = e.target
+            if (e.target === this || target.classList.contains('swim-lane') || target.classList.contains('lane')) return
 
-        if (e.target === this || target.classList.contains('swim-lane') || target.classList.contains('lane')) return
+            if (e.target.tagName === 'button') return
 
-        if (e.target.tagName === 'button') return
+            console.log('true')
 
-        console.log('true')
+            const grandpaDiv = hasDataBsToggleAttribute(target)
 
-        const grandpaDiv = hasDataBsToggleAttribute(target)
+            if (grandpaDiv === null) return
 
-        if (grandpaDiv === null) return
+            if (grandpaDiv.getAttribute('data-bs-toggle') !== 'modal') return
 
-        if (grandpaDiv.getAttribute('data-bs-toggle') !== 'modal') return
+            if (!['#project-details', '#department-details', '#task-details'].includes(grandpaDiv.getAttribute('data-bs-target'))) return;
 
-        if (!['#project-details', '#department-details', '#task-details'].includes(grandpaDiv.getAttribute('data-bs-target'))) return;
+            console.log(grandpaDiv)
+            console.log(grandpaDiv.tagName)
 
-        console.log(grandpaDiv)
-        console.log(grandpaDiv.tagName)
+            modal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
 
-        modal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
-
-    }, false)
-
+        }, false)
+    }
     // ======================== change modal title automatic =======================
 });
 

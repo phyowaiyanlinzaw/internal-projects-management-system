@@ -45,7 +45,7 @@ public class SecurityConfig {
                                 .loginProcessingUrl("/processLogin")
                                 .successHandler(
                                         (request, response, authentication) -> {
-                                            response.sendRedirect("/");
+                                            response.sendRedirect("/dashboard");
                                         })
                                 .permitAll()
                 )

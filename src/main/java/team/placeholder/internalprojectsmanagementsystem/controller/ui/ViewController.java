@@ -16,7 +16,7 @@ public class ViewController {
         return "login";
     }
 
-    @GetMapping("/")
+    @GetMapping("/dashboard")
     public String home(){
         return "dashboard";
     }
@@ -46,9 +46,9 @@ public class ViewController {
         return "department";
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping("/")
     public String dashboard(){
-        return "redirect:/";
+        return "redirect:/dashboard";
     }
 
 
