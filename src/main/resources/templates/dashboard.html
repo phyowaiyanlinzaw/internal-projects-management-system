@@ -6,8 +6,7 @@
 
  -->
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout">
 
 <head>
 </head>
@@ -80,29 +79,20 @@
                 <div class="col-sm-12 col-md-6 border border-dark" style="height: 400px">
                     <!-- TODO :: PUT CHART HERE -->
                     <div>Productivity Chart here</div>
+<!--                    <p th:text="${#httpServletRequest.requestURI}"></p>-->
+<!--                    <a th:href="@{__${#httpServletRequest.requestURI}__}">Click to More</a>-->
+<!--                    <p>The current URL is: <span th:text="${#httpServletRequest.getRequestURL()}"></span></p>-->
                 </div>
             </div>
         </div>
+        <div th:replace="fragments/footer :: aside"></div>
 
-        <div class="container-fluid pt-4 px-4">
-            <div class="bg-light rounded-top p-4">
-                <div class="row">
-                    <div class="col-12 col-sm-6 text-center text-sm-start">
-                        &copy; <a href="#">Project Management</a>, All
-                        Right Reserved.
-                    </div>
-                    <div class="col-12 col-sm-6 text-center text-sm-end">
-                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                        Designed By
-                        <a href="https://github.com/zawlinshein">Papaya</a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- Content End -->
 
-
+    <script>
+        console.log("hi guys")
+    </script>
 
    </div>
 

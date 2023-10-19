@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.SecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,11 +29,12 @@ public class SecurityConfig {
                                         "/css/**",
                                         "/images/**",
                                         "/fragments/**",
+                                        "/font/**",
+                                        "/lib/**",
                                         "/layout/**"
 
                                 ).permitAll()
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers("/department/**").hasAnyRole("PMO","SDQC","DEPARTMENT_HEAD")
+                                .requestMatchers("/department/**").hasAnyRole("PMO","SDQC")
                                 .requestMatchers("/").authenticated()
                                 .anyRequest().authenticated()
                 ).exceptionHandling(
@@ -48,13 +47,12 @@ public class SecurityConfig {
                                 .loginProcessingUrl("/processLogin")
                                 .successHandler(
                                         (request, response, authentication) -> {
-                                            response.sendRedirect("/");
+                                            response.sendRedirect("/dashboard");
                                         })
                                 .permitAll()
                 )
                 .logout(
                         (logout) -> logout
-
                                 .invalidateHttpSession(true)
                                 .clearAuthentication(true)
                                 .deleteCookies("JSESSIONID")
@@ -63,6 +61,10 @@ public class SecurityConfig {
                                             response.sendRedirect("/login");
                                         })
                                 .permitAll()
+                ).rememberMe(
+                (rememberMe) -> rememberMe
+                        .key("my-secure-key")
+                        .rememberMeParameter("remember-me")
                 );
         return http.build();
 

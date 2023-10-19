@@ -18,7 +18,7 @@ public interface DepartmentService {
 
     DepartmentDto updateDepartment(DepartmentDto departmentDto);
 
-    public void deleteDepartment(long id);
+    void deleteDepartment(long id);
 
 
 
