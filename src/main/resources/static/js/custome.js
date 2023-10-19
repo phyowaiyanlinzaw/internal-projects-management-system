@@ -1,4 +1,32 @@
 $(document).ready(function () {
+
+    // ========================== AJAX FUNCTION (JUST TESTING) ===========================
+
+    function ajaxRequest(url, method = 'POST', data, callback) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    callback(xhr.responseText);
+                } else {
+                    // Handle errors here
+                    console.error("Request failed with status code: " + xhr.status);
+                }
+            }
+        };
+
+        xhr.open(method, url, true);
+
+        if (method === "POST") {
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        }
+
+        xhr.send(data);
+    }
+
+    // Example of how to use the ajaxRequest function to send data with a POST request
+
     
     //  ======================== SORTING DEPARTMENT AND PROJECT START ========================
 
@@ -312,10 +340,7 @@ $(document).ready(function () {
                     ${value}
                 </div>
                 <div class="col d-flex justify-content-between align-items-center">
-                    <button class="btn btn-outline-danger">
-                        <i class="bi bi-trash-fill"></i>
-                    </button>
-                    <img src="https://source.unsplash.com/random/200x200?sig=1" class="img-fluid" alt="" style="width: 30px;">
+                    <img src="https://source.unsplash.com/random/200x200?sig=1" class="img-fluid rounded-circle" alt="" style="width: 30px;">
                 </div>
             `;
 
@@ -349,8 +374,15 @@ $(document).ready(function () {
             console.log(
                 task.parentNode.previousElementSibling.innerText
             );
+            let postData = JSON.stringify({ key1: "value1", key2: "value2" });
+            ajaxRequest("/data", "POST", postData, function (response) {
+                // Handle the response data here
+                console.log(response);
+            });
         });
     });
+
+    // ======================= TRASH BRN ======================
 
     if(trashCan != null) {
         const comfirmBox = document.querySelector('#confirm-box')
@@ -380,9 +412,16 @@ $(document).ready(function () {
                 currentTask.remove()
                 trashCan.classList.remove('drag-over')
                 bModal.hide()
+            } else if (e.target.innerText.toLowerCase() === 'no') {
+                bModal.hide()
             }
+            
         })
     }
+
+    // =========================== TRASH BIN =============================
+
+    // ========================== AJAX FUNCTION (JUST TESTING) ===========================
 
     droppables.forEach((zone) => {
         zone.addEventListener("dragover", (e) => {
