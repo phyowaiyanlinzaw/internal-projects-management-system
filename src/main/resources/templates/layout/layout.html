@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Layout</title>
 </head>
-<body class="fix-header fix-sidebar card-no-border">
+<body>
 <!-- ============================================================== -->
 <!-- Preloader - style you can find in spinners.css -->
 <!-- ============================================================== -->
@@ -20,17 +20,16 @@
 <!-- ============================================================== -->
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
-<div id="main-wrapper">
     <!-- Topbar header - style you can find in pages.scss -->
 
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <div th:replace="fragments/sidebar :: sidebar"></div>
 
     <!-- Page wrapper  -->
-    <div class="page-wrapper" id="mainContent">
-        <div layout:fragment="content">
+    <div layout:fragment="content">
 
-        </div>
+    </div>
+
         <!-- modal for department's details -->
         <div class="modal fade" id="department-details" data-bs-keyboard="true">
             <div
@@ -154,8 +153,6 @@
 
 
         <div th:replace="fragments/footer :: footer"></div>
-    </div>
-</div>
 
 <!-- fontawesome -->
 <script src="/js/fontawesome.js"></script>

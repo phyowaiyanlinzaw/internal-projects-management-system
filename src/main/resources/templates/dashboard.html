@@ -6,8 +6,7 @@
 
  -->
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout">
 
 <head>
 </head>
@@ -39,16 +38,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xl-3">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa-solid fa-people-group fa-3x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2">Total Employe</p>
-                            <!-- TODO :: SHOW THE NUMBER OF EMPLOYEE -->
-                            <h6 class="mb-0">100000</h6>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="col-sm-6 col-xl-3">-->
+<!--                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">-->
+<!--                        <i class="fa-solid fa-people-group fa-3x text-primary"></i>-->
+<!--                        <div class="ms-3">-->
+<!--                            <p class="mb-2">Total Employe</p>-->
+<!--                            &lt;!&ndash; TODO :: SHOW THE NUMBER OF EMPLOYEE &ndash;&gt;-->
+<!--                            <h6 class="mb-0">100000</h6>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="col-sm-6 col-xl-3">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa-solid fa-dog fa-3x text-dark"></i>
@@ -80,6 +79,9 @@
                 <div class="col-sm-12 col-md-6 border border-dark" style="height: 400px">
                     <!-- TODO :: PUT CHART HERE -->
                     <div>Productivity Chart here</div>
+<!--                    <p th:text="${#httpServletRequest.requestURI}"></p>-->
+<!--                    <a th:href="@{__${#httpServletRequest.requestURI}__}">Click to More</a>-->
+<!--                    <p>The current URL is: <span th:text="${#httpServletRequest.getRequestURL()}"></span></p>-->
                 </div>
             </div>
         </div>
@@ -102,7 +104,9 @@
     </div>
     <!-- Content End -->
 
-
+    <script>
+        console.log("hi guys")
+    </script>
 
    </div>
 
