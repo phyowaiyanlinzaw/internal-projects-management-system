@@ -6,9 +6,6 @@
     <title>Layout</title>
 </head>
 <body>
-<!-- ============================================================== -->
-<!-- Preloader - style you can find in spinners.css -->
-<!-- ============================================================== -->
 <!-- Spinner Start -->
 <div id="spinner"
      class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -16,19 +13,11 @@
         <span class="sr-only">Loading...</span>
     </div>
 </div>
-<!-- Spinner End -->
-<!-- ============================================================== -->
-<!-- Main wrapper - style you can find in pages.scss -->
-<!-- ============================================================== -->
-    <!-- Topbar header - style you can find in pages.scss -->
 
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <div th:replace="fragments/sidebar :: sidebar"></div>
 
-    <!-- Page wrapper  -->
-    <div layout:fragment="content">
-
-    </div>
+    <div layout:fragment="content"></div>
 
         <!-- modal for department's details -->
         <div class="modal fade" id="department-details" data-bs-keyboard="true">
