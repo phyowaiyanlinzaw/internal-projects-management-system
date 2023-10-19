@@ -1,17 +1,13 @@
 $(document).ready(function () {
+    
     //  ======================== SORTING DEPARTMENT AND PROJECT START ========================
 
-
-
     let sortIcon = document.querySelector(".sort-btn");
+    let sortableContainer = document.getElementById("sort-container");
 
     function sortCards(btn, order) {
-        let sortableContainer = document.getElementById("sort-container");
+        
         let sortableElement = Array.from(sortableContainer.children);
-
-        console.log(sortableElement)
-
-        console.log(btn, order)
 
         sortableElement.sort(function (a, b) {
             console.log('in sort')
@@ -21,11 +17,8 @@ $(document).ready(function () {
             if (order) {
                 btn.classList.remove("bi-sort-alpha-down");
                 btn.classList.add("bi-sort-alpha-up");
-                console.log("it true")
                 return nameA.localeCompare(nameB);
             } else {
-                console.log("it false")
-                console.log(btn, order)
                 btn.classList.add("bi-sort-alpha-down");
                 btn.classList.remove("bi-sort-alpha-up");
                 return nameB.localeCompare(nameA);
@@ -39,7 +32,6 @@ $(document).ready(function () {
     if (sortIcon != null) {
         sortIcon.addEventListener("click", function () {
             let isAsc = sortIcon.classList.contains("bi-sort-alpha-down");
-            console.log(isAsc)
             sortCards(this, isAsc);
         });
     }
@@ -48,10 +40,6 @@ $(document).ready(function () {
         const maxValue = $(this).attr("data-max-value");
         const value = $(this).attr("data-value");
         const type = $(this).attr("data-type");
-
-        console.log(this.id)
-        console.log(value);
-        console.log(maxValue)
 
         if (value < 40) {
             this.classList.add("circle-progress-secondary");
@@ -82,7 +70,7 @@ $(document).ready(function () {
      *  =======================================
      */
 
-    let form = $("#login-form");
+    let validatedForm = $("#login-form");
 
     // email validation
     function validateEmail(email) {
@@ -106,8 +94,8 @@ $(document).ready(function () {
     }
 
     // check if the email and password are validated or not on submit
-    if (form != null) {
-        form.on("submit", function (e) {
+    if (validatedForm != null) {
+        validatedForm.on("submit", function (e) {
             let email = $(this).find("#emailInput");
             let password = $(this).find("#floatingPassword");
 
@@ -130,7 +118,7 @@ $(document).ready(function () {
 
         // check the validation every time when use enter value in input
         // TODO :: SHOULD VALIDATE OTHER DATA-TYPE
-        form.on("input", function (e) {
+        validatedForm.on("input", function (e) {
             let target = $(e.target);
             let parent = target.parent();
             let type = target.attr("data-type").toLowerCase();
@@ -246,46 +234,16 @@ $(document).ready(function () {
     //     .querySelector(".navbar-nav").children;
 
     const  sidebarLink = [...document.querySelector('.navbar').querySelector('.navbar-nav').children]
-    console.log(sidebarLink);
     currentAtag = sidebarLink.find(a => urlPath.includes(a.getAttribute("href")))
 
-    console.log(urlPath);
-    console.log(currentAtag.classList)
-    currentAtag.classList.add('bg-primary', 'text-white')
-    currentAtag.firstChild.classList.add('bg-primary')
-
-    console.log(urlPath.includes("dashboard"));
-    console.log(currentAtag)
-
-    switch (urlPath) {
-        case "http://localhost:8080/project/all":
-
-            break
-        case "http://localhost:8080/department":
-            console.log("url is : ", urlPath)
-            break
-        case "http://localhost:8080/project":
-            console.log("url is :", urlPath)
-            break
+    if(currentAtag) {
+        currentAtag.classList.add('bg-primary', 'text-white')
+        currentAtag.firstChild.classList.add('bg-primary')
     }
-
-    // if (urlPath.includes("dashboard")) {
-    //     sidebarLink[0].classList.add("bg-primary", "text-white");
-    //     sidebarLink[0].firstChild.classList.add("bg-primary");
-    // } else if (urlPath.includes("department", "text-white")) {
-    //     sidebarLink[1].classList.add("bg-primary", "text-white");
-    //     sidebarLink[1].firstChild.classList.add("bg-primary");
-    // } else if (urlPath.includes("project")) {
-    //     sidebarLink[2].classList.add("bg-primary", "text-white");
-    //     sidebarLink[2].firstChild.classList.add("bg-primary");
-    // }
 
     // ======================== SIDE NAV LINK BEHAVIOR END ========================
 
     // ======================== change modal title automatic =======================
-
-    let sortableContainer = document.querySelector("#sort-container");
-    const modal = document.querySelector('div[id$="-details"]')
 
     // recursive function to search paremtn element that contain data-bs-toggle
     function hasDataBsToggleAttribute(element) {
@@ -309,8 +267,6 @@ $(document).ready(function () {
 
             if (e.target.tagName === 'button') return
 
-            console.log('true')
-
             const grandpaDiv = hasDataBsToggleAttribute(target)
 
             if (grandpaDiv === null) return
@@ -318,14 +274,233 @@ $(document).ready(function () {
             if (grandpaDiv.getAttribute('data-bs-toggle') !== 'modal') return
 
             if (!['#project-details', '#department-details', '#task-details'].includes(grandpaDiv.getAttribute('data-bs-target'))) return;
+            const targetModal = document.querySelector(grandpaDiv.getAttribute('data-bs-target'))
 
-            console.log(grandpaDiv)
-            console.log(grandpaDiv.tagName)
+            console.log(targetModal)
 
-            modal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
+            targetModal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
 
         }, false)
     }
     // ======================== change modal title automatic =======================
+
+
+    const todoForm = document.getElementById("todo-form");
+    const input = document.getElementById("todo-input");
+    const todoLane = document.getElementById("todo-lane");
+    const draggables = document.querySelectorAll(".task");
+    const droppables = document.querySelectorAll(".swim-lane");
+    const modal = document.getElementById("task-details");
+
+    todoForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const value = input.value;
+
+        if (!value) return;
+
+        let newTask = document.createElement('div');
+        newTask.classList.add('task', 'py-1', 'row', 'rounded-2', 'border-primary', 'border-2', 'border');
+        newTask.setAttribute('draggable', 'true');
+        newTask.setAttribute('data-bs-toggle', 'modal');
+        newTask.setAttribute('data-bs-target', '#task-details');
+
+        // Create the inner content of the task
+        newTask.innerHTML = `
+                <div class="col-12 mb-2 lh-1 mh-50 modal-detail-title text-break">
+                    ${value}
+                </div>
+                <div class="col d-flex justify-content-between align-items-center">
+                    <button class="btn btn-outline-danger">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <img src="https://source.unsplash.com/random/200x200?sig=1" class="img-fluid" alt="" style="width: 30px;">
+                </div>
+            `;
+
+        newTask.addEventListener("dragstart", (e) => {
+            newTask.classList.add("is-dragging");
+            console.log("deagging")
+        });
+
+        newTask.addEventListener('click', (e) => {
+            modal.querySelector('.modal-title').innerText = newTask.innerText
+        })
+
+        newTask.addEventListener("dragend", () => {
+            newTask.classList.remove("is-dragging");
+            console.log(newTask);
+        });
+
+        todoLane.appendChild(newTask);
+
+        input.value = "";
+    });
+
+    draggables.forEach((task) => {
+        task.addEventListener("dragstart", () => {
+            task.classList.add("is-dragging");
+        });
+        task.addEventListener("dragend", () => {
+            task.classList.remove("is-dragging");
+
+            console.log("drop");
+            console.log(
+                task.parentNode.previousElementSibling.innerText
+            );
+        });
+    });
+
+    droppables.forEach((zone) => {
+        zone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+
+            const bottomTask = insertAboveTask(zone, e.clientY);
+            const curTask = document.querySelector(".is-dragging");
+
+            if (curTask === null) {
+                return
+            }
+
+            const curZone = zone.getAttribute("id");
+
+            switch (curZone) {
+                case "todo-lane":
+                    curTask.classList.add("border-primary");
+                    curTask.classList.remove(
+                        "border-dark",
+                        "border-success"
+                    );
+                    break;
+                case "doing-lane":
+                    curTask.classList.add("border-dark");
+                    curTask.classList.remove(
+                        "border-primary",
+                        "border-success"
+                    );
+                    break;
+                case "done-lane":
+                    curTask.classList.add("border-success");
+                    curTask.classList.remove(
+                        "border-primary",
+                        "border-dark"
+                    );
+                    break;
+            }
+
+            if (!bottomTask) {
+                zone.appendChild(curTask);
+            } else {
+                zone.insertBefore(curTask, bottomTask);
+            }
+        });
+    }); const insertAboveTask = (zone, mouseY) => {
+        const els = zone.querySelectorAll(".task:not(.is-dragging)");
+
+        let closestTask = null;
+        let closestOffset = Number.NEGATIVE_INFINITY;
+
+        els.forEach((task) => {
+            const { top } = task.getBoundingClientRect();
+
+            const offset = mouseY - top;
+
+            if (offset < 0 && offset > closestOffset) {
+                closestOffset = offset;
+                closestTask = task;
+            }
+        });
+
+        return closestTask;
+    };
+
+
+    const ctx = document.getElementById("department-projects-chart");
+
+    const firstChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: [
+                "January",
+                "February",
+                "March",
+                "Apirl",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ],
+
+            datasets: [
+                {
+                    label: "project one",
+                    backgroundColor: "rgba(255, 111, 200, 0.5)",
+                    data: [0, 0, 3, 5, 2, 3],
+                    fill: true,
+                    borderColor: "rgb(255, 111, 200)",
+                    pointRadius: 0,
+                    borderWidth: 1,
+                },
+                {
+                    label: "project two",
+                    backgroundColor: "rgba(100, 111, 200, 0.5)",
+                    data: [20, 10, 58, 12],
+                    fill: true,
+                    borderColor: "rgb(100, 111, 200)",
+                    pointRadius: 0,
+                    borderWidth: 1,
+                },
+                {
+                    label: "project one",
+                    backgroundColor: "rgba(255, 0, 0, 0.5)",
+                    data: [23, 85, 10, 5, 25, 7, 65, 77, 10],
+                    fill: true,
+                    borderColor: "rgb(255, 0, 0)",
+                    pointRadius: 0,
+                    borderWidth: 1,
+                },
+                {
+                    label: "project one",
+                    backgroundColor: "rgba(0, 255, 0, 0.5)",
+                    data: [5, 50, 10, 5, 54, 3, 65],
+                    fill: true,
+                    borderColor: "rgb(0, 255, 0)",
+                    pointRadius: 0,
+                    borderWidth: 1,
+                },
+                {
+                    label: "project one",
+                    backgroundColor: "rgba(0, 0, 255, 0.5)",
+                    data: [
+                        89, 45, 33, 15, 25, 3, 34, 44, 58, 89, 45, 33,
+                    ],
+                    fill: true,
+                    borderColor: "rgb(0, 0, 255)",
+                    pointRadius: 0,
+                    borderWidth: 1,
+                },
+            ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+            animation: {
+                duration: 2000,
+            },
+            legend: {
+                display: true,
+            },
+            responsive: false
+        },
+    });
+
+    console.log(firstChart);
+    firstChart.config.options.animation.duration = 5000;
 });
 

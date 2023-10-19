@@ -650,11 +650,6 @@
     transition-property: border-radius;
 }
 
-.active-card:active > .card {
-    border: 2px solid rgb(0, 0, 0);
-    background-color: rgba(240, 240, 240, 0.8);
-}
-
 .bi-trash3-fill {
     cursor: pointer;
 }
