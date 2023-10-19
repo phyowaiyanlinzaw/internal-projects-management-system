@@ -292,6 +292,8 @@ $(document).ready(function () {
     const droppables = document.querySelectorAll(".swim-lane");
     const modal = document.getElementById("task-details");
 
+    const trashCan = document.querySelector('.trash')
+
     todoForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const value = input.value;
@@ -350,9 +352,43 @@ $(document).ready(function () {
         });
     });
 
+    if(trashCan != null) {
+        const comfirmBox = document.querySelector('#confirm-box')
+        const bModal = new bootstrap.Modal(comfirmBox)
+        let currentTask;
+        console.log(trashCan)
+        trashCan.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            currentTask = document.querySelector('.is-dragging')
+            if(currentTask === null) return
+
+            console.log(this)
+            this.classList.add('drag-over')
+
+        })
+
+        trashCan.addEventListener('dragleave', function(e) {
+            this.classList.remove('drag-over')
+        })
+
+        trashCan.addEventListener('drop', function (e) {
+            bModal.show()
+        })
+
+        comfirmBox.addEventListener('click', function(e) {
+            if(e.target.innerText.toLowerCase() === 'yes') {
+                currentTask.remove()
+                trashCan.classList.remove('drag-over')
+                bModal.hide()
+            }
+        })
+    }
+
     droppables.forEach((zone) => {
         zone.addEventListener("dragover", (e) => {
             e.preventDefault();
+
+            console.log(undefined)
 
             const bottomTask = insertAboveTask(zone, e.clientY);
             const curTask = document.querySelector(".is-dragging");
