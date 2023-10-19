@@ -15,9 +15,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class Notification implements Serializable {
-
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

@@ -6,13 +6,13 @@ public interface TaskService {
 
     TasksDto save(TasksDto taskDto);
 
-    TasksDto getTaskById(int id);
+    TasksDto getTaskById(long id);
 
-    TasksDto getTaskByName(String name);
+    TasksDto getTaskByDescription(String description);
 
     TasksDto updateTask(TasksDto taskDto);
 
-    void deleteTask(TasksDto taskDto);
+    void deleteTask(long id);
 
 
 }

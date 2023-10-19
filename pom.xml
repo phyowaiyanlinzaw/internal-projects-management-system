@@ -90,6 +90,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.5.6.RELEASE</version>
                 <configuration>
                     <excludes>
                         <exclude>
@@ -97,6 +98,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <addResources>true</addResources>
                 </configuration>
             </plugin>
         </plugins>

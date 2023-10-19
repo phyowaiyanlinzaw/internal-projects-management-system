@@ -18,32 +18,37 @@ public class ViewController {
 
     @GetMapping("/")
     public String home(){
-        return "dashboard"; //TODO:Change to Home Actual View
-    }
-
-    @GetMapping("/department")
-    public String department(){
-        return "department"; //TODO:Change to Department Actual View
+        return "dashboard";
     }
 
     @GetMapping("/profile")
     public String profile(){
-        return "login"; //TODO:Change to Profile Actual View
+        return "profile"; //TODO:Change to Profile Actual View
     }
 
     @GetMapping("/issues")
     public String issues(){
-        return "login";//TODO:Change to Issues View
+        return "issues";//TODO:Change to Issues View
     }
 
-    @GetMapping("/task")
+    @GetMapping("/project")
     public String task(){
-        return "login";//TODO:Change to Task View
+        return "project";//TODO:Change to Task View
     }
 
     @GetMapping("/project/all")
     public String project(){
         return "projects";
+    }
+
+    @GetMapping("/department")
+    public String department(){
+        return "department";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(){
+        return "redirect:/";
     }
 
 

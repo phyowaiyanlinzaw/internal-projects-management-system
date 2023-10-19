@@ -100,16 +100,16 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void deleteIssue(IssueDto issueDto) {
-        Issue issue = issueRepository.findById(issueDto.getId());
+    public void deleteIssue(long id) {
+        Issue issue = issueRepository.findById(id);
         if(issue != null) {
             issueRepository.delete(issue);
         }else{
             log.error("Issue not found");
         }
 
-        }
-
     }
+
+}
 
 

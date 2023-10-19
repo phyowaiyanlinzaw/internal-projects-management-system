@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface IssueCategoryService {
 
-    IssueCategoryDto save(IssueCategory issueCategory);
+    IssueCategoryDto save(IssueCategoryDto issueCategory);
 
-    IssueCategoryDto update(IssueCategory issueCategory);
+    IssueCategoryDto update(IssueCategoryDto issueCategory);
 
     IssueCategoryDto findById(long id);
 
