@@ -71,7 +71,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProject(ProjectDto projectDto) {
+    public void deleteProject(long id) {
 
     }
 
