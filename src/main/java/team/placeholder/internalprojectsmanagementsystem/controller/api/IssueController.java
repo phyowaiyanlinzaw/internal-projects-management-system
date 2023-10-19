@@ -67,7 +67,7 @@ public class IssueController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteIssue(@RequestBody IssueDto issueDto) {
-         issueService.deleteIssue(issueDto);
+         issueService.deleteIssue(issueDto.getId());
         return ResponseEntity.ok("Issue deleted successfully");
     }
 

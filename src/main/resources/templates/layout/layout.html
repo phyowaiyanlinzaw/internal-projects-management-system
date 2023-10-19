@@ -1,39 +1,424 @@
 <!DOCTYPE html>
-
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head th:replace="fragments/header :: header">
-    <title>Header</title>
+    <meta charset="UTF-8">
+    <title>Layout</title>
 </head>
-
-<body class="fix-header fix-sidebar card-no-border">
-<!-- ============================================================== -->
-<!-- Preloader - style you can find in spinners.css -->
-<!-- ============================================================== -->
-<!-- loader Start -->
-<div id="loading">
-    <div id="loading-center">
+<body>
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
+        <span class="sr-only">Loading...</span>
     </div>
 </div>
-<!-- loader END -->
-<!-- ============================================================== -->
-<!-- Main wrapper - style you can find in pages.scss -->
-<!-- ============================================================== -->
-<div id="main-wrapper">
-    <!-- Topbar header - style you can find in pages.scss -->
-    <div th:replace="fragments/navigation :: navigation"></div>
+
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <div th:replace="fragments/sidebar :: sidebar"></div>
-    <!-- Page wrapper  -->
-    <div class="page-wrapper" id="mainContent">
-        <div layout:fragment="content"></div>
 
-    </div>
-    <div th:replace="fragments/footer :: footer"></div>
-</div>
-<!-- ============================================================== -->
-<!-- End Wrapper -->
-<!-- ============================================================== -->
+    <div layout:fragment="content"></div>
+
+        <!-- modal for department's details -->
+        <div class="modal fade" id="department-details" data-bs-keyboard="true">
+            <div
+                    class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down modal-fullscreen-md-down modal-fullscreen-lg-down">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title" id="staticBackdropLabel">
+                            Department Details
+                        </h5>
+                        <button type="button" class="btn-close text-white btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
+                        <div class="row row-cols-1 row-cols-md-1 row-cols-xl-2">
+                            <div class="col border border-dark rounded p-2">
+                                <div class="row row-cols-1">
+                                    <img src="https://source.unsplash.com/random/200x200?sig=1" alt=""
+                                         class="rounded-circle col m-auto border img-fluid" style="width: 40%;">
+                                    <p class="text-center fs-1 col m-auto">Zaw Lin Shein</p>
+                                </div>
+                                <ul class="list-group mb-2">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Total Project
+                                        <span class="badge bg-primary rounded-pill">14</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Total Member
+                                        <span class="badge bg-primary rounded-pill">100</span>
+                                    </li>
+                                </ul>
+                                <a href="2projects.html" class="btn btn-primary">See Projects</a>
+                            </div>
+                            <div>
+                                <canvas class="col-6 border border-dark rounded mt-2 bg-dark w-100"
+                                        id="department-projects-chart" width="600" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal for department's details -->
+
+        <!-- task's details start -->
+        <div class="modal fade" id="task-details" data-bs-keyboard="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Task Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body"></div>
+                </div>
+            </div>
+        </div>
+        <!-- task's details end -->
+
+        <!-- add task -->
+        <div class="modal fade" id="add-task" data-bs-keyboard="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form id="todo-form">
+                            <input type="text" class="form-control" placeholder="New TODO..." id="todo-input" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- add task -->
+
+        <!-- confrim box for delete -->
+        <div class="modal fade" id="confirm-box" data-bs-keyboard="false" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Are you sure you want to delete ?</span>
+                        <button class="btn btn-danger col me-1">
+                            YES
+                        </button>
+                        <button class="btn btn-primary col" data-bs-dismiss="modal" aria-label="Close">
+                            NO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- confirm box for delete -->
+
+        <!-- modal for project's details -->
+        <div class="modal fade" id="project-details" data-bs-keyboard="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            Department Details
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <a href="/project" class="btn btn-primary">manage task</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal for project's details -->
+
+        <!-- profile modal -->
+        <div class="modal fade" id="profile-modal" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- profile modal -->
+
+
+
+        <div th:replace="fragments/footer :: footer"></div>
+
+<!-- fontawesome -->
+<script src="/js/fontawesome.js"></script>
+
+<!-- jquery -->
+<script src="/js/jquery.3.7.1.min.js"></script>
+
+<!-- datable table -->
+<script src="/js/databales.min.js"></script>
+
+<!-- bootstrap -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- javascript libraries -->
+<script src="/lib/chart/chart.min.js"></script>
+<script src="/lib/easing/easing.min.js"></script>
+<script src="/lib/waypoints/waypoints.min.js"></script>
+<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/lib/tempusdominus/js/moment.min.js"></script>
+<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+<script src="/js/forprogresscircleiguess.js"></script>
+
+<!-- sort (department, project), form validation and search bar behavior are all here -->
+<script src="/js/custome.js"></script>
+<script>
+
+    const form = document.getElementById("todo-form");
+    const input = document.getElementById("todo-input");
+    const todoLane = document.getElementById("todo-lane");
+    const draggables = document.querySelectorAll(".task");
+    const droppables = document.querySelectorAll(".swim-lane");
+    const modal = document.getElementById("task-details");
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const value = input.value;
+
+        if (!value) return;
+
+        let newTask = document.createElement('div');
+        newTask.classList.add('task', 'py-1', 'row', 'rounded-2', 'border-primary', 'border-2', 'border');
+        newTask.setAttribute('draggable', 'true');
+        newTask.setAttribute('data-bs-toggle', 'modal');
+        newTask.setAttribute('data-bs-target', '#task-details');
+
+        // Create the inner content of the task
+        newTask.innerHTML = `
+                <div class="col-12 mb-2 lh-1 mh-50 modal-detail-title text-break">
+                    ${value}
+                </div>
+                <div class="col d-flex justify-content-between align-items-center">
+                    <button class="btn btn-outline-danger">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                    <img src="https://source.unsplash.com/random/200x200?sig=1" class="img-fluid" alt="" style="width: 30px;">
+                </div>
+            `;
+
+        newTask.addEventListener("dragstart", (e) => {
+            newTask.classList.add("is-dragging");
+            console.log("deagging")
+        });
+
+        newTask.addEventListener('click', (e) => {
+            modal.querySelector('.modal-title').innerText = newTask.innerText
+        })
+
+        newTask.addEventListener("dragend", () => {
+            newTask.classList.remove("is-dragging");
+            console.log(newTask);
+        });
+
+        todoLane.appendChild(newTask);
+
+        input.value = "";
+    });
+
+    draggables.forEach((task) => {
+        task.addEventListener("dragstart", () => {
+            task.classList.add("is-dragging");
+        });
+        task.addEventListener("dragend", () => {
+            task.classList.remove("is-dragging");
+
+            console.log("drop");
+            console.log(
+                task.parentNode.previousElementSibling.innerText
+            );
+        });
+    });
+
+    droppables.forEach((zone) => {
+        zone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+
+            const bottomTask = insertAboveTask(zone, e.clientY);
+            const curTask = document.querySelector(".is-dragging");
+
+            if (curTask === null) {
+                return
+            }
+
+            const curZone = zone.getAttribute("id");
+
+            switch (curZone) {
+                case "todo-lane":
+                    curTask.classList.add("border-primary");
+                    curTask.classList.remove(
+                        "border-dark",
+                        "border-success"
+                    );
+                    break;
+                case "doing-lane":
+                    curTask.classList.add("border-dark");
+                    curTask.classList.remove(
+                        "border-primary",
+                        "border-success"
+                    );
+                    break;
+                case "done-lane":
+                    curTask.classList.add("border-success");
+                    curTask.classList.remove(
+                        "border-primary",
+                        "border-dark"
+                    );
+                    break;
+            }
+
+            if (!bottomTask) {
+                zone.appendChild(curTask);
+            } else {
+                zone.insertBefore(curTask, bottomTask);
+            }
+        });
+    });const insertAboveTask = (zone, mouseY) => {
+        const els = zone.querySelectorAll(".task:not(.is-dragging)");
+
+        let closestTask = null;
+        let closestOffset = Number.NEGATIVE_INFINITY;
+
+        els.forEach((task) => {
+            const { top } = task.getBoundingClientRect();
+
+            const offset = mouseY - top;
+
+            if (offset < 0 && offset > closestOffset) {
+                closestOffset = offset;
+                closestTask = task;
+            }
+        });
+
+        return closestTask;
+    };
+
+    let sortableContainer = document.querySelector("#sort-container");
+    const modal = document.querySelector('div[id$="-details"]');
+
+    // recursive function to search paremtn element that contain data-bs-toggle
+    function hasDataBsToggleAttribute(element) {
+        if (element && element.hasAttribute("data-bs-toggle")) {
+            return element;
+        }
+
+        if (element && element.parentElement) {
+            return hasDataBsToggleAttribute(element.parentElement);
+        }
+    }
+
+    sortableContainer.addEventListener(
+        "click",
+        function (e) {
+            const grandpaDiv = hasDataBsToggleAttribute(e.target);
+            console.log("hihi");
+            if (grandpaDiv) {
+                modal.querySelector(".modal-title").innerText =
+                    grandpaDiv.querySelector(
+                        ".modal-detail-title"
+                    ).innerText;
+            }
+        },
+        false
+    );
+
+        const ctx = document.getElementById("department-projects-chart");
+
+        const firstChart = new Chart(ctx, {
+        type: "line",
+        data: {
+        labels: [
+        "January",
+        "February",
+        "March",
+        "Apirl",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        ],
+
+        datasets: [
+    {
+        label: "project one",
+        backgroundColor: "rgba(255, 111, 200, 0.5)",
+        data: [0, 0, 3, 5, 2, 3],
+        fill: true,
+        borderColor: "rgb(255, 111, 200)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+    {
+        label: "project two",
+        backgroundColor: "rgba(100, 111, 200, 0.5)",
+        data: [20, 10, 58, 12],
+        fill: true,
+        borderColor: "rgb(100, 111, 200)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+    {
+        label: "project one",
+        backgroundColor: "rgba(255, 0, 0, 0.5)",
+        data: [23, 85, 10, 5, 25, 7, 65, 77, 10],
+        fill: true,
+        borderColor: "rgb(255, 0, 0)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+    {
+        label: "project one",
+        backgroundColor: "rgba(0, 255, 0, 0.5)",
+        data: [5, 50, 10, 5, 54, 3, 65],
+        fill: true,
+        borderColor: "rgb(0, 255, 0)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+    {
+        label: "project one",
+        backgroundColor: "rgba(0, 0, 255, 0.5)",
+        data: [
+        89, 45, 33, 15, 25, 3, 34, 44, 58, 89, 45, 33,
+        ],
+        fill: true,
+        borderColor: "rgb(0, 0, 255)",
+        pointRadius: 0,
+        borderWidth: 1,
+    },
+        ],
+    },
+        options: {
+        scales: {
+        y: {
+        beginAtZero: true,
+    },
+    },
+        animation: {
+        duration: 2000,
+    },
+        legend: {
+        display: true,
+    },
+        responsive: false
+    },
+    });
+
+        console.log(firstChart);
+        firstChart.config.options.animation.duration = 5000;
+
+</script>
 </body>
-
 </html>

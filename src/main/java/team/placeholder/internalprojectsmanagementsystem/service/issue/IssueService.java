@@ -18,7 +18,7 @@ public interface IssueService {
 
     IssueDto updateIssue(IssueDto issueDto);
 
-    public void deleteIssue(IssueDto issueDto);
+    void deleteIssue(long id);
 
 
 }

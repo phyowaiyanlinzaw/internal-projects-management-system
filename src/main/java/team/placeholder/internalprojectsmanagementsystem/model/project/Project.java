@@ -86,8 +86,4 @@ public class Project implements Serializable {
         return Objects.hash(id);
     }
 
-
-
-
-
 }
