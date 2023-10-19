@@ -54,7 +54,6 @@ public class SecurityConfig {
                 )
                 .logout(
                         (logout) -> logout
-
                                 .invalidateHttpSession(true)
                                 .clearAuthentication(true)
                                 .deleteCookies("JSESSIONID")
@@ -63,6 +62,10 @@ public class SecurityConfig {
                                             response.sendRedirect("/login");
                                         })
                                 .permitAll()
+                ).rememberMe(
+                (rememberMe) -> rememberMe
+                        .key("my-secure-key")
+                        .rememberMeParameter("remember-me")
                 );
         return http.build();
 
