@@ -8,7 +8,7 @@ public class ViewController {
 
     @GetMapping("/accessDenied")
     public String accessDenied(){
-        return "404";
+        return "dashboard";
     }
 
     @GetMapping("/login")
@@ -44,6 +44,21 @@ public class ViewController {
     @GetMapping("/project/all")
     public String project(){
         return "projects";
+    }
+
+    @GetMapping("/department")
+    public String department(){
+        return "department";
+    }
+
+    @GetMapping("/projects")
+    public String projects(){
+        return "project";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(){
+        return "redirect:/";
     }
 
 
