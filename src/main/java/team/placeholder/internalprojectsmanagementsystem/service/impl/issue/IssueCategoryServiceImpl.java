@@ -23,7 +23,7 @@ public class IssueCategoryServiceImpl implements IssueCategoryService {
 
 
     @Override
-    public IssueCategoryDto save(IssueCategory issueCategory) {
+    public IssueCategoryDto save(IssueCategoryDto issueCategory) {
         IssueCategory  issue = new IssueCategory();
         issue.setName(issueCategory.getName());
         issueCategoryRepository.save(issue);
@@ -31,7 +31,7 @@ public class IssueCategoryServiceImpl implements IssueCategoryService {
     }
 
     @Override
-    public IssueCategoryDto update(IssueCategory issueCategory) {
+    public IssueCategoryDto update(IssueCategoryDto issueCategory) {
         IssueCategory issue = new IssueCategory();
         issue.setName(issueCategory.getName());
         issueCategoryRepository.save(issue);

@@ -10,11 +10,11 @@ public interface ReviewService {
 
     ReviewDto update(ReviewDto reviewDto);
 
-    ReviewDto delete(ReviewDto reviewDto);
+    void deleteReview(ReviewDto reviewDto);
 
     List<ReviewDto> getAllReviews();
 
-    ReviewDto getRevieweById(int id);
+    ReviewDto getRevieweById(long id);
 
 
 }

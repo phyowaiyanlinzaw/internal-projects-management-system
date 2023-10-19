@@ -8,7 +8,9 @@ public interface NotificationService {
 
     NotificationDto save(NotificationDto notificationDto);
 
-    NotificationDto getNotificationById(int id);
+    NotificationDto getNotificationById(long id);
 
     List<NotificationDto> getAllNotifications();
+
+
 }
