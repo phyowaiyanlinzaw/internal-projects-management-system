@@ -75,7 +75,11 @@ public class UserController {
         }
     }
 
-
+    @GetMapping("sendEmail/{email}")
+    public ResponseEntity<String> sendEmail(@PathVariable String email) {
+        userService.sendEmail(email);
+        return ResponseEntity.ok("Email sent successfully");
+    }
 
 
 }
