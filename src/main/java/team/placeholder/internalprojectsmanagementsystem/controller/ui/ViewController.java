@@ -41,10 +41,6 @@ public class ViewController {
         return "projects";
     }
 
-    @GetMapping("/department")
-    public String department(){
-        return "department";
-    }
 
     @GetMapping("/")
     public String dashboard(){

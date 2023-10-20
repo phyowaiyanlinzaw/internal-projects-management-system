@@ -37,4 +37,5 @@ public class Client implements Serializable {
         return Objects.hash(id);
     }
 
+
 }
