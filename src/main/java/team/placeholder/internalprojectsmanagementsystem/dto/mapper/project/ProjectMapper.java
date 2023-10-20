@@ -6,7 +6,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 
 @Component
 public class ProjectMapper {
-    public ProjectDto toProjectDto(Project project){
+    public static ProjectDto toProjectDto(Project project){
         if(project == null){
             return null;
         }
