@@ -291,7 +291,7 @@ $(document).ready(function () {
     // recursive function to search paremtn element that contain data-bs-toggle
     function hasDataBsToggleAttribute(element) {
 
-        if (element && element.hasAttribute('data-bs-toggle')) {
+        if (element && element.classList.contains('card')) {
             return element;
         }
 
@@ -314,12 +314,12 @@ $(document).ready(function () {
 
             if (grandpaDiv === null) return
 
-            if (grandpaDiv.getAttribute('data-bs-toggle') !== 'modal') return
-
-            if (!['#project-details', '#department-details', '#task-details'].includes(grandpaDiv.getAttribute('data-bs-target'))) return;
-            const targetModal = document.querySelector(grandpaDiv.getAttribute('data-bs-target'))
+            const targetModal = document.querySelector(target.getAttribute('data-bs-target'))
+            console.log(target.getAttribute('data-bs-target'))
 
             console.log(targetModal)
+
+            if (targetModal === null) return
 
             targetModal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
 
