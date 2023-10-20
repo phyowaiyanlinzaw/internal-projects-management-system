@@ -380,34 +380,55 @@ $(document).ready(function () {
         input.value = "";
     });
 
+    let currentZone = null
+
+    const comfirmBox = document.querySelector('#confirm-box')
+    const bModal = new bootstrap.Modal(comfirmBox)
+    let currentTask;
+
     draggables.forEach((task) => {
         task.addEventListener("dragstart", () => {
             task.classList.add("is-dragging");
+            currentTask = task
+            console.log(currentZone)
         });
-        task.addEventListener("dragend", () => {
+        task.addEventListener("dragend", (e) => {
+            
+            console.log(e.target)
+            console.log(e.target.classList)
+            if (currentZone.classList.contains('dummy-trash')) {
+                bModal.show()
+            }
             task.classList.remove("is-dragging");
+            
+        });
+    });
 
-            console.log("drop");
-            console.log(
-                task.parentNode.previousElementSibling.innerText
-            );
+    comfirmBox.addEventListener('click', function (e) {
+        if (e.target.innerText.toLowerCase() === 'yes') {
+            currentTask.remove()
+            document.querySelector('.trash').classList.remove('drag-over')
+            bModal.hide()
             let postData = JSON.stringify({ key1: "value1", key2: "value2" });
+            console.log('this task will be deleted', currentTask)
             ajaxRequest("/data", "POST", postData, function (response) {
                 // Handle the response data here
                 console.log(response);
             });
-        });
-    });
+        } else if (e.target.innerText.toLowerCase() === 'no') {
+            document.querySelector('.trash').classList.remove('drag-over')
+            bModal.hide()
+        }
+    })
 
     // ======================= TRASH BRN ======================
 
     if (trashCanContainer != null) {
-        const comfirmBox = document.querySelector('#confirm-box')
-        const bModal = new bootstrap.Modal(comfirmBox)
-        let currentTask;
+        
         console.log(trashCanContainer)
         trashCanContainer.addEventListener('dragover', function (e) {
             e.preventDefault();
+            currentZone = trashCanContainer;
             currentTask = document.querySelector('.is-dragging')
             if (currentTask === null) return
 
@@ -419,21 +440,7 @@ $(document).ready(function () {
         trashCanContainer.addEventListener('dragleave', function (e) {
             document.querySelector('.trash').classList.remove('drag-over')
         })
-
-        trashCanContainer.addEventListener('drop', function (e) {
-            bModal.show()
-        })
-
-        comfirmBox.addEventListener('click', function (e) {
-            if (e.target.innerText.toLowerCase() === 'yes') {
-                currentTask.remove()
-                document.querySelector('.trash').classList.remove('drag-over')
-                bModal.hide()
-            } else if (e.target.innerText.toLowerCase() === 'no') {
-                bModal.hide()
-            }
-
-        })
+        
     }
 
     // =========================== TRASH BIN =============================
@@ -443,8 +450,9 @@ $(document).ready(function () {
     droppables.forEach((zone) => {
         zone.addEventListener("dragover", (e) => {
             e.preventDefault();
-
+            currentZone = zone
             console.log(undefined)
+            console.log(currentZone)
 
             const bottomTask = insertAboveTask(zone, e.clientY);
             const curTask = document.querySelector(".is-dragging");
