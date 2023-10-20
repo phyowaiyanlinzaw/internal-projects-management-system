@@ -31,53 +31,37 @@
 
         <div th:replace="fragments/navigation :: navigation"></div>
         <!-- Search Start -->
-        <div class="container-fluid d-md-block pt-2 ps-s pe-2" id="dropdrown-search-bar">
-            <div class="d-flex flex-row justify-content-between position-relative">
-                <form class="d-md-flex">
-                    <input class="form-control border-0" type="search" placeholder="Search" />
-                </form>
-                <div class="position-absolute end-0 d-flex gap-3">
-                    <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop">
-                        <i class="bi bi-building-fill-add"></i>
-                    </button>
-                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                                        Add new Department
-                                    </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-floating mb-3">
-                                        <input type="email" class="form-control" id="floatingInput"
-                                               placeholder="name@example.com" />
-                                        <label for="floatingInput">Email address</label>
-                                    </div>
-                                    <div class="form-floating mb-4">
-                                        <input type="password" class="form-control" id="floatingPassword"
-                                               placeholder="Password" />
-                                        <label for="floatingPassword">Password</label>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary py-3 w-100 mb-4" id="loign-btn">
-                                        Sign In
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+        <div
+                    class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar"
+                >
+                    <div class="d-flex flex-row justify-content-end gap-2">
+                        <form class="d-inline-block">
+                            <input
+                                class="form-control border-0"
+                                type="search"
+                                placeholder="Search"
+                            />
+                        </form>
+                        <!-- modal toggle button start -->
+                        <button
+                            type="button"
+                            class="btn btn-light align-self-start"
+                            data-bs-toggle="modal"
+                            data-bs-target="#add-department-modal"
+                        >
+                            <i class="bi bi-building-fill-add"></i>
+                        </button>
+                        <!-- modal toggle button end -->
+                        <!-- add department modal start -->
+
+                        <!-- add department modal end -->
+                        <!-- sortting button -->
+                        <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+
+                        <!-- Modal -->
                     </div>
-                    <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
                 </div>
-
-                <!-- Button trigger modal -->
-
-                <!-- Modal -->
-            </div>
-        </div>
         <!-- Search End -->
 
         <!-- project start -->
