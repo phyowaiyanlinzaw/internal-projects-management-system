@@ -220,34 +220,47 @@ $(document).ready(function () {
 
     // ======================== SEARCH BAR BEHAVIOR START HERE ========================
 
-    const dDSBtn = $("#drop-down-search-btn");
-    const dDSbar = $("#dropdrown-search-bar");
+    const dDSBtn = document.getElementById("drop-down-search-btn");
+    const dDSbar = document.getElementById("dropdrown-search-bar");
 
-    $(window).on("resize", function () {
+    window.addEventListener("resize", function () {
         if (window.innerWidth > 768) {
             // Screen size greater than 768px, hide the element
-            dDSbar.addClass("d-none d-sm-none");
+            dDSbar.classList.add("d-none", "d-sm-none");
         }
     });
 
     if (dDSBtn != null) {
         // toggle search bar when click the search button
-        dDSBtn.on("click", function () {
-            console.log(dDSbar.hasClass("d-none", "d-sm-none"));
-            if (dDSbar.hasClass("d-none", "d-sm-none")) {
+        dDSBtn.addEventListener("click", function () {
+            if (dDSbar.classList.contains("d-none", "d-sm-none")) {
                 // Classes are present, so show the element
-                dDSbar.removeClass("d-none d-sm-none");
+                dDSbar.classList.remove("d-none", "d-sm-none");
             } else {
-                console.log("false so should add classes");
                 // Classes are not present, so hide the element
-                dDSbar.addClass("d-none d-sm-none");
+                dDSbar.classList.add("d-none", "d-sm-none");
+            }
+        });
+
+        dDSbar.addEventListener('input', function (e) {
+            let inputText = dDSbar.querySelector('input').value;
+            let allData = sortableContainer.children;
+
+            for (let i = 0; i < allData.length; i++) {
+                let text = allData[i].querySelector('.card-title').textContent; // Use .textContent to get the text
+
+                if (text.includes(inputText)) {
+                    allData[i].style.display = 'block';
+                } else {
+                    allData[i].style.display = 'none';
+                }
             }
         });
     }
 
     // close search bar when window width < 768
     if (window.innerWidth < 768) {
-        dDSbar.addClass("d-none d-sm-none");
+        dDSbar.classList.add("d-none", "d-sm-none");
     }
 
     // ======================== SEARCH BEHAVIOR END HERE ========================
