@@ -586,7 +586,7 @@ $(document).ready(function () {
             legend: {
                 display: true,
             },
-            responsive: false
+            responsive: true
         },
     });
 

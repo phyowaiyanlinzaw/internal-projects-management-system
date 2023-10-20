@@ -49,4 +49,7 @@ public class ViewController {
 
     @GetMapping("/department")
     public String department() { return "department"; }
+
+    @GetMapping("/reset-password")
+    public String resetPassword() {return "password-reset";}
 }
