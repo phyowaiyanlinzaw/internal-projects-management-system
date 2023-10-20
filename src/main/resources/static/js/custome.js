@@ -27,14 +27,14 @@ $(document).ready(function () {
 
     // Example of how to use the ajaxRequest function to send data with a POST request
 
-    
+
     //  ======================== SORTING DEPARTMENT AND PROJECT START ========================
 
     let sortIcon = document.querySelector(".sort-btn");
     let sortableContainer = document.getElementById("sort-container");
 
     function sortCards(btn, order) {
-        
+
         let sortableElement = Array.from(sortableContainer.children);
 
         sortableElement.sort(function (a, b) {
@@ -223,7 +223,7 @@ $(document).ready(function () {
     const dDSBtn = document.getElementById("drop-down-search-btn");
     const dDSbar = document.getElementById("dropdrown-search-bar");
 
-    if(dDSbar != null) {
+    if (dDSbar != null) {
         window.addEventListener("resize", function () {
             if (window.innerWidth > 768) {
                 // Screen size greater than 768px, hide the element
@@ -261,8 +261,10 @@ $(document).ready(function () {
     }
 
     // close search bar when window width < 768
-    if (window.innerWidth < 768) {
-        dDSbar.classList.add("d-none", "d-sm-none");
+    if (dDSbar != null) {
+        if (window.innerWidth < 768) {
+            dDSbar.classList.add("d-none", "d-sm-none");
+        }
     }
 
     // ======================== SEARCH BEHAVIOR END HERE ========================
@@ -276,10 +278,10 @@ $(document).ready(function () {
     //     .querySelector(".navbar")
     //     .querySelector(".navbar-nav").children;
 
-    const  sidebarLink = [...document.querySelector('.navbar').querySelector('.navbar-nav').children]
+    const sidebarLink = [...document.querySelector('.navbar').querySelector('.navbar-nav').children]
     currentAtag = sidebarLink.find(a => urlPath.includes(a.getAttribute("href")))
 
-    if(currentAtag) {
+    if (currentAtag) {
         currentAtag.classList.add('bg-primary', 'text-white')
         currentAtag.firstChild.classList.add('bg-primary')
     }
@@ -399,7 +401,7 @@ $(document).ready(function () {
 
     // ======================= TRASH BRN ======================
 
-    if(trashCanContainer != null) {
+    if (trashCanContainer != null) {
         const comfirmBox = document.querySelector('#confirm-box')
         const bModal = new bootstrap.Modal(comfirmBox)
         let currentTask;
@@ -407,14 +409,14 @@ $(document).ready(function () {
         trashCanContainer.addEventListener('dragover', function (e) {
             e.preventDefault();
             currentTask = document.querySelector('.is-dragging')
-            if(currentTask === null) return
+            if (currentTask === null) return
 
             console.log(this)
             document.querySelector('.trash').classList.add('drag-over')
 
         })
 
-        trashCanContainer.addEventListener('dragleave', function(e) {
+        trashCanContainer.addEventListener('dragleave', function (e) {
             document.querySelector('.trash').classList.remove('drag-over')
         })
 
@@ -422,15 +424,15 @@ $(document).ready(function () {
             bModal.show()
         })
 
-        comfirmBox.addEventListener('click', function(e) {
-            if(e.target.innerText.toLowerCase() === 'yes') {
+        comfirmBox.addEventListener('click', function (e) {
+            if (e.target.innerText.toLowerCase() === 'yes') {
                 currentTask.remove()
                 document.querySelector('.trash').classList.remove('drag-over')
                 bModal.hide()
             } else if (e.target.innerText.toLowerCase() === 'no') {
                 bModal.hide()
             }
-            
+
         })
     }
 

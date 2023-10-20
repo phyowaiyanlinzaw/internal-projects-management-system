@@ -5,10 +5,10 @@
         <title>Navigation</title>
     </head>
     <body>
-        <header class="topbar" th:fragment="navigation">
             <!-- Navbar With Search  Start -->
             <nav
                 class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0"
+                th:fragment="navigation-with-search-icon"
             >
                 <a th:href="@{/}" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0">
@@ -146,7 +146,6 @@
                 </div>
             </nav>
             <!-- Navbar With Search End -->
-        </header>
         <aside>
             <!-- Navbar No Search Start -->
             <nav
