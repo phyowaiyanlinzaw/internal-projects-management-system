@@ -75,10 +75,24 @@ public class UserController {
         }
     }
 
-    @GetMapping("sendEmail/{email}")
+    @GetMapping("reset-password/{email}")
     public ResponseEntity<String> sendEmail(@PathVariable String email) {
         userService.sendEmail(email);
+
         return ResponseEntity.ok("Email sent successfully");
+    }
+
+    @PostMapping("reset-password/{email}/{newPassword}")
+    public ResponseEntity<String> resetPassword(@PathVariable String email, @PathVariable String newPassword) {
+
+        UserDto user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        System.out.println(user.getName());
+        userService.changePassword(user, newPassword);
+        return ResponseEntity.ok("Password reset successfully");
     }
 
 

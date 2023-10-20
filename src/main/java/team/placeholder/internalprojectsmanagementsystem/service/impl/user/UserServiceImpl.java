@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
@@ -87,7 +89,7 @@ public class UserServiceImpl implements UserService{
     public UserDto changePassword(UserDto userDto, String newPassword) {
         User user = userRepository.findById(userDto.getId());
         if(user != null) {
-            user.setPassword(newPassword);
+            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
             user = userRepository.save(user);
             return UserMapper.toUserDto(user);
         }else{
