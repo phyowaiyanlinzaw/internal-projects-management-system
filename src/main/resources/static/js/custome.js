@@ -223,12 +223,14 @@ $(document).ready(function () {
     const dDSBtn = document.getElementById("drop-down-search-btn");
     const dDSbar = document.getElementById("dropdrown-search-bar");
 
-    window.addEventListener("resize", function () {
-        if (window.innerWidth > 768) {
-            // Screen size greater than 768px, hide the element
-            dDSbar.classList.add("d-none", "d-sm-none");
-        }
-    });
+    if(dDSbar != null) {
+        window.addEventListener("resize", function () {
+            if (window.innerWidth > 768) {
+                // Screen size greater than 768px, hide the element
+                dDSbar.classList.add("d-none", "d-sm-none");
+            }
+        });
+    }
 
     if (dDSBtn != null) {
         // toggle search bar when click the search button
@@ -243,11 +245,11 @@ $(document).ready(function () {
         });
 
         dDSbar.addEventListener('input', function (e) {
-            let inputText = dDSbar.querySelector('input').value;
+            let inputText = dDSbar.querySelector('input').value.toLowerCase();
             let allData = sortableContainer.children;
 
             for (let i = 0; i < allData.length; i++) {
-                let text = allData[i].querySelector('.card-title').textContent; // Use .textContent to get the text
+                let text = allData[i].querySelector('.card-title').textContent.toLowerCase(); // Use .textContent to get the text
 
                 if (text.includes(inputText)) {
                     allData[i].style.display = 'block';
