@@ -66,8 +66,6 @@ public class UserServiceImpl implements UserService{
 
     }
 
-
-
     @Override
     public UserDto updateProfile(UserDto userDto) {
         User user = userRepository.findById(userDto.getId());
@@ -95,7 +93,6 @@ public class UserServiceImpl implements UserService{
         }else{
             return null;
         }
-
 
     }
 

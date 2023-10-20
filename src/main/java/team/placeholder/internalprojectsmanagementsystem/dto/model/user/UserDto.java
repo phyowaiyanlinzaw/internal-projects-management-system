@@ -6,6 +6,8 @@ import team.placeholder.internalprojectsmanagementsystem.model.department.Depart
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 public class UserDto {
@@ -13,6 +15,8 @@ public class UserDto {
     private String name,email,password;
     private Role role;
     private Department department;
+
+
 
 
 
