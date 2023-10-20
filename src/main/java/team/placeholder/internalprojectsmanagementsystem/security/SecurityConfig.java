@@ -24,6 +24,7 @@ public class SecurityConfig {
                         (auth) -> auth
                                 .requestMatchers(
                                         "/resources/**",
+
                                         "/js/**",
                                         "/css/**",
                                         "/images/**",
@@ -31,6 +32,7 @@ public class SecurityConfig {
                                         "/font/**",
                                         "/lib/**",
                                         "/layout/**"
+
                                 ).permitAll()
                                 .requestMatchers("/department/**").hasAnyRole("PMO","SDQC")
                                 .requestMatchers("/").authenticated()
