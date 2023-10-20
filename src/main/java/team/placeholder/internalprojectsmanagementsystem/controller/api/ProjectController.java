@@ -12,26 +12,6 @@ import java.util.List;
 @RequestMapping("/api/project")
 @RequiredArgsConstructor
 public class ProjectController {
-    private final ProjectService projectService;
-    @GetMapping("/list")
-    public List<ProjectDto> getAllProject(){
-        return projectService.getAllProjects();
-    }
 
-    @GetMapping("/{id}/listone")
-    public ResponseEntity<ProjectDto> getProjectById(@PathVariable int id) {
-        ProjectDto projectDto = projectService.getProjectById(id);
 
-        if (projectDto != null) {
-            return ResponseEntity.ok(projectDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping("/save")
-    public ResponseEntity<ProjectDto> saveProject(@RequestBody ProjectDto projectDto) {
-        ProjectDto savedProjectDto = projectService.save(projectDto);
-        return ResponseEntity.ok(savedProjectDto);
-    }
 }

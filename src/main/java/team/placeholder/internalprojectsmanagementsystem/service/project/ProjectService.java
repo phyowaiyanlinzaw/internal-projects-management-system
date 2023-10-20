@@ -8,7 +8,7 @@ public interface ProjectService {
     ProjectDto save(ProjectDto projectDto);
 
     List<ProjectDto> getAllProjects();
-    ProjectDto getProjectById(int id);
+    ProjectDto getProjectById(long id);
     ProjectDto getProjectByName(String name);
 
     ProjectDto updateProject(ProjectDto projectDto);
