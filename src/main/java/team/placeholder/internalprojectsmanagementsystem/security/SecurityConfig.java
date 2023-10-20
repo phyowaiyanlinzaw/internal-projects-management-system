@@ -34,6 +34,7 @@ public class SecurityConfig {
                                         "/layout/**"
 
                                 ).permitAll()
+                                .requestMatchers("/report/**").hasAnyRole("PMO","SDQC")
                                 .requestMatchers("/department/**").hasAnyRole("PMO","SDQC")
                                 .requestMatchers("/").authenticated()
                                 .anyRequest().authenticated()

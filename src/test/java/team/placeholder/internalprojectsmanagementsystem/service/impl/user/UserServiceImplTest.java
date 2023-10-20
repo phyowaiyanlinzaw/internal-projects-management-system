@@ -4,10 +4,7 @@ import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -150,6 +147,19 @@ class UserServiceImplTest {
         assertEquals("1234567", user1.getPassword());
         verify(userRepository, times(1)).save(user1);
 
+    }
+
+    @Test
+    public void testSendEmail() {
+        String to = "test@example.com";
+
+        // Mock the behavior of mailSender
+        Mockito.doNothing().when(mailSender).send(any(SimpleMailMessage.class));
+
+        userService.sendEmail(to);
+
+        // Verify that the mailSender's send method was called with the expected message
+        Mockito.verify(mailSender).send(any(SimpleMailMessage.class));
     }
 
 

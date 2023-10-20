@@ -4,14 +4,11 @@ import java.security.SecureRandom;
 
 public class PasswordGenerator {
 
-    int length = 8; // Minimum length of 8 characters
-    String password = generatePassword(length);
-
     public static String generatePassword(int length) {
         String uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
         String numericChars = "0123456789";
-        String specialChars = "!@#$%^&*()-_=+[]{}|;:'\"<>,.?/";
+        String specialChars = "!@#$%^&*";
 
         String allChars = uppercaseChars + lowercaseChars + numericChars + specialChars;
 

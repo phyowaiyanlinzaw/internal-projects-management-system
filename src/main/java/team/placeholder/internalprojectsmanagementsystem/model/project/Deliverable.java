@@ -16,7 +16,7 @@ import java.util.Objects;
 @Setter
 public class Deliverable implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String description;
     private String name;

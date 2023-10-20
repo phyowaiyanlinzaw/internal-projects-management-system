@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class IssueServiceImpl implements IssueService {
 
-    //TODO: Implement Issue Service Implementation
-
     private final IssueRepository issueRepository;
     @Override
     public IssueDto save(IssueDto issueDto) {

@@ -34,7 +34,7 @@ public class Review implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Review other = (Review) o;
-        return id == other.id;
+        return Objects.equals(id, other.id);
     }
 
     @Override

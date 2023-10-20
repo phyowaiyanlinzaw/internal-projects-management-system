@@ -20,8 +20,9 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
 
+    @Column(unique = true)
+    private String name;
 
     @JsonBackReference
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -35,7 +36,7 @@ public class Department {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Department other = (Department) o;
-        return id == other.id;
+        return Objects.equals(id, other.id);
     }
 
     @Override
