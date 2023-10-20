@@ -1,8 +1,9 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
@@ -10,62 +11,80 @@ import team.placeholder.internalprojectsmanagementsystem.repository.project.Proj
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
-public class ProjectServiceImpl implements ProjectService {
+public class ProjectServiceImpl  implements ProjectService {
     private final ProjectRepository projectRepository;
-    private final ProjectMapper projectMapper;
 
 
     @Override
-    public ProjectDto  save(ProjectDto projectDto) {
-        Project project = projectMapper.toProject(projectDto);
-        Project savedProject = projectRepository.save(project);
-        return projectMapper.toProjectDto(savedProject);
+    public ProjectDto save(ProjectDto projectDto) {
+        Project project= new Project();
+        project.setId(projectDto.getId());
+        project.setName(projectDto.getName());
+        project.setBackground(projectDto.getBackground());
+        project.setStart_date(projectDto.getStart_date());
+        project.setEnd_date(projectDto.getEnd_date());
+        project.setObjective(projectDto.getObjective());
+        project.setDuration(projectDto.getDuration());
+        project.setCurrent_phase(projectDto.getCurrent_phase());
+        project.setClient(projectDto.getClient());
+        project.setDepartment(projectDto.getDepartment());
+        project.setUser(projectDto.getUser());
+        return ProjectMapper.toProjectDto(project);
+
+
     }
 
     @Override
     public List<ProjectDto> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
         return projects.stream()
-                .map(projectMapper::toProjectDto)
-                .collect(Collectors.toList());
-
+                .map(ProjectMapper::toProjectDto)
+                .collect(java.util.stream.Collectors.toList());
     }
 
-
     @Override
-    public ProjectDto getProjectById(int id) {
-        Optional<Project> optionalProject = Optional.ofNullable(projectRepository.findById(id));
+    public ProjectDto getProjectById(long id) {
+        Project project= projectRepository.findById(id);
+        if(project != null){
+            return ProjectMapper.toProjectDto(project);
 
-        if (optionalProject.isPresent()) {
-            Project project = optionalProject.get();
-            return projectMapper.toProjectDto(project);
-        } else {
-
+        }else {
             return null;
         }
     }
 
     @Override
     public ProjectDto getProjectByName(String name) {
-        return null;
+        Project project=projectRepository.findByName(name);
+        if (project!= null){
+            return ProjectMapper.toProjectDto(project);
+
+        }else {
+            return null;
+        }
     }
 
     @Override
     public ProjectDto updateProject(ProjectDto projectDto) {
-
-        Project project = projectMapper.toProject(projectDto);
-        if (projectRepository.existsById(project.getId())) {
-
-            Project updatedProject = projectRepository.save(project);
-
-            return projectMapper.toProjectDto(updatedProject);
-        } else {
-
+        Project project= projectRepository.findById(projectDto.getId());
+        if(project!= null){
+            project.setId(projectDto.getId());
+            project.setName(projectDto.getName());
+            project.setBackground(projectDto.getBackground());
+            project.setStart_date(projectDto.getStart_date());
+            project.setEnd_date(projectDto.getEnd_date());
+            project.setObjective(projectDto.getObjective());
+            project.setDuration(projectDto.getDuration());
+            project.setCurrent_phase(projectDto.getCurrent_phase());
+            project.setClient(projectDto.getClient());
+            project.setDepartment(projectDto.getDepartment());
+            project.setUser(projectDto.getUser());
+            return ProjectMapper.toProjectDto(project);
+        }else {
             return null;
         }
     }
@@ -74,6 +93,4 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteProject(long id) {
 
     }
-
-    //TODO: Implement Project Service Implementation
 }
