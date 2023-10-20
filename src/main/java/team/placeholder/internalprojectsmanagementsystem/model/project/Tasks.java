@@ -14,15 +14,14 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor
 @Table(name="tasks")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Tasks implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private long id;
     private String title;
     private String description;
     private String status;
@@ -42,7 +41,7 @@ public class Tasks implements Serializable {
 
     @ManyToMany
     @JoinTable(name="task_notification",
-            joinColumns = @JoinColumn(name="task_id"),
+            joinColumns = @JoinColumn(name="tasks_id"),
             inverseJoinColumns = @JoinColumn(name="notification_id"))
     private Set<Notification> notifications = new HashSet<>();
 
@@ -71,6 +70,5 @@ public class Tasks implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 
 }

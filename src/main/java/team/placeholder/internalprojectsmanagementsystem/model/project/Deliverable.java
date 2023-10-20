@@ -24,8 +24,9 @@ public class Deliverable implements Serializable {
     private String status;
     private Date due_date;
 
+
     @ManyToOne
-    @JoinTable(name="project_id")
+    @JoinColumn(name = "project_id")
     private Project project;
     @Override
     public boolean equals(Object o) {

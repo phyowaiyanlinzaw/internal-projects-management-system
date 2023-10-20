@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -19,6 +22,8 @@ public class Notification implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String description;
+
+
 
     @ManyToMany(mappedBy = "notifications",cascade = CascadeType.ALL)
     private Set<Tasks> tasks = new HashSet<>();
