@@ -8,19 +8,23 @@
 
  -->
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<html
+    lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="layout/layout"
+>
+    <head></head>
 
-<head>
-
-</head>
-
-<body>
-<div class="container-fluid position-relative bg-white d-flex p-0" layout:fragment="content">
-
-
-    <!-- Content Start -->
-    <div class="content" style="
+    <body>
+        <div
+            class="container-fluid position-relative bg-white d-flex p-0"
+            layout:fragment="content"
+        >
+            <!-- Content Start -->
+            <div
+                class="content"
+                style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
@@ -28,146 +32,571 @@
                         #e5e5f7 0.6000000000000001px
                     );
                     background-size: 12px 12px;
-                ">
-        <div th:replace="fragments/navigation :: header"></div>
+                "
+            >
+                <!-- Navbar Start -->
+                <nav
+                    class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0"
+                >
+                    <a
+                        href="index.html"
+                        class="navbar-brand d-flex d-lg-none me-4"
+                    >
+                        <h2 class="text-primary mb-0">
+                            <i class="fa fa-hashtag"></i>
+                        </h2>
+                    </a>
+                    <a href="#" class="sidebar-toggler flex-shrink-0">
+                        <i class="fa fa-bars"></i>
+                    </a>
 
-        <!-- Search Start -->
-        <div class="container-fluid d-md-block pt-2 ps-s pe-2" id="dropdrown-search-bar">
-            <div class="d-flex flex-row justify-content-between position-relative">
-                <form class="d-md-flex">
-                    <input class="form-control border-0" type="search" placeholder="Search" />
-                </form>
-                <div class="position-absolute end-0 d-flex gap-3">
-                    <!-- modal toggle button start -->
-                    <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop">
-                        <i class="bi bi-building-fill-add"></i>
-                    </button>
-                    <!-- modal toggle button end -->
-                    <!-- add department modal start -->
+                    <div class="navbar-nav align-items-center ms-auto">
+                        <i
+                            class="bi bi-search d-md-none d-block d-sm-block fs-4"
+                            id="drop-down-search-btn"
+                        ></i>
 
-                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5">
-                                        Add new Department
-                                    </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
-                                    <form>
-                                        <div class="form-floating mb-3">
-                                            <input type="email" class="form-control" id="floatingInput"
-                                                   placeholder="name@example.com" />
-                                            <label for="floatingInput">Email address</label>
+                        <div class="nav-item dropdown">
+                            <a
+                                href="#"
+                                class="nav-link dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                            >
+                                <i class="fa fa-envelope me-lg-2"></i>
+                                <span class="d-none d-lg-inline-flex"
+                                    >Message</span
+                                >
+                            </a>
+                            <div
+                                class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0"
+                            >
+                                <a href="#" class="dropdown-item">
+                                    <div class="d-flex align-items-center">
+                                        <img
+                                            class="rounded-circle"
+                                            src="https://source.unsplash.com/random/200x200?sig=1"
+                                            alt
+                                            style="width: 40px; height: 40px"
+                                        />
+                                        <div class="ms-2">
+                                            <h6 class="fw-normal mb-0">
+                                                Jhon send you a message
+                                            </h6>
+                                            <small>15 minutes ago</small>
                                         </div>
-                                        <div class="form-floating mb-4">
-                                            <input type="password" class="form-control" id="floatingPassword"
-                                                   placeholder="Password" />
-                                            <label for="floatingPassword">Password</label>
+                                    </div>
+                                </a>
+                                <hr class="dropdown-divider" />
+                                <a href="#" class="dropdown-item text-center"
+                                    >See all message</a
+                                >
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a
+                                href="#"
+                                class="nav-link dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                            >
+                                <i class="fa fa-bell me-lg-2"></i>
+                                <span class="d-none d-lg-inline-flex"
+                                    >Notificatin</span
+                                >
+                            </a>
+                            <div
+                                class="dropdown-menu dropdown-menu-end bg-light border-dark rounded-bottom m-0 overflow-auto"
+                                style="height: 200px"
+                            >
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">
+                                        Profile updated
+                                    </h6>
+                                    <small>15 minutes ago</small>
+                                </a>
+                                <hr class="dropdown-divider" />
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">
+                                        New user added
+                                    </h6>
+                                    <small>15 minutes ago</small>
+                                </a>
+                                <hr class="dropdown-divider" />
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">
+                                        Password changed
+                                    </h6>
+                                    <small>15 minutes ago</small>
+                                </a>
+                                <hr class="dropdown-divider" />
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">
+                                        New user added
+                                    </h6>
+                                    <small>15 minutes ago</small>
+                                </a>
+                                <hr class="dropdown-divider" />
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">
+                                        New user added
+                                    </h6>
+                                    <small>15 minutes ago</small>
+                                </a>
+                                <hr class="dropdown-divider" />
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">
+                                        New user added
+                                    </h6>
+                                    <small>15 minutes ago</small>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a
+                                href="#"
+                                class="nav-link dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                            >
+                                <img
+                                    class="rounded-circle"
+                                    src="https://source.unsplash.com/random/200x200?sig=1"
+                                    alt
+                                    style="width: 40px; height: 40px"
+                                />
+                                <span class="d-none d-lg-inline-flex"
+                                    >John Doe</span
+                                >
+                            </a>
+                            <div
+                                class="dropdown-menu dropdown-menu-end bg-light border-dark rounded-bottom m-0"
+                            >
+                                <a
+                                    href="#"
+                                    class="dropdown-item"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#profile-modal"
+                                    >My Profile</a
+                                >
+                                <!-- <a href="#" class="dropdown-item">Settings</a> -->
+                                <a href="#" class="dropdown-item d-flex gap-1"
+                                    ><i
+                                        class="bi bi-box-arrow-right text-danger"
+                                    ></i
+                                    >Log Out</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <!-- Navbar End -->
+
+                <!-- Search Start -->
+                <div
+                    class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar"
+                >
+                    <div class="d-flex flex-row justify-content-end gap-2">
+                        <form class="d-inline-block">
+                            <input
+                                class="form-control border-0"
+                                type="search"
+                                placeholder="Search"
+                            />
+                        </form>
+                        <!-- modal toggle button start -->
+                        <button
+                            type="button"
+                            class="btn btn-light align-self-start"
+                            data-bs-toggle="modal"
+                            data-bs-target="#add-department-modal"
+                        >
+                            <i class="bi bi-building-fill-add"></i>
+                        </button>
+                        <!-- modal toggle button end -->
+                        <!-- add department modal start -->
+
+                        <!-- add department modal end -->
+                        <!-- sortting button -->
+                        <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+
+                        <!-- Modal -->
+                    </div>
+                </div>
+                <!-- Search End -->
+
+                <!-- department start -->
+
+                <div
+                    id="grid"
+                    class="item-content animate__animated animate__fadeIn active"
+                    data-toggle-extra="tab-content"
+                >
+                    <div class="row" id="sort-container" style="margin: 10px">
+                        <div
+                            class="col-lg-4 col-md-4"
+                            style="padding-bottom: 20px"
+                        >
+                            <div
+                                class="card card-block card-stretch card-height"
+                                style="background-color: rgb(242, 247, 248)"
+                            >
+                                <div class="card-body">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between mb-4"
+                                    >
+                                        <img
+                                            src="images/levi.png"
+                                            style="height: 100px; width: 100px"
+                                        />
+                                    </div>
+
+                                    <h5
+                                        class="mb-1 card-title department-detail-titile"
+                                    >
+                                        Development
+                                    </h5>
+                                    <p class="mb-3">
+                                        Preparing framework of block-based
+                                        WordPress Theme.
+                                    </p>
+                                    <div
+                                        class="d-flex align-items-center justify-content-between pt-3 border-top"
+                                    >
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/eren.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/mikasa.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/jean.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
                                         </div>
-                                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4"
-                                                id="loign-btn">
-                                            Sign In
-                                        </button>
-                                    </form>
+                                        <a
+                                            href=""
+                                            class="btn btn-white text-secondary link-shadow"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#department-details"
+                                            >See More</a
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div
+                                class="card card-block card-stretch card-height"
+                                style="background-color: rgb(242, 247, 248)"
+                            >
+                                <div class="card-body">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between mb-4"
+                                    >
+                                        <div>
+                                            <img
+                                                src="images/levi.png"
+                                                style="
+                                                    height: 100px;
+                                                    width: 100px;
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <h5
+                                        class="mb-1 card-title department-detail-titile"
+                                    >
+                                        Theme development
+                                    </h5>
+                                    <p class="mb-3">
+                                        Preparing framework of block-based
+                                        WordPress Theme.
+                                    </p>
+                                    <div
+                                        class="d-flex align-items-center justify-content-between pt-3 border-top"
+                                    >
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/eren.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/mikasa.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/jean.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div
+                                class="card card-block card-stretch card-height"
+                                style="background-color: rgb(242, 247, 248)"
+                            >
+                                <div class="card-body">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between mb-4"
+                                    >
+                                        <div>
+                                            <img
+                                                src="images/levi.png"
+                                                style="
+                                                    height: 100px;
+                                                    width: 100px;
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <h5
+                                        class="mb-1 card-title department-detail-titile"
+                                    >
+                                        Theme development
+                                    </h5>
+                                    <p class="mb-3">
+                                        Preparing framework of block-based
+                                        WordPress Theme.
+                                    </p>
+                                    <div
+                                        class="d-flex align-items-center justify-content-between pt-3 border-top"
+                                    >
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/eren.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/mikasa.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/jean.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div
+                                class="card card-block card-stretch card-height"
+                                style="background-color: rgb(242, 247, 248)"
+                            >
+                                <div class="card-body">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between mb-4"
+                                    >
+                                        <div>
+                                            <img
+                                                src="images/levi.png"
+                                                style="
+                                                    height: 100px;
+                                                    width: 100px;
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <h5
+                                        class="mb-1 card-title department-detail-titile"
+                                    >
+                                        Theme development
+                                    </h5>
+                                    <p class="mb-3">
+                                        Preparing framework of block-based
+                                        WordPress Theme.
+                                    </p>
+                                    <div
+                                        class="d-flex align-items-center justify-content-between pt-3 border-top"
+                                    >
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/eren.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/mikasa.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/jean.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div
+                                class="card card-block card-stretch card-height"
+                                style="background-color: rgb(242, 247, 248)"
+                            >
+                                <div class="card-body">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between mb-4"
+                                    >
+                                        <div>
+                                            <img
+                                                src="images/levi.png"
+                                                style="
+                                                    height: 100px;
+                                                    width: 100px;
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                    <h5
+                                        class="mb-1 card-title department-detail-titile"
+                                    >
+                                        Theme development
+                                    </h5>
+                                    <p class="mb-3">
+                                        Preparing framework of block-based
+                                        WordPress Theme.
+                                    </p>
+                                    <div
+                                        class="d-flex align-items-center justify-content-between pt-3 border-top"
+                                    >
+                                        <div class="iq-media-group">
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/eren.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/mikasa.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                            <a href="#" class="iq-media">
+                                                <img
+                                                    class="img-fluid avatar-40 rounded-circle"
+                                                    src="images/jean.png"
+                                                    alt=""
+                                                    style="
+                                                        height: 40px;
+                                                        width: 40px;
+                                                    "
+                                                />
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- add department modal end -->
-                    <!-- sortting button -->
-                    <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
                 </div>
-
-                <!-- Modal -->
+                <!-- department end -->
             </div>
+            <!-- Content End -->
+
+            <!-- Back to Top -->
         </div>
-        <!-- Search End -->
-
-        <!-- department start -->
-        <div class="container-fluid border mt-sm-3 mt-3 mt-md-0">
-            <div class="row row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 gap-md-0 g-3 p-sm-2"
-                 id="sort-container">
-                <!-- TODO :: SHOW ALL PROJECT LIST START FROM HERE -->
-                <div class="p-md-3 p-sm-2 active-card" data-bs-toggle="modal" data-bs-target="#department-details">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark position-relative">
-                            <h4 class="card-title modal-detail-title">z</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex align-item-center">
-                                <img src="https://source.unsplash.com/random/200x200?sig=1"
-                                     class="img-fluid rounded-circle w-25" alt="..." />
-                                <h5 class="card-title text-center text-align-center m-auto">
-                                    Department Head's Name
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-md-3 p-sm-2 active-card" data-bs-toggle="modal" data-bs-target="#department-details">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark position-relative">
-                            <h4 class="card-title modal-detail-title">z</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex align-item-center">
-                                <img src="https://source.unsplash.com/random/200x200?sig=1"
-                                     class="img-fluid rounded-circle w-25" alt="..." />
-                                <h5 class="card-title text-center text-align-center m-auto">
-                                    Department Head's Name
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-md-3 p-sm-2 active-card" data-bs-toggle="modal" data-bs-target="#department-details">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark position-relative">
-                            <h4 class="card-title modal-detail-title">z</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex align-item-center">
-                                <img src="https://source.unsplash.com/random/200x200?sig=1"
-                                     class="img-fluid rounded-circle w-25" alt="..." />
-                                <h5 class="card-title text-center text-align-center m-auto">
-                                    Department Head's Name
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-md-3 p-sm-2 active-card" data-bs-toggle="modal" data-bs-target="#department-details">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark position-relative">
-                            <h4 class="card-title modal-detail-title">zaw lin shein</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex align-item-center">
-                                <img src="https://source.unsplash.com/random/200x200?sig=1"
-                                     class="img-fluid rounded-circle w-25" alt="..." />
-                                <h5 class="card-title text-center text-align-center m-auto">
-                                    Department Head's Name
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- TODO :: SHOW ALL PROJECT LIST END HERE -->
-            </div>
-        </div>
-        <!-- department end -->
-
-    </div>
-    <!-- Content End -->
-
-   </div>
-
-
-</body>
-
+    </body>
 </html>
