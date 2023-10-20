@@ -47,5 +47,6 @@ public class ViewController {
         return "redirect:/dashboard";
     }
 
-
+    @GetMapping("/department")
+    public String department() { return "department"; }
 }
