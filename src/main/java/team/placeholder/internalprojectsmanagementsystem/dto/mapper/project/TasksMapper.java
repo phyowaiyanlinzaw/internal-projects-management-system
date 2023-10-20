@@ -16,7 +16,7 @@ public class TasksMapper {
         tasksDto.setStart_time(tasks.getStart_time());
         tasksDto.setEnd_time(tasks.getEnd_time());
         tasksDto.setActual_mm(tasks.getActual_mm());
-        tasksDto.setExcepted_mm(tasks.getExcepted_mm());
+        tasksDto.setExcepted_mm(tasks.getExpected_mm());
         return tasksDto;
     }
 }
