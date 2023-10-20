@@ -590,5 +590,8 @@ $(document).ready(function () {
 
     console.log(firstChart);
     firstChart.config.options.animation.duration = 5000;
+
+
+
 });
 
