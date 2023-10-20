@@ -36,6 +36,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     }
 
+    @Override
+    public ProjectDto getProjectById(long id) {
+        return null;
+    }
+
 
     @Override
     public ProjectDto getProjectById(int id) {
