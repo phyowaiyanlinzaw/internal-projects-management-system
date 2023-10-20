@@ -47,10 +47,5 @@ public class ViewController {
         return "redirect:/dashboard";
     }
 
-    @GetMapping("/reset-password")
-    public String resetPassword(){
-        return "password-reset";
-    }
-
 
 }

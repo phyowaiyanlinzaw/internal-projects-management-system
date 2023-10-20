@@ -333,7 +333,7 @@ $(document).ready(function () {
     const droppables = document.querySelectorAll(".swim-lane");
     const modal = document.getElementById("task-details");
 
-    const trashCan = document.querySelector('.trash')
+    const trashCanContainer = document.querySelector('.trash-can-container')
 
     todoForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -397,33 +397,33 @@ $(document).ready(function () {
 
     // ======================= TRASH BRN ======================
 
-    if(trashCan != null) {
+    if(trashCanContainer != null) {
         const comfirmBox = document.querySelector('#confirm-box')
         const bModal = new bootstrap.Modal(comfirmBox)
         let currentTask;
-        console.log(trashCan)
-        trashCan.addEventListener('dragover', function (e) {
+        console.log(trashCanContainer)
+        trashCanContainer.addEventListener('dragover', function (e) {
             e.preventDefault();
             currentTask = document.querySelector('.is-dragging')
             if(currentTask === null) return
 
             console.log(this)
-            this.classList.add('drag-over')
+            document.querySelector('.trash').classList.add('drag-over')
 
         })
 
-        trashCan.addEventListener('dragleave', function(e) {
-            this.classList.remove('drag-over')
+        trashCanContainer.addEventListener('dragleave', function(e) {
+            document.querySelector('.trash').classList.remove('drag-over')
         })
 
-        trashCan.addEventListener('drop', function (e) {
+        trashCanContainer.addEventListener('drop', function (e) {
             bModal.show()
         })
 
         comfirmBox.addEventListener('click', function(e) {
             if(e.target.innerText.toLowerCase() === 'yes') {
                 currentTask.remove()
-                trashCan.classList.remove('drag-over')
+                document.querySelector('.trash').classList.remove('drag-over')
                 bModal.hide()
             } else if (e.target.innerText.toLowerCase() === 'no') {
                 bModal.hide()
