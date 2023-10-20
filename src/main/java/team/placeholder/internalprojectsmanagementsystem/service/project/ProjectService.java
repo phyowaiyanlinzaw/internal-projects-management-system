@@ -4,7 +4,6 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Proje
 import java.util.List;
 
 public interface ProjectService {
-    //TODO: Implement Project Service
 
     ProjectDto save(ProjectDto projectDto);
 

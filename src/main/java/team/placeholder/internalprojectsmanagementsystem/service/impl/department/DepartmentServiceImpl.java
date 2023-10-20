@@ -17,8 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
-    //TODO: Implement Department Service Implementation
-
     private final DepartmentRepository departmentRepository;
 
     @Override
