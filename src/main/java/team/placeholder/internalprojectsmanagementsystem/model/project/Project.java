@@ -86,4 +86,7 @@ public class Project implements Serializable {
         return Objects.hash(id);
     }
 
+    public Project orElse(Object o) {
+        return null;
+    }
 }
