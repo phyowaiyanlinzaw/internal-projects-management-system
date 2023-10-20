@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head th:replace="fragments/header :: header">
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Layout</title>
 </head>
+
 <body>
-<!-- Spinner Start -->
-<!-- <div id="spinner"
+    <!-- Spinner Start -->
+    <!-- <div id="spinner"
      class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
         <span class="sr-only">Loading...</span>
@@ -19,155 +20,295 @@
 
     <div layout:fragment="content"></div>
 
-        <!-- modal for department's details -->
-        <div class="modal fade" id="department-details" data-bs-keyboard="true">
-            <div
-                    class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down modal-fullscreen-md-down modal-fullscreen-lg-down">
-                <div class="modal-content">
-                    <div class="modal-header bg-info text-white">
-                        <h5 class="modal-title" id="staticBackdropLabel">
-                        </h5>
-                        <button type="button" class="btn-close text-white btn-close-white" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
-                        <div class="row row-cols-1 row-cols-md-1 row-cols-xl-2">
-                            <div class="col border border-dark rounded p-2">
-                                <div class="row row-cols-1">
-                                    <img src="https://source.unsplash.com/random/200x200?sig=1" alt=""
-                                         class="rounded-circle col m-auto border img-fluid" style="width: 40%;">
-                                    <p class="text-center fs-1 col m-auto">Zaw Lin Shein</p>
+    <!-- modal for department's details -->
+    <div class="modal fade" id="department-details" data-bs-keyboard="true">
+        <div
+            class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down modal-fullscreen-md-down modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #369; color: white">
+                    <h5 class="modal-title" id="staticBackdropLabel">
+                        Department Details
+                    </h5>
+                    <button type="button" class="btn-close text-white btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="card">
+                                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                                        <img src="images/profile.png" alt="Profile" class="rounded-circle" style="
+                                                    height: 100px;
+                                                    width: 100px;
+                                                " />
+                                        <h4 style="margin-top: 10px">
+                                            Department Head
+                                        </h4>
+                                        <h5>Lai Kuan Lin</h5>
+                                        <div class="social-links mt-2">
+                                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <ul class="list-group mb-2">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Total Project
-                                        <span class="badge bg-primary rounded-pill">14</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Total Member
-                                        <span class="badge bg-primary rounded-pill">100</span>
-                                    </li>
-                                </ul>
-                                <a href="2projects.html" class="btn btn-primary">See Projects</a>
                             </div>
-                            <div>
-                                <canvas class="col-6 border border-dark rounded mt-2 bg-dark w-100"
-                                        id="department-projects-chart" width="600" height="400"></canvas>
+                            <div class="col-9">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <!-- Bordered Tabs -->
+                                        <ul class="nav nav-tabs nav-tabs-bordered">
+                                            <li class="nav-item">
+                                                <button class="nav-link active" data-bs-toggle="tab"
+                                                    data-bs-target="#profile-overview">
+                                                    Overview
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <button class="nav-link" data-bs-toggle="tab"
+                                                    data-bs-target="#profile-edit">
+                                                    Edit Profile
+                                                </button>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content pt-2">
+                                            <div class="tab-pane fade show active profile-overview"
+                                                id="profile-overview">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-5">
+                                                            <div class="row" style="
+                                                                        margin-top: 20px;
+                                                                    ">
+                                                                <div class="col-lg-9 col-md-8">
+                                                                    HR
+                                                                    Department
+                                                                </div>
+                                                                <br /><br />
+                                                            </div>
+                                                            <ul class="list-group mb-2">
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    Total
+                                                                    Project
+                                                                    <span
+                                                                        class="badge bg-primary rounded-pill">14</span>
+                                                                </li>
+                                                                <br />
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    Total
+                                                                    Member
+                                                                    <span
+                                                                        class="badge bg-primary rounded-pill">100</span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-7">
+                                                            <canvas
+                                                                class="col-6 border border-dark rounded mt-2 bg-light w-100"
+                                                                id="department-projects-chart" width="600"
+                                                                height="400"></canvas>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                                                <form>
+                                                    <div>
+                                                        <label>Department
+                                                            Name</label>
+                                                        <br /><br />
+                                                        <input type="text" class="form-control" name="departmentname"
+                                                            placeholder="Department Name" />
+                                                    </div>
+                                                    <br />
+                                                    <div>
+                                                        <label for="departmenthead">Choose
+                                                            Deparment
+                                                            Head:</label><br /><br />
+                                                        <select name="departmenthead" id="departmenthead"
+                                                            class="form-control">
+                                                            <option value="volvo">
+                                                                Phyoe Wai
+                                                                Yan
+                                                            </option>
+                                                            <option value="saab">
+                                                                Zaw Lin
+                                                                Shein
+                                                            </option>
+                                                            <option value="opel">
+                                                                Thant Htet
+                                                                Ko
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <br />
+
+                                                    <button style="
+                                                                background-color: #369;
+                                                            " type="submit" class="btn btn-primary py-2 w-100 mb-3"
+                                                        id="loign-btn">
+                                                        Edit
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- End Bordered Tabs -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- modal for department's details -->
+    </div>
+    <!-- modal for department's details -->
 
-        <!-- task's details start -->
-        <div class="modal fade" id="task-details" data-bs-keyboard="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body"></div>
+    <!-- task's details start -->
+    <div class="modal fade" id="task-details" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+    <!-- task's details end -->
+
+    <!-- add task -->
+    <div class="modal fade" id="add-task" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="todo-form">
+                        <input type="text" class="form-control" placeholder="New TODO..." id="todo-input" />
+                    </form>
                 </div>
             </div>
         </div>
-        <!-- task's details end -->
+    </div>
+    <!-- add task -->
 
-        <!-- add task -->
-        <div class="modal fade" id="add-task" data-bs-keyboard="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form id="todo-form">
-                            <input type="text" class="form-control" placeholder="New TODO..." id="todo-input" />
-                        </form>
-                    </div>
+    <!-- confrim box for delete -->
+    <div class="modal fade" id="confirm-box" data-bs-keyboard="false" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>Are you sure you want to delete ?</span>
+                    <button class="btn btn-danger col me-1">YES</button>
+                    <button class="btn btn-primary col" data-bs-dismiss="modal" aria-label="Close">
+                        NO
+                    </button>
                 </div>
             </div>
         </div>
-        <!-- add task -->
+    </div>
+    <!-- confirm box for delete -->
 
-        <!-- confrim box for delete -->
-        <div class="modal fade" id="confirm-box" data-bs-keyboard="false" data-bs-backdrop="static">
-            <div class="modal-dialog modal-dialog-centered modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span>Are you sure you want to delete ?</span>
-                        <button class="btn btn-danger col me-1">
-                            YES
+    <!-- modal for project's details -->
+    <div class="modal fade" id="project-details" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <a href="/project" class="btn btn-primary">manage task</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal for project's details -->
+
+    <!-- add department modal -->
+    <div class="modal fade" id="add-department-modal" data-bs-backdrop="static" data-bs-keyboard="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img src="images/tph.png" style="width: 70px; height: 45px" />
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
+                    <form>
+                        <h1 class="modal-title fs-5" style="
+                                    margin-bottom: 10px;
+                                    text-align: center;
+                                    color: #369;
+                                    font-weight: bold;
+                                ">
+                            Add Department
+                        </h1>
+                        <div>
+                            <label>Department Name</label> <br /><br />
+                            <input type="text" class="form-control" name="departmentname"
+                                placeholder="Department Name" />
+                        </div>
+                        <br />
+                        <div>
+                            <label for="departmenthead">Choose Deparment
+                                Head:</label><br /><br />
+                            <select name="departmenthead" id="departmenthead" class="form-control">
+                                <option value="volvo">Phyoe Wai Yan</option>
+                                <option value="saab">Zaw Lin Shein</option>
+                                <option value="opel">Thant Htet Ko</option>
+                            </select>
+                        </div>
+                        <br />
+
+                        <button style="background-color: #369" type="submit" class="btn btn-primary py-2 w-100 mb-3"
+                            id="loign-btn">
+                            Add
                         </button>
-                        <button class="btn btn-primary col" data-bs-dismiss="modal" aria-label="Close">
-                            NO
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <!-- confirm box for delete -->
+    </div>
+    <!-- add department modal -->
 
-        <!-- modal for project's details -->
-        <div class="modal fade" id="project-details" data-bs-keyboard="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body"></div>
-                    <div class="modal-footer">
-                        <a href="/project" class="btn btn-primary">manage task</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- modal for project's details -->
+    <div th:replace="fragments/footer :: footer"></div>
 
-        <!-- profile modal -->
-        <div class="modal fade" id="profile-modal" data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="modal-body">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- profile modal -->
+    <!-- fontawesome -->
+    <script src="/js/fontawesome.js"></script>
 
+    <!-- jquery -->
+    <script src="/js/jquery.3.7.1.min.js"></script>
 
+    <!-- datable table -->
+    <script src="/js/databales.min.js"></script>
 
-        <div th:replace="fragments/footer :: footer"></div>
+    <!-- bootstrap -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
 
-<!-- fontawesome -->
-<script src="/js/fontawesome.js"></script>
+    <!-- javascript libraries -->
+    <script src="/lib/chart/chart.min.js"></script>
+    <script src="/lib/easing/easing.min.js"></script>
+    <script src="/lib/waypoints/waypoints.min.js"></script>
+    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-<!-- jquery -->
-<script src="/js/jquery.3.7.1.min.js"></script>
+    <!-- Template Javascript -->
+    <script src="/js/main.js"></script>
+    <script src="/js/forprogresscircleiguess.js"></script>
 
-<!-- datable table -->
-<script src="/js/databales.min.js"></script>
-
-<!-- bootstrap -->
-<script src="/js/bootstrap.bundle.min.js"></script>
-
-<!-- javascript libraries -->
-<script src="/lib/chart/chart.min.js"></script>
-<script src="/lib/easing/easing.min.js"></script>
-<script src="/lib/waypoints/waypoints.min.js"></script>
-<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="/lib/tempusdominus/js/moment.min.js"></script>
-<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-<!-- Template Javascript -->
-<script src="/js/main.js"></script>
-<script src="/js/forprogresscircleiguess.js"></script>
-
-<!-- sort (department, project), form validation and search bar behavior are all here -->
-<script src="/js/custome.js"></script>
+    <!-- sort (department, project), form validation and search bar behavior are all here -->
+    <script src="/js/custome.js"></script>
 </body>
+
 </html>
