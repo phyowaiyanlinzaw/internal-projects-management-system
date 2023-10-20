@@ -7,7 +7,6 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.util.List;
 
 public interface UserService {
-    //TODO: Implement User Service
     UserDto save(UserDto userDto);
 
     UserDto getUserById(long id);

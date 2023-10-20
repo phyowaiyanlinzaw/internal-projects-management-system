@@ -20,7 +20,7 @@ class PasswordGeneratorTest {
         assertTrue(password.chars().anyMatch(Character::isDigit));
 
         // Ensure the generated password contains at least one special character
-        assertTrue(password.chars().anyMatch(ch -> "!@#$%^&*()-_=+[]{}|;:'\"<>,.?/".contains(String.valueOf((char) ch))));
+        assertTrue(password.chars().anyMatch(ch -> "!@#$%^&*".contains(String.valueOf((char) ch))));
 
     }
 

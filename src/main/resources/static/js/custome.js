@@ -220,34 +220,47 @@ $(document).ready(function () {
 
     // ======================== SEARCH BAR BEHAVIOR START HERE ========================
 
-    const dDSBtn = $("#drop-down-search-btn");
-    const dDSbar = $("#dropdrown-search-bar");
+    const dDSBtn = document.getElementById("drop-down-search-btn");
+    const dDSbar = document.getElementById("dropdrown-search-bar");
 
-    $(window).on("resize", function () {
+    window.addEventListener("resize", function () {
         if (window.innerWidth > 768) {
             // Screen size greater than 768px, hide the element
-            dDSbar.addClass("d-none d-sm-none");
+            dDSbar.classList.add("d-none", "d-sm-none");
         }
     });
 
     if (dDSBtn != null) {
         // toggle search bar when click the search button
-        dDSBtn.on("click", function () {
-            console.log(dDSbar.hasClass("d-none", "d-sm-none"));
-            if (dDSbar.hasClass("d-none", "d-sm-none")) {
+        dDSBtn.addEventListener("click", function () {
+            if (dDSbar.classList.contains("d-none", "d-sm-none")) {
                 // Classes are present, so show the element
-                dDSbar.removeClass("d-none d-sm-none");
+                dDSbar.classList.remove("d-none", "d-sm-none");
             } else {
-                console.log("false so should add classes");
                 // Classes are not present, so hide the element
-                dDSbar.addClass("d-none d-sm-none");
+                dDSbar.classList.add("d-none", "d-sm-none");
+            }
+        });
+
+        dDSbar.addEventListener('input', function (e) {
+            let inputText = dDSbar.querySelector('input').value;
+            let allData = sortableContainer.children;
+
+            for (let i = 0; i < allData.length; i++) {
+                let text = allData[i].querySelector('.card-title').textContent; // Use .textContent to get the text
+
+                if (text.includes(inputText)) {
+                    allData[i].style.display = 'block';
+                } else {
+                    allData[i].style.display = 'none';
+                }
             }
         });
     }
 
     // close search bar when window width < 768
     if (window.innerWidth < 768) {
-        dDSbar.addClass("d-none d-sm-none");
+        dDSbar.classList.add("d-none", "d-sm-none");
     }
 
     // ======================== SEARCH BEHAVIOR END HERE ========================
@@ -320,7 +333,7 @@ $(document).ready(function () {
     const droppables = document.querySelectorAll(".swim-lane");
     const modal = document.getElementById("task-details");
 
-    const trashCan = document.querySelector('.trash')
+    const trashCanContainer = document.querySelector('.trash-can-container')
 
     todoForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -384,33 +397,33 @@ $(document).ready(function () {
 
     // ======================= TRASH BRN ======================
 
-    if(trashCan != null) {
+    if(trashCanContainer != null) {
         const comfirmBox = document.querySelector('#confirm-box')
         const bModal = new bootstrap.Modal(comfirmBox)
         let currentTask;
-        console.log(trashCan)
-        trashCan.addEventListener('dragover', function (e) {
+        console.log(trashCanContainer)
+        trashCanContainer.addEventListener('dragover', function (e) {
             e.preventDefault();
             currentTask = document.querySelector('.is-dragging')
             if(currentTask === null) return
 
             console.log(this)
-            this.classList.add('drag-over')
+            document.querySelector('.trash').classList.add('drag-over')
 
         })
 
-        trashCan.addEventListener('dragleave', function(e) {
-            this.classList.remove('drag-over')
+        trashCanContainer.addEventListener('dragleave', function(e) {
+            document.querySelector('.trash').classList.remove('drag-over')
         })
 
-        trashCan.addEventListener('drop', function (e) {
+        trashCanContainer.addEventListener('drop', function (e) {
             bModal.show()
         })
 
         comfirmBox.addEventListener('click', function(e) {
             if(e.target.innerText.toLowerCase() === 'yes') {
                 currentTask.remove()
-                trashCan.classList.remove('drag-over')
+                document.querySelector('.trash').classList.remove('drag-over')
                 bModal.hide()
             } else if (e.target.innerText.toLowerCase() === 'no') {
                 bModal.hide()

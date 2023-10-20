@@ -19,6 +19,7 @@ public class Client implements Serializable {
     private long id;
     private String name;
     private String phone;
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)

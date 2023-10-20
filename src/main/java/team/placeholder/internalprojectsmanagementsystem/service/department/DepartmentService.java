@@ -6,7 +6,6 @@ import team.placeholder.internalprojectsmanagementsystem.model.department.Depart
 import java.util.List;
 
 public interface DepartmentService {
-    //TODO: Implement Department Service
     DepartmentDto save(DepartmentDto departmentDto);
 
     List<DepartmentDto> getAllDepartments();

@@ -21,6 +21,8 @@ public class IssueCategory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "issueCategory", cascade = CascadeType.ALL, orphanRemoval = true)

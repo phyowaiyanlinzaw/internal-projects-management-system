@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface IssueService {
 
-    //TODO: Implement Issue Service
 
     IssueDto save(IssueDto issueDto);
 
