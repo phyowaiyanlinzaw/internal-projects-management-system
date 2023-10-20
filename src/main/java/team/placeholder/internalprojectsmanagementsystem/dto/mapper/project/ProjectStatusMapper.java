@@ -4,7 +4,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Proje
 import team.placeholder.internalprojectsmanagementsystem.model.project.ProjectStatus;
 
 public class ProjectStatusMapper {
-    public static ProjectStatusDto toProjectStatudDto(ProjectStatus projectStatus){
+    public static ProjectStatusDto toProjectStatusDto(ProjectStatus projectStatus){
         if(projectStatus == null){
             return  null;
         }

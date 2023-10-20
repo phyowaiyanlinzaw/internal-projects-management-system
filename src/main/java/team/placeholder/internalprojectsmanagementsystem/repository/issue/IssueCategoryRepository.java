@@ -13,4 +13,5 @@ public interface IssueCategoryRepository extends JpaRepository<IssueCategory, Lo
     IssueCategory findById(long id);
 
 
+    void update(IssueCategory issueCategory1);
 }

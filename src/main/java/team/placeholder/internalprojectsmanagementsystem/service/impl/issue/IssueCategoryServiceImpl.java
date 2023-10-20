@@ -27,15 +27,20 @@ public class IssueCategoryServiceImpl implements IssueCategoryService {
         IssueCategory  issue = new IssueCategory();
         issue.setName(issueCategory.getName());
         issueCategoryRepository.save(issue);
-        return null;
+        return IssueCategoryMapper.toIssueCategoryDto(issue);
     }
 
     @Override
     public IssueCategoryDto update(IssueCategoryDto issueCategory) {
-        IssueCategory issue = new IssueCategory();
-        issue.setName(issueCategory.getName());
-        issueCategoryRepository.save(issue);
-        return null;
+        IssueCategory issueCategory1 = issueCategoryRepository.findById(issueCategory.getId());
+        if(issueCategory1 != null) {
+            issueCategory1.setName(issueCategory.getName());
+            issueCategoryRepository.save(issueCategory1);
+            return IssueCategoryMapper.toIssueCategoryDto(issueCategory1);
+        }else{
+            return null;
+        }
+
     }
 
     @Override
