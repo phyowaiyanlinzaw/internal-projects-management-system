@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Group;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.io.Serializable;
 import java.sql.Date;
@@ -28,6 +29,7 @@ public class Tasks implements Serializable {
     private Date end_time;
     private Time excepted_mm;
     private Time actual_mm;
+    private Group group;
 
     @ManyToOne
     @JoinColumn(name="project_id")

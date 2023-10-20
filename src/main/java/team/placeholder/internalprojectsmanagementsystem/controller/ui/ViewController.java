@@ -23,17 +23,17 @@ public class ViewController {
 
     @GetMapping("/profile")
     public String profile(){
-        return "profile"; //TODO:Change to Profile Actual View
+        return "profile";
     }
 
     @GetMapping("/issues")
     public String issues(){
-        return "issues";//TODO:Change to Issues View
+        return "issues";
     }
 
     @GetMapping("/project")
     public String task(){
-        return "project";//TODO:Change to Task View
+        return "project";
     }
 
     @GetMapping("/project/all")
