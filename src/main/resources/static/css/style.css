@@ -650,11 +650,6 @@
     transition-property: border-radius;
 }
 
-.active-card:active > .card {
-    border: 2px solid rgb(0, 0, 0);
-    background-color: rgba(240, 240, 240, 0.8);
-}
-
 .bi-trash3-fill {
     cursor: pointer;
 }
@@ -730,7 +725,7 @@
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 	transform: rotate(0deg);
-	transition: transform 250ms;
+	transition: transform 100ms;
 	transform-origin: 19% 100%;
 }
 .trash span:after {
@@ -744,16 +739,88 @@
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 	transform: rotate(0deg);
-	transition: transform 250ms;
+	transition: transform 100ms;
 	transform-origin: 19% 100%;
 }
 
 .trash:hover span {
 	top: -10px;
-	transition: all 250ms;
+	transition: all 100ms;
 }
 
 .drag-over.trash span {
     top: -10px;
-    transition: all 250ms;
+    transition: all 100ms;
 }
+
+/* Breadcrumbs */
+.breadcrumb {
+  font-size: 14px;
+  font-family: "Nunito", sans-serif;
+  color: #899bbd;
+  font-weight: 600;
+}
+
+.breadcrumb a {
+  color: #899bbd;
+  transition: 0.3s;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: #51678f;
+}
+
+.breadcrumb .breadcrumb-item::before {
+  color: #899bbd;
+}
+
+.breadcrumb .active {
+  color: #51678f;
+  font-weight: 600;
+}
+
+
+
+/* Task Add */
+.col-form-label {
+    color: #01041b;
+}
+
+.border-task{
+    height: 50px;
+    line-height: 50px;
+    background: #F8F7F7;
+    border: 1px solid #E0E2DB;
+    font-size: 14px;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    -ms-border-radius: 16px;
+    -o-border-radius: 16px;
+    border-radius: 16px;
+    box-shadow: none;
+}
+
+.task-content{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+    outline: 0;
+}
+
+.border-task-description{
+    background-color: #F8F7F7;
+    line-height: 28px;
+}
+
+/**Task End**/
+
+
+

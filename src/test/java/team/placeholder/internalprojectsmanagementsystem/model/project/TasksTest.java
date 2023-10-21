@@ -51,7 +51,7 @@ public class TasksTest {
         task.setTitle(title);
         task.setDescription(description);
         task.setStatus(status);
-        task.setExcepted_mm(expectedMM);
+        task.setExpected_mm(expectedMM);
         task.setActual_mm(actualMM);
         task.setProject(project);
         task.setUser(user);
@@ -95,7 +95,7 @@ public class TasksTest {
     @Test
     public void testExpectedMM() {
         Time expectedMM = Time.valueOf("08:30:00");
-        assertEquals(expectedMM, task.getExcepted_mm());
+        assertEquals(expectedMM, task.getExpected_mm());
     }
 
     @Test

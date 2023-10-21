@@ -17,10 +17,11 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@NoArgsConstructor
 @Table(name="project")
 @Getter
 @Setter
-@NoArgsConstructor
+
 public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +45,7 @@ public class Project implements Serializable {
     private List<SystemOutLine> systemOutLines ;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Deliverable> deliverable ;
+    private List<Deliverable> deliverables ;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Amount> amount ;
@@ -86,4 +87,7 @@ public class Project implements Serializable {
         return Objects.hash(id);
     }
 
+    public Project orElse(Object o) {
+        return null;
+    }
 }

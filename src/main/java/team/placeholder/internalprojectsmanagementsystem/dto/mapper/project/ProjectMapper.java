@@ -25,5 +25,25 @@ public class ProjectMapper {
         return projectDto;
     }
 
+    public Project toProject(ProjectDto projectDto){
+        if(projectDto == null){
+            return null;
+        }
+        Project project = new Project();
+        project.setName(projectDto.getName());
+        project.setBackground(projectDto.getBackground());
+        project.setDuration(projectDto.getDuration());
+        project.setId(projectDto.getId());
+        project.setStart_date(projectDto.getStart_date());
+        project.setEnd_date(projectDto.getEnd_date());
+        project.setCurrent_phase(projectDto.getCurrent_phase());
+        project.setObjective(projectDto.getObjective());
+        project.setClient(projectDto.getClient());
+        project.setUser(projectDto.getUser());
+        project.setDepartment(projectDto.getDepartment());
+        return project;
+    }
+
+
 
 }
