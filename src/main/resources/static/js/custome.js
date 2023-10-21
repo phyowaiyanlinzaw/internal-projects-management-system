@@ -156,7 +156,8 @@ $(document).ready(function () {
                     console.log(validateEmail(target.val()));
                     let p1 = $("<p>")
                         .addClass("text-danger fs-6")
-                        .text("Not a valid email");
+                        .text("Not a valid email")
+                        .css("margin", "0");
 
                     if (!validateEmail(target.val())) {
                         parent.removeClass("was-validated");
@@ -188,7 +189,8 @@ $(document).ready(function () {
                         .addClass("text-danger fs-6")
                         .text(
                             "The password can only contain numbers and alphabets with a minimum length of 8 characters"
-                        );
+                        )
+                        .css("margin", "0");
 
                     if (!validatePassword(target.val())) {
                         parent.removeClass("was-validated");
