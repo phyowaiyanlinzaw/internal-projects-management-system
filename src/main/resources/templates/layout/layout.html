@@ -201,17 +201,72 @@
 
     <!-- task's details start -->
     <div class="modal fade" id="task-details" data-bs-keyboard="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered modal-lg ">
+            <div class="modal-content task-content ">
                 <div class="modal-header">
-                    <h5 class="modal-title"></h5>
+                    <h2 class="card-title" style="text-align:center">Task Details</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body"></div>
+                <div class="modal-body">
+
+                    <form class="row g-5" id="validation-form" action="">
+
+                        <div class="col-lg-12 ">
+                            <span><i class="fa fa-tasks"></i></span>
+                            <label id="task" class="editable-label" name="task" onclick="editTitle()">  Testing Write</label>
+                            <input id="task" name="task" type="text" class="form-control border-task editable-input" dir="auto" data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;" onblur="updateTitle(this)">
+                        </div>
+
+                        <div  class="col-lg-12">
+                        <span class="text-align-center">
+                            <i class="fa-solid fa-users"></i>
+                        </span>
+                            <select id="member" name="member" class="form-control selectpicker editable-input" data-live-search="true" multiple dir="auto" data-width="50%" data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;" onblur="updateTitle(this)">
+                                <option value="John Doe"selected>John Doe</option>
+                                <option value="Smith">Smith</option>
+                                <option value="Peter">Peter</option>
+                                <option value="James">James</option>
+                            </select>
+
+                        </div>
+
+                        <div class="col-lg-6">
+                            <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label id="start_time" class="editable-label" name="start_time" onclick="editTitle()">  Start Date</label>
+                            <input type="date" id="start_time" name="start_time"  class="form-control border-task editable-input" dir="auto" data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;" onblur="updateTitle(this)">
+                        </div>
+
+                        <div class="col-lg-6 ">
+                            <i class="fa-regular fa-calendar"></i>
+                            <label id="duration" class="editable-label" name="duration" onclick="editTitle()">  Duration</label>
+                            <input type="text" id="tduration" name="task"  class="form-control border-task editable-input" dir="auto" data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;" onblur="updateTitle(this)">
+                        </div>
+
+                        <div class="col-lg-6">
+                        <span>
+                            <i class="fa-solid fa-circle-chevron-down"></i> Status
+                        </span>
+                            <select id="projectStatuses" name="projectStatuses" class="selectpicker">
+                                <option data-content="<span class='badge rounded-pill  bg-primary'>STARTED</span>" value="STARTED" selected>STARTED</option>
+                                <option data-content="<span class='badge rounded-pill  bg-warning'>IN_PROGRESS</span>" value="IN_PROGRESS">IN_PROGRESS</option>
+                                <option data-content="<span class='badge rounded-pill  bg-success'>FINISHED</span>" value="FINISHED">FINISHED</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <span><i class="fa-solid fa-bars-staggered"></i></span>
+                            <label id="description-label" class="editable-label" name="description" onclick="toggleEditor()">  Description</label>
+                            <textarea id="description-editor" class="form-control editable-input" name="description" rows="5" style="display: none;"></textarea>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
         </div>
     </div>
     <!-- task's details end -->
+
 
     <!-- add task -->
     <div class="modal fade" id="add-task" data-bs-keyboard="true">
@@ -945,6 +1000,54 @@
 
     <!-- sort (department, project), form validation and search bar behavior are all here -->
     <script src="/js/custome.js"></script>
+
+
+<!--    task details js-->
+    <script>
+        // Get all elements with the common class name
+        const editableLabels = document.querySelectorAll('.editable-label');
+        const editableInputs = document.querySelectorAll('.editable-input');
+
+        // Add event listeners for each element
+        editableLabels.forEach(label => {
+            label.addEventListener('click', editTitle);
+        });
+
+        editableInputs.forEach(input => {
+            input.addEventListener('blur', function () {
+                updateTitle(this);
+            });
+        });
+
+        function editTitle() {
+            const label = this;
+            const input = label.nextElementSibling;
+
+            label.style.display = 'none';
+            input.style.display = 'block';
+            input.value = label.textContent;
+            input.focus();
+        }
+
+        function updateTitle(inputField) {
+            const input = inputField;
+            const label = input.previousElementSibling;
+
+            label.textContent = input.value;
+            label.style.display = 'inline';
+            input.style.display = 'none';
+        }
+
+
+        function toggleEditor() {
+            var editor = document.getElementById('description-editor');
+            if (editor.style.display === 'none' || editor.style.display === '') {
+                editor.style.display = 'block';
+            } else {
+                editor.style.display = 'none';
+            }
+        }
+    </script>
     <script>
         let quillEditors = document.querySelectorAll(
                 ".quill-editor-bubble"
