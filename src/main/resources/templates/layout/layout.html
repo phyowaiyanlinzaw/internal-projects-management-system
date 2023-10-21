@@ -22,145 +22,174 @@
 
     <!-- modal for department's details -->
     <div class="modal fade" id="department-details" data-bs-keyboard="true">
-        <div
-            class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down modal-fullscreen-md-down modal-fullscreen-lg-down">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #369; color: white">
-                    <h5 class="modal-title" id="staticBackdropLabel">
-                        Department Details
-                    </h5>
-                    <button type="button" class="btn-close text-white btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-3">
+            <div
+                class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down modal-fullscreen-lg-down"
+            >
+                <div class="modal-content">
+                    <div
+                        class="modal-header"
+                        style="background-color: #369; color: white"
+                    >
+                        <h5 class="modal-title" id="staticBackdropLabel">
+                            Department Details
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close text-white btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
+                        <div class="container-fluid">
+                            <div class="row">
                                 <div class="card">
-                                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                        <img src="https://source.unsplash.com/random/200x200?sig=1" alt="Profile" class="rounded-circle" style="
-                                                    height: 100px;
-                                                    width: 100px;
-                                                " />
+                                    <div
+                                        class="card-body profile-card pt-4 d-flex flex-column align-items-center"
+                                    >
+                                        <img
+                                            src="https://source.unsplash.com/random/200x200?sig=1"
+                                            alt="Profile"
+                                            class="rounded-circle"
+                                            style="height: 100px; width: 100px"
+                                        />
                                         <h4 style="margin-top: 10px">
                                             Department Head
                                         </h4>
                                         <h5>Lai Kuan Lin</h5>
                                         <div class="social-links mt-2">
-                                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                            <a href="#" class="twitter"
+                                                ><i class="bi bi-twitter"></i
+                                            ></a>
+                                            <a href="#" class="facebook"
+                                                ><i class="bi bi-facebook"></i
+                                            ></a>
+                                            <a href="#" class="instagram"
+                                                ><i class="bi bi-instagram"></i
+                                            ></a>
+                                            <a href="#" class="linkedin"
+                                                ><i class="bi bi-linkedin"></i
+                                            ></a>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-9">
-                                <div class="card">
-                                    <div class="card-body pt-3">
-                                        <!-- Bordered Tabs -->
-                                        <ul class="nav nav-tabs nav-tabs-bordered">
-                                            <li class="nav-item">
-                                                <button class="nav-link active" data-bs-toggle="tab"
-                                                    data-bs-target="#profile-overview">
-                                                    Overview
-                                                </button>
-                                            </li>
+                                <div class="pt-3">
+                                    <!-- Bordered Tabs -->
+                                    <ul class="nav nav-tabs nav-tabs-bordered">
+                                        <li class="nav-item">
+                                            <button
+                                                class="nav-link active"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#profile-overview"
+                                            >
+                                                Overview
+                                            </button>
+                                        </li>
 
-                                            <li class="nav-item">
-                                                <button class="nav-link" data-bs-toggle="tab"
-                                                    data-bs-target="#profile-edit">
-                                                    Edit Profile
-                                                </button>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content pt-2">
-                                            <div class="tab-pane fade show active profile-overview"
-                                                id="profile-overview">
-                                                <div class="container-fluid">
-                                                    <div class="row">
-                                                        <div class="col-5">
-                                                            <div class="row" style="
-                                                                        margin-top: 20px;
-                                                                    ">
-                                                                <div class="col-lg-9 col-md-8">
-                                                                    HR
-                                                                    Department
-                                                                </div>
-                                                                <br /><br />
-                                                            </div>
-                                                            <ul class="list-group mb-2">
-                                                                <li
-                                                                    class="list-group-item d-flex justify-content-between align-items-center">
-                                                                    Total
-                                                                    Project
-                                                                    <span
-                                                                        class="badge bg-primary rounded-pill">14</span>
-                                                                </li>
-                                                                <br />
-                                                                <li
-                                                                    class="list-group-item d-flex justify-content-between align-items-center">
-                                                                    Total
-                                                                    Member
-                                                                    <span
-                                                                        class="badge bg-primary rounded-pill">100</span>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-7">
-                                                            <canvas
-                                                                class="col-6 border border-dark rounded mt-2 bg-light w-100"
-                                                                id="department-projects-chart" width="600"
-                                                                height="400"></canvas>
-                                                        </div>
-                                                    </div>
+                                        <li class="nav-item">
+                                            <button
+                                                class="nav-link"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#profile-edit"
+                                            >
+                                                Edit
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content pt-3">
+                                        <div
+                                            class="tab-pane fade show active profile-overview"
+                                            id="profile-overview"
+                                        >
+                                            <div
+                                                class="row row-cols-lg-1 row-cols-sm-1 row-cols-md-1 row-cols-xl-2"
+                                            >
+                                                <ul class="list-group col" style="padding: 0;">
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center"
+                                                    >
+                                                        Total Project
+                                                        <span
+                                                            class="badge bg-primary rounded-pill"
+                                                            >14</span
+                                                        >
+                                                    </li>
+                                                    <br />
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center"
+                                                    >
+                                                        Total Member
+                                                        <span
+                                                            class="badge bg-primary rounded-pill"
+                                                            >100</span
+                                                        >
+                                                    </li>
+                                                </ul>
+                                                <div class="col">
+                                                    <canvas 
+                                                    style="max-width: 960px; padding: 0; min-width: 300px"
+                                                    id="department-projects-chart" height="200"
+                                                ></canvas>
                                                 </div>
-                                            </div>
-
-                                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                                <form>
-                                                    <div>
-                                                        <label>Department
-                                                            Name</label>
-                                                        <br /><br />
-                                                        <input type="text" class="form-control" name="departmentname"
-                                                            placeholder="Department Name" />
-                                                    </div>
-                                                    <br />
-                                                    <div>
-                                                        <label for="departmenthead">Choose
-                                                            Deparment
-                                                            Head:</label><br /><br />
-                                                        <select name="departmenthead"
-                                                            class="form-control">
-                                                            <option value="volvo">
-                                                                Phyoe Wai
-                                                                Yan
-                                                            </option>
-                                                            <option value="saab">
-                                                                Zaw Lin
-                                                                Shein
-                                                            </option>
-                                                            <option value="opel">
-                                                                Thant Htet
-                                                                Ko
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <br />
-
-                                                    <button style="
-                                                                background-color: #369;
-                                                            " type="submit" class="btn btn-primary py-2 w-100 mb-3"
-                                                        id="loign-btn">
-                                                        Edit
-                                                    </button>
-                                                </form>
+                                                
                                             </div>
                                         </div>
-                                        <!-- End Bordered Tabs -->
+
+                                        <div
+                                            class="tab-pane fade profile-edit pt-3"
+                                            id="profile-edit"
+                                        >
+                                            <form>
+                                                <div>
+                                                    <label
+                                                        >Department Name</label
+                                                    >
+                                                    <br /><br />
+                                                    <input
+                                                        type="text"
+                                                        class="form-control"
+                                                        name="departmentname"
+                                                        placeholder="Department Name"
+                                                    />
+                                                </div>
+                                                <br />
+                                                <div>
+                                                    <label for="departmenthead"
+                                                        >Choose Deparment
+                                                        Head:</label
+                                                    ><br /><br />
+                                                    <select
+                                                        name="departmenthead"
+                                                        class="form-control"
+                                                    >
+                                                        <option value="volvo">
+                                                            Phyoe Wai Yan
+                                                        </option>
+                                                        <option value="saab">
+                                                            Zaw Lin Shein
+                                                        </option>
+                                                        <option value="opel">
+                                                            Thant Htet Ko
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <br />
+
+                                                <button
+                                                    style="
+                                                        background-color: #369;
+                                                    "
+                                                    type="submit"
+                                                    class="btn btn-primary py-2 w-100 mb-3"
+                                                    id="loign-btn"
+                                                >
+                                                    Edit
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
+                                    <!-- End Bordered Tabs -->
                                 </div>
                             </div>
                         </div>
@@ -168,7 +197,6 @@
                 </div>
             </div>
         </div>
-    </div>
     <!-- modal for department's details -->
 
     <!-- task's details start -->
