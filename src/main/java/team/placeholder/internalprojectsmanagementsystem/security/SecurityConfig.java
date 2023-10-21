@@ -24,15 +24,15 @@ public class SecurityConfig {
                         (auth) -> auth
                                 .requestMatchers(
                                         "/resources/**",
-
                                         "/js/**",
                                         "/css/**",
                                         "/images/**",
                                         "/fragments/**",
                                         "/font/**",
                                         "/lib/**",
-                                        "/layout/**"
-
+                                        "/layout/**",
+                                        "/reset-password",
+                                        "/api/user/reset-password/**"
                                 ).permitAll()
                                 .requestMatchers("/report/**").hasAnyRole("PMO","SDQC")
                                 .requestMatchers("/department/**").hasAnyRole("PMO","SDQC")

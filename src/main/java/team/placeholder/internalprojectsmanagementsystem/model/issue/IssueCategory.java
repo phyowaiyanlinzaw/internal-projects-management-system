@@ -1,11 +1,9 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue;
 
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 
 import java.io.Serializable;
 import java.util.List;

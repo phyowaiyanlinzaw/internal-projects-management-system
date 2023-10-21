@@ -5,12 +5,12 @@
         <title>Navigation</title>
     </head>
     <body>
-        <header class="topbar" th:fragment="navigation">
             <!-- Navbar With Search  Start -->
             <nav
                 class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0"
+                th:fragment="navigation-with-search-icon"
             >
-                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                <a th:href="@{/}" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0">
                         <i class="fa fa-hashtag"></i>
                     </h2>
@@ -72,7 +72,7 @@
                                 <!--                                </span>-->
                             </i>
                             <span class="d-none d-lg-inline-flex"
-                                >Notificatin</span
+                                >Notification</span
                             >
                         </a>
                         <div
@@ -130,10 +130,8 @@
                             class="dropdown-menu dropdown-menu-end bg-light border-dark rounded-bottom m-0"
                         >
                             <a
-                                href="#"
+                                href="/profile"
                                 class="dropdown-item"
-                                data-bs-toggle="modal"
-                                data-bs-target="#profile-modal"
                                 >My Profile</a
                             >
                             <!-- <a href="#" class="dropdown-item">Settings</a> -->
@@ -148,7 +146,6 @@
                 </div>
             </nav>
             <!-- Navbar With Search End -->
-        </header>
         <aside>
             <!-- Navbar No Search Start -->
             <nav
@@ -206,7 +203,7 @@
                                 </span> -->
                             </i>
                             <span class="d-none d-lg-inline-flex"
-                                >Notificatin</span
+                                >Notification</span
                             >
                         </a>
                         <div
@@ -264,14 +261,12 @@
                             class="dropdown-menu dropdown-menu-end bg-light border-dark rounded-bottom m-0"
                         >
                             <a
-                                href="#"
+                                href="/profile"
                                 class="dropdown-item"
-                                data-bs-toggle="modal"
-                                data-bs-target="#profile-modal"
                                 >My Profile</a
                             >
                             <!-- <a href="#" class="dropdown-item">Settings</a> -->
-                            <a href="/logout" class="dropdown-item d-flex gap-1"
+                            <a th:href="@{/logout}" class="dropdown-item d-flex gap-1"
                                 ><i
                                     class="bi bi-box-arrow-right text-danger"
                                 ></i

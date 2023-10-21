@@ -6,20 +6,23 @@
 
  -->
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-                     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<html
+    lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="layout/layout"
+>
+    <head> </head>
 
-
-<head>
-</head>
-
-<body>
-<div class="container-fluid position-relative bg-white d-flex p-0" layout:fragment="content">
-
-
-
-    <!-- Content Start -->
-    <div class="content" style="
+    <body>
+        <div
+            class="container-fluid position-relative bg-white d-flex p-0"
+            layout:fragment="content"
+        >
+            <!-- Content Start -->
+            <div
+                class="content"
+                style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
@@ -27,186 +30,160 @@
                         #e5e5f7 0.6000000000000001px
                     );
                     background-size: 12px 12px;
-                ">
+                "
+            >
+                <div th:replace="fragments/navigation :: navigation-with-search-icon"></div>
+                <!-- Search Start -->
+                <div
+                    class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar"
+                >
+                    <div class="d-flex flex-row justify-content-end gap-2">
+                        <form class="d-inline-block">
+                            <input
+                                class="form-control border-0"
+                                type="search"
+                                placeholder="Search"
+                            />
+                        </form>
+                        <!-- modal toggle button start -->
+                        <button
+                            type="button"
+                            class="btn btn-light align-self-start"
+                            data-bs-toggle="modal"
+                            data-bs-target="#add-department-modal"
+                        >
+                            <i class="bi bi-building-fill-add"></i>
+                        </button>
+                        <!-- modal toggle button end -->
+                        <!-- add department modal start -->
 
-        <div th:replace="fragments/navigation :: navigation"></div>
-        <!-- Search Start -->
-        <div class="container-fluid d-md-block pt-2 ps-s pe-2" id="dropdrown-search-bar">
-            <div class="d-flex flex-row justify-content-between position-relative">
-                <form class="d-md-flex">
-                    <input class="form-control border-0" type="search" placeholder="Search" />
-                </form>
-                <div class="position-absolute end-0 d-flex gap-3">
-                    <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop">
-                        <i class="bi bi-building-fill-add"></i>
-                    </button>
-                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                                        Add new Department
-                                    </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-floating mb-3">
-                                        <input type="email" class="form-control" id="floatingInput"
-                                               placeholder="name@example.com" />
-                                        <label for="floatingInput">Email address</label>
+                        <!-- add department modal end -->
+                        <!-- sortting button -->
+                        <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+
+                        <!-- Modal -->
+                    </div>
+                </div>
+                <!-- Search End -->
+
+                <!-- project start -->
+                <div class="container-fluid border mt-sm-2 mt-2">
+                    <div
+                        class="row row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 gap-md-0 g-3 p-sm-2"
+                        id="sort-container"
+                    >
+                        <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
+                        <div class="p-md-3 p-sm-2 active-card">
+                            <div class="card border-success">
+                                <div class="card-header">
+                                    <div class="d-flex flex-column">
+                                        <h2
+                                            class="card-title text-center text-primary modal-detail-title"
+                                        >
+                                            a
+                                        </h2>
+                                        <div
+                                            class="d-flex justify-content-between"
+                                        >
+                                            <div class="d-flex">
+                                                <img
+                                                    src="https://source.unsplash.com/random/200x200?sig=1"
+                                                    class="img-fluid rounded-circle d-none d-md-block d-sm-block"
+                                                    style="width: 40px"
+                                                    alt="..."
+                                                />
+                                                <h5
+                                                    class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
+                                                >
+                                                    Project manager
+                                                </h5>
+                                            </div>
+                                            <a
+                                                href=""
+                                                class="btn btn-white text-secondary link-shadow"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#project-details"
+                                                >See More</a
+                                            >
+                                        </div>
                                     </div>
-                                    <div class="form-floating mb-4">
-                                        <input type="password" class="form-control" id="floatingPassword"
-                                               placeholder="Password" />
-                                        <label for="floatingPassword">Password</label>
+                                </div>
+                                <div
+                                    class="card-body position-relative mx-auto"
+                                >
+                                    <p class="card-title text-center fs-6 mb-1">
+                                        progress
+                                    </p>
+                                    <div
+                                        id="circle-progress-1"
+                                        class="circle-progress rounded-circle"
+                                        data-min-value="0"
+                                        data-max-value="100"
+                                        data-value="80"
+                                        data-type="percent"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-md-3 p-sm-2 active-card">
+                            <div class="card border-success">
+                                <div class="card-header">
+                                    <div class="d-flex flex-column">
+                                        <h2
+                                            class="card-title text-center text-primary modal-detail-title"
+                                        >
+                                            h
+                                        </h2>
+                                        <div
+                                            class="d-flex justify-content-between"
+                                        >
+                                            <div class="d-flex">
+                                                <img
+                                                    src="https://source.unsplash.com/random/200x200?sig=1"
+                                                    class="img-fluid rounded-circle d-none d-md-block d-sm-block"
+                                                    style="width: 40px"
+                                                    alt="..."
+                                                />
+                                                <h5
+                                                    class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
+                                                >
+                                                    Project manager
+                                                </h5>
+                                            </div>
+                                            <a
+                                                href=""
+                                                class="btn btn-white text-secondary link-shadow"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#project-details"
+                                                >See More</a
+                                            >
+                                        </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary py-3 w-100 mb-4" id="loign-btn">
-                                        Sign In
-                                    </button>
+                                </div>
+                                <div
+                                    class="card-body position-relative mx-auto"
+                                >
+                                    <p class="card-title text-center fs-6 mb-1">
+                                        progress
+                                    </p>
+                                    <div
+                                        id="circle-progress-2"
+                                        class="circle-progress rounded-circle"
+                                        data-min-value="0"
+                                        data-max-value="100"
+                                        data-value="25"
+                                        data-type="percent"
+                                    ></div>
                                 </div>
                             </div>
                         </div>
+                        <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
                     </div>
-                    <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
                 </div>
-
-                <!-- Button trigger modal -->
-
-                <!-- Modal -->
+                <!-- project end -->
             </div>
+            <!-- Content End -->
         </div>
-        <!-- Search End -->
-
-        <!-- project start -->
-        <div class="container-fluid border mt-sm-2 mt-2">
-            <div class="row row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 gap-md-0 g-3 p-sm-2"
-                 id="sort-container">
-                <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
-                <div class="p-md-3 p-sm-2 active-card" data-bs-toggle="modal" data-bs-target="#project-details">
-                    <div class="card border-success">
-                        <div class="card-header">
-                            <div class="d-flex flex-column">
-                                <h2 class="card-title text-center text-primary modal-detail-title">
-                                    c
-                                </h2>
-                                <div class="d-flex">
-                                    <img src="https://source.unsplash.com/random/200x200?sig=1"
-                                         class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                         style="width: 40px" alt="..." />
-                                    <h5
-                                            class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2">
-                                        Project manager
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body position-relative mx-auto">
-                            <p class="card-title text-center fs-6 mb-1">
-                                progress
-                            </p>
-                            <div id="circle-progress-1" class="circle-progress rounded-circle" data-min-value="0"
-                                 data-max-value="100" data-value="100" data-type="percent"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-md-3 p-sm-2 active-card" data-bs-toggle="modal" data-bs-target="#project-details">
-                    <div class="card border-success">
-                        <div class="card-header">
-                            <div class="d-flex flex-column">
-                                <h2 class="card-title text-center text-primary modal-detail-title">
-                                    z
-                                </h2>
-                                <div class="d-flex">
-                                    <img src="https://source.unsplash.com/random/200x200?sig=1"
-                                         class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                         style="width: 40px" alt="..." />
-                                    <h5
-                                            class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2">
-                                        Project manager
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body position-relative mx-auto">
-                            <p class="card-title text-center fs-6 mb-1">
-                                progress
-                            </p>
-                            <div id="circle-progress-2" class="circle-progress rounded-circle" data-min-value="0"
-                                 data-max-value="100" data-value="40" data-type="percent"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-md-3 p-sm-2 active-card" data-bs-toggle="modal" data-bs-target="#project-details">
-                    <div class="card border-success">
-                        <div class="card-header">
-                            <div class="d-flex flex-column">
-                                <h2 class="card-title text-center text-primary modal-detail-title">
-                                    a
-                                </h2>
-                                <div class="d-flex">
-                                    <img src="https://source.unsplash.com/random/200x200?sig=1"
-                                         class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                         style="width: 40px" alt="..." />
-                                    <h5
-                                            class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2">
-                                        Project manager
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body position-relative mx-auto">
-                            <p class="card-title text-center fs-6 mb-1">
-                                progress
-                            </p>
-                            <div id="circle-progress-3" class="circle-progress rounded-circle" data-min-value="0"
-                                 data-max-value="100" data-value="25" data-type="percent"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-md-3 p-sm-2 active-card" data-bs-toggle="modal" data-bs-target="#project-details">
-                    <div class="card border-success">
-                        <div class="card-header">
-                            <div class="d-flex flex-column">
-                                <h2 class="card-title text-center text-primary modal-detail-title">
-                                    h
-                                </h2>
-                                <div class="d-flex">
-                                    <img src="https://source.unsplash.com/random/200x200?sig=1"
-                                         class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                         style="width: 40px" alt="..." />
-                                    <h5
-                                            class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2">
-                                        Project manager
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body position-relative mx-auto">
-                            <p class="card-title text-center fs-6 mb-1">
-                                progress
-                            </p>
-                            <div id="circle-progress-4" class="circle-progress rounded-circle" data-min-value="0"
-                                 data-max-value="100" data-value="80" data-type="percent"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
-            </div>
-        </div>
-        <!-- project end -->
-
-    </div>
-    <!-- Content End -->
-
-
-
-
-
-    </div>
-
-</body>
-
+    </body>
 </html>

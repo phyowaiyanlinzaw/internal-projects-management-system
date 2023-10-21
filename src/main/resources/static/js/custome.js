@@ -27,14 +27,14 @@ $(document).ready(function () {
 
     // Example of how to use the ajaxRequest function to send data with a POST request
 
-    
+
     //  ======================== SORTING DEPARTMENT AND PROJECT START ========================
 
     let sortIcon = document.querySelector(".sort-btn");
     let sortableContainer = document.getElementById("sort-container");
 
     function sortCards(btn, order) {
-        
+
         let sortableElement = Array.from(sortableContainer.children);
 
         sortableElement.sort(function (a, b) {
@@ -223,12 +223,14 @@ $(document).ready(function () {
     const dDSBtn = document.getElementById("drop-down-search-btn");
     const dDSbar = document.getElementById("dropdrown-search-bar");
 
-    window.addEventListener("resize", function () {
-        if (window.innerWidth > 768) {
-            // Screen size greater than 768px, hide the element
-            dDSbar.classList.add("d-none", "d-sm-none");
-        }
-    });
+    if (dDSbar != null) {
+        window.addEventListener("resize", function () {
+            if (window.innerWidth > 768) {
+                // Screen size greater than 768px, hide the element
+                dDSbar.classList.add("d-none", "d-sm-none");
+            }
+        });
+    }
 
     if (dDSBtn != null) {
         // toggle search bar when click the search button
@@ -243,11 +245,11 @@ $(document).ready(function () {
         });
 
         dDSbar.addEventListener('input', function (e) {
-            let inputText = dDSbar.querySelector('input').value;
+            let inputText = dDSbar.querySelector('input').value.toLowerCase();
             let allData = sortableContainer.children;
 
             for (let i = 0; i < allData.length; i++) {
-                let text = allData[i].querySelector('.card-title').textContent; // Use .textContent to get the text
+                let text = allData[i].querySelector('.card-title').textContent.toLowerCase(); // Use .textContent to get the text
 
                 if (text.includes(inputText)) {
                     allData[i].style.display = 'block';
@@ -259,8 +261,10 @@ $(document).ready(function () {
     }
 
     // close search bar when window width < 768
-    if (window.innerWidth < 768) {
-        dDSbar.classList.add("d-none", "d-sm-none");
+    if (dDSbar != null) {
+        if (window.innerWidth < 768) {
+            dDSbar.classList.add("d-none", "d-sm-none");
+        }
     }
 
     // ======================== SEARCH BEHAVIOR END HERE ========================
@@ -274,10 +278,10 @@ $(document).ready(function () {
     //     .querySelector(".navbar")
     //     .querySelector(".navbar-nav").children;
 
-    const  sidebarLink = [...document.querySelector('.navbar').querySelector('.navbar-nav').children]
+    const sidebarLink = [...document.querySelector('.navbar').querySelector('.navbar-nav').children]
     currentAtag = sidebarLink.find(a => urlPath.includes(a.getAttribute("href")))
 
-    if(currentAtag) {
+    if (currentAtag) {
         currentAtag.classList.add('bg-primary', 'text-white')
         currentAtag.firstChild.classList.add('bg-primary')
     }
@@ -289,7 +293,7 @@ $(document).ready(function () {
     // recursive function to search paremtn element that contain data-bs-toggle
     function hasDataBsToggleAttribute(element) {
 
-        if (element && element.hasAttribute('data-bs-toggle')) {
+        if (element && element.classList.contains('card')) {
             return element;
         }
 
@@ -312,12 +316,12 @@ $(document).ready(function () {
 
             if (grandpaDiv === null) return
 
-            if (grandpaDiv.getAttribute('data-bs-toggle') !== 'modal') return
-
-            if (!['#project-details', '#department-details', '#task-details'].includes(grandpaDiv.getAttribute('data-bs-target'))) return;
-            const targetModal = document.querySelector(grandpaDiv.getAttribute('data-bs-target'))
+            const targetModal = document.querySelector(target.getAttribute('data-bs-target'))
+            console.log(target.getAttribute('data-bs-target'))
 
             console.log(targetModal)
+
+            if (targetModal === null) return
 
             targetModal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
 
@@ -376,60 +380,67 @@ $(document).ready(function () {
         input.value = "";
     });
 
+    let currentZone = null
+
+    const comfirmBox = document.querySelector('#confirm-box')
+    const bModal = new bootstrap.Modal(comfirmBox)
+    let currentTask;
+
     draggables.forEach((task) => {
         task.addEventListener("dragstart", () => {
             task.classList.add("is-dragging");
+            currentTask = task
+            console.log(currentZone)
         });
-        task.addEventListener("dragend", () => {
+        task.addEventListener("dragend", (e) => {
+            
+            console.log(e.target)
+            console.log(e.target.classList)
+            if (currentZone.classList.contains('dummy-trash')) {
+                bModal.show()
+            }
             task.classList.remove("is-dragging");
+            
+        });
+    });
 
-            console.log("drop");
-            console.log(
-                task.parentNode.previousElementSibling.innerText
-            );
+    comfirmBox.addEventListener('click', function (e) {
+        if (e.target.innerText.toLowerCase() === 'yes') {
+            currentTask.remove()
+            document.querySelector('.trash').classList.remove('drag-over')
+            bModal.hide()
             let postData = JSON.stringify({ key1: "value1", key2: "value2" });
+            console.log('this task will be deleted', currentTask)
             ajaxRequest("/data", "POST", postData, function (response) {
                 // Handle the response data here
                 console.log(response);
             });
-        });
-    });
+        } else if (e.target.innerText.toLowerCase() === 'no') {
+            document.querySelector('.trash').classList.remove('drag-over')
+            bModal.hide()
+        }
+    })
 
     // ======================= TRASH BRN ======================
 
-    if(trashCanContainer != null) {
-        const comfirmBox = document.querySelector('#confirm-box')
-        const bModal = new bootstrap.Modal(comfirmBox)
-        let currentTask;
+    if (trashCanContainer != null) {
+        
         console.log(trashCanContainer)
         trashCanContainer.addEventListener('dragover', function (e) {
             e.preventDefault();
+            currentZone = trashCanContainer;
             currentTask = document.querySelector('.is-dragging')
-            if(currentTask === null) return
+            if (currentTask === null) return
 
             console.log(this)
             document.querySelector('.trash').classList.add('drag-over')
 
         })
 
-        trashCanContainer.addEventListener('dragleave', function(e) {
+        trashCanContainer.addEventListener('dragleave', function (e) {
             document.querySelector('.trash').classList.remove('drag-over')
         })
-
-        trashCanContainer.addEventListener('drop', function (e) {
-            bModal.show()
-        })
-
-        comfirmBox.addEventListener('click', function(e) {
-            if(e.target.innerText.toLowerCase() === 'yes') {
-                currentTask.remove()
-                document.querySelector('.trash').classList.remove('drag-over')
-                bModal.hide()
-            } else if (e.target.innerText.toLowerCase() === 'no') {
-                bModal.hide()
-            }
-            
-        })
+        
     }
 
     // =========================== TRASH BIN =============================
@@ -439,8 +450,9 @@ $(document).ready(function () {
     droppables.forEach((zone) => {
         zone.addEventListener("dragover", (e) => {
             e.preventDefault();
-
+            currentZone = zone
             console.log(undefined)
+            console.log(currentZone)
 
             const bottomTask = insertAboveTask(zone, e.clientY);
             const curTask = document.querySelector(".is-dragging");
@@ -584,11 +596,14 @@ $(document).ready(function () {
             legend: {
                 display: true,
             },
-            responsive: false
+            responsive: true
         },
     });
 
     console.log(firstChart);
     firstChart.config.options.animation.duration = 5000;
+
+
+
 });
 
