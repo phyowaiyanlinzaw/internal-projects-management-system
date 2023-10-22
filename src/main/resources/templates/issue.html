@@ -438,14 +438,19 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    Issue Details
+                    <div>
+                        Issue Details
+                    </div>
+                    <div class="btn btn-primary" id="issue-edit-btn">
+                        edit
+                    </div>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
                             <div class="col">
                                 <h4>corrective action</h4>
-                                <div>
+                                <div class="editable">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -453,7 +458,7 @@
                             </div>
                             <div class="col">
                                 <h4>preventive action</h4>
-                                <div>
+                                <div class="editable">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -461,7 +466,7 @@
                             </div>
                             <div class="col">
                                 <h4>direct cause</h4>
-                                <div>
+                                <div class="editable">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -469,7 +474,7 @@
                             </div>
                             <div class="col">
                                 <h4>root cause</h4>
-                                <div>
+                                <div class="editable">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -477,7 +482,7 @@
                             </div>
                             <div class="col">
                                 <h4>impact</h4>
-                                <div>
+                                <div class="editable">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -485,7 +490,7 @@
                             </div>
                             <div class="col">
                                 <h4>place</h4>
-                                <div>
+                                <div class="editable">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -537,6 +542,40 @@
 <script src="/js/custome.js"></script>
 
 <script>
+
+    const issueEditBtn = document.getElementById('issue-edit-btn')
+
+
+    issueEditBtn.addEventListener('click', function (e) {
+        if (this.innerText === 'edit') {  // Use '===' for comparison
+            const eidtable = Array.from(document.getElementsByClassName('editable'));
+            console.log(eidtable);
+            for (let i = 0; i < eidtable.length; i++) {
+                let d = eidtable[i];
+                let input = document.createElement('textarea');
+                input.value = d.innerText;
+                input.classList.add('form-control');
+                input.classList.add('editable');
+                input.setAttribute('rows', 5);
+                console.log(d.parentNode);
+                d.parentNode.replaceChild(input, d);
+            }
+            this.innerText = 'save';
+        } else if (this.innerText === 'save') {  // Use '===' for comparison
+            const eidtable = Array.from(document.getElementsByClassName('editable'));
+            for (let i = 0; i < eidtable.length; i++) {
+                let d = eidtable[i];
+                let input = document.createElement('div');
+                input.textContent = d.value;  // Use textContent to set text for div
+                input.classList.add('editable');
+                console.log(d.parentNode);
+                d.parentNode.replaceChild(input, d);
+            }
+            this.innerText = 'edit';
+        }
+    });
+
+
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
