@@ -197,9 +197,7 @@
                         <div
                                 class="card-header border-bottom text-dark"
                         >
-                            <div
-                                    class="d-flex justify-content-between"
-                            >
+                            
                                 <div class="col d-flex align-items-center gap-2">
                                     <h4
                                             class="card-title modal-detail-title"
@@ -221,10 +219,7 @@
                                         see more
                                     </button>
                                 </div>
-                                <div class="btn btn-info">
-                                    edit
-                                </div>
-                            </div>
+                               
                             <div
                                     class="col issue-time-line d-flex gap-2"
                             >
@@ -472,10 +467,18 @@
 
 <script>
 
+    const editOpenBtn = document.querySelector('button[data-bs-target="#issue-details"]')
+
     const issueEditBtn = document.getElementById('issue-edit-btn')
 
+    editOpenBtn.addEventListener('click', function(e) {
+        // TODO :: SHOULD CALL AJAX FUNCTION WHEN CLICK AND CREATE DIV 
+        console.log("open issue detail modal")
+        issueEditBtn.innerText = 'edit'
+    })
 
     issueEditBtn.addEventListener('click', function (e) {
+
         if (this.innerText === 'edit') {  // Use '===' for comparison
             const eidtable = Array.from(document.getElementsByClassName('editable'));
             console.log(eidtable);
