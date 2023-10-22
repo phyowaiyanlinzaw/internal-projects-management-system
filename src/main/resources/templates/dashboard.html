@@ -6,13 +6,15 @@
 
  -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
+      lang="en">
 
 <head>
 </head>
 
-<body>
-<div class="container-fluid position-relative d-flex p-0" layout:fragment="content">
+<body layout:fragment="content">
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<div class="container-fluid position-relative d-flex p-0">
 
     <!-- Content Start -->
     <div class="content" style="
@@ -24,7 +26,7 @@
                     );
                     background-size: 12px 12px;
                 ">
-        <div th:replace="fragments/navigation :: aside"></div>
+        <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
         <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
@@ -79,9 +81,9 @@
                 <div class="col-sm-12 col-md-6 border border-dark" style="height: 400px">
                     <!-- TODO :: PUT CHART HERE -->
                     <div>Productivity Chart here</div>
-<!--                    <p th:text="${#httpServletRequest.requestURI}"></p>-->
-<!--                    <a th:href="@{__${#httpServletRequest.requestURI}__}">Click to More</a>-->
-<!--                    <p>The current URL is: <span th:text="${#httpServletRequest.getRequestURL()}"></span></p>-->
+                    <!--                    <p th:text="${#httpServletRequest.requestURI}"></p>-->
+                    <!--                    <a th:href="@{__${#httpServletRequest.requestURI}__}">Click to More</a>-->
+                    <!--                    <p>The current URL is: <span th:text="${#httpServletRequest.getRequestURL()}"></span></p>-->
                 </div>
             </div>
         </div>
@@ -94,7 +96,39 @@
         console.log("hi guys")
     </script>
 
-   </div>
+</div>
+
+<!--    for select drop-drown-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<!-- fontawesome -->
+<script src="/js/fontawesome.js"></script>
+
+<!-- jquery -->
+<script src="/js/jquery.3.7.1.min.js"></script>
+
+<!-- datable table -->
+<script src="/js/databales.min.js"></script>
+
+<!-- bootstrap -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- javascript libraries -->
+<script src="/lib/chart/chart.min.js"></script>
+<script src="/lib/easing/easing.min.js"></script>
+<script src="/lib/waypoints/waypoints.min.js"></script>
+<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/lib/tempusdominus/js/moment.min.js"></script>
+<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/lib/quill/quill.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+<script src="/js/forprogresscircleiguess.js"></script>
+
+<!-- sort (department, project), form validation and search bar behavior are all here -->
+<script src="/js/custome.js"></script>
 
 
 </body>

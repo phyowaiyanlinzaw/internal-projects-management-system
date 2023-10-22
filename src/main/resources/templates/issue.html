@@ -1,115 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>DASHMIN - Bootstrap Admin Template</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <meta
-            name="keywords"
-            content="project, management, project management, teamplaceholder project ma္nagement"
-        />
-        <meta content name="description" />
-        <meta name="author" content="teamplaceholder's project" />
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
+      lang="en">
 
-        <!-- Favicon -->
-        <!-- <link href="/images/favicon.ico" rel="icon"> -->
+<body layout:fragment="content">
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<div class="container-fluid position-relative d-flex p-0">
 
-        <!-- Google Web Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
-            rel="stylesheet"
-        />
-
-        <!-- bootstrap icons -->
-        <link rel="stylesheet" href="/font/bootstrap-icons.min.css" />
-
-        <!-- Libraries Stylesheet -->
-        <link
-            href="/lib/owlcarousel/assets/owl.carousel.min.css"
-            rel="stylesheet"
-        />
-        <link
-            href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
-            rel="stylesheet"
-        />
-        <link rel="stylesheet" href="/lib/quill/quill.bubble.css" />
-        <link rel="stylesheet" href="/lib/quill/quill.snow.css" />
-        <link rel="stylesheet" href="/lib/quill/quill.core.css" />
-
-        <!-- Customized Bootstrap Stylesheet -->
-        <link href="/css/bootstrap.min.css" rel="stylesheet" />
-
-        <!-- Template Stylesheet -->
-        <link href="/css/style.css" rel="stylesheet" />
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"
-        />
-
-        <style>
-            .ql-toolbar {
-                color: white;
-                text-align: center;
-            }
-
-            .custom-color {
-                color: #046061;
-                background-color: #70f8fa;
-                border: 2px solid #81e6d9;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div class="container-fluid position-relative d-flex p-0">
-            <!-- Spinner Start -->
-            <div
-                id="spinner"
-                class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
-            >
-                <div
-                    class="spinner-border text-primary"
-                    style="width: 3rem; height: 3rem"
-                    role="status"
-                >
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            <!-- Spinner End -->
-
-            <!-- Sidebar Start -->
-            <div class="sidebar pe-4 pb-3">
-                <nav class="navbar navbar-light">
-                    <a href="dashboard.html" class="navbar-brand mx-4 mb-3">
-                        <h3 class="text-primary">
-                            <i class="fa fa-hashtag me-2"></i>DASHMIN
-                        </h3>
-                    </a>
-                    <div class="navbar-nav w-100 gap-2">
-                        <!-- TODO:: GOT TO MAIN/DASHBOARD -->
-                        <a href="dashboard.html" class="nav-item nav-link"
-                            ><i class="bi bi-clipboard-data-fill me-1"></i
-                            >Dashboard</a
-                        >
-                        <!-- TODO :: GOT TO DEPARTMENT LIST -->
-                        <a href="department.html" class="nav-item nav-link"
-                            ><i class="fa-solid fa-building"></i>Department</a
-                        >
-                        <a href="2projects.html" class="nav-item nav-link"
-                            ><i class="bi bi-collection-fill me-1"></i>All
-                            Projects</a
-                        >
-                    </div>
-                </nav>
-            </div>
-            <!-- Sidebar End -->
-
-            <!-- Content Start -->
-            <div
-                class="content"
-                style="
+    <!-- Content Start -->
+    <div
+            class="content"
+            style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
@@ -118,935 +18,789 @@
                     );
                     background-size: 12px 12px;
                 "
+    >
+
+        <div th:replace="fragments/navigation :: navigation-with-search"></div>
+
+        <div class="container-fluid">
+            <div
+                    class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar"
             >
-                <!-- Navbar Start -->
-                <nav
-                    class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0"
+                <div
+                        class="d-flex flex-row justify-content-between position-relative"
                 >
-                    <a
-                        href="index.html"
-                        class="navbar-brand d-flex d-lg-none me-4"
-                    >
-                        <h2 class="text-primary mb-0">
-                            <i class="fa fa-hashtag"></i>
-                        </h2>
-                    </a>
-                    <a href="#" class="sidebar-toggler flex-shrink-0">
-                        <i class="fa fa-bars"></i>
-                    </a>
-
-                    <div class="navbar-nav align-items-center ms-auto">
-                        <i
-                            class="bi bi-search d-md-none d-block d-sm-block fs-4"
-                            id="drop-down-search-btn"
-                        ></i>
-
-                        <div class="nav-item dropdown">
-                            <a
-                                href="#"
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                            >
-                                <i class="fa fa-envelope me-lg-2"></i>
-                                <span class="d-none d-lg-inline-flex"
-                                    >Message</span
-                                >
-                            </a>
-                            <div
-                                class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0"
-                            >
-                                <a href="#" class="dropdown-item">
-                                    <div class="d-flex align-items-center">
-                                        <img
-                                            class="rounded-circle"
-                                            src="https://source.unsplash.com/random/200x200?sig=1"
-                                            alt
-                                            style="width: 40px; height: 40px"
-                                        />
-                                        <div class="ms-2">
-                                            <h6 class="fw-normal mb-0">
-                                                Jhon send you a message
-                                            </h6>
-                                            <small>15 minutes ago</small>
-                                        </div>
-                                    </div>
-                                </a>
-                                <hr class="dropdown-divider" />
-                                <a href="#" class="dropdown-item text-center"
-                                    >See all message</a
-                                >
-                            </div>
-                        </div>
-                        <div class="nav-item dropdown">
-                            <a
-                                href="#"
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                            >
-                                <i class="fa fa-bell me-lg-2"></i>
-                                <span class="d-none d-lg-inline-flex"
-                                    >Notificatin</span
-                                >
-                            </a>
-                            <div
-                                class="dropdown-menu dropdown-menu-end bg-light border-dark rounded-bottom m-0 overflow-auto"
-                                style="height: 200px"
-                            >
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">
-                                        Profile updated
-                                    </h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider" />
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">
-                                        New user added
-                                    </h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider" />
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">
-                                        Password changed
-                                    </h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider" />
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">
-                                        New user added
-                                    </h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider" />
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">
-                                        New user added
-                                    </h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                                <hr class="dropdown-divider" />
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0">
-                                        New user added
-                                    </h6>
-                                    <small>15 minutes ago</small>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="nav-item dropdown">
-                            <a
-                                href="#"
-                                class="nav-link dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                            >
-                                <img
-                                    class="rounded-circle"
-                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                    alt
-                                    style="width: 40px; height: 40px"
-                                />
-                                <span class="d-none d-lg-inline-flex"
-                                    >John Doe</span
-                                >
-                            </a>
-                            <div
-                                class="dropdown-menu dropdown-menu-end bg-light border-dark rounded-bottom m-0"
-                            >
-                                <a
-                                    href="#"
-                                    class="dropdown-item"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#profile-modal"
-                                    >My Profile</a
-                                >
-                                <!-- <a href="#" class="dropdown-item">Settings</a> -->
-                                <a href="#" class="dropdown-item d-flex gap-1"
-                                    ><i
-                                        class="bi bi-box-arrow-right text-danger"
-                                    ></i
-                                    >Log Out</a
-                                >
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-                <!-- Navbar End -->
-
-                <div class="container-fluid">
-                    <div
-                        class="container-fluid d-md-block pt-2 ps-s pe-2"
-                        id="dropdrown-search-bar"
-                    >
-                        <div
-                            class="d-flex flex-row justify-content-between position-relative"
+                    <form class="d-md-flex">
+                        <input
+                                class="form-control border-0"
+                                type="search"
+                                placeholder="Search"
+                        />
+                    </form>
+                    <div class="position-absolute end-0 d-flex gap-3">
+                        <!-- modal toggle button start -->
+                        <button
+                                type="button"
+                                class="btn btn-light align-self-start"
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop"
                         >
-                            <form class="d-md-flex">
-                                <input
-                                    class="form-control border-0"
-                                    type="search"
-                                    placeholder="Search"
-                                />
-                            </form>
-                            <div class="position-absolute end-0 d-flex gap-3">
-                                <!-- modal toggle button start -->
-                                <button
-                                    type="button"
-                                    class="btn btn-light align-self-start"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop"
-                                >
-                                    <i class="bi bi-building-fill-add"></i>
-                                </button>
-                                <!-- modal toggle button end -->
+                            <i class="bi bi-building-fill-add"></i>
+                        </button>
+                        <!-- modal toggle button end -->
 
-                                <!-- add department modal start -->
-                                <div
-                                    class="modal fade bd-example-modal-lg"
-                                    id="staticBackdrop"
-                                    data-bs-backdrop="static"
-                                    data-bs-keyboard="true"
-                                >
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5">
-                                                    Add New Issue
-                                                </h1>
-                                                <button
-                                                    type="button"
-                                                    class="btn-close"
-                                                    data-bs-dismiss="modal"
-                                                    aria-label="Close"
-                                                ></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
-                                                <form>
-                                                    <!-- issue modal start -->
-                                                    <div class="p-md-3 p-sm-2">
-                                                        <div class="card">
-                                                            <div
-                                                                class="card-header border-bottom text-dark"
-                                                            >
-                                                                <div
-                                                                    class="col d-flex align-items-center gap-2"
-                                                                >
-                                                                    <input
-                                                                        type="text"
-                                                                        class="card-title modal-detail-title"
-                                                                        placeholder="Title"
-                                                                    />
+                        <!-- add department modal start -->
+                        <div
+                                class="modal fade bd-example-modal-lg"
+                                id="staticBackdrop"
+                                data-bs-backdrop="static"
+                                data-bs-keyboard="true"
+                        >
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">
+                                            Add New Issue
+                                        </h1>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
+                                        <form>
+                                            <!-- issue modal start -->
+                                            <div class="p-md-3 p-sm-2">
+                                                <div class="card">
+                                                    <div
+                                                            class="card-header border-bottom text-dark"
+                                                    >
+                                                        <div
+                                                                class="col d-flex align-items-center gap-2"
+                                                        >
+                                                            <input
+                                                                    type="text"
+                                                                    class="card-title modal-detail-title"
+                                                                    placeholder="Title"
+                                                            />
 
-                                                                    <div
-                                                                        class="d-flex col align-items-center gap-2"
-                                                                    >
-                                                                        <select
-                                                                            name="countries"
-                                                                            id="countries"
-                                                                            multiple
-                                                                        >
-                                                                            <option
-                                                                                value="1"
-                                                                            >
-                                                                                Afghanistan
-                                                                            </option>
-                                                                            <option
-                                                                                value="2"
-                                                                            >
-                                                                                Australia
-                                                                            </option>
-                                                                            <option
-                                                                                value="3"
-                                                                            >
-                                                                                Germany
-                                                                            </option>
-                                                                            <option
-                                                                                value="4"
-                                                                            >
-                                                                                Canada
-                                                                            </option>
-                                                                            <option
-                                                                                value="5"
-                                                                            >
-                                                                                Russia
-                                                                            </option>
-                                                                            <option
-                                                                                value="6"
-                                                                            >
-                                                                                America
-                                                                            </option>
-                                                                            <option
-                                                                                value="7"
-                                                                            >
-                                                                                Spain
-                                                                            </option>
-                                                                            <option
-                                                                                value="8"
-                                                                            >
-                                                                                Turkey
-                                                                            </option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                             <div
-                                                                class="card-body"
+                                                                    class="d-flex col align-items-center gap-2"
                                                             >
-                                                                <div
-                                                                    class="quill-editor-bubble"
+                                                                <select
+                                                                        name="countries"
+                                                                        id="countries"
+                                                                        multiple
                                                                 >
-                                                                    <p>
-                                                                        Hello
-                                                                        World!
-                                                                    </p>
-                                                                    <pre>
-                                &lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-                                &lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-                                </pre
+                                                                    <option
+                                                                            value="1"
                                                                     >
-                                                                </div>
+                                                                        Afghanistan
+                                                                    </option>
+                                                                    <option
+                                                                            value="2"
+                                                                    >
+                                                                        Australia
+                                                                    </option>
+                                                                    <option
+                                                                            value="3"
+                                                                    >
+                                                                        Germany
+                                                                    </option>
+                                                                    <option
+                                                                            value="4"
+                                                                    >
+                                                                        Canada
+                                                                    </option>
+                                                                    <option
+                                                                            value="5"
+                                                                    >
+                                                                        Russia
+                                                                    </option>
+                                                                    <option
+                                                                            value="6"
+                                                                    >
+                                                                        America
+                                                                    </option>
+                                                                    <option
+                                                                            value="7"
+                                                                    >
+                                                                        Spain
+                                                                    </option>
+                                                                    <option
+                                                                            value="8"
+                                                                    >
+                                                                        Turkey
+                                                                    </option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- issue modal end -->
-                                                </form>
+                                                    <div
+                                                            class="card-body"
+                                                    >
+                                                        <div
+                                                                class="quill-editor-bubble"
+                                                        >
+                                                            <p>
+                                                                Hello
+                                                                World!
+                                                            </p>
+                                                            <pre>
+                                &lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
+                                &lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
+                                </pre
+                                >
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <button
-                                                    type="menu"
-                                                    class="btn btn-secondary"
-                                                    data-dismiss="modal"
-                                                >
-                                                    Close
-                                                </button>
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-primary"
-                                                    data-bs-target="#"
-                                                >
-                                                    Add New Issue
-                                                </button>
-                                            </div>
-                                        </div>
+                                            <!-- issue modal end -->
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                                type="menu"
+                                                class="btn btn-secondary"
+                                                data-dismiss="modal"
+                                        >
+                                            Close
+                                        </button>
+                                        <button
+                                                type="submit"
+                                                class="btn btn-primary"
+                                                data-bs-target="#"
+                                        >
+                                            Add New Issue
+                                        </button>
                                     </div>
                                 </div>
-                                <!-- add department modal end -->
-
-                                <!-- sortting button -->
-                                <i
-                                    class="bi bi-sort-alpha-down sort-btn text-dark"
-                                ></i>
                             </div>
+                        </div>
+                        <!-- add department modal end -->
 
-                            <!-- Modal -->
+                        <!-- sortting button -->
+                        <i
+                                class="bi bi-sort-alpha-down sort-btn text-dark"
+                        ></i>
+                    </div>
+
+                    <!-- Modal -->
+                </div>
+            </div>
+            <div class="row row-cols-1">
+                <div class="p-md-3 p-sm-2">
+                    <div class="card">
+                        <div
+                                class="card-header border-bottom text-dark"
+                        >
+                            <div
+                                    class="col d-flex align-items-center gap-2"
+                            >
+                                <h4
+                                        class="card-title modal-detail-title"
+                                >
+                                    Title
+                                </h4>
+
+                                <h6
+                                        class="card-title modal-detail-title"
+                                >
+                                    Name
+                                </h6>
+                                <span
+                                        class="card-title modal-detail-title badge rounded-pill bg-success"
+                                >Success</span
+                                >
+                                <span
+                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
+                                >Danger</span
+                                >
+                            </div>
+                            <div
+                                    class="col issue-time-line d-flex gap-2"
+                            >
+                                <div
+                                        class="d-flex align-items-center gap-2"
+                                >
+                                    <p>Posted</p>
+                                    <span>3 days ago</span>
+                                </div>
+                                <div
+                                        class="d-flex align-items-center gap-2"
+                                >
+                                    <p>Modified at</p>
+                                    <span>1 minute ago</span>
+                                </div>
+                            </div>
+                            <div
+                                    class="col issue-time-line d-flex gap-2"
+                            >
+                                <p
+                                        class="btn custom-color m-2 rounded-pill"
+                                >
+                                    Custom Color
+                                </p>
+                                <p
+                                        class="btn custom-color m-2 rounded-pill"
+                                >
+                                    Australia
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="code-block">
+                                <p>
+                                    this code does not work help me
+                                    please
+                                </p>
+                                <pre>
+&lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
+&lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
+                                >
+                            </div>
                         </div>
                     </div>
-                    <div class="row row-cols-1">
-                        <div class="p-md-3 p-sm-2">
-                            <div class="card">
-                                <div
-                                    class="card-header border-bottom text-dark"
-                                >
-                                    <div
-                                        class="col d-flex align-items-center gap-2"
-                                    >
-                                        <h4
-                                            class="card-title modal-detail-title"
-                                        >
-                                            Title
-                                        </h4>
+                </div>
 
-                                        <h6
-                                            class="card-title modal-detail-title"
-                                        >
-                                            Name
-                                        </h6>
-                                        <span
-                                            class="card-title modal-detail-title badge rounded-pill bg-success"
-                                            >Success</span
-                                        >
-                                        <span
-                                            class="card-title modal-detail-title badge rounded-pill bg-danger"
-                                            >Danger</span
-                                        >
-                                    </div>
-                                    <div
-                                        class="col issue-time-line d-flex gap-2"
-                                    >
-                                        <div
-                                            class="d-flex align-items-center gap-2"
-                                        >
-                                            <p>Posted</p>
-                                            <span>3 days ago</span>
-                                        </div>
-                                        <div
-                                            class="d-flex align-items-center gap-2"
-                                        >
-                                            <p>Modified at</p>
-                                            <span>1 minute ago</span>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="col issue-time-line d-flex gap-2"
-                                    >
-                                        <p
-                                            class="btn custom-color m-2 rounded-pill"
-                                        >
-                                            Custom Color
-                                        </p>
-                                        <p
-                                            class="btn custom-color m-2 rounded-pill"
-                                        >
-                                            Australia
-                                        </p>
-                                    </div>
+                <div class="p-md-3 p-sm-2">
+                    <div class="card">
+                        <div
+                                class="card-header border-bottom text-dark"
+                        >
+                            <div
+                                    class="col d-flex align-items-center gap-2"
+                            >
+                                <h4
+                                        class="card-title modal-detail-title"
+                                >
+                                    Title
+                                </h4>
+
+                                <h6
+                                        class="card-title modal-detail-title"
+                                >
+                                    Name
+                                </h6>
+                                <span
+                                        class="card-title modal-detail-title badge rounded-pill bg-success"
+                                >Success</span
+                                >
+                                <span
+                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
+                                >Danger</span
+                                >
+                            </div>
+                            <div
+                                    class="col issue-time-line d-flex gap-2"
+                            >
+                                <div
+                                        class="d-flex align-items-center gap-2"
+                                >
+                                    <p>Posted</p>
+                                    <span>3 days ago</span>
                                 </div>
-                                <div class="card-body">
-                                    <div class="code-block">
-                                        <p>
-                                            this code does not work help me
-                                            please
-                                        </p>
-                                        <pre>
-&lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-&lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
-                                        >
-                                    </div>
+                                <div
+                                        class="d-flex align-items-center gap-2"
+                                >
+                                    <p>Modified at</p>
+                                    <span>1 minute ago</span>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="p-md-3 p-sm-2">
-                            <div class="card">
-                                <div
-                                    class="card-header border-bottom text-dark"
+                            <div
+                                    class="col issue-time-line d-flex gap-2"
+                            >
+                                <p
+                                        class="btn custom-color m-2 rounded-pill"
                                 >
-                                    <div
-                                        class="col d-flex align-items-center gap-2"
-                                    >
-                                        <h4
-                                            class="card-title modal-detail-title"
-                                        >
-                                            Title
-                                        </h4>
-
-                                        <h6
-                                            class="card-title modal-detail-title"
-                                        >
-                                            Name
-                                        </h6>
-                                        <span
-                                            class="card-title modal-detail-title badge rounded-pill bg-success"
-                                            >Success</span
-                                        >
-                                        <span
-                                            class="card-title modal-detail-title badge rounded-pill bg-danger"
-                                            >Danger</span
-                                        >
-                                    </div>
-                                    <div
-                                        class="col issue-time-line d-flex gap-2"
-                                    >
-                                        <div
-                                            class="d-flex align-items-center gap-2"
-                                        >
-                                            <p>Posted</p>
-                                            <span>3 days ago</span>
-                                        </div>
-                                        <div
-                                            class="d-flex align-items-center gap-2"
-                                        >
-                                            <p>Modified at</p>
-                                            <span>1 minute ago</span>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="col issue-time-line d-flex gap-2"
-                                    >
-                                        <p
-                                            class="btn custom-color m-2 rounded-pill"
-                                        >
-                                            Custom Color
-                                        </p>
-                                        <p
-                                            class="btn custom-color m-2 rounded-pill"
-                                        >
-                                            Australia
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="code-block">
-                                        <p>
-                                            this code does not work help me
-                                            please
-                                        </p>
-                                        <pre>
-&lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-&lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
-                                        >
-                                    </div>
-                                </div>
+                                    Custom Color
+                                </p>
+                                <p
+                                        class="btn custom-color m-2 rounded-pill"
+                                >
+                                    Australia
+                                </p>
                             </div>
                         </div>
-
-                        <div class="p-md-3 p-sm-2">
-                            <div class="card">
-                                <div
-                                    class="card-header border-bottom text-dark"
-                                >
-                                    <div
-                                        class="col d-flex align-items-center gap-2"
-                                    >
-                                        <h4
-                                            class="card-title modal-detail-title"
-                                        >
-                                            Title
-                                        </h4>
-
-                                        <h6
-                                            class="card-title modal-detail-title"
-                                        >
-                                            Name
-                                        </h6>
-                                        <span
-                                            class="card-title modal-detail-title badge rounded-pill bg-success"
-                                            >Success</span
-                                        >
-                                        <span
-                                            class="card-title modal-detail-title badge rounded-pill bg-danger"
-                                            >Danger</span
-                                        >
-                                    </div>
-                                    <div
-                                        class="col issue-time-line d-flex gap-2"
-                                    >
-                                        <div
-                                            class="d-flex align-items-center gap-2"
-                                        >
-                                            <p>Posted</p>
-                                            <span>3 days ago</span>
-                                        </div>
-                                        <div
-                                            class="d-flex align-items-center gap-2"
-                                        >
-                                            <p>Modified at</p>
-                                            <span>1 minute ago</span>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="col issue-time-line d-flex gap-2"
-                                    >
-                                        <p
-                                            class="btn custom-color m-2 rounded-pill"
-                                        >
-                                            Custom Color
-                                        </p>
-                                        <p
-                                            class="btn custom-color m-2 rounded-pill"
-                                        >
-                                            Australia
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="code-block">
-                                        <p>
-                                            this code does not work help me
-                                            please
-                                        </p>
-                                        <pre>
+                        <div class="card-body">
+                            <div class="code-block">
+                                <p>
+                                    this code does not work help me
+                                    please
+                                </p>
+                                <pre>
 &lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
 &lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
-                                        >
-                                    </div>
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-md-3 p-sm-2">
+                    <div class="card">
+                        <div
+                                class="card-header border-bottom text-dark"
+                        >
+                            <div
+                                    class="col d-flex align-items-center gap-2"
+                            >
+                                <h4
+                                        class="card-title modal-detail-title"
+                                >
+                                    Title
+                                </h4>
+
+                                <h6
+                                        class="card-title modal-detail-title"
+                                >
+                                    Name
+                                </h6>
+                                <span
+                                        class="card-title modal-detail-title badge rounded-pill bg-success"
+                                >Success</span
+                                >
+                                <span
+                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
+                                >Danger</span
+                                >
+                            </div>
+                            <div
+                                    class="col issue-time-line d-flex gap-2"
+                            >
+                                <div
+                                        class="d-flex align-items-center gap-2"
+                                >
+                                    <p>Posted</p>
+                                    <span>3 days ago</span>
                                 </div>
+                                <div
+                                        class="d-flex align-items-center gap-2"
+                                >
+                                    <p>Modified at</p>
+                                    <span>1 minute ago</span>
+                                </div>
+                            </div>
+                            <div
+                                    class="col issue-time-line d-flex gap-2"
+                            >
+                                <p
+                                        class="btn custom-color m-2 rounded-pill"
+                                >
+                                    Custom Color
+                                </p>
+                                <p
+                                        class="btn custom-color m-2 rounded-pill"
+                                >
+                                    Australia
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="code-block">
+                                <p>
+                                    this code does not work help me
+                                    please
+                                </p>
+                                <pre>
+&lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
+&lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
+                                >
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Content End -->
-
-            <div
-                class="modal fade"
-                id="profile-modal"
-                data-bs-keyboard="false"
-                tabindex="-1"
-                aria-labelledby="staticBackdropLabel"
-                aria-hidden="true"
-            >
-                <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-body"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
-                ><i class="bi bi-arrow-up"></i
-            ></a>
         </div>
+    </div>
+    <!-- Content End -->
 
-        <!-- fontawesome -->
-        <script src="/js/fontawesome.js"></script>
+    <div
+            class="modal fade"
+            id="profile-modal"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
 
-        <!-- jquery -->
-        <script src="/js/jquery.3.7.1.min.js"></script>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
+    ><i class="bi bi-arrow-up"></i
+    ></a>
+</div>
 
-        <!-- datable table -->
-        <script src="/js/databales.min.js"></script>
+<!--    for select drop-drown-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
-        <!-- bootstrap -->
-        <script src="/js/bootstrap.bundle.min.js"></script>
+<!-- fontawesome -->
+<script src="/js/fontawesome.js"></script>
 
-        <!-- javascript libraries -->
-        <script src="/lib/chart/chart.min.js"></script>
-        <script src="/lib/easing/easing.min.js"></script>
-        <script src="/lib/waypoints/waypoints.min.js"></script>
-        <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="/lib/tempusdominus/js/moment.min.js"></script>
-        <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-        <script src="/lib/quill/quill.js"></script>
+<!-- jquery -->
+<script src="/js/jquery.3.7.1.min.js"></script>
 
-        <!-- Template Javascript -->
-        <script src="/js/main.js"></script>
-        <script src="/js/forprogresscircleiguess.js"></script>
+<!-- datable table -->
+<script src="/js/databales.min.js"></script>
 
-        <!-- sort (department, project), form validation and search bar behavior are all here -->
-        <script src="/js/custome.js"></script>
+<!-- bootstrap -->
+<script src="/js/bootstrap.bundle.min.js"></script>
 
-        <script>
-            let quillEditors = document.querySelectorAll(
-                ".quill-editor-bubble"
-            );
+<!-- javascript libraries -->
+<script src="/lib/chart/chart.min.js"></script>
+<script src="/lib/easing/easing.min.js"></script>
+<script src="/lib/waypoints/waypoints.min.js"></script>
+<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/lib/tempusdominus/js/moment.min.js"></script>
+<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/lib/quill/quill.min.js"></script>
 
-            let toolbaroptions = [
-                // Test-style
-                ["bold", "italic", "underline"],
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+<script src="/js/forprogresscircleiguess.js"></script>
 
-                // Bullet points style...
-                [{ list: "ordered" }, { list: "bullet" }],
+<!-- sort (department, project), form validation and search bar behavior are all here -->
+<script src="/js/custome.js"></script>
 
-                // Sub and super script...
-                [{ script: "sub" }, { script: "super" }],
+<script>
+    let quillEditors = document.querySelectorAll(
+        ".quill-editor-bubble"
+    );
 
-                // Indentation...
-                [{ indent: "+1" }, { indent: "-1" }],
+    let toolbaroptions = [
+        // Test-style
+        ["bold", "italic", "underline"],
 
-                // Alignment
-                [{ align: [] }],
+        // Bullet points style...
+        [{list: "ordered"}, {list: "bullet"}],
 
-                // Header for test, e.g., h1, h2...
-                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        // Sub and super script...
+        [{script: "sub"}, {script: "super"}],
 
-                // Adding image, link, video, or formula
-                ["link"],
+        // Indentation...
+        [{indent: "+1"}, {indent: "-1"}],
 
-                // Adding code snippet or blockquote
-                ["code-block", "blockquote"],
-            ];
+        // Alignment
+        [{align: []}],
 
-            // Initialize Quill for each selected element
-            quillEditors.forEach(function (editor) {
-                new Quill(editor, {
-                    modules: {
-                        toolbar: toolbaroptions,
-                    },
-                    theme: "snow",
-                });
-            });
+        // Header for test, e.g., h1, h2...
+        [{header: [1, 2, 3, 4, 5, 6, false]}],
 
-            let fullQuillEditor = document.querySelector(".quill-editor-full");
+        // Adding image, link, video, or formula
+        ["link"],
 
-            new Quill(fullQuillEditor, {
-                modules: {
-                    toolbar: toolbaroptions,
-                },
-                theme: "snow",
-            });
+        // Adding code snippet or blockquote
+        ["code-block", "blockquote"],
+    ];
 
-            // Author: Habib Mhamadi
-            // Email: habibmhamadi@gmail.com
+    // Initialize Quill for each selected element
+    quillEditors.forEach(function (editor) {
+        new Quill(editor, {
+            modules: {
+                toolbar: toolbaroptions,
+            },
+            theme: "snow",
+        });
+    });
 
-            new MultiSelectTag("countries"), new MultiSelectTag("state"); // id
+    let fullQuillEditor = document.querySelector(".quill-editor-full");
 
-            function MultiSelectTag(
-                el,
-                customs = { shadow: false, rounded: true }
-            ) {
-                let element = null;
-                let options = null;
-                let customSelectContainer = null;
-                let wrapper = null;
-                let btnContainer = null;
-                let body = null;
-                let inputContainer = null;
-                let inputBody = null;
-                let input = null;
-                let button = null;
-                let drawer = null;
-                let ul = null;
-                let domParser = new DOMParser();
-                init();
+    new Quill(fullQuillEditor, {
+        modules: {
+            toolbar: toolbaroptions,
+        },
+        theme: "snow",
+    });
 
-                function init() {
-                    element = document.getElementById(el);
-                    createElements();
+    // Author: Habib Mhamadi
+    // Email: habibmhamadi@gmail.com
+
+    new MultiSelectTag("countries"), new MultiSelectTag("state"); // id
+
+    function MultiSelectTag(
+        el,
+        customs = {shadow: false, rounded: true}
+    ) {
+        let element = null;
+        let options = null;
+        let customSelectContainer = null;
+        let wrapper = null;
+        let btnContainer = null;
+        let body = null;
+        let inputContainer = null;
+        let inputBody = null;
+        let input = null;
+        let button = null;
+        let drawer = null;
+        let ul = null;
+        let domParser = new DOMParser();
+        init();
+
+        function init() {
+            element = document.getElementById(el);
+            createElements();
+            initOptions();
+            enableItemSelection();
+            setValues(false);
+
+            button.addEventListener("click", () => {
+                if (drawer.classList.contains("hidden")) {
                     initOptions();
                     enableItemSelection();
-                    setValues(false);
-
-                    button.addEventListener("click", () => {
-                        if (drawer.classList.contains("hidden")) {
-                            initOptions();
-                            enableItemSelection();
-                            drawer.classList.remove("hidden");
-                            input.focus();
-                        }
-                    });
-
-                    input.addEventListener("keyup", (e) => {
-                        initOptions(e.target.value);
-                        enableItemSelection();
-                    });
-
-                    input.addEventListener("keydown", (e) => {
-                        if (
-                            e.key === "Backspace" &&
-                            !e.target.value &&
-                            inputContainer.childElementCount > 1
-                        ) {
-                            const child =
-                                body.children[
-                                    inputContainer.childElementCount - 2
-                                ].firstChild;
-                            const option = options.find(
-                                (op) => op.value == child.dataset.value
-                            );
-                            option.selected = false;
-                            removeTag(child.dataset.value);
-                            setValues();
-                        }
-                    });
-
-                    window.addEventListener("click", (e) => {
-                        if (!customSelectContainer.contains(e.target)) {
-                            drawer.classList.add("hidden");
-                        }
-                    });
+                    drawer.classList.remove("hidden");
+                    input.focus();
                 }
+            });
 
-                function createElements() {
-                    // Create custom elements
-                    options = getOptions();
-                    element.classList.add("hidden");
+            input.addEventListener("keyup", (e) => {
+                initOptions(e.target.value);
+                enableItemSelection();
+            });
 
-                    // .multi-select-tag
-                    customSelectContainer = document.createElement("div");
-                    customSelectContainer.classList.add("mult-select-tag");
+            input.addEventListener("keydown", (e) => {
+                if (
+                    e.key === "Backspace" &&
+                    !e.target.value &&
+                    inputContainer.childElementCount > 1
+                ) {
+                    const child =
+                        body.children[
+                        inputContainer.childElementCount - 2
+                            ].firstChild;
+                    const option = options.find(
+                        (op) => op.value == child.dataset.value
+                    );
+                    option.selected = false;
+                    removeTag(child.dataset.value);
+                    setValues();
+                }
+            });
 
-                    // .container
-                    wrapper = document.createElement("div");
-                    wrapper.classList.add("wrapper");
+            window.addEventListener("click", (e) => {
+                if (!customSelectContainer.contains(e.target)) {
+                    drawer.classList.add("hidden");
+                }
+            });
+        }
 
-                    // body
-                    body = document.createElement("div");
-                    body.classList.add("body");
-                    if (customs.shadow) {
-                        body.classList.add("shadow");
-                    }
-                    if (customs.rounded) {
-                        body.classList.add("rounded");
-                    }
+        function createElements() {
+            // Create custom elements
+            options = getOptions();
+            element.classList.add("hidden");
 
-                    // .input-container
-                    inputContainer = document.createElement("div");
-                    inputContainer.classList.add("input-container");
+            // .multi-select-tag
+            customSelectContainer = document.createElement("div");
+            customSelectContainer.classList.add("mult-select-tag");
 
-                    // input
-                    input = document.createElement("input");
-                    input.classList.add("input");
-                    input.placeholder = `${customs.placeholder || "Search..."}`;
+            // .container
+            wrapper = document.createElement("div");
+            wrapper.classList.add("wrapper");
 
-                    inputBody = document.createElement("inputBody");
-                    inputBody.classList.add("input-body");
-                    inputBody.append(input);
+            // body
+            body = document.createElement("div");
+            body.classList.add("body");
+            if (customs.shadow) {
+                body.classList.add("shadow");
+            }
+            if (customs.rounded) {
+                body.classList.add("rounded");
+            }
 
-                    body.append(inputContainer);
+            // .input-container
+            inputContainer = document.createElement("div");
+            inputContainer.classList.add("input-container");
 
-                    // .btn-container
-                    btnContainer = document.createElement("div");
-                    btnContainer.classList.add("btn-container");
+            // input
+            input = document.createElement("input");
+            input.classList.add("input");
+            input.placeholder = `${customs.placeholder || "Search..."}`;
 
-                    // button
-                    button = document.createElement("button");
-                    button.type = "button";
-                    btnContainer.append(button);
+            inputBody = document.createElement("inputBody");
+            inputBody.classList.add("input-body");
+            inputBody.append(input);
 
-                    const icon = domParser.parseFromString(
-                        `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            body.append(inputContainer);
+
+            // .btn-container
+            btnContainer = document.createElement("div");
+            btnContainer.classList.add("btn-container");
+
+            // button
+            button = document.createElement("button");
+            button.type = "button";
+            btnContainer.append(button);
+
+            const icon = domParser.parseFromString(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 21 6 15"></polyline></svg>`,
-                        "image/svg+xml"
-                    ).documentElement;
-                    button.append(icon);
+                "image/svg+xml"
+            ).documentElement;
+            button.append(icon);
 
-                    body.append(btnContainer);
-                    wrapper.append(body);
+            body.append(btnContainer);
+            wrapper.append(body);
 
-                    drawer = document.createElement("div");
-                    drawer.classList.add(...["drawer", "hidden"]);
-                    if (customs.shadow) {
-                        drawer.classList.add("shadow");
-                    }
-                    if (customs.rounded) {
-                        drawer.classList.add("rounded");
-                    }
-                    drawer.append(inputBody);
-                    ul = document.createElement("ul");
+            drawer = document.createElement("div");
+            drawer.classList.add(...["drawer", "hidden"]);
+            if (customs.shadow) {
+                drawer.classList.add("shadow");
+            }
+            if (customs.rounded) {
+                drawer.classList.add("rounded");
+            }
+            drawer.append(inputBody);
+            ul = document.createElement("ul");
 
-                    drawer.appendChild(ul);
+            drawer.appendChild(ul);
 
-                    customSelectContainer.appendChild(wrapper);
-                    customSelectContainer.appendChild(drawer);
+            customSelectContainer.appendChild(wrapper);
+            customSelectContainer.appendChild(drawer);
 
-                    // Place TailwindTagSelection after the element
-                    if (element.nextSibling) {
-                        element.parentNode.insertBefore(
-                            customSelectContainer,
-                            element.nextSibling
-                        );
-                    } else {
-                        element.parentNode.appendChild(customSelectContainer);
-                    }
-                }
+            // Place TailwindTagSelection after the element
+            if (element.nextSibling) {
+                element.parentNode.insertBefore(
+                    customSelectContainer,
+                    element.nextSibling
+                );
+            } else {
+                element.parentNode.appendChild(customSelectContainer);
+            }
+        }
 
-                function initOptions(val = null) {
-                    ul.innerHTML = "";
-                    for (let option of options) {
-                        if (option.selected) {
-                            !isTagSelected(option.value) && createTag(option);
-                        } else {
-                            const li = document.createElement("li");
-                            li.innerHTML = option.label;
-                            li.dataset.value = option.value;
+        function initOptions(val = null) {
+            ul.innerHTML = "";
+            for (let option of options) {
+                if (option.selected) {
+                    !isTagSelected(option.value) && createTag(option);
+                } else {
+                    const li = document.createElement("li");
+                    li.innerHTML = option.label;
+                    li.dataset.value = option.value;
 
-                            // For search
-                            if (
-                                val &&
-                                option.label
-                                    .toLowerCase()
-                                    .startsWith(val.toLowerCase())
-                            ) {
-                                ul.appendChild(li);
-                            } else if (!val) {
-                                ul.appendChild(li);
-                            }
-                        }
+                    // For search
+                    if (
+                        val &&
+                        option.label
+                            .toLowerCase()
+                            .startsWith(val.toLowerCase())
+                    ) {
+                        ul.appendChild(li);
+                    } else if (!val) {
+                        ul.appendChild(li);
                     }
                 }
+            }
+        }
 
-                function createTag(option) {
-                    // Create and show selected item as tag
-                    const itemDiv = document.createElement("div");
-                    itemDiv.classList.add("item-container");
-                    const itemLabel = document.createElement("div");
-                    itemLabel.classList.add("item-label");
-                    itemLabel.innerHTML = option.label;
-                    itemLabel.dataset.value = option.value;
-                    const itemClose = new DOMParser().parseFromString(
-                        `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="item-close-svg">
+        function createTag(option) {
+            // Create and show selected item as tag
+            const itemDiv = document.createElement("div");
+            itemDiv.classList.add("item-container");
+            const itemLabel = document.createElement("div");
+            itemLabel.classList.add("item-label");
+            itemLabel.innerHTML = option.label;
+            itemLabel.dataset.value = option.value;
+            const itemClose = new DOMParser().parseFromString(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="item-close-svg">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>`,
-                        "image/svg+xml"
-                    ).documentElement;
+                "image/svg+xml"
+            ).documentElement;
 
-                    itemClose.addEventListener("click", (e) => {
-                        const unselectOption = options.find(
-                            (op) => op.value == option.value
-                        );
-                        unselectOption.selected = false;
-                        removeTag(option.value);
-                        initOptions();
-                        setValues();
-                    });
+            itemClose.addEventListener("click", (e) => {
+                const unselectOption = options.find(
+                    (op) => op.value == option.value
+                );
+                unselectOption.selected = false;
+                removeTag(option.value);
+                initOptions();
+                setValues();
+            });
 
-                    itemDiv.appendChild(itemLabel);
-                    itemDiv.appendChild(itemClose);
-                    inputContainer.append(itemDiv);
-                }
+            itemDiv.appendChild(itemLabel);
+            itemDiv.appendChild(itemClose);
+            inputContainer.append(itemDiv);
+        }
 
-                function enableItemSelection() {
-                    // Add click listener to the list items
-                    for (let li of ul.children) {
-                        li.addEventListener("click", (e) => {
-                            options.find(
-                                (o) => o.value == e.target.dataset.value
-                            ).selected = true;
-                            input.value = null;
-                            initOptions();
-                            setValues();
-                            input.focus();
-                        });
-                    }
-                }
+        function enableItemSelection() {
+            // Add click listener to the list items
+            for (let li of ul.children) {
+                li.addEventListener("click", (e) => {
+                    options.find(
+                        (o) => o.value == e.target.dataset.value
+                    ).selected = true;
+                    input.value = null;
+                    initOptions();
+                    setValues();
+                    input.focus();
+                });
+            }
+        }
 
-                function isTagSelected(val) {
-                    // If the item is already selected
-                    for (let child of inputContainer.children) {
-                        if (
-                            !child.classList.contains("input-body") &&
-                            child.firstChild.dataset.value == val
-                        ) {
-                            return true;
-                        }
-                    }
-                    return false;
+        function isTagSelected(val) {
+            // If the item is already selected
+            for (let child of inputContainer.children) {
+                if (
+                    !child.classList.contains("input-body") &&
+                    child.firstChild.dataset.value == val
+                ) {
+                    return true;
                 }
-                function removeTag(val) {
-                    // Remove selected item
-                    for (let child of inputContainer.children) {
-                        if (
-                            !child.classList.contains("input-body") &&
-                            child.firstChild.dataset.value == val
-                        ) {
-                            inputContainer.removeChild(child);
-                        }
-                    }
+            }
+            return false;
+        }
+
+        function removeTag(val) {
+            // Remove selected item
+            for (let child of inputContainer.children) {
+                if (
+                    !child.classList.contains("input-body") &&
+                    child.firstChild.dataset.value == val
+                ) {
+                    inputContainer.removeChild(child);
                 }
-                function setValues(fireEvent = true) {
-                    // Update element final values
-                    selected_values = [];
-                    for (let i = 0; i < options.length; i++) {
-                        element.options[i].selected = options[i].selected;
-                        if (options[i].selected) {
-                            selected_values.push({
-                                label: options[i].label,
-                                value: options[i].value,
-                            });
-                        }
-                    }
-                    if (fireEvent && customs.hasOwnProperty("onChange")) {
-                        customs.onChange(selected_values);
-                    }
-                }
-                function getOptions() {
-                    // Map element options
-                    return [...element.options].map((op) => {
-                        return {
-                            value: op.value,
-                            label: op.label,
-                            selected: op.selected,
-                        };
+            }
+        }
+
+        function setValues(fireEvent = true) {
+            // Update element final values
+            selected_values = [];
+            for (let i = 0; i < options.length; i++) {
+                element.options[i].selected = options[i].selected;
+                if (options[i].selected) {
+                    selected_values.push({
+                        label: options[i].label,
+                        value: options[i].value,
                     });
                 }
             }
-        
-        </script>
-    </body>
+            if (fireEvent && customs.hasOwnProperty("onChange")) {
+                customs.onChange(selected_values);
+            }
+        }
+
+        function getOptions() {
+            // Map element options
+            return [...element.options].map((op) => {
+                return {
+                    value: op.value,
+                    label: op.label,
+                    selected: op.selected,
+                };
+            });
+        }
+    }
+
+</script>
+</body>
 </html>

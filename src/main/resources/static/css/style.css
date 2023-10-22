@@ -847,3 +847,13 @@
     margin: 0;
 }
 
+.ql-toolbar {
+    color: white;
+    text-align: center;
+}
+
+.custom-color {
+    color: #046061;
+    background-color: #70f8fa;
+    border: 2px solid #81e6d9;
+}

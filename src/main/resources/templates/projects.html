@@ -7,22 +7,24 @@
  -->
 <!DOCTYPE html>
 <html
-    lang="en"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="layout/layout"
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="layout/layout"
 >
-    <head> </head>
+<head></head>
 
-    <body>
-        <div
-            class="container-fluid position-relative bg-white d-flex p-0"
-            layout:fragment="content"
-        >
-            <!-- Content Start -->
-            <div
-                class="content"
-                style="
+<body layout:fragment="content">
+<div
+        class="container-fluid position-relative bg-white d-flex p-0"
+>
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <!-- Content Start -->
+    <div
+            class="content"
+            style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
@@ -31,159 +33,774 @@
                     );
                     background-size: 12px 12px;
                 "
-            >
-                <div th:replace="fragments/navigation :: navigation"></div>
-                <!-- Search Start -->
-                <div
-                    class="container-fluid d-md-block pt-2 ps-s pe-2"
-                    id="dropdrown-search-bar"
+    >
+        <div th:replace="fragments/navigation :: navigation-with-search"></div>
+        <!-- Search Start -->
+        <div
+                class="container-fluid d-md-block pt-2 ps-s pe-2"
+                id="dropdrown-search-bar"
+        >
+            <div class="d-flex flex-row justify-content-end gap-2">
+                <form class="d-inline-block">
+                    <input
+                            class="form-control border-0"
+                            type="search"
+                            placeholder="Search"
+                    />
+                </form>
+                <!-- modal toggle button start -->
+                <button
+                        type="button"
+                        class="btn btn-light align-self-start"
+                        data-bs-toggle="modal"
+                        data-bs-target="#add-department-modal"
                 >
-                    <div class="d-flex flex-row justify-content-end gap-2">
-                        <form class="d-inline-block">
-                            <input
-                                class="form-control border-0"
-                                type="search"
-                                placeholder="Search"
-                            />
-                        </form>
-                        <!-- modal toggle button start -->
-                        <button
-                            type="button"
-                            class="btn btn-light align-self-start"
-                            data-bs-toggle="modal"
-                            data-bs-target="#add-department-modal"
-                        >
-                            <i class="bi bi-building-fill-add"></i>
-                        </button>
-                        <!-- modal toggle button end -->
-                        <!-- add department modal start -->
+                    <i class="bi bi-building-fill-add"></i>
+                </button>
+                <!-- modal toggle button end -->
+                <!-- add department modal start -->
 
-                        <!-- add department modal end -->
-                        <!-- sortting button -->
-                        <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+                <!-- add department modal end -->
+                <!-- sortting button -->
+                <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
 
-                        <!-- Modal -->
-                    </div>
-                </div>
-                <!-- Search End -->
-
-                <!-- project start -->
-                <div class="container-fluid border mt-sm-2 mt-2">
-                    <div
-                        class="row row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 gap-md-0 g-3 p-sm-2"
-                        id="sort-container"
-                    >
-                        <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
-                        <div class="p-md-3 p-sm-2 active-card m-0">
-                            <div class="card border-success">
-                                <div class="card-header">
-                                    <div class="d-flex flex-column">
-                                        <h2
-                                            class="card-title text-center text-primary modal-detail-title"
-                                        >
-                                            a
-                                        </h2>
-                                        <div
-                                            class="d-flex justify-content-between"
-                                        >
-                                            <div class="d-flex">
-                                                <img
-                                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                                    class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                                    style="width: 40px"
-                                                    alt="..."
-                                                />
-                                                <h5
-                                                    class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
-                                                >
-                                                    Project manager
-                                                </h5>
-                                            </div>
-                                            <a
-                                                href=""
-                                                class="btn btn-white text-secondary link-shadow"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#project-details"
-                                                >See More</a
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="card-body position-relative mx-auto"
-                                >
-                                    <p class="card-title text-center fs-6 mb-1">
-                                        progress
-                                    </p>
-                                    <div
-                                        id="circle-progress-1"
-                                        class="circle-progress rounded-circle"
-                                        data-min-value="0"
-                                        data-max-value="100"
-                                        data-value="80"
-                                        data-type="percent"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-md-3 p-sm-2 active-card m-0">
-                            <div class="card border-success">
-                                <div class="card-header">
-                                    <div class="d-flex flex-column">
-                                        <h2
-                                            class="card-title text-center text-primary modal-detail-title"
-                                        >
-                                            h
-                                        </h2>
-                                        <div
-                                            class="d-flex justify-content-between"
-                                        >
-                                            <div class="d-flex">
-                                                <img
-                                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                                    class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                                    style="width: 40px"
-                                                    alt="..."
-                                                />
-                                                <h5
-                                                    class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
-                                                >
-                                                    Project manager
-                                                </h5>
-                                            </div>
-                                            <a
-                                                href=""
-                                                class="btn btn-white text-secondary link-shadow"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#project-details"
-                                                >See More</a
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="card-body position-relative mx-auto"
-                                >
-                                    <p class="card-title text-center fs-6 mb-1">
-                                        progress
-                                    </p>
-                                    <div
-                                        id="circle-progress-2"
-                                        class="circle-progress rounded-circle"
-                                        data-min-value="0"
-                                        data-max-value="100"
-                                        data-value="25"
-                                        data-type="percent"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
-                    </div>
-                </div>
-                <!-- project end -->
+                <!-- Modal -->
             </div>
-            <!-- Content End -->
         </div>
-    </body>
+        <!-- Search End -->
+
+        <!-- project start -->
+        <div
+                id="grid"
+                class="item-content animate__animated animate__fadeIn active"
+                data-toggle-extra="tab-content"
+        >
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3" id="sort-container" style="margin: 10px">
+                <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
+                <div class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0">
+                    <div class="card border-success">
+                        <div class="card-header">
+                            <div class="d-flex flex-column">
+                                <h2
+                                        class="card-title text-center text-primary modal-detail-title"
+                                >
+                                    a
+                                </h2>
+                                <div
+                                        class="d-flex justify-content-between"
+                                >
+                                    <div class="d-flex">
+                                        <img
+                                                src="https://source.unsplash.com/random/200x200?sig=1"
+                                                class="img-fluid rounded-circle d-none d-md-block d-sm-block"
+                                                style="width: 40px"
+                                                alt="..."
+                                        />
+                                        <h5
+                                                class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
+                                        >
+                                            Project manager
+                                        </h5>
+                                    </div>
+                                    <a
+                                            href=""
+                                            class="btn btn-white text-secondary link-shadow"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#project-details"
+                                    >See More</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                                class="card-body position-relative mx-auto"
+                        >
+                            <p class="card-title text-center fs-6 mb-1">
+                                progress
+                            </p>
+                            <div
+                                    id="circle-progress-1"
+                                    class="circle-progress rounded-circle"
+                                    data-min-value="0"
+                                    data-max-value="100"
+                                    data-value="80"
+                                    data-type="percent"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0">
+                    <div class="card border-success">
+                        <div class="card-header">
+                            <div class="d-flex flex-column">
+                                <h2
+                                        class="card-title text-center text-primary modal-detail-title"
+                                >
+                                    h
+                                </h2>
+                                <div
+                                        class="d-flex justify-content-between"
+                                >
+                                    <div class="d-flex">
+                                        <img
+                                                src="https://source.unsplash.com/random/200x200?sig=1"
+                                                class="img-fluid rounded-circle d-none d-md-block d-sm-block"
+                                                style="width: 40px"
+                                                alt="..."
+                                        />
+                                        <h5
+                                                class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
+                                        >
+                                            Project manager
+                                        </h5>
+                                    </div>
+                                    <a
+                                            href=""
+                                            class="btn btn-white text-secondary link-shadow"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#project-details"
+                                    >See More</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                                class="card-body position-relative mx-auto"
+                        >
+                            <p class="card-title text-center fs-6 mb-1">
+                                progress
+                            </p>
+                            <div
+                                    id="circle-progress-2"
+                                    class="circle-progress rounded-circle"
+                                    data-min-value="0"
+                                    data-max-value="100"
+                                    data-value="25"
+                                    data-type="percent"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
+            </div>
+        </div>
+        <!-- project end -->
+    </div>
+    <!-- Content End -->
+</div>
+
+<!--    modal for add project-->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content task-content">
+            <div class="modal-header">
+                <h2 class="card-title" style="text-align:center">Add Project</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form class="row g-3" id="validation-form" action="">
+                    <div class="col-lg-6">
+                        <label for="name" class="col-sm-12 col-form-label" name="name" id="name">Project Name<span style="color:red"> *</span></label>
+                        <input type="text" class="form-control border-task" id="name" name="name">
+                    </div>
+
+
+                    <div class="col-lg-6">
+                        <label for="department" class="col-sm-12 col-form-label" name="department" id="name">Department Name <span style="color:red"> *</span></label>
+                        <select class="form-control selectpicker"  aria-label="Select Department" data-live-search="true" id="department" name="department" multiple>
+                            <option>Category</option>
+                            <option>Android</option>
+                            <option>IOS</option>
+                            <option>Ui/Ux Design</option>
+                            <option>Development</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="user" class="col-sm-12 col-form-label" name="user" id="user">Project Manager <span style="color:red"> *</span></label>
+                        <input type="text" class="form-control border-task" id="user" name="user">
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="user" class="col-sm-12 col-form-label" name="user" id="user">Assign Members <span style="color:red"> *</span></label>
+                        <select class="form-control selectpicker"  aria-label="Select Members" data-live-search="true" id="member" name="member" multiple>
+                            <option>Category</option>
+                            <option>Android</option>
+                            <option>IOS</option>
+                            <option>Ui/Ux Design</option>
+                            <option>Development</option>
+                        </select>
+                    </div>
+
+
+                    <div class="col-lg-6">
+                        <label for="client" class="col-sm-12 col-form-label" name="client" id="client">Client <span style="color:red"> *</span></label>
+                        <select class="form-control selectpicker"  aria-label="Select Clients" data-live-search="true" id="client" name="client" >
+                            <option>Category</option>
+                            <option>Android</option>
+                            <option>IOS</option>
+                            <option>Ui/Ux Design</option>
+                            <option>Development</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="background" class="col-sm-12 col-form-label" name="background" id="background">Background<span style="color:red"> *</span></label>
+                        <input type="text" class="form-control border-task" id="background" name="background">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="start_date" class="col-sm-12 col-form-label" name="start_date" id="start_date">Start Date <span style="color:red"> *</span></label>
+                        <input type="date" class="form-control border-task" id="start_date" name="start_date">
+                    </div>
+
+                    <div class="col-6">
+                        <label for="duration" class="col-sm-12 col-form-label" name="duration" id="duration">Duration <span style="color:red"> *</span></label>
+                        <input type="text" class="form-control border-task" id="duration" name="duration">
+                    </div>
+
+
+
+                    <div class="col-lg-6">
+                        <label for="duration" class="col-sm-12 col-form-label" name="objective" id="objective">Objective <span style="color:red"> *</span></label>
+                        <input type="text" class="form-control border-task" id="objective" name="objective">
+                    </div>
+
+
+
+                    <div class="col-lg-6">
+                        <label for="architectures" class="col-sm-12 col-form-label" name="architectures" id="architectures">Architecture <span style="color:red"> *</span></label>
+                        <input type="text" class="form-control border-task" id="architectures" name="architectures">
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines" id="systemOutlines">SystemOutline <span style="color:red"> *</span></label>
+                        <select class="form-control selectpicker"  aria-label="Select System Outlines" data-live-search="true" id="systemOutlines" name="systemOutlines" multiple>
+                            <option>Analysis</option>
+                            <option>System Design</option>
+                            <option>Coding</option>
+                            <option>Testing</option>
+                            <option>Deploy</option>
+                            <option>Maintenance</option>
+                            <option>Document</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable" id="deliverable">Deliverable  <span style="color:red"> *</span></label>
+                        <input type="text" class="form-control border-task" id="deliverable" name="deliverable">
+                    </div>
+
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">Add</button>
+                        <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--    modal for add project-->
+
+<!-- modal for project's details -->
+<div
+        class="modal fade"
+        id="project-details"
+        data-bs-keyboard="true"
+>
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    Department Details
+                </h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div
+                                    class="card-body profile-card pt-4 d-flex flex-column align-items-center"
+                            >
+                                <img
+                                        src="https://source.unsplash.com/random/200x200?sig=1"
+                                        alt="Profile"
+                                        class="rounded-circle"
+                                />
+                                <h2>Kevin Anderson</h2>
+                                <div class="social-links mt-2">
+                                    <a href="#" class="twitter"
+                                    ><i
+                                            class="bi bi-twitter"
+                                    ></i
+                                    ></a>
+                                    <a href="#" class="facebook"
+                                    ><i
+                                            class="bi bi-facebook"
+                                    ></i
+                                    ></a>
+                                    <a href="#" class="instagram"
+                                    ><i
+                                            class="bi bi-instagram"
+                                    ></i
+                                    ></a>
+                                    <a href="#" class="linkedin"
+                                    ><i
+                                            class="bi bi-linkedin"
+                                    ></i
+                                    ></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-body pt-3">
+                                <!-- Bordered Tabs -->
+                                <ul
+                                        class="nav nav-tabs nav-tabs-bordered"
+                                >
+                                    <li class="nav-item">
+                                        <button
+                                                class="nav-link active"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#project-overview"
+                                        >
+                                            Overview
+                                        </button>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <button
+                                                class="nav-link"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#project-edit"
+                                        >
+                                            edit
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content pt-2">
+                                    <div
+                                            class="tab-pane fade show active profile-overview"
+                                            id="project-overview"
+                                    >
+                                        <h5 class="card-title">
+                                            About background
+                                        </h5>
+                                        <p class="small fst-italic">
+                                            Sunt est soluta
+                                            temporibus accusantium
+                                            neque nam maiores cumque
+                                            temporibus. Tempora
+                                            libero non est unde
+                                            veniam est qui dolor. Ut
+                                            sunt iure rerum quae
+                                            quisquam autem eveniet
+                                            perspiciatis odit. Fuga
+                                            sequi sed ea saepe at
+                                            unde.
+                                        </p>
+
+                                        <h5 class="card-title">
+                                            Project Details
+                                        </h5>
+
+                                        <div class="row">
+                                            <div
+                                                    class="col-lg-3 col-md-4 label"
+                                            >
+                                                Department name
+                                            </div>
+                                            <div
+                                                    class="col-lg-9 col-md-8"
+                                            >
+                                                dance club
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div
+                                                    class="col-lg-3 col-md-4 label"
+                                            >
+                                                Project name
+                                            </div>
+                                            <div
+                                                    class="col-lg-9 col-md-8"
+                                            >
+                                                find nemo
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div
+                                                    class="col-lg-3 col-md-4 label"
+                                            >
+                                                Duration
+                                            </div>
+                                            <div
+                                                    class="col-lg-9 col-md-8"
+                                            >
+                                                3 Months
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div
+                                                    class="col-lg-3 col-md-4 label"
+                                            >
+                                                Start date
+                                            </div>
+                                            <div
+                                                    class="col-lg-9 col-md-8"
+                                            >
+                                                25 september 2022
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div
+                                                    class="col-lg-3 col-md-4 label"
+                                            >
+                                                End date
+                                            </div>
+                                            <div
+                                                    class="col-lg-9 col-md-8"
+                                            >
+                                                25 december 2022
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div
+                                                    class="col-lg-3 col-md-4 label"
+                                            >
+                                                Current phase
+                                            </div>
+                                            <div
+                                                    class="col-lg-9 col-md-8"
+                                            >
+                                                Basic design
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div
+                                                    class="col-lg-3 col-md-4 label"
+                                            >
+                                                Client
+                                            </div>
+                                            <div
+                                                    class="col-lg-9 col-md-8"
+                                            >
+                                                DAT
+                                            </div>
+                                        </div>
+
+                                        <div
+                                                class="row d-flex align-items-center"
+                                        >
+                                            <div
+                                                    class="col-lg-3 col-md-4 label"
+                                            >
+                                                Objective
+                                            </div>
+                                            <div
+                                                    class="col-lg-9 col-md-8 accordion"
+                                            >
+                                                <div
+                                                        class="accordion-item"
+                                                >
+                                                    <h2
+                                                            class="accordion-header"
+                                                            id="panelsStayOpen-headingOne"
+                                                    >
+                                                        <button
+                                                                class="accordion-button"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#panelsStayOpen-collapseOne"
+                                                                aria-expanded="true"
+                                                                aria-controls="panelsStayOpen-collapseOne"
+                                                        >
+                                                            See
+                                                            details
+                                                        </button>
+                                                    </h2>
+                                                    <div
+                                                            id="panelsStayOpen-collapseOne"
+                                                            class="accordion-collapse collapse"
+                                                            aria-labelledby="panelsStayOpen-headingOne"
+                                                    >
+                                                        <div
+                                                                class="accordion-body"
+                                                        >
+                                                            <strong
+                                                            >This
+                                                                is
+                                                                the
+                                                                first
+                                                                item's
+                                                                accordion
+                                                                body.</strong
+                                                            >
+                                                            It is
+                                                            shown by
+                                                            default,
+                                                            until
+                                                            the
+                                                            collapse
+                                                            plugin
+                                                            adds the
+                                                            appropriate
+                                                            classes
+                                                            that we
+                                                            use to
+                                                            style
+                                                            each
+                                                            element.
+                                                            These
+                                                            classes
+                                                            control
+                                                            the
+                                                            overall
+                                                            appearance,
+                                                            as well
+                                                            as the
+                                                            showing
+                                                            and
+                                                            hiding
+                                                            via CSS
+                                                            transitions.
+                                                            You can
+                                                            modify
+                                                            any of
+                                                            this
+                                                            with
+                                                            custom
+                                                            CSS or
+                                                            overriding
+                                                            our
+                                                            default
+                                                            variables.
+                                                            It's
+                                                            also
+                                                            worth
+                                                            noting
+                                                            that
+                                                            just
+                                                            about
+                                                            any HTML
+                                                            can go
+                                                            within
+                                                            the
+                                                            <code
+                                                            >.accordion-body</code
+                                                            >,
+                                                            though
+                                                            the
+                                                            transition
+                                                            does
+                                                            limit
+                                                            overflow.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                            class="tab-pane fade profile-edit pt-3"
+                                            id="project-edit"
+                                    >
+                                        <!-- Profile Edit Form -->
+                                        <form>
+                                            <div class="row mb-3">
+                                                <label
+                                                        for="about"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                >About
+                                                    background</label
+                                                >
+                                                <div
+                                                        class="col-md-8 col-lg-9"
+                                                >
+                                                    <div
+                                                            class="quill-editor-bubble"
+                                                    >
+                                                        <p>
+                                                            Hello
+                                                            World!
+                                                        </p>
+                                                        <p>
+                                                            This is
+                                                            Quill
+                                                            <strong
+                                                            >full</strong
+                                                            >
+                                                            editor
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label
+                                                        for="project_name"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                >Project
+                                                    name</label
+                                                >
+                                                <div
+                                                        class="col-md-8 col-lg-9"
+                                                >
+                                                    <input
+                                                            name="project_name"
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="project_name"
+                                                            value="find nemo"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label
+                                                        for="start-date"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                >start
+                                                    date</label
+                                                >
+                                                <div
+                                                        class="col-md-8 col-lg-9"
+                                                >
+                                                    <input
+                                                            name="start_date"
+                                                            type="date"
+                                                            class="form-control"
+                                                            id="start-date"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label
+                                                        for="end-date"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                >end date</label
+                                                >
+                                                <div
+                                                        class="col-md-8 col-lg-9"
+                                                >
+                                                    <input
+                                                            name="end_date"
+                                                            type="date"
+                                                            class="form-control"
+                                                            id="end-date"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label
+                                                        for="end-date"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                >Objective</label
+                                                >
+                                                <div
+                                                        class="col-md-8 col-lg-9"
+                                                >
+                                                    <div
+                                                            class="quill-editor-bubble"
+                                                    >
+                                                        <p>
+                                                            Hello
+                                                            World!
+                                                        </p>
+                                                        <p>
+                                                            This is
+                                                            Quill
+                                                            <strong
+                                                            >full</strong
+                                                            >
+                                                            editor
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                    class="text-center"
+                                            >
+                                                <button
+                                                        type="submit"
+                                                        class="btn btn-primary"
+                                                >
+                                                    Save Changes
+                                                </button>
+                                            </div>
+                                        </form>
+                                        <!-- End Profile Edit Form -->
+                                    </div>
+                                </div>
+                                <!-- End Bordered Tabs -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="/project" class="btn btn-primary"
+                >manage task</a
+                >
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal for project's details -->
+
+<!--    for select drop-drown-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<!-- fontawesome -->
+<script src="/js/fontawesome.js"></script>
+
+<!-- jquery -->
+<script src="/js/jquery.3.7.1.min.js"></script>
+
+<!-- datable table -->
+<script src="/js/databales.min.js"></script>
+
+<!-- bootstrap -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- javascript libraries -->
+<script src="/lib/chart/chart.min.js"></script>
+<script src="/lib/easing/easing.min.js"></script>
+<script src="/lib/waypoints/waypoints.min.js"></script>
+<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/lib/tempusdominus/js/moment.min.js"></script>
+<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/lib/quill/quill.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+<script src="/js/forprogresscircleiguess.js"></script>
+
+<!-- sort (department, project), form validation and search bar behavior are all here -->
+<script src="/js/custome.js"></script>
+</body>
 </html>
