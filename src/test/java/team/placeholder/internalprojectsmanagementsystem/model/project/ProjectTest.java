@@ -119,9 +119,9 @@ public class ProjectTest {
     public void testDeliverableList() {
         List<Deliverable> deliverables = new ArrayList<>();
         deliverables.add(deliverable);
-        project.setDeliverable(deliverables);
+        project.setDeliverables(deliverables);
 
-        assertEquals(deliverables, project.getDeliverable());
+        assertEquals(deliverables, project.getDeliverables());
     }
 
     @Test
