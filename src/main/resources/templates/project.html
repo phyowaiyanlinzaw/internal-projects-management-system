@@ -358,48 +358,48 @@ vs
                 </div>
                 <div class="modal-body">
 
-                    <form class="row g-3" action="" id="todo-form">
+                    <form class="row g-3" action="/project" id="todo-form" method="GET"  novalidate>
                         <div class="col-lg-6">
-                            <label for="task" class="col-sm-12 col-form-label ">Task Name <span style="color:red"> *</span></label>
-                            <input type="text" class="form-control border-task" name="task">
+                            <label for="task" class="col-sm-12 col-form-label">Task Name <span style="color:red"> *</span></label>
+                            <input type="text" class="form-control border-task" name="task" id="task" data-type="task">
+                            <div class="invalid-feedback">Task name is required and cannot be empty.</div>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="pm" class="col-sm-12 col-form-label " name="pm">Project Manager <span style="color:red"> *</span></label>
-                            <select class="form-control selectpicker"  aria-label="Select Project Manager" data-live-search="true" id="pm" name="pm" multiple>
+                            <label for="pm" class="col-sm-12 col-form-label" name="pm">Project Manager <span style="color:red"> *</span></label>
+                            <select class="form-control selectpicker" aria-label="Select Project Manager" data-live-search="true" id="pm" name="pm" multiple data-type="pm">
                                 <option>Category</option>
                                 <option>Android</option>
                                 <option>IOS</option>
                                 <option>Ui/Ux Design</option>
                                 <option>Development</option>
                             </select>
+                            <div class="invalid-feedback">Please select a Project Manager.</div>
                         </div>
 
-
                         <div class="col-md-6">
-                            <label for="start_time" class="col-sm-12 col-form-label" name="start_time" >Start Date <span style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task" id="start_time" name="start_time">
+                            <label for="start_time" class="col-sm-12 col-form-label" name="start_time">Start Date <span style="color:red"> *</span></label>
+                            <input type="date" class="form-control border-task" id="start_time" name="start_time" data-type="start_time">
+                            <div class="invalid-feedback">Start date is required.</div>
                         </div>
 
                         <div class="col-md-6">
                             <label for="end_time" class="col-sm-12 col-form-label" name="end_time">End Date <span style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task" id="end_time" name="end_time">
+                            <input type="date" class="form-control border-task" id="end_time" name="end_time" data-type="end_time">
+                            <div class="invalid-feedback">End date is required.</div>
                         </div>
-
 
                         <div class="col-12">
                             <label for="description" class="col-sm-12 col-form-label" name="description">Description</label>
-                            <textarea class="form-control border-task-description" id="description" name="description" rows="2"></textarea>
+                            <textarea class="form-control border-task-description" id="description" name="description" rows="2" data-type="description"></textarea>
+                            <div class="invalid-feedback">Description is required.</div>
                         </div>
-
-
 
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">Add</button>
                             <button type="reset" class="btn btn-secondary mr-3" data-dismiss="modal">Cancel</button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -453,6 +453,209 @@ vs
 
     <!-- sort (department, project), form validation and search bar behavior are all here -->
     <script src="/js/custome.js"></script>
+
+
+    <script>
+        let form = $("#todo-form");
+
+        let task = form.find('#task');
+        let start_time = form.find('#start_time');
+        let end_time = form.find('#end_time');
+        let description = form.find('#description');
+
+
+        function validateTask(task) {
+            if(!task || task.trim() === '') {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        function validateStartTime(start_time) {
+            if(!start_time || start_time.trim() === '') {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        function validateEndTime(end_time) {
+            if(!end_time || end_time.trim() === '') {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        function validateDescription(description) {
+            if(!description || description.trim() === '') {
+                return false;
+            }
+
+            return true;
+        }
+
+        form.on("input",function (e) {
+            let target = $(e.target);
+            let parent = target.parent();
+            let type = target.attr("data-type").toLowerCase();
+            switch (type) {
+
+                case "task":
+                    console.log(validateTask(target.val()));
+                    let pTask = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Not a valid email");
+
+                    if (!validateDescription(target.val())) {
+                        parent.removeClass("was-validated");
+                        if (parent.find("p").length === 0) {
+                            parent.append(pTask);
+                        }
+                    } else {
+                        let existingP = parent.find("p");
+                        if (existingP.length > 0) {
+                            existingP.remove();
+                        }
+                        if ( parent.find(".valid-feedback").length === 0 &&  validateTask(target.val()) ) {
+                            existingP = $("<div>")
+                                .addClass("valid-feedback")
+                                .text("good");
+                            parent.append(existingP);
+                        }
+                        parent.addClass("was-validated");
+                    }
+                    break;
+
+
+                case "start_time":
+                    console.log(validateStartTime(target.val()));
+                    let pStartTime = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Not a valid email");
+
+                    if (!validateDescription(target.val())) {
+                        parent.removeClass("was-validated");
+                        if (parent.find("p").length === 0) {
+                            parent.append(pStartTime);
+                        }
+                    } else {
+                        let existingP = parent.find("p");
+                        if (existingP.length > 0) {
+                            existingP.remove();
+                        }
+                        if ( parent.find(".valid-feedback").length === 0 &&  validateStartTime(target.val()) ) {
+                            existingP = $("<div>")
+                                .addClass("valid-feedback")
+                                .text("good");
+                            parent.append(existingP);
+                        }
+                        parent.addClass("was-validated");
+                    }
+                    break;
+
+                case "end_time":
+                    console.log(validateEndTime(target.val()));
+                    let pEndTime = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Not a valid email");
+
+                    if (!validateEndTime(target.val())) {
+                        parent.removeClass("was-validated");
+                        if (parent.find("p").length === 0) {
+                            parent.append(pEndTime);
+                        }
+                    } else {
+                        let existingP = parent.find("p");
+                        if (existingP.length > 0) {
+                            existingP.remove();
+                        }
+                        if ( parent.find(".valid-feedback").length === 0 &&  validateEndTime(target.val()) ) {
+                            existingP = $("<div>")
+                                .addClass("valid-feedback")
+                                .text("good");
+                            parent.append(existingP);
+                        }
+                        parent.addClass("was-validated");
+                    }
+                    break;
+
+                case "description":
+                    console.log(validateDescription(target.val()));
+                    let pDescription = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Not a valid email");
+
+                    if (!validateDescription(target.val())) {
+                        parent.removeClass("was-validated");
+                        if (parent.find("p").length === 0) {
+                            parent.append(pDescription);
+                        }
+                    } else {
+                        let existingP = parent.find("p");
+                        if (existingP.length > 0) {
+                            existingP.remove();
+                        }
+                        if ( parent.find(".valid-feedback").length === 0 &&  validateDescription(target.val()) ) {
+                            existingP = $("<div>")
+                                .addClass("valid-feedback")
+                                .text("good");
+                            parent.append(existingP);
+                        }
+                        parent.addClass("was-validated");
+                    }
+                    break;
+
+            }
+        });
+
+        form.on("submit", function(e) {
+            let task = $(this).find('#task');
+            // let pm = $(this).find('#pm');
+            let start_time = $(this).find('#start_time');
+            let end_time = $(this).find('#end_time');
+            let description = $(this).find('#description');
+
+            if(!validateTask(task.val()) || !validateStartTime(start_time.val()) || !validateEndTime(end_time.val()) ||  !validateDescription(description.val())) {
+                task.parent().addClass("was-validated");
+                // pm.parent().addClass("was-validated");
+                start_time.parent().addClass("was-validated");
+                end_time.parent().addClass("was-validated");
+                description.parent().addClass("was-validated");
+
+                if(validateTask(task.val())) {
+                    task.parent().addClass("was-validated");
+                }
+
+                // if(validatePm(pm.val())) {
+                //     pm.parent().addClass("was-validated");
+                // }
+
+                if(validateStartTime(start_time.val())) {
+                    start_time.parent().addClass("was-validated");
+                }
+
+                if(validateEndTime(end_time.val())) {
+                    end_time.parent().addClass("was-validated");
+                }
+
+                if(validateDescription(description.val())) {
+                    description.parent().addClass("was-validated");
+                }
+
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("task is not valid");
+            }
+
+        });
+
+    </script>
+
     <script>
 
         // Get all elements with the common class name
