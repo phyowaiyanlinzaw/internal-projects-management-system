@@ -198,27 +198,32 @@
                                 class="card-header border-bottom text-dark"
                         >
                             <div
-                                    class="col d-flex align-items-center gap-2"
+                                    class="d-flex justify-content-between"
                             >
-                                <h4
-                                        class="card-title modal-detail-title"
-                                >
-                                    a
-                                </h4>
+                                <div class="col d-flex align-items-center gap-2">
+                                    <h4
+                                            class="card-title modal-detail-title"
+                                    >
+                                        a
+                                    </h4>
 
-                                <h6
-                                        class="card-title"
-                                >
-                                    Name
-                                </h6>
+                                    <h6
+                                            class="card-title"
+                                    >
+                                        Name
+                                    </h6>
 
-                                <span
-                                        class="card-title badge rounded-pill bg-danger"
-                                >Danger</span
-                                >
-                                <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                    see more
-                                </button>
+                                    <span
+                                            class="card-title badge rounded-pill bg-danger"
+                                    >Danger</span
+                                    >
+                                    <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                        see more
+                                    </button>
+                                </div>
+                                <div class="btn btn-info">
+                                    edit
+                                </div>
                             </div>
                             <div
                                     class="col issue-time-line d-flex gap-2"
@@ -240,12 +245,12 @@
                                     class="col issue-time-line d-flex gap-2"
                             >
                                 <p
-                                        class="btn custom-color m-2 rounded-pill"
+                                        class="btn custom-color rounded-pill"
                                 >
                                     java
                                 </p>
                                 <p
-                                        class="btn custom-color m-2 rounded-pill"
+                                        class="btn custom-color rounded-pill"
                                 >
                                     error
                                 </p>
@@ -257,9 +262,14 @@
                                     this code does not work help me
                                     please
                                 </p>
-                                <pre>
-&lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-&lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
+                                <pre>private final CustomUserDetailsService userDetailsService;
+  &#64;Bean
+  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
+      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;
+      authProvider.setUserDetailsService&#40;userDetailsService&#41;;
+      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
+      return authProvider;
+  &#125;</pre
                                 >
                             </div>
                         </div>
@@ -313,12 +323,12 @@
                                     class="col issue-time-line d-flex gap-2"
                             >
                                 <p
-                                        class="btn custom-color m-2 rounded-pill"
+                                        class="btn custom-color rounded-pill"
                                 >
                                     html
                                 </p>
                                 <p
-                                        class="btn custom-color m-2 rounded-pill"
+                                        class="btn custom-color rounded-pill"
                                 >
                                     bug
                                 </p>
@@ -369,7 +379,7 @@
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
                             <div class="col">
                                 <h4>corrective action</h4>
-                                <div class="editable">
+                                <div class="editable text-wrap">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -377,7 +387,7 @@
                             </div>
                             <div class="col">
                                 <h4>preventive action</h4>
-                                <div class="editable">
+                                <div class="editable text-break">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -385,7 +395,7 @@
                             </div>
                             <div class="col">
                                 <h4>direct cause</h4>
-                                <div class="editable">
+                                <div class="editable text-break">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -393,7 +403,7 @@
                             </div>
                             <div class="col">
                                 <h4>root cause</h4>
-                                <div class="editable">
+                                <div class="editable text-break">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -401,7 +411,7 @@
                             </div>
                             <div class="col">
                                 <h4>impact</h4>
-                                <div class="editable">
+                                <div class="editable text-break">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -409,7 +419,7 @@
                             </div>
                             <div class="col">
                                 <h4>place</h4>
-                                <div class="editable">
+                                <div class="editable text-break">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -486,7 +496,7 @@
                 let d = eidtable[i];
                 let input = document.createElement('div');
                 input.textContent = d.value;  // Use textContent to set text for div
-                input.classList.add('editable');
+                input.classList.add('editable', 'text-break');
                 console.log(d.parentNode);
                 d.parentNode.replaceChild(input, d);
             }

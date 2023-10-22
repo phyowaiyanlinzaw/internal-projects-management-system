@@ -853,9 +853,10 @@
 }
 
 .custom-color {
-    color: #046061;
     background-color: #70f8fa;
     border: 2px solid #81e6d9;
+    font-size: .8em;
+    padding: 0 10px !important;
 }
 
 .mult-select-tag {
