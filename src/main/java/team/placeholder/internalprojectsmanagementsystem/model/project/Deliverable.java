@@ -24,7 +24,6 @@ public class Deliverable implements Serializable {
     private String status;
     private Date due_date;
 
-
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
