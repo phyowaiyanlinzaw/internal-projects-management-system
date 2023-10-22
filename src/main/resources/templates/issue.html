@@ -192,7 +192,7 @@
                 </div>
             </div>
             <div class="row row-cols-1">
-                <div class="p-md-3 p-sm-2">
+                <div class="p-md-3 p-sm-2" id="sort-container">
                     <div class="card">
                         <div
                                 class="card-header border-bottom text-dark"
@@ -203,22 +203,25 @@
                                 <h4
                                         class="card-title modal-detail-title"
                                 >
-                                    Title
+                                    a
                                 </h4>
 
                                 <h6
-                                        class="card-title modal-detail-title"
+                                        class="card-title"
                                 >
                                     Name
                                 </h6>
                                 <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-success"
+                                        class="card-title badge rounded-pill bg-success"
                                 >Success</span
                                 >
                                 <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
+                                        class="card-title badge rounded-pill bg-danger"
                                 >Danger</span
                                 >
+                                <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                    see more
+                                </button>
                             </div>
                             <div
                                     class="col issue-time-line d-flex gap-2"
@@ -281,18 +284,21 @@
                                 </h4>
 
                                 <h6
-                                        class="card-title modal-detail-title"
+                                        class="card-title"
                                 >
                                     Name
                                 </h6>
                                 <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-success"
+                                        class="card-title badge rounded-pill bg-success"
                                 >Success</span
                                 >
                                 <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
+                                        class="card-title badge rounded-pill bg-danger"
                                 >Danger</span
                                 >
+                                <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                    see more
+                                </button>
                             </div>
                             <div
                                     class="col issue-time-line d-flex gap-2"
@@ -355,18 +361,21 @@
                                 </h4>
 
                                 <h6
-                                        class="card-title modal-detail-title"
+                                        class="card-title"
                                 >
                                     Name
                                 </h6>
                                 <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-success"
+                                        class="card-title badge rounded-pill bg-success"
                                 >Success</span
                                 >
                                 <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
+                                        class="card-title badge rounded-pill bg-danger"
                                 >Danger</span
                                 >
+                                <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                    see more
+                                </button>
                             </div>
                             <div
                                     class="col issue-time-line d-flex gap-2"
@@ -420,15 +429,71 @@
 
     <div
             class="modal fade"
-            id="profile-modal"
+            id="issue-details"
             data-bs-keyboard="false"
             tabindex="-1"
             aria-labelledby="staticBackdropLabel"
             aria-hidden="true"
     >
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <div class="modal-body"></div>
+                <div class="modal-header">
+                    Issue Details
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
+                            <div class="col">
+                                <h4>corrective action</h4>
+                                <div>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>preventive action</h4>
+                                <div>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>direct cause</h4>
+                                <div>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>root cause</h4>
+                                <div>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>impact</h4>
+                                <div>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>place</h4>
+                                <div>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
