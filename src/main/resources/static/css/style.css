@@ -618,7 +618,7 @@
     flex-direction: column;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
     overflow: auto;
-    max-width: 225px;
+    width: 225px;
     row-gap: 12px;
     max-height: 480px;
     flex-shrink: 0;
