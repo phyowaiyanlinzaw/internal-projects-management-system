@@ -802,5 +802,17 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
+<script>
+    let quillEditors = document.querySelectorAll(
+        ".quill-editor-bubble"
+    );
+
+    // Initialize Quill for each selected element
+    quillEditors.forEach(function (editor) {
+        new Quill(editor, {
+            theme: "bubble",
+        });
+    });
+</script>
 </body>
 </html>

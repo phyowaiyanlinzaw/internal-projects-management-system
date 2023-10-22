@@ -21,61 +21,10 @@
 
 <!--    task details js-->
     <script>
-        // Get all elements with the common class name
-        const editableLabels = document.querySelectorAll('.editable-label');
-        const editableInputs = document.querySelectorAll('.editable-input');
 
-        // Add event listeners for each element
-        editableLabels.forEach(label => {
-            label.addEventListener('click', editTitle);
-        });
-
-        editableInputs.forEach(input => {
-            input.addEventListener('blur', function () {
-                updateTitle(this);
-            });
-        });
-
-        function editTitle() {
-            const label = this;
-            const input = label.nextElementSibling;
-
-            label.style.display = 'none';
-            input.style.display = 'block';
-            input.value = label.textContent;
-            input.focus();
-        }
-
-        function updateTitle(inputField) {
-            const input = inputField;
-            const label = input.previousElementSibling;
-
-            label.textContent = input.value;
-            label.style.display = 'inline';
-            input.style.display = 'none';
-        }
-
-
-        function toggleEditor() {
-            var editor = document.getElementById('description-editor');
-            if (editor.style.display === 'none' || editor.style.display === '') {
-                editor.style.display = 'block';
-            } else {
-                editor.style.display = 'none';
-            }
-        }
     </script>
     <script>
-        let quillEditors = document.querySelectorAll(
-                ".quill-editor-bubble"
-        );
 
-        // Initialize Quill for each selected element
-        quillEditors.forEach(function (editor) {
-                new Quill(editor, {
-                theme: "bubble",
-            });
-        });
     </script>
 </body>
 
