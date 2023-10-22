@@ -156,7 +156,8 @@ $(document).ready(function () {
                     console.log(validateEmail(target.val()));
                     let p1 = $("<p>")
                         .addClass("text-danger fs-6")
-                        .text("Not a valid email");
+                        .text("Not a valid email")
+                        .css("margin", "0");
 
                     if (!validateEmail(target.val())) {
                         parent.removeClass("was-validated");
@@ -188,7 +189,8 @@ $(document).ready(function () {
                         .addClass("text-danger fs-6")
                         .text(
                             "The password can only contain numbers and alphabets with a minimum length of 8 characters"
-                        );
+                        )
+                        .css("margin", "0");
 
                     if (!validatePassword(target.val())) {
                         parent.removeClass("was-validated");
@@ -312,9 +314,15 @@ $(document).ready(function () {
 
             if (e.target.tagName === 'button') return
 
+            console.log('i don\'t know')
+
             const grandpaDiv = hasDataBsToggleAttribute(target)
 
+            console.log('grandpadiv', grandpaDiv)
+
             if (grandpaDiv === null) return
+
+            console.log('grandpadiv',grandpaDiv)
 
             const targetModal = document.querySelector(target.getAttribute('data-bs-target'))
             console.log(target.getAttribute('data-bs-target'))
@@ -322,6 +330,8 @@ $(document).ready(function () {
             console.log(targetModal)
 
             if (targetModal === null) return
+
+            console.log(grandpaDiv.querySelector('.modal-detail-title').innerText)
 
             targetModal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
 
@@ -363,6 +373,7 @@ $(document).ready(function () {
 
         newTask.addEventListener("dragstart", (e) => {
             newTask.classList.add("is-dragging");
+            currentTask = newTask
             console.log("deagging")
         });
 
@@ -373,6 +384,10 @@ $(document).ready(function () {
         newTask.addEventListener("dragend", () => {
             newTask.classList.remove("is-dragging");
             console.log(newTask);
+            if (currentZone.classList.contains('dummy-trash')) {
+                bModal.show()
+            }
+            task.classList.remove("is-dragging");
         });
 
         todoLane.appendChild(newTask);
@@ -402,6 +417,10 @@ $(document).ready(function () {
             task.classList.remove("is-dragging");
             
         });
+
+        task.addEventListener('click', function (e) {
+            modal.querySelector('.modal-title').innerText = task.innerText
+        })
     });
 
     comfirmBox.addEventListener('click', function (e) {
