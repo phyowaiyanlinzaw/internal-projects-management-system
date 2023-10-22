@@ -52,4 +52,7 @@ public class ViewController {
 
     @GetMapping("/reset-password")
     public String resetPassword() {return "password-reset";}
+
+    @GetMapping("/issue")
+    public String issue() {return "issue";}
 }
