@@ -267,11 +267,11 @@ vs
                 </div>
                 <div class="modal-body">
 
-                    <form class="row g-5" id="validation-form" action="">
+                    <form class="row g-5" action="">
 
                         <div class="col-lg-12 ">
                             <span><i class="fa fa-tasks"></i></span>
-                            <label id="task" class="editable-label" name="task" onclick="editTitle()"> Testing
+                            <label class="editable-label" name="task" onclick="editTitle()"> Testing
                                 Write</label>
                             <input id="task" name="task" type="text" class="form-control border-task editable-input"
                                    dir="auto" data-autosize="true"
@@ -297,9 +297,9 @@ vs
 
                         <div class="col-lg-6">
                             <span><i class="fa-solid fa-calendar-days"></i></span>
-                            <label id="start_time" class="editable-label" name="start_time" onclick="editTitle()"> Start
+                            <label class="editable-label" name="start_time" onclick="editTitle()"> Start
                                 Date</label>
-                            <input type="date" id="start_time" name="start_time"
+                            <input type="date" id="task-detail-start_time" name="start_time"
                                    class="form-control border-task editable-input" dir="auto" data-autosize="true"
                                    style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;"
                                    onblur="updateTitle(this)">
@@ -349,7 +349,7 @@ vs
     <!-- task's details end -->
 
     <!-- add task -->
-    <div class="modal fade" id="todo-form" data-bs-keyboard="true">
+    <div class="modal fade" data-bs-keyboard="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content task-content">
                 <div class="modal-header">
@@ -358,14 +358,14 @@ vs
                 </div>
                 <div class="modal-body">
 
-                    <form class="row g-3" id="validation-form" action="">
+                    <form class="row g-3" action="">
                         <div class="col-lg-6">
-                            <label for="task" class="col-sm-12 col-form-label " name="task" id="task">Task Name <span style="color:red"> *</span></label>
-                            <input type="text" class="form-control border-task" id="task" name="task">
+                            <label for="task" class="col-sm-12 col-form-label " name="task" >Task Name <span style="color:red"> *</span></label>
+                            <input type="text" class="form-control border-task" id="add-task" name="task">
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="pm" class="col-sm-12 col-form-label " name="pm" id="pm">Project Manager <span style="color:red"> *</span></label>
+                            <label for="pm" class="col-sm-12 col-form-label " name="pm">Project Manager <span style="color:red"> *</span></label>
                             <select class="form-control selectpicker"  aria-label="Select Project Manager" data-live-search="true" id="pm" name="pm" multiple>
                                 <option>Category</option>
                                 <option>Android</option>
@@ -377,18 +377,18 @@ vs
 
 
                         <div class="col-md-6">
-                            <label for="start_time" class="col-sm-12 col-form-label" name="start_time" id="start_time">Start Date <span style="color:red"> *</span></label>
+                            <label for="start_time" class="col-sm-12 col-form-label" name="start_time" >Start Date <span style="color:red"> *</span></label>
                             <input type="date" class="form-control border-task" id="start_time" name="start_time">
                         </div>
 
                         <div class="col-md-6">
-                            <label for="end_time" class="col-sm-12 col-form-label" name="end_time" id="end_time">End Date <span style="color:red"> *</span></label>
+                            <label for="end_time" class="col-sm-12 col-form-label" name="end_time">End Date <span style="color:red"> *</span></label>
                             <input type="date" class="form-control border-task" id="end_time" name="end_time">
                         </div>
 
 
                         <div class="col-12">
-                            <label for="description" class="col-sm-12 col-form-label" name="description" id="description">Description</label>
+                            <label for="description" class="col-sm-12 col-form-label" name="description">Description</label>
                             <textarea class="form-control border-task-description" id="description" name="description" rows="2"></textarea>
                         </div>
 

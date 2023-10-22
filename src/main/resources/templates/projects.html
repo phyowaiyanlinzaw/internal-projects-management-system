@@ -190,7 +190,7 @@
 </div>
 
 <!--    modal for add project-->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+<div class="modal fade" id="add-department-modal" data-bs-backdrop="static" data-bs-keyboard="false"
      tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content task-content">
@@ -202,13 +202,13 @@
 
                 <form class="row g-3" id="validation-form" action="">
                     <div class="col-lg-6">
-                        <label for="name" class="col-sm-12 col-form-label" name="name" id="name">Project Name<span style="color:red"> *</span></label>
+                        <label for="name" class="col-sm-12 col-form-label" name="name" >Project Name<span style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="name" name="name">
                     </div>
 
 
                     <div class="col-lg-6">
-                        <label for="department" class="col-sm-12 col-form-label" name="department" id="name">Department Name <span style="color:red"> *</span></label>
+                        <label for="department" class="col-sm-12 col-form-label" name="department">Department Name <span style="color:red"> *</span></label>
                         <select class="form-control selectpicker"  aria-label="Select Department" data-live-search="true" id="department" name="department" multiple>
                             <option>Category</option>
                             <option>Android</option>
@@ -219,12 +219,12 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="user" class="col-sm-12 col-form-label" name="user" id="user">Project Manager <span style="color:red"> *</span></label>
+                        <label for="user" class="col-sm-12 col-form-label" name="user" >Project Manager <span style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="user" name="user">
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="user" class="col-sm-12 col-form-label" name="user" id="user">Assign Members <span style="color:red"> *</span></label>
+                        <label for="user" class="col-sm-12 col-form-label" name="user">Assign Members <span style="color:red"> *</span></label>
                         <select class="form-control selectpicker"  aria-label="Select Members" data-live-search="true" id="member" name="member" multiple>
                             <option>Category</option>
                             <option>Android</option>
@@ -236,7 +236,7 @@
 
 
                     <div class="col-lg-6">
-                        <label for="client" class="col-sm-12 col-form-label" name="client" id="client">Client <span style="color:red"> *</span></label>
+                        <label for="client" class="col-sm-12 col-form-label" name="client" >Client <span style="color:red"> *</span></label>
                         <select class="form-control selectpicker"  aria-label="Select Clients" data-live-search="true" id="client" name="client" >
                             <option>Category</option>
                             <option>Android</option>
@@ -247,36 +247,36 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="background" class="col-sm-12 col-form-label" name="background" id="background">Background<span style="color:red"> *</span></label>
+                        <label for="background" class="col-sm-12 col-form-label" name="background">Background<span style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="background" name="background">
                     </div>
 
                     <div class="col-md-6">
-                        <label for="start_date" class="col-sm-12 col-form-label" name="start_date" id="start_date">Start Date <span style="color:red"> *</span></label>
+                        <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date <span style="color:red"> *</span></label>
                         <input type="date" class="form-control border-task" id="start_date" name="start_date">
                     </div>
 
                     <div class="col-6">
-                        <label for="duration" class="col-sm-12 col-form-label" name="duration" id="duration">Duration <span style="color:red"> *</span></label>
+                        <label for="duration" class="col-sm-12 col-form-label" name="duration">Duration <span style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="duration" name="duration">
                     </div>
 
 
 
                     <div class="col-lg-6">
-                        <label for="duration" class="col-sm-12 col-form-label" name="objective" id="objective">Objective <span style="color:red"> *</span></label>
+                        <label for="duration" class="col-sm-12 col-form-label" name="objective">Objective <span style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="objective" name="objective">
                     </div>
 
 
 
                     <div class="col-lg-6">
-                        <label for="architectures" class="col-sm-12 col-form-label" name="architectures" id="architectures">Architecture <span style="color:red"> *</span></label>
+                        <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture <span style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="architectures" name="architectures">
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines" id="systemOutlines">SystemOutline <span style="color:red"> *</span></label>
+                        <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">SystemOutline <span style="color:red"> *</span></label>
                         <select class="form-control selectpicker"  aria-label="Select System Outlines" data-live-search="true" id="systemOutlines" name="systemOutlines" multiple>
                             <option>Analysis</option>
                             <option>System Design</option>
@@ -289,7 +289,7 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable" id="deliverable">Deliverable  <span style="color:red"> *</span></label>
+                        <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable  <span style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="deliverable" name="deliverable">
                     </div>
 
@@ -629,7 +629,7 @@
                                         <form>
                                             <div class="row mb-3">
                                                 <label
-                                                        for="about"
+
                                                         class="col-md-4 col-lg-3 col-form-label"
                                                 >About
                                                     background</label
