@@ -75,7 +75,8 @@
                 class="item-content animate__animated animate__fadeIn active"
                 data-toggle-extra="tab-content"
         >
-            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3" id="sort-container" style="margin: 10px">
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3" id="sort-container"
+                 style="margin: 10px">
                 <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
                 <div class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0">
                     <div class="card border-success">
@@ -202,14 +203,16 @@
 
                 <form class="row g-3" id="validation-form" action="">
                     <div class="col-lg-6">
-                        <label for="name" class="col-sm-12 col-form-label" name="name" >Project Name<span style="color:red"> *</span></label>
+                        <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span
+                                style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="name" name="name">
                     </div>
 
-
                     <div class="col-lg-6">
-                        <label for="department" class="col-sm-12 col-form-label" name="department">Department Name <span style="color:red"> *</span></label>
-                        <select class="form-control selectpicker"  aria-label="Select Department" data-live-search="true" id="department" name="department" multiple>
+                        <label for="client" class="col-sm-12 col-form-label" name="client">Client <span
+                                style="color:red"> *</span></label>
+                        <select class="form-control selectpicker" aria-label="Select Clients" data-live-search="true"
+                                id="client" name="client">
                             <option>Category</option>
                             <option>Android</option>
                             <option>IOS</option>
@@ -219,65 +222,42 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="user" class="col-sm-12 col-form-label" name="user" >Project Manager <span style="color:red"> *</span></label>
-                        <input type="text" class="form-control border-task" id="user" name="user">
-                    </div>
-
-                    <div class="col-lg-6">
-                        <label for="user" class="col-sm-12 col-form-label" name="user">Assign Members <span style="color:red"> *</span></label>
-                        <select class="form-control selectpicker"  aria-label="Select Members" data-live-search="true" id="member" name="member" multiple>
-                            <option>Category</option>
-                            <option>Android</option>
-                            <option>IOS</option>
-                            <option>Ui/Ux Design</option>
-                            <option>Development</option>
-                        </select>
-                    </div>
-
-
-                    <div class="col-lg-6">
-                        <label for="client" class="col-sm-12 col-form-label" name="client" >Client <span style="color:red"> *</span></label>
-                        <select class="form-control selectpicker"  aria-label="Select Clients" data-live-search="true" id="client" name="client" >
-                            <option>Category</option>
-                            <option>Android</option>
-                            <option>IOS</option>
-                            <option>Ui/Ux Design</option>
-                            <option>Development</option>
-                        </select>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <label for="background" class="col-sm-12 col-form-label" name="background">Background<span style="color:red"> *</span></label>
+                        <label for="background" class="col-sm-12 col-form-label" name="background">Background<span
+                                style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="background" name="background">
                     </div>
 
                     <div class="col-md-6">
-                        <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date <span style="color:red"> *</span></label>
+                        <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date <span
+                                style="color:red"> *</span></label>
                         <input type="date" class="form-control border-task" id="start_date" name="start_date">
                     </div>
 
                     <div class="col-6">
-                        <label for="duration" class="col-sm-12 col-form-label" name="duration">Duration <span style="color:red"> *</span></label>
+                        <label for="duration" class="col-sm-12 col-form-label" name="duration">Duration <span
+                                style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="duration" name="duration">
                     </div>
 
 
-
                     <div class="col-lg-6">
-                        <label for="duration" class="col-sm-12 col-form-label" name="objective">Objective <span style="color:red"> *</span></label>
+                        <label for="duration" class="col-sm-12 col-form-label" name="objective">Objective <span
+                                style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="objective" name="objective">
                     </div>
 
 
-
                     <div class="col-lg-6">
-                        <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture <span style="color:red"> *</span></label>
+                        <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture
+                            <span style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="architectures" name="architectures">
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">SystemOutline <span style="color:red"> *</span></label>
-                        <select class="form-control selectpicker"  aria-label="Select System Outlines" data-live-search="true" id="systemOutlines" name="systemOutlines" multiple>
+                        <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">SystemOutline
+                            <span style="color:red"> *</span></label>
+                        <select class="form-control selectpicker" aria-label="Select System Outlines"
+                                data-live-search="true" id="systemOutlines" name="systemOutlines" multiple>
                             <option>Analysis</option>
                             <option>System Design</option>
                             <option>Coding</option>
@@ -289,7 +269,8 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable  <span style="color:red"> *</span></label>
+                        <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable <span
+                                style="color:red"> *</span></label>
                         <input type="text" class="form-control border-task" id="deliverable" name="deliverable">
                     </div>
 
@@ -419,12 +400,12 @@
 
                                         <div class="row">
                                             <div
-                                                    class="col-lg-3 col-md-4 label"
+                                                    class="col-lg-3 col-md-4 label col-4"
                                             >
                                                 Department name
                                             </div>
                                             <div
-                                                    class="col-lg-9 col-md-8"
+                                                    class="col-lg-9 col-md-8 col-8"
                                             >
                                                 dance club
                                             </div>
@@ -432,12 +413,12 @@
 
                                         <div class="row">
                                             <div
-                                                    class="col-lg-3 col-md-4 label"
+                                                    class="col-lg-3 col-md-4 label col-4"
                                             >
                                                 Project name
                                             </div>
                                             <div
-                                                    class="col-lg-9 col-md-8"
+                                                    class="col-lg-9 col-md-8 col-8"
                                             >
                                                 find nemo
                                             </div>
@@ -445,12 +426,12 @@
 
                                         <div class="row">
                                             <div
-                                                    class="col-lg-3 col-md-4 label"
+                                                    class="col-lg-3 col-md-4 label col-4"
                                             >
                                                 Duration
                                             </div>
                                             <div
-                                                    class="col-lg-9 col-md-8"
+                                                    class="col-lg-9 col-md-8 col-8"
                                             >
                                                 3 Months
                                             </div>
@@ -458,12 +439,12 @@
 
                                         <div class="row">
                                             <div
-                                                    class="col-lg-3 col-md-4 label"
+                                                    class="col-lg-3 col-md-4 label col-4"
                                             >
                                                 Start date
                                             </div>
                                             <div
-                                                    class="col-lg-9 col-md-8"
+                                                    class="col-lg-9 col-md-8 col-8"
                                             >
                                                 25 september 2022
                                             </div>
@@ -471,12 +452,12 @@
 
                                         <div class="row">
                                             <div
-                                                    class="col-lg-3 col-md-4 label"
+                                                    class="col-lg-3 col-md-4 label col-4"
                                             >
                                                 End date
                                             </div>
                                             <div
-                                                    class="col-lg-9 col-md-8"
+                                                    class="col-lg-9 col-md-8 col-8"
                                             >
                                                 25 december 2022
                                             </div>
@@ -484,12 +465,12 @@
 
                                         <div class="row">
                                             <div
-                                                    class="col-lg-3 col-md-4 label"
+                                                    class="col-lg-3 col-md-4 label col-4"
                                             >
                                                 Current phase
                                             </div>
                                             <div
-                                                    class="col-lg-9 col-md-8"
+                                                    class="col-lg-9 col-md-8 col-8"
                                             >
                                                 Basic design
                                             </div>
@@ -497,128 +478,157 @@
 
                                         <div class="row">
                                             <div
-                                                    class="col-lg-3 col-md-4 label"
+                                                    class="col-lg-3 col-md-4 label col-4"
                                             >
                                                 Client
                                             </div>
                                             <div
-                                                    class="col-lg-9 col-md-8"
+                                                    class="col-lg-9 col-md-8 col-8"
                                             >
                                                 DAT
                                             </div>
                                         </div>
-
                                         <div
-                                                class="row d-flex align-items-center"
-                                        >
-                                            <div
-                                                    class="col-lg-3 col-md-4 label"
-                                            >
-                                                Objective
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 accordion"
+                                                    class="col accordion"
                                             >
                                                 <div
                                                         class="accordion-item"
                                                 >
                                                     <h2
                                                             class="accordion-header"
-                                                            id="panelsStayOpen-headingOne"
+                                                            id="systemOutline-headingOne"
                                                     >
                                                         <button
                                                                 class="accordion-button"
                                                                 type="button"
                                                                 data-bs-toggle="collapse"
-                                                                data-bs-target="#panelsStayOpen-collapseOne"
+                                                                data-bs-target="#systemOutline-collapseOne"
                                                                 aria-expanded="true"
-                                                                aria-controls="panelsStayOpen-collapseOne"
+                                                                aria-controls="systemOutline-collapseOne"
                                                         >
-                                                            See
-                                                            details
+                                                            System outline
                                                         </button>
                                                     </h2>
                                                     <div
-                                                            id="panelsStayOpen-collapseOne"
+                                                            id="systemOutline-collapseOne"
                                                             class="accordion-collapse collapse"
-                                                            aria-labelledby="panelsStayOpen-headingOne"
+                                                            aria-labelledby="systemOutline-headingOne"
                                                     >
-                                                        <div
-                                                                class="accordion-body"
+                                                        <ul class="list-group accordion-body p-0 rounded-end">
+                                                            <li class="list-group-item d-flex justify-content-between">Analysis<i class="bi bi-check2-all text-success fs-4"></i></li>
+                                                            <li class="list-group-item d-flex justify-content-between">System Design<i class="bi bi-check2-all text-success fs-4"></i></li>
+                                                            <li class="list-group-item d-flex justify-content-between">Source Code<i class="bi bi-check2-all text-success fs-4"></i></li>
+                                                            <li class="list-group-item d-flex justify-content-between">Testing<i class="bi bi-check2-all text-success fs-4"></i></li>
+                                                            <li class="list-group-item d-flex justify-content-between">Deploy</li>
+                                                            <li class="list-group-item d-flex justify-content-between">Maintence</li>
+                                                            <li class="list-group-item d-flex justify-content-between">Document</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        <div
+                                                class="col accordion"
+                                        >
+                                            <div
+                                                    class="accordion-item"
+                                            >
+                                                <h2
+                                                        class="accordion-header"
+                                                        id="objective-headingOne"
+                                                >
+                                                    <button
+                                                            class="accordion-button"
+                                                            type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#objective-collapseOne"
+                                                            aria-expanded="true"
+                                                            aria-controls="objective-collapseOne"
+                                                    >
+                                                        Objective
+                                                    </button>
+                                                </h2>
+                                                <div
+                                                        id="objective-collapseOne"
+                                                        class="accordion-collapse collapse"
+                                                        aria-labelledby="objective-headingOne"
+                                                >
+                                                    <div
+                                                            class="accordion-body"
+                                                    >
+                                                        <strong
+                                                        >This
+                                                            is
+                                                            the
+                                                            first
+                                                            item's
+                                                            accordion
+                                                            body.</strong
                                                         >
-                                                            <strong
-                                                            >This
-                                                                is
-                                                                the
-                                                                first
-                                                                item's
-                                                                accordion
-                                                                body.</strong
-                                                            >
-                                                            It is
-                                                            shown by
-                                                            default,
-                                                            until
-                                                            the
-                                                            collapse
-                                                            plugin
-                                                            adds the
-                                                            appropriate
-                                                            classes
-                                                            that we
-                                                            use to
-                                                            style
-                                                            each
-                                                            element.
-                                                            These
-                                                            classes
-                                                            control
-                                                            the
-                                                            overall
-                                                            appearance,
-                                                            as well
-                                                            as the
-                                                            showing
-                                                            and
-                                                            hiding
-                                                            via CSS
-                                                            transitions.
-                                                            You can
-                                                            modify
-                                                            any of
-                                                            this
-                                                            with
-                                                            custom
-                                                            CSS or
-                                                            overriding
-                                                            our
-                                                            default
-                                                            variables.
-                                                            It's
-                                                            also
-                                                            worth
-                                                            noting
-                                                            that
-                                                            just
-                                                            about
-                                                            any HTML
-                                                            can go
-                                                            within
-                                                            the
-                                                            <code
-                                                            >.accordion-body</code
-                                                            >,
-                                                            though
-                                                            the
-                                                            transition
-                                                            does
-                                                            limit
-                                                            overflow.
-                                                        </div>
+                                                        It is
+                                                        shown by
+                                                        default,
+                                                        until
+                                                        the
+                                                        collapse
+                                                        plugin
+                                                        adds the
+                                                        appropriate
+                                                        classes
+                                                        that we
+                                                        use to
+                                                        style
+                                                        each
+                                                        element.
+                                                        These
+                                                        classes
+                                                        control
+                                                        the
+                                                        overall
+                                                        appearance,
+                                                        as well
+                                                        as the
+                                                        showing
+                                                        and
+                                                        hiding
+                                                        via CSS
+                                                        transitions.
+                                                        You can
+                                                        modify
+                                                        any of
+                                                        this
+                                                        with
+                                                        custom
+                                                        CSS or
+                                                        overriding
+                                                        our
+                                                        default
+                                                        variables.
+                                                        It's
+                                                        also
+                                                        worth
+                                                        noting
+                                                        that
+                                                        just
+                                                        about
+                                                        any HTML
+                                                        can go
+                                                        within
+                                                        the
+                                                        <code
+                                                        >.accordion-body</code
+                                                        >,
+                                                        though
+                                                        the
+                                                        transition
+                                                        does
+                                                        limit
+                                                        overflow.
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
 
                                     <div

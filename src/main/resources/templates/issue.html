@@ -191,35 +191,35 @@
                     <!-- Modal -->
                 </div>
             </div>
-            <div class="row row-cols-1">
-                <div class="p-md-3 p-sm-2">
+            <div class="row row-cols-1"  id="sort-container">
+                <div class="p-md-3 p-sm-2 mt-3">
                     <div class="card">
                         <div
                                 class="card-header border-bottom text-dark"
                         >
-                            <div
-                                    class="col d-flex align-items-center gap-2"
-                            >
-                                <h4
-                                        class="card-title modal-detail-title"
-                                >
-                                    Title
-                                </h4>
+                            
+                                <div class="col d-flex align-items-center gap-2">
+                                    <h4
+                                            class="card-title modal-detail-title"
+                                    >
+                                        a
+                                    </h4>
 
-                                <h6
-                                        class="card-title modal-detail-title"
-                                >
-                                    Name
-                                </h6>
-                                <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-success"
-                                >Success</span
-                                >
-                                <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
-                                >Danger</span
-                                >
-                            </div>
+                                    <h6
+                                            class="card-title"
+                                    >
+                                        Name
+                                    </h6>
+
+                                    <span
+                                            class="card-title badge rounded-pill bg-danger"
+                                    >Danger</span
+                                    >
+                                    <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                        see more
+                                    </button>
+                                </div>
+                               
                             <div
                                     class="col issue-time-line d-flex gap-2"
                             >
@@ -240,14 +240,14 @@
                                     class="col issue-time-line d-flex gap-2"
                             >
                                 <p
-                                        class="btn custom-color m-2 rounded-pill"
+                                        class="btn custom-color rounded-pill"
                                 >
-                                    Custom Color
+                                    java
                                 </p>
                                 <p
-                                        class="btn custom-color m-2 rounded-pill"
+                                        class="btn custom-color rounded-pill"
                                 >
-                                    Australia
+                                    error
                                 </p>
                             </div>
                         </div>
@@ -257,16 +257,21 @@
                                     this code does not work help me
                                     please
                                 </p>
-                                <pre>
-&lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-&lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
+                                <pre>private final CustomUserDetailsService userDetailsService;
+  &#64;Bean
+  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
+      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;
+      authProvider.setUserDetailsService&#40;userDetailsService&#41;;
+      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
+      return authProvider;
+  &#125;</pre
                                 >
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="p-md-3 p-sm-2">
+                <div class="p-md-3 p-sm-2 mt-3">
                     <div class="card">
                         <div
                                 class="card-header border-bottom text-dark"
@@ -281,18 +286,17 @@
                                 </h4>
 
                                 <h6
-                                        class="card-title modal-detail-title"
+                                        class="card-title"
                                 >
                                     Name
                                 </h6>
                                 <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-success"
+                                        class="card-title badge rounded-pill bg-success"
                                 >Success</span
                                 >
-                                <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
-                                >Danger</span
-                                >
+                                <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                    see more
+                                </button>
                             </div>
                             <div
                                     class="col issue-time-line d-flex gap-2"
@@ -314,88 +318,14 @@
                                     class="col issue-time-line d-flex gap-2"
                             >
                                 <p
-                                        class="btn custom-color m-2 rounded-pill"
+                                        class="btn custom-color rounded-pill"
                                 >
-                                    Custom Color
+                                    html
                                 </p>
                                 <p
-                                        class="btn custom-color m-2 rounded-pill"
+                                        class="btn custom-color rounded-pill"
                                 >
-                                    Australia
-                                </p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="code-block">
-                                <p>
-                                    this code does not work help me
-                                    please
-                                </p>
-                                <pre>
-&lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-&lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
-                                >
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-md-3 p-sm-2">
-                    <div class="card">
-                        <div
-                                class="card-header border-bottom text-dark"
-                        >
-                            <div
-                                    class="col d-flex align-items-center gap-2"
-                            >
-                                <h4
-                                        class="card-title modal-detail-title"
-                                >
-                                    Title
-                                </h4>
-
-                                <h6
-                                        class="card-title modal-detail-title"
-                                >
-                                    Name
-                                </h6>
-                                <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-success"
-                                >Success</span
-                                >
-                                <span
-                                        class="card-title modal-detail-title badge rounded-pill bg-danger"
-                                >Danger</span
-                                >
-                            </div>
-                            <div
-                                    class="col issue-time-line d-flex gap-2"
-                            >
-                                <div
-                                        class="d-flex align-items-center gap-2"
-                                >
-                                    <p>Posted</p>
-                                    <span>3 days ago</span>
-                                </div>
-                                <div
-                                        class="d-flex align-items-center gap-2"
-                                >
-                                    <p>Modified at</p>
-                                    <span>1 minute ago</span>
-                                </div>
-                            </div>
-                            <div
-                                    class="col issue-time-line d-flex gap-2"
-                            >
-                                <p
-                                        class="btn custom-color m-2 rounded-pill"
-                                >
-                                    Custom Color
-                                </p>
-                                <p
-                                        class="btn custom-color m-2 rounded-pill"
-                                >
-                                    Australia
+                                    bug
                                 </p>
                             </div>
                         </div>
@@ -420,15 +350,79 @@
 
     <div
             class="modal fade"
-            id="profile-modal"
+            id="issue-details"
             data-bs-keyboard="false"
             tabindex="-1"
             aria-labelledby="staticBackdropLabel"
             aria-hidden="true"
     >
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <div class="modal-body"></div>
+                <div class="modal-header">
+                    <div>
+                        Issue Details
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center gap-3">
+                        <div class="btn btn-primary" id="issue-edit-btn">
+                            edit
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
+                            <div class="col">
+                                <h4>corrective action</h4>
+                                <div class="editable text-wrap">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>preventive action</h4>
+                                <div class="editable text-break">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>direct cause</h4>
+                                <div class="editable text-break">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>root cause</h4>
+                                <div class="editable text-break">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>impact</h4>
+                                <div class="editable text-break">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h4>place</h4>
+                                <div class="editable text-break">
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
+                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
+                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -472,6 +466,48 @@
 <script src="/js/custome.js"></script>
 
 <script>
+
+    const editOpenBtn = document.querySelector('button[data-bs-target="#issue-details"]')
+
+    const issueEditBtn = document.getElementById('issue-edit-btn')
+
+    editOpenBtn.addEventListener('click', function(e) {
+        // TODO :: SHOULD CALL AJAX FUNCTION WHEN CLICK AND CREATE DIV 
+        console.log("open issue detail modal")
+        issueEditBtn.innerText = 'edit'
+    })
+
+    issueEditBtn.addEventListener('click', function (e) {
+
+        if (this.innerText === 'edit') {  // Use '===' for comparison
+            const eidtable = Array.from(document.getElementsByClassName('editable'));
+            console.log(eidtable);
+            for (let i = 0; i < eidtable.length; i++) {
+                let d = eidtable[i];
+                let input = document.createElement('textarea');
+                input.value = d.innerText;
+                input.classList.add('form-control');
+                input.classList.add('editable');
+                input.setAttribute('rows', 5);
+                console.log(d.parentNode);
+                d.parentNode.replaceChild(input, d);
+            }
+            this.innerText = 'save';
+        } else if (this.innerText === 'save') {  // Use '===' for comparison
+            const eidtable = Array.from(document.getElementsByClassName('editable'));
+            for (let i = 0; i < eidtable.length; i++) {
+                let d = eidtable[i];
+                let input = document.createElement('div');
+                input.textContent = d.value;  // Use textContent to set text for div
+                input.classList.add('editable', 'text-break');
+                console.log(d.parentNode);
+                d.parentNode.replaceChild(input, d);
+            }
+            this.innerText = 'edit';
+        }
+    });
+
+
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
