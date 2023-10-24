@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueCategoryDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.IssueCategory;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueCategoryRepository;
 import java.util.ArrayList;
@@ -23,28 +24,37 @@ class IssueCategoryServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testSaveIssueCategory() {
+       IssueCategoryDto issueCategoryDto = new IssueCategoryDto();
+       issueCategoryDto.setName("IT");
+
+         IssueCategory issueCategory = new IssueCategory();
+            issueCategory.setName(issueCategoryDto.getName());
+            issueCategory.setId(1L);
+            when(issueCategoryRepository.save(any(IssueCategory.class))).thenReturn(issueCategory);
+            IssueCategoryDto savedDto = issueCategoryService.save(issueCategoryDto);
+            System.out.println("Saved DTO: " + savedDto);
+            assertNotNull(savedDto);
+
+            assertEquals(issueCategoryDto.getName(), savedDto.getName());
+            assertEquals(issueCategory.getId(), savedDto.getId());
+            verify(issueCategoryRepository, times(1)).save(any(IssueCategory.class));
+
+    }
+    @Test
+    public void testUpdateIssueCategory() {
         IssueCategory issueCategory = new IssueCategory();
-        issueCategory.setName("IT");
+        issueCategory.setId(1L);
+
+        issueCategory.setName("HR");
         issueCategoryRepository.save(issueCategory);
+        assertEquals("HR", issueCategory.getName());
         verify(issueCategoryRepository, times(1)).save(issueCategory);
     }
-
-
-        @Test
-        public void testUpdateIssueCategory() {
-            IssueCategory issueCategory = new IssueCategory();
-            issueCategory.setId(1L);
-
-            issueCategory.setName("HR");
-            issueCategoryRepository.save(issueCategory);
-            assertEquals("HR", issueCategory.getName());
-            verify(issueCategoryRepository, times(1)).save(issueCategory);
-        }
 
 
     @Test

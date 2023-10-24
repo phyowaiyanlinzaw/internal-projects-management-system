@@ -61,7 +61,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto updateDepartment(DepartmentDto departmentDto) {
-        Department department = departmentRepository.findById(departmentDto.getId()).orElse(null);
+        Department department = departmentRepository.findById(departmentDto.getId());
         if(department != null) {
             department.setName(departmentDto.getName());
             departmentRepository.save(department);

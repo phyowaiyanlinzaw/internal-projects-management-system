@@ -4,8 +4,10 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.issue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue.IssueCategoryMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueCategoryDto;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.IssueCategory;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueCategoryRepository;
@@ -26,7 +28,7 @@ public class IssueCategoryServiceImpl implements IssueCategoryService {
     public IssueCategoryDto save(IssueCategoryDto issueCategory) {
         IssueCategory  issue = new IssueCategory();
         issue.setName(issueCategory.getName());
-        issueCategoryRepository.save(issue);
+        issue=issueCategoryRepository.save(issue);
         return IssueCategoryMapper.toIssueCategoryDto(issue);
     }
 
