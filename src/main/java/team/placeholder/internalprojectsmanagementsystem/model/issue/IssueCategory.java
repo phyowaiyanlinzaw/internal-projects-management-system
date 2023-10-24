@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,7 +22,7 @@ public class IssueCategory implements Serializable {
     private long id;
 
     @Column(unique = true)
-    private String name;
+    private Category name;
 
     @OneToMany(mappedBy = "issueCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Issue> issues;
