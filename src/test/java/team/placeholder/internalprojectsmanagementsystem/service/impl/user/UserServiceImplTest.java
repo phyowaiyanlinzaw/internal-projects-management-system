@@ -8,6 +8,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -16,6 +17,7 @@ import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,12 +35,12 @@ class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @Mock
-    private MailSender mailSender;
+    private JavaMailSender mailSender;
 
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -151,17 +153,31 @@ class UserServiceImplTest {
 
     @Test
     public void testSendEmail() {
-        String to = "test@example.com";
+        User user = new User();
+        user.setName("John");
+        user.setEmail("user@user.com");
+        user.setPassword("123456");
+        user.setDepartment(new Department());
+        user.setRole(SDQC);
+        user.setId(1L);
+        when(userRepository.findByEmail("user@user.com")).thenReturn(user);
+        User user1 = userRepository.findByEmail("user@user.com");
+        String password = PasswordGenerator.generatePassword(8);
+        user1.setPassword(password);
+        userRepository.save(user1);
+        assertEquals(password, user1.getPassword());
+        verify(userRepository, times(1)).save(user1);
 
-        // Mock the behavior of mailSender
-        Mockito.doNothing().when(mailSender).send(any(SimpleMailMessage.class));
+        String message = "Your new password is: " + password;
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(user1.getEmail());
+        simpleMailMessage.setSubject("New Password");
+        simpleMailMessage.setText(message);
+        mailSender.send(simpleMailMessage);
+        verify(mailSender, times(1)).send(simpleMailMessage);
 
-        userService.sendEmail(to);
 
-        // Verify that the mailSender's send method was called with the expected message
-        Mockito.verify(mailSender).send(any(SimpleMailMessage.class));
+
     }
-
-
 
 }

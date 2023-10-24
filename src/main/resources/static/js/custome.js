@@ -88,7 +88,7 @@ $(document).ready(function () {
         const minLength = 8;
 
         // Check if the password contains at least one alphanumeric character
-        const containsAlphanumeric = /^[a-zA-Z0-9]+$/.test(password);
+        const containsAlphanumeric = /^[a-zA-Z0-9!@#$%^&*]+$/.test(password);
 
         // Check all criteria
         console.log(password.length >= minLength, containsAlphanumeric);
@@ -162,7 +162,7 @@ $(document).ready(function () {
                     let p = $("<p>")
                         .addClass("text-danger fs-6")
                         .text(
-                            "The password can only contain numbers and alphabets with a minimum length of 8 characters"
+                            "The password can only contain a-z, A-Z, !@#$%^&* with a minimum length of 8 characters"
                         )
                         .css("margin", "0");
 

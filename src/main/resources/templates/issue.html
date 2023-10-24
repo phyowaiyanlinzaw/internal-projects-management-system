@@ -3,39 +3,37 @@
       lang="en">
 
 <body layout:fragment="content">
+
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
 
     <!-- Content Start -->
-    <div
-            class="content"
-            style="
+    <div class="content" style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
                         #444cf7 0.6000000000000001px,
                         #e5e5f7 0.6000000000000001px
                     );
-                    background-size: 12px 12px;
-                "
-    >
+                    background-size: 12px 12px;">
 
         <div th:replace="fragments/navigation :: navigation-with-search"></div>
 
         <div class="container-fluid">
-            <div
-                    class="container-fluid d-md-block pt-2 ps-s pe-2"
-                    id="dropdrown-search-bar"
-            >
-                <div
-                        class="d-flex flex-row justify-content-between position-relative"
-                >
+            <div class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar">
+                <div class="d-flex flex-row justify-content-between position-relative">
                     <form class="d-md-flex">
-                        <input
-                                class="form-control border-0"
-                                type="search"
-                                placeholder="Search"
-                        />
+                        <input class="form-control border-0" type="search" placeholder="Search" />
                     </form>
                     <div class="position-absolute end-0 d-flex gap-3">
                         <!-- modal toggle button start -->
@@ -45,7 +43,7 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#staticBackdrop"
                         >
-                            <i class="bi bi-building-fill-add"></i>
+                            <i class="bi bi-plus-lg"></i>
                         </button>
                         <!-- modal toggle button end -->
 
@@ -60,7 +58,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5">
-                                            Add New Issue
+                                            Create New Issue
                                         </h1>
                                         <button
                                                 type="button"
@@ -73,91 +71,57 @@
                                         <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
                                         <form>
                                             <!-- issue modal start -->
-                                            <div class="p-md-3 p-sm-2">
-                                                <div class="card">
-                                                    <div
-                                                            class="card-header border-bottom text-dark"
-                                                    >
-                                                        <div
-                                                                class="col d-flex align-items-center gap-2"
-                                                        >
-                                                            <input
-                                                                    type="text"
-                                                                    class="card-title modal-detail-title"
-                                                                    placeholder="Title"
-                                                            />
 
-                                                            <div
-                                                                    class="d-flex col align-items-center gap-2"
-                                                            >
-                                                                <select
-                                                                        name="countries"
-                                                                        id="countries"
-                                                                        multiple
-                                                                >
-                                                                    <option
-                                                                            value="1"
-                                                                    >
-                                                                        Afghanistan
-                                                                    </option>
-                                                                    <option
-                                                                            value="2"
-                                                                    >
-                                                                        Australia
-                                                                    </option>
-                                                                    <option
-                                                                            value="3"
-                                                                    >
-                                                                        Germany
-                                                                    </option>
-                                                                    <option
-                                                                            value="4"
-                                                                    >
-                                                                        Canada
-                                                                    </option>
-                                                                    <option
-                                                                            value="5"
-                                                                    >
-                                                                        Russia
-                                                                    </option>
-                                                                    <option
-                                                                            value="6"
-                                                                    >
-                                                                        America
-                                                                    </option>
-                                                                    <option
-                                                                            value="7"
-                                                                    >
-                                                                        Spain
-                                                                    </option>
-                                                                    <option
-                                                                            value="8"
-                                                                    >
-                                                                        Turkey
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                            class="card-body"
-                                                    >
-                                                        <div
-                                                                class="quill-editor-bubble"
-                                                        >
-                                                            <p>
-                                                                Hello
-                                                                World!
-                                                            </p>
-                                                            <pre>
-                                &lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-                                &lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-                                </pre
-                                >
-                                                        </div>
-                                                    </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="title">Issue Title</label>
+                                                    <input type="text" class="form-control" id="title"
+                                                           placeholder="Title">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="categories">Issue Category</label>
+                                                    <select name="countries" id="categories" multiple>
+                                                        <option value="1">Afghanistan</option>
+                                                        <option value="2">Australia</option>
+                                                        <option value="3">Germany</option>
+                                                        <option value="4">Canada</option>
+                                                        <option value="5">Russia</option>
+                                                        <option value="6">America</option>
+                                                        <option value="7">Spain</option>
+                                                        <option value="8">Turkey</option>
+                                                    </select>
                                                 </div>
                                             </div>
+
+
+                                            <label for="editor">Description</label>
+                                            <div class="quill-editor-bubble" id="editor">
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="directcause">Direct Cause</label>
+                                                    <textarea class="form-control" id="directcause"></textarea>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="rootcause">Root Cause</label>
+                                                    <textarea class="form-control" id="rootcause"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="impact">Impact</label>
+                                                    <textarea class="form-control" id="impact"></textarea>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="place">Place</label>
+                                                    <textarea class="form-control" id="place"></textarea>
+                                                </div>
+                                            </div>
+
+
                                             <!-- issue modal end -->
                                         </form>
                                     </div>
@@ -191,35 +155,35 @@
                     <!-- Modal -->
                 </div>
             </div>
-            <div class="row row-cols-1"  id="sort-container">
+            <div class="row row-cols-1" id="sort-container">
                 <div class="p-md-3 p-sm-2 mt-3">
                     <div class="card">
                         <div
                                 class="card-header border-bottom text-dark"
                         >
-                            
-                                <div class="col d-flex align-items-center gap-2">
-                                    <h4
-                                            class="card-title modal-detail-title"
-                                    >
-                                        a
-                                    </h4>
 
-                                    <h6
-                                            class="card-title"
-                                    >
-                                        Name
-                                    </h6>
+                            <div class="col d-flex align-items-center gap-2">
+                                <h4
+                                        class="card-title modal-detail-title"
+                                >
+                                    a
+                                </h4>
 
-                                    <span
-                                            class="card-title badge rounded-pill bg-danger"
-                                    >Danger</span
-                                    >
-                                    <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                        see more
-                                    </button>
-                                </div>
-                               
+                                <h6
+                                        class="card-title"
+                                >
+                                    Name
+                                </h6>
+
+                                <span
+                                        class="card-title badge rounded-pill bg-danger"
+                                >Danger</span
+                                >
+                                <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                    see more
+                                </button>
+                            </div>
+
                             <div
                                     class="col issue-time-line d-flex gap-2"
                             >
@@ -299,32 +263,21 @@
                                 </button>
                             </div>
                             <div
-                                    class="col issue-time-line d-flex gap-2"
-                            >
-                                <div
-                                        class="d-flex align-items-center gap-2"
-                                >
+                                    class="col issue-time-line d-flex gap-2">
+                                <div class="d-flex align-items-center gap-2">
                                     <p>Posted</p>
                                     <span>3 days ago</span>
                                 </div>
-                                <div
-                                        class="d-flex align-items-center gap-2"
-                                >
+                                <div class="d-flex align-items-center gap-2">
                                     <p>Modified at</p>
                                     <span>1 minute ago</span>
                                 </div>
                             </div>
-                            <div
-                                    class="col issue-time-line d-flex gap-2"
-                            >
-                                <p
-                                        class="btn custom-color rounded-pill"
-                                >
+                            <div class="col issue-time-line d-flex gap-2">
+                                <p class="btn custom-color rounded-pill">
                                     html
                                 </p>
-                                <p
-                                        class="btn custom-color rounded-pill"
-                                >
+                                <p class="btn custom-color rounded-pill">
                                     bug
                                 </p>
                             </div>
@@ -471,7 +424,7 @@
 
     const issueEditBtn = document.getElementById('issue-edit-btn')
 
-    editOpenBtn.addEventListener('click', function(e) {
+    editOpenBtn.addEventListener('click', function (e) {
         // TODO :: SHOULD CALL AJAX FUNCTION WHEN CLICK AND CREATE DIV 
         console.log("open issue detail modal")
         issueEditBtn.innerText = 'edit'
@@ -560,7 +513,7 @@
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.com
 
-    new MultiSelectTag("countries"), new MultiSelectTag("state"); // id
+    new MultiSelectTag("categories"), new MultiSelectTag("state"); // id
 
     function MultiSelectTag(
         el,
@@ -836,6 +789,29 @@
             });
         }
     }
+
+
+    const issue = [{
+        id: 1,
+        title: "title",
+        uploader: { id: 1, name: "thant" },
+        status: true, // complete or not
+        createdDate: 1702000000000,
+        modified: 0,
+        category: ["error", "bug"],
+        description: `<div class="code-block">
+                                <p>"this code does not work"</p>
+                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
+                            </div>`,
+        corractive: "bla",
+        preventive: "bla",
+        direct: "bla",
+        root: "bla",
+        impact: "bla",
+        place: "bla"
+    }];
+
+
 
 </script>
 </body>
