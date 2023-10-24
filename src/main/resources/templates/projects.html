@@ -95,114 +95,7 @@
                         style="margin: 10px"
                     >
                         <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
-                        <div
-                            class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0"
-                        >
-                            <div class="card border-success">
-                                <div class="card-header">
-                                    <div class="d-flex flex-column">
-                                        <h2
-                                            class="card-title text-center text-primary modal-detail-title"
-                                        >
-                                            a
-                                        </h2>
-                                        <div
-                                            class="d-flex justify-content-between"
-                                        >
-                                            <div class="d-flex">
-                                                <img
-                                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                                    class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                                    style="width: 40px"
-                                                    alt="..."
-                                                />
-                                                <h5
-                                                    class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
-                                                >
-                                                    Project manager
-                                                </h5>
-                                            </div>
-                                            <a
-                                                href=""
-                                                class="btn btn-white text-secondary link-shadow"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#project-details"
-                                                >See More</a
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="card-body position-relative mx-auto"
-                                >
-                                    <p class="card-title text-center fs-6 mb-1">
-                                        progress
-                                    </p>
-                                    <div
-                                        id="circle-progress-1"
-                                        class="circle-progress rounded-circle"
-                                        data-min-value="0"
-                                        data-max-value="100"
-                                        data-value="80"
-                                        data-type="percent"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0"
-                        >
-                            <div class="card border-success">
-                                <div class="card-header">
-                                    <div class="d-flex flex-column">
-                                        <h2
-                                            class="card-title text-center text-primary modal-detail-title"
-                                        >
-                                            h
-                                        </h2>
-                                        <div
-                                            class="d-flex justify-content-between"
-                                        >
-                                            <div class="d-flex">
-                                                <img
-                                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                                    class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                                    style="width: 40px"
-                                                    alt="..."
-                                                />
-                                                <h5
-                                                    class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
-                                                >
-                                                    Project manager
-                                                </h5>
-                                            </div>
-                                            <a
-                                                href=""
-                                                class="btn btn-white text-secondary link-shadow"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#project-details"
-                                                >See More</a
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="card-body position-relative mx-auto"
-                                >
-                                    <p class="card-title text-center fs-6 mb-1">
-                                        progress
-                                    </p>
-                                    <div
-                                        id="circle-progress-2"
-                                        class="circle-progress rounded-circle"
-                                        data-min-value="0"
-                                        data-max-value="100"
-                                        data-value="25"
-                                        data-type="percent"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
+
                         <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
                     </div>
                 </div>
@@ -503,7 +396,7 @@
                                                 <h5 class="card-title">
                                                     About background
                                                 </h5>
-                                                <p class="small fst-italic">
+                                                <p class="small fst-italic" id="project-background">
                                                     Sunt est soluta temporibus
                                                     accusantium neque nam
                                                     maiores cumque temporibus.
@@ -1091,35 +984,263 @@
         <!-- sort (department, project), form validation and search bar behavior are all here -->
         <script src="/js/custome.js"></script>
         <script>
-
             class project {
-                constructor(id, name, startDate, endDate, departmentId, PMId, background, currentPhase, objective, client, exReview, inReview) {
-                    this.id = id
-                    this.name = name
-                    this.endDate = endDate
-                    this.PMId = PMId
-                    this.background = background
-                    this.currentPhase = currentPhase
-                    this.objective = objective
-                    this.exReview = exReview
-                    this.inReview = inReview
-                    this.client = client // only name i guess
+                constructor({
+                    id,
+                    name: name,
+                    startDate: star,
+                    endDate,
+                    departmentId,
+                    PMId,
+                    background,
+                    currentPhase,
+                    objective,
+                    client,
+                    exReview,
+                    inReview
+                }) {
+                    this.id = id;
+                    this.name = name;
+                    this.endDate = endDate;
+                    this.PMId = PMId;
+                    this.background = background;
+                    this.currentPhase = currentPhase;
+                    this.objective = objective;
+                    this.exReview = exReview;
+                    this.inReview = inReview;
+                    this.client = client; // only name i guess
                 }
             }
 
             class amount {
-                constructor(basicDesign = 0, detailDesign = 0, coding = 0, unitTesting = 0, integratedTestin = 0) {
-                    this.basicDesign = basicDesign
-                    this.detailDesign = detailDesign
-                    this.coding = coding
-                    this.unitTesting = unitTesting
-                    this.integratedTestin = integratedTesting
+                constructor(
+                    basicDesign = 0,
+                    detailDesign = 0,
+                    coding = 0,
+                    unitTesting = 0,
+                    integratedTestin = 0
+                ) {
+                    this.basicDesign = basicDesign;
+                    this.detailDesign = detailDesign;
+                    this.coding = coding;
+                    this.unitTesting = unitTesting;
+                    this.integratedTestin = integratedTesting;
                 }
             }
 
-            let projectList = []
+            const proListFromBack = [
+                {
+                    id: 1,
+                    name: "project name",
+                    startDate: 1698105600000,
+                    endDate: 1698710400000,
+                    pm: {id: 2, name: 'zawlinshein'},
+                    background: "project background",
+                    currentPhase: "basic design",
+                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
+                    inReview: 25,
+                    exReview: 2,
+                    client: "name",
+                    totalTask: 100,
+                    doneTask: 50,
+                    amount: {
+                        basicDesign: 0,
+                        detailDesign: 0,
+                        coding: 0,
+                        unitTesting: 0,
+                        integratedTesting: 0,
+                    },
+                    systemOutline: {
+                        analysis: true,
+                        sysDesign: true,
+                        coding: false,
+                        testing: false,
+                        deploy: true,
+                        maintenence: true,
+                        document: true,
+                    },
+                    architecutre: [
+                        "html",
+                        "mysql",
+                        "js",
+                        "java",
+                        "spring boot",
+                    ],
+                },
+                {
+                    id: 2,
+                    name: "another project",
+                    startDate: 1700000000000,
+                    endDate: 1701000000000,
+                    pm: {id:3, name: 'phyo'},
+                    background: "another project background",
+                    currentPhase: "detail design",
+                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
+                    inReview: 15,
+                    exReview: 5,
+                    client: "another client",
+                    totalTask: 30,
+                    doneTask: 20,
+                    amount: {
+                        basicDesign: 1,
+                        detailDesign: 2,
+                        coding: 3,
+                        unitTesting: 1,
+                        integratedTesting: 2,
+                    },
+                    systemOutline: {
+                        analysis: false,
+                        sysDesign: true,
+                        coding: true,
+                        testing: false,
+                        deploy: true,
+                        maintenence: false,
+                        document: true,
+                    },
+                    architecutre: ["html", "mongodb", "python", "node.js"],
+                },
+                {
+                    id: 3,
+                    name: "third project",
+                    startDate: 1702000000000,
+                    endDate: 1703000000000,
+                    pm: {id: 4, name: "nyo"},
+                    background: "third project background",
+                    currentPhase: "coding",
+                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
+                    inReview: 10,
+                    exReview: 3,
+                    client: "third client",
+                    totalTask: 40,
+                    doneTask: 10,
+                    amount: {
+                        basicDesign: 2,
+                        detailDesign: 1,
+                        coding: 4,
+                        unitTesting: 2,
+                        integratedTesting: 3,
+                    },
+                    systemOutline: {
+                        analysis: true,
+                        sysDesign: false,
+                        coding: true,
+                        testing: true,
+                        deploy: false,
+                        maintenence: true,
+                        document: true,
+                    },
+                    architecutre: ["html", "java", "react", "spring boot"],
+                },
+            ];
 
-            projectList.push(new project(1, 'zawlinshein', ))
+            const motherContainer = document.querySelector('#sort-container')
+
+            for (let i = 0; i < proListFromBack.length; i++) {
+                currentProject = proListFromBack[i];
+
+                const curDiv = `<div
+                            class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0"
+                        >
+                            <div class="card border-success">
+                                <div class="card-header">
+                                    <div class="d-flex flex-column">
+                                        <h2
+                                            class="card-title text-center text-primary modal-detail-title"
+                                        >
+                                            ${currentProject.name}
+                                        </h2>
+                                        <div
+                                            class="d-flex justify-content-between"
+                                        >
+                                            <div class="d-flex">
+                                                <img
+                                                    src="https://source.unsplash.com/random/200x200?sig=1"
+                                                    class="img-fluid rounded-circle d-none d-md-block d-sm-block"
+                                                    style="width: 40px"
+                                                    alt="..."
+                                                />
+                                                <h5
+                                                    class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
+                                                >
+                                                    ${currentProject.pm.name}
+                                                </h5>
+                                            </div>
+                                            <a
+                                                href=""
+                                                id="${currentProject.id}"
+                                                class="btn btn-white text-secondary link-shadow"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#project-details"
+                                                >See More</a
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="card-body position-relative mx-auto"
+                                >
+                                    <p class="card-title text-center fs-6 mb-1">
+                                        progress
+                                    </p>
+                                    <div
+                                        id="circle-progress-${
+                                            currentProject.id
+                                        }"
+                                        class="circle-progress rounded-circle"
+                                        data-min-value="0"
+                                        data-max-value="100"
+                                        data-value="${
+                                            (currentProject.doneTask /
+                                                currentProject.totalTask) *
+                                            100
+                                        }"
+                                        data-type="percent"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>`;
+
+                motherContainer.innerHTML += curDiv;
+            }
+
+            const detailMoal = document.querySelector('#project-details')
+
+            motherContainer.addEventListener('click', function(e) {
+                let target = e.target;
+                if (target.hasAttribute('data-bs-target')) {
+                    let id = parseInt(target.getAttribute('id'));
+                    let targetData = proListFromBack.find(a => a.id == id)
+                    detailMoal.querySelector('.modal-title').innerText = targetData.name
+                    detailMoal.querySelector('#project-background').innerText = targetData.background
+                    detailMoal.querySelector('')
+                }
+            })
+
+            const task = {
+                id: 1,
+                title: "title",
+                description: "description",
+                status: "STARTED",
+                exTime: 42,
+                acTime: 0,
+                group: A,
+                user: {
+                    id: 1,
+                    name: "zaw",
+                },
+            };
+
+            const issue = {
+                description: "html code block",
+                uploader: {
+                    id: 1,
+                    name: "zawlinshein",
+                },
+                pic: {
+                    id: 3,
+                    name: "blabla",
+                },
+            };
 
             let quillEditors = document.querySelectorAll(
                 ".quill-editor-bubble"
