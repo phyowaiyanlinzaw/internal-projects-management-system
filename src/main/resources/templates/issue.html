@@ -17,35 +17,23 @@
 <div class="container-fluid position-relative d-flex p-0">
 
     <!-- Content Start -->
-    <div
-            class="content"
-            style="
+    <div class="content" style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
                         #444cf7 0.6000000000000001px,
                         #e5e5f7 0.6000000000000001px
                     );
-                    background-size: 12px 12px;
-                "
-    >
+                    background-size: 12px 12px;">
 
         <div th:replace="fragments/navigation :: navigation-with-search"></div>
 
         <div class="container-fluid">
-            <div
-                    class="container-fluid d-md-block pt-2 ps-s pe-2"
-                    id="dropdrown-search-bar"
-            >
-                <div
-                        class="d-flex flex-row justify-content-between position-relative"
-                >
+            <div class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar">
+                <div class="d-flex flex-row justify-content-between position-relative">
                     <form class="d-md-flex">
-                        <input
-                                class="form-control border-0"
-                                type="search"
-                                placeholder="Search"
-                        />
+                        <input class="form-control border-0" type="search" placeholder="Search" />
                     </form>
                     <div class="position-absolute end-0 d-flex gap-3">
                         <!-- modal toggle button start -->
@@ -85,15 +73,15 @@
                                             <!-- issue modal start -->
 
 
-
                                             <div class="row">
                                                 <div class="col">
                                                     <label for="title">Issue Title</label>
-                                                    <input type="text" class="form-control" id="title" placeholder="Title">
+                                                    <input type="text" class="form-control" id="title"
+                                                           placeholder="Title">
                                                 </div>
                                                 <div class="col">
-                                                    <label for="countries">Issue Category</label>
-                                                    <select name="countries" id="countries" multiple >
+                                                    <label for="categories">Issue Category</label>
+                                                    <select name="countries" id="categories" multiple>
                                                         <option value="1">Afghanistan</option>
                                                         <option value="2">Australia</option>
                                                         <option value="3">Germany</option>
@@ -107,13 +95,10 @@
                                             </div>
 
 
+                                            <label for="editor">Description</label>
+                                            <div class="quill-editor-bubble" id="editor">
 
-
-
-                                                <label for="editor">Description</label>
-                                                <div class="quill-editor-bubble" id="editor">
-
-                                                </div>
+                                            </div>
 
                                             <div class="row">
                                                 <div class="col">
@@ -135,12 +120,6 @@
                                                     <textarea class="form-control" id="place"></textarea>
                                                 </div>
                                             </div>
-
-
-
-
-
-
 
 
                                             <!-- issue modal end -->
@@ -534,7 +513,7 @@
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.com
 
-    new MultiSelectTag("countries"), new MultiSelectTag("state"); // id
+    new MultiSelectTag("categories"), new MultiSelectTag("state"); // id
 
     function MultiSelectTag(
         el,
@@ -809,7 +788,71 @@
                 };
             });
         }
+
     }
+
+    const issue1 = [{
+        id: 1,
+        title: "title",
+        uploader: { id: 1, name: "thant" },
+        status: true, // complete or not
+        createdDate: 1702000000000,
+        modified: 0,
+        category: ["error", "bug"],
+        description: `<div class="code-block">
+                                <p>"this code does not work"</p>
+                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
+                            </div>`,
+        corractive: "bla",
+        preventive: "bla",
+        direct: "bla",
+        root: "bla",
+        impact: "bla",
+        place: "bla"
+    }];
+
+    const issue2 = [{
+        id: 1,
+        title: "title",
+        uploader: { id: 1, name: "thant" },
+        status: true, // complete or not
+        createdDate: 1702000000000,
+        modified: 0,
+        category: ["error", "bug"],
+        description: `<div class="code-block">
+                                <p>"this code does not work"</p>
+                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
+                            </div>`,
+        corractive: "bla",
+        preventive: "bla",
+        direct: "bla",
+        root: "bla",
+        impact: "bla",
+        place: "bla"
+    }];
+    const issue3 = [{
+        id: 1,
+        title: "title",
+        uploader: { id: 1, name: "thant" },
+        status: true, // complete or not
+        createdDate: 1702000000000,
+        modified: 0,
+        category: ["error", "bug"],
+        description: `<div class="code-block">
+                                <p>"this code does not work"</p>
+                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
+                            </div>`,
+        corractive: "bla",
+        preventive: "bla",
+        direct: "bla",
+        root: "bla",
+        impact: "bla",
+        place: "bla"
+    }];
+
+    const issueArray = [issue1, issue2, issue3];
+
+
 
 </script>
 </body>
