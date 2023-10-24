@@ -18,12 +18,12 @@
 <div
         class="container-fluid position-relative bg-white d-flex p-0"
 >
-     <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
+    </div>
     <!-- Spinner End -->
 
     <div th:replace="fragments/sidebar :: sidebar"></div>
@@ -208,7 +208,7 @@
             </div>
             <div class="modal-body">
 
-                <form class="row g-3" id="validation-form" action="/project" method="GET">
+                <form class="row g-3" id="validation-form" action="">
                     <div class="col-lg-6">
                         <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span
                                 style="color:red"> *</span></label>
@@ -496,43 +496,43 @@
                                             </div>
                                         </div>
                                         <div
-                                                    class="col accordion"
+                                                class="col accordion"
+                                        >
+                                            <div
+                                                    class="accordion-item"
                                             >
-                                                <div
-                                                        class="accordion-item"
+                                                <h2
+                                                        class="accordion-header"
+                                                        id="systemOutline-headingOne"
                                                 >
-                                                    <h2
-                                                            class="accordion-header"
-                                                            id="systemOutline-headingOne"
+                                                    <button
+                                                            class="accordion-button"
+                                                            type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#systemOutline-collapseOne"
+                                                            aria-expanded="true"
+                                                            aria-controls="systemOutline-collapseOne"
                                                     >
-                                                        <button
-                                                                class="accordion-button"
-                                                                type="button"
-                                                                data-bs-toggle="collapse"
-                                                                data-bs-target="#systemOutline-collapseOne"
-                                                                aria-expanded="true"
-                                                                aria-controls="systemOutline-collapseOne"
-                                                        >
-                                                            System outline
-                                                        </button>
-                                                    </h2>
-                                                    <div
-                                                            id="systemOutline-collapseOne"
-                                                            class="accordion-collapse collapse"
-                                                            aria-labelledby="systemOutline-headingOne"
-                                                    >
-                                                        <ul class="list-group accordion-body p-0 rounded-end">
-                                                            <li class="list-group-item d-flex justify-content-between">Analysis<i class="bi bi-check2-all text-success fs-4"></i></li>
-                                                            <li class="list-group-item d-flex justify-content-between">System Design<i class="bi bi-check2-all text-success fs-4"></i></li>
-                                                            <li class="list-group-item d-flex justify-content-between">Source Code<i class="bi bi-check2-all text-success fs-4"></i></li>
-                                                            <li class="list-group-item d-flex justify-content-between">Testing<i class="bi bi-check2-all text-success fs-4"></i></li>
-                                                            <li class="list-group-item d-flex justify-content-between">Deploy</li>
-                                                            <li class="list-group-item d-flex justify-content-between">Maintence</li>
-                                                            <li class="list-group-item d-flex justify-content-between">Document</li>
-                                                        </ul>
-                                                    </div>
+                                                        System outline
+                                                    </button>
+                                                </h2>
+                                                <div
+                                                        id="systemOutline-collapseOne"
+                                                        class="accordion-collapse collapse"
+                                                        aria-labelledby="systemOutline-headingOne"
+                                                >
+                                                    <ul class="list-group accordion-body p-0 rounded-end">
+                                                        <li class="list-group-item d-flex justify-content-between">Analysis<i class="bi bi-check2-all text-success fs-4"></i></li>
+                                                        <li class="list-group-item d-flex justify-content-between">System Design<i class="bi bi-check2-all text-success fs-4"></i></li>
+                                                        <li class="list-group-item d-flex justify-content-between">Source Code<i class="bi bi-check2-all text-success fs-4"></i></li>
+                                                        <li class="list-group-item d-flex justify-content-between">Testing<i class="bi bi-check2-all text-success fs-4"></i></li>
+                                                        <li class="list-group-item d-flex justify-content-between">Deploy</li>
+                                                        <li class="list-group-item d-flex justify-content-between">Maintence</li>
+                                                        <li class="list-group-item d-flex justify-content-between">Document</li>
+                                                    </ul>
                                                 </div>
                                             </div>
+                                        </div>
 
                                         <div
                                                 class="col accordion"
@@ -787,53 +787,6 @@
     </div>
 </div>
 <!-- modal for project's details -->
-
-
-<script>
-
-    let form=$('#validation-form');
-
-    function validateForm(){
-        let name=$('#name').val();
-        let department=$('#department').val();
-        let user=$('#user').val();
-        let member=$('#member').val();
-        let client=$('#client').val();
-        let background=$('#background').val();
-        let start_date=$('#start_date').val();
-        let duration=$('#duration').val();
-        let objective=$('#objective').val();
-        let architectures=$('#architectures').val();
-        let systemOutlines=$('#systemOutlines').val();
-        let deliverable=$('#deliverable').val();
-
-        if(name=="" || department=="" || user=="" || member=="" || client=="" || background=="" || start_date=="" || duration=="" || objective=="" || architectures=="" || systemOutlines=="" || deliverable==""){
-            alert("Please fill all the fields");
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
-
-    form.submit(function (e){
-        e.preventDefault();
-        if(validateForm()){
-            $.ajax({
-                type: "POST",
-                url: "/project",
-                data: form.serialize(),
-                success: function (response){
-                    alert("Project added successfully");
-                    window.location.href="/project";
-                },
-                error: function (error){
-                    alert("Something went wrong");
-                }
-            });
-        }
-    });
-</script>
 
 <!--    for select drop-drown-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
