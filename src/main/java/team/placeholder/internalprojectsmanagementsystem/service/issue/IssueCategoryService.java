@@ -1,7 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.service.issue;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueCategoryDto;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.IssueCategory;
 
 import java.util.List;
 
@@ -14,6 +13,8 @@ public interface IssueCategoryService {
     IssueCategoryDto findById(long id);
 
     List<IssueCategoryDto> findAll();
+
+
 
 
 }
