@@ -1,7 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project.projectenums;
 
 
-public enum Development_phase {
+public enum DevelopmentPhase {
     PLANNING,DESIGN,CODING,TESTING,REVIEW,DEPLOYMENT,MAINTENANCE;
 
      public String getPhaseName(){

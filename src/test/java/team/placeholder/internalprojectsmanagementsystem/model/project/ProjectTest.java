@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.IssueTest;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Development_phase;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.DevelopmentPhase;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
@@ -46,7 +45,7 @@ public class ProjectTest {
     private Set<User> users;
 
     @Mock
-    private Development_phase developmentPhase;
+    private DevelopmentPhase developmentPhase;
 
     @BeforeEach
     public void setUp() {
@@ -75,7 +74,7 @@ public class ProjectTest {
         project.setDuration(30);
         project.setStart_date(new Date(2023, 1, 1));
         project.setEnd_date(new Date(2023, 2, 1));
-        project.setCurrent_phase(Development_phase.TESTING);
+        project.setCurrent_phase(DevelopmentPhase.TESTING);
         project.setObjective("Objective");
 
         assertEquals(1L, project.getId());
@@ -84,7 +83,7 @@ public class ProjectTest {
         assertEquals(30, project.getDuration());
         assertEquals(new Date(2023, 1, 1), project.getStart_date());
         assertEquals(new Date(2023, 2, 1), project.getEnd_date());
-        assertEquals(Development_phase.TESTING, project.getCurrent_phase());
+        assertEquals(DevelopmentPhase.TESTING, project.getCurrent_phase());
         assertEquals("Objective", project.getObjective());
     }
 

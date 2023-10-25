@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.NotificationMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.NotificationDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
+import team.placeholder.internalprojectsmanagementsystem.model.project.TaskNotification;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.NotificationRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.NotificationService;
 
@@ -22,17 +22,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationDto save(NotificationDto notificationDto) {
-        Notification notification = new Notification();
-        notification.setDescription(notificationDto.getDescription());
-        notificationRepository.save(notification);
-        return NotificationMapper.toNotificationDto(notificationRepository.save(notification));
+        TaskNotification taskNotification = new TaskNotification();
+        taskNotification.setDescription(notificationDto.getDescription());
+        notificationRepository.save(taskNotification);
+        return NotificationMapper.toNotificationDto(notificationRepository.save(taskNotification));
     }
 
     @Override
     public NotificationDto getNotificationById(long id) {
-        Notification notification = notificationRepository.findById(id);
-        if(notification != null) {
-            return NotificationMapper.toNotificationDto(notification);
+        TaskNotification taskNotification = notificationRepository.findById(id);
+        if(taskNotification != null) {
+            return NotificationMapper.toNotificationDto(taskNotification);
         }else{
             return null;
         }
@@ -40,8 +40,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<NotificationDto> getAllNotifications() {
-        List<Notification> notifications = notificationRepository.findAll();
-        return notifications.stream()
+        List<TaskNotification> taskNotifications = notificationRepository.findAll();
+        return taskNotifications.stream()
                 .map(NotificationMapper::toNotificationDto)
                 .collect(Collectors.toList());
     }

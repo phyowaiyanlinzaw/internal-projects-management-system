@@ -1,7 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.project;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Development_phase;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.DevelopmentPhase;
 
 import java.sql.Date;
 
@@ -20,7 +20,7 @@ public class ProjectDtoTest {
         projectDto.setDuration(30);
         projectDto.setStart_date(new Date(System.currentTimeMillis()));
         projectDto.setEnd_date(new Date(System.currentTimeMillis() + 30 * 24 * 60 * 60 * 1000)); // 30 days later
-        projectDto.setCurrent_phase(Development_phase.PLANNING);
+        projectDto.setCurrent_phase(DevelopmentPhase.PLANNING);
         projectDto.setObjective("Test Objective");
 
         // Test the getter methods
@@ -30,7 +30,7 @@ public class ProjectDtoTest {
         assertEquals(30, projectDto.getDuration());
         assertNotNull(projectDto.getStart_date());
         assertNotNull(projectDto.getEnd_date());
-        assertEquals(Development_phase.PLANNING, projectDto.getCurrent_phase());
+        assertEquals(DevelopmentPhase.PLANNING, projectDto.getCurrent_phase());
         assertEquals("Test Objective", projectDto.getObjective());
     }
 }

@@ -2,7 +2,6 @@ package team.placeholder.internalprojectsmanagementsystem.dto.model.issue;
 
 import lombok.Getter;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.IssueCategory;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 

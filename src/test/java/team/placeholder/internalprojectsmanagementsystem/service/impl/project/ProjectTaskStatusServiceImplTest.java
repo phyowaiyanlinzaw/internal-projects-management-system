@@ -7,17 +7,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
-import team.placeholder.internalprojectsmanagementsystem.model.project.ProjectStatus;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectStatusRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Status.IN_PROGRESS;
+import static team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus.IN_PROGRESS;
 
 
 @ExtendWith(MockitoExtension.class)
-class ProjectStatusServiceImplTest {
+class ProjectTaskStatusServiceImplTest {
 
     @Mock
     private ProjectStatusRepository projectStatusRepository;

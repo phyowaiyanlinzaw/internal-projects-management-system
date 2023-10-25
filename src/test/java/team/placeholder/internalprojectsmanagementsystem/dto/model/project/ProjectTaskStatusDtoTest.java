@@ -1,11 +1,11 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.project;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Status;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ProjectStatusDtoTest {
+public class ProjectTaskStatusDtoTest {
     @Mock
     private ProjectStatusDto projectStatusDto;
 
@@ -14,11 +14,11 @@ public class ProjectStatusDtoTest {
         // Create a ProjectStatusDto object with some mock data
         projectStatusDto = new ProjectStatusDto();
         projectStatusDto.setId(1L);
-        projectStatusDto.setName(Status.IN_PROGRESS);
+        projectStatusDto.setName(TaskStatus.IN_PROGRESS);
 
         // Test the getter methods
         assertEquals(1L, projectStatusDto.getId());
-        assertEquals(Status.IN_PROGRESS, projectStatusDto.getName());
+        assertEquals(TaskStatus.IN_PROGRESS, projectStatusDto.getName());
     }
 }
 

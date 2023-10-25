@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="architecture")
@@ -20,9 +22,12 @@ public class Architecture implements Serializable {
     @Column(unique = true, nullable = false)
     private String tech_name;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @ManyToMany
+    @JoinTable(
+            name = "architecture_project",
+            joinColumns = @JoinColumn(name = "architecture_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    private Set<Project> projects = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

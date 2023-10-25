@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Development_phase;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.DevelopmentPhase;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.io.Serializable;
@@ -21,18 +21,17 @@ import java.util.Set;
 @Table(name="project")
 @Getter
 @Setter
-
 public class Project implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private Long id;
+    private long id;
     private String name;
     private String background;
     private int duration;
-    private Date start_date;
-    private Date end_date;
-    private Development_phase current_phase;
+    private long start_date;
+    private long end_date;
+    private DevelopmentPhase current_phase;
     private String objective;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -47,17 +46,15 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Deliverable> deliverables ;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Amount> amount ;
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectStatus> projectStatuses;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "amount_id")
+    private Amount amount;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Issue> issues;
 
-    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Architecture> architectures;
+    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
+    private Set<Architecture> architectures = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name="department_id")

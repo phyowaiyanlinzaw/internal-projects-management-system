@@ -9,7 +9,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Proje
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProjectStatusServiceTest {
+class ProjectTaskStatusServiceTest {
 
     @Mock
     private ProjectStatusService projectStatusService;

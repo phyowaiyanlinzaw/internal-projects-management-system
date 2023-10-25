@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="deliverable")
@@ -18,11 +19,10 @@ public class Deliverable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String description;
-    private String name;
-    private String type;
-    private String status;
-    private Date due_date;
+    private boolean status;
+
+    @ManyToMany(mappedBy = "deliverables")
+    private Set<DeliverableType> deliverableTypes;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
