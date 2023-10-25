@@ -55,4 +55,7 @@ public class ViewController {
 
     @GetMapping("/issue")
     public String issue() {return "issue";}
+
+    @GetMapping("/employees")
+    public String employees() {return "employees";}
 }

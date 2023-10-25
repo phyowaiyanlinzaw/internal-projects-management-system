@@ -27,10 +27,10 @@ public class Issue implements Serializable {
     private String direct_cause;
     private String corrective_action;
     private String preventive_action;
-    private int clint_or_user;
+    private int responsible_party;
     private boolean solved;
-    private Date created_date;
-    private Date updated_date;
+    private long created_date;
+    private long updated_date;
 
     @ManyToOne
     @JoinColumn(name="issueCategory_id")
