@@ -3,7 +3,7 @@ package team.placeholder.internalprojectsmanagementsystem.dto.uidto;
 
 import lombok.Getter;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
+import team.placeholder.internalprojectsmanagementsystem.model.project.TaskNotification;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
@@ -20,7 +20,7 @@ public class TasDto {
     private Time excepted_mm;
     private Time actual_mm;
     private Project project;
-    private Notification notification;
+    private TaskNotification taskNotification;
     private User user;
 
     private long projectId;

@@ -1,24 +1,24 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Status;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProjectStatusTest {
+public class ProjectTaskStatusTest {
     @Mock
-    private Status status;
+    private TaskStatus taskStatus;
 
     @Test
     public void testConstructorAndGettersSetters() {
         ProjectStatus projectStatus = new ProjectStatus();
         projectStatus.setId(1);
-        projectStatus.setName(Status.IN_PROGRESS);
+        projectStatus.setName(TaskStatus.IN_PROGRESS);
 
         assertEquals(1, projectStatus.getId());
-        assertEquals(Status.IN_PROGRESS, projectStatus.getName());
+        assertEquals(TaskStatus.IN_PROGRESS, projectStatus.getName());
     }
 
     @Test

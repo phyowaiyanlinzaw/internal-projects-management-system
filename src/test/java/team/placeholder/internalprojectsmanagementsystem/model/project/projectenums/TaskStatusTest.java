@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StatusTest {
+class TaskStatusTest {
 
     @Test
     public void testEnumValues() {
-        for (Status value : Status.values()) {
+        for (TaskStatus value : TaskStatus.values()) {
             assertNotNull(value);
         }
     }
@@ -16,16 +16,16 @@ class StatusTest {
     @Test
     public void testEnumOrder() {
         // Test the order of enum values
-        Status[] values = Status.values();
-        assertEquals(Status.STARTED, values[0]);
-        assertEquals(Status.IN_PROGRESS, values[1]);
-        assertEquals(Status.FINISHED, values[2]);
+        TaskStatus[] values = TaskStatus.values();
+        assertEquals(TaskStatus.STARTED, values[0]);
+        assertEquals(TaskStatus.IN_PROGRESS, values[1]);
+        assertEquals(TaskStatus.FINISHED, values[2]);
     }
 
     @Test
     public void testGetPhaseName() {
         // Arrange
-        Status enumInstance = Status.FINISHED; // Replace with your actual enum value
+        TaskStatus enumInstance = TaskStatus.FINISHED; // Replace with your actual enum value
 
         // Act
         String phaseName = enumInstance.getStatus_Name();

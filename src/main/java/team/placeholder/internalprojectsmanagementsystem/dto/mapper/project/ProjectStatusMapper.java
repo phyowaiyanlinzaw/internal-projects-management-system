@@ -1,7 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.project;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectStatusDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.ProjectStatus;
 
 public class ProjectStatusMapper {
     public static ProjectStatusDto toProjectStatusDto(ProjectStatus projectStatus){

@@ -23,7 +23,7 @@ public class TasksTest {
     @MockBean
     private User user;
     @Mock
-    private Set<Notification> notifications;
+    private Set<TaskNotification> taskNotifications;
 
 
 
@@ -32,7 +32,7 @@ public class TasksTest {
         task = new Tasks();
         project = Mockito.mock(Project.class);
         user = Mockito.mock(User.class);
-        notifications = new HashSet<>();
+        taskNotifications = new HashSet<>();
 
         // Mock data
         Long id = 1L;
@@ -55,7 +55,7 @@ public class TasksTest {
         task.setActual_mm(actualMM);
         task.setProject(project);
         task.setUser(user);
-        task.setNotifications(notifications);
+        task.setTaskNotifications(taskNotifications);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class TasksTest {
 
     @Test
     public void testNotificationAssociation() {
-        assertEquals(notifications, task.getNotifications());
+        assertEquals(taskNotifications, task.getTaskNotifications());
     }
 
     @Test

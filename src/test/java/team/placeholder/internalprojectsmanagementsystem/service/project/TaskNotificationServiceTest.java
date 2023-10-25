@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class NotificationServiceTest {
+public class TaskNotificationServiceTest {
 
     @Mock
     private NotificationService notificationService;

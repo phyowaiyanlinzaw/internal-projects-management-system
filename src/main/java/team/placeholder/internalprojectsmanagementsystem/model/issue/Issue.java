@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
+import team.placeholder.internalprojectsmanagementsystem.model.project.IssueNotification;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -31,10 +34,8 @@ public class Issue implements Serializable {
     private boolean solved;
     private long created_date;
     private long updated_date;
-
-    @ManyToOne
-    @JoinColumn(name="issueCategory_id")
-    private IssueCategory issueCategory;
+    private long solved_date;
+    private Category issue_category;
 
     @ManyToOne
     @JoinColumn(name="project_id")
@@ -47,6 +48,9 @@ public class Issue implements Serializable {
     @ManyToOne
     @JoinColumn(name="pic_id")
     private User user_pic;
+
+    @OneToMany(mappedBy = "issue")
+    private List<IssueNotification> issueNotifications;
 
     @Override
     public boolean equals(Object o) {

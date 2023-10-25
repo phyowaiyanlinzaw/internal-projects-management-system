@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectStatusMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectStatusDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.ProjectStatus;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectStatusRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectStatusService;
 

@@ -6,50 +6,50 @@ public class DevelopmentPhaseTest {
 
     @Test
     public void testPlanningPhase() {
-        Development_phase phase = Development_phase.PLANNING;
+        DevelopmentPhase phase = DevelopmentPhase.PLANNING;
         assertEquals("PLANNING", phase.toString());
     }
 
     @Test
     public void testDesignPhase() {
-        Development_phase phase = Development_phase.DESIGN;
+        DevelopmentPhase phase = DevelopmentPhase.DESIGN;
         assertEquals("DESIGN", phase.toString());
     }
 
     @Test
     public void testCodingPhase() {
-        Development_phase phase = Development_phase.CODING;
+        DevelopmentPhase phase = DevelopmentPhase.CODING;
         assertEquals("CODING", phase.toString());
     }
 
     @Test
     public void testTestingPhase() {
-        Development_phase phase = Development_phase.TESTING;
+        DevelopmentPhase phase = DevelopmentPhase.TESTING;
         assertEquals("TESTING", phase.toString());
     }
 
     @Test
     public void testReviewPhase() {
-        Development_phase phase = Development_phase.REVIEW;
+        DevelopmentPhase phase = DevelopmentPhase.REVIEW;
         assertEquals("REVIEW", phase.toString());
     }
 
     @Test
     public void testDeploymentPhase() {
-        Development_phase phase = Development_phase.DEPLOYMENT;
+        DevelopmentPhase phase = DevelopmentPhase.DEPLOYMENT;
         assertEquals("DEPLOYMENT", phase.toString());
     }
 
     @Test
     public void testMaintenancePhase() {
-        Development_phase phase = Development_phase.MAINTENANCE;
+        DevelopmentPhase phase = DevelopmentPhase.MAINTENANCE;
         assertEquals("MAINTENANCE", phase.toString());
     }
 
     @Test
     public void testGetPhaseName() {
         // Arrange
-        Development_phase enumInstance = Development_phase.TESTING; // Replace with your actual enum value
+        DevelopmentPhase enumInstance = DevelopmentPhase.TESTING; // Replace with your actual enum value
 
         // Act
         String phaseName = enumInstance.getPhaseName();

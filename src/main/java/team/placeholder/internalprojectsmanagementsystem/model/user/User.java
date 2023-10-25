@@ -26,7 +26,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private String name;
 
@@ -62,7 +62,7 @@ public class User implements Serializable {
     private List<Issue> uploader;
 
     @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Issue> pm;
+    private List<Issue> pic;
 
     @Override
     public boolean equals(Object o) {

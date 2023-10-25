@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Development_phase;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.DevelopmentPhase;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
@@ -20,7 +20,7 @@ public class PrjDto {
     private int duration;
     private Date start_date;
     private Date end_date;
-    private Development_phase current_phase;
+    private DevelopmentPhase current_phase;
     private String objective;
     private Client client;
     private User user;

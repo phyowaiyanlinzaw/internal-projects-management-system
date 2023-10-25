@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name="tasks")
@@ -21,19 +21,16 @@ public class Tasks implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String status;
+    private TaskStatus status;
     private String description;
     private String title;
-    private Date start_time;
-    private Date end_time;
-    private Time actual_mm;
-    private Time expected_mm;
+    private long plan_start_time;
+    private long plan_end_time;
+    private long actual_start_time;
+    private long actual_end_time;
 
-    @ManyToMany
-    @JoinTable(name="tasks_notification",
-            joinColumns = @JoinColumn(name="tasks_id"),
-            inverseJoinColumns = @JoinColumn(name="notification_id"))
-    private Set<Notification> notifications = new HashSet<>();
+    @OneToMany(mappedBy = "tasks")
+    private List<TaskNotification> taskNotifications;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

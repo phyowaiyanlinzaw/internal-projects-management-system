@@ -4,35 +4,32 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
-@Table(name="notification")
+@Table(name="task_notification")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Notification implements Serializable {
+public class TaskNotification implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String description;
+    private long noti_time;
 
-
-
-    @ManyToMany(mappedBy = "notifications",cascade = CascadeType.ALL)
-    private Set<Tasks> tasks = new HashSet<>();
+    //Many to one with tasks
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Tasks tasks;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Notification noti = (Notification) o;
+        TaskNotification noti = (TaskNotification) o;
         return id == noti.id;
     }
 
