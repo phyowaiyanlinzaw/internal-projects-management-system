@@ -14,4 +14,15 @@ public class ReviewMapper {
         reviewDto.setExternal_review_count(review.getExternal_review_count());
         return reviewDto;
     }
+
+    public static Review toReview(ReviewDto reviewDto) {
+        if(reviewDto == null) {
+            return null;
+        }
+        Review review = new Review();
+        review.setId(reviewDto.getId());
+        review.setInternal_review_count(reviewDto.getInternal_review_count());
+        review.setExternal_review_count(review.getExternal_review_count());
+        return review;
+    }
 }

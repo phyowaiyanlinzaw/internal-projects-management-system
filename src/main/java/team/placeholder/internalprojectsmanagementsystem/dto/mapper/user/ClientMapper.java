@@ -15,4 +15,16 @@ public class ClientMapper {
         clientDto.setPhone(client.getPhone());
         return clientDto;
     }
+
+    public static Client toClient(ClientDto clientDto) {
+        if(clientDto == null){
+            return null;
+        }
+        Client client = new Client();
+        client.setId(clientDto.getId());
+        client.setName(clientDto.getName());
+        client.setEmail(clientDto.getEmail());
+        client.setPhone(clientDto.getPhone());
+        return client;
+    }
 }

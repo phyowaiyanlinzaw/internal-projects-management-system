@@ -19,4 +19,20 @@ public class SystemOutLineMapper {
         systemOutLineDto.setDocument(false);
         return systemOutLineDto;
     }
+
+    public static SystemOutLine toSystemOutline(SystemOutLineDto systemOutlineDto) {
+        if(systemOutlineDto == null){
+            return null;
+        }
+        SystemOutLine systemOutline = new SystemOutLine();
+        systemOutline.setId(systemOutlineDto.getId());
+        systemOutline.setAnalysis(systemOutlineDto.isAnalysis());
+        systemOutline.setSys_design(systemOutlineDto.isSys_design());
+        systemOutline.setCoding(systemOutlineDto.isCoding());
+        systemOutline.setTesting(systemOutlineDto.isTesting());
+        systemOutline.setDeploy(systemOutlineDto.isDeploy());
+        systemOutline.setMaintenance(systemOutlineDto.isMaintenance());
+        systemOutline.setDocument(systemOutlineDto.isDocument());
+        return systemOutline;
+    }
 }

@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectStatusRepository;
 
 import static org.mockito.Mockito.*;
 import static team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus.IN_PROGRESS;

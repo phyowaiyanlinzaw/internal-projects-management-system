@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectStatusDto;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectTaskStatusServiceTest {
 

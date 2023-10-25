@@ -2,6 +2,9 @@ package team.placeholder.internalprojectsmanagementsystem.dto.model.project;
 
 import lombok.Getter;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -10,7 +13,14 @@ import java.sql.Time;
 @Setter
 public class TasksDto {
     private Long id;
-    private String title,description,status;
-    private Date start_time,end_time;
-    private Time excepted_mm,actual_mm;
+    private TaskStatus status;
+    private String title,description;
+    private long plan_start_time;
+    private long plan_end_time;
+    private long actual_start_time;
+    private long actual_end_time;
+    private User user;
+    private Project project;
+
+
 }

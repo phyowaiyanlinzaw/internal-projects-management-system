@@ -1,18 +1,15 @@
 package team.placeholder.internalprojectsmanagementsystem.service.project;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.NotificationDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 public class TaskNotificationServiceTest {
 
