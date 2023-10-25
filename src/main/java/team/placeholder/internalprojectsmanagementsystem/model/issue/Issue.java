@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.project.IssueNotification;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
@@ -64,6 +65,7 @@ public class Issue implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 
 
 }

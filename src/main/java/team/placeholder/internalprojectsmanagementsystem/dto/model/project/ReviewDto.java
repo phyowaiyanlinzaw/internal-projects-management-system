@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReviewDto {
-    private Long id;
+    private long id;
     private int internal_review_count,external_review_count;
 
 }
