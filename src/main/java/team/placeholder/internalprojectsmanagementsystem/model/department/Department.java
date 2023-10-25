@@ -31,6 +31,7 @@ public class Department {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects;
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

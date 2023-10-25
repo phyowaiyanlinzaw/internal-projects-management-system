@@ -2,21 +2,22 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.departmen
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class DepartmentServiceImplTest {
 
     @Mock
@@ -26,78 +27,197 @@ class DepartmentServiceImplTest {
     private DepartmentServiceImpl departmentService;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
-
 
     @Test
     public void testSaveDepartment() {
+        // Arrange
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setName("IT");
+
         Department department = new Department();
-        department.setName("IT");
-        departmentRepository.save(department);
-        verify(departmentRepository, times(1)).save(department);
+        department.setName(departmentDto.getName());
+        department.setId(1L); // Set a valid ID
+
+        when(departmentRepository.save(any(Department.class))).thenReturn(department);
+
+        // Act
+        DepartmentDto savedDto = departmentService.save(departmentDto);
+
+        System.out.println("Saved DTO: " + savedDto);
+
+        // Assert
+        assertNotNull(savedDto);
+        assertEquals(departmentDto.getName(), savedDto.getName());
+        assertEquals(department.getId(), savedDto.getId()); // Check that the ID is transferred to the DTO
+
+        verify(departmentRepository, times(1)).save(any(Department.class));
     }
+
+
 
     @Test
     public void testGetAllDepartments() {
-        List<Department> list = new ArrayList<>();
-        Department department1 = new Department();
-        department1.setName("IT");
+        // Arrange
+        List<Department> mockDepartments = new ArrayList<>();
 
-        Department department2 = new Department();
-        department2.setName("HR");
+        Department itDepartment = new Department();
+        itDepartment.setId(1L);
+        itDepartment.setName("IT");
 
-        list.add(department1);
-        list.add(department2);
+        Department hrDepartment = new Department();
+        hrDepartment.setId(2L);
+        hrDepartment.setName("HR");
 
-        when(departmentRepository.findAll()).thenReturn(list);
-        List<Department> departments = departmentRepository.findAll();
-        assertEquals(2, departments.size());
-        verify(departmentRepository, times(1)).findAll();
+        mockDepartments.add(itDepartment);
+        mockDepartments.add(hrDepartment);
+
+        when(departmentRepository.findAll()).thenReturn(mockDepartments);
+
+        // Act
+        List<DepartmentDto> result = departmentService.getAllDepartments();
+
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals("IT", result.get(0).getName());
+        assertEquals("HR", result.get(1).getName());
     }
 
     @Test
     public void testGetDepartmentById() {
-        Department department = new Department();
-        department.setName("IT");
-        department.setId(1L);
-        when(departmentRepository.findById(1L)).thenReturn(department);
-        Department department1 = departmentRepository.findById(1L);
-        assertEquals("IT", department1.getName());
-        verify(departmentRepository, times(1)).findById(1L);
+        // Arrange
+        long validDepartmentId = 1L;
+        long invalidDepartmentId = 2L;
+
+        Department itDepartment = new Department();
+        itDepartment.setId(validDepartmentId);
+        itDepartment.setName("IT");
+
+        when(departmentRepository.findById(validDepartmentId)).thenReturn(itDepartment);
+        when(departmentRepository.findById(invalidDepartmentId)).thenReturn(null);
+
+        // Act
+        DepartmentDto resultValid = departmentService.getDepartmentById(validDepartmentId);
+        DepartmentDto resultInvalid = departmentService.getDepartmentById(invalidDepartmentId);
+
+        // Assert
+        assertNotNull(resultValid);
+        assertEquals("IT", resultValid.getName());
+        assertEquals(validDepartmentId, resultValid.getId());
+
+        assertNull(resultInvalid);
     }
+
+
 
     @Test
     public void testGetDepartmentByName() {
+        // Arrange
+        String departmentName = "IT";
+        String invalidDepartmentName = "HR";
+
         Department department = new Department();
-        department.setName("IT");
         department.setId(1L);
-        when(departmentRepository.findByName("IT")).thenReturn(department);
-        Department department1 = departmentRepository.findByName("IT");
-        assertEquals("IT", department1.getName());
-        verify(departmentRepository, times(1)).findByName("IT");
+        department.setName(departmentName);
+
+        when(departmentRepository.findByName(departmentName)).thenReturn(department);
+        when(departmentRepository.findByName(invalidDepartmentName)).thenReturn(null);
+
+        // Act
+        DepartmentDto departmentDto = departmentService.getDepartmentByName(departmentName);
+        DepartmentDto invalidDepartmentDto = departmentService.getDepartmentByName(invalidDepartmentName);
+
+        // Assert
+        assertNotNull(departmentDto);
+
+        assertEquals(departmentName, departmentDto.getName());
+        assertNull(invalidDepartmentDto);
+
     }
 
     @Test
-    public void testUpdateDepartment() {
-        Department department = new Department();
-        department.setName("IT");
-        department.setId(1L);
-        when(departmentRepository.findById(1L)).thenReturn(department);
-        Department department1 = departmentRepository.findById(1L);
-        department1.setName("HR");
-        departmentRepository.save(department1);
-        assertEquals("HR", department1.getName());
-        verify(departmentRepository, times(1)).save(department1);
+    public void testUpdateExistingDepartment() {
+        // Arrange
+        long existingDepartmentId = 1L;
+
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setId(existingDepartmentId);
+        departmentDto.setName("Updated Department Name");
+
+        Department existingDepartment = new Department();
+        existingDepartment.setId(existingDepartmentId);
+        existingDepartment.setName("Original Department Name");
+
+        DepartmentRepository departmentRepository = Mockito.mock(DepartmentRepository.class);
+
+        DepartmentServiceImpl departmentService = new DepartmentServiceImpl(departmentRepository);
+
+        Mockito.when(departmentRepository.findById(existingDepartmentId)).thenReturn(existingDepartment);
+        Mockito.when(departmentRepository.save(existingDepartment)).thenReturn(existingDepartment);
+
+        // Act
+        DepartmentDto result = departmentService.updateDepartment(departmentDto);
+
+        // Assert
+        assertEquals(departmentDto.getName(), result.getName());
     }
 
     @Test
-    public void testDeleteDepartment() {
-        Department department = new Department();
-        department.setName("IT");
-        department.setId(1L);
-        departmentRepository.delete(department);
-        verify(departmentRepository, times(1)).delete(department);
+    public void testUpdateNonExistingDepartment() {
+        // Arrange
+        long nonExistingDepartmentId = 2L;
+
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setId(nonExistingDepartmentId);
+        departmentDto.setName("Updated Department Name");
+
+        DepartmentRepository departmentRepository = Mockito.mock(DepartmentRepository.class);
+
+        DepartmentServiceImpl departmentService = new DepartmentServiceImpl(departmentRepository);
+
+        Mockito.when(departmentRepository.findById(nonExistingDepartmentId)).thenReturn(null);
+
+        // Act
+        DepartmentDto result = departmentService.updateDepartment(departmentDto);
+
+        // Assert
+        assertNull(result);
     }
+
+    @Test
+    public void testDeleteExistingDepartment() {
+        // Arrange
+        long existingDepartmentId = 1L;
+
+        Department existingDepartment = new Department();
+        existingDepartment.setId(existingDepartmentId);
+        existingDepartment.setName("Existing Department");
+
+        Mockito.when(departmentRepository.findById(existingDepartmentId)).thenReturn(existingDepartment);
+
+        // Act
+        departmentService.deleteDepartment(existingDepartmentId);
+
+    }
+
+
+    @Test
+    public void testDeleteNonExistingDepartment() {
+        // Arrange
+        long nonExistingDepartmentId = 2L;
+
+        DepartmentRepository departmentRepository = Mockito.mock(DepartmentRepository.class);
+
+        DepartmentServiceImpl departmentService = new DepartmentServiceImpl(departmentRepository);
+
+        Mockito.when(departmentRepository.findById(nonExistingDepartmentId)).thenReturn(null);
+
+        // Act
+        departmentService.deleteDepartment(nonExistingDepartmentId);
+
+
+    }
+
 }

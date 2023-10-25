@@ -17,67 +17,38 @@
 <div class="container-fluid position-relative d-flex p-0">
 
     <!-- Content Start -->
-    <div
-            class="content"
-            style="
+    <div class="content" style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
                         #444cf7 0.6000000000000001px,
                         #e5e5f7 0.6000000000000001px
                     );
-                    background-size: 12px 12px;
-                "
-    >
+                    background-size: 12px 12px;">
 
         <div th:replace="fragments/navigation :: navigation-with-search"></div>
 
         <div class="container-fluid">
-            <div
-                    class="container-fluid d-md-block pt-2 ps-s pe-2"
-                    id="dropdrown-search-bar"
-            >
-                <div
-                        class="d-flex flex-row justify-content-between position-relative"
-                >
+            <div class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar">
+                <div class="d-flex flex-row justify-content-between position-relative">
                     <form class="d-md-flex">
-                        <input
-                                class="form-control border-0"
-                                type="search"
-                                placeholder="Search"
-                        />
+                        <input class="form-control border-0" type="search" placeholder="Search" />
                     </form>
                     <div class="position-absolute end-0 d-flex gap-3">
                         <!-- modal toggle button start -->
-                        <button
-                                type="button"
-                                class="btn btn-light align-self-start"
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop"
-                        >
+                        <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                         <!-- modal toggle button end -->
 
                         <!-- add department modal start -->
-                        <div
-                                class="modal fade bd-example-modal-lg"
-                                id="staticBackdrop"
-                                data-bs-backdrop="static"
-                                data-bs-keyboard="true"
-                        >
+                        <div class="modal fade bd-example-modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5">
-                                            Create New Issue
-                                        </h1>
-                                        <button
-                                                type="button"
-                                                class="btn-close"
-                                                data-bs-dismiss="modal"
-                                                aria-label="Close"
-                                        ></button>
+                                        <h1 class="modal-title fs-5">Create New Issue</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
@@ -85,15 +56,15 @@
                                             <!-- issue modal start -->
 
 
-
                                             <div class="row">
                                                 <div class="col">
                                                     <label for="title">Issue Title</label>
-                                                    <input type="text" class="form-control" id="title" placeholder="Title">
+                                                    <input type="text" class="form-control" id="title"
+                                                           placeholder="Title">
                                                 </div>
                                                 <div class="col">
-                                                    <label for="countries">Issue Category</label>
-                                                    <select name="countries" id="countries" multiple >
+                                                    <label for="categories">Issue Category</label>
+                                                    <select name="countries" id="categories" multiple>
                                                         <option value="1">Afghanistan</option>
                                                         <option value="2">Australia</option>
                                                         <option value="3">Germany</option>
@@ -107,13 +78,10 @@
                                             </div>
 
 
+                                            <label for="editor">Description</label>
+                                            <div class="quill-editor-bubble" id="editor">
 
-
-
-                                                <label for="editor">Description</label>
-                                                <div class="quill-editor-bubble" id="editor">
-
-                                                </div>
+                                            </div>
 
                                             <div class="row">
                                                 <div class="col">
@@ -137,30 +105,12 @@
                                             </div>
 
 
-
-
-
-
-
-
                                             <!-- issue modal end -->
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button
-                                                type="menu"
-                                                class="btn btn-secondary"
-                                                data-dismiss="modal"
-                                        >
-                                            Close
-                                        </button>
-                                        <button
-                                                type="submit"
-                                                class="btn btn-primary"
-                                                data-bs-target="#"
-                                        >
-                                            Add New Issue
-                                        </button>
+                                        <button type="menu" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" data-bs-target="#">Add New Issue</button>
                                     </div>
                                 </div>
                             </div>
@@ -168,9 +118,7 @@
                         <!-- add department modal end -->
 
                         <!-- sortting button -->
-                        <i
-                                class="bi bi-sort-alpha-down sort-btn text-dark"
-                        ></i>
+                        <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
                     </div>
 
                     <!-- Modal -->
@@ -258,33 +206,17 @@
 
                 <div class="p-md-3 p-sm-2 mt-3">
                     <div class="card">
-                        <div
-                                class="card-header border-bottom text-dark"
-                        >
-                            <div
-                                    class="col d-flex align-items-center gap-2"
-                            >
-                                <h4
-                                        class="card-title modal-detail-title"
-                                >
-                                    Title
-                                </h4>
+                        <div class="card-header border-bottom text-dark">
+                            <div class="col d-flex align-items-center gap-2">
+                                <h4 class="card-title modal-detail-title">Title</h4>
 
-                                <h6
-                                        class="card-title"
-                                >
-                                    Name
-                                </h6>
-                                <span
-                                        class="card-title badge rounded-pill bg-success"
-                                >Success</span
-                                >
+                                <h6 class="card-title">Name</h6>
+                                <span class="card-title badge rounded-pill bg-success">Success</span>
                                 <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
                                     see more
                                 </button>
                             </div>
-                            <div
-                                    class="col issue-time-line d-flex gap-2">
+                            <div class="col issue-time-line d-flex gap-2">
                                 <div class="d-flex align-items-center gap-2">
                                     <p>Posted</p>
                                     <span>3 days ago</span>
@@ -310,9 +242,8 @@
                                     please
                                 </p>
                                 <pre>
-&lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
-&lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre
-                                >
+                                &lt;div th:data-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;
+                                &lt;div data-th-el_id="${element.getId()}"&gt; &lt;!-- does not work --&gt;</pre>
                             </div>
                         </div>
                     </div>
@@ -534,7 +465,7 @@
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.com
 
-    new MultiSelectTag("countries"), new MultiSelectTag("state"); // id
+    new MultiSelectTag("categories"), new MultiSelectTag("state"); // id
 
     function MultiSelectTag(
         el,
@@ -809,6 +740,71 @@
                 };
             });
         }
+
+    }
+
+    const issue1 = {
+        id: 1,
+        title: "head",
+        uploader: { id: 1, name: "thant" },
+        status: true, // complete or not
+        createdDate: 1702000000000,
+        modified: 3,
+        category: ["error", "bug"],
+        description: `<div class="code-block">
+                                <p>"this code does not work"</p>
+                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
+                            </div>`,
+        corractive: "bla",
+        preventive: "bla",
+        direct: "bla",
+        root: "bla",
+        impact: "bla",
+        place: "bla"
+    };
+    const issue2 = {
+        id: 2,
+        title: "body",
+        uploader: { id: 2, name: "zaw" },
+        status: false, // complete or not
+        createdDate: 1712000000000,
+        modified: 2,
+        category: ["error", "bug"],
+        description: `<div class="code-block">
+                                <p>"this is alitte work"</p>
+                                <pre class="ql-syntax" spellcheck="false">fjfjfdf{}@#!@#!@</pre>
+                            </div>`,
+        corractive: "bla",
+        preventive: "bla",
+        direct: "bla",
+        root: "bla",
+        impact: "bla",
+        place: "bla"
+    };
+    const issue3 = {
+        id: 3,
+        title: "foot",
+        uploader: { id: 3, name: "phyoe" },
+        status: true, // complete or not
+        createdDate: 1322000000000,
+        modified: 0,
+        category: ["error", "bug"],
+        description: `<div class="code-block">
+                                <p>"this code work"</p>
+                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
+                            </div>`,
+        corractive: "bla",
+        preventive: "bla",
+        direct: "bla",
+        root: "bla",
+        impact: "bla",
+        place: "bla"
+    };
+
+    const issueArray = [issue1, issue2, issue3];
+
+    for (let i = 0; i < issueArray.length; i++) {
+
     }
 
 </script>
