@@ -35,15 +35,25 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserDto updateProfile(UserDto userDto) {
+        return null;
+    }
+
+//    @Override
+//    public UserDto save(UserDto userDto) {
+//      User user = new User();
+//      user.setName(userDto.getName());
+//      user.setEmail(userDto.getEmail());
+//      user.setPassword(userDto.getPassword());
+//      user.setRole(userDto.getRole());
+//      user.setDepartment(userDto.getDepartment());
+//      userRepository.save(user);
+//      return UserMapper.toUserDto(userRepository.save(user));
+//    }
+
+    @Override
     public UserDto save(UserDto userDto) {
-      User user = new User();
-      user.setName(userDto.getName());
-      user.setEmail(userDto.getEmail());
-      user.setPassword(userDto.getPassword());
-      user.setRole(userDto.getRole());
-      user.setDepartment(userDto.getDepartment());
-      userRepository.save(user);
-      return UserMapper.toUserDto(userRepository.save(user));
+        return null;
     }
 
     @Override
@@ -68,22 +78,22 @@ public class UserServiceImpl implements UserService{
 
     }
 
-    @Override
-    public UserDto updateProfile(UserDto userDto) {
-        User user = userRepository.findById(userDto.getId());
-        if(user != null) {
-            user.setName(userDto.getName());
-            user.setEmail(userDto.getEmail());
-            user.setPassword(userDto.getPassword());
-            user.setRole(userDto.getRole());
-            user.setDepartment(userDto.getDepartment());
-            userRepository.save(user);
-            return UserMapper.toUserDto(user);
-        }else{
-            return null;
-        }
-
-    }
+//    @Override
+//    public UserDto updateProfile(UserDto userDto) {
+//        User user = userRepository.findById(userDto.getId());
+//        if(user != null) {
+//            user.setName(userDto.getName());
+//            user.setEmail(userDto.getEmail());
+//            user.setPassword(userDto.getPassword());
+//            user.setRole(userDto.getRole());
+//            user.setDepartment(userDto.getDepartment());
+//            userRepository.save(user);
+//            return UserMapper.toUserDto(user);
+//        }else{
+//            return null;
+//        }
+//
+//    }
 
     @Override
     public UserDto changePassword(UserDto userDto, String newPassword) {

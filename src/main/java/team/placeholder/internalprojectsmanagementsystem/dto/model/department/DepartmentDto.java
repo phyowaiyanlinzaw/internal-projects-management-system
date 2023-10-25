@@ -8,4 +8,6 @@ import lombok.Setter;
 public class DepartmentDto {
     private long id;
     private String name;
+
+
 }
