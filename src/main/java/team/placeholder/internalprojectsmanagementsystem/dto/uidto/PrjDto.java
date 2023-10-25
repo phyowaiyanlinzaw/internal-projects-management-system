@@ -1,54 +1,37 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.uidto;
 
-
 import lombok.Getter;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.SystemOutLineDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Development_phase;
-import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
-import java.sql.Date;
+import java.util.List;
 
 @Getter
 @Setter
-public class PrjDto {
-    private long id;
-    private String name;
-    private String background;
-    private int duration;
-    private Date start_date;
-    private Date end_date;
-    private Development_phase current_phase;
-    private String objective;
-    private Client client;
-    private User user;
-    private Department department;
-    private Review review;
-    private Tasks tasks;
-    private Amount amount;
-    private SystemOutLine systemOutLine;
-    private Architecture architecture;
-    private Deliverable deliverable;
-    private ProjectStatus projectStatus;
+public class PrjDto extends ProjectDto {
 
-    private long pmId;
-    private long clientId;
-    private String clientName;
+    // ONLY USE THIS OJBECT WHEN SEND DATA FROM BACK TO FRONT
+    // FOR PROJECT LIST
 
-    private long departmentId;
+    // review count
+    private int internalReviews;
+    private int exReviexternalReviewsews;
+    // review count
 
+    // other objects that are related to project
+    private AmountDto amount;
+    private SystemOutLineDto systemOutLine;
+    private List<ArchitectureDto> architecture;
+    private Deliverable deliverable; // not sure
+    // other objects that are related to project
 
-
+    // to calcuate the percentage in front-end
     private int totalTasks;
     private int doneTasks;
-    private int internalReviews;
-    private int externalReviews;
-
-
-
-
-
+    // to calcuate the percentage in front-end
 
 }
