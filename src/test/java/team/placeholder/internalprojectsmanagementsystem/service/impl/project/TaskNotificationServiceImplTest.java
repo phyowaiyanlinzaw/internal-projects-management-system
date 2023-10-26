@@ -1,23 +1,23 @@
-package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import team.placeholder.internalprojectsmanagementsystem.model.project.TaskNotification;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.NotificationRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(MockitoExtension.class)
-class TaskNotificationServiceImplTest {
+//package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
+//
+//import org.junit.jupiter.api.BeforeEach;
+//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.mockito.InjectMocks;
+//import org.mockito.Mock;
+//import org.mockito.MockitoAnnotations;
+//import org.mockito.junit.jupiter.MockitoExtension;
+//import team.placeholder.internalprojectsmanagementsystem.model.project.TaskNotification;
+//import team.placeholder.internalprojectsmanagementsystem.repository.project.NotificationRepository;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import static org.junit.jupiter.api.Assertions.*;
+//import static org.mockito.Mockito.*;
+//
+//@ExtendWith(MockitoExtension.class)
+//class TaskNotificationServiceImplTest {
 //
 //    @Mock
 //    private NotificationRepository notificationRepository;
@@ -67,7 +67,7 @@ class TaskNotificationServiceImplTest {
 //        assertEquals(2, taskNotifications.size());
 //        verify(notificationRepository, times(1)).findAll();
 //    }
-
-
-
-}
+//
+//
+//
+//}
