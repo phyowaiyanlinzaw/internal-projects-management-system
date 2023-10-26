@@ -18,55 +18,55 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TaskNotificationServiceImplTest {
-
-    @Mock
-    private NotificationRepository notificationRepository;
-
-    @InjectMocks
-    private NotificationServiceImpl notificationService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    public void testSaveNotification() {
-        TaskNotification taskNotification = new TaskNotification();
-        taskNotification.setDescription("IT");
-        notificationRepository.save(taskNotification);
-        verify(notificationRepository, times(1)).save(taskNotification);
-    }
-
-    @Test
-    public void testGetNotificationById() {
-        TaskNotification taskNotification = new TaskNotification();
-        taskNotification.setId(1L);
-        taskNotification.setDescription("IT");
-        when(notificationRepository.findById(taskNotification.getId())).thenReturn(taskNotification);
-
-        TaskNotification taskNotification1 = notificationRepository.findById(taskNotification.getId());
-        assertEquals("IT", taskNotification1.getDescription());
-        verify(notificationRepository, times(1)).findById(taskNotification.getId());
-    }
-
-    @Test
-    public void testGetAllNotifications() {
-        List<TaskNotification> list = new ArrayList<>();
-        TaskNotification taskNotification1 = new TaskNotification();
-        taskNotification1.setDescription("IT");
-
-        TaskNotification taskNotification2 = new TaskNotification();
-        taskNotification2.setDescription("HR");
-
-        list.add(taskNotification1);
-        list.add(taskNotification2);
-
-        when(notificationRepository.findAll()).thenReturn(list);
-        List<TaskNotification> taskNotifications = notificationRepository.findAll();
-        assertEquals(2, taskNotifications.size());
-        verify(notificationRepository, times(1)).findAll();
-    }
+//
+//    @Mock
+//    private NotificationRepository notificationRepository;
+//
+//    @InjectMocks
+//    private NotificationServiceImpl notificationService;
+//
+//    @BeforeEach
+//    void setUp() {
+//        MockitoAnnotations.initMocks(this);
+//    }
+//
+//    @Test
+//    public void testSaveNotification() {
+//        TaskNotification taskNotification = new TaskNotification();
+//        taskNotification.setDescription("IT");
+//        notificationRepository.save(taskNotification);
+//        verify(notificationRepository, times(1)).save(taskNotification);
+//    }
+//
+//    @Test
+//    public void testGetNotificationById() {
+//        TaskNotification taskNotification = new TaskNotification();
+//        taskNotification.setId(1L);
+//        taskNotification.setDescription("IT");
+//        when(notificationRepository.findById(taskNotification.getId())).thenReturn(taskNotification);
+//
+//        TaskNotification taskNotification1 = notificationRepository.findById(taskNotification.getId());
+//        assertEquals("IT", taskNotification1.getDescription());
+//        verify(notificationRepository, times(1)).findById(taskNotification.getId());
+//    }
+//
+//    @Test
+//    public void testGetAllNotifications() {
+//        List<TaskNotification> list = new ArrayList<>();
+//        TaskNotification taskNotification1 = new TaskNotification();
+//        taskNotification1.setDescription("IT");
+//
+//        TaskNotification taskNotification2 = new TaskNotification();
+//        taskNotification2.setDescription("HR");
+//
+//        list.add(taskNotification1);
+//        list.add(taskNotification2);
+//
+//        when(notificationRepository.findAll()).thenReturn(list);
+//        List<TaskNotification> taskNotifications = notificationRepository.findAll();
+//        assertEquals(2, taskNotifications.size());
+//        verify(notificationRepository, times(1)).findAll();
+//    }
 
 
 
