@@ -198,100 +198,186 @@
 </div>
 
 <!--    modal for add project-->
-<div class="modal fade" id="add-department-modal" data-bs-backdrop="static" data-bs-keyboard="false"
-     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="add-department-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content task-content">
             <div class="modal-header">
-                <h2 class="card-title" style="text-align:center">Add Project</h2>
+                <h2 class="modal-title fs-5" style="text-align:center">Add Project</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <!-- Bordered Tabs -->
 
-                <form class="row g-3" id="validation-form" action="">
-                    <div class="col-lg-6">
-                        <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span
-                                style="color:red"> *</span></label>
-                        <input type="text" class="form-control border-task" id="name" name="name">
+            <ul class="nav nav-tabs nav-tabs-bordered">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#project-create" href="#project-create">Project</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#client-create" href="#client-create">Client</a>
+                </li>
+
+
+            </ul>
+
+
+            <div class="tab-content pt-2">
+                <div class="tab-pane fade show active" id="project-create">
+                    <div class="modal-body">
+                    <form class="row g-3" id="validation-form" action="">
+                        <div class="col-lg-6">
+                            <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span
+                                    style="color:#dec6c6"> *</span></label>
+                            <input type="text" class="form-control border-task" id="name" name="name">
+
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="client" class="col-sm-12 col-form-label" name="client">Client<span style="color:red"> *</span></label>
+                            <div class="input-group">
+                                <select class="selectpicker" aria-label="Select Client" data-live-search="true" id="client" name="client">
+                                    <option selected>Choose Client</option>
+                                    <option>Analysis</option>
+                                    <option>System Design</option>
+                                    <option>Coding</option>
+                                    <option>Testing</option>
+                                    <option>Deploy</option>
+                                    <option>Maintenance</option>
+                                    <option>Document</option>
+                                </select>
+                                <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-lg-6">
+                            <label for="background" class="col-sm-12 col-form-label" name="background">Background<span
+                                    style="color:red"> *</span></label>
+                            <input type="text" class="form-control border-task" id="background" name="background">
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">SystemOutline
+                                <span style="color:red"> *</span></label>
+                            <select class="form-control selectpicker" aria-label="Select System Outlines"
+                                    data-live-search="true" id="systemOutlines" name="systemOutlines" multiple>
+                                <option>Analysis</option>
+                                <option>System Design</option>
+                                <option>Coding</option>
+                                <option>Testing</option>
+                                <option>Deploy</option>
+                                <option>Maintenance</option>
+                                <option>Document</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date <span
+                                    style="color:red"> *</span></label>
+                            <input type="date" class="form-control border-task" id="start_date" name="start_date">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="end_date" class="col-sm-12 col-form-label" name="end_date">End Date <span
+                                    style="color:red"> *</span></label>
+                            <input type="date" class="form-control border-task" id="end_date" name="end_date">
+                        </div>
+
+
+
+
+                        <div class="col-lg-6">
+                            <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture
+                                <span style="color:red"> *</span></label>
+                            <select class="form-control selectpicker" aria-label="Select System Outlines"
+                                    data-live-search="true" id="architectures" name="architectures" multiple>
+                                <option>Analysis</option>
+                                <option>System Design</option>
+                                <option>Coding</option>
+                                <option>Testing</option>
+                                <option>Deploy</option>
+                                <option>Maintenance</option>
+                                <option>Document</option>
+                            </select>
+                        </div>
+
+
+
+                        <div class="col-lg-6">
+                            <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable <span
+                                    style="color:red"> *</span></label>
+                            <select class="form-control selectpicker" aria-label="Select System Outlines"
+                                    data-live-search="true" id="deliverable" name="deliverable" multiple>
+                                <option>Analysis</option>
+                                <option>System Design</option>
+                                <option>Coding</option>
+                                <option>Testing</option>
+                                <option>Deploy</option>
+                                <option>Maintenance</option>
+                                <option>Document</option>
+                            </select>
+                        </div>
+
+
+
+
+                        <div class="col-lg-6">
+                            <label for="objective" class="col-sm-12 col-form-label" name="objective">Objective <span
+                                    style="color:red"> *</span></label>
+                            <input type="text" class="form-control border-task" id="objective" name="objective">
+                        </div>
+
+                        <label for="editor">Description</label>
+                        <div class="quill-editor-bubble" id="editor">
+
+                        </div>
+
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">Add</button>
+                            <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+
+                <div class="tab-pane fade" id="client-create">
+                    <div class="modal-body">
+                        <form class="row g-5" id="client-form" action="#">
+                            <div class="col-lg-12">
+                                <label for="name" class="col-sm-12 col-form-label">Client Name<span style="color:red"> *</span></label>
+                                <input type="text" class="form-control border-task" id="name" name="name">
+                            </div>
+
+                            <div class="col-lg-12">
+                                <label for="email" class="col-sm-12 col-form-label">Email<span style="color:red"> *</span></label>
+                                <input type="email" class="form-control border-task" id="email" name="email">
+                            </div>
+
+                            <div class="col-lg-12">
+                                <label for="phone" class="col-sm-12 col-form-label">Phone<span style="color:red"> *</span></label>
+                                <input type="phone" class="form-control border-task" id="phone" name="phone">
+                            </div>
+
+                            <!-- Add other client-related form fields here -->
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">Create</button>
+                                <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
                     </div>
-
-                    <div class="col-lg-6">
-                        <label for="client" class="col-sm-12 col-form-label" name="client">Client <span
-                                style="color:red"> *</span></label>
-                        <select class="form-control selectpicker" aria-label="Select Clients" data-live-search="true"
-                                id="client" name="client">
-                            <option>Category</option>
-                            <option>Android</option>
-                            <option>IOS</option>
-                            <option>Ui/Ux Design</option>
-                            <option>Development</option>
-                        </select>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <label for="background" class="col-sm-12 col-form-label" name="background">Background<span
-                                style="color:red"> *</span></label>
-                        <input type="text" class="form-control border-task" id="background" name="background">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date <span
-                                style="color:red"> *</span></label>
-                        <input type="date" class="form-control border-task" id="start_date" name="start_date">
-                    </div>
-
-                    <div class="col-6">
-                        <label for="duration" class="col-sm-12 col-form-label" name="duration">Duration <span
-                                style="color:red"> *</span></label>
-                        <input type="text" class="form-control border-task" id="duration" name="duration">
-                    </div>
-
-
-                    <div class="col-lg-6">
-                        <label for="duration" class="col-sm-12 col-form-label" name="objective">Objective <span
-                                style="color:red"> *</span></label>
-                        <input type="text" class="form-control border-task" id="objective" name="objective">
-                    </div>
-
-
-                    <div class="col-lg-6">
-                        <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture
-                            <span style="color:red"> *</span></label>
-                        <input type="text" class="form-control border-task" id="architectures" name="architectures">
-                    </div>
-
-                    <div class="col-lg-6">
-                        <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">SystemOutline
-                            <span style="color:red"> *</span></label>
-                        <select class="form-control selectpicker" aria-label="Select System Outlines"
-                                data-live-search="true" id="systemOutlines" name="systemOutlines" multiple>
-                            <option>Analysis</option>
-                            <option>System Design</option>
-                            <option>Coding</option>
-                            <option>Testing</option>
-                            <option>Deploy</option>
-                            <option>Maintenance</option>
-                            <option>Document</option>
-                        </select>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable <span
-                                style="color:red"> *</span></label>
-                        <input type="text" class="form-control border-task" id="deliverable" name="deliverable">
-                    </div>
-
-
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">Add</button>
-                        <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
+                </div>
 
             </div>
+            <!-- End Bordered Tabs -->
         </div>
     </div>
 </div>
+
+
+
 <!--    modal for add project-->
 
 <!-- modal for project's details -->
@@ -787,6 +873,65 @@
     </div>
 </div>
 <!-- modal for project's details -->
+
+<script src="/lib/quill/quill.min.js"></script>
+<script>
+    let quillEditors = document.querySelectorAll(
+        ".quill-editor-bubble"
+    );
+
+    let toolbaroptions = [
+        // Test-style
+        ["bold", "italic", "underline"],
+
+        // Bullet points style...
+        [{list: "ordered"}, {list: "bullet"}],
+
+        // Sub and super script...
+        [{script: "sub"}, {script: "super"}],
+
+        // Indentation...
+        [{indent: "+1"}, {indent: "-1"}],
+
+        // Alignment
+        [{align: []}],
+
+        // Header for test, e.g., h1, h2...
+        [{header: [1, 2, 3, 4, 5, 6, false]}],
+
+        // Adding image, link, video, or formula
+        ["link"],
+
+        // Adding code snippet or blockquote
+        ["code-block", "blockquote"],
+    ];
+
+    // Initialize Quill for each selected element
+    quillEditors.forEach(function (editor) {
+        new Quill(editor, {
+            modules: {
+                toolbar: toolbaroptions,
+            },
+            theme: "snow",
+        });
+    });
+
+    let fullQuillEditor = document.querySelector(".quill-editor-full");
+
+    new Quill(fullQuillEditor, {
+        modules: {
+            toolbar: toolbaroptions,
+        },
+        theme: "snow",
+    });
+
+
+    function getData() {
+        const userInput = quill.root.innerHTML;
+        console.log(userInput);
+    }
+</script>
+
 
 <!--    for select drop-drown-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
