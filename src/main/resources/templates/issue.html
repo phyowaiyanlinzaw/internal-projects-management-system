@@ -37,85 +37,10 @@
                     </form>
                     <div class="position-absolute end-0 d-flex gap-3">
                         <!-- modal toggle button start -->
-                        <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                         <!-- modal toggle button end -->
-
-                        <!-- add department modal start -->
-                        <div class="modal fade bd-example-modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5">Create New Issue</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
-                                        <form>
-                                            <!-- issue modal start -->
-
-
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="title">Issue Title</label>
-                                                    <input type="text" class="form-control" id="title"
-                                                           placeholder="Title">
-                                                </div>
-                                                <div class="col">
-                                                    <label for="categories">Issue Category</label>
-                                                    <select name="countries" id="categories" multiple>
-                                                        <option value="1">Afghanistan</option>
-                                                        <option value="2">Australia</option>
-                                                        <option value="3">Germany</option>
-                                                        <option value="4">Canada</option>
-                                                        <option value="5">Russia</option>
-                                                        <option value="6">America</option>
-                                                        <option value="7">Spain</option>
-                                                        <option value="8">Turkey</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-                                            <label for="editor">Description</label>
-                                            <div class="quill-editor-bubble" id="editor">
-
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="directcause">Direct Cause</label>
-                                                    <textarea class="form-control" id="directcause"></textarea>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="rootcause">Root Cause</label>
-                                                    <textarea class="form-control" id="rootcause"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="impact">Impact</label>
-                                                    <textarea class="form-control" id="impact"></textarea>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="place">Place</label>
-                                                    <textarea class="form-control" id="place"></textarea>
-                                                </div>
-                                            </div>
-
-
-                                            <!-- issue modal end -->
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="menu" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary" data-bs-target="#">Add New Issue</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- add department modal end -->
 
                         <!-- sortting button -->
                         <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
@@ -124,6 +49,8 @@
                     <!-- Modal -->
                 </div>
             </div>
+
+
             <div class="row row-cols-1" id="sort-container">
                 <div class="p-md-3 p-sm-2 mt-3">
                     <div class="card">
@@ -288,6 +215,115 @@
             </div>
         </div>
     </div>
+
+    <!-- add issue modal start -->
+    <div class="modal fade bd-example-modal-lg" id="add-issue" data-bs-keyboard="true">
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Create New Issue</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
+
+                    <!-- issue modal start -->
+                    <form class="row g-3 ">
+                        <div class="col-lg-6">
+                            <label for="title" class="col-sm-12 col-form-label" name="name">Issue Title<span
+                                    style="color:#e86666"> *</span></label>
+                            <input type="text" class="form-control " id="title" name="title" placeholder="Title">
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="categories" class="col-sm-12 col-form-label" name="name">Issue Category<span
+                                    style="color:red"> *</span></label>
+                            <select class="four-control border-task" name="countries" id="categories" multiple>
+                                <option value="1">Afghanistan</option>
+                                <option value="2">Australia</option>
+                                <option value="3">Germany</option>
+                                <option value="4">Canada</option>
+                                <option value="5">Russia</option>
+                                <option value="6">America</option>
+                                <option value="7">Spain</option>
+                                <option value="8">Turkey</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="person_in_charge" class="col-sm-12 col-form-label" name="client">Person In Charge <span
+                                    style="color:red"> *</span></label>
+                            <select class="form-control" aria-label="Select Clients" data-live-search="true"
+                                    id="person_in_charge" name="client">
+                                <option>Category</option>
+                                <option>Android</option>
+                                <option>IOS</option>
+                                <option>Ui/Ux Design</option>
+                                <option>Development</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="responsible_party" class="col-sm-12 col-form-label" name="client">Responsible Party <span
+                                    style="color:red"> *</span></label>
+                            <select class="form-control" aria-label="Select Clients" data-live-search="true"
+                                    id="responsible_party" name="client">
+                                <option>Category</option>
+                                <option>Android</option>
+                                <option>IOS</option>
+                                <option>Ui/Ux Design</option>
+                                <option>Development</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-12" style="margin-bottom: 80px;">
+                            <label for="editor" class="col-sm-12 col-form-label" name="name">Description<span
+                                    style="color:#e86666"> *</span></label>
+                            <div class="quill-editor-bubble form-control" id="editor"></div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="directcause" class="col-sm-12 col-form-label" name="name">Direct Cause<span
+                                    style="color:#e86666"> *</span></label>
+
+                            <textarea class="form-control" id="directcause"></textarea>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="rootcause" class="col-sm-12 col-form-label" name="name">Root Cause<span
+                                    style="color:#e86666"> *</span></label>
+                            <textarea class="form-control" id="rootcause"></textarea>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="impact" class="col-sm-12 col-form-label" name="name">Direct Cause<span
+                                    style="color:#e86666"> *</span></label>
+                            <textarea class="form-control" id="impact"></textarea>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="place" class="col-sm-12 col-form-label" name="name">Impact<span
+                                    style="color:#e86666"> *</span></label>
+                            <textarea class="form-control" id="place"></textarea>
+                        </div>
+
+                        <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
+                            <button type="submit" class="btn btn-primary" data-bs-target="#">Add New Issue</button>
+                        </div>
+
+                    </form>
+                    <!-- issue modal end -->
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+    <!-- add issue modal end -->
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
