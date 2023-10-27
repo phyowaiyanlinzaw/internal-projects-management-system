@@ -28,11 +28,9 @@
                  class="ms-3"
             >
                 <a href="" class="btn btn-primary"
-                     data-toggle="modal"
-                     data-target="#addEmployeeModal"
-                     style="color: white"
-                     role="button"
-                     aria-pressed="true"
+                     data-bs-toggle="modal"
+                     data-bs-target="#addEmployeeModal"
+
                 >Add Employee</a><!--open modal to register employee account-->
             </div>
             <table
@@ -41,17 +39,48 @@
                     data-toolbar="#toolbar"
                     data-toolbar-align="right"
                     data-search="true"
+                    data-header-style="headerStyle"
             >
                 <thead
                class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5"
                 >
                 <tr>
-                    <th data-sortable="true">ID</th>
-                    <th data-sortable="true">Email</th>
-                    <th data-sortable="true">Name</th>
-                    <th data-sortable="true">Department</th>
-                    <th data-sortable="true">Role</th>
-                    <th data-sortable="true">Project Count</th>
+                    <th data-sortable="true"
+                        data-field="id"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >ID</th>
+                    <th data-sortable="true"
+                        data-field="email"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Email</th>
+                    <th data-sortable="true"
+                        data-field="username"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Name</th>
+                    <th data-sortable="true"
+                        data-field="department"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Department</th>
+                    <th data-sortable="true"
+                        data-field="role"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Role</th>
+                    <th data-sortable="true"
+                        data-field="projectCount"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Project Count</th>
                 </tr>
                 </thead>
 
@@ -101,7 +130,7 @@
         <div class="modal fade" id="addEmployeeModal" data-bs-backdrop="static" data-bs-keyboard="false"
              tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content ">
                     <div class="modal-header">
                         <h5 class="modal-title">Register Employee</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -167,6 +196,7 @@
     $(function () {
         $('#table').bootstrapTable({
         });
+
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
         });
 </script>
