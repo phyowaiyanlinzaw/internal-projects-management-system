@@ -18,12 +18,14 @@ vs
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="layout/layout"
 >
-<head></head>
+<head>
+</head>
 
 <body layout:fragment="content">
 
 <!-- Spinner Start -->
-<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -252,13 +254,23 @@ vs
                 </div>
                 <!-- gantt chart start -->
                 <div
-                        class="tab-pane fade"
+                        class="tab-pane fade mt-4"
                         id="gantt-chart"
                         role="tabpanel"
                         aria-labelledby="gantt-chart-tab"
                 >
-                    <!-- TODO :: PUT GANTT CHART HERE -->
-                    ...
+                    <div class="wrap">
+                        <div class="left">
+                            <div id="nav"></div>
+                        </div>
+                        <div class="right">
+                            <div class="toolbar">
+                                <button id="previous">Previous</button>
+                                <button id="next">Next</button>
+                            </div>
+                            <div id="dp"></div>
+                        </div>
+                    </div>
                 </div>
                 <!-- gantt chart end -->
             </div>
@@ -369,13 +381,16 @@ vs
 
                     <form class="row g-3" action="" id="todo-form">
                         <div class="col-lg-6">
-                            <label for="task" class="col-sm-12 col-form-label ">Task Name <span style="color:red"> *</span></label>
+                            <label for="task" class="col-sm-12 col-form-label ">Task Name <span
+                                    style="color:red"> *</span></label>
                             <input type="text" class="form-control border-task" name="task">
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="pm" class="col-sm-12 col-form-label " name="pm">Project Manager <span style="color:red"> *</span></label>
-                            <select class="form-control selectpicker"  aria-label="Select Project Manager" data-live-search="true" id="pm" name="pm" multiple>
+                            <label for="pm" class="col-sm-12 col-form-label " name="pm">Project Manager <span
+                                    style="color:red"> *</span></label>
+                            <select class="form-control selectpicker" aria-label="Select Project Manager"
+                                    data-live-search="true" id="pm" name="pm" multiple>
                                 <option>Category</option>
                                 <option>Android</option>
                                 <option>IOS</option>
@@ -386,21 +401,24 @@ vs
 
 
                         <div class="col-md-6">
-                            <label for="start_time" class="col-sm-12 col-form-label" name="start_time" >Start Date <span style="color:red"> *</span></label>
+                            <label for="start_time" class="col-sm-12 col-form-label" name="start_time">Start Date <span
+                                    style="color:red"> *</span></label>
                             <input type="date" class="form-control border-task" id="start_time" name="start_time">
                         </div>
 
                         <div class="col-md-6">
-                            <label for="end_time" class="col-sm-12 col-form-label" name="end_time">End Date <span style="color:red"> *</span></label>
+                            <label for="end_time" class="col-sm-12 col-form-label" name="end_time">End Date <span
+                                    style="color:red"> *</span></label>
                             <input type="date" class="form-control border-task" id="end_time" name="end_time">
                         </div>
 
 
                         <div class="col-12">
-                            <label for="description" class="col-sm-12 col-form-label" name="description">Description</label>
-                            <textarea class="form-control border-task-description" id="description" name="description" rows="2"></textarea>
+                            <label for="description" class="col-sm-12 col-form-label"
+                                   name="description">Description</label>
+                            <textarea class="form-control border-task-description" id="description" name="description"
+                                      rows="2"></textarea>
                         </div>
-
 
 
                         <div class="text-center">
@@ -455,6 +473,9 @@ vs
     <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="/lib/quill/quill.min.js"></script>
+
+    <!-- template main javascript -->
+    <script src="/js/daypilot-all.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
@@ -624,7 +645,7 @@ vs
                 currentTask.remove()
                 document.querySelector('.trash').classList.remove('drag-over')
                 bModal.hide()
-                let postData = JSON.stringify({ key1: "value1", key2: "value2" });
+                let postData = JSON.stringify({key1: "value1", key2: "value2"});
                 console.log('this task will be deleted', currentTask)
                 ajaxRequest("/data", "POST", postData, function (response) {
                     // Handle the response data here
@@ -708,14 +729,15 @@ vs
                     zone.insertBefore(curTask, bottomTask);
                 }
             });
-        }); const insertAboveTask = (zone, mouseY) => {
+        });
+        const insertAboveTask = (zone, mouseY) => {
             const els = zone.querySelectorAll(".task:not(.is-dragging)");
 
             let closestTask = null;
             let closestOffset = Number.NEGATIVE_INFINITY;
 
             els.forEach((task) => {
-                const { top } = task.getBoundingClientRect();
+                const {top} = task.getBoundingClientRect();
 
                 const offset = mouseY - top;
 
@@ -728,7 +750,221 @@ vs
             return closestTask;
         };
 
+        // ========================== Calendar View ===========================
 
+        const datePicker = new DayPilot.Navigator("nav", {
+            showMonths: 1,
+            selectMode: "Day",
+            onTimeRangeSelected: args => {
+                // Calculate the start of the selected week
+                const selectedWeekStart = args.day.firstDayOfWeek();
+
+                // Update the calendar view to display the selected week
+                calendar.update({
+                    startDate: selectedWeekStart
+                });
+
+                // Load events for the selected week
+                calendar.events.load("/api/tasks");
+            },
+            nav:{
+                top: {
+                    children: [
+                        {
+                            command: "previous",
+                            icon: "icon icon-chevron-left"
+                        },
+                        {
+                            command: "today",
+                            icon: "icon icon-chevron-down"
+                        },
+                        {
+                            command: "next",
+                            icon: "icon icon-chevron-right"
+                        }
+                    ]
+                }
+            }
+        });
+
+
+
+
+        datePicker.init();
+
+        //console.log datePicker
+            console.log('date time picker', datePicker)
+
+        // Handle the "Next" and "Previous" buttons to navigate week by week
+        document.getElementById("previous").addEventListener("click", () => {
+            const currentStartDate = calendar.visibleStart();
+            calendar.update({
+                startDate: currentStartDate.addDays(-7)
+            });
+            calendar.events.load("/api/tasks");
+        });
+
+        document.getElementById("next").addEventListener("click", () => {
+            const currentStartDate = calendar.visibleStart();
+            calendar.update({
+                startDate: currentStartDate.addDays(7)
+            });
+            calendar.events.load("/api/tasks");
+        });
+
+
+
+        const calendar = new DayPilot.Calendar("dp", {
+            eventEndSpec: "Week",
+            startDate: new DayPilot.Date().firstDayOfWeek(),
+            days: 7,
+            eventHeight: 30,
+            eventBarVisible: false,
+            onTimeRangeSelected: async (args) => {
+                const modal = await DayPilot.Modal.prompt("Create a new event:", "Event");
+                calendar.clearSelection();
+                if (modal.canceled) {
+                    return;
+                }
+                const params = {
+                    start: args.start,
+                    end: args.end,
+                    text: modal.result
+                };
+                const {data} = await DayPilot.Http.post('/api/tasks/create', params);
+                calendar.events.add(data);
+            },
+            onEventMove: async (args) => {
+                const params = {
+                    id: args.e.id(),
+                    start: args.newStart,
+                    end: args.newEnd
+                };
+                const {data} = await DayPilot.Http.post('/api/tasks/move', params);
+            },
+            onEventResize: async (args) => {
+                const params = {
+                    id: args.e.id(),
+                    start: args.newStart,
+                    end: args.newEnd
+                };
+                const {data} = await DayPilot.Http.post('/api/tasks/move', params);
+            },
+            onBeforeEventRender: args => {
+                args.data.backColor = args.data.color || app.colors.gray;
+                args.data.borderColor = "darker";
+                args.data.fontColor = "#ffffff";
+                args.data.text = args.data.text || "New task";
+                args.data.areas = [
+                    {
+                        top: 6,
+                        right: 6,
+                        width: 18,
+                        height: 18,
+                        symbol: "../icons/daypilot.svg#minichevron-down-2",
+                        action: "ContextMenu",
+                        backColor: "#ffffff",
+                        fontColor: "#666666",
+                        style: "border: 1px solid #ccc; cursor:pointer; border-radius: 15px;"
+                    }
+                ];
+            },
+            contextMenu: new DayPilot.Menu({
+                items: [
+                    {
+                        text: "Delete",
+                        onClick: async (args) => {
+                            const e = args.source;
+                            const params = {
+                                id: e.id()
+                            };
+
+                            const {data} = await DayPilot.Http.post('/api/tasks/delete', params);
+                            calendar.events.remove(e);
+                        }
+                    },
+                    {
+                        text: "-"
+                    },
+                    {
+                        text: "Blue",
+                        icon: "icon icon-blue",
+                        onClick: (args) => {
+                            app.updateColor(args.source, app.colors.blue);
+                        }
+                    },
+                    {
+                        text: "Green",
+                        icon: "icon icon-green",
+                        onClick: (args) => {
+                            app.updateColor(args.source, app.colors.green);
+                        }
+                    },
+                    {
+                        text: "Yellow",
+                        icon: "icon icon-yellow",
+                        onClick: (args) => {
+                            app.updateColor(args.source, app.colors.yellow);
+                        }
+                    },
+                    {
+                        text: "Red",
+                        icon: "icon icon-red",
+                        onClick: (args) => {
+                            app.updateColor(args.source, app.colors.red);
+                        }
+                    }, {
+                        text: "Auto",
+                        onClick: (args) => {
+                            app.updateColor(args.source, "auto");
+                        }
+                    },
+
+                ]
+            })
+        });
+        calendar.init();
+
+
+        const app = {
+            colors: {
+                blue: "#2e78d6",
+                green: "#6aa84f",
+                yellow: "#efb914",
+                red: "#cc4125",
+                gray: "#808080",
+            },
+            elements: {
+                previous: document.querySelector("#previous"),
+                next: document.querySelector("#next"),
+            },
+            async updateColor(e, color) {
+                const params = {
+                    id: e.id(),
+                    color: color
+                };
+                const {data} = await DayPilot.Http.post('/api/tasks/setColor', params);
+                e.data.color = color;
+                calendar.events.update(e);
+            },
+            init() {
+                app.elements.previous.addEventListener("click", () => {
+                    // Move to the previous week
+                    datePicker.select(datePicker.selectionDay.addDays(-7));
+
+                });
+                app.elements.next.addEventListener("click", () => {
+                    // Move to the next week
+                    datePicker.select(datePicker.selectionDay.addDays(7));
+                });
+
+                calendar.events.load("/api/tasks");
+            }
+        };
+
+        app.init();
+
+        console.log(calendar)
 
     </script>
 </div>
