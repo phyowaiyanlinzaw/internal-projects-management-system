@@ -21,26 +21,154 @@
                 ">
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
+
+
         <div class="container-fluid">
-            <table id="table"
-                   class="table bg-white table-bordered table-hover table-responsive table-light"
-                     data-toggle="table"
-                     data-pagination="true"
-                     data-search="true"
+            <div id="toolbar"
+                 class="ms-3"
             >
-                <thead>
+                <a href="" class="btn btn-primary"
+                     data-bs-toggle="modal"
+                     data-bs-target="#addEmployeeModal"
+
+                >Add Employee</a><!--open modal to register employee account-->
+            </div>
+            <table
+                    id="table"
+                    data-toggle="table"
+                    data-toolbar="#toolbar"
+                    data-toolbar-align="right"
+                    data-search="true"
+                    data-header-style="headerStyle"
+            >
+                <thead
+               class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5"
+                >
                 <tr>
-                    <th data-sortable="true">ID</th>
-                    <th data-sortable="true">Email</th>
-                    <th data-sortable="true">Name</th>
-                    <th data-sortable="true">Department</th>
-                    <th data-sortable="true">Role</th>
-                    <th data-sortable="true">Project Count</th>
+                    <th data-sortable="true"
+                        data-field="id"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >ID</th>
+                    <th data-sortable="true"
+                        data-field="email"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Email</th>
+                    <th data-sortable="true"
+                        data-field="username"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Name</th>
+                    <th data-sortable="true"
+                        data-field="department"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Department</th>
+                    <th data-sortable="true"
+                        data-field="role"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Role</th>
+                    <th data-sortable="true"
+                        data-field="projectCount"
+                        data-align="left"
+                        data-valign="middle"
+                        data-width="100"
+                    >Project Count</th>
                 </tr>
                 </thead>
+
+                <tbody>
+                  <!-- Sample User List -->
+                    <tr>
+                        <td>1</td>
+                        <td>user@user.com</td>
+                        <td>user</td>
+                        <td>IT</td>
+                        <td>Developer</td>
+                        <td>0</td>
+                    </tr>
+                  <tr>
+                      <td>1</td>
+                      <td>user@user.com</td>
+                      <td>yuzer</td>
+                      <td>IT</td>
+                      <td>Developer</td>
+                      <td>0</td>
+                  </tr>
+                  <tr>
+                      <td>1</td>
+                      <td>user@user.com</td>
+                      <td>user</td>
+                      <td>IT</td>
+                      <td>Developer</td>
+                      <td>0</td>
+                  </tr>
+                  <tr>
+                      <td>1</td>
+                      <td>user@user.com</td>
+                      <td>user</td>
+                      <td>IT</td>
+                      <td>Developer</td>
+                      <td>0</td>
+                  </tr>
+                </tbody>
+
+
+
             </table>
         </div>
 <!--        <div th:replace="fragments/footer :: aside"></div>-->
+
+        <!-- Register Employee Modal -->
+        <div class="modal fade" id="addEmployeeModal" data-bs-backdrop="static" data-bs-keyboard="false"
+             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Register Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!-- Modal Header End -->
+                    <div class="modal-body">
+                        <div class="form-floating mb-3 mt-4">
+                            <input type="text" class="form-control" id="floatingText" placeholder="jhondoe">
+                            <label for="floatingText">Username</label>
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <label for="floatingInput">Email address</label>
+                        </div>
+
+                        <div>
+                            <select id="memberSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;">
+                                <option value="Project Manager">ProjectManager</option>
+                                <option value="Member">Member</option>
+                                <option value="FOC">FOC</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <select id="departmentSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;">
+                                <option value="Department 1">Department 1</option>
+                                <option value="Department 2">Department 2</option>
+                                <option value="Department 3">Department 3</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4" style="background-color: #369;">Register</button>
+                    </div>  <!-- Modal Body End -->
+                </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <!-- Content End -->
@@ -68,7 +196,9 @@
     $(function () {
         $('#table').bootstrapTable({
         });
-    });
+
+        $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
+        });
 </script>
 </body>
 </html>
