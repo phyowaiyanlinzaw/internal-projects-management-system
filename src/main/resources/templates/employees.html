@@ -27,7 +27,13 @@
             <div id="toolbar"
                  class="ms-3"
             >
-                <a href="/employees/add" class="btn btn-primary">Add Employee</a>
+                <a href="" class="btn btn-primary"
+                     data-toggle="modal"
+                     data-target="#addEmployeeModal"
+                     style="color: white"
+                     role="button"
+                     aria-pressed="true"
+                >Add Employee</a><!--open modal to register employee account-->
             </div>
             <table
                     id="table"
@@ -90,6 +96,50 @@
             </table>
         </div>
 <!--        <div th:replace="fragments/footer :: aside"></div>-->
+
+        <!-- Register Employee Modal -->
+        <div class="modal fade" id="addEmployeeModal" data-bs-backdrop="static" data-bs-keyboard="false"
+             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Register Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!-- Modal Header End -->
+                    <div class="modal-body">
+                        <div class="form-floating mb-3 mt-4">
+                            <input type="text" class="form-control" id="floatingText" placeholder="jhondoe">
+                            <label for="floatingText">Username</label>
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <label for="floatingInput">Email address</label>
+                        </div>
+
+                        <div>
+                            <select id="memberSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;">
+                                <option value="Project Manager">ProjectManager</option>
+                                <option value="Member">Member</option>
+                                <option value="FOC">FOC</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <select id="departmentSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;">
+                                <option value="Department 1">Department 1</option>
+                                <option value="Department 2">Department 2</option>
+                                <option value="Department 3">Department 3</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4" style="background-color: #369;">Register</button>
+                    </div>  <!-- Modal Body End -->
+                </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <!-- Content End -->
