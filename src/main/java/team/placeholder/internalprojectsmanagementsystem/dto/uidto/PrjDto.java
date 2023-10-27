@@ -16,6 +16,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class PrjDto {
     private long end_date;
     private UserDto user;
     private String background;
-    private String currentPhase;
+    private int currentPhase;
     private String objective;
     private int inReview;
     private int exReview;
@@ -36,15 +37,8 @@ public class PrjDto {
     private int doneTask;
     private AmountDto amount;
     private SystemOutLineDto systemOutLine;
-    private String[] architecutre;
+    private List<ArchitectureDto> architecutre;
 
-    @Override
-    public String toString() {
-        return "PrjDto [id=" + id + ", name=" + name + ", start_date=" + start_date + ", end_date=" + end_date
-                + ", user=" + user + ", background=" + background + ", currentPhase=" + currentPhase + ", objective="
-                + objective + ", inReview=" + inReview + ", exReview=" + exReview + ", client=" + client
-                + ", totalTask=" + totalTask + ", doneTask=" + doneTask + ", amount=" + amount + ", systemOutLine="
-                + systemOutLine + ", architecutre=" + Arrays.toString(architecutre) + "]";
-    }
+   
 
 }
