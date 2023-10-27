@@ -11,5 +11,5 @@ import java.sql.Date;
 public class DeliverableDto {
     private long id;
     private boolean status;
-    private ProjectDto projectDto;
+    private String type;
 }

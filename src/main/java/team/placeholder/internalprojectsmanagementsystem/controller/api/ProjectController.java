@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
@@ -20,12 +21,13 @@ public class ProjectController {
     private static final Logger logger = LoggerFactory.getLogger(ProjectController.class);
 
     @PostMapping("/save")
-    public String saveProject (@RequestBody PrjDto data) {
+    public String saveProject (@RequestBody NewProDto newProject) {
 
         // logger.info("Received data: " + data);
-        System.out.println("xxxxxxxxxxxxxxxxxxxxxx" + data);
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxx" + newProject);
 
-        return "data : " + data;
+        return "{\"message\": \""+newProject+"\"}";
+
     }
 
 }

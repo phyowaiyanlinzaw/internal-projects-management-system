@@ -986,8 +986,19 @@
 
         <!-- sort (department, project), form validation and search bar behavior are all here -->
         <script src="/js/custome.js"></script>
-        <script>
+        <!-- <script type="module" src="/js/class.js"></script> -->
+        <script type="module">
+
             const log = console.log;
+
+            import { Amount, SystemOutline, Project } from "/js/class.js";
+
+            const amount = new Amount();
+            const systemOutline = new SystemOutline();
+
+            const project = new Project({systemOutLine: systemOutline});
+
+            console.log(project);
 
             document
                 .querySelector("#validation-form")
@@ -1002,39 +1013,7 @@
                         // Define the data you want to send to the server
                         body: JSON.stringify(
                             // Define your data here
-                            {
-                                id: 1,
-                                name: "project name",
-                                start_date: 1698257483634,
-                                end_date: 1698257483634,
-                                user: 2,
-                                clientId: 3,
-                                background: "project background",
-                                objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
-                                amount: {
-                                    basicDesign: 0,
-                                    detailDesign: 0,
-                                    coding: 0,
-                                    unitTesting: 0,
-                                    integratedTesting: 0,
-                                },
-                                systemOutline: {
-                                    analysis: true,
-                                    sysDesign: true,
-                                    coding: false,
-                                    testing: false,
-                                    deploy: true,
-                                    maintenence: true,
-                                    document: true,
-                                },
-                                architecutre: [
-                                    "html",
-                                    "mysql",
-                                    "js",
-                                    "java",
-                                    "spring boot",
-                                ],
-                            },
+                            project
                         ),
                     })
                         .then((response) => {
@@ -1045,57 +1024,19 @@
                         })
                         .then((data) => {
                             // Handle the response data here
-                            log("Request was successful. Response:", data);
+                            try {
+                                log(data);
+                                log(data.message)
+                                alert(data.message);
+                            } catch (error) {
+                                log("Error parsing JSON:", error);
+                            }
                         })
                         .catch((error) => {
                             // Handle any errors that occurred during the fetch
                             log("Fetch error:", error);
                         });
                 });
-
-            class project {
-                constructor({
-                    id,
-                    name: name,
-                    startDate: star,
-                    endDate,
-                    departmentId,
-                    PMId,
-                    background,
-                    currentPhase,
-                    objective,
-                    client,
-                    exReview,
-                    inReview,
-                }) {
-                    this.id = id;
-                    this.name = name;
-                    this.endDate = endDate;
-                    this.PMId = PMId;
-                    this.background = background;
-                    this.currentPhase = currentPhase;
-                    this.objective = objective;
-                    this.exReview = exReview;
-                    this.inReview = inReview;
-                    this.client = client; // only name i guess
-                }
-            }
-
-            class amount {
-                constructor(
-                    basicDesign = 0,
-                    detailDesign = 0,
-                    coding = 0,
-                    unitTesting = 0,
-                    integratedTestin = 0
-                ) {
-                    this.basicDesign = basicDesign;
-                    this.detailDesign = detailDesign;
-                    this.coding = coding;
-                    this.unitTesting = unitTesting;
-                    this.integratedTestin = integratedTesting;
-                }
-            }
 
             const proListFromBack = [
                 {
@@ -1205,7 +1146,7 @@
             const motherContainer = document.querySelector("#sort-container");
 
             for (let i = 0; i < proListFromBack.length; i++) {
-                currentProject = proListFromBack[i];
+                let currentProject = proListFromBack[i];
 
                 const curDiv = `<div
                             class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0"

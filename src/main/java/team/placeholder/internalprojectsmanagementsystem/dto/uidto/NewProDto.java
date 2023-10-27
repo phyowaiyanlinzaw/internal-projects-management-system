@@ -1,11 +1,13 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.uidto;
 
 import java.util.Arrays;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.SystemOutLineDto;
 
 @Getter
@@ -13,23 +15,24 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Syste
 public class NewProDto {
 
     private long id;
-    private long name;
+    private String name;
     private long start_date;
     private long end_date;
     private long userId;
-    private long clientIdt;
+    private long clientId;
     private String background;
     private String objective;
     private AmountDto amount;
     private SystemOutLineDto systemOutLine;
-    private String[] architecture;
+    private int[] architecutre;
+    private int[] deliverable;
 
     @Override
     public String toString() {
         return "NewProDto [id=" + id + ", name=" + name + ", start_date=" + start_date + ", end_date=" + end_date
-                + ", userId=" + userId + ", clientIdt=" + clientIdt + ", background=" + background + ", objective="
-                + objective + ", amount=" + amount + ", systemOutLine=" + systemOutLine + ", architecture="
-                + Arrays.toString(architecture) + "]";
+                + ", userId=" + userId + ", clientId=" + clientId + ", background=" + background + ", objective="
+                + objective + ", amount=" + amount + ", systemOutLine=" + systemOutLine + ", architecutre="
+                + Arrays.toString(architecutre) + ", deliverable=" + Arrays.toString(deliverable) + "]";
     }
 
 }
