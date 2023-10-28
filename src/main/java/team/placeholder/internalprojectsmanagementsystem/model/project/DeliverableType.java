@@ -8,9 +8,9 @@ import lombok.Setter;
 import java.util.Set;
 
 @Entity
-@Getter
 @Setter
 @NoArgsConstructor
+@Getter
 @Table(name = "deliverable_type")
 public class DeliverableType {
 
