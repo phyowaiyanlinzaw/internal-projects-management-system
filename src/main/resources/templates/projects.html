@@ -12,13 +12,7 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="layout/layout"
 >
-<head>
-
-
-
-
-</head>
-
+    <head> </head>
 
     <body layout:fragment="content">
         <div class="container-fluid position-relative bg-white d-flex p-0">
@@ -123,7 +117,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content task-content">
                     <div class="modal-header">
-                        <h2 class="card-title" style="text-align: center">
+                        <h2 class="modal-title fs-5" style="text-align: center">
                             Add Project
                         </h2>
                         <button
@@ -133,477 +127,320 @@
                             aria-label="Close"
                         ></button>
                     </div>
-                    <div class="modal-body">
-                        <form class="row g-3" id="validation-form" action="">
-                            <div class="col-lg-6">
-                                <label
-                                    for="name"
-                                    class="col-sm-12 col-form-label"
-                                    name="name"
-                                    >Project Name<span style="color: red">
-                                        *</span
-                                    ></label
+                    <!-- Bordered Tabs -->
+                    <nav>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link active"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#project-create"
+                                    >Project</a
                                 >
-                                    a
-                                </h2>
-                                <div
-                                        class="d-flex justify-content-between"
+                            </li>
+
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#client-create"
+                                    >Client</a
                                 >
-                                    <div class="d-flex">
-                                        <img
-                                                src="https://source.unsplash.com/random/200x200?sig=1"
-                                                class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                                style="width: 40px"
-                                                alt="..."
-                                        />
-                                        <h5
-                                                class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
-                                        >
-                                            Project manager
-                                        </h5>
-                                    </div>
-                                    <a
-                                            href=""
-                                            class="btn btn-white text-secondary link-shadow"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#project-details"
-                                    >See More</a
-                                    >
-                                </div>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="tab-content pt-2">
                         <div
-                                class="card-body position-relative mx-auto"
+                            class="tab-pane fade show active"
+                            id="project-create"
                         >
-                            <p class="card-title text-center fs-6 mb-1">
-                                progress
-                            </p>
-                            <div
-                                    id="circle-progress-1"
-                                    class="circle-progress rounded-circle"
-                                    data-min-value="0"
-                                    data-max-value="100"
-                                    data-value="80"
-                                    data-type="percent"
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0">
-                    <div class="card border-success">
-                        <div class="card-header">
-                            <div class="d-flex flex-column">
-                                <h2
-                                        class="card-title text-center text-primary modal-detail-title"
+                            <div class="modal-body">
+                                <form
+                                    class="row g-3"
+                                    id="validation-form"
+                                    action=""
                                 >
-                                    h
-                                </h2>
-                                <div
-                                        class="d-flex justify-content-between"
-                                >
-                                    <div class="d-flex">
-                                        <img
-                                                src="https://source.unsplash.com/random/200x200?sig=1"
-                                                class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                                style="width: 40px"
-                                                alt="..."
-                                        />
-                                        <h5
-                                                class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="name"
+                                            class="col-sm-12 col-form-label"
+                                            name="name"
+                                            >Project Name<span
+                                                style="color: #dec6c6"
+                                            >
+                                                *</span
+                                            ></label
                                         >
-                                            Project manager
-                                        </h5>
+                                        <input
+                                            type="text"
+                                            class="form-control border-task-description"
+                                            id="name"
+                                            name="name"
+                                        />
                                     </div>
-                                    <a
-                                            href=""
-                                            class="btn btn-white text-secondary link-shadow"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#project-details"
-                                    >See More</a
-                                    >
-                                </div>
+
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="client"
+                                            class="col-sm-12 col-form-label"
+                                            name="client"
+                                            >Client<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <select
+                                            class="form-select border-task-description"
+                                            aria-label="Select Client"
+                                            data-live-search="true"
+                                            id="client"
+                                            name="client"
+                                        >
+                                            <option selected>
+                                                Choose Client
+                                            </option>
+                                            <option>Analysis</option>
+                                            <option>System Design</option>
+                                            <option>Coding</option>
+                                            <option>Testing</option>
+                                            <option>Deploy</option>
+                                            <option>Maintenance</option>
+                                            <option>Document</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label
+                                            for="start_date"
+                                            class="col-sm-12 col-form-label"
+                                            name="start_date"
+                                            >Start Date
+                                            <span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="date"
+                                            class="form-control border-task-description"
+                                            id="start_date"
+                                            name="start_date"
+                                        />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label
+                                            for="end_date"
+                                            class="col-sm-12 col-form-label"
+                                            name="end_date"
+                                            >End Date
+                                            <span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="date"
+                                            class="form-control border-task-description"
+                                            id="end_date"
+                                            name="end_date"
+                                        />
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="background"
+                                            class="col-sm-12 col-form-label"
+                                            name="background"
+                                            >Background<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control border-task-description"
+                                            id="background"
+                                            name="background"
+                                        />
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="architectures"
+                                            class="col-sm-12 col-form-label"
+                                            name="architectures"
+                                            >Architecture
+                                            <span style="color: red"> *</span>
+                                        </label>
+                                        <select
+                                            class="form-control select2"
+                                            id="architectures"
+                                            name="architectures"
+                                            multiple="multiple"
+                                        >
+                                            <option selected="selected">
+                                                orange
+                                            </option>
+                                            <option>white</option>
+                                            <option>purple</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="systemOutlines"
+                                            class="col-sm-12 col-form-label"
+                                            name="systemOutlines"
+                                            >System Outlines
+                                            <span style="color: red"> *</span>
+                                        </label>
+                                        <select
+                                            class="form-control select2 border-task-description"
+                                            id="systemOutlines"
+                                            name="systemOutlines"
+                                            multiple="multiple"
+                                        >
+                                            <option selected="selected">
+                                                orange
+                                            </option>
+                                            <option>white</option>
+                                            <option>purple</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="deliverable"
+                                            class="col-sm-12 col-form-label"
+                                            name="deliverable"
+                                            >Deliverable
+                                            <span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+
+                                        <select
+                                            class="form-control select2 border-task-description"
+                                            id="deliverable"
+                                            name="deliverable"
+                                            multiple="multiple"
+                                        >
+                                            <option selected="selected">
+                                                orange
+                                            </option>
+                                            <option>white</option>
+                                            <option>purple</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <label for="objective"
+                                            >Objective<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <div
+                                            class="quill-editor-full"
+                                            id="objective"
+                                            name="objective"
+                                            style="height: 50px"
+                                        ></div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary col-2"
+                                            data-dismiss="modal"
+                                        >
+                                            Add
+                                        </button>
+                                        <button
+                                            type="reset"
+                                            class="btn btn-secondary mr-2"
+                                            data-dismiss="modal"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                        <div
-                                class="card-body position-relative mx-auto"
-                        >
-                            <p class="card-title text-center fs-6 mb-1">
-                                progress
-                            </p>
-                            <div
-                                    id="circle-progress-2"
-                                    class="circle-progress rounded-circle"
-                                    data-min-value="0"
-                                    data-max-value="100"
-                                    data-value="25"
-                                    data-type="percent"
-                            ></div>
+
+                        <div class="tab-pane fade" id="client-create">
+                            <div class="modal-body modal-lg-6">
+                                <form
+                                    class="row g-4"
+                                    id="client-form"
+                                    action="#"
+                                >
+                                    <div class="col-md-12">
+                                        <label
+                                            for="name"
+                                            class="col-sm-12 col-form-label"
+                                            >Client Name<span
+                                                style="color: red"
+                                            >
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control border-task-description"
+                                            id="name"
+                                            name="name"
+                                        />
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label
+                                            for="email"
+                                            class="col-sm-12 col-form-label"
+                                            >Email<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="email"
+                                            class="form-control border-task-description"
+                                            id="email"
+                                            name="email"
+                                        />
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label
+                                            for="phone"
+                                            class="col-sm-12 col-form-label"
+                                            >Phone<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="phone"
+                                            class="form-control border-task-description"
+                                            id="phone"
+                                            name="phone"
+                                        />
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary mr-3"
+                                            data-dismiss="modal"
+                                        >
+                                            Create
+                                        </button>
+                                        <button
+                                            type="reset"
+                                            class="btn btn-secondary mr-2"
+                                            data-dismiss="modal"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
-            </div>
-        </div>
-        <!-- project end -->
-    </div>
-    <!-- Content End -->
-</div>
-
-<!--    modal for add project-->
-<div class="modal fade" id="add-department-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content task-content">
-            <div class="modal-header">
-                <h2 class="modal-title fs-5" style="text-align:center">Add Project</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <!-- Bordered Tabs -->
-            <nav>
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#project-create">Project</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#client-create">Client</a>
-                </li>
-            </ul>
-            </nav>
-
-
-            <div class="tab-content pt-2">
-                <div class="tab-pane fade show active" id="project-create">
-                    <div class="modal-body">
-            <nav>
-
-                    <form class="row g-3" id="validation-form" action="">
-                        <div class="col-lg-6">
-                            <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span
-                                    style="color:#dec6c6"> *</span></label>
-                            <input type="text" class="form-control border-task-description" id="name" name="name">
-
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="client" class="col-sm-12 col-form-label" name="client">Client<span style="color:red"> *</span></label>
-                                <select class="form-select border-task-description" aria-label="Select Client" data-live-search="true" id="client" name="client">
-                                    <option selected>Choose Client</option>
-                                    <option>Analysis</option>
-                                    <option>System Design</option>
-                                    <option>Coding</option>
-                                    <option>Testing</option>
-                                    <option>Deploy</option>
-                                    <option>Maintenance</option>
-                                    <option>Document</option>
-                                </select>
-
-                        </div>
-
-
-
-                        <div class="col-md-6">
-                            <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date <span
-                                    style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task-description" id="start_date" name="start_date">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="end_date" class="col-sm-12 col-form-label" name="end_date">End Date <span
-                                    style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task-description" id="end_date" name="end_date">
-                        </div>
-
-
-
-                        <div class="col-lg-6">
-                            <label for="background" class="col-sm-12 col-form-label" name="background">Background<span
-                                style="color:red"> *</span></label>
-                            <input type="text" class="form-control border-task-description" id="background" name="background">
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture
-                                <span style="color:red"> *</span>
-                            </label>
-                            <select class="form-control select2  " id="architectures" name="architectures" multiple="multiple">
-                                <option selected="selected">orange</option>
-                                <option>white</option>
-                                <option>purple</option>
-                            </select>
-                        </div>
-
-
-                        <div class="col-lg-6">
-                            <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">System Outlines
-                                <span style="color:red"> *</span>
-                            </label>
-                            <select class="form-control select2 border-task-description " id="systemOutlines" name="systemOutlines" multiple="multiple">
-                                <option selected="selected">orange</option>
-                                <option>white</option>
-                                <option>purple</option>
-                            </select>
-                        </div>
-
-
-
-                        <div class="col-lg-6">
-                            <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable <span
-                                    style="color:red"> *</span></label>
-
-                            <select class="form-control select2 border-task-description " id="deliverable" name="deliverable"  multiple="multiple">
-                                <option selected="selected">orange</option>
-                                <option>white</option>
-                                <option>purple</option>
-                            </select>
-                        </div>
-
-
-
-                        <div class="col-lg-12">
-                            <label for="objective">Objective<span style="color:red"> *</span></label>
-                            <div class="quill-editor-full" id="objective" name="objective" style="height: 50px;"></div>
-
-                        </div>
-
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">Add</button>
-                            <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-                </div>
-
-                <div class="tab-pane fade" id="client-create">
-                    <div class="modal-body modal-lg-6">
-                        <form class="row g-4" id="client-form" action="#">
-                            <div class="col-md-12">
-                                <label for="name" class="col-sm-12 col-form-label">Client Name<span style="color:red"> *</span></label>
-                                <input type="text" class="form-control border-task-description " id="name" name="name">
-                            </div>
-
-                            <div class="col-md-12">
-                                <label for="email" class="col-sm-12 col-form-label">Email<span style="color:red"> *</span></label>
-                                <input type="email" class="form-control border-task-description" id="email" name="email">
-                            </div>
-
-                            <div class="col-md-12">
-                                <label for="phone" class="col-sm-12 col-form-label">Phone<span style="color:red"> *</span></label>
-                                <input type="phone" class="form-control border-task-description" id="phone" name="phone">
-                            </div>
-
-
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary mr-3" data-dismiss="modal">Create</button>
-                                <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </div>
-            <!-- End Bordered Tabs -->
-        </div>
-    </div>
-</div>
-<!--    modal for add project-->
-
-<!-- modal for project's details -->
-<div
-        class="modal fade"
-        id="project-details"
-        data-bs-keyboard="true"
->
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">
-                    Department Details
-                </h5>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                ></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xl-4">
-                        <div class="card">
-                            <div
-                                    class="card-body profile-card pt-4 d-flex flex-column align-items-center"
-                            >
-                                <img
-                                        src="https://source.unsplash.com/random/200x200?sig=1"
-                                        alt="Profile"
-                                        class="rounded-circle"
-                                />
-                            </div>
-
-                            <div class="col-lg-6">
-                                <label
-                                    for="client"
-                                    class="col-sm-12 col-form-label"
-                                    name="client"
-                                    >Client
-                                    <span style="color: red"> *</span></label
-                                >
-                                <select
-                                    class="form-control selectpicker"
-                                    aria-label="Select Clients"
-                                    data-live-search="true"
-                                    id="client"
-                                    name="client"
-                                >
-                                    <option>Category</option>
-                                    <option>Android</option>
-                                    <option>IOS</option>
-                                    <option>Ui/Ux Design</option>
-                                    <option>Development</option>
-                                </select>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <label
-                                    for="background"
-                                    class="col-sm-12 col-form-label"
-                                    name="background"
-                                    >Background<span style="color: red">
-                                        *</span
-                                    ></label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control border-task"
-                                    id="background"
-                                    name="background"
-                                />
-                            </div>
-
-                            <div class="col-md-6">
-                                <label
-                                    for="start_date"
-                                    class="col-sm-12 col-form-label"
-                                    name="start_date"
-                                    >Start Date
-                                    <span style="color: red"> *</span></label
-                                >
-                                <input
-                                    type="date"
-                                    class="form-control border-task"
-                                    id="start_date"
-                                    name="start_date"
-                                />
-                            </div>
-
-                            <div class="col-6">
-                                <label
-                                    for="duration"
-                                    class="col-sm-12 col-form-label"
-                                    name="duration"
-                                    >Duration
-                                    <span style="color: red"> *</span></label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control border-task"
-                                    id="duration"
-                                    name="duration"
-                                />
-                            </div>
-
-                            <div class="col-lg-6">
-                                <label
-                                    for="duration"
-                                    class="col-sm-12 col-form-label"
-                                    name="objective"
-                                    >Objective
-                                    <span style="color: red"> *</span></label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control border-task"
-                                    id="objective"
-                                    name="objective"
-                                />
-                            </div>
-
-                            <div class="col-lg-6">
-                                <label
-                                    for="architectures"
-                                    class="col-sm-12 col-form-label"
-                                    name="architectures"
-                                    >Architecture
-                                    <span style="color: red"> *</span></label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control border-task"
-                                    id="architectures"
-                                    name="architectures"
-                                />
-                            </div>
-
-                            <div class="col-lg-6">
-                                <label
-                                    for="systemOutlines"
-                                    class="col-sm-12 col-form-label"
-                                    name="systemOutlines"
-                                    >SystemOutline
-                                    <span style="color: red"> *</span></label
-                                >
-                                <select
-                                    class="form-control selectpicker"
-                                    aria-label="Select System Outlines"
-                                    data-live-search="true"
-                                    id="systemOutlines"
-                                    name="systemOutlines"
-                                    multiple
-                                >
-                                    <option>Analysis</option>
-                                    <option>System Design</option>
-                                    <option>Coding</option>
-                                    <option>Testing</option>
-                                    <option>Deploy</option>
-                                    <option>Maintenance</option>
-                                    <option>Document</option>
-                                </select>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <label
-                                    for="deliverable"
-                                    class="col-sm-12 col-form-label"
-                                    name="deliverable"
-                                    >Deliverable
-                                    <span style="color: red"> *</span></label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control border-task"
-                                    id="deliverable"
-                                    name="deliverable"
-                                />
-                            </div>
-
-                            <div class="text-center">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary col-2"
-                                    data-dismiss="modal"
-                                >
-                                    Add
-                                </button>
-                                <button
-                                    type="reset"
-                                    class="btn btn-secondary mr-2"
-                                    data-dismiss="modal"
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -691,7 +528,10 @@
                                                 <h5 class="card-title">
                                                     About background
                                                 </h5>
-                                                <p class="small fst-italic" id="project-background">
+                                                <p
+                                                    class="small fst-italic"
+                                                    id="project-background"
+                                                >
                                                     Sunt est soluta temporibus
                                                     accusantium neque nam
                                                     maiores cumque temporibus.
@@ -1247,102 +1087,7 @@
         </div>
         <!-- modal for project's details -->
 
-<!-- Scripts -->
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-
-
-<script src="/lib/quill/quill.min.js"></script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-
-    $(document).ready(function () {
-        console.log("Document is ready!");
-
-        $("#architectures, #systemOutlines, #deliverable").select2({
-            tags: true,
-            width: "100%",
-        });
-    });
-
-    console.log("error");
-
-
-
-    let quillEditors = document.querySelectorAll(
-        ".quill-editor-bubble"
-    );
-
-    let toolbaroptions = [
-        // Test-style
-        ["bold", "italic", "underline"],
-
-        // Bullet points style...
-        [{list: "ordered"}, {list: "bullet"}],
-
-        // Sub and super script...
-        [{script: "sub"}, {script: "super"}],
-
-        // Indentation...
-        [{indent: "+1"}, {indent: "-1"}],
-
-        // Alignment
-        [{align: []}],
-
-        // Header for test, e.g., h1, h2...
-        [{header: [1, 2, 3, 4, 5, 6, false]}],
-
-        // Adding image, link, video, or formula
-        ["link"],
-
-        // Adding code snippet or blockquote
-        ["code-block", "blockquote"],
-
-
-    ];
-
-    // Initialize Quill for each selected element
-    quillEditors.forEach(function (editor) {
-        new Quill(editor, {
-            modules: {
-                toolbar: toolbaroptions,
-            },
-            theme: "snow",
-        });
-    });
-
-    let fullQuillEditor = document.querySelector(".quill-editor-full");
-
-    new Quill(fullQuillEditor, {
-        modules: {
-            toolbar: toolbaroptions,
-        },
-        theme: "snow",
-
-
-    });
-
-
-    function getData() {
-        const userInput = quill.root.innerHTML;
-        console.log(userInput);
-    }
-
-
-</script>
-
-<!-- Include other libraries that depend on jQuery -->
-
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script>-->
-
-<!--&lt;!&ndash;    for select drop-drown&ndash;&gt;-->
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>-->
+        <!-- Scripts -->
 
         <!-- fontawesome -->
         <script src="/js/fontawesome.js"></script>
@@ -1356,18 +1101,16 @@
         <!-- bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
 
-
-
-<!-- javascript libraries -->
-<script src="/lib/chart/chart.min.js"></script>
-<script src="/lib/easing/easing.min.js"></script>
-<script src="/lib/waypoints/waypoints.min.js"></script>
-<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="/lib/tempusdominus/js/moment.min.js"></script>
-<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+        <!-- javascript libraries -->
+        <script src="/lib/chart/chart.min.js"></script>
+        <script src="/lib/easing/easing.min.js"></script>
+        <script src="/lib/waypoints/waypoints.min.js"></script>
+        <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="/lib/tempusdominus/js/moment.min.js"></script>
+        <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/lib/quill/quill.min.js"></script>
 
         <!-- Template Javascript -->
         <script src="/js/main.js"></script>
@@ -1375,6 +1118,10 @@
 
         <!-- sort (department, project), form validation and search bar behavior are all here -->
         <script src="/js/custome.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script>
+
         <script>
             class project {
                 constructor({
@@ -1389,7 +1136,7 @@
                     objective,
                     client,
                     exReview,
-                    inReview
+                    inReview,
                 }) {
                     this.id = id;
                     this.name = name;
@@ -1426,7 +1173,7 @@
                     name: "project name",
                     startDate: 1698105600000,
                     endDate: 1698710400000,
-                    pm: {id: 2, name: 'zawlinshein'},
+                    pm: { id: 2, name: "zawlinshein" },
                     background: "project background",
                     currentPhase: "basic design",
                     objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
@@ -1464,7 +1211,7 @@
                     name: "another project",
                     startDate: 1700000000000,
                     endDate: 1701000000000,
-                    pm: {id:3, name: 'phyo'},
+                    pm: { id: 3, name: "phyo" },
                     background: "another project background",
                     currentPhase: "detail design",
                     objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
@@ -1496,7 +1243,7 @@
                     name: "third project",
                     startDate: 1702000000000,
                     endDate: 1703000000000,
-                    pm: {id: 4, name: "nyo"},
+                    pm: { id: 4, name: "nyo" },
                     background: "third project background",
                     currentPhase: "coding",
                     objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
@@ -1525,7 +1272,7 @@
                 },
             ];
 
-            const motherContainer = document.querySelector('#sort-container')
+            const motherContainer = document.querySelector("#sort-container");
 
             for (let i = 0; i < proListFromBack.length; i++) {
                 currentProject = proListFromBack[i];
@@ -1595,55 +1342,86 @@
                 motherContainer.innerHTML += curDiv;
             }
 
-            const detailMoal = document.querySelector('#project-details')
+            const detailMoal = document.querySelector("#project-details");
 
-            motherContainer.addEventListener('click', function(e) {
+            motherContainer.addEventListener("click", function (e) {
                 let target = e.target;
-                if (target.hasAttribute('data-bs-target')) {
-                    let id = parseInt(target.getAttribute('id'));
-                    let targetData = proListFromBack.find(a => a.id == id)
-                    detailMoal.querySelector('.modal-title').innerText = targetData.name
-                    detailMoal.querySelector('#project-background').innerText = targetData.background
-                    detailMoal.querySelector('')
+                if (target.hasAttribute("data-bs-target")) {
+                    let id = parseInt(target.getAttribute("id"));
+                    let targetData = proListFromBack.find((a) => a.id == id);
+                    detailMoal.querySelector(".modal-title").innerText =
+                        targetData.name;
+                    detailMoal.querySelector("#project-background").innerText =
+                        targetData.background;
+                    detailMoal.querySelector("");
                 }
-            })
+            });
 
-            const task = {
-                id: 1,
-                title: "title",
-                description: "description",
-                status: "STARTED",
-                exTime: 42,
-                acTime: 0,
-                group: A,
-                user: {
-                    id: 1,
-                    name: "zaw",
-                },
-            };
+            $(document).ready(function () {
+                console.log("Document is ready!");
 
-            const issue = {
-                description: "html code block",
-                uploader: {
-                    id: 1,
-                    name: "zawlinshein",
-                },
-                pic: {
-                    id: 3,
-                    name: "blabla",
-                },
-            };
+                $("#architectures, #systemOutlines, #deliverable").select2({
+                    tags: true,
+                    width: "100%",
+                });
+            });
+
+            console.log("error");
 
             let quillEditors = document.querySelectorAll(
                 ".quill-editor-bubble"
             );
 
+            let toolbaroptions = [
+                // Test-style
+                ["bold", "italic", "underline"],
+
+                // Bullet points style...
+                [{ list: "ordered" }, { list: "bullet" }],
+
+                // Sub and super script...
+                [{ script: "sub" }, { script: "super" }],
+
+                // Indentation...
+                [{ indent: "+1" }, { indent: "-1" }],
+
+                // Alignment
+                [{ align: [] }],
+
+                // Header for test, e.g., h1, h2...
+                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+                // Adding image, link, video, or formula
+                ["link"],
+
+                // Adding code snippet or blockquote
+                ["code-block", "blockquote"],
+            ];
+
             // Initialize Quill for each selected element
             quillEditors.forEach(function (editor) {
                 new Quill(editor, {
-                    theme: "bubble",
+                    modules: {
+                        toolbar: toolbaroptions,
+                    },
+                    theme: "snow",
                 });
             });
+
+            let fullQuillEditor = document.querySelector(".quill-editor-full");
+
+            new Quill(fullQuillEditor, {
+                modules: {
+                    toolbar: toolbaroptions,
+                },
+                theme: "snow",
+            });
+
+            function getData() {
+                const userInput = quill.root.innerHTML;
+                console.log(userInput);
+            }
+
             let minusButtons = document.querySelectorAll(".minus");
             let plusButtons = document.querySelectorAll(".plus");
 
@@ -1651,7 +1429,7 @@
                 minusButton.addEventListener("click", function () {
                     let input = this.parentElement.querySelector("input");
                     let count = parseInt(input.value) - 1;
-                    count = count < 1 ? 1 : count;
+                    count = count < 0 ? 0 : count;
                     input.value = count;
                     console.log(input, count);
                     //input.dispatchEvent(new Event('change'));
@@ -1669,10 +1447,4 @@
             });
         </script>
     </body>
-<!-- sort (department, project), form validation and search bar behavior are all here -->
-<script src="/js/custome.js"></script>
-
-
-
-</body>
 </html>
