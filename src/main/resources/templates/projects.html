@@ -12,7 +12,11 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="layout/layout"
 >
-<head></head>
+<head>
+
+
+</head>
+
 
 <body layout:fragment="content">
 <div
@@ -206,35 +210,35 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- Bordered Tabs -->
-
-            <ul class="nav nav-tabs nav-tabs-bordered">
+            <nav>
+            <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#project-create" href="#project-create">Project</a>
+                    <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#project-create">Project</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#client-create" href="#client-create">Client</a>
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#client-create">Client</a>
                 </li>
-
-
             </ul>
+            </nav>
 
 
             <div class="tab-content pt-2">
                 <div class="tab-pane fade show active" id="project-create">
                     <div class="modal-body">
+            <nav>
+
                     <form class="row g-3" id="validation-form" action="">
                         <div class="col-lg-6">
                             <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span
                                     style="color:#dec6c6"> *</span></label>
-                            <input type="text" class="form-control border-task" id="name" name="name">
+                            <input type="text" class="form-control border-task-description" id="name" name="name">
 
                         </div>
 
                         <div class="col-lg-6">
                             <label for="client" class="col-sm-12 col-form-label" name="client">Client<span style="color:red"> *</span></label>
-                            <div class="input-group">
-                                <select class="selectpicker" aria-label="Select Client" data-live-search="true" id="client" name="client">
+                                <select class="form-select border-task-description" aria-label="Select Client" data-live-search="true" id="client" name="client">
                                     <option selected>Choose Client</option>
                                     <option>Analysis</option>
                                     <option>System Design</option>
@@ -244,61 +248,51 @@
                                     <option>Maintenance</option>
                                     <option>Document</option>
                                 </select>
-                                <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-plus"></i></button>
-                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+                            <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date <span
+                                    style="color:red"> *</span></label>
+                            <input type="date" class="form-control border-task-description" id="start_date" name="start_date">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="end_date" class="col-sm-12 col-form-label" name="end_date">End Date <span
+                                    style="color:red"> *</span></label>
+                            <input type="date" class="form-control border-task-description" id="end_date" name="end_date">
                         </div>
 
 
 
                         <div class="col-lg-6">
                             <label for="background" class="col-sm-12 col-form-label" name="background">Background<span
-                                    style="color:red"> *</span></label>
-                            <input type="text" class="form-control border-task" id="background" name="background">
+                                style="color:red"> *</span></label>
+                            <input type="text" class="form-control border-task-description" id="background" name="background">
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">SystemOutline
-                                <span style="color:red"> *</span></label>
-                            <select class="form-control selectpicker" aria-label="Select System Outlines"
-                                    data-live-search="true" id="systemOutlines" name="systemOutlines" multiple>
-                                <option>Analysis</option>
-                                <option>System Design</option>
-                                <option>Coding</option>
-                                <option>Testing</option>
-                                <option>Deploy</option>
-                                <option>Maintenance</option>
-                                <option>Document</option>
+                            <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture
+                                <span style="color:red"> *</span>
+                            </label>
+                            <select class="form-control select2 border-task-description " id="architectures" name="architectures" multiple="multiple">
+                                <option selected="selected">orange</option>
+                                <option>white</option>
+                                <option>purple</option>
                             </select>
                         </div>
 
 
-                        <div class="col-md-6">
-                            <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date <span
-                                    style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task" id="start_date" name="start_date">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="end_date" class="col-sm-12 col-form-label" name="end_date">End Date <span
-                                    style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task" id="end_date" name="end_date">
-                        </div>
-
-
-
-
                         <div class="col-lg-6">
-                            <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture
-                                <span style="color:red"> *</span></label>
-                            <select class="form-control selectpicker" aria-label="Select System Outlines"
-                                    data-live-search="true" id="architectures" name="architectures" multiple>
-                                <option>Analysis</option>
-                                <option>System Design</option>
-                                <option>Coding</option>
-                                <option>Testing</option>
-                                <option>Deploy</option>
-                                <option>Maintenance</option>
-                                <option>Document</option>
+                            <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">System Outlines
+                                <span style="color:red"> *</span>
+                            </label>
+                            <select class="form-control select2 border-task-description " id="systemOutlines" name="systemOutlines" multiple="multiple">
+                                <option selected="selected">orange</option>
+                                <option>white</option>
+                                <option>purple</option>
                             </select>
                         </div>
 
@@ -307,29 +301,19 @@
                         <div class="col-lg-6">
                             <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control selectpicker" aria-label="Select System Outlines"
-                                    data-live-search="true" id="deliverable" name="deliverable" multiple>
-                                <option>Analysis</option>
-                                <option>System Design</option>
-                                <option>Coding</option>
-                                <option>Testing</option>
-                                <option>Deploy</option>
-                                <option>Maintenance</option>
-                                <option>Document</option>
+
+                            <select class="form-control select2 border-task-description " id="deliverable" name="deliverable"  multiple="multiple">
+                                <option selected="selected">orange</option>
+                                <option>white</option>
+                                <option>purple</option>
                             </select>
                         </div>
 
 
 
-
-                        <div class="col-lg-6">
-                            <label for="objective" class="col-sm-12 col-form-label" name="objective">Objective <span
-                                    style="color:red"> *</span></label>
-                            <input type="text" class="form-control border-task" id="objective" name="objective">
-                        </div>
-
-                        <label for="editor">Description</label>
-                        <div class="quill-editor-bubble" id="editor">
+                        <div class="col-lg-12">
+                            <label for="objective">Objective<span style="color:red"> *</span></label>
+                            <div class="quill-editor-full" id="objective" name="objective" style="height: 50px;"></div>
 
                         </div>
 
@@ -343,27 +327,26 @@
                 </div>
 
                 <div class="tab-pane fade" id="client-create">
-                    <div class="modal-body">
-                        <form class="row g-5" id="client-form" action="#">
-                            <div class="col-lg-12">
+                    <div class="modal-body modal-lg-6">
+                        <form class="row g-4" id="client-form" action="#">
+                            <div class="col-md-12">
                                 <label for="name" class="col-sm-12 col-form-label">Client Name<span style="color:red"> *</span></label>
-                                <input type="text" class="form-control border-task" id="name" name="name">
+                                <input type="text" class="form-control border-task-description " id="name" name="name">
                             </div>
 
-                            <div class="col-lg-12">
+                            <div class="col-md-12">
                                 <label for="email" class="col-sm-12 col-form-label">Email<span style="color:red"> *</span></label>
-                                <input type="email" class="form-control border-task" id="email" name="email">
+                                <input type="email" class="form-control border-task-description" id="email" name="email">
                             </div>
 
-                            <div class="col-lg-12">
+                            <div class="col-md-12">
                                 <label for="phone" class="col-sm-12 col-form-label">Phone<span style="color:red"> *</span></label>
-                                <input type="phone" class="form-control border-task" id="phone" name="phone">
+                                <input type="phone" class="form-control border-task-description" id="phone" name="phone">
                             </div>
 
-                            <!-- Add other client-related form fields here -->
 
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">Create</button>
+                                <button type="submit" class="btn btn-primary mr-3" data-dismiss="modal">Create</button>
                                 <button type="reset" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
                             </div>
                         </form>
@@ -375,9 +358,6 @@
         </div>
     </div>
 </div>
-
-
-
 <!--    modal for add project-->
 
 <!-- modal for project's details -->
@@ -874,7 +854,32 @@
 </div>
 <!-- modal for project's details -->
 
+<!-- Scripts -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+            console.log("Document is ready!");
+
+            $("#architectures, #systemOutlines, #deliverable").select2({
+                tags: true,
+                width: "100%",
+        });
+        });
+
+            console.log("error");
+
+</script>
+
+
 <script src="/lib/quill/quill.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
@@ -904,6 +909,8 @@
 
         // Adding code snippet or blockquote
         ["code-block", "blockquote"],
+
+
     ];
 
     // Initialize Quill for each selected element
@@ -923,6 +930,8 @@
             toolbar: toolbaroptions,
         },
         theme: "snow",
+
+
     });
 
 
@@ -932,6 +941,9 @@
     }
 </script>
 
+<!-- Include other libraries that depend on jQuery -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script>
 
 <!--    for select drop-drown-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
@@ -948,6 +960,8 @@
 <!-- bootstrap -->
 <script src="/js/bootstrap.bundle.min.js"></script>
 
+
+
 <!-- javascript libraries -->
 <script src="/lib/chart/chart.min.js"></script>
 <script src="/lib/easing/easing.min.js"></script>
@@ -956,7 +970,8 @@
 <script src="/lib/tempusdominus/js/moment.min.js"></script>
 <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
 <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="/lib/quill/quill.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
@@ -964,17 +979,8 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
-<script>
-    let quillEditors = document.querySelectorAll(
-        ".quill-editor-bubble"
-    );
 
-    // Initialize Quill for each selected element
-    quillEditors.forEach(function (editor) {
-        new Quill(editor, {
-            theme: "bubble",
-        });
-    });
-</script>
+
+
 </body>
 </html>
