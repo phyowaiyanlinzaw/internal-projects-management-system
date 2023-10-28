@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
       lang="en">
+<head>
+    <style>
+
+        .ql-toolbar {
+            color: white;
+        }
+        .ql-editor {
+
+        }
+    </style>
+</head>
 
 <body layout:fragment="content">
 
@@ -51,72 +62,49 @@
             </div>
 
 
-            <div class="row row-cols-1" id="sort-container">
+
+
+
+            <div class="row row-cols-1" id="sort">
                 <div class="p-md-3 p-sm-2 mt-3">
                     <div class="card">
-                        <div
-                                class="card-header border-bottom text-dark"
-                        >
+                        <div class="card-header border-bottom text-dark">
 
-                            <div class="col d-flex align-items-center gap-2">
-                                <h4
-                                        class="card-title modal-detail-title"
-                                >
-                                    a
-                                </h4>
+                            <div class="d-flex justify-content-between align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>
 
-                                <h6
-                                        class="card-title"
-                                >
-                                    Name
-                                </h6>
+                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                       Thant Htet Ko
+                                      </p>
 
-                                <span
-                                        class="card-title badge rounded-pill bg-danger"
-                                >Danger</span
-                                >
-                                <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                    see more
+                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
+                                        Ei Ei Phyo
+                                    </p>
+                                </div>
+                                <span class="card-title badge rounded-pill bg-success">Success</span>
+                            </div>
+
+                            <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <p>Posted</p><span>3 days ago</span>
+                                    <p>Modified at</p><span>1 minute ago</span>
+
+                                </div>
+                                <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                    See More
                                 </button>
                             </div>
 
-                            <div
-                                    class="col issue-time-line d-flex gap-2"
-                            >
-                                <div
-                                        class="d-flex align-items-center gap-2"
-                                >
-                                    <p>Posted</p>
-                                    <span>3 days ago</span>
-                                </div>
-                                <div
-                                        class="d-flex align-items-center gap-2"
-                                >
-                                    <p>Modified at</p>
-                                    <span>1 minute ago</span>
-                                </div>
-                            </div>
-                            <div
-                                    class="col issue-time-line d-flex gap-2"
-                            >
-                                <p
-                                        class="btn custom-color rounded-pill"
-                                >
-                                    java
-                                </p>
-                                <p
-                                        class="btn custom-color rounded-pill"
-                                >
-                                    error
-                                </p>
+
+                            <div class="col issue-time-line d-flex gap-2">
+                                <p class="btn custom-color rounded-pill">java</p>
+                                <p class="btn custom-color rounded-pill">error</p>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="code-block">
-                                <p>
-                                    this code does not work help me
-                                    please
-                                </p>
+                                <p> this code does not work help me please</p>
                                 <pre>private final CustomUserDetailsService userDetailsService;
   &#64;Bean
   public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
@@ -124,15 +112,71 @@
       authProvider.setUserDetailsService&#40;userDetailsService&#41;;
       authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
       return authProvider;
-  &#125;</pre
-                                >
+  &#125;</pre>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
             </div>
+
+            <div class="row row-cols-1" id="sort-container">
+                <div class="p-md-3 p-sm-2 mt-3">
+                    <div class="card">
+                        <div class="card-header border-bottom text-dark">
+
+                            <div class="d-flex justify-content-between align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>
+
+
+                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                        Phyo Wai Yan Lin Zaw
+                                    </p>
+
+                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
+                                        Zaw Lin Shein
+                                    </p>
+
+
+                                </div>
+                                <span class="card-title badge rounded-pill bg-danger">Danger</span>
+
+
+                            </div>
+
+                            <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <p>Posted</p><span>3 days ago</span>
+                                <p>Modified at</p><span>1 minute ago</span>
+                            </div>
+                                <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                    See More
+                                </button>
+                            </div>
+                            <div class="col issue-time-line d-flex gap-2">
+                                <p class="btn custom-color rounded-pill">java</p>
+                                <p class="btn custom-color rounded-pill">error</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="code-block">
+                                <p> this code does not work help me please</p>
+                                <pre>private final CustomUserDetailsService userDetailsService;
+  &#64;Bean
+  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
+      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;
+      authProvider.setUserDetailsService&#40;userDetailsService&#41;;
+      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
+      return authProvider;
+  &#125;</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
     <!-- Content End -->
@@ -256,11 +300,12 @@
                                     style="color:red"> *</span></label>
                             <select class="form-control" aria-label="Select Clients" data-live-search="true"
                                     id="person_in_charge" name="client">
-                                <option>Category</option>
-                                <option>Android</option>
-                                <option>IOS</option>
-                                <option>Ui/Ux Design</option>
-                                <option>Development</option>
+                                <option>PIC</option>
+                                <option>Phyo Wai Yan Lin Zaw</option>
+                                <option>Zaw Lin Shein</option>
+                                <option>Ei Ei Phyo</option>
+                                <option>Hnin Aye Lwin</option>
+                                <option>Thant Htet Ko</option>
                             </select>
                         </div>
 
@@ -269,11 +314,12 @@
                                     style="color:red"> *</span></label>
                             <select class="form-control" aria-label="Select Clients" data-live-search="true"
                                     id="responsible_party" name="client">
-                                <option>Category</option>
-                                <option>Android</option>
-                                <option>IOS</option>
-                                <option>Ui/Ux Design</option>
-                                <option>Development</option>
+                                <option>RP</option>
+                                <option>Phyo Wai Yan Lin Zaw</option>
+                                <option>Zaw Lin Shein</option>
+                                <option>Ei Ei Phyo</option>
+                                <option>Hnin Aye Lwin</option>
+                                <option>Thant Htet Ko</option>
                             </select>
                         </div>
 

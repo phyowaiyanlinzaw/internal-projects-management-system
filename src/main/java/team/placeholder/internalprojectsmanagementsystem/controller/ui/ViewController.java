@@ -59,7 +59,6 @@ public class ViewController {
     @GetMapping("/employees")
     public String employees() {return "employees";}
 
-    @GetMapping ("/register")
-    public String register(){return "register";}
+
 
 }
