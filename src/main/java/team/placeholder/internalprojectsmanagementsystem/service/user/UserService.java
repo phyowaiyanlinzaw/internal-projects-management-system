@@ -6,6 +6,9 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface UserService {
     UserDto save(UserDto userDto);
 
