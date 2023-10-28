@@ -55,6 +55,24 @@
                     id="dropdrown-search-bar"
                 >
                     <div class="d-flex flex-row justify-content-end gap-2">
+                        <button class="btn btn-info" id="reset-btn">reset</button>
+                        <div class="d-inline-block">
+                            <select id="month-filter" class="form-control">
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="Match">Match</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="Auguest">Auguest</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
+
                         <form class="d-inline-block">
                             <input
                                 class="form-control border-0"
@@ -1363,6 +1381,7 @@
 
                 const curDiv = `<div
                             class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0"
+                            id="${currentProject.id}"
                         >
                             <div class="card border-success">
                                 <div class="card-header">
@@ -1474,9 +1493,8 @@
 
             motherContainer.addEventListener("click", function (e) {
                 let target = e.target;
-                
+
                 if (target.hasAttribute("data-bs-target")) {
-                    
                     let id = parseInt(target.getAttribute("id"));
                     let targetData = proListFromBack.find((a) => a.id == id);
                     let duration = calculateDuration(
@@ -1498,8 +1516,9 @@
                     detailMoal.querySelector(
                         "#project-external-review-count"
                     ).innerText = targetData.exReview;
-                    detailMoal.querySelector("#project-duration").innerText =
-                       `${duration.days} days, ${duration.hours} hours, ${duration.minutes} minutes, ${duration.seconds} seconds`
+                    detailMoal.querySelector(
+                        "#project-duration"
+                    ).innerText = `${duration.days} days, ${duration.hours} hours, ${duration.minutes} minutes, ${duration.seconds} seconds`;
                     detailMoal.querySelector("#project-start-date").innerText =
                         formatDateFromMilliseconds(targetData.startDate);
                     detailMoal.querySelector("#project-end-date").innerText =
@@ -1511,6 +1530,76 @@
                         targetData.client.name;
                 }
             });
+
+            let dateFilter = document.querySelector("#month-filter");
+
+            const monthNames = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ];
+
+            dateFilter.addEventListener("input", filterProjects);
+
+            document.querySelector('#reset-btn').addEventListener('click', function (e) {
+                let allData =
+                    document.getElementById("sort-container").children;
+
+                for(let i = 0; i < allData.length; i++) {
+                    allData[i].style.display = 'block'
+                }
+            })
+
+            function filterProjects(e) {
+                console.log("lee");
+                let allData =
+                    document.getElementById("sort-container").children;
+                let currentTime = dateFilter.value;
+
+                let targetProject = proListFromBack.find((a) => {
+                    // Convert the millisecond timestamp to a Date object
+                    const projectDate = new Date(a.startDate);
+
+                    // Extract the month from the Date object
+                    const projectMonth = projectDate.getMonth();
+
+                    console.log(projectMonth)
+
+                    console.log(monthNames[projectMonth])
+
+                    console.log(currentTime)
+
+                    console.log(monthNames[projectMonth] === currentTime)
+
+                    // Extract the month from the currentTime Date object
+
+                    // Compare the months
+                    return monthNames[projectMonth] === currentTime;
+                });
+
+                console.log(targetProject);
+
+                for (let i = 0; i < allData.length; i++) {
+                    if (
+                        targetProject &&
+                        targetProject.id ===
+                            parseInt(allData[i].getAttribute("id"))
+                    ) {
+                        allData[i].style.display = "block";
+                    } else {
+                        allData[i].style.display = "none";
+                    }
+                }
+            }
 
             $(document).ready(function () {
                 console.log("Document is ready!");
