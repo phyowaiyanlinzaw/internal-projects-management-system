@@ -546,17 +546,7 @@
                                                 <p
                                                     class="small fst-italic"
                                                     id="project-background"
-                                                >
-                                                    Sunt est soluta temporibus
-                                                    accusantium neque nam
-                                                    maiores cumque temporibus.
-                                                    Tempora libero non est unde
-                                                    veniam est qui dolor. Ut
-                                                    sunt iure rerum quae
-                                                    quisquam autem eveniet
-                                                    perspiciatis odit. Fuga
-                                                    sequi sed ea saepe at unde.
-                                                </p>
+                                                ></p>
 
                                                 <h5 class="card-title">
                                                     Project Details
@@ -570,6 +560,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-department-name"
                                                     >
                                                         dance club
                                                     </div>
@@ -583,6 +574,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-name"
                                                     >
                                                         find nemo
                                                     </div>
@@ -596,6 +588,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-internal-review-count"
                                                     >
                                                         25
                                                     </div>
@@ -609,6 +602,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-external-review-count"
                                                     >
                                                         1
                                                     </div>
@@ -622,6 +616,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-duration"
                                                     >
                                                         3 Months
                                                     </div>
@@ -635,6 +630,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-start-date"
                                                     >
                                                         25 september 2022
                                                     </div>
@@ -648,6 +644,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-end-date"
                                                     >
                                                         25 december 2022
                                                     </div>
@@ -661,6 +658,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-current-phase"
                                                     >
                                                         Basic design
                                                     </div>
@@ -674,6 +672,7 @@
                                                     </div>
                                                     <div
                                                         class="col-lg-9 col-md-8 col-8"
+                                                        id="project-client-name"
                                                     >
                                                         DAT
                                                     </div>
@@ -913,8 +912,15 @@
                                                             data-bs-parent="#accordionExample"
                                                         >
                                                             <div
-                                                                class="accordion-body"
+                                                                class="accordion-body position-relative"
                                                             >
+                                                                <div
+                                                                    class="position-absolute bottom-0 end-0 rounded-circle p-1 fs-6 bg-primary text-white"
+                                                                >
+                                                                    <i
+                                                                        class="bi bi-pencil"
+                                                                    ></i>
+                                                                </div>
                                                                 <strong
                                                                     >This is the
                                                                     third item's
@@ -1091,7 +1097,11 @@
                                                 id="client-info"
                                             >
                                                 <div class="row">
-                                                    <div class="fs-2 text-center">DAT</div>
+                                                    <div
+                                                        class="fs-2 text-center"
+                                                    >
+                                                        DAT
+                                                    </div>
                                                     <div
                                                         class="row row-cols-1 gap-2"
                                                     >
@@ -1105,7 +1115,11 @@
                                                                     class="bi bi-envelope-at"
                                                                 ></i>
                                                             </div>
-                                                            <div class="align-self-center">suckmyfingure@gmail.com</div>
+                                                            <div
+                                                                class="align-self-center"
+                                                            >
+                                                                suckmyfingure@gmail.com
+                                                            </div>
                                                         </div>
                                                         <div
                                                             class="d-flex justify-content-start align-items-center gap-2"
@@ -1117,7 +1131,11 @@
                                                                     class="bi bi-telephone"
                                                                 ></i>
                                                             </div>
-                                                            <div class="align-self-center">09 77558822</div>
+                                                            <div
+                                                                class="align-self-center"
+                                                            >
+                                                                09 77558822
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1174,7 +1192,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script>
 
-        <script>
+        <script type="module">
             class project {
                 constructor({
                     id,
@@ -1203,22 +1221,6 @@
                 }
             }
 
-            class amount {
-                constructor(
-                    basicDesign = 0,
-                    detailDesign = 0,
-                    coding = 0,
-                    unitTesting = 0,
-                    integratedTestin = 0
-                ) {
-                    this.basicDesign = basicDesign;
-                    this.detailDesign = detailDesign;
-                    this.coding = coding;
-                    this.unitTesting = unitTesting;
-                    this.integratedTestin = integratedTesting;
-                }
-            }
-
             const proListFromBack = [
                 {
                     id: 1,
@@ -1227,11 +1229,17 @@
                     endDate: 1698710400000,
                     pm: { id: 2, name: "zawlinshein" },
                     background: "project background",
-                    currentPhase: "basic design",
+                    currentPhase: "TESTING",
+                    department: { id: 1, name: "department name" },
                     objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
                     inReview: 25,
                     exReview: 2,
-                    client: "name",
+                    client: {
+                        id: 1,
+                        name: "Dat",
+                        phone: "09 77558833",
+                        email: "suckmyfingure@gmail.com",
+                    },
                     totalTask: 100,
                     doneTask: 50,
                     amount: {
@@ -1251,11 +1259,11 @@
                         document: true,
                     },
                     architecutre: [
-                        "html",
-                        "mysql",
-                        "js",
-                        "java",
-                        "spring boot",
+                        { id: 1, name: "html" },
+                        { id: 2, name: "mysql" },
+                        { id: 3, name: "js" },
+                        { id: 4, name: "java" },
+                        { id: 5, name: "spring boot" },
                     ],
                 },
                 {
@@ -1266,10 +1274,16 @@
                     pm: { id: 3, name: "phyo" },
                     background: "another project background",
                     currentPhase: "detail design",
+                    department: { id: 1, name: "department name two" },
                     objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
                     inReview: 15,
                     exReview: 5,
-                    client: "another client",
+                    client: {
+                        id: 1,
+                        name: "Dat",
+                        phone: "09 77558833",
+                        email: "suckmyfingure@gmail.com",
+                    },
                     totalTask: 30,
                     doneTask: 20,
                     amount: {
@@ -1288,7 +1302,13 @@
                         maintenence: false,
                         document: true,
                     },
-                    architecutre: ["html", "mongodb", "python", "node.js"],
+                    architecutre: [
+                        { id: 1, name: "html" },
+                        { id: 2, name: "mysql" },
+                        { id: 3, name: "js" },
+                        { id: 4, name: "java" },
+                        { id: 5, name: "spring boot" },
+                    ],
                 },
                 {
                     id: 3,
@@ -1298,10 +1318,16 @@
                     pm: { id: 4, name: "nyo" },
                     background: "third project background",
                     currentPhase: "coding",
+                    department: { id: 1, name: "department name three" },
                     objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
                     inReview: 10,
                     exReview: 3,
-                    client: "third client",
+                    client: {
+                        id: 1,
+                        name: "Dat",
+                        phone: "09 77558833",
+                        email: "suckmyfingure@gmail.com",
+                    },
                     totalTask: 40,
                     doneTask: 10,
                     amount: {
@@ -1320,7 +1346,13 @@
                         maintenence: true,
                         document: true,
                     },
-                    architecutre: ["html", "java", "react", "spring boot"],
+                    architecutre: [
+                        { id: 1, name: "html" },
+                        { id: 2, name: "mysql" },
+                        { id: 3, name: "js" },
+                        { id: 4, name: "java" },
+                        { id: 5, name: "spring boot" },
+                    ],
                 },
             ];
 
@@ -1396,16 +1428,87 @@
 
             const detailMoal = document.querySelector("#project-details");
 
+            function calculateDuration(startDate, endDate) {
+                const durationMillis = endDate - startDate;
+
+                // Convert duration in milliseconds to days, hours, minutes, and seconds
+                const durationInSeconds = Math.floor(durationMillis / 1000);
+                const seconds = durationInSeconds % 60;
+                const durationMinutes = Math.floor(durationInSeconds / 60);
+                const minutes = durationMinutes % 60;
+                const durationHours = Math.floor(durationMinutes / 60);
+                const hours = durationHours % 24;
+                const days = Math.floor(durationHours / 24);
+
+                return {
+                    days,
+                    hours,
+                    minutes,
+                    seconds,
+                };
+            }
+
+            function formatDateFromMilliseconds(milliseconds) {
+                const date = new Date(milliseconds);
+                const day = date.getDate();
+                const monthNames = [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                ];
+                const month = monthNames[date.getMonth()];
+                const year = date.getFullYear();
+
+                const formattedDate = `${day} ${month} ${year}`;
+                return formattedDate;
+            }
+
             motherContainer.addEventListener("click", function (e) {
                 let target = e.target;
+                
                 if (target.hasAttribute("data-bs-target")) {
+                    
                     let id = parseInt(target.getAttribute("id"));
                     let targetData = proListFromBack.find((a) => a.id == id);
+                    let duration = calculateDuration(
+                        targetData.startDate,
+                        targetData.endDate
+                    );
                     detailMoal.querySelector(".modal-title").innerText =
                         targetData.name;
                     detailMoal.querySelector("#project-background").innerText =
                         targetData.background;
-                    detailMoal.querySelector("");
+                    detailMoal.querySelector("#project-name").innerText =
+                        targetData.name;
+                    detailMoal.querySelector(
+                        "#project-department-name"
+                    ).innerHTML = targetData.department.name;
+                    detailMoal.querySelector(
+                        "#project-internal-review-count"
+                    ).innerText = targetData.inReview;
+                    detailMoal.querySelector(
+                        "#project-external-review-count"
+                    ).innerText = targetData.exReview;
+                    detailMoal.querySelector("#project-duration").innerText =
+                       `${duration.days} days, ${duration.hours} hours, ${duration.minutes} minutes, ${duration.seconds} seconds`
+                    detailMoal.querySelector("#project-start-date").innerText =
+                        formatDateFromMilliseconds(targetData.startDate);
+                    detailMoal.querySelector("#project-end-date").innerText =
+                        formatDateFromMilliseconds(targetData.endDate);
+                    detailMoal.querySelector(
+                        "#project-current-phase"
+                    ).innerText = targetData.currentPhase;
+                    detailMoal.querySelector("#project-client-name").innerText =
+                        targetData.client.name;
                 }
             });
 
