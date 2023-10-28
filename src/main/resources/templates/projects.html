@@ -331,7 +331,10 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-12" style="margin-bottom: 80px;">
+                                    <div
+                                        class="col-lg-12"
+                                        style="margin-bottom: 80px"
+                                    >
                                         <label for="objective"
                                             >Objective<span style="color: red">
                                                 *</span
@@ -518,6 +521,15 @@
                                                     edit
                                                 </button>
                                             </li>
+                                            <li class="nav-item">
+                                                <button
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#client-info"
+                                                >
+                                                    client info
+                                                </button>
+                                            </li>
                                         </ul>
                                         <div class="tab-content pt-2">
                                             <div
@@ -530,7 +542,7 @@
                                                 <p
                                                     class="small fst-italic"
                                                     id="project-background"
-                                                >
+                                                ></p>
                                                 <p
                                                     class="small fst-italic"
                                                     id="project-background"
@@ -1073,6 +1085,42 @@
                                                     </div>
                                                 </form>
                                                 <!-- End Profile Edit Form -->
+                                            </div>
+                                            <div
+                                                class="tab-pane fade profile-edit pt-3"
+                                                id="client-info"
+                                            >
+                                                <div class="row">
+                                                    <div class="fs-2 text-center">DAT</div>
+                                                    <div
+                                                        class="row row-cols-1 gap-2"
+                                                    >
+                                                        <div
+                                                            class="d-flex justify-content-start align-items-center gap-2"
+                                                        >
+                                                            <div
+                                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-envelope-at"
+                                                                ></i>
+                                                            </div>
+                                                            <div class="align-self-center">suckmyfingure@gmail.com</div>
+                                                        </div>
+                                                        <div
+                                                            class="d-flex justify-content-start align-items-center gap-2"
+                                                        >
+                                                            <div
+                                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-telephone"
+                                                                ></i>
+                                                            </div>
+                                                            <div class="align-self-center">09 77558822</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- End Bordered Tabs -->
