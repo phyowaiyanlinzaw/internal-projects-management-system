@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
@@ -36,29 +37,47 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto updateProfile(UserDto userDto) {
-        return null;
+        User user = userRepository.findById(userDto.getId()).orElseNull();
+
+        if (user != null) {
+            user.setName(userDto.getName());
+            user.setEmail(userDto.getEmail());
+            user.setPassword(userDto.getPassword());
+            user.setRole(userDto.getRole());
+            user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
+            userRepository.save(user);
+            return UserMapper.toUserDto(user);
+
+        }else{
+            return null;
+
+        }
+}
+
+
+        @Override
+        public UserDto save(UserDto userDto) {
+        User user = UserMapper.toUser(userDto);
+
+        // Set user properties
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
+        user.setRole(userDto.getRole());
+
+        // Set the department using getDepartmentdto method
+        user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
+
+        // Save the user and map it back to a UserDto
+        User savedUser = userRepository.save(user);
+        return UserMapper.toUserDto(savedUser);
     }
 
-//    @Override
-//    public UserDto save(UserDto userDto) {
-//      User user = new User();
-//      user.setName(userDto.getName());
-//      user.setEmail(userDto.getEmail());
-//      user.setPassword(userDto.getPassword());
-//      user.setRole(userDto.getRole());
-//      user.setDepartment(userDto.getDepartment());
-//      userRepository.save(user);
-//      return UserMapper.toUserDto(userRepository.save(user));
-//    }
 
-    @Override
-    public UserDto save(UserDto userDto) {
-        return null;
-    }
 
     @Override
     public UserDto getUserById(long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).orElseNull();
         if(user != null) {
             return UserMapper.toUserDto(user);
         }else{
@@ -78,22 +97,6 @@ public class UserServiceImpl implements UserService{
 
     }
 
-//    @Override
-//    public UserDto updateProfile(UserDto userDto) {
-//        User user = userRepository.findById(userDto.getId());
-//        if(user != null) {
-//            user.setName(userDto.getName());
-//            user.setEmail(userDto.getEmail());
-//            user.setPassword(userDto.getPassword());
-//            user.setRole(userDto.getRole());
-//            user.setDepartment(userDto.getDepartment());
-//            userRepository.save(user);
-//            return UserMapper.toUserDto(user);
-//        }else{
-//            return null;
-//        }
-//
-//    }
 
     @Override
     public UserDto changePassword(UserDto userDto, String newPassword) {
@@ -117,4 +120,5 @@ public class UserServiceImpl implements UserService{
         message.setText("Your OTP is: " + generatedOtp);
         mailSender.send(message);
     }
+
 }
