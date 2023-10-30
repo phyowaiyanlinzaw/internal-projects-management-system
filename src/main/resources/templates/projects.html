@@ -103,6 +103,26 @@
                 endDateInput.disabled = false;
             });
 
+            const toolbaroptions = [
+                // Test-style
+                ["bold", "italic", "underline"],
+
+                // Bullet points style...
+                [{ list: "ordered" }, { list: "bullet" }],
+
+                // Indentation...
+                [{ indent: "+1" }, { indent: "-1" }],
+
+                // Alignment
+                [{ align: [] }],
+
+                // Header for test, e.g., h1, h2...
+                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+                // Adding image, link, video, or formula
+                ["link"],
+            ];
+
             const arcList = [
                 {
                     id: 1,
@@ -135,46 +155,31 @@
                 {
                     id: 1,
                     name: "zawlinshein",
-                    email: "dat@gamil.com",
-                    phone: "09 775862459",
                 },
                 {
                     id: 2,
                     name: "dog",
-                    email: "dog@gamil.com",
-                    phone: "09 11111111111",
                 },
                 {
                     id: 3,
                     name: "papaya",
-                    email: "papa@gamil.com",
-                    phone: "09 775862459",
                 },
             ];
 
             for (let i = 0; i < clientList.length; i++) {
                 const curClient = clientList[i];
                 const option = document.createElement("option");
-                option.setAttribute("value", curClient.id);
+                option.setAttribute("value", JSON.stringify(curClient));
                 option.innerText = curClient.name;
                 document.querySelector("#client-list").appendChild(option);
             }
-
-            const systemOutlineList = ['Analysis','System Design','Source Code', 'Testing','Deploy','Maintence','Documet']
-
-            systemOutlineList.forEach(item => {
-                const option = document.createElement("option");
-                option.setAttribute('value', item);
-                option.textContent = item
-                document.querySelector("#systemOutlines-list").appendChild(option);
-            })
 
             const proListFromBack = [
                 {
                     id: 1,
                     name: "project name",
-                    start_date: 1698105600000,
-                    end_date: 1698710400000,
+                    start_date: 1696377600000,
+                    end_date: 1701648000000,
                     user: { id: 2, name: "zawlinshein" },
                     background: "project background",
                     currentPhase: "TESTING",
@@ -215,6 +220,27 @@
                     ],
                 },
             ];
+
+            const fullQuillEditor = document.querySelector(".quill-editor-full");
+
+            const editor = new Quill(fullQuillEditor, {
+                modules: {
+                    toolbar: toolbaroptions,
+                },
+                theme: "snow",
+            });
+
+            const checkboxes = document.querySelectorAll('input[name="systemOutline"]');
+            const systemOutlineData = {};
+
+            document.querySelector("#validation-form").addEventListener('submit', function(e) {
+                e.preventDefault()
+                checkboxes.forEach((checkbox) => {
+                    systemOutlineData[checkbox.value] = checkbox.checked;
+                });
+                console.log(systemOutlineData)
+                console.log('quill', editor.root.innerHTML)
+            })
 
             const motherContainer = document.querySelector("#sort-container");
 
@@ -378,7 +404,7 @@
                     ).innerText = targetData.exReview;
                     detailMoal.querySelector(
                         "#project-duration"
-                    ).innerText = `${duration} months`;
+                    ).innerText = `${duration}`;
                     detailMoal.querySelector("#project-start-date").innerText =
                         formatDateFromMilliseconds(targetData.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =
@@ -444,11 +470,10 @@
             $(document).ready(function () {
                 console.log("Document is ready!");
 
-                let a = $("#architectures-list, #systemOutlines-list, #deliverable").select2({
+                let a = $("#architectures-list, #deliverable").select2({
                     tags: true,
                     width: "100%",
                 });
-                $('#systemOutlines-list').select2()
                 console.log(a)
             });
 
@@ -458,31 +483,7 @@
                 ".quill-editor-bubble"
             );
 
-            let toolbaroptions = [
-                // Test-style
-                ["bold", "italic", "underline"],
-
-                // Bullet points style...
-                [{ list: "ordered" }, { list: "bullet" }],
-
-                // Sub and super script...
-                [{ script: "sub" }, { script: "super" }],
-
-                // Indentation...
-                [{ indent: "+1" }, { indent: "-1" }],
-
-                // Alignment
-                [{ align: [] }],
-
-                // Header for test, e.g., h1, h2...
-                [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-                // Adding image, link, video, or formula
-                ["link"],
-
-                // Adding code snippet or blockquote
-                ["code-block", "blockquote"],
-            ];
+            
 
             // Initialize Quill for each selected element
             quillEditors.forEach(function (editor) {
@@ -492,15 +493,6 @@
                     },
                     theme: "snow",
                 });
-            });
-
-            let fullQuillEditor = document.querySelector(".quill-editor-full");
-
-            new Quill(fullQuillEditor, {
-                modules: {
-                    toolbar: toolbaroptions,
-                },
-                theme: "snow",
             });
 
             function getData() {
@@ -653,7 +645,7 @@
             aria-labelledby="staticBackdropLabel"
             aria-hidden="true"
         >
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content task-content">
                     <div class="modal-header">
                         <h2 class="modal-title fs-5" style="text-align: center">
@@ -815,13 +807,21 @@
                                             >System Outlines
                                             <span style="color: red"> *</span>
                                         </label>
-                                        <select
-                                            class="form-control border-task-description"
-                                            id="systemOutlines-list"
-                                            name="systemOutlines"
-                                            multiple="multiple"
-                                        >
-                                        </select>
+                                        
+                                        <input type="checkbox" name="systemOutline" value="document" id="Document">
+                                        <label for="Document">Document</label><br>
+                                        <input type="checkbox" name="systemOutline" value="maintenance" id="Maintence">
+                                        <label for="Maintence">Maintence</label><br>
+                                        <input type="checkbox" name="systemOutline" value="deploy" id="Deploy">
+                                        <label for="Deploy">Deploy</label><br>
+                                        <input type="checkbox" name="systemOutline" value="testing" id="Testing">
+                                        <label for="Testing">Testing</label><br>
+                                        <input type="checkbox" name="systemOutline" value="coding" id="Source Code">
+                                        <label for="Source Code">Source Code</label><br>
+                                        <input type="checkbox" name="systemOutline" value="sys_design" id="System Design">
+                                        <label for="System Design">System Design</label><br>
+                                        <input type="checkbox" name="systemOutline" value="analysis" id="Analysis">
+                                        <label for="Analysis">Analysis</label>
                                     </div>
 
                                     <div class="col-lg-6">
@@ -872,13 +872,6 @@
                                             data-dismiss="modal"
                                         >
                                             Add
-                                        </button>
-                                        <button
-                                            type="reset"
-                                            class="btn btn-secondary mr-2"
-                                            data-dismiss="modal"
-                                        >
-                                            Cancel
                                         </button>
                                     </div>
                                 </form>

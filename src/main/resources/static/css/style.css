@@ -566,12 +566,12 @@
 
 /* Handle */
 *::-webkit-scrollbar-thumb {
-    background: #020204;
+    background: #4759fe;
 }
 
 /* Handle on hover */
 *::-webkit-scrollbar-thumb:hover {
-    background: #4759fe;
+    background: #838fff;
 }
 
 /* Track */
