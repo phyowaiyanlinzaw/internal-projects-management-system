@@ -561,22 +561,22 @@
 }
 
 *::-webkit-scrollbar {
-    width: 5px;
+    width: 2px;
 }
 
 /* Handle */
 *::-webkit-scrollbar-thumb {
-    background: #b7acef;
+    background: #020204;
 }
 
 /* Handle on hover */
 *::-webkit-scrollbar-thumb:hover {
-    background: #917aff;
+    background: #4759fe;
 }
 
 /* Track */
 *::-webkit-scrollbar-track {
-    background: #000000;
+    background: rgba(0, 0, 0, 0);
 }
 
 .board {

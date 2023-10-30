@@ -6,15 +6,521 @@
 
  -->
 <!DOCTYPE html>
-<html
-    lang="en"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="layout/layout"
->
-    <head> </head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Internal Project Management</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta
+            name="keywords"
+            content="project, management, project management, teamplaceholder project management"
+        />
+        <meta content name="description" />
+        <meta name="author" content="teamplaceholder's project" />
 
-    <body layout:fragment="content">
+        <!-- Favicon -->
+        <!-- <link href="/images/favicon.ico" rel="icon"> -->
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- bootstrap icons -->
+        <link rel="stylesheet" href="/font/bootstrap-icons.min.css" />
+
+        <!-- Libraries Stylesheet -->
+        <link
+            href="/lib/owlcarousel/assets/owl.carousel.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="/lib/quill/quill.bubble.css" />
+        <link rel="stylesheet" href="/lib/quill/quill.snow.css" />
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"
+        />
+
+        <link href="/css/daypilot.css" rel="stylesheet" type="text/css" />
+
+        <!-- datepicker -->
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css"
+        />
+
+        <!--  select-->
+        <!-- <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"> -->
+
+        <!-- Bootstrap Tables -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/bootstrap-table.min.css"
+        />
+
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/css/bootstrap-select.min.css"> -->
+
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"> -->
+        <!-- Template Stylesheet -->
+        <link href="/css/style.css" rel="stylesheet" />
+        <link href="/css/bootstrap-select2.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <script type="module" defer>
+            import {
+                formatDateFromMilliseconds,
+                MONTH_NAMES,
+                calculateDuration,
+            } from "/js/time.js";
+
+            const startDateInput = document.getElementById("start_date");
+            const endDateInput = document.getElementById("end_date");
+
+            startDateInput.addEventListener("change", function () {
+                const startDate = new Date(startDateInput.value);
+                const minEndDate = new Date(startDate);
+                minEndDate.setMonth(startDate.getMonth() + 1);
+
+                endDateInput.min = minEndDate.toISOString().split("T")[0];
+                endDateInput.disabled = false;
+            });
+
+            const arcList = [
+                {
+                    id: 1,
+                    tech_name: "js",
+                },
+                {
+                    id: 2,
+                    tech_name: "html",
+                },
+                {
+                    id: 3,
+                    tech_name: "css",
+                },
+            ];
+
+            for (let i = 0; i < arcList.length; i++) {
+                const curArc = arcList[i];
+                let option = document.createElement("option");
+                if (i === 1) {
+                    option.selected = true;
+                }
+                option.setAttribute("value", curArc.id);
+                option.innerText = curArc.tech_name;
+                document
+                    .querySelector("#architectures-list")
+                    .appendChild(option);
+            }
+
+            const clientList = [
+                {
+                    id: 1,
+                    name: "zawlinshein",
+                    email: "dat@gamil.com",
+                    phone: "09 775862459",
+                },
+                {
+                    id: 2,
+                    name: "dog",
+                    email: "dog@gamil.com",
+                    phone: "09 11111111111",
+                },
+                {
+                    id: 3,
+                    name: "papaya",
+                    email: "papa@gamil.com",
+                    phone: "09 775862459",
+                },
+            ];
+
+            for (let i = 0; i < clientList.length; i++) {
+                const curClient = clientList[i];
+                const option = document.createElement("option");
+                option.setAttribute("value", curClient.id);
+                option.innerText = curClient.name;
+                document.querySelector("#client-list").appendChild(option);
+            }
+
+            const proListFromBack = [
+                {
+                    id: 1,
+                    name: "project name",
+                    start_date: 1698105600000,
+                    end_date: 1698710400000,
+                    user: { id: 2, name: "zawlinshein" },
+                    background: "project background",
+                    currentPhase: "TESTING",
+                    department: { id: 1, name: "department name" },
+                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
+                    inReview: 25,
+                    exReview: 2,
+                    client: {
+                        id: 1,
+                        name: "Dat",
+                        phone: "09 77558833",
+                        email: "suckmyfingure@gmail.com",
+                    },
+                    totalTask: 100,
+                    doneTask: 50,
+                    amount: {
+                        basicDesign: 0,
+                        detailDesign: 0,
+                        coding: 0,
+                        unitTesting: 0,
+                        integratedTesting: 0,
+                    },
+                    systemOutline: {
+                        analysis: true,
+                        sys_design: true,
+                        coding: false,
+                        testing: false,
+                        deploy: true,
+                        maintenance: true,
+                        document: true,
+                    },
+                    architecutre: [
+                        { id: 1, tech_name: "html" },
+                        { id: 2, tech_name: "mysql" },
+                        { id: 3, tech_name: "js" },
+                        { id: 4, tech_name: "java" },
+                        { id: 5, tech_name: "spring boot" },
+                    ],
+                },
+            ];
+
+            const motherContainer = document.querySelector("#sort-container");
+
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < proListFromBack.length; i++) {
+                let currentProject = proListFromBack[i];
+
+                const div = document.createElement("div");
+                div.classList.add(
+                    "p-md-3",
+                    "p-sm-2",
+                    "active-card",
+                    "mt-3",
+                    "mt-md-0",
+                    "mt-lg-0",
+                    "mt-xl-0"
+                );
+                div.id = `project-${currentProject.id}`;
+
+                const card = document.createElement("div");
+                card.classList.add("card", "border-success");
+
+                const cardHeader = document.createElement("div");
+                cardHeader.classList.add("card-header");
+
+                const dFlexContainer = document.createElement("div");
+                dFlexContainer.classList.add("d-flex", "flex-column");
+
+                const h2 = document.createElement("h2");
+                h2.classList.add(
+                    "card-title",
+                    "text-center",
+                    "text-primary",
+                    "modal-detail-title"
+                );
+                h2.innerText = currentProject.name;
+
+                const dFlexBetween = document.createElement("div");
+                dFlexBetween.classList.add("d-flex", "justify-content-between");
+
+                const dFlexInner = document.createElement("div");
+                dFlexInner.classList.add("d-flex");
+
+                const img = document.createElement("img");
+                img.src = `https://source.unsplash.com/random/200x200?sig=${currentProject.id}`;
+                img.classList.add(
+                    "img-fluid",
+                    "rounded-circle",
+                    "d-none",
+                    "d-md-block",
+                    "d-sm-block"
+                );
+                img.style.width = "40px";
+                img.alt = "Profile Image";
+
+                const h5 = document.createElement("h5");
+                h5.classList.add(
+                    "card-text",
+                    "text-center",
+                    "text-align-center",
+                    "my-auto",
+                    "fst-italic",
+                    "fs-6",
+                    "ms-2"
+                );
+                h5.innerText = currentProject.user.name;
+
+                const a = document.createElement("a");
+                a.href = "#";
+                a.id = currentProject.id;
+                a.classList.add(
+                    "btn",
+                    "btn-white",
+                    "text-secondary",
+                    "link-shadow"
+                );
+                a.setAttribute("data-bs-toggle", "modal");
+                a.setAttribute("data-bs-target", "#project-details");
+                a.innerText = "See More";
+
+                // Create and append the progress-related elements
+                const cardBody = document.createElement("div");
+                cardBody.classList.add(
+                    "card-body",
+                    "position-relative",
+                    "mx-auto"
+                );
+
+                const progressTitle = document.createElement("p");
+                progressTitle.classList.add(
+                    "card-title",
+                    "text-center",
+                    "fs-6",
+                    "mb-1"
+                );
+                progressTitle.innerText = "progress";
+
+                const progressCircle = document.createElement("div");
+                progressCircle.id = `circle-progress-${currentProject.id}`;
+                progressCircle.classList.add(
+                    "circle-progress",
+                    "rounded-circle"
+                );
+                progressCircle.setAttribute("data-min-value", "0");
+                progressCircle.setAttribute("data-max-value", "100");
+                progressCircle.setAttribute(
+                    "data-value",
+                    (
+                        (currentProject.doneTask / currentProject.totalTask) *
+                        100
+                    ).toString()
+                );
+                progressCircle.setAttribute("data-type", "percent");
+
+                dFlexInner.appendChild(img);
+                dFlexInner.appendChild(h5);
+                dFlexBetween.appendChild(dFlexInner);
+                dFlexBetween.appendChild(a);
+                dFlexContainer.appendChild(h2);
+                dFlexContainer.appendChild(dFlexBetween);
+                cardHeader.appendChild(dFlexContainer);
+                card.appendChild(cardHeader);
+
+                cardBody.appendChild(progressTitle);
+                cardBody.appendChild(progressCircle);
+                card.appendChild(cardBody);
+
+                div.appendChild(card);
+                fragment.appendChild(div);
+            }
+
+            motherContainer.appendChild(fragment);
+
+            const detailMoal = document.querySelector("#project-details");
+
+            motherContainer.addEventListener("click", function (e) {
+                let target = e.target;
+
+                if (target.hasAttribute("data-bs-target")) {
+                    let id = parseInt(target.getAttribute("id"));
+                    let targetData = proListFromBack.find((a) => a.id == id);
+                    let duration = calculateDuration(
+                        targetData.start_date,
+                        targetData.end_date
+                    );
+                    detailMoal.querySelector(".modal-title").innerText =
+                        targetData.name;
+                    detailMoal.querySelector("#project-background").innerText =
+                        targetData.background;
+                    detailMoal.querySelector("#project-name").innerText =
+                        targetData.name;
+                    detailMoal.querySelector(
+                        "#project-department-name"
+                    ).innerHTML = targetData.department.name;
+                    detailMoal.querySelector(
+                        "#project-internal-review-count"
+                    ).innerText = targetData.inReview;
+                    detailMoal.querySelector(
+                        "#project-external-review-count"
+                    ).innerText = targetData.exReview;
+                    detailMoal.querySelector(
+                        "#project-duration"
+                    ).innerText = `${duration} months`;
+                    detailMoal.querySelector("#project-start-date").innerText =
+                        formatDateFromMilliseconds(targetData.start_date);
+                    detailMoal.querySelector("#project-end-date").innerText =
+                        formatDateFromMilliseconds(targetData.end_date);
+                    detailMoal.querySelector(
+                        "#project-current-phase"
+                    ).innerText = targetData.currentPhase;
+                    detailMoal.querySelector("#project-client-name").innerText =
+                        targetData.client.name;
+                }
+            });
+
+            let dateFilter = document.querySelector("#month-filter");
+
+            dateFilter.addEventListener("input", function (e) {
+                console.log("lee");
+                let allData =
+                    document.getElementById("sort-container").children;
+                let currentTime = dateFilter.value;
+
+                let targetProject = proListFromBack.find((a) => {
+                    const projectDate = new Date(a.startDate);
+
+                    const projectMonth = projectDate.getMonth();
+
+                    console.log(projectMonth);
+
+                    console.log(MONTH_NAMES[projectMonth]);
+
+                    console.log(currentTime);
+
+                    console.log(MONTH_NAMES[projectMonth] === currentTime);
+
+                    return MONTH_NAMES[projectMonth] === currentTime;
+                });
+
+                console.log(targetProject);
+
+                for (let i = 0; i < allData.length; i++) {
+                    if (
+                        targetProject &&
+                        targetProject.id ===
+                            parseInt(allData[i].getAttribute("id"))
+                    ) {
+                        allData[i].style.display = "block";
+                    } else {
+                        allData[i].style.display = "none";
+                    }
+                }
+            });
+
+            document
+                .querySelector("#reset-btn")
+                .addEventListener("click", function (e) {
+                    let allData =
+                        document.getElementById("sort-container").children;
+
+                    for (let i = 0; i < allData.length; i++) {
+                        allData[i].style.display = "block";
+                    }
+                });
+
+            $(document).ready(function () {
+                console.log("Document is ready!");
+
+                $("#architectures, #systemOutlines, #deliverable").select2({
+                    tags: true,
+                    width: "100%",
+                });
+            });
+
+            console.log("error");
+
+            let quillEditors = document.querySelectorAll(
+                ".quill-editor-bubble"
+            );
+
+            let toolbaroptions = [
+                // Test-style
+                ["bold", "italic", "underline"],
+
+                // Bullet points style...
+                [{ list: "ordered" }, { list: "bullet" }],
+
+                // Sub and super script...
+                [{ script: "sub" }, { script: "super" }],
+
+                // Indentation...
+                [{ indent: "+1" }, { indent: "-1" }],
+
+                // Alignment
+                [{ align: [] }],
+
+                // Header for test, e.g., h1, h2...
+                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+                // Adding image, link, video, or formula
+                ["link"],
+
+                // Adding code snippet or blockquote
+                ["code-block", "blockquote"],
+            ];
+
+            // Initialize Quill for each selected element
+            quillEditors.forEach(function (editor) {
+                new Quill(editor, {
+                    modules: {
+                        toolbar: toolbaroptions,
+                    },
+                    theme: "snow",
+                });
+            });
+
+            let fullQuillEditor = document.querySelector(".quill-editor-full");
+
+            new Quill(fullQuillEditor, {
+                modules: {
+                    toolbar: toolbaroptions,
+                },
+                theme: "snow",
+            });
+
+            function getData() {
+                const userInput = quill.root.innerHTML;
+                console.log(userInput);
+            }
+
+            let minusButtons = document.querySelectorAll(".minus");
+            let plusButtons = document.querySelectorAll(".plus");
+
+            minusButtons.forEach(function (minusButton) {
+                minusButton.addEventListener("click", function () {
+                    let input = this.parentElement.querySelector("input");
+                    let count = parseInt(input.value) - 1;
+                    count = count < 0 ? 0 : count;
+                    input.value = count;
+                    console.log(input, count);
+                    //input.dispatchEvent(new Event('change'));
+                    return false;
+                });
+            });
+
+            plusButtons.forEach(function (plusButton) {
+                plusButton.addEventListener("click", function () {
+                    let input = this.parentElement.querySelector("input");
+                    input.value = parseInt(input.value) + 1;
+                    //input.dispatchEvent(new Event('change'));
+                    return false;
+                });
+            });
+        </script>
+    </head>
+
+    <body>
         <div class="container-fluid position-relative bg-white d-flex p-0">
             <!-- Spinner Start -->
             <div
@@ -55,7 +561,9 @@
                     id="dropdrown-search-bar"
                 >
                     <div class="d-flex flex-row justify-content-end gap-2">
-                        <button class="btn btn-info" id="reset-btn">reset</button>
+                        <button class="btn btn-info" id="reset-btn">
+                            reset
+                        </button>
                         <div class="d-inline-block">
                             <select id="month-filter" class="form-control">
                                 <option value="January">January</option>
@@ -211,20 +719,9 @@
                                             class="form-select border-task-description"
                                             aria-label="Select Client"
                                             data-live-search="true"
-                                            id="client"
+                                            id="client-list"
                                             name="client"
-                                        >
-                                            <option selected>
-                                                Choose Client
-                                            </option>
-                                            <option>Analysis</option>
-                                            <option>System Design</option>
-                                            <option>Coding</option>
-                                            <option>Testing</option>
-                                            <option>Deploy</option>
-                                            <option>Maintenance</option>
-                                            <option>Document</option>
-                                        </select>
+                                        ></select>
                                     </div>
 
                                     <div class="col-md-6">
@@ -273,12 +770,12 @@
                                                 *</span
                                             ></label
                                         >
-                                        <input
+                                        <textarea
                                             type="text"
                                             class="form-control border-task-description"
                                             id="background"
                                             name="background"
-                                        />
+                                        ></textarea>
                                     </div>
 
                                     <div class="col-lg-6">
@@ -291,16 +788,10 @@
                                         </label>
                                         <select
                                             class="form-control"
-                                            id="architectures"
+                                            id="architectures-list"
                                             name="architectures"
                                             multiple="multiple"
-                                        >
-                                            <option selected="selected">
-                                                orange
-                                            </option>
-                                            <option>white</option>
-                                            <option>purple</option>
-                                        </select>
+                                        ></select>
                                     </div>
 
                                     <div class="col-lg-6">
@@ -1207,326 +1698,6 @@
         <script src="/js/bootstrap-select2.min.js"></script>
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
 
-        <script type="module">
-
-            import {
-
-                formatDateFromMilliseconds,
-                MONTH_NAMES,
-                calculateDuration
-                
-            } from '/js/time.js'
-
-            const startDateInput = document.getElementById("start_date");
-            const endDateInput = document.getElementById("end_date");
-
-            startDateInput.addEventListener("change", function () {
-
-                const startDate = new Date(startDateInput.value);
-                const minEndDate = new Date(startDate);
-                minEndDate.setMonth(startDate.getMonth() + 1); 
-
-                endDateInput.min = minEndDate.toISOString().split("T")[0];
-                endDateInput.disabled = false;
-            });
-
-            const proListFromBack = [
-                {
-                    id: 1,
-                    name: "project name",
-                    start_date: 1698105600000,
-                    end_date: 1698710400000,
-                    user: { id: 2, name: "zawlinshein" },
-                    background: "project background",
-                    currentPhase: "TESTING",
-                    department: { id: 1, name: "department name" },
-                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
-                    inReview: 25,
-                    exReview: 2,
-                    client: {
-                        id: 1,
-                        name: "Dat",
-                        phone: "09 77558833",
-                        email: "suckmyfingure@gmail.com",
-                    },
-                    totalTask: 100,
-                    doneTask: 50,
-                    amount: {
-                        basicDesign: 0,
-                        detailDesign: 0,
-                        coding: 0,
-                        unitTesting: 0,
-                        integratedTesting: 0,
-                    },
-                    systemOutline: {
-                        analysis: true,
-                        sys_design: true,
-                        coding: false,
-                        testing: false,
-                        deploy: true,
-                        maintenance: true,
-                        document: true,
-                    },
-                    architecutre: [
-                        { id: 1, tech_name: "html" },
-                        { id: 2, tech_name: "mysql" },
-                        { id: 3, tech_name: "js" },
-                        { id: 4, tech_name: "java" },
-                        { id: 5, tech_name: "spring boot" },
-                    ],
-                },
-            ];
-
-            const motherContainer = document.querySelector("#sort-container");
-
-            for (let i = 0; i < proListFromBack.length; i++) {
-                let currentProject = proListFromBack[i];
-
-                const curDiv = `<div
-                            class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0"
-                            id="project-${currentProject.id}"
-                        >
-                            <div class="card border-success">
-                                <div class="card-header">
-                                    <div class="d-flex flex-column">
-                                        <h2
-                                            class="card-title text-center text-primary modal-detail-title"
-                                        >
-                                            ${currentProject.name}
-                                        </h2>
-                                        <div
-                                            class="d-flex justify-content-between"
-                                        >
-                                            <div class="d-flex">
-                                                <img
-                                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                                    class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                                    style="width: 40px"
-                                                    alt="..."
-                                                />
-                                                <h5
-                                                    class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
-                                                >
-                                                    ${currentProject.user.name}
-                                                </h5>
-                                            </div>
-                                            <a
-                                                href=""
-                                                id="${currentProject.id}"
-                                                class="btn btn-white text-secondary link-shadow"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#project-details"
-                                                >See More</a
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="card-body position-relative mx-auto"
-                                >
-                                    <p class="card-title text-center fs-6 mb-1">
-                                        progress
-                                    </p>
-                                    <div
-                                        id="circle-progress-${
-                                            currentProject.id
-                                        }"
-                                        class="circle-progress rounded-circle"
-                                        data-min-value="0"
-                                        data-max-value="100"
-                                        data-value="${
-                                            (currentProject.doneTask /
-                                                currentProject.totalTask) *
-                                            100
-                                        }"
-                                        data-type="percent"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>`;
-
-                motherContainer.innerHTML += curDiv;
-            }
-
-            const detailMoal = document.querySelector("#project-details");
-
-            motherContainer.addEventListener("click", function (e) {
-                let target = e.target;
-
-                if (target.hasAttribute("data-bs-target")) {
-                    let id = parseInt(target.getAttribute("id"));
-                    let targetData = proListFromBack.find((a) => a.id == id);
-                    let duration = calculateDuration(
-                        targetData.start_date,
-                        targetData.end_date
-                    );
-                    detailMoal.querySelector(".modal-title").innerText =
-                        targetData.name;
-                    detailMoal.querySelector("#project-background").innerText =
-                        targetData.background;
-                    detailMoal.querySelector("#project-name").innerText =
-                        targetData.name;
-                    detailMoal.querySelector(
-                        "#project-department-name"
-                    ).innerHTML = targetData.department.name;
-                    detailMoal.querySelector(
-                        "#project-internal-review-count"
-                    ).innerText = targetData.inReview;
-                    detailMoal.querySelector(
-                        "#project-external-review-count"
-                    ).innerText = targetData.exReview;
-                    detailMoal.querySelector(
-                        "#project-duration"
-                    ).innerText = `${duration} months`;
-                    detailMoal.querySelector("#project-start-date").innerText =
-                        formatDateFromMilliseconds(targetData.start_date);
-                    detailMoal.querySelector("#project-end-date").innerText =
-                        formatDateFromMilliseconds(targetData.end_date);
-                    detailMoal.querySelector(
-                        "#project-current-phase"
-                    ).innerText = targetData.currentPhase;
-                    detailMoal.querySelector("#project-client-name").innerText =
-                        targetData.client.name;
-                }
-            });
-
-            let dateFilter = document.querySelector("#month-filter");
-
-            dateFilter.addEventListener("input", function(e) {
-                console.log("lee");
-                let allData =
-                    document.getElementById("sort-container").children;
-                let currentTime = dateFilter.value;
-
-                let targetProject = proListFromBack.find((a) => {
-                    const projectDate = new Date(a.startDate);
-
-                    const projectMonth = projectDate.getMonth();
-
-                    console.log(projectMonth)
-
-                    console.log(MONTH_NAMES[projectMonth])
-
-                    console.log(currentTime)
-
-                    console.log(MONTH_NAMES[projectMonth] === currentTime)
-
-                    return MONTH_NAMES[projectMonth] === currentTime;
-                });
-
-                console.log(targetProject);
-
-                for (let i = 0; i < allData.length; i++) {
-                    if (
-                        targetProject &&
-                        targetProject.id ===
-                            parseInt(allData[i].getAttribute("id"))
-                    ) {
-                        allData[i].style.display = "block";
-                    } else {
-                        allData[i].style.display = "none";
-                    }
-                }
-            });
-
-            document.querySelector('#reset-btn').addEventListener('click', function (e) {
-                let allData =
-                    document.getElementById("sort-container").children;
-
-                for(let i = 0; i < allData.length; i++) {
-                    allData[i].style.display = 'block'
-                }
-            })
-
-            $(document).ready(function () {
-                console.log("Document is ready!");
-
-                $("#architectures, #systemOutlines, #deliverable").select2({
-                    tags: true,
-                    width: "100%",
-                });
-            });
-
-            console.log("error");
-
-            let quillEditors = document.querySelectorAll(
-                ".quill-editor-bubble"
-            );
-
-            let toolbaroptions = [
-                // Test-style
-                ["bold", "italic", "underline"],
-
-                // Bullet points style...
-                [{ list: "ordered" }, { list: "bullet" }],
-
-                // Sub and super script...
-                [{ script: "sub" }, { script: "super" }],
-
-                // Indentation...
-                [{ indent: "+1" }, { indent: "-1" }],
-
-                // Alignment
-                [{ align: [] }],
-
-                // Header for test, e.g., h1, h2...
-                [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-                // Adding image, link, video, or formula
-                ["link"],
-
-                // Adding code snippet or blockquote
-                ["code-block", "blockquote"],
-            ];
-
-            // Initialize Quill for each selected element
-            quillEditors.forEach(function (editor) {
-                new Quill(editor, {
-                    modules: {
-                        toolbar: toolbaroptions,
-                    },
-                    theme: "snow",
-                });
-            });
-
-            let fullQuillEditor = document.querySelector(".quill-editor-full");
-
-            new Quill(fullQuillEditor, {
-                modules: {
-                    toolbar: toolbaroptions,
-                },
-                theme: "snow",
-            });
-
-            function getData() {
-                const userInput = quill.root.innerHTML;
-                console.log(userInput);
-            }
-
-            let minusButtons = document.querySelectorAll(".minus");
-            let plusButtons = document.querySelectorAll(".plus");
-
-            minusButtons.forEach(function (minusButton) {
-                minusButton.addEventListener("click", function () {
-                    let input = this.parentElement.querySelector("input");
-                    let count = parseInt(input.value) - 1;
-                    count = count < 0 ? 0 : count;
-                    input.value = count;
-                    console.log(input, count);
-                    //input.dispatchEvent(new Event('change'));
-                    return false;
-                });
-            });
-
-            plusButtons.forEach(function (plusButton) {
-                plusButton.addEventListener("click", function () {
-                    let input = this.parentElement.querySelector("input");
-                    input.value = parseInt(input.value) + 1;
-                    //input.dispatchEvent(new Event('change'));
-                    return false;
-                });
-            });
-        </script>
-
+        
     </body>
 </html>
