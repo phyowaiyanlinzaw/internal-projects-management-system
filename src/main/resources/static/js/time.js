@@ -5,6 +5,21 @@ const WEEK = 7 * DAY;
 const MONTH = 4 * WEEK;
 const YEAR = 12 * MONTH;
 
+export const MONTH_NAMES = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+];
+
 export function getTimeElapsed(selectedMillisecond) {
 
     const timeElapsedInSeconds = (Date.now() - selectedMillisecond) / 1000;
@@ -36,4 +51,28 @@ export function getTimeElapsed(selectedMillisecond) {
     }
 
     return result + prefix;
+}
+
+export function formatDateFromMilliseconds(milliseconds) {
+    const date = new Date(milliseconds);
+    const day = date.getDate();
+
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+
+    const formattedDate = `${day} ${month} ${year}`;
+    return formattedDate;
+}
+
+export function calculateDuration(startDate, endDate) {
+    const startTimestamp = startDate.getTime();
+    const endTimestamp = endDate.getTime();
+
+    // Calculate the difference in milliseconds
+    const durationInMilliseconds = endTimestamp - startTimestamp;
+
+    // Convert the duration to months
+    const durationInMonths = durationInMilliseconds / (30.44 * 24 * 60 * 60 * 1000); // Average month duration
+
+    return Math.floor(durationInMonths); // Round down to the nearest whole month
 }

@@ -260,6 +260,7 @@
                                             class="form-control border-task-description"
                                             id="end_date"
                                             name="end_date"
+                                            disabled
                                         />
                                     </div>
 
@@ -1183,7 +1184,7 @@
         <script src="/js/databales.min.js"></script>
 
         <!-- bootstrap -->
-        <!-- <script src="/js/bootstrap.bundle.min.js"></script> -->
+        <script src="/js/bootstrap.bundle.min.js"></script>
 
         <!-- javascript libraries -->
         <script src="/lib/chart/chart.min.js"></script>
@@ -1207,33 +1208,27 @@
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
 
         <script type="module">
-            class project {
-                constructor({
-                    id,
-                    name: name,
-                    startDate: star,
-                    endDate,
-                    departmentId,
-                    PMId,
-                    background,
-                    currentPhase,
-                    objective,
-                    client,
-                    exReview,
-                    inReview,
-                }) {
-                    this.id = id;
-                    this.name = name;
-                    this.endDate = endDate;
-                    this.PMId = PMId;
-                    this.background = background;
-                    this.currentPhase = currentPhase;
-                    this.objective = objective;
-                    this.exReview = exReview;
-                    this.inReview = inReview;
-                    this.client = client; // only name i guess
-                }
-            }
+
+            import {
+
+                formatDateFromMilliseconds,
+                MONTH_NAMES,
+                calculateDuration
+                
+            } from '/js/time.js'
+
+            const startDateInput = document.getElementById("start_date");
+            const endDateInput = document.getElementById("end_date");
+
+            startDateInput.addEventListener("change", function () {
+
+                const startDate = new Date(startDateInput.value);
+                const minEndDate = new Date(startDate);
+                minEndDate.setMonth(startDate.getMonth() + 1); 
+
+                endDateInput.min = minEndDate.toISOString().split("T")[0];
+                endDateInput.disabled = false;
+            });
 
             const proListFromBack = [
                 {
@@ -1289,7 +1284,7 @@
 
                 const curDiv = `<div
                             class="p-md-3 p-sm-2 active-card mt-3 mt-md-0 mt-lg-0 mt-xl-0"
-                            id="${currentProject.id}"
+                            id="project-${currentProject.id}"
                         >
                             <div class="card border-success">
                                 <div class="card-header">
@@ -1312,7 +1307,7 @@
                                                 <h5
                                                     class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
                                                 >
-                                                    ${currentProject.pm.name}
+                                                    ${currentProject.user.name}
                                                 </h5>
                                             </div>
                                             <a
@@ -1355,50 +1350,6 @@
 
             const detailMoal = document.querySelector("#project-details");
 
-            function calculateDuration(startDate, endDate) {
-                const durationMillis = endDate - startDate;
-
-                // Convert duration in milliseconds to days, hours, minutes, and seconds
-                const durationInSeconds = Math.floor(durationMillis / 1000);
-                const seconds = durationInSeconds % 60;
-                const durationMinutes = Math.floor(durationInSeconds / 60);
-                const minutes = durationMinutes % 60;
-                const durationHours = Math.floor(durationMinutes / 60);
-                const hours = durationHours % 24;
-                const days = Math.floor(durationHours / 24);
-
-                return {
-                    days,
-                    hours,
-                    minutes,
-                    seconds,
-                };
-            }
-
-            function formatDateFromMilliseconds(milliseconds) {
-                const date = new Date(milliseconds);
-                const day = date.getDate();
-                const monthNames = [
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May",
-                    "June",
-                    "July",
-                    "August",
-                    "September",
-                    "October",
-                    "November",
-                    "December",
-                ];
-                const month = monthNames[date.getMonth()];
-                const year = date.getFullYear();
-
-                const formattedDate = `${day} ${month} ${year}`;
-                return formattedDate;
-            }
-
             motherContainer.addEventListener("click", function (e) {
                 let target = e.target;
 
@@ -1406,8 +1357,8 @@
                     let id = parseInt(target.getAttribute("id"));
                     let targetData = proListFromBack.find((a) => a.id == id);
                     let duration = calculateDuration(
-                        targetData.startDate,
-                        targetData.endDate
+                        targetData.start_date,
+                        targetData.end_date
                     );
                     detailMoal.querySelector(".modal-title").innerText =
                         targetData.name;
@@ -1426,11 +1377,11 @@
                     ).innerText = targetData.exReview;
                     detailMoal.querySelector(
                         "#project-duration"
-                    ).innerText = `${duration.days} days, ${duration.hours} hours, ${duration.minutes} minutes, ${duration.seconds} seconds`;
+                    ).innerText = `${duration} months`;
                     detailMoal.querySelector("#project-start-date").innerText =
-                        formatDateFromMilliseconds(targetData.startDate);
+                        formatDateFromMilliseconds(targetData.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =
-                        formatDateFromMilliseconds(targetData.endDate);
+                        formatDateFromMilliseconds(targetData.end_date);
                     detailMoal.querySelector(
                         "#project-current-phase"
                     ).innerText = targetData.currentPhase;
@@ -1441,57 +1392,26 @@
 
             let dateFilter = document.querySelector("#month-filter");
 
-            const monthNames = [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-            ];
-
-            dateFilter.addEventListener("input", filterProjects);
-
-            document.querySelector('#reset-btn').addEventListener('click', function (e) {
-                let allData =
-                    document.getElementById("sort-container").children;
-
-                for(let i = 0; i < allData.length; i++) {
-                    allData[i].style.display = 'block'
-                }
-            })
-
-            function filterProjects(e) {
+            dateFilter.addEventListener("input", function(e) {
                 console.log("lee");
                 let allData =
                     document.getElementById("sort-container").children;
                 let currentTime = dateFilter.value;
 
                 let targetProject = proListFromBack.find((a) => {
-                    // Convert the millisecond timestamp to a Date object
                     const projectDate = new Date(a.startDate);
 
-                    // Extract the month from the Date object
                     const projectMonth = projectDate.getMonth();
 
                     console.log(projectMonth)
 
-                    console.log(monthNames[projectMonth])
+                    console.log(MONTH_NAMES[projectMonth])
 
                     console.log(currentTime)
 
-                    console.log(monthNames[projectMonth] === currentTime)
+                    console.log(MONTH_NAMES[projectMonth] === currentTime)
 
-                    // Extract the month from the currentTime Date object
-
-                    // Compare the months
-                    return monthNames[projectMonth] === currentTime;
+                    return MONTH_NAMES[projectMonth] === currentTime;
                 });
 
                 console.log(targetProject);
@@ -1507,7 +1427,16 @@
                         allData[i].style.display = "none";
                     }
                 }
-            }
+            });
+
+            document.querySelector('#reset-btn').addEventListener('click', function (e) {
+                let allData =
+                    document.getElementById("sort-container").children;
+
+                for(let i = 0; i < allData.length; i++) {
+                    allData[i].style.display = 'block'
+                }
+            })
 
             $(document).ready(function () {
                 console.log("Document is ready!");
