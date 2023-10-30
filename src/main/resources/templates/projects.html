@@ -79,8 +79,11 @@
         <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"> -->
         <!-- Template Stylesheet -->
         <link href="/css/style.css" rel="stylesheet" />
-        <link href="/css/bootstrap-select2.min.css" rel="stylesheet" />
+        <!-- <link href="/css/bootstrap-select2.min.css" rel="stylesheet" /> -->
+        
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <script src="/js/custome.js" defer></script>
         <script type="module" defer>
             import {
                 formatDateFromMilliseconds,
@@ -117,7 +120,7 @@
 
             for (let i = 0; i < arcList.length; i++) {
                 const curArc = arcList[i];
-                let option = document.createElement("option");
+                const option = document.createElement("option");
                 if (i === 1) {
                     option.selected = true;
                 }
@@ -156,6 +159,15 @@
                 option.innerText = curClient.name;
                 document.querySelector("#client-list").appendChild(option);
             }
+
+            const systemOutlineList = ['Analysis','System Design','Source Code', 'Testing','Deploy','Maintence','Documet']
+
+            systemOutlineList.forEach(item => {
+                const option = document.createElement("option");
+                option.setAttribute('value', item);
+                option.textContent = item
+                document.querySelector("#systemOutlines-list").appendChild(option);
+            })
 
             const proListFromBack = [
                 {
@@ -432,10 +444,12 @@
             $(document).ready(function () {
                 console.log("Document is ready!");
 
-                $("#architectures, #systemOutlines, #deliverable").select2({
+                let a = $("#architectures-list, #systemOutlines-list, #deliverable").select2({
                     tags: true,
                     width: "100%",
                 });
+                $('#systemOutlines-list').select2()
+                console.log(a)
             });
 
             console.log("error");
@@ -634,7 +648,6 @@
         <div
             class="modal fade"
             id="add-department-modal"
-            data-bs-backdrop="static"
             data-bs-keyboard="false"
             tabindex="-1"
             aria-labelledby="staticBackdropLabel"
@@ -804,15 +817,10 @@
                                         </label>
                                         <select
                                             class="form-control border-task-description"
-                                            id="systemOutlines"
+                                            id="systemOutlines-list"
                                             name="systemOutlines"
                                             multiple="multiple"
                                         >
-                                            <option selected="selected">
-                                                orange
-                                            </option>
-                                            <option>white</option>
-                                            <option>purple</option>
                                         </select>
                                     </div>
 
@@ -941,13 +949,6 @@
                                             data-dismiss="modal"
                                         >
                                             Create
-                                        </button>
-                                        <button
-                                            type="reset"
-                                            class="btn btn-secondary mr-2"
-                                            data-dismiss="modal"
-                                        >
-                                            Cancel
                                         </button>
                                     </div>
                                 </form>
@@ -1693,9 +1694,9 @@
         <script src="/js/forprogresscircleiguess.js"></script>
 
         <!-- sort (department, project), form validation and search bar behavior are all here -->
-        <script src="/js/custome.js"></script>
 
-        <script src="/js/bootstrap-select2.min.js"></script>
+        <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
 
         
