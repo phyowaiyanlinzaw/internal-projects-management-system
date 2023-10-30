@@ -561,10 +561,6 @@
                                                     class="small fst-italic"
                                                     id="project-background"
                                                 ></p>
-                                                <p
-                                                    class="small fst-italic"
-                                                    id="project-background"
-                                                ></p>
 
                                                 <h5 class="card-title">
                                                     Project Details
@@ -1243,9 +1239,9 @@
                 {
                     id: 1,
                     name: "project name",
-                    startDate: 1698105600000,
-                    endDate: 1698710400000,
-                    pm: { id: 2, name: "zawlinshein" },
+                    start_date: 1698105600000,
+                    end_date: 1698710400000,
+                    user: { id: 2, name: "zawlinshein" },
                     background: "project background",
                     currentPhase: "TESTING",
                     department: { id: 1, name: "department name" },
@@ -1269,107 +1265,19 @@
                     },
                     systemOutline: {
                         analysis: true,
-                        sysDesign: true,
+                        sys_design: true,
                         coding: false,
                         testing: false,
                         deploy: true,
-                        maintenence: true,
+                        maintenance: true,
                         document: true,
                     },
                     architecutre: [
-                        { id: 1, name: "html" },
-                        { id: 2, name: "mysql" },
-                        { id: 3, name: "js" },
-                        { id: 4, name: "java" },
-                        { id: 5, name: "spring boot" },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: "another project",
-                    startDate: 1700000000000,
-                    endDate: 1701000000000,
-                    pm: { id: 3, name: "phyo" },
-                    background: "another project background",
-                    currentPhase: "detail design",
-                    department: { id: 1, name: "department name two" },
-                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
-                    inReview: 15,
-                    exReview: 5,
-                    client: {
-                        id: 1,
-                        name: "Dat",
-                        phone: "09 77558833",
-                        email: "suckmyfingure@gmail.com",
-                    },
-                    totalTask: 30,
-                    doneTask: 20,
-                    amount: {
-                        basicDesign: 1,
-                        detailDesign: 2,
-                        coding: 3,
-                        unitTesting: 1,
-                        integratedTesting: 2,
-                    },
-                    systemOutline: {
-                        analysis: false,
-                        sysDesign: true,
-                        coding: true,
-                        testing: false,
-                        deploy: true,
-                        maintenence: false,
-                        document: true,
-                    },
-                    architecutre: [
-                        { id: 1, name: "html" },
-                        { id: 2, name: "mysql" },
-                        { id: 3, name: "js" },
-                        { id: 4, name: "java" },
-                        { id: 5, name: "spring boot" },
-                    ],
-                },
-                {
-                    id: 3,
-                    name: "third project",
-                    startDate: 1702000000000,
-                    endDate: 1703000000000,
-                    pm: { id: 4, name: "nyo" },
-                    background: "third project background",
-                    currentPhase: "coding",
-                    department: { id: 1, name: "department name three" },
-                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
-                    inReview: 10,
-                    exReview: 3,
-                    client: {
-                        id: 1,
-                        name: "Dat",
-                        phone: "09 77558833",
-                        email: "suckmyfingure@gmail.com",
-                    },
-                    totalTask: 40,
-                    doneTask: 10,
-                    amount: {
-                        basicDesign: 2,
-                        detailDesign: 1,
-                        coding: 4,
-                        unitTesting: 2,
-                        integratedTesting: 3,
-                    },
-                    systemOutline: {
-                        analysis: true,
-                        sysDesign: false,
-                        coding: true,
-                        testing: true,
-                        deploy: false,
-                        maintenence: true,
-                        document: true,
-                    },
-                    architecutre: [
-                        { id: 1, name: "html" },
-                        { id: 2, name: "mysql" },
-                        { id: 3, name: "js" },
-                        { id: 4, name: "java" },
-                        { id: 5, name: "spring boot" },
+                        { id: 1, tech_name: "html" },
+                        { id: 2, tech_name: "mysql" },
+                        { id: 3, tech_name: "js" },
+                        { id: 4, tech_name: "java" },
+                        { id: 5, tech_name: "spring boot" },
                     ],
                 },
             ];
