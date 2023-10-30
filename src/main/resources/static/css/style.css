@@ -1073,12 +1073,7 @@
 }
 
 
-/*for client*/
-body{
-    justify-content: flex-start;
-    padding-top: 10vh;
-    font-family: 'Roboto', sans-serif;
-}
+/*for pm*/
 
 .tagify{
     width: 100%;
@@ -1158,3 +1153,4 @@ body{
     vertical-align: top;
     pointer-events: none;
 }
+/*end*/
