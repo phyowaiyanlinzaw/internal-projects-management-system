@@ -36,9 +36,15 @@ public class UserMapper {
         user.setRole(userDto.getRole());
 
         // Convert DepartmentDto to Department using DepartmentMapper
-        user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
+        if (userDto.getDepartmentdto() != null) {
+            user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
+        } else {
+            user.setDepartment(null); // or handle this case as needed
+        }
 
         return user;
     }
+
+
 
 }
