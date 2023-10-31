@@ -22,7 +22,7 @@ import java.util.Objects;
 public class Issue implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String title;
     private String description;
     private String place;

@@ -5,8 +5,6 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDt
 import java.util.List;
 
 public interface IssueService {
-
-
     IssueDto save(IssueDto issueDto);
 
     List<IssueDto> getAllIssues();
