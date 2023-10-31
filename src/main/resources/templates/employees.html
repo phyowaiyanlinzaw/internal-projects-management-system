@@ -119,9 +119,6 @@
                       <td>0</td>
                   </tr>
                 </tbody>
-
-
-
             </table>
         </div>
 <!--        <div th:replace="fragments/footer :: aside"></div>-->
@@ -136,7 +133,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!-- Modal Header End -->
                     <div class="modal-body">
-                        <div class="form-floating mb-3 mt-4">
+                        <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="floatingText" placeholder="jhondoe">
                             <label for="floatingText">Username</label>
                         </div>
@@ -152,6 +149,7 @@
                                 <option value="Project Manager">ProjectManager</option>
                                 <option value="Member">Member</option>
                                 <option value="FOC">FOC</option>
+                                <option value="Contract">Contract</option>
                             </select>
                         </div>
 
@@ -163,7 +161,7 @@
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4" style="background-color: #369;">Register</button>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-2" style="background-color: #369;">Register</button>
                     </div>  <!-- Modal Body End -->
                 </div>
                 </div>
@@ -198,7 +196,29 @@
         });
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
+
+        $('#memberSelect').change(function() {
+            var selectedValue = $(this).val();
+            var departmentSelect = $('#departmentSelect');
+
+            if (selectedValue === 'Member' || selectedValue === 'FOC') {
+                departmentSelect.html(`
+                        <option value="1">Project Manager 1</option>
+                        <option value="2">Project Manager 2</option>
+                        <option value="3">Project Manager 3</option>
+                    `);
+            } else {
+                departmentSelect.html(`
+                        <option value="Department 1">Department 1</option>
+                        <option value="Department 2">Department 2</option>
+                        <option value="Department 3">Department 3</option>
+                    `);
+            }
         });
+
+        });
+
+
 </script>
 </body>
 </html>
