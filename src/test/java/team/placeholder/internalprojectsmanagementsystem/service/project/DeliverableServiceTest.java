@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableDto;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;

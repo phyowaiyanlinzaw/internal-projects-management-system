@@ -20,7 +20,7 @@ public class DeliverableServiceImpl implements DeliverableService{
         Deliverable deliverable = new Deliverable();
         deliverable.setId(deliverableDto.getId());
         deliverable.setStatus(deliverableDto.isStatus());
-        deliverable.setProject(deliverableDto.getProjectDto());
+        deliverable.setType(deliverableDto.getType());
         deliverable = deliverableRepository.save(deliverable);
         return DeliverableMapper.toDeliverableDto(deliverable);
 
