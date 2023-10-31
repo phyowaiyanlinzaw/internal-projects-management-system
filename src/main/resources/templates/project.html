@@ -383,33 +383,26 @@ vs
                         <div class="col-lg-6">
                             <label for="task" class="col-sm-12 col-form-label ">Task Name <span
                                     style="color:red"> *</span></label>
-                            <input type="text" class="form-control border-task" name="task">
+                            <input type="text" class="form-control border-task-description" name="task">
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="pm" class="col-sm-12 col-form-label " name="pm">Project Manager <span
+                            <label for="pm" class="col-sm-12 col-form-label " name="pm">Assign Members<span
                                     style="color:red"> *</span></label>
-                            <select class="form-control selectpicker" aria-label="Select Project Manager"
-                                    data-live-search="true" id="pm" name="pm" multiple>
-                                <option>Category</option>
-                                <option>Android</option>
-                                <option>IOS</option>
-                                <option>Ui/Ux Design</option>
-                                <option>Development</option>
-                            </select>
+                            <input type="text" name='pm-tags' id="pm" value='abatisse2@nih.gov, Justinian Hattersley'>
                         </div>
 
 
                         <div class="col-md-6">
                             <label for="start_time" class="col-sm-12 col-form-label" name="start_time">Start Date <span
                                     style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task" id="start_time" name="start_time">
+                            <input type="date" class="form-control border-task-description" id="start_time" name="start_time">
                         </div>
 
                         <div class="col-md-6">
                             <label for="end_time" class="col-sm-12 col-form-label" name="end_time">End Date <span
                                     style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task" id="end_time" name="end_time">
+                            <input type="date" class="form-control border-task-description" id="end_time" name="end_time">
                         </div>
 
 
@@ -483,6 +476,200 @@ vs
 
     <!-- sort (department, project), form validation and search bar behavior are all here -->
     <script src="/js/custome.js"></script>
+
+
+<!--    for assign member-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
+
+
+    <script>
+        var inputElm = document.querySelector('input[name=pm-tags]');
+        function tagTemplate(tagData){
+            return `
+        <tag title="${tagData.email}"
+                contenteditable='false'
+                spellcheck='false'
+                tabIndex="-1"
+                class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                ${this.getAttributes(tagData)}>
+            <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+            <div>
+                <div class='tagify__tag__avatar-wrap'>
+                    <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                </div>
+                <span class='tagify__tag-text'>${tagData.name}</span>
+            </div>
+        </tag>
+    `
+        }
+
+        function suggestionItemTemplate(tagData){
+            return `
+        <div ${this.getAttributes(tagData)}
+            class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+            tabindex="0"
+            role="option">
+            ${ tagData.avatar ? `
+            <div class='tagify__dropdown__item__avatar-wrap'>
+                <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+            </div>` : ''
+            }
+            <strong>${tagData.name}</strong>
+            <span>${tagData.email}</span>
+        </div>
+    `
+        }
+
+        function dropdownHeaderTemplate(suggestions){
+            return `
+        <div class="${this.settings.classNames.dropdownItem} ${this.settings.classNames.dropdownItem}__addAll">
+            <strong>${this.value.length ? `Add remaning ${suggestions.length}` : 'Add All'}</strong>
+            <span>${suggestions.length} members</span>
+        </div>
+    `
+        }
+
+        // initialize Tagify on the above input node reference
+        var tagify = new Tagify(inputElm, {
+            tagTextProp: 'name', // very important since a custom template is used with this property as text
+            // enforceWhitelist: true,
+            skipInvalid: true, // do not remporarily add invalid tags
+            dropdown: {
+                closeOnSelect: false,
+                enabled: 0,
+                classname: 'users-list',
+                searchKeys: ['name', 'email']  // very important to set by which keys to search for suggesttions when typing
+            },
+            templates: {
+                tag: tagTemplate,
+                dropdownItem: suggestionItemTemplate,
+                dropdownHeader: dropdownHeaderTemplate
+            },
+            whitelist: [
+                {
+                    "value": 1,
+                    "name": "Justinian Hattersley",
+                    "avatar": "https://i.pravatar.cc/80?img=1",
+                    "email": "jhattersley0@ucsd.edu"
+                },
+                {
+                    "value": 2,
+                    "name": "Antons Esson",
+                    "avatar": "https://i.pravatar.cc/80?img=2",
+                    "email": "aesson1@ning.com"
+                },
+                {
+                    "value": 3,
+                    "name": "Ardeen Batisse",
+                    "avatar": "https://i.pravatar.cc/80?img=3",
+                    "email": "abatisse2@nih.gov"
+                },
+                {
+                    "value": 4,
+                    "name": "Graeme Yellowley",
+                    "avatar": "https://i.pravatar.cc/80?img=4",
+                    "email": "gyellowley3@behance.net"
+                },
+                {
+                    "value": 5,
+                    "name": "Dido Wilford",
+                    "avatar": "https://i.pravatar.cc/80?img=5",
+                    "email": "dwilford4@jugem.jp"
+                },
+                {
+                    "value": 6,
+                    "name": "Celesta Orwin",
+                    "avatar": "https://i.pravatar.cc/80?img=6",
+                    "email": "corwin5@meetup.com"
+                },
+                {
+                    "value": 7,
+                    "name": "Sally Main",
+                    "avatar": "https://i.pravatar.cc/80?img=7",
+                    "email": "smain6@techcrunch.com"
+                },
+                {
+                    "value": 8,
+                    "name": "Grethel Haysman",
+                    "avatar": "https://i.pravatar.cc/80?img=8",
+                    "email": "ghaysman7@mashable.com"
+                },
+                {
+                    "value": 9,
+                    "name": "Marvin Mandrake",
+                    "avatar": "https://i.pravatar.cc/80?img=9",
+                    "email": "mmandrake8@sourceforge.net"
+                },
+                {
+                    "value": 10,
+                    "name": "Corrie Tidey",
+                    "avatar": "https://i.pravatar.cc/80?img=10",
+                    "email": "ctidey9@youtube.com"
+                },
+                {
+                    "value": 11,
+                    "name": "foo",
+                    "avatar": "https://i.pravatar.cc/80?img=11",
+                    "email": "foo@bar.com"
+                },
+                {
+                    "value": 12,
+                    "name": "foo",
+                    "avatar": "https://i.pravatar.cc/80?img=12",
+                    "email": "foo.aaa@foo.com"
+                },
+            ],
+            transformTag: (tagData, originalData) => {
+                var {name, email} = parseFullValue(tagData.name)
+                tagData.name = name
+                tagData.email = email || tagData.email
+            },
+            validate({name, email}) {
+                // when editing a tag, there will only be the "name" property which contains name + email (see 'transformTag' above)
+                if( !email && name ) {
+                    var parsed = parseFullValue(name)
+                    name = parsed.name
+                    email = parsed.email
+                }
+
+                if( !name ) return "Missing name"
+                if( !validateEmail(email) ) return "Invalid email"
+
+                return true
+            }
+        })
+
+        // attach events listeners
+        tagify.on('dropdown:select', onSelectSuggestion) // allows selecting all the suggested (whitelist) items
+            .on('edit:start', onEditStart)  // show custom text in the tag while in edit-mode
+
+        function onSelectSuggestion(e){
+            // custom class from "dropdownHeaderTemplate"
+            if( e.detail.elm.classList.contains(`${tagify.settings.classNames.dropdownItem}__addAll`) )
+                tagify.dropdown.selectAll();
+        }
+
+        function onEditStart({detail:{tag, data}}){
+            tagify.setTagTextNode(tag, `${data.name} <${data.email}>`)
+        }
+
+        // https://stackoverflow.com/a/9204568/104380
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        }
+
+        function parseFullValue(value) {
+            // https://stackoverflow.com/a/11592042/104380
+            var parts = value.split(/<(.*?)>/g),
+                name = parts[0].trim(),
+                email = parts[1]?.replace(/<(.*?)>/g, '').trim();
+
+            return {name, email}
+        }
+    </script>
+
+
+
     <script>
 
         // Get all elements with the common class name
