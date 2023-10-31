@@ -138,18 +138,18 @@
                 },
             ];
 
-            for (let i = 0; i < arcList.length; i++) {
-                const curArc = arcList[i];
-                const option = document.createElement("option");
-                if (i === 1) {
-                    option.selected = true;
-                }
-                option.setAttribute("value", curArc.id);
-                option.innerText = curArc.tech_name;
-                document
-                    .querySelector("#architectures-list")
-                    .appendChild(option);
-            }
+            // for (let i = 0; i < arcList.length; i++) {
+            //     const curArc = arcList[i];
+            //     const option = document.createElement("option");
+            //     if (i === 1) {
+            //         option.selected = true;
+            //     }
+            //     option.setAttribute("value", curArc.id);
+            //     option.innerText = curArc.tech_name;
+            //     document
+            //         .querySelector("#architectures")
+            //         .appendChild(option);
+            // }
 
             const clientList = [
                 {
@@ -166,13 +166,13 @@
                 },
             ];
 
-            for (let i = 0; i < clientList.length; i++) {
-                const curClient = clientList[i];
-                const option = document.createElement("option");
-                option.setAttribute("value", JSON.stringify(curClient));
-                option.innerText = curClient.name;
-                document.querySelector("#client-list").appendChild(option);
-            }
+            // for (let i = 0; i < clientList.length; i++) {
+            //     const curClient = clientList[i];
+            //     const option = document.createElement("option");
+            //     option.setAttribute("value", JSON.stringify(curClient));
+            //     option.innerText = curClient.name;
+            //     document.querySelector("#client").appendChild(option);
+            // }
 
             const proListFromBack = [
                 {
