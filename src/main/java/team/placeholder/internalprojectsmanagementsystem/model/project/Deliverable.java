@@ -41,5 +41,10 @@ public class Deliverable implements Serializable {
     }
 
 
+    public String getType() {
+        return null;
+    }
 
+    public void setType(String type) {
+    }
 }

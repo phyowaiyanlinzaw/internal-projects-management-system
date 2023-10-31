@@ -77,4 +77,12 @@ public class User implements Serializable {
         return Objects.hash(id);
     }
 
+
+    public User orElseNull() {
+        return null;
+    }
+
+    public User orElseThrow(Object o) {
+        return null;
+    }
 }

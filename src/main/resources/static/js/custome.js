@@ -220,20 +220,28 @@ $(document).ready(function () {
             }
         });
 
+
         dDSbar.addEventListener('input', function (e) {
-            let inputText = dDSbar.querySelector('input').value.toLowerCase();
-            let allData = sortableContainer.children;
 
-            for (let i = 0; i < allData.length; i++) {
-                let text = allData[i].querySelector('.card-title').textContent.toLowerCase(); // Use .textContent to get the text
+            let target = e.target
 
-                if (text.includes(inputText)) {
-                    allData[i].style.display = 'block';
-                } else {
-                    allData[i].style.display = 'none';
+            if (target.getAttribute('type') === 'search') {
+
+                let inputText = target.value.toLowerCase();
+                let allData = sortableContainer.children;
+
+                for (let i = 0; i < allData.length; i++) {
+                    let text = allData[i].querySelector('.card-title').textContent.toLowerCase(); // Use .textContent to get the text
+
+                    if (text.includes(inputText)) {
+                        allData[i].style.display = 'block';
+                    } else {
+                        allData[i].style.display = 'none';
+                    }
                 }
             }
         });
+
     }
 
     // close search bar when window width < 768
@@ -296,7 +304,7 @@ $(document).ready(function () {
 
             if (grandpaDiv === null) return
 
-            console.log('grandpadiv',grandpaDiv)
+            console.log('grandpadiv', grandpaDiv)
 
             const targetModal = document.querySelector(target.getAttribute('data-bs-target'))
             console.log(target.getAttribute('data-bs-target'))
@@ -314,8 +322,20 @@ $(document).ready(function () {
     // ======================== change modal title automatic =======================
 
 
+    // Get all date input elements using a common class name or another method
+    const dateInputs = document.querySelectorAll('input[type="date"]');
 
+    // Get the current date and format it as yyyy-MM-dd
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const minDate = `${year}-${month}-${day}`;
 
+    // Set the min attribute for each date input
+    dateInputs.forEach((dateInput) => {
+        dateInput.setAttribute('min', minDate);
+    });
 
 });
 

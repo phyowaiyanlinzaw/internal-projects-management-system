@@ -3,7 +3,9 @@
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
+//import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 //import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
+//import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 //import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 //import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 //import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
@@ -25,9 +27,8 @@
 //    public ProjectDto  save(ProjectDto projectDto) {
 //        Project project = new Project();
 //        project.setId(projectDto.getId());
-//        project.setUser(projectDto.getUser());
-//        project.setClient(projectDto.getClient());
-//        project.setDepartment(projectDto.getDepartment());
+//        project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
+//        project.setDepartment(DepartmentMapper.toDepartment(projectDto.getDepartment());
 //        project.setObjective(projectDto.getObjective());
 //        project.setDuration(projectDto.getDuration());
 //        project.setName(projectDto.getName());

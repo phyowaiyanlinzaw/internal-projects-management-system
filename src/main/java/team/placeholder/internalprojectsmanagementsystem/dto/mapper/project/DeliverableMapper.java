@@ -11,8 +11,7 @@ public class DeliverableMapper {
         DeliverableDto deliverableDto = new DeliverableDto();
         deliverableDto.setId(deliverable.getId());
         deliverableDto.setStatus(deliverable.isStatus());
-        // Use ProjectMapper to convert the project
-        deliverableDto.setProjectDto(ProjectMapper.toProjectDto(deliverable.getProject()));
+        deliverableDto.setType(deliverable.getType());
 
         return deliverableDto;
     }
@@ -24,10 +23,7 @@ public class DeliverableMapper {
         Deliverable deliverable = new Deliverable();
         deliverable.setId(deliverableDto.getId());
         deliverable.setStatus(deliverableDto.isStatus());
-
-        // Use ProjectMapper to convert the project
-        deliverable.setProject(ProjectMapper.toProject(deliverableDto.getProjectDto()));
-
+        deliverable.setType(deliverableDto.getType());
         return deliverable;
     }
 }
