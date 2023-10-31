@@ -561,22 +561,22 @@
 }
 
 *::-webkit-scrollbar {
-    width: 5px;
+    width: 2px;
 }
 
 /* Handle */
 *::-webkit-scrollbar-thumb {
-    background: #b7acef;
+    background: #4759fe;
 }
 
 /* Handle on hover */
 *::-webkit-scrollbar-thumb:hover {
-    background: #917aff;
+    background: #838fff;
 }
 
 /* Track */
 *::-webkit-scrollbar-track {
-    background: #000000;
+    background: rgba(0, 0, 0, 0);
 }
 
 .board {
@@ -781,7 +781,7 @@
 }
 
 /* Task Add */
-.col-form-label {
+/* .col-form-label {
     color: #01041b;
 }
 
@@ -816,7 +816,7 @@
 .border-task-description {
     background-color: #f8f7f7;
     line-height: 28px;
-}
+} */
 
 /**Task End**/
 
