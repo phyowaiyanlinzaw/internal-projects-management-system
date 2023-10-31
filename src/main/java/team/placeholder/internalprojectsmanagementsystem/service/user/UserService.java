@@ -2,7 +2,6 @@ package team.placeholder.internalprojectsmanagementsystem.service.user;
 
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.util.List;
 
@@ -20,10 +19,11 @@ public interface UserService {
 
     UserDto updateProfile(UserDto userDto);
 
-    UserDto changePassword(UserDto userDto, String newPassword);
+    void resetPassword(String email);
 
-    void sendEmail(String to);
+    void sendEmail(String to, String subject, String text);
 
+    UserDto registerUser(UserDto userDto);
 
 
 
