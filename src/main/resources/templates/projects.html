@@ -141,51 +141,22 @@
                     <div class="card border-success">
                         <div class="card-header">
                             <div class="d-flex flex-column">
-                                <h2
-                                        class="card-title text-center text-primary modal-detail-title"
-                                >
-                                    h
-                                </h2>
-                                <div
-                                        class="d-flex justify-content-between"
-                                >
+                                <h2 class="card-title text-center text-primary modal-detail-title">h</h2>
+                                <div class="d-flex justify-content-between">
                                     <div class="d-flex">
                                         <img
                                                 src="https://source.unsplash.com/random/200x200?sig=1"
                                                 class="img-fluid rounded-circle d-none d-md-block d-sm-block"
-                                                style="width: 40px"
-                                                alt="..."
-                                        />
-                                        <h5
-                                                class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2"
-                                        >
-                                            Project manager
-                                        </h5>
+                                                style="width: 40px" alt="..."/>
+                                        <h5 class="card-text text-center text-align-center my-auto fst-italic fs-6 ms-2">Project manager</h5>
                                     </div>
-                                    <a
-                                            href=""
-                                            class="btn btn-white text-secondary link-shadow"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#project-details"
-                                    >See More</a
-                                    >
+                                    <a href="" class="btn btn-white text-secondary link-shadow" data-bs-toggle="modal" data-bs-target="#project-details">See More</a>
                                 </div>
                             </div>
                         </div>
-                        <div
-                                class="card-body position-relative mx-auto"
-                        >
-                            <p class="card-title text-center fs-6 mb-1">
-                                progress
-                            </p>
-                            <div
-                                    id="circle-progress-2"
-                                    class="circle-progress rounded-circle"
-                                    data-min-value="0"
-                                    data-max-value="100"
-                                    data-value="25"
-                                    data-type="percent"
-                            ></div>
+                        <div class="card-body position-relative mx-auto">
+                            <p class="card-title text-center fs-6 mb-1">progress</p>
+                            <div id="circle-progress-2" class="circle-progress rounded-circle" data-min-value="0" data-max-value="100" data-value="25" data-type="percent"></div>
                         </div>
                     </div>
                 </div>
@@ -295,58 +266,25 @@
 <!--    modal for add project-->
 
 <!-- modal for project's details -->
-<div
-        class="modal fade"
-        id="project-details"
-        data-bs-keyboard="true"
->
+<div class="modal fade" id="project-details" data-bs-keyboard="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">
-                    Department Details
-                </h5>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                ></button>
+                <h5 class="modal-title" id="staticBackdropLabel">Department Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xl-4">
                         <div class="card">
-                            <div
-                                    class="card-body profile-card pt-4 d-flex flex-column align-items-center"
-                            >
-                                <img
-                                        src="https://source.unsplash.com/random/200x200?sig=1"
-                                        alt="Profile"
-                                        class="rounded-circle"
-                                />
+                            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                                <img src="https://source.unsplash.com/random/200x200?sig=1" alt="Profile" class="rounded-circle"/>
                                 <h2>Kevin Anderson</h2>
                                 <div class="social-links mt-2">
-                                    <a href="#" class="twitter"
-                                    ><i
-                                            class="bi bi-twitter"
-                                    ></i
-                                    ></a>
-                                    <a href="#" class="facebook"
-                                    ><i
-                                            class="bi bi-facebook"
-                                    ></i
-                                    ></a>
-                                    <a href="#" class="instagram"
-                                    ><i
-                                            class="bi bi-instagram"
-                                    ></i
-                                    ></a>
-                                    <a href="#" class="linkedin"
-                                    ><i
-                                            class="bi bi-linkedin"
-                                    ></i
-                                    ></a>
+                                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -356,37 +294,21 @@
                         <div class="card">
                             <div class="card-body pt-3">
                                 <!-- Bordered Tabs -->
-                                <ul
-                                        class="nav nav-tabs nav-tabs-bordered"
-                                >
+                                <ul class="nav nav-tabs nav-tabs-bordered">
                                     <li class="nav-item">
-                                        <button
-                                                class="nav-link active"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#project-overview"
-                                        >
-                                            Overview
-                                        </button>
+                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#project-overview">Overview</button>
                                     </li>
 
                                     <li class="nav-item">
-                                        <button
-                                                class="nav-link"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#project-edit"
-                                        >
-                                            edit
-                                        </button>
+                                        <butto class="nav-link" data-bs-toggle="tab" data-bs-target="#project-edit">Client</button>
                                     </li>
                                 </ul>
                                 <div class="tab-content pt-2">
-                                    <div
-                                            class="tab-pane fade show active profile-overview"
-                                            id="project-overview"
-                                    >
-                                        <h5 class="card-title">
-                                            About background
-                                        </h5>
+                                    <div class="tab-pane fade show active profile-overview"
+                                            id="project-overview">
+                                        <h5 class="card-title">About background
+                                            <i class="fa-regular fa-pen-to-square"></i></h5>
+
                                         <p class="small fst-italic">
                                             Sunt est soluta
                                             temporibus accusantium
@@ -401,126 +323,48 @@
                                             unde.
                                         </p>
 
-                                        <h5 class="card-title">
-                                            Project Details
-                                        </h5>
+                                        <h5 class="card-title">Project Details</h5>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Department name
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                            >
-                                                dance club
-                                            </div>
+                                            <div class="col-lg-3 col-md-4 label col-4">Department name</div>
+                                            <div class="col-lg-9 col-md-8 col-8">dance club</div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Project name
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                            >
-                                                find nemo
-                                            </div>
+                                            <div class="col-lg-3 col-md-4 label col-4">Project name</div>
+                                            <div class="col-lg-9 col-md-8 col-8">find nemo</div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Duration
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                            >
-                                                3 Months
-                                            </div>
+                                            <div class="col-lg-3 col-md-4 label col-4">Duration</div>
+                                            <div class="col-lg-9 col-md-8 col-8">3 Months</div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Start date
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                            >
-                                                25 september 2022
-                                            </div>
+                                            <div class="col-lg-3 col-md-4 label col-4">Start date</div>
+                                            <div class="col-lg-9 col-md-8 col-8">25 september 2022</div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                End date
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                            >
-                                                25 december 2022
-                                            </div>
+                                            <div class="col-lg-3 col-md-4 label col-4">End date</div>
+                                            <div class="col-lg-9 col-md-8 col-8">25 december 2022</div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Current phase
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                            >
-                                                Basic design
-                                            </div>
+                                            <div class="col-lg-3 col-md-4 label col-4">Current phase</div>
+                                            <div class="col-lg-9 col-md-8 col-8">Basic design</div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Client
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                            >
-                                                DAT
-                                            </div>
+                                            <div class="col-lg-3 col-md-4 label col-4">Client</div>
+                                            <div class="col-lg-9 col-md-8 col-8">DAT</div>
                                         </div>
-                                        <div
-                                                class="col accordion"
-                                        >
-                                            <div
-                                                    class="accordion-item"
-                                            >
-                                                <h2
-                                                        class="accordion-header"
-                                                        id="systemOutline-headingOne"
-                                                >
-                                                    <button
-                                                            class="accordion-button"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#systemOutline-collapseOne"
-                                                            aria-expanded="true"
-                                                            aria-controls="systemOutline-collapseOne"
-                                                    >
-                                                        System outline
-                                                    </button>
+                                        <div class="col accordion">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="systemOutline-headingOne">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#systemOutline-collapseOne" aria-expanded="true" aria-controls="systemOutline-collapseOne">System outline</button>
                                                 </h2>
-                                                <div
-                                                        id="systemOutline-collapseOne"
-                                                        class="accordion-collapse collapse"
-                                                        aria-labelledby="systemOutline-headingOne"
-                                                >
+                                                <div id="systemOutline-collapseOne" class="accordion-collapse collapse" aria-labelledby="systemOutline-headingOne">
                                                     <ul class="list-group accordion-body p-0 rounded-end">
                                                         <li class="list-group-item d-flex justify-content-between">Analysis<i class="bi bi-check2-all text-success fs-4"></i></li>
                                                         <li class="list-group-item d-flex justify-content-between">System Design<i class="bi bi-check2-all text-success fs-4"></i></li>
@@ -534,103 +378,23 @@
                                             </div>
                                         </div>
 
-                                        <div
-                                                class="col accordion"
-                                        >
-                                            <div
-                                                    class="accordion-item"
-                                            >
-                                                <h2
-                                                        class="accordion-header"
-                                                        id="objective-headingOne"
-                                                >
-                                                    <button
-                                                            class="accordion-button"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#objective-collapseOne"
-                                                            aria-expanded="true"
-                                                            aria-controls="objective-collapseOne"
-                                                    >
-                                                        Objective
+                                        <div class="col accordion">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="objective-headingOne">
+                                                    <button class="accordion-button" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#objective-collapseOne"
+                                                            aria-expanded="true" aria-controls="objective-collapseOne">Objective
                                                     </button>
                                                 </h2>
-                                                <div
-                                                        id="objective-collapseOne"
-                                                        class="accordion-collapse collapse"
-                                                        aria-labelledby="objective-headingOne"
-                                                >
-                                                    <div
-                                                            class="accordion-body"
-                                                    >
-                                                        <strong
-                                                        >This
-                                                            is
-                                                            the
-                                                            first
-                                                            item's
-                                                            accordion
-                                                            body.</strong
-                                                        >
-                                                        It is
-                                                        shown by
-                                                        default,
-                                                        until
-                                                        the
-                                                        collapse
-                                                        plugin
-                                                        adds the
-                                                        appropriate
-                                                        classes
-                                                        that we
-                                                        use to
-                                                        style
-                                                        each
-                                                        element.
-                                                        These
-                                                        classes
-                                                        control
-                                                        the
-                                                        overall
-                                                        appearance,
-                                                        as well
-                                                        as the
-                                                        showing
-                                                        and
-                                                        hiding
-                                                        via CSS
-                                                        transitions.
-                                                        You can
-                                                        modify
-                                                        any of
-                                                        this
-                                                        with
-                                                        custom
-                                                        CSS or
-                                                        overriding
-                                                        our
-                                                        default
-                                                        variables.
-                                                        It's
-                                                        also
-                                                        worth
-                                                        noting
-                                                        that
-                                                        just
-                                                        about
-                                                        any HTML
-                                                        can go
-                                                        within
-                                                        the
-                                                        <code
-                                                        >.accordion-body</code
-                                                        >,
-                                                        though
-                                                        the
-                                                        transition
-                                                        does
-                                                        limit
-                                                        overflow.
+                                                <div id="objective-collapseOne" class="accordion-collapse collapse" aria-labelledby="objective-headingOne">
+                                                    <div class="accordion-body">
+                                                        <strong>This is the first item's accordion body.</strong>
+                                                        It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element.
+                                                        These classes control the overall appearance, as well as the showing and hiding via CSS transitions.
+                                                        You can modify any of this with custom CSS or overriding our default variables.
+                                                        It's also worth noting that just about any HTML can go within the
+                                                        <code>.accordion-body</code>,
+                                                        though the transition does limit overflow.
                                                     </div>
                                                 </div>
                                             </div>
@@ -638,135 +402,52 @@
 
                                     </div>
 
-                                    <div
-                                            class="tab-pane fade profile-edit pt-3"
-                                            id="project-edit"
-                                    >
+                                    <div class="tab-pane fade profile-edit pt-3" id="project-edit">
                                         <!-- Profile Edit Form -->
                                         <form>
                                             <div class="row mb-3">
-                                                <label
-
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >About
-                                                    background</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <div
-                                                            class="quill-editor-bubble"
-                                                    >
-                                                        <p>
-                                                            Hello
-                                                            World!
-                                                        </p>
-                                                        <p>
-                                                            This is
-                                                            Quill
-                                                            <strong
-                                                            >full</strong
-                                                            >
-                                                            editor
-                                                        </p>
+                                                <label class="col-md-4 col-lg-3 col-form-label">About background</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <div class="quill-editor-bubble">
+                                                        <p>Hello World!</p>
+                                                        <p> This is Quill <strong>full</strong>editor</p>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="project_name"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >Project
-                                                    name</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <input
-                                                            name="project_name"
-                                                            type="text"
-                                                            class="form-control"
-                                                            id="project_name"
-                                                            value="find nemo"
-                                                    />
+                                                <label for="project_name" class="col-md-4 col-lg-3 col-form-label">Project name</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="project_name" type="text" class="form-control" id="project_name" value="find nemo"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="start-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >start
-                                                    date</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <input
-                                                            name="start_date"
-                                                            type="date"
-                                                            class="form-control"
-                                                            id="start-date"
-                                                    />
+                                                <label for="start-date" class="col-md-4 col-lg-3 col-form-label">start date</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="start_date" type="date" class="form-control" id="start-date"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="end-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >end date</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <input
-                                                            name="end_date"
-                                                            type="date"
-                                                            class="form-control"
-                                                            id="end-date"
-                                                    />
+                                                <label for="end-date" class="col-md-4 col-lg-3 col-form-label">end date</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="end_date" type="date" class="form-control" id="end-date"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="end-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >Objective</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <div
-                                                            class="quill-editor-bubble"
-                                                    >
-                                                        <p>
-                                                            Hello
-                                                            World!
-                                                        </p>
-                                                        <p>
-                                                            This is
-                                                            Quill
-                                                            <strong
-                                                            >full</strong
-                                                            >
-                                                            editor
-                                                        </p>
+                                                <label for="end-date" class="col-md-4 col-lg-3 col-form-label">Objective</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <div class="quill-editor-bubble">
+                                                        <p> Hello World! </p>
+                                                        <p> This is Quill <strong>full</strong>editor</p>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div
-                                                    class="text-center"
-                                            >
-                                                <button
-                                                        type="submit"
-                                                        class="btn btn-primary"
-                                                >
-                                                    Save Changes
-                                                </button>
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
                                             </div>
                                         </form>
                                         <!-- End Profile Edit Form -->
@@ -779,9 +460,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="/project" class="btn btn-primary"
-                >manage task</a
-                >
+                <a href="/project" class="btn btn-primary">manage task</a>
             </div>
         </div>
     </div>
