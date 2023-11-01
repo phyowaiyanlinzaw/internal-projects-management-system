@@ -4,8 +4,11 @@ import org.springframework.stereotype.Component;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+
+import java.util.Set;
 
 @Component
 public class ProjectMapper {
@@ -17,17 +20,30 @@ public class ProjectMapper {
         projectDto.setId(project.getId());
         projectDto.setName(project.getName());
         projectDto.setBackground(project.getBackground());
-        projectDto.setDuration(project.getDuration());
         projectDto.setStart_date(project.getStart_date());
         projectDto.setEnd_date(project.getEnd_date());
-        projectDto.setCurrent_phase(project.getCurrent_phase());
         projectDto.setObjective(project.getObjective());
-        projectDto.setClientDto(ClientMapper.toClientDto(project.getClient())); // Convert Client to ClientDto
+        projectDto.setCurrent_phase(project.getCurrent_phase());
+        projectDto.setDuration(project.getDuration());
 
-        // Convert User to UserDto using UserMapper
-        projectDto.setUserDto(UserMapper.toUserDto(project.getUser()));
+        projectDto.setClientDto(ClientMapper.toClientDto(project.getClient()));
+        // Convert Client to ClientDto
 
-        projectDto.setDepartmentDto(DepartmentMapper.toDepartmentDto(project.getDepartment())); // Convert Department to DepartmentDto
+
+        projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
+        //Convert Architecture to ArchitectureDto
+
+
+        projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
+        //Deliverable to DeliverableDto
+
+
+        projectDto.setSystemOutLineDto(SystemOutLineMapper.tosystemOutLineDtos(project.getSystemOutLines()));
+        // Convert SystemOutLinesDto to SystemOutLines using UserMapper
+
+
+
+
         return projectDto;
     }
 
@@ -35,24 +51,32 @@ public class ProjectMapper {
         if (projectDto == null) {
             return null;
         }
-
         Project project = new Project();
         project.setId(projectDto.getId());
         project.setName(projectDto.getName());
         project.setBackground(projectDto.getBackground());
-        project.setDuration(projectDto.getDuration());
         project.setStart_date(projectDto.getStart_date());
         project.setEnd_date(projectDto.getEnd_date());
-        project.setCurrent_phase(projectDto.getCurrent_phase());
         project.setObjective(projectDto.getObjective());
+        project.setCurrent_phase(projectDto.getCurrent_phase());
+        project.setDuration(projectDto.getDuration());
 
-        // Convert ClientDto to Client using ClientMapper
+        project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
+
         project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
+        // Convert Client to ClientDto
 
-        // Convert UserDto to User using UserMapper
-        project.setUser(UserMapper.toUser(projectDto.getUserDto()));
 
-        project.setDepartment(DepartmentMapper.toDepartment(projectDto.getDepartmentDto())); // Convert DepartmentDto to Department
+        project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
+        //Convert Architecture to ArchitectureDto
+
+
+        project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
+        //Deliverable to DeliverableDto
+
+
+        project.setSystemOutLines(SystemOutLineMapper.tosystemOutLines(projectDto.getSystemOutLineDto()));
+        // Convert SystemOutLinesDto to SystemOutLines using UserMapper
+
         return project;
-    }
-}
+}}

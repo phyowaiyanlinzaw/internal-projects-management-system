@@ -1,7 +1,9 @@
 package team.placeholder.internalprojectsmanagementsystem.model.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +24,22 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Table(name="user")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class User implements Serializable {
 
     @Id
@@ -38,7 +56,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
@@ -49,19 +67,19 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name="project_id"))
     private Set<Project> projects = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Tasks> tasks;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> project;
 
-    @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL)
     private List<Issue> uploader;
 
-    @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL)
     private List<Issue> pic;
 
     @ManyToOne

@@ -34,6 +34,8 @@ public class Project implements Serializable {
     private DevelopmentPhase current_phase;
     private String objective;
 
+
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 

@@ -6,6 +6,13 @@
     <title>EMPLOYEES LIST</title>
 </head>
 <body layout:fragment="content">
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
 
@@ -40,17 +47,18 @@
                     data-toolbar-align="right"
                     data-search="true"
                     data-header-style="headerStyle"
+                    data-url="/api/user/list"
             >
                 <thead
                class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5"
                 >
                 <tr>
                     <th data-sortable="true"
-                        data-field="id"
+                        data-formatter="indexFormatter"
                         data-align="left"
                         data-valign="middle"
                         data-width="100"
-                    >ID</th>
+                    >No.</th>
                     <th data-sortable="true"
                         data-field="email"
                         data-align="left"
@@ -58,7 +66,7 @@
                         data-width="100"
                     >Email</th>
                     <th data-sortable="true"
-                        data-field="username"
+                        data-field="name"
                         data-align="left"
                         data-valign="middle"
                         data-width="100"
@@ -75,6 +83,7 @@
                         data-valign="middle"
                         data-width="100"
                     >Role</th>
+<!--                    TODO: GET PROJECT COUNT BY USER API -->
                     <th data-sortable="true"
                         data-field="projectCount"
                         data-align="left"
@@ -85,39 +94,6 @@
                 </thead>
 
                 <tbody>
-                  <!-- Sample User List -->
-                    <tr>
-                        <td>1</td>
-                        <td>user@user.com</td>
-                        <td>user</td>
-                        <td>IT</td>
-                        <td>Developer</td>
-                        <td>0</td>
-                    </tr>
-                  <tr>
-                      <td>1</td>
-                      <td>user@user.com</td>
-                      <td>yuzer</td>
-                      <td>IT</td>
-                      <td>Developer</td>
-                      <td>0</td>
-                  </tr>
-                  <tr>
-                      <td>1</td>
-                      <td>user@user.com</td>
-                      <td>user</td>
-                      <td>IT</td>
-                      <td>Developer</td>
-                      <td>0</td>
-                  </tr>
-                  <tr>
-                      <td>1</td>
-                      <td>user@user.com</td>
-                      <td>user</td>
-                      <td>IT</td>
-                      <td>Developer</td>
-                      <td>0</td>
-                  </tr>
                 </tbody>
 
 
@@ -136,34 +112,34 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!-- Modal Header End -->
                     <div class="modal-body">
-                        <div class="form-floating mb-3 mt-4">
-                            <input type="text" class="form-control" id="floatingText" placeholder="jhondoe">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingText" placeholder="jhondoe" required>
                             <label for="floatingText">Username</label>
                         </div>
 
 
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
                             <label for="floatingInput">Email address</label>
                         </div>
 
                         <div>
-                            <select id="memberSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;">
-                                <option value="Project Manager">ProjectManager</option>
-                                <option value="Member">Member</option>
+                            <select id="memberSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;" required>
+                                <option value="PROJECT_MANAGER" selected>Project Manager</option>
+                                <option value="EMPLOYEE">Member</option>
                                 <option value="FOC">FOC</option>
+                                <option value="CONTRACT">Contract</option>
                             </select>
                         </div>
 
                         <div>
                             <select id="departmentSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;">
-                                <option value="Department 1">Department 1</option>
-                                <option value="Department 2">Department 2</option>
-                                <option value="Department 3">Department 3</option>
+                            </select>
+                            <select id="projectManagerSelect" class="form-select form-select-lg mb-3"  aria-label=".form-select-lg example" style="font-size: 16px;display: none">
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4" style="background-color: #369;">Register</button>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-2" style="background-color: #369;" id="register-employee-btn">Register</button>
                     </div>  <!-- Modal Body End -->
                 </div>
                 </div>
@@ -193,11 +169,105 @@
 <!-- Include Bootstrap Table, and Bootstrap Table Export JavaScript -->
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
 <script>
+    function indexFormatter(value, row, index) {
+        return index + 1;
+    }
     $(function () {
+
         $('#table').bootstrapTable({
         });
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
+
+        $('#memberSelect').change(function() {
+            var selectedValue = $(this).val();
+            var departmentSelect = $('#departmentSelect');
+            var projectManagerSelect = $('#projectManagerSelect');
+
+            if (selectedValue === 'PROJECT_MANAGER') {
+                // Show departmentSelect and hide projectManagerSelect by display css property
+                departmentSelect.show();
+                projectManagerSelect.hide();
+
+                // Make an AJAX request to populate departmentSelect options
+                $.get('/api/department/list', function(data) {
+                    departmentSelect.empty();
+                    $.each(data, function(index, department) {
+                        departmentSelect.append($('<option>', {
+                            value: department,
+                            text: department
+                        }));
+                    });
+                });
+            } else {
+                // Show projectManagerSelect and hide departmentSelect
+                projectManagerSelect.show();
+                departmentSelect.hide();
+
+                // Make an AJAX request to populate projectManagerSelect options
+                $.get('/api/user/list/PROJECT_MANAGER', function(data) {
+                    projectManagerSelect.empty();
+                    $.each(data, function(index, user) {
+                        projectManagerSelect.append($('<option>', {
+                            value: user.id, // Adjust this based on your data
+                            text: user.name // Adjust this based on your data
+                        }));
+                    });
+                });
+            }
+        });
+
+
+        $('#register-employee-btn').click(function() {
+            var username = $('#floatingText').val();
+            var email = $('#floatingInput').val();
+            var role = $('#memberSelect').val();
+            var department = $('#departmentSelect').val();
+            var projectManagerId = $('#projectManagerSelect').val();
+            console.log(projectManagerId);
+
+            if (username === '' || email === '' || role === '' || department === '') {
+                alert('Please fill all the fields');
+                return;
+            }
+
+            // Show the loading spinner on the button
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Registering...');
+            $(this).prop('disabled', true);
+
+            $.ajax({
+                url: '/api/user/register-employee',
+                type: 'POST',
+                data: JSON.stringify({
+                    name: username,
+                    email: email,
+                    role: role,
+                    department: department,
+                    project_manager : {
+                        id: projectManagerId
+                    }
+                }),
+                contentType: 'application/json',
+                success: function (data) {
+                    alert('Employee registered successfully');
+                    $('#addEmployeeModal').modal('hide');
+                    $('#register-employee-btn').html('Register').prop('disabled', false);
+                    $('#table').bootstrapTable('refresh');
+
+
+                },
+                error: function (data,xhr) {
+                    alert('Error registering employee');
+                    $('#register-employee-btn').html('Register').prop('disabled', false);
+
+                },
+                complete : function(){
+
+                }
+            });
+
+        });
+
         });
 </script>
 </body>

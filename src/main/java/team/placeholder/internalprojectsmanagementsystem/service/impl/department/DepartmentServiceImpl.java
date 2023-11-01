@@ -3,16 +3,12 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.departmen
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.department.DepartmentService;
-
 import java.util.List;
 
 @Service
@@ -84,5 +80,9 @@ public class DepartmentServiceImpl implements DepartmentService {
             log.error("Department not found");
         }
     }
+
+
+
+
 
 }
