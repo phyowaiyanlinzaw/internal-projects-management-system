@@ -40,8 +40,11 @@ public class ProjectController {
 
     @GetMapping("/lists/{id}")
     public ResponseEntity<ProjectDto> getProjectById(@PathVariable long id){
+        System.out.println("Project Id :" +id);
+
         ProjectDto projects = projectService.getProjectById(id);
         if (projects!=null){
+            System.out.println("Project" +projects);
             return ResponseEntity.ok(projects);
         }else {
             return ResponseEntity.notFound().build();

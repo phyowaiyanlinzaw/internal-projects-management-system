@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.issue.IssueServiceImpl;
 
 import java.util.List;
@@ -22,9 +23,11 @@ public class IssueController {
         return new ResponseEntity<>(issueDtos, HttpStatus.OK);
     }
 
-    @PostMapping("save")
-    public ResponseEntity<String> save(IssueDto issueDto) {
-        IssueDto savedIssue = issueService.save(issueDto);
+    @PostMapping(value = "save")
+    public ResponseEntity<String> save(@RequestBody IssueDto dto) {
+        System.out.println("Issue to save: " + dto);
+        IssueDto savedIssue = issueService.save(dto);
+        System.out.println("Issue saved successfully");
         if (savedIssue != null) {
             return ResponseEntity.ok("Issue saved successfully");
         } else {

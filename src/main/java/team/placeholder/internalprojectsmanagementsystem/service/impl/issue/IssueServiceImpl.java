@@ -22,22 +22,6 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public IssueDto save(IssueDto issueDto) {
         Issue issue = IssueMapper.toIssue(issueDto);
-        issue.setTitle(issueDto.getTitle());
-        issue.setDescription(issueDto.getDescription());
-        issue.setPlace(issueDto.getPlace());
-        issue.setImpact(issueDto.getImpact());
-        issue.setRoot_cause(issueDto.getRoot_cause());
-        issue.setDirect_cause(issueDto.getDirect_cause());
-        issue.setCorrective_action(issueDto.getCorrective_action());
-        issue.setPreventive_action(issueDto.getPreventive_action());
-        issue.setResponsible_party(issueDto.getResponsible_party());
-        issue.setSolved(issueDto.isSolved());
-        issue.setCreated_date(issueDto.getCreated_date());
-        issue.setUpdated_date(issueDto.getUpdated_date());
-        issue.setIssue_category(issueDto.getIssue_category());
-        issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
-        issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
-        issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
         Issue savedIssue = issueRepository.save(issue);
         return IssueMapper.toIssueDto(savedIssue);
     }
@@ -79,8 +63,8 @@ public class IssueServiceImpl implements IssueService {
             issue.setUpdated_date(issueDto.getUpdated_date());
             issue.setSolved_date(issueDto.getSolved_date());
             issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
-            issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
-            issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
+//            issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
+//            issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
             issueRepository.save(issue);
             return IssueMapper.toIssueDto(issue);
         }else {

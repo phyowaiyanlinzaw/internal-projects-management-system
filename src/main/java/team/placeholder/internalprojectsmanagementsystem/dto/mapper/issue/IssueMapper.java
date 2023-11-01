@@ -1,6 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
@@ -28,6 +29,8 @@ public class IssueMapper {
         issueDto.setSolved(issue.isSolved());
         issueDto.setIssue_category(issue.getIssue_category());
         issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
+        issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
+        issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
         return issueDto;
     }
 
@@ -52,6 +55,8 @@ public class IssueMapper {
         issue.setUpdated_date(issueDto.getUpdated_date());
         issue.setIssue_category(issueDto.getIssue_category());
         issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
+        issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
+        issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
         return issue;
     }
 

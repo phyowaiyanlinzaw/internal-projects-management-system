@@ -42,6 +42,7 @@ private final ProjectRepository projectRepository;
     public ProjectDto getProjectById(long id) {
         Project project = projectRepository.findById(id).orElse(null);
         if (project!=null){
+            System.out.println(project);
             return ProjectMapper.toProjectDto(project);
         }else {
             return null;

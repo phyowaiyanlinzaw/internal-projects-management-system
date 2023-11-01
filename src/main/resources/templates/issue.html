@@ -273,7 +273,7 @@
                     <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
 
                     <!-- issue modal start -->
-                    <form class="row g-3 " id="addIssue" action="#" >
+                    <form class="row g-3 " id="addIssue" >
                         <div class="col-lg-6">
                             <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
                                     style="color:#e86666"> *</span></label>
@@ -284,14 +284,9 @@
                             <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
                                     style="color:red"> *</span></label>
                             <select class="four-control" name="issue_category" id="issue_category" multiple>
-                                <option value="1">Error</option>
-                                <option value="2">Australia</option>
-                                <option value="3">Germany</option>
-                                <option value="4">Canada</option>
-                                <option value="5">Russia</option>
-                                <option value="6">America</option>
-                                <option value="7">Spain</option>
-                                <option value="8">Turkey</option>
+                                <option value="ERROR">Error</option>
+                                <option value="BUG">Bug</option>
+
                             </select>
                         </div>
 
@@ -354,7 +349,7 @@
                         </div>
 
                         <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <button type="submit" class="btn btn-primary" >Add New Issue</button>
+                            <button type="button" class="btn btn-primary" id="save">Add New Issue</button>
                         </div>
 
                     </form>
@@ -415,55 +410,48 @@
 
 
 <script>
-    $(document).ready(function () {
-        $("#bookForm").submit(function (event) {
-            event.preventDefault();
-            ajaxPost();
+    $(document).ready(function() {
+        console.log("ready!");
+
+        // Attach a click event handler to the "Add New Issue" button
+        $("#save").click(function() {
+            addIssue();
         });
-
-
-        function ajaxPost() {
-            var formData = {
-                title: $("#title").val(),
-                description: $("#description").val(),
-                place: $("#place").val(),
-                impact: $("#impact").val(),
-                root_cause: $("#root_cause").val(),
-                direct_cause: $("#direct_cause").val(),
-                responsible_party: $("#responsible_party").val(),
-                user_pic: $("#user_pic").val(),
-                issue_category: $("#issue_category").val()
-
-            }
-
-
-            $.ajax({
-                type: 'POST',
-                contentType: "application/json",
-                url: '/api/issue/save',
-                data: $('#addIssue').serialize(),
-                dataType: 'json',
-                success: function (result) {
-                    if (result.status == "success") {
-                        $("#postResultDiv").html(
-                            "" + result.data.title
-                            + "Post Successfully! <br>"
-                            + "---> Congrats !!" + "</p>");
-                    } else {
-                        $("#postResultDiv").html("<strong>Error</strong>");
-                    }
-                    console.log(result);
-                },
-                error: function (e) {
-                    alert("Error!")
-                    console.log("ERROR: ", e);
-                }
-            });
-        }
-
     });
 
+    function addIssue() {
+        this.event.preventDefault();
+        let issue = {};
+        issue['title'] = $('#title').val();
+        issue['description'] = $('#description').val();
+        issue['place'] = $('#place').val();
+        issue['impact'] = $('#impact').val();
+        issue['root_cause'] = $('#root_cause').val();
+        issue['direct_cause'] = $('#direct_cause').val();
+        issue['responsible_party'] = $('#responsible_party').val();
+        issue['user_pic'] = $('#user_pic').val();
+        issue['issue_category'] = $('#issue_category').val();
+        console.log(issue);
+        $.ajax({
+            type: 'POST',
+            url: '/api/issue/save',
+            data: JSON.stringify(issue),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(result) {
+                if (result.status == "success") {
+                    console.log(result);
+                }
+            },
+            error: function(e) {
+                alert("Error!");
+                console.log("ERROR: ", e);
+            }
+        });
+    }
+
 </script>
+
 
 <script>
 
@@ -556,6 +544,8 @@
         },
         theme: "snow",
     });
+
+
 
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.com

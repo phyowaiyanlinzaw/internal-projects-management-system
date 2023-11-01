@@ -11,8 +11,6 @@ public interface IssueService {
 
     IssueDto getIssueById(long id);
 
-    IssueDto getIssueByName(String name);
-
     IssueDto updateIssue(IssueDto issueDto);
 
    void deleteIssue(long id);

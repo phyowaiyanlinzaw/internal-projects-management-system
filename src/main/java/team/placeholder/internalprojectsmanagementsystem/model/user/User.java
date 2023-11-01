@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;

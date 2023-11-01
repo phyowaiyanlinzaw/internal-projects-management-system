@@ -52,16 +52,16 @@ class IssueServiceTest {
         assertEquals(issueDto, issueById);
     }
 
-    @Test
-    public void testGetIssueByName() {
-        String issueName = "issueName";
-        IssueDto issueDto = new IssueDto();
-
-        Mockito.when(issueService.getIssueByName(issueName)).thenReturn(issueDto);
-
-        IssueDto issueByName = issueService.getIssueByName("issueName");
-        assertEquals(issueDto, issueByName);
-    }
+//    @Test
+//    public void testGetIssueByName() {
+//        String issueName = "issueName";
+//        IssueDto issueDto = new IssueDto();
+//
+//        Mockito.when(issueService.getIssueByName(issueName)).thenReturn(issueDto);
+//
+//        IssueDto issueByName = issueService.getIssueByName("issueName");
+//        assertEquals(issueDto, issueByName);
+//    }
 
     @Test
     public void testUpdateIssue() {

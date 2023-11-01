@@ -6,10 +6,12 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 
+import java.io.Serializable;
+
 
 @Getter
 @Setter
-public class IssueDto {
+public class IssueDto implements Serializable {
     private long id;
     private String title;
     private String description;
