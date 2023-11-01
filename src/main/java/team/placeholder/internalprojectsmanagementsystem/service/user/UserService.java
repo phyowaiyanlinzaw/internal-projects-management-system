@@ -24,7 +24,7 @@ public interface UserService {
 
     void sendEmail(String to);
 
-
+    List<UserDto> getAllUsersByPMId(long id);
 
 
 }

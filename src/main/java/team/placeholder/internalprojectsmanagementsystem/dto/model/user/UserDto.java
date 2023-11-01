@@ -13,6 +13,7 @@ public class UserDto {
     private Role role;
 
     private DepartmentDto departmentdto;
+    private UserDto projectmanager;
 
     public DepartmentDto getDepartmentdto() {
         return departmentdto;

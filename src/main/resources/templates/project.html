@@ -13,39 +13,43 @@ vs
  -->
 <!DOCTYPE html>
 <html
-        lang="en"
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="layout/layout"
+    lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="layout/layout"
 >
-<head>
-    <style>
-        .calendar_default_cell_inner {
-            background-color: #fd0d55;!important;
-        }
-    </style>
-</head>
+    <head>
+        <style>
+            .calendar_default_cell_inner {
+                background-color: #fd0d55 !important;
+            }
+        </style>
+    </head>
 
-<body layout:fragment="content">
+    <body layout:fragment="content">
+        <script type="module" src="/js/callDataForTask.js" async></script>
 
-<!-- Spinner Start -->
-<div id="spinner"
-     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-</div>
-<!-- Spinner End -->
+        <!-- Spinner Start -->
+        <div
+            id="spinner"
+            class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
+        >
+            <div
+                class="spinner-border text-primary"
+                style="width: 3rem; height: 3rem"
+                role="status"
+            >
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
 
-<div th:replace="fragments/sidebar :: sidebar"></div>
-<div
-        class="container-fluid position-relative d-flex p-0"
-
->
-    <!-- Content Start -->
-    <div
-            class="content"
-            style="
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div class="container-fluid position-relative d-flex p-0">
+            <!-- Content Start -->
+            <div
+                class="content"
+                style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
@@ -54,443 +58,554 @@ vs
                     );
                     background-size: 12px 12px;
                 "
-    >
-        <div th:replace="fragments/navigation :: navigation-without-search"></div>
-
-        <div class="container-fluid mt-2">
-            <!-- nav for task and gantt chart start -->
-            <nav>
-                <ul
-                        class="nav nav-tabs rounded-top"
-                        id="myTab"
-                        role="tablist"
-                >
-                    <li class="nav-item" role="presentation">
-                        <button
-                                class="nav-link active border-primary border border-bottom-0"
-                                id="tasks-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#task"
-                                type="button"
-                                role="tab"
-                                aria-controls="task"
-                                aria-selected="false"
-                        >
-                            Tasks
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button
-                                class="nav-link border-primary border border-bottom-0 rounded-top"
-                                id="gantt-chart-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#gantt-chart"
-                                type="button"
-                                role="tab"
-                                aria-controls="gantt-chart"
-                                aria-selected="false"
-                        >
-                            Calendar
-                        </button>
-                    </li>
-                    <div
-                            class="d-flex justify-content-end trash-can-container dummy-trash"
-                    >
-                                <span class="trash align-self-end dummy-trash">
-                                    <span class="dummy-trash"></span>
-                                </span>
-                    </div>
-                </ul>
-            </nav>
-            <!-- nav for task and gantt chart end -->
-            <div
-                    class="tab-content"
-                    style="height: 670px"
-                    id="myTabContent"
             >
                 <div
-                        class="tab-pane fade show active"
-                        id="task"
-                        role="tabpanel"
-                        aria-labelledby="tasks-tab"
-                >
-                    <div class="board">
-                        <!-- add task form start -->
-                        <!-- TODO :: REDESIGN ADD TASK FORM -->
-                        <!-- add task form end -->
+                    th:replace="fragments/navigation :: navigation-without-search"
+                ></div>
 
-                        <div class="lanes" id="sort-container">
-                            <!-- TODO :: SHOW TASK'S DETAILS WHEN CLICK ON TASK -->
-                            <!-- todo start -->
-                            <div class="lane">
-                                <h3
-                                        class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center"
+                <div class="container-fluid mt-2">
+                    <!-- nav for task and gantt chart start -->
+                    <nav>
+                        <ul
+                            class="nav nav-tabs rounded-top"
+                            id="myTab"
+                            role="tablist"
+                        >
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link active border-primary border border-bottom-0"
+                                    id="tasks-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#task"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="task"
+                                    aria-selected="false"
                                 >
-                                    TODO
-                                    <button
-                                            type="submit"
-                                            class="btn btn-primary"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#add-task"
+                                    Tasks
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button
+                                    class="nav-link border-primary border border-bottom-0 rounded-top"
+                                    id="gantt-chart-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#gantt-chart"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="gantt-chart"
+                                    aria-selected="false"
+                                >
+                                    Calendar
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- nav for task and gantt chart end -->
+                    <div
+                        class="tab-content position-relative"
+                        style="height: 600px"
+                        id="myTabContent"
+                    >
+                        <div
+                            class="d-flex justify-content-end trash-can-container dummy-trash position-absolute"
+                            style="bottom: 100px; right: 0; width: 60px"
+                        >
+                            <span class="trash align-self-end dummy-trash">
+                                <span class="dummy-trash"></span>
+                            </span>
+                        </div>
+                        <div
+                            class="tab-pane fade show active"
+                            id="task"
+                            role="tabpanel"
+                            aria-labelledby="tasks-tab"
+                        >
+                            <div class="board">
+                                <!-- add task form start -->
+                                <!-- TODO :: REDESIGN ADD TASK FORM -->
+                                <!-- add task form end -->
+
+                                <div class="lanes" id="sort-container">
+                                    <!-- TODO :: SHOW TASK'S DETAILS WHEN CLICK ON TASK -->
+                                    <!-- todo start -->
+                                    <div class="lane">
+                                        <h3
+                                            class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center"
+                                        >
+                                            TODO
+                                            <button
+                                                type="submit"
+                                                class="btn btn-primary"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#add-task"
+                                            >
+                                                <i
+                                                    class="bi bi-plus-circle"
+                                                ></i>
+                                            </button>
+                                        </h3>
+                                        <div class="swim-lane p-3" id="TODO">
+                                        </div>
+                                        <div
+                                            class="bg-primary rounded-bottom"
+                                            style="height: 10px"
+                                        ></div>
+                                    </div>
+                                    <!-- todo end -->
+                                    <!-- doing start -->
+                                    <div class="lane">
+                                        <h3
+                                            class="heading bg-info text-white rounded-top p-2"
+                                        >
+                                            DOING
+                                        </h3>
+                                        <div
+                                            class="swim-lane p-3"
+                                            id="IN_PROGRESS"
+                                        >
+                                        </div>
+                                        <div
+                                            class="bg-info rounded-bottom"
+                                            style="height: 10px"
+                                        ></div>
+                                    </div>
+                                    <!-- doing end -->
+                                    <!-- done start -->
+                                    <div class="lane">
+                                        <h3
+                                            class="heading bg-success text-white rounded-top p-2"
+                                        >
+                                            DONE
+                                        </h3>
+                                        <div
+                                            class="swim-lane p-3"
+                                            id="FINISHED"
+                                        ></div>
+                                        <div
+                                            class="bg-success rounded-bottom"
+                                            style="height: 10px"
+                                        ></div>
+                                    </div>
+                                    <!-- done end -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- gantt chart start -->
+                        <div
+                            class="tab-pane fade mt-4"
+                            id="gantt-chart"
+                            role="tabpanel"
+                            aria-labelledby="gantt-chart-tab"
+                        >
+                            <div class="wrap">
+                                <div class="left">
+                                    <div id="nav"></div>
+                                </div>
+                                <div class="right">
+                                    <div class="toolbar">
+                                        <button id="previous">Previous</button>
+                                        <button id="next">Next</button>
+                                    </div>
+                                    <div id="dp"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- gantt chart end -->
+                    </div>
+                </div>
+            </div>
+            <!-- Content End -->
+
+            <!-- task's details start -->
+            <div class="modal fade" id="task-details" data-bs-keyboard="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content task-content">
+                        <div class="modal-header">
+                            <h2 class="card-title" style="text-align: center">
+                                Task Details
+                            </h2>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="row g-5" action="">
+                                <div class="col-lg-12">
+                                    <span><i class="fa fa-tasks"></i></span>
+                                    <label
+                                        class="editable-label"
+                                        name="task"
+                                        onclick="editTitle()"
                                     >
+                                        Testing Write</label
+                                    >
+                                    <input
+                                        id="task"
+                                        name="task"
+                                        type="text"
+                                        class="form-control border-task editable-input"
+                                        dir="auto"
+                                        data-autosize="true"
+                                        style="
+                                            overflow: hidden;
+                                            overflow-wrap: break-word;
+                                            height: 36.8px;
+                                            display: none;
+                                        "
+                                        onblur="updateTitle(this)"
+                                    />
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <span class="text-align-center">
+                                        <i class="fa-solid fa-users"></i>
+                                    </span>
+                                    <select
+                                        id="member"
+                                        name="member"
+                                        class="form-control selectpicker editable-input"
+                                        data-live-search="true"
+                                        multiple
+                                        dir="auto"
+                                        data-width="50%"
+                                        data-autosize="true"
+                                        style="
+                                            overflow: hidden;
+                                            overflow-wrap: break-word;
+                                            height: 36.8px;
+                                            display: none;
+                                        "
+                                        onblur="updateTitle(this)"
+                                    >
+                                        <option value="John Doe" selected>
+                                            John Doe
+                                        </option>
+                                        <option value="Smith">Smith</option>
+                                        <option value="Peter">Peter</option>    
+                                        <option value="James">James</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <span
+                                        ><i
+                                            class="fa-solid fa-calendar-days"
+                                        ></i
+                                    ></span>
+                                    <label
+                                        class="editable-label"
+                                        name="start_time"
+                                        onclick="editTitle()"
+                                    >
+                                        Start Date</label
+                                    >
+                                    <input
+                                        type="date"
+                                        id="task-detail-start_time"
+                                        name="start_time"
+                                        class="form-control border-task editable-input"
+                                        dir="auto"
+                                        data-autosize="true"
+                                        style="
+                                            overflow: hidden;
+                                            overflow-wrap: break-word;
+                                            height: 36.8px;
+                                            display: none;
+                                        "
+                                        onblur="updateTitle(this)"
+                                    />
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <i class="fa-regular fa-calendar"></i>
+                                    <label
+                                        id="duration"
+                                        class="editable-label"
+                                        name="duration"
+                                        onclick="editTitle()"
+                                    >
+                                        Duration</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="tduration"
+                                        name="task"
+                                        class="form-control border-task editable-input"
+                                        dir="auto"
+                                        data-autosize="true"
+                                        style="
+                                            overflow: hidden;
+                                            overflow-wrap: break-word;
+                                            height: 36.8px;
+                                            display: none;
+                                        "
+                                        onblur="updateTitle(this)"
+                                    />
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <span>
                                         <i
-                                                class="bi bi-plus-circle"
+                                            class="fa-solid fa-circle-chevron-down"
                                         ></i>
+                                        Status
+                                    </span>
+                                    <select
+                                        id="projectStatuses"
+                                        name="projectStatuses"
+                                        class="selectpicker"
+                                    >
+                                        <option
+                                            data-content="<span class='badge rounded-pill  bg-primary'>STARTED</span>"
+                                            value="STARTED"
+                                            selected
+                                        >
+                                            STARTED
+                                        </option>
+                                        <option
+                                            data-content="<span class='badge rounded-pill  bg-warning'>IN_PROGRESS</span>"
+                                            value="IN_PROGRESS"
+                                        >
+                                            IN_PROGRESS
+                                        </option>
+                                        <option
+                                            data-content="<span class='badge rounded-pill  bg-success'>FINISHED</span>"
+                                            value="FINISHED"
+                                        >
+                                            FINISHED
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <span
+                                        ><i
+                                            class="fa-solid fa-bars-staggered"
+                                        ></i
+                                    ></span>
+                                    <label
+                                        id="description-label"
+                                        class="editable-label"
+                                        name="description"
+                                        onclick="toggleEditor()"
+                                    >
+                                        Description</label
+                                    >
+                                    <textarea
+                                        id="description-editor"
+                                        class="form-control editable-input"
+                                        name="description"
+                                        rows="5"
+                                        style="display: none"
+                                    ></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- task's details end -->
+
+            <!-- add task -->
+            <div class="modal fade" data-bs-keyboard="true" id="add-task">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content task-content">
+                        <div class="modal-header">
+                            <h2 class="card-title" style="text-align: center">
+                                Add Task
+                            </h2>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="row g-3" action="" id="todo-form">
+                                <div class="col-lg-6">
+                                    <label
+                                        for="task"
+                                        class="col-sm-12 col-form-label"
+                                        >Task Name
+                                        <span style="color: red">
+                                            *</span
+                                        ></label
+                                    >
+                                    <input
+                                        type="text"
+                                        class="form-control border-task-description"
+                                        name="task"
+                                    />
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label
+                                        for="pm"
+                                        class="col-sm-12 col-form-label"
+                                        name="pm"
+                                        >Assign Members<span style="color: red">
+                                            *</span
+                                        ></label
+                                    >
+                                    <input
+                                        type="text"
+                                        name="pm-tags"
+                                        id="pm"
+                                        value="abatisse2@nih.gov, Justinian Hattersley"
+                                    />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label
+                                        for="start_time"
+                                        class="col-sm-12 col-form-label"
+                                        name="start_time"
+                                        >Start Date
+                                        <span style="color: red">
+                                            *</span
+                                        ></label
+                                    >
+                                    <input
+                                        type="date"
+                                        class="form-control border-task-description"
+                                        id="start_time"
+                                        name="start_time"
+                                    />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label
+                                        for="end_time"
+                                        class="col-sm-12 col-form-label"
+                                        name="end_time"
+                                        >End Date
+                                        <span style="color: red">
+                                            *</span
+                                        ></label
+                                    >
+                                    <input
+                                        type="date"
+                                        class="form-control border-task-description"
+                                        id="end_time"
+                                        name="end_time"
+                                    />
+                                </div>
+
+                                <div class="col-12">
+                                    <label
+                                        for="description"
+                                        class="col-sm-12 col-form-label"
+                                        name="description"
+                                        >Description</label
+                                    >
+                                    <textarea
+                                        class="form-control border-task-description"
+                                        id="description"
+                                        name="description"
+                                        rows="2"
+                                    ></textarea>
+                                </div>
+
+                                <div class="text-center">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary col-2"
+                                        data-dismiss="modal"
+                                    >
+                                        Add
                                     </button>
-                                </h3>
-                                <div
-                                        class="swim-lane p-3"
-                                        id="todo-lane"
-                                >
-                                    <div
-                                            class="task py-1 row rounded-2 border-primary border-2 border"
-                                            draggable="true"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#task-details"
+                                    <button
+                                        type="reset"
+                                        class="btn btn-secondary mr-3"
+                                        data-dismiss="modal"
                                     >
-                                        <div
-                                                class="col-12 mb-2 lh-1 mh-50 modal-detail-title text-break"
-                                        >
-                                            i have no idea what am
-                                            iawercawecrawercawecrawecraw
-                                            even doingawecrawecrawe
-                                        </div>
-                                        <div
-                                                class="col d-flex justify-content-between align-items-center"
-                                        >
-                                            <img
-                                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                                    class="img-fluid rounded-circle"
-                                                    alt
-                                                    style="width: 30px"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div
-                                            class="task py-1 row rounded-2 border-primary border-2 border"
-                                            draggable="true"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#task-details"
-                                    >
-                                        <div
-                                                class="col-12 mb-2 lh-1 mh-50 modal-detail-title text-break"
-                                        >
-                                            i have no idea what am
-                                            iawercawecrawercawecrawecraw
-                                            even doingawecrawecrawe
-                                        </div>
-                                        <div
-                                                class="col d-flex justify-content-between align-items-center"
-                                        >
-                                            <img
-                                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                                    class="img-fluid rounded-circle"
-                                                    alt
-                                                    style="width: 30px"
-                                            />
-                                        </div>
-                                    </div>
+                                        Cancel
+                                    </button>
                                 </div>
-                                <div
-                                        class="bg-primary rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
-                            </div>
-                            <!-- todo end -->
-                            <!-- doing start -->
-                            <div class="lane">
-                                <h3
-                                        class="heading bg-info text-white rounded-top p-2"
-                                >
-                                    DOING
-                                </h3>
-                                <div
-                                        class="swim-lane p-3"
-                                        id="doing-lane"
-                                >
-                                    <div
-                                            class="task py-1 row rounded-2 border-dark border-2 border"
-                                            draggable="true"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#task-details"
-                                    >
-                                        <div
-                                                class="col-12 mb-2 lh-1 mh-50 modal-detail-title text-break"
-                                        >
-                                            i like walking
-                                        </div>
-                                        <div
-                                                class="col d-flex justify-content-between align-items-center"
-                                        >
-                                            <img
-                                                    src="https://source.unsplash.com/random/200x200?sig=1"
-                                                    class="img-fluid rounded-circle"
-                                                    alt
-                                                    style="width: 30px"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                        class="bg-info rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
-                            </div>
-                            <!-- doing end -->
-                            <!-- done start -->
-                            <div class="lane">
-                                <h3
-                                        class="heading bg-success text-white rounded-top p-2"
-                                >
-                                    DONE
-                                </h3>
-                                <div
-                                        class="swim-lane p-3"
-                                        id="done-lane"
-                                ></div>
-                                <div
-                                        class="bg-success rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
-                            </div>
-                            <!-- done end -->
+                            </form>
                         </div>
                     </div>
                 </div>
-                <!-- gantt chart start -->
-                <div
-                        class="tab-pane fade mt-4"
-                        id="gantt-chart"
-                        role="tabpanel"
-                        aria-labelledby="gantt-chart-tab"
-                >
-                    <div class="wrap">
-                        <div class="left">
-                            <div id="nav"></div>
-                        </div>
-                        <div class="right">
-                            <div class="toolbar">
-                                <button id="previous">Previous</button>
-                                <button id="next">Next</button>
-                            </div>
-                            <div id="dp"></div>
+            </div>
+            <!-- add task -->
+
+            <!-- confrim box for delete -->
+            <div
+                class="modal fade"
+                id="confirm-box"
+                data-bs-keyboard="false"
+                data-bs-backdrop="static"
+            >
+                <div class="modal-dialog modal-dialog-centered modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span>Are you sure you want to delete ?</span>
+                            <button class="btn btn-danger col me-1">YES</button>
+                            <button
+                                class="btn btn-primary col"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            >
+                                NO
+                            </button>
                         </div>
                     </div>
                 </div>
-                <!-- gantt chart end -->
             </div>
-        </div>
-    </div>
-    <!-- Content End -->
+            <!-- confirm box for delete -->
 
-    <!-- task's details start -->
-    <div class="modal fade" id="task-details" data-bs-keyboard="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg ">
-            <div class="modal-content task-content ">
-                <div class="modal-header">
-                    <h2 class="card-title" style="text-align:center">Task Details</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+            <!--    for select drop-drown-->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
-                    <form class="row g-5" action="">
+            <!-- fontawesome -->
+            <script src="/js/fontawesome.js"></script>
 
-                        <div class="col-lg-12 ">
-                            <span><i class="fa fa-tasks"></i></span>
-                            <label class="editable-label" name="task" onclick="editTitle()"> Testing
-                                Write</label>
-                            <input id="task" name="task" type="text" class="form-control border-task editable-input"
-                                   dir="auto" data-autosize="true"
-                                   style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;"
-                                   onblur="updateTitle(this)">
-                        </div>
+            <!-- jquery -->
+            <script src="/js/jquery.3.7.1.min.js"></script>
 
-                        <div class="col-lg-12">
-                        <span class="text-align-center">
-                            <i class="fa-solid fa-users"></i>
-                        </span>
-                            <select id="member" name="member" class="form-control selectpicker editable-input"
-                                    data-live-search="true" multiple dir="auto" data-width="50%" data-autosize="true"
-                                    style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;"
-                                    onblur="updateTitle(this)">
-                                <option value="John Doe" selected>John Doe</option>
-                                <option value="Smith">Smith</option>
-                                <option value="Peter">Peter</option>
-                                <option value="James">James</option>
-                            </select>
+            <!-- datable table -->
+            <script src="/js/databales.min.js"></script>
 
-                        </div>
+            <!-- bootstrap -->
+            <script src="/js/bootstrap.bundle.min.js"></script>
 
-                        <div class="col-lg-6">
-                            <span><i class="fa-solid fa-calendar-days"></i></span>
-                            <label class="editable-label" name="start_time" onclick="editTitle()"> Start
-                                Date</label>
-                            <input type="date" id="task-detail-start_time" name="start_time"
-                                   class="form-control border-task editable-input" dir="auto" data-autosize="true"
-                                   style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;"
-                                   onblur="updateTitle(this)">
-                        </div>
+            <!-- javascript libraries -->
+            <script src="/lib/chart/chart.min.js"></script>
+            <script src="/lib/easing/easing.min.js"></script>
+            <script src="/lib/waypoints/waypoints.min.js"></script>
+            <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+            <script src="/lib/tempusdominus/js/moment.min.js"></script>
+            <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+            <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+            <script src="/lib/quill/quill.min.js"></script>
 
-                        <div class="col-lg-6 ">
-                            <i class="fa-regular fa-calendar"></i>
-                            <label id="duration" class="editable-label" name="duration" onclick="editTitle()">
-                                Duration</label>
-                            <input type="text" id="tduration" name="task"
-                                   class="form-control border-task editable-input" dir="auto" data-autosize="true"
-                                   style="overflow: hidden; overflow-wrap: break-word; height: 36.8px; display: none;"
-                                   onblur="updateTitle(this)">
-                        </div>
+            <!-- template main javascript -->
+            <script src="/js/daypilot-all.min.js"></script>
 
-                        <div class="col-lg-6">
-                        <span>
-                            <i class="fa-solid fa-circle-chevron-down"></i> Status
-                        </span>
-                            <select id="projectStatuses" name="projectStatuses" class="selectpicker">
-                                <option data-content="<span class='badge rounded-pill  bg-primary'>STARTED</span>"
-                                        value="STARTED" selected>STARTED
-                                </option>
-                                <option data-content="<span class='badge rounded-pill  bg-warning'>IN_PROGRESS</span>"
-                                        value="IN_PROGRESS">IN_PROGRESS
-                                </option>
-                                <option data-content="<span class='badge rounded-pill  bg-success'>FINISHED</span>"
-                                        value="FINISHED">FINISHED
-                                </option>
-                            </select>
-                        </div>
+            <!-- Template Javascript -->
+            <script src="/js/main.js"></script>
+            <script src="/js/forprogresscircleiguess.js"></script>
 
-                        <div class="col-lg-12">
-                            <span><i class="fa-solid fa-bars-staggered"></i></span>
-                            <label id="description-label" class="editable-label" name="description"
-                                   onclick="toggleEditor()"> Description</label>
-                            <textarea id="description-editor" class="form-control editable-input" name="description"
-                                      rows="5" style="display: none;"></textarea>
-                        </div>
+            <!-- sort (department, project), form validation and search bar behavior are all here -->
+            <script src="/js/custome.js"></script>
 
-                    </form>
+            <!--    for assign member-->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
 
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- task's details end -->
+            <script type="module">
 
-    <!-- add task -->
-    <div class="modal fade" data-bs-keyboard="true" id="add-task">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content task-content">
-                <div class="modal-header">
-                    <h2 class="card-title" style="text-align:center">Add Task</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+                import { getTaskList } from '/js/callDataForTask.js';
 
-                    <form class="row g-3" action="" id="todo-form">
-                        <div class="col-lg-6">
-                            <label for="task" class="col-sm-12 col-form-label ">Task Name <span
-                                    style="color:red"> *</span></label>
-                            <input type="text" class="form-control border-task-description" name="task">
-                        </div>
+                console.log("xxxxxxxxxxxxxxxxxx", getTaskList());
 
-                        <div class="col-lg-6">
-                            <label for="pm" class="col-sm-12 col-form-label " name="pm">Assign Members<span
-                                    style="color:red"> *</span></label>
-                            <input type="text" name='pm-tags' id="pm" value='abatisse2@nih.gov, Justinian Hattersley'>
-                        </div>
-
-
-                        <div class="col-md-6">
-                            <label for="start_time" class="col-sm-12 col-form-label" name="start_time">Start Date <span
-                                    style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task-description" id="start_time" name="start_time">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="end_time" class="col-sm-12 col-form-label" name="end_time">End Date <span
-                                    style="color:red"> *</span></label>
-                            <input type="date" class="form-control border-task-description" id="end_time" name="end_time">
-                        </div>
-
-
-                        <div class="col-12">
-                            <label for="description" class="col-sm-12 col-form-label"
-                                   name="description">Description</label>
-                            <textarea class="form-control border-task-description" id="description" name="description"
-                                      rows="2"></textarea>
-                        </div>
-
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">Add</button>
-                            <button type="reset" class="btn btn-secondary mr-3" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- add task -->
-
-    <!-- confrim box for delete -->
-    <div class="modal fade" id="confirm-box" data-bs-keyboard="false" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span>Are you sure you want to delete ?</span>
-                    <button class="btn btn-danger col me-1">YES</button>
-                    <button class="btn btn-primary col" data-bs-dismiss="modal" aria-label="Close">
-                        NO
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- confirm box for delete -->
-
-    <!--    for select drop-drown-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
-    <!-- fontawesome -->
-    <script src="/js/fontawesome.js"></script>
-
-    <!-- jquery -->
-    <script src="/js/jquery.3.7.1.min.js"></script>
-
-    <!-- datable table -->
-    <script src="/js/databales.min.js"></script>
-
-    <!-- bootstrap -->
-    <script src="/js/bootstrap.bundle.min.js"></script>
-
-    <!-- javascript libraries -->
-    <script src="/lib/chart/chart.min.js"></script>
-    <script src="/lib/easing/easing.min.js"></script>
-    <script src="/lib/waypoints/waypoints.min.js"></script>
-    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="/lib/tempusdominus/js/moment.min.js"></script>
-    <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="/lib/quill/quill.min.js"></script>
-
-    <!-- template main javascript -->
-    <script src="/js/daypilot-all.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="/js/main.js"></script>
-    <script src="/js/forprogresscircleiguess.js"></script>
-
-    <!-- sort (department, project), form validation and search bar behavior are all here -->
-    <script src="/js/custome.js"></script>
-
-
-<!--    for assign member-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
-
-
-    <script>
-        var inputElm = document.querySelector('input[name=pm-tags]');
-        function tagTemplate(tagData){
-            return `
+                var inputElm = document.querySelector("input[name=pm-tags]");
+                function tagTemplate(tagData) {
+                    return `
         <tag title="${tagData.email}"
                 contenteditable='false'
                 spellcheck='false'
@@ -500,278 +615,414 @@ vs
             <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
             <div>
                 <div class='tagify__tag__avatar-wrap'>
-                    <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                    <img onerror="this.style.visibility='hidden'" src="${
+                        tagData.avatar
+                    }">
                 </div>
                 <span class='tagify__tag-text'>${tagData.name}</span>
             </div>
         </tag>
-    `
-        }
+    `;
+                }
 
-        function suggestionItemTemplate(tagData){
-            return `
+                function suggestionItemTemplate(tagData) {
+                    return `
         <div ${this.getAttributes(tagData)}
             class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
             tabindex="0"
             role="option">
-            ${ tagData.avatar ? `
+            ${
+                tagData.avatar
+                    ? `
             <div class='tagify__dropdown__item__avatar-wrap'>
                 <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
-            </div>` : ''
+            </div>`
+                    : ""
             }
             <strong>${tagData.name}</strong>
             <span>${tagData.email}</span>
         </div>
-    `
-        }
+    `;
+                }
 
-        function dropdownHeaderTemplate(suggestions){
-            return `
-        <div class="${this.settings.classNames.dropdownItem} ${this.settings.classNames.dropdownItem}__addAll">
-            <strong>${this.value.length ? `Add remaning ${suggestions.length}` : 'Add All'}</strong>
+                function dropdownHeaderTemplate(suggestions) {
+                    return `
+        <div class="${this.settings.classNames.dropdownItem} ${
+                        this.settings.classNames.dropdownItem
+                    }__addAll">
+            <strong>${
+                this.value.length
+                    ? `Add remaning ${suggestions.length}`
+                    : "Add All"
+            }</strong>
             <span>${suggestions.length} members</span>
         </div>
-    `
-        }
-
-        // initialize Tagify on the above input node reference
-        var tagify = new Tagify(inputElm, {
-            tagTextProp: 'name', // very important since a custom template is used with this property as text
-            // enforceWhitelist: true,
-            skipInvalid: true, // do not remporarily add invalid tags
-            dropdown: {
-                closeOnSelect: false,
-                enabled: 0,
-                classname: 'users-list',
-                searchKeys: ['name', 'email']  // very important to set by which keys to search for suggesttions when typing
-            },
-            templates: {
-                tag: tagTemplate,
-                dropdownItem: suggestionItemTemplate,
-                dropdownHeader: dropdownHeaderTemplate
-            },
-            whitelist: [
-                {
-                    "value": 1,
-                    "name": "Justinian Hattersley",
-                    "avatar": "https://i.pravatar.cc/80?img=1",
-                    "email": "jhattersley0@ucsd.edu"
-                },
-                {
-                    "value": 2,
-                    "name": "Antons Esson",
-                    "avatar": "https://i.pravatar.cc/80?img=2",
-                    "email": "aesson1@ning.com"
-                },
-                {
-                    "value": 3,
-                    "name": "Ardeen Batisse",
-                    "avatar": "https://i.pravatar.cc/80?img=3",
-                    "email": "abatisse2@nih.gov"
-                },
-                {
-                    "value": 4,
-                    "name": "Graeme Yellowley",
-                    "avatar": "https://i.pravatar.cc/80?img=4",
-                    "email": "gyellowley3@behance.net"
-                },
-                {
-                    "value": 5,
-                    "name": "Dido Wilford",
-                    "avatar": "https://i.pravatar.cc/80?img=5",
-                    "email": "dwilford4@jugem.jp"
-                },
-                {
-                    "value": 6,
-                    "name": "Celesta Orwin",
-                    "avatar": "https://i.pravatar.cc/80?img=6",
-                    "email": "corwin5@meetup.com"
-                },
-                {
-                    "value": 7,
-                    "name": "Sally Main",
-                    "avatar": "https://i.pravatar.cc/80?img=7",
-                    "email": "smain6@techcrunch.com"
-                },
-                {
-                    "value": 8,
-                    "name": "Grethel Haysman",
-                    "avatar": "https://i.pravatar.cc/80?img=8",
-                    "email": "ghaysman7@mashable.com"
-                },
-                {
-                    "value": 9,
-                    "name": "Marvin Mandrake",
-                    "avatar": "https://i.pravatar.cc/80?img=9",
-                    "email": "mmandrake8@sourceforge.net"
-                },
-                {
-                    "value": 10,
-                    "name": "Corrie Tidey",
-                    "avatar": "https://i.pravatar.cc/80?img=10",
-                    "email": "ctidey9@youtube.com"
-                },
-                {
-                    "value": 11,
-                    "name": "foo",
-                    "avatar": "https://i.pravatar.cc/80?img=11",
-                    "email": "foo@bar.com"
-                },
-                {
-                    "value": 12,
-                    "name": "foo",
-                    "avatar": "https://i.pravatar.cc/80?img=12",
-                    "email": "foo.aaa@foo.com"
-                },
-            ],
-            transformTag: (tagData, originalData) => {
-                var {name, email} = parseFullValue(tagData.name)
-                tagData.name = name
-                tagData.email = email || tagData.email
-            },
-            validate({name, email}) {
-                // when editing a tag, there will only be the "name" property which contains name + email (see 'transformTag' above)
-                if( !email && name ) {
-                    var parsed = parseFullValue(name)
-                    name = parsed.name
-                    email = parsed.email
+    `;
                 }
 
-                if( !name ) return "Missing name"
-                if( !validateEmail(email) ) return "Invalid email"
+                // initialize Tagify on the above input node reference
+                var tagify = new Tagify(inputElm, {
+                    tagTextProp: "name", // very important since a custom template is used with this property as text
+                    // enforceWhitelist: true,
+                    skipInvalid: true, // do not remporarily add invalid tags
+                    dropdown: {
+                        closeOnSelect: false,
+                        enabled: 0,
+                        classname: "users-list",
+                        searchKeys: ["name", "email"], // very important to set by which keys to search for suggesttions when typing
+                    },
+                    templates: {
+                        tag: tagTemplate,
+                        dropdownItem: suggestionItemTemplate,
+                        dropdownHeader: dropdownHeaderTemplate,
+                    },
+                    whitelist: [
+                        {
+                            value: 1,
+                            name: "Justinian Hattersley",
+                            avatar: "https://i.pravatar.cc/80?img=1",
+                            email: "jhattersley0@ucsd.edu",
+                        },
+                        {
+                            value: 2,
+                            name: "Antons Esson",
+                            avatar: "https://i.pravatar.cc/80?img=2",
+                            email: "aesson1@ning.com",
+                        },
+                        {
+                            value: 3,
+                            name: "Ardeen Batisse",
+                            avatar: "https://i.pravatar.cc/80?img=3",
+                            email: "abatisse2@nih.gov",
+                        },
+                        {
+                            value: 4,
+                            name: "Graeme Yellowley",
+                            avatar: "https://i.pravatar.cc/80?img=4",
+                            email: "gyellowley3@behance.net",
+                        },
+                        {
+                            value: 5,
+                            name: "Dido Wilford",
+                            avatar: "https://i.pravatar.cc/80?img=5",
+                            email: "dwilford4@jugem.jp",
+                        },
+                        {
+                            value: 6,
+                            name: "Celesta Orwin",
+                            avatar: "https://i.pravatar.cc/80?img=6",
+                            email: "corwin5@meetup.com",
+                        },
+                        {
+                            value: 7,
+                            name: "Sally Main",
+                            avatar: "https://i.pravatar.cc/80?img=7",
+                            email: "smain6@techcrunch.com",
+                        },
+                        {
+                            value: 8,
+                            name: "Grethel Haysman",
+                            avatar: "https://i.pravatar.cc/80?img=8",
+                            email: "ghaysman7@mashable.com",
+                        },
+                        {
+                            value: 9,
+                            name: "Marvin Mandrake",
+                            avatar: "https://i.pravatar.cc/80?img=9",
+                            email: "mmandrake8@sourceforge.net",
+                        },
+                        {
+                            value: 10,
+                            name: "Corrie Tidey",
+                            avatar: "https://i.pravatar.cc/80?img=10",
+                            email: "ctidey9@youtube.com",
+                        },
+                        {
+                            value: 11,
+                            name: "foo",
+                            avatar: "https://i.pravatar.cc/80?img=11",
+                            email: "foo@bar.com",
+                        },
+                        {
+                            value: 12,
+                            name: "foo",
+                            avatar: "https://i.pravatar.cc/80?img=12",
+                            email: "foo.aaa@foo.com",
+                        },
+                    ],
+                    transformTag: (tagData, originalData) => {
+                        var { name, email } = parseFullValue(tagData.name);
+                        tagData.name = name;
+                        tagData.email = email || tagData.email;
+                    },
+                    validate({ name, email }) {
+                        // when editing a tag, there will only be the "name" property which contains name + email (see 'transformTag' above)
+                        if (!email && name) {
+                            var parsed = parseFullValue(name);
+                            name = parsed.name;
+                            email = parsed.email;
+                        }
 
-                return true
-            }
-        })
+                        if (!name) return "Missing name";
+                        if (!validateEmail(email)) return "Invalid email";
 
-        // attach events listeners
-        tagify.on('dropdown:select', onSelectSuggestion) // allows selecting all the suggested (whitelist) items
-            .on('edit:start', onEditStart)  // show custom text in the tag while in edit-mode
+                        return true;
+                    },
+                });
 
-        function onSelectSuggestion(e){
-            // custom class from "dropdownHeaderTemplate"
-            if( e.detail.elm.classList.contains(`${tagify.settings.classNames.dropdownItem}__addAll`) )
-                tagify.dropdown.selectAll();
-        }
+                // attach events listeners
+                tagify
+                    .on("dropdown:select", onSelectSuggestion) // allows selecting all the suggested (whitelist) items
+                    .on("edit:start", onEditStart); // show custom text in the tag while in edit-mode
 
-        function onEditStart({detail:{tag, data}}){
-            tagify.setTagTextNode(tag, `${data.name} <${data.email}>`)
-        }
+                function onSelectSuggestion(e) {
+                    // custom class from "dropdownHeaderTemplate"
+                    if (
+                        e.detail.elm.classList.contains(
+                            `${tagify.settings.classNames.dropdownItem}__addAll`
+                        )
+                    )
+                        tagify.dropdown.selectAll();
+                }
 
-        // https://stackoverflow.com/a/9204568/104380
-        function validateEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-        }
+                function onEditStart({ detail: { tag, data } }) {
+                    tagify.setTagTextNode(tag, `${data.name} <${data.email}>`);
+                }
 
-        function parseFullValue(value) {
-            // https://stackoverflow.com/a/11592042/104380
-            var parts = value.split(/<(.*?)>/g),
-                name = parts[0].trim(),
-                email = parts[1]?.replace(/<(.*?)>/g, '').trim();
+                // https://stackoverflow.com/a/9204568/104380
+                function validateEmail(email) {
+                    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                }
 
-            return {name, email}
-        }
-    </script>
+                function parseFullValue(value) {
+                    // https://stackoverflow.com/a/11592042/104380
+                    var parts = value.split(/<(.*?)>/g),
+                        name = parts[0].trim(),
+                        email = parts[1]?.replace(/<(.*?)>/g, "").trim();
 
+                    return { name, email };
+                }
+            </script>
 
+            <script type="module">
+                import { getData, sendData } from "/js/api-function.js";
+                import { getTaskList } from '/js/callDataForTask.js';
 
-    <script>
+                // Get all elements with the common class name
+                const editableLabels =
+                    document.querySelectorAll(".editable-label");
+                const editableInputs =
+                    document.querySelectorAll(".editable-input");
 
-        // Get all elements with the common class name
-        const editableLabels = document.querySelectorAll('.editable-label');
-        const editableInputs = document.querySelectorAll('.editable-input');
+                // Add event listeners for each element
+                editableLabels.forEach((label) => {
+                    label.addEventListener("click", editTitle);
+                });
 
-        // Add event listeners for each element
-        editableLabels.forEach(label => {
-            label.addEventListener('click', editTitle);
-        });
+                editableInputs.forEach((input) => {
+                    input.addEventListener("blur", function () {
+                        updateTitle(this);
+                    });
+                });
 
-        editableInputs.forEach(input => {
-            input.addEventListener('blur', function () {
-                updateTitle(this);
-            });
-        });
+                function editTitle() {
+                    const label = this;
+                    const input = label.nextElementSibling;
 
-        function editTitle() {
-            const label = this;
-            const input = label.nextElementSibling;
+                    label.style.display = "none";
+                    input.style.display = "block";
+                    input.value = label.textContent;
+                    input.focus();
+                }
 
-            label.style.display = 'none';
-            input.style.display = 'block';
-            input.value = label.textContent;
-            input.focus();
-        }
+                function updateTitle(inputField) {
+                    const input = inputField;
+                    const label = input.previousElementSibling;
 
-        function updateTitle(inputField) {
-            const input = inputField;
-            const label = input.previousElementSibling;
+                    label.textContent = input.value;
+                    label.style.display = "inline";
+                    input.style.display = "none";
+                }
 
-            label.textContent = input.value;
-            label.style.display = 'inline';
-            input.style.display = 'none';
-        }
-
-
-        function toggleEditor() {
-            var editor = document.getElementById('description-editor');
-            if (editor.style.display === 'none' || editor.style.display === '') {
-                editor.style.display = 'block';
-            } else {
-                editor.style.display = 'none';
-            }
-        }
-
-
-        // ========================== AJAX FUNCTION (JUST TESTING) ===========================
-
-        function ajaxRequest(url, method = 'POST', data, callback) {
-            var xhr = new XMLHttpRequest();
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        callback(xhr.responseText);
+                function toggleEditor() {
+                    var editor = document.getElementById("description-editor");
+                    if (
+                        editor.style.display === "none" ||
+                        editor.style.display === ""
+                    ) {
+                        editor.style.display = "block";
                     } else {
-                        // Handle errors here
-                        console.error("Request failed with status code: " + xhr.status);
+                        editor.style.display = "none";
                     }
                 }
-            };
 
-            xhr.open(method, url, true);
+                const todoLane = document.getElementById("TODO");
+                const inProgress = document.getElementById("IN_PROGRESS");
+                const finished = document.getElementById("FINISHED");
+                let currentZone = null;
+                let currentTask;
+                let currentTaskData;
+                const status = ['TODO', 'IN_PROGRESS', 'FINISHED']
+                const modal = document.getElementById("task-details");
 
-            if (method === "POST") {
-                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            }
+                function createTaskDiv(task) {
+                    const taskDiv = document.createElement("div");
+                    taskDiv.classList.add(
+                        "task",
+                        "py-1",
+                        "row",
+                        "rounded-2",
+                        "border-2",
+                        "border"
+                    );
+                    console.log(task.status);
+                    switch (task.status) {
+                        case "TODO":
+                            taskDiv.classList.add("border-primary");
+                            break;
+                        case "IN_PROGRESS":
+                            taskDiv.classList.add("border-dark");
+                            break;
+                        case "FINISHED":
+                            taskDiv.classList.add("border-success");
+                            break;
+                    }
+                    taskDiv.draggable = true;
 
-            xhr.send(data);
-        }
+                    // Add a data attribute for modal triggering (if needed)
+                    taskDiv.setAttribute("data-bs-toggle", "modal");
+                    taskDiv.setAttribute("data-bs-target", "#task-details");
 
-        // Example of how to use the ajaxRequest function to send data with a POST request
+                    const titleDiv = document.createElement("div");
+                    titleDiv.classList.add(
+                        "col-12",
+                        "mb-2",
+                        "lh-1",
+                        "mh-50",
+                        "modal-detail-title",
+                        "text-break"
+                    );
+                    titleDiv.textContent = task.title;
 
-        const todoForm = document.getElementById("todo-form");
-        const input = document.getElementById("todo-input");
-        const todoLane = document.getElementById("todo-lane");
-        const draggables = document.querySelectorAll(".task");
-        const droppables = document.querySelectorAll(".swim-lane");
-        const modal = document.getElementById("task-details");
+                    const imgDiv = document.createElement("div");
+                    imgDiv.classList.add(
+                        "col",
+                        "d-flex",
+                        "justify-content-between",
+                        "align-items-center"
+                    );
 
-        const trashCanContainer = document.querySelector('.trash-can-container')
+                    const img = document.createElement("img");
+                    img.src =
+                        "https://source.unsplash.com/random/200x200?sig=" +
+                        task.id; // Assuming you want to change the image based on task.id
+                    img.classList.add("img-fluid", "rounded-circle");
+                    img.alt = "";
+                    img.style.width = "30px";
 
-        todoForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const value = input.value;
+                    imgDiv.appendChild(img);
 
-            if (!value) return;
+                    taskDiv.appendChild(titleDiv);
+                    taskDiv.appendChild(imgDiv);
 
-            let newTask = document.createElement('div');
-            newTask.classList.add('task', 'py-1', 'row', 'rounded-2', 'border-primary', 'border-2', 'border');
-            newTask.setAttribute('draggable', 'true');
-            newTask.setAttribute('data-bs-toggle', 'modal');
-            newTask.setAttribute('data-bs-target', '#task-details');
+                    return taskDiv;
+                }
 
-            // Create the inner content of the task
-            newTask.innerHTML = `
+                let taskList = getTaskList();
+
+                console.log(taskList[0]);
+                for (let i = 0; i < taskList.length; i++) {
+                    const task = taskList[i];
+
+                    const taskDiv = createTaskDiv(task);
+
+                    taskDiv.setAttribute("index", i);
+
+                    // Determine the status of the task and append it to the appropriate lane
+                    if (task.status === "TODO") {
+                        todoLane.appendChild(taskDiv);
+                    } else if (task.status === "IN_PROGRESS") {
+                        inProgress.appendChild(taskDiv);
+                    } else if (task.status === "FINISHED") {
+                        finished.appendChild(taskDiv);
+                    }
+                    taskDiv.addEventListener("dragstart", (e) => {
+                        taskDiv.classList.add("is-dragging");
+                        console.log("deagging");
+                        currentTask = taskDiv;
+                        console.log("CURRENT TASK ", currentTask)
+                    });
+
+                    taskDiv.addEventListener("click", (e) => {
+                        currentTaskData = taskList[parseInt(taskDiv.getAttribute('index'))]
+                        console.log('click task so should change the current task data', currentTaskData)
+                    });
+
+                    taskDiv.addEventListener("dragend", () => {
+                        taskDiv.classList.remove("is-dragging");
+                        currentTaskData =
+                            taskList[
+                                parseInt(currentTask.getAttribute("index"))
+                            ];
+                        currentTaskData.status = currentZone.getAttribute("id")
+                        console.log("CURRENT TASK DATA", currentTaskData)
+                        if (currentZone.classList.contains("dummy-trash")) {
+                            bModal.show();
+                        } else if (status.some(a => currentZone.getAttribute("id") === a)) {
+                            sendData(
+                            "/api/task/update",
+                            "POST",
+                            currentTaskData,
+                            (error, response) => {
+                                if (error) {
+                                    console.error("Error for URL /api/task/update", error);
+                                } else {
+                                    console.log(
+                                        "Response for URL /api/task/update",
+                                        response
+                                    );
+                                }
+                            }
+                        );
+                        }
+                        
+                        taskDiv.classList.remove("is-dragging");
+                    });
+                }
+
+                // Example of how to use the ajaxRequest function to send data with a POST request
+
+                const todoForm = document.getElementById("todo-form");
+                const input = document.getElementById("todo-input");
+                const draggables = document.querySelectorAll(".task");
+                const droppables = document.querySelectorAll(".swim-lane");
+
+                const trashCanContainer = document.querySelector(
+                    ".trash-can-container"
+                );
+
+                todoForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    const value = input.value;
+
+                    if (!value) return;
+
+                    let newTask = document.createElement("div");
+                    newTask.classList.add(
+                        "task",
+                        "py-1",
+                        "row",
+                        "rounded-2",
+                        "border-primary",
+                        "border-2",
+                        "border"
+                    );
+                    newTask.setAttribute("draggable", "true");
+                    newTask.setAttribute("data-bs-toggle", "modal");
+                    newTask.setAttribute("data-bs-target", "#task-details");
+
+                    // Create the inner content of the task
+                    newTask.innerHTML = `
                 <div class="col-12 mb-2 lh-1 mh-50 modal-detail-title text-break">
                     ${value}
                 </div>
@@ -780,389 +1031,414 @@ vs
                 </div>
             `;
 
-            newTask.addEventListener("dragstart", (e) => {
-                newTask.classList.add("is-dragging");
-                currentTask = newTask
-                console.log("deagging")
-            });
+                    newTask.addEventListener("dragstart", (e) => {
+                        newTask.classList.add("is-dragging");
+                        currentTask = newTask;
+                        console.log("deagging");
+                    });
 
-            newTask.addEventListener('click', (e) => {
-                modal.querySelector('.modal-title').innerText = newTask.innerText
-            })
+                    newTask.addEventListener("click", (e) => {
+                        modal.querySelector(".modal-title").innerText =
+                            newTask.innerText;
+                    });
 
-            newTask.addEventListener("dragend", () => {
-                newTask.classList.remove("is-dragging");
-                console.log(newTask);
-                if (currentZone.classList.contains('dummy-trash')) {
-                    bModal.show()
-                }
-                task.classList.remove("is-dragging");
-            });
-
-            todoLane.appendChild(newTask);
-
-            input.value = "";
-        });
-
-        let currentZone = null
-
-        const comfirmBox = document.querySelector('#confirm-box')
-        const bModal = new bootstrap.Modal(comfirmBox)
-        let currentTask;
-
-        draggables.forEach((task) => {
-            task.addEventListener("dragstart", () => {
-                task.classList.add("is-dragging");
-                currentTask = task
-                console.log(currentZone)
-            });
-            task.addEventListener("dragend", (e) => {
-
-                console.log(e.target)
-                console.log(e.target.classList)
-                if (currentZone.classList.contains('dummy-trash')) {
-                    bModal.show()
-                }
-                task.classList.remove("is-dragging");
-
-            });
-
-            task.addEventListener('click', function (e) {
-                modal.querySelector('.modal-title').innerText = task.innerText
-            })
-        });
-
-        comfirmBox.addEventListener('click', function (e) {
-            if (e.target.innerText.toLowerCase() === 'yes') {
-                currentTask.remove()
-                document.querySelector('.trash').classList.remove('drag-over')
-                bModal.hide()
-                let postData = JSON.stringify({key1: "value1", key2: "value2"});
-                console.log('this task will be deleted', currentTask)
-                ajaxRequest("/data", "POST", postData, function (response) {
-                    // Handle the response data here
-                    console.log(response);
-                });
-            } else if (e.target.innerText.toLowerCase() === 'no') {
-                document.querySelector('.trash').classList.remove('drag-over')
-                bModal.hide()
-            }
-        })
-
-        // ======================= TRASH BRN ======================
-
-        if (trashCanContainer != null) {
-
-            console.log(trashCanContainer)
-            trashCanContainer.addEventListener('dragover', function (e) {
-                e.preventDefault();
-                currentZone = trashCanContainer;
-                currentTask = document.querySelector('.is-dragging')
-                if (currentTask === null) return
-
-                console.log(this)
-                document.querySelector('.trash').classList.add('drag-over')
-
-            })
-
-            trashCanContainer.addEventListener('dragleave', function (e) {
-                document.querySelector('.trash').classList.remove('drag-over')
-            })
-
-        }
-
-        // =========================== TRASH BIN =============================
-
-        // ========================== AJAX FUNCTION (JUST TESTING) ===========================
-
-        droppables.forEach((zone) => {
-            zone.addEventListener("dragover", (e) => {
-                e.preventDefault();
-                currentZone = zone
-                console.log(undefined)
-                console.log(currentZone)
-
-                const bottomTask = insertAboveTask(zone, e.clientY);
-                const curTask = document.querySelector(".is-dragging");
-
-                if (curTask === null) {
-                    return
-                }
-
-                const curZone = zone.getAttribute("id");
-
-                switch (curZone) {
-                    case "todo-lane":
-                        curTask.classList.add("border-primary");
-                        curTask.classList.remove(
-                            "border-dark",
-                            "border-success"
-                        );
-                        break;
-                    case "doing-lane":
-                        curTask.classList.add("border-dark");
-                        curTask.classList.remove(
-                            "border-primary",
-                            "border-success"
-                        );
-                        break;
-                    case "done-lane":
-                        curTask.classList.add("border-success");
-                        curTask.classList.remove(
-                            "border-primary",
-                            "border-dark"
-                        );
-                        break;
-                }
-
-                if (!bottomTask) {
-                    zone.appendChild(curTask);
-                } else {
-                    zone.insertBefore(curTask, bottomTask);
-                }
-            });
-        });
-        const insertAboveTask = (zone, mouseY) => {
-            const els = zone.querySelectorAll(".task:not(.is-dragging)");
-
-            let closestTask = null;
-            let closestOffset = Number.NEGATIVE_INFINITY;
-
-            els.forEach((task) => {
-                const {top} = task.getBoundingClientRect();
-
-                const offset = mouseY - top;
-
-                if (offset < 0 && offset > closestOffset) {
-                    closestOffset = offset;
-                    closestTask = task;
-                }
-            });
-
-            return closestTask;
-        };
-
-        // ========================== Calendar View ===========================
-
-        const datePicker = new DayPilot.Navigator("nav", {
-            showMonths: 1,
-            selectMode: "Day",
-            onTimeRangeSelected: args => {
-                // Calculate the start of the selected week
-                const selectedWeekStart = args.day.firstDayOfWeek();
-
-                // Update the calendar view to display the selected week
-                calendar.update({
-                    startDate: selectedWeekStart
-                });
-
-                // Load events for the selected week
-                calendar.events.load("/api/tasks");
-            },
-            nav:{
-                top: {
-                    children: [
-                        {
-                            command: "previous",
-                            icon: "icon icon-chevron-left"
-                        },
-                        {
-                            command: "today",
-                            icon: "icon icon-chevron-down"
-                        },
-                        {
-                            command: "next",
-                            icon: "icon icon-chevron-right"
+                    newTask.addEventListener("dragend", () => {
+                        newTask.classList.remove("is-dragging");
+                        console.log(newTask);
+                        if (currentZone.classList.contains("dummy-trash")) {
+                            bModal.show();
                         }
-                    ]
-                }
-            }
-        });
+                        task.classList.remove("is-dragging");
+                    });
 
+                    todoLane.appendChild(newTask);
 
+                    input.value = "";
+                });
 
+                
 
-        datePicker.init();
+                const comfirmBox = document.querySelector("#confirm-box");
+                const bModal = new bootstrap.Modal(comfirmBox);
 
-        //console.log datePicker
-            console.log('date time picker', datePicker)
+                
 
-        // Handle the "Next" and "Previous" buttons to navigate week by week
-        document.getElementById("previous").addEventListener("click", () => {
-            const currentStartDate = calendar.visibleStart();
-            calendar.update({
-                startDate: currentStartDate.addDays(-7)
-            });
-            calendar.events.load("/api/tasks");
-        });
+                comfirmBox.addEventListener("click", function (e) {
+                    if (e.target.innerText.toLowerCase() === "yes") {
+                        currentTask.remove();
 
-        document.getElementById("next").addEventListener("click", () => {
-            const currentStartDate = calendar.visibleStart();
-            calendar.update({
-                startDate: currentStartDate.addDays(7)
-            });
-            calendar.events.load("/api/tasks");
-        });
-
-        console.log(new DayPilot.Calendar("dp"))
-
-        const calendar = new DayPilot.Calendar("dp", {
-            eventEndSpec: "Week",
-            startDate: new DayPilot.Date().firstDayOfWeek(),
-            days: 7,
-            eventHeight: 30,
-            dayBeginsHour: 8,
-            dayEndsHour: 20,
-            businessBeginsHour: 8,
-            businessEndsHour: 18,
-            eventBarVisible: false,
-            onTimeRangeSelected: async (args) => {
-                const modal = await DayPilot.Modal.prompt("Create a new event:", "Event");
-                calendar.clearSelection();
-                if (modal.canceled) {
-                    return;
-                }
-                const params = {
-                    start: args.start,
-                    end: args.end,
-                    text: modal.result
-                };
-                const {data} = await DayPilot.Http.post('/api/tasks/create', params);
-                calendar.events.add(data);
-            },
-            onEventMove: async (args) => {
-                const params = {
-                    id: args.e.id(),
-                    start: args.newStart,
-                    end: args.newEnd
-                };
-                const {data} = await DayPilot.Http.post('/api/tasks/move', params);
-            },
-            onEventResize: async (args) => {
-                const params = {
-                    id: args.e.id(),
-                    start: args.newStart,
-                    end: args.newEnd
-                };
-                const {data} = await DayPilot.Http.post('/api/tasks/move', params);
-            },
-            onBeforeEventRender: args => {
-                args.data.backColor = args.data.color || app.colors.gray;
-                args.data.borderColor = "darker";
-                args.data.fontColor = "#122d7a";
-                args.data.text = args.data.text || "New task";
-                args.data.areas = [
-                    {
-                        top: 6,
-                        right: 6,
-                        width: 18,
-                        height: 18,
-                        symbol: "../icons/daypilot.svg#minichevron-down-2",
-                        action: "ContextMenu",
-                        backColor: "#fd0d55",
-                        fontColor: "#666666",
-                        style: "border: 1px solid #ccc; cursor:pointer; border-radius: 15px;"
+                        document
+                            .querySelector(".trash")
+                            .classList.remove("drag-over");
+                        bModal.hide();
+                        console.log("this task will be deleted", currentTask);
+                        sendData('/api/task/delete', "POST", currentTaskData, (error, response) => {
+                            if(error) {
+                                console.log("Error for Url : /api/task/delete", error)
+                            } else {
+                                console.log("Response for Url : /api/task/delete", response)
+                            }
+                        })
+                    } else if (e.target.innerText.toLowerCase() === "no") {
+                        document
+                            .querySelector(".trash")
+                            .classList.remove("drag-over");
+                        bModal.hide();
                     }
-                ];
-            },
-            contextMenu: new DayPilot.Menu({
-                items: [
-                    {
-                        text: "Delete",
-                        onClick: async (args) => {
-                            const e = args.source;
-                            const params = {
-                                id: e.id()
-                            };
+                });
 
-                            const {data} = await DayPilot.Http.post('/api/tasks/delete', params);
-                            calendar.events.remove(e);
-                        }
-                    },
-                    {
-                        text: "-"
-                    },
-                    {
-                        text: "Blue",
-                        icon: "icon icon-blue",
-                        onClick: (args) => {
-                            app.updateColor(args.source, app.colors.blue);
-                        }
-                    },
-                    {
-                        text: "Green",
-                        icon: "icon icon-green",
-                        onClick: (args) => {
-                            app.updateColor(args.source, app.colors.green);
-                        }
-                    },
-                    {
-                        text: "Yellow",
-                        icon: "icon icon-yellow",
-                        onClick: (args) => {
-                            app.updateColor(args.source, app.colors.yellow);
-                        }
-                    },
-                    {
-                        text: "Red",
-                        icon: "icon icon-red",
-                        onClick: (args) => {
-                            app.updateColor(args.source, app.colors.red);
-                        }
-                    }, {
-                        text: "Auto",
-                        onClick: (args) => {
-                            app.updateColor(args.source, "auto");
-                        }
-                    },
+                // ======================= TRASH BRN ======================
 
-                ]
-            })
-        });
-        calendar.init();
+                if (trashCanContainer != null) {
+                    console.log(trashCanContainer);
+                    trashCanContainer.addEventListener(
+                        "dragover",
+                        function (e) {
+                            e.preventDefault();
+                            currentZone = trashCanContainer;
+                            currentTask = document.querySelector(".is-dragging");
+                            if (currentTask === null) return;
+                            document
+                                .querySelector(".trash")
+                                .classList.add("drag-over");
+                        }
+                    );
 
+                    trashCanContainer.addEventListener(
+                        "dragleave",
+                        function (e) {
+                            document
+                                .querySelector(".trash")
+                                .classList.remove("drag-over");
+                        }
+                    );
+                }
 
-        const app = {
-            colors: {
-                blue: "#2e78d6",
-                green: "#6aa84f",
-                yellow: "#efb914",
-                red: "#cc4125",
-                gray: "#808080",
-            },
-            elements: {
-                previous: document.querySelector("#previous"),
-                next: document.querySelector("#next"),
-            },
-            async updateColor(e, color) {
-                const params = {
-                    id: e.id(),
-                    color: color
+                // =========================== TRASH BIN =============================
+
+                // ========================== AJAX FUNCTION (JUST TESTING) ===========================
+
+                droppables.forEach((zone) => {
+                    zone.addEventListener("dragover", (e) => {
+                        e.preventDefault();
+                        currentZone = zone;
+
+                        const bottomTask = insertAboveTask(zone, e.clientY);
+                        const curTask = document.querySelector(".is-dragging");
+
+                        if (curTask === null) {
+                            return;
+                        }
+
+                        const curZone = zone.getAttribute("id");
+
+                        switch (curZone) {
+                            case "TODO":
+                                curTask.classList.add("border-primary");
+                                curTask.classList.remove(
+                                    "border-dark",
+                                    "border-success"
+                                );
+                                break;
+                            case "IN_PROGRESS":
+                                curTask.classList.add("border-dark");
+                                curTask.classList.remove(
+                                    "border-primary",
+                                    "border-success"
+                                );
+                                break;
+                            case "FINISHED":
+                                curTask.classList.add("border-success");
+                                curTask.classList.remove(
+                                    "border-primary",
+                                    "border-dark"
+                                );
+                                break;
+                        }
+
+                        if (!bottomTask) {
+                            zone.appendChild(curTask);
+                        } else {
+                            zone.insertBefore(curTask, bottomTask);
+                        }
+                    });
+                });
+                const insertAboveTask = (zone, mouseY) => {
+                    const els = zone.querySelectorAll(
+                        ".task:not(.is-dragging)"
+                    );
+
+                    let closestTask = null;
+                    let closestOffset = Number.NEGATIVE_INFINITY;
+
+                    els.forEach((task) => {
+                        const { top } = task.getBoundingClientRect();
+
+                        const offset = mouseY - top;
+
+                        if (offset < 0 && offset > closestOffset) {
+                            closestOffset = offset;
+                            closestTask = task;
+                        }
+                    });
+
+                    return closestTask;
                 };
-                const {data} = await DayPilot.Http.post('/api/tasks/setColor', params);
-                e.data.color = color;
-                calendar.events.update(e);
-            },
-            init() {
-                app.elements.previous.addEventListener("click", () => {
-                    // Move to the previous week
-                    datePicker.select(datePicker.selectionDay.addDays(-7));
 
+                // ========================== Calendar View ===========================
+
+                const datePicker = new DayPilot.Navigator("nav", {
+                    showMonths: 1,
+                    selectMode: "Day",
+                    onTimeRangeSelected: (args) => {
+                        // Calculate the start of the selected week
+                        const selectedWeekStart = args.day.firstDayOfWeek();
+
+                        // Update the calendar view to display the selected week
+                        calendar.update({
+                            startDate: selectedWeekStart,
+                        });
+
+                        // Load events for the selected week
+                        calendar.events.load("/api/tasks");
+                    },
+                    nav: {
+                        top: {
+                            children: [
+                                {
+                                    command: "previous",
+                                    icon: "icon icon-chevron-left",
+                                },
+                                {
+                                    command: "today",
+                                    icon: "icon icon-chevron-down",
+                                },
+                                {
+                                    command: "next",
+                                    icon: "icon icon-chevron-right",
+                                },
+                            ],
+                        },
+                    },
                 });
-                app.elements.next.addEventListener("click", () => {
-                    // Move to the next week
-                    datePicker.select(datePicker.selectionDay.addDays(7));
+
+                datePicker.init();
+
+                //console.log datePicker
+                console.log("date time picker", datePicker);
+
+                // Handle the "Next" and "Previous" buttons to navigate week by week
+                document
+                    .getElementById("previous")
+                    .addEventListener("click", () => {
+                        const currentStartDate = calendar.visibleStart();
+                        calendar.update({
+                            startDate: currentStartDate.addDays(-7),
+                        });
+                        calendar.events.load("/api/tasks");
+                    });
+
+                document
+                    .getElementById("next")
+                    .addEventListener("click", () => {
+                        const currentStartDate = calendar.visibleStart();
+                        calendar.update({
+                            startDate: currentStartDate.addDays(7),
+                        });
+                        calendar.events.load("/api/tasks");
+                    });
+
+                console.log(new DayPilot.Calendar("dp"));
+
+                const calendar = new DayPilot.Calendar("dp", {
+                    eventEndSpec: "Week",
+                    startDate: new DayPilot.Date().firstDayOfWeek(),
+                    days: 7,
+                    eventHeight: 30,
+                    dayBeginsHour: 8,
+                    dayEndsHour: 20,
+                    businessBeginsHour: 8,
+                    businessEndsHour: 18,
+                    eventBarVisible: false,
+                    onTimeRangeSelected: async (args) => {
+                        const modal = await DayPilot.Modal.prompt(
+                            "Create a new event:",
+                            "Event"
+                        );
+                        calendar.clearSelection();
+                        if (modal.canceled) {
+                            return;
+                        }
+                        const params = {
+                            start: args.start,
+                            end: args.end,
+                            text: modal.result,
+                        };
+                        const { data } = await DayPilot.Http.post(
+                            "/api/tasks/create",
+                            params
+                        );
+                        calendar.events.add(data);
+                    },
+                    onEventMove: async (args) => {
+                        const params = {
+                            id: args.e.id(),
+                            start: args.newStart,
+                            end: args.newEnd,
+                        };
+                        const { data } = await DayPilot.Http.post(
+                            "/api/tasks/move",
+                            params
+                        );
+                    },
+                    onEventResize: async (args) => {
+                        const params = {
+                            id: args.e.id(),
+                            start: args.newStart,
+                            end: args.newEnd,
+                        };
+                        const { data } = await DayPilot.Http.post(
+                            "/api/tasks/move",
+                            params
+                        );
+                    },
+                    onBeforeEventRender: (args) => {
+                        args.data.backColor =
+                            args.data.color || app.colors.gray;
+                        args.data.borderColor = "darker";
+                        args.data.fontColor = "#122d7a";
+                        args.data.text = args.data.text || "New task";
+                        args.data.areas = [
+                            {
+                                top: 6,
+                                right: 6,
+                                width: 18,
+                                height: 18,
+                                symbol: "../icons/daypilot.svg#minichevron-down-2",
+                                action: "ContextMenu",
+                                backColor: "#fd0d55",
+                                fontColor: "#666666",
+                                style: "border: 1px solid #ccc; cursor:pointer; border-radius: 15px;",
+                            },
+                        ];
+                    },
+                    contextMenu: new DayPilot.Menu({
+                        items: [
+                            {
+                                text: "Delete",
+                                onClick: async (args) => {
+                                    const e = args.source;
+                                    const params = {
+                                        id: e.id(),
+                                    };
+
+                                    const { data } = await DayPilot.Http.post(
+                                        "/api/tasks/delete",
+                                        params
+                                    );
+                                    calendar.events.remove(e);
+                                },
+                            },
+                            {
+                                text: "-",
+                            },
+                            {
+                                text: "Blue",
+                                icon: "icon icon-blue",
+                                onClick: (args) => {
+                                    app.updateColor(
+                                        args.source,
+                                        app.colors.blue
+                                    );
+                                },
+                            },
+                            {
+                                text: "Green",
+                                icon: "icon icon-green",
+                                onClick: (args) => {
+                                    app.updateColor(
+                                        args.source,
+                                        app.colors.green
+                                    );
+                                },
+                            },
+                            {
+                                text: "Yellow",
+                                icon: "icon icon-yellow",
+                                onClick: (args) => {
+                                    app.updateColor(
+                                        args.source,
+                                        app.colors.yellow
+                                    );
+                                },
+                            },
+                            {
+                                text: "Red",
+                                icon: "icon icon-red",
+                                onClick: (args) => {
+                                    app.updateColor(
+                                        args.source,
+                                        app.colors.red
+                                    );
+                                },
+                            },
+                            {
+                                text: "Auto",
+                                onClick: (args) => {
+                                    app.updateColor(args.source, "auto");
+                                },
+                            },
+                        ],
+                    }),
                 });
+                calendar.init();
 
-                calendar.events.load("/api/tasks");
-            }
-        };
+                const app = {
+                    colors: {
+                        blue: "#2e78d6",
+                        green: "#6aa84f",
+                        yellow: "#efb914",
+                        red: "#cc4125",
+                        gray: "#808080",
+                    },
+                    elements: {
+                        previous: document.querySelector("#previous"),
+                        next: document.querySelector("#next"),
+                    },
+                    async updateColor(e, color) {
+                        const params = {
+                            id: e.id(),
+                            color: color,
+                        };
+                        const { data } = await DayPilot.Http.post(
+                            "/api/tasks/setColor",
+                            params
+                        );
+                        e.data.color = color;
+                        calendar.events.update(e);
+                    },
+                    init() {
+                        app.elements.previous.addEventListener("click", () => {
+                            // Move to the previous week
+                            datePicker.select(
+                                datePicker.selectionDay.addDays(-7)
+                            );
+                        });
+                        app.elements.next.addEventListener("click", () => {
+                            // Move to the next week
+                            datePicker.select(
+                                datePicker.selectionDay.addDays(7)
+                            );
+                        });
 
-        app.init();
+                        calendar.events.load("/api/tasks");
+                    },
+                };
 
-        console.log(calendar)
+                app.init();
 
-    </script>
-</div>
-</body>
+                console.log(calendar);
+            </script>
+        </div>
+    </body>
 </html>

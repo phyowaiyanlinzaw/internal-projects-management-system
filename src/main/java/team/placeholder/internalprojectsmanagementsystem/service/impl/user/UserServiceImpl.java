@@ -121,4 +121,15 @@ public class UserServiceImpl implements UserService {
         mailSender.send(message);
     }
 
+    @Override
+    public List<UserDto> getAllUsersByPMId(long id) {
+
+        List<User> userList = userRepository.findByProjectManagerId(id);
+
+        return userList.stream().map(UserMapper::toUserDto).collect(Collectors.toList());
+    }
+    
+
+    
+
 }

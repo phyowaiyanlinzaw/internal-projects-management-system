@@ -18,6 +18,10 @@ public class UserMapper {
         userDto.setPassword(user.getPassword());
         userDto.setRole(user.getRole());
 
+        if(user.getProjectManager() != null) {
+            userDto.setProjectmanager(toUserDto(user.getProjectManager()));
+        }
+
         // Convert Department to DepartmentDto
         userDto.setDepartmentdto(DepartmentMapper.toDepartmentDto(user.getDepartment()));
 
