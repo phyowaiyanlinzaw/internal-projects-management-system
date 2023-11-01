@@ -29,6 +29,7 @@ public class PrjDto {
     private UserDto user;
     private String background;
     private int currentPhase;
+    private DepartmentDto department;
     private String objective;
     private int inReview;
     private int exReview;

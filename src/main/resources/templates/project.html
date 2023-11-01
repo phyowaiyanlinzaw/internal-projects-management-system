@@ -19,6 +19,11 @@ vs
         layout:decorate="layout/layout"
 >
 <head>
+    <style>
+        .calendar_default_cell_inner {
+            background-color: #fd0d55;!important;
+        }
+    </style>
 </head>
 
 <body layout:fragment="content">
@@ -85,7 +90,7 @@ vs
                                 aria-controls="gantt-chart"
                                 aria-selected="false"
                         >
-                            Gantt chart
+                            Calendar
                         </button>
                     </li>
                     <div
@@ -999,13 +1004,17 @@ vs
             calendar.events.load("/api/tasks");
         });
 
-
+        console.log(new DayPilot.Calendar("dp"))
 
         const calendar = new DayPilot.Calendar("dp", {
             eventEndSpec: "Week",
             startDate: new DayPilot.Date().firstDayOfWeek(),
             days: 7,
             eventHeight: 30,
+            dayBeginsHour: 8,
+            dayEndsHour: 20,
+            businessBeginsHour: 8,
+            businessEndsHour: 18,
             eventBarVisible: false,
             onTimeRangeSelected: async (args) => {
                 const modal = await DayPilot.Modal.prompt("Create a new event:", "Event");
@@ -1040,7 +1049,7 @@ vs
             onBeforeEventRender: args => {
                 args.data.backColor = args.data.color || app.colors.gray;
                 args.data.borderColor = "darker";
-                args.data.fontColor = "#ffffff";
+                args.data.fontColor = "#122d7a";
                 args.data.text = args.data.text || "New task";
                 args.data.areas = [
                     {
@@ -1050,7 +1059,7 @@ vs
                         height: 18,
                         symbol: "../icons/daypilot.svg#minichevron-down-2",
                         action: "ContextMenu",
-                        backColor: "#ffffff",
+                        backColor: "#fd0d55",
                         fontColor: "#666666",
                         style: "border: 1px solid #ccc; cursor:pointer; border-radius: 15px;"
                     }
