@@ -11,11 +11,10 @@ public interface IssueService {
 
     IssueDto getIssueById(long id);
 
-    IssueDto getIssueByName(String name);
-
-    IssueDto updateIssue(IssueDto issueDto);
+        IssueDto updateIssue(IssueDto issueDto);
 
    void deleteIssue(long id);
 
 
+    IssueDto getIssueByTitle(String title);
 }

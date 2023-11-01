@@ -36,6 +36,9 @@ public class Issue implements Serializable {
     private long created_date;
     private long updated_date;
     private long solved_date;
+
+
+    @Enumerated(EnumType.STRING)
     private Category issue_category;
 
     @ManyToOne

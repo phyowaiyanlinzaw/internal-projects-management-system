@@ -10,7 +10,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 @Getter
 @Setter
 public class IssueDto {
-    private Long id;
+    private long id;
     private String title;
     private String description;
     private String place;
@@ -24,11 +24,22 @@ public class IssueDto {
     private long created_date;
     private long updated_date;
     private long solved_date;
+
     private Category issue_category;
 
     private ProjectDto projectDto;
     private UserDto user_uploader;
     private UserDto user_pic;
+
+
+
+    public boolean isSolved() {
+        return solved;
+    }
+
+    public void setSolved(boolean solved) {
+        this.solved = solved;
+    }
 
 
 
