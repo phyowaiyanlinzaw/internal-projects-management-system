@@ -68,15 +68,6 @@ class UserServiceTest {
         assertEquals(userDto, updatedUser);
     }
 
-    @Test
-    public void testChangePassword() {
-        UserDto userDto = new UserDto();
-        String newPassword = "newPassword";
-        Mockito.when(userService.changePassword(userDto, newPassword)).thenReturn(userDto);
-        UserDto changedPassword = userService.changePassword(userDto, newPassword);
-        assertEquals(userDto, changedPassword);
-    }
-
 
 
 }

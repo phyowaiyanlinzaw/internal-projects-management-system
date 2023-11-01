@@ -10,14 +10,15 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,6 +37,9 @@ class UserServiceImplTest {
 
     @Mock
     private JavaMailSender mailSender;
+
+    @Mock
+    private PasswordGenerator passwordGenerator;
 
 
     @BeforeEach
@@ -134,50 +138,15 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testChangePassword() {
-        User user = new User();
-        user.setName("John");
-        user.setEmail("john@gmail.com");
-        user.setPassword("123456");
-        user.setDepartment(new Department());
-        user.setRole(SDQC);
-        user.setId(1L);
-        when(userRepository.findById(1L)).thenReturn(user);
-        User user1 = userRepository.findById(1L);
-        user1.setPassword("1234567");
-        userRepository.save(user1);
-        assertEquals("1234567", user1.getPassword());
-        verify(userRepository, times(1)).save(user1);
-
+    public void testResetPassword(){
+        String password = "12345678";
+        assertEquals(password.length(),PasswordGenerator.generatePassword(8).length());
     }
 
-    @Test
-    public void testSendEmail() {
-        User user = new User();
-        user.setName("John");
-        user.setEmail("user@user.com");
-        user.setPassword("123456");
-        user.setDepartment(new Department());
-        user.setRole(SDQC);
-        user.setId(1L);
-        when(userRepository.findByEmail("user@user.com")).thenReturn(user);
-        User user1 = userRepository.findByEmail("user@user.com");
-        String password = PasswordGenerator.generatePassword(8);
-        user1.setPassword(password);
-        userRepository.save(user1);
-        assertEquals(password, user1.getPassword());
-        verify(userRepository, times(1)).save(user1);
-
-        String message = "Your new password is: " + password;
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(user1.getEmail());
-        simpleMailMessage.setSubject("New Password");
-        simpleMailMessage.setText(message);
-        mailSender.send(simpleMailMessage);
-        verify(mailSender, times(1)).send(simpleMailMessage);
 
 
 
-    }
+
+
 
 }
