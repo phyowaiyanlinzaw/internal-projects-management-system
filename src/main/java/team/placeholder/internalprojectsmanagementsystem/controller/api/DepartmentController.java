@@ -78,10 +78,6 @@ public class DepartmentController {
         return ResponseEntity.ok("Department deleted successfully");
     }
 
-    @GetMapping("/getProject/{id}")
-    public long getProject(@RequestParam("id") long id) {
-        return departmentService.getcount(id);
-    }
 
 
 

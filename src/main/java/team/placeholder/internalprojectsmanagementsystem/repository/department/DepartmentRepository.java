@@ -17,7 +17,8 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     List<Department> findAll();
 
-    int getCountById(long id);
+
+
 
 
 }

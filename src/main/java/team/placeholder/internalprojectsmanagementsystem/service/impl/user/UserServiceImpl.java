@@ -121,4 +121,9 @@ public class UserServiceImpl implements UserService {
         mailSender.send(message);
     }
 
+    @Override
+    public long getMemberCount(long id) {
+        return userRepository.countByDepartmentId(id);
+    }
+
 }
