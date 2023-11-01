@@ -19,7 +19,7 @@ public class UserMapper {
         userDto.setRole(user.getRole());
 
         if(user.getProjectManager() != null) {
-            userDto.setProjectmanager(toUserDto(user.getProjectManager()));
+            userDto.setProjectManager(toUserDto(user.getProjectManager()));
         }
 
         // Convert Department to DepartmentDto

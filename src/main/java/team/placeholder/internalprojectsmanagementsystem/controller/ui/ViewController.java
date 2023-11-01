@@ -50,7 +50,7 @@ public class ViewController {
             session.setAttribute("loing-user-role", userDto.getRole());
             session.setAttribute("login-user-dp-id", userDto.getDepartmentdto().getId());
             
-            if(userDto.getProjectmanager() != null) {
+            if(userDto.getProjectManager() != null) {
                 session.setAttribute("login-user-pm-id", userDto);
             }
 

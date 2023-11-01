@@ -167,16 +167,4 @@ public class UserServiceImpl implements UserService {
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public List<UserDto> getAllUsersByPMId(long id) {
-
-        List<User> userList = userRepository.findByProjectManagerId(id);
-
-        return userList.stream().map(UserMapper::toUserDto).collect(Collectors.toList());
-    }
-    
-
-    
-
 }
