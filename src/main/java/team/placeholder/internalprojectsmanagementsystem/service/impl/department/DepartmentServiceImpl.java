@@ -85,4 +85,14 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
+
+
+
+    public long getcount(long id){
+        return departmentRepository.getCountById(id);
+    }
+
+
+
+
 }
