@@ -144,5 +144,15 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(user);
     }
 
+    @Override
+    public UserDto findByName(String name) {
+        User user = userRepository.findByName(name);
 
+        if (user!=null){
+            return UserMapper.toUserDto(user);
+        }else {
+            return null;
+        }
+
+    }
 }
