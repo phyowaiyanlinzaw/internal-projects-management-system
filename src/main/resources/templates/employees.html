@@ -54,11 +54,11 @@
                 >
                 <tr>
                     <th data-sortable="true"
-                        data-field="id"
+                        data-formatter="indexFormatter"
                         data-align="left"
                         data-valign="middle"
                         data-width="100"
-                    >ID</th>
+                    >No.</th>
                     <th data-sortable="true"
                         data-field="email"
                         data-align="left"
@@ -125,7 +125,7 @@
 
                         <div>
                             <select id="memberSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;" required>
-                                <option value="PROJECT_MANAGER" selected>ProjectManager</option>
+                                <option value="PROJECT_MANAGER" selected>Project Manager</option>
                                 <option value="EMPLOYEE">Member</option>
                                 <option value="FOC">FOC</option>
                                 <option value="CONTRACT">Contract</option>
@@ -133,10 +133,9 @@
                         </div>
 
                         <div>
-                            <select id="departmentSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;" required>
-                                <option value="Department 1">Department 1</option>
-                                <option value="Department 2">Department 2</option>
-                                <option value="Department 3">Department 3</option>
+                            <select id="departmentSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;">
+                            </select>
+                            <select id="projectManagerSelect" class="form-select form-select-lg mb-3"  aria-label=".form-select-lg example" style="font-size: 16px;display: none">
                             </select>
                         </div>
 
@@ -170,36 +169,62 @@
 <!-- Include Bootstrap Table, and Bootstrap Table Export JavaScript -->
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
 <script>
+    function indexFormatter(value, row, index) {
+        return index + 1;
+    }
     $(function () {
 
-        $('#table').bootstrapTable({});
+        $('#table').bootstrapTable({
+        });
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
 
         $('#memberSelect').change(function() {
             var selectedValue = $(this).val();
             var departmentSelect = $('#departmentSelect');
+            var projectManagerSelect = $('#projectManagerSelect');
 
-            if (selectedValue === 'Member' || selectedValue === 'FOC' || selectedValue==='Contract') {
-                departmentSelect.html(`
-                        <option value="Project 1">Project 1</option>
-                        <option value="Project 2">Project 2</option>
-                        <option value="Project 3">Project 3</option>
-                    `);
+            if (selectedValue === 'PROJECT_MANAGER') {
+                // Show departmentSelect and hide projectManagerSelect by display css property
+                departmentSelect.show();
+                projectManagerSelect.hide();
+
+                // Make an AJAX request to populate departmentSelect options
+                $.get('/api/department/list', function(data) {
+                    departmentSelect.empty();
+                    $.each(data, function(index, department) {
+                        departmentSelect.append($('<option>', {
+                            value: department,
+                            text: department
+                        }));
+                    });
+                });
             } else {
-                departmentSelect.html(`
-                        <option value="Department 1">Department 1</option>
-                        <option value="Department 2">Department 2</option>
-                        <option value="Department 3">Department 3</option>
-                    `);
+                // Show projectManagerSelect and hide departmentSelect
+                projectManagerSelect.show();
+                departmentSelect.hide();
+
+                // Make an AJAX request to populate projectManagerSelect options
+                $.get('/api/user/list/PROJECT_MANAGER', function(data) {
+                    projectManagerSelect.empty();
+                    $.each(data, function(index, user) {
+                        projectManagerSelect.append($('<option>', {
+                            value: user.id, // Adjust this based on your data
+                            text: user.name // Adjust this based on your data
+                        }));
+                    });
+                });
             }
         });
+
 
         $('#register-employee-btn').click(function() {
             var username = $('#floatingText').val();
             var email = $('#floatingInput').val();
             var role = $('#memberSelect').val();
             var department = $('#departmentSelect').val();
+            var projectManagerId = $('#projectManagerSelect').val();
+            console.log(projectManagerId);
 
             if (username === '' || email === '' || role === '' || department === '') {
                 alert('Please fill all the fields');
@@ -214,27 +239,25 @@
                 url: '/api/user/register-employee',
                 type: 'POST',
                 data: JSON.stringify({
-                    username: username,
+                    name: username,
                     email: email,
                     role: role,
-                    department: department
+                    department: department,
+                    project_manager : {
+                        id: projectManagerId
+                    }
                 }),
                 contentType: 'application/json',
                 success: function (data) {
                     alert('Employee registered successfully');
                     $('#addEmployeeModal').modal('hide');
                     $('#register-employee-btn').html('Register').prop('disabled', false);
+                    $('#table').bootstrapTable('refresh');
+
 
                 },
                 error: function (data,xhr) {
-                    console.log(xhr.status)
-                    console.log(xhr.responseText)
-                    if (xhr.status===400){
-                        alert('Username or email already exists');
-                    }
-                    else{
-                        alert('Error registering employee');
-                    }
+                    alert('Error registering employee');
                     $('#register-employee-btn').html('Register').prop('disabled', false);
 
                 },

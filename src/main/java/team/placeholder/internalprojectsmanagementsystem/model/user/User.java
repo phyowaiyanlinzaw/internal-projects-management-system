@@ -23,6 +23,22 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Table(name="user")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class User implements Serializable {
 
     @Id
@@ -50,19 +66,19 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name="project_id"))
     private Set<Project> projects = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Tasks> tasks;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> project;
 
-    @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL)
     private List<Issue> uploader;
 
-    @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL)
     private List<Issue> pic;
 
     @ManyToOne

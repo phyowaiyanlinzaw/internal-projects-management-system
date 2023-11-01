@@ -6,6 +6,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
 @Service
 public interface UserService {
@@ -26,6 +27,8 @@ public interface UserService {
     UserDto registerUser(UserDto userDto);
 
     UserDto findByName(String name);
+
+    List<UserDto> getAllByRole(Role role);
 
 
 

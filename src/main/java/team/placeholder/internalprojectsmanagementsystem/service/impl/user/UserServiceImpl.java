@@ -11,6 +11,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.D
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
@@ -124,6 +125,9 @@ public class UserServiceImpl implements UserService {
         user.setRole(userDto.getRole());
         user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
 
+        // Set the project manager by retrieving it from the database based on its ID
+        user.setProjectManager(userRepository.findById(userDto.getProjectManager().getId()));
+
         // Attempt to save the user to the repository
         try {
             userRepository.save(user);
@@ -154,5 +158,13 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
+    }
+
+    @Override
+    public List<UserDto> getAllByRole(Role role) {
+        List<User> users = userRepository.findAllByRole(role);
+        return users.stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 }

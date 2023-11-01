@@ -19,5 +19,8 @@ public class UserDto {
     @JsonProperty("department")
     private DepartmentDto departmentdto;
 
+    @JsonProperty("project_manager")
+    private UserDto projectManager;
+
 
 }

@@ -51,7 +51,7 @@
         </div>
         <div class="container-fluid">
             <div class="row row-cols-1">
-                <div class="col col-xl-3">
+                <div class="col mb-2">
                     <div class="card">
                         <div
                                 class="card-body profile-card pt-4 d-flex flex-column align-items-center"
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col col-xl-9">
+                <div class="col">
                     <div class="card">
                         <div class="card-body">
                             <!-- Bordered Tabs -->
@@ -214,15 +214,22 @@
                                         id="profile-change-password"
                                 >
                                     <!-- Change Password Form -->
-                                    <form id="login-form">
-                                        <div class="row mb-3">
+
+                                    <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                        <strong>Error:</strong> <span id="errorText"></span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; position: absolute; top: 0; right: 0;">&times;</button>
+                                    </div>
+
+
+
+                                    <div class="row mb-3">
                                             <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
                                             <div class="col-md-8 col-lg-9">
                                                 <div class="input-group">
                                                     <input name="password" type="password" class="form-control" id="currentPassword" data-type="password" />
                                                     <div class="input-group-append border-1 border">
-                                                        <button class="btn btn-light toggle-password" type="button">
-                                                            <i class="fas fa-eye" id="passwordIcon"></i>
+                                                        <button class="btn btn-light toggle-password" type="button" pw-target="currentPassword">
+                                                            <i class="fas fa-eye passwordIcon"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -230,41 +237,30 @@
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label
-                                                    for="newPassword"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >New Password</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="newpassword"
-                                                        type="password"
-                                                        class="form-control"
-                                                        id="newPassword"
-                                                        data-type="newpassword"
-                                                />
+                                            <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <div class="input-group">
+                                                    <input name="password" type="password" class="form-control" id="newPassword" data-type="password" />
+                                                    <div class="input-group-append border-1 border">
+                                                        <button class="btn btn-light toggle-password" type="button" pw-target="newPassword">
+                                                            <i class="fas fa-eye passwordIcon"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label
-                                                    for="renewPassword"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Re-enter New
-                                                Password</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="renewpassword"
-                                                        type="password"
-                                                        class="form-control"
-                                                        id="renewPassword"
-                                                        data-type="confirmpassword"
-                                                />
+                                            <label for="confirmNewPassword" class="col-md-4 col-lg-3 col-form-label">Confirm New Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <div class="input-group">
+                                                    <input name="password" type="password" class="form-control" id="confirmNewPassword" data-type="password" />
+                                                    <div class="input-group-append border-1 border">
+                                                        <button class="btn btn-light toggle-password" type="button" pw-target="confirmNewPassword">
+                                                            <i class="fas fa-eye passwordIcon"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -272,12 +268,18 @@
                                             <button
                                                     type="submit"
                                                     class="btn btn-primary"
+                                                    id="changePasswordBtn"
                                             >
                                                 Change Password
                                             </button>
                                         </div>
-                                    </form>
                                     <!-- End Change Password Form -->
+                                    <!-- Add a full-page loading overlay -->
+                                    <div id="loading-overlay" class="d-none position-fixed w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center bg-light opacity-75">
+                                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- End Bordered Tabs -->
@@ -326,21 +328,82 @@
 
             //password eye toggle
             $(".toggle-password").on("click", function () {
-                var passwordInput = $("#currentPassword");
-                var passwordIcon = $("#passwordIcon");
+                const targetInputId = $(this).attr("pw-target");
+                const targetInput = $("#" + targetInputId);
+                const passwordIcon = $(this).find(".passwordIcon");
 
-                if (passwordInput.attr("data-type") === "password") {
-                    passwordInput.attr("type", "text");
-                    passwordInput.attr("data-type", "text");
+                if (targetInput.attr("data-type") === "password") {
+                    targetInput.attr("type", "text");
+                    targetInput.attr("data-type", "text");
                     passwordIcon.removeClass("fa-eye");
                     passwordIcon.addClass("fa-eye-slash");
                 } else {
-                    passwordInput.attr("type", "password");
-                    passwordInput.attr("data-type", "password");
+                    targetInput.attr("type", "password");
+                    targetInput.attr("data-type", "password");
                     passwordIcon.removeClass("fa-eye-slash");
                     passwordIcon.addClass("fa-eye");
                 }
             });
+
+            // Change password button AJAX
+            $("#changePasswordBtn").on("click", function (e) {
+                e.preventDefault();
+                const currentPassword = $("#currentPassword").val();
+                const newPassword = $("#newPassword").val();
+                const confirmNewPassword = $("#confirmNewPassword").val();
+
+                if (currentPassword === "" || newPassword === "" || confirmNewPassword === "") {
+                    showError("Please fill in all fields");
+                    return;
+                }
+
+                if (newPassword !== confirmNewPassword) {
+                    showError("New password and confirm new password do not match");
+                    return;
+                }
+
+                // Show the full-page loading overlay
+                $('#loading-overlay').removeClass('d-none');
+
+                $.ajax({
+                    url: "/api/user/change-password",
+                    type: "POST",
+                    data: {
+                        oldPassword: currentPassword,
+                        newPassword: newPassword
+                    },
+                    success: function (data) {
+                        // Hide the full-page loading overlay on success
+                        $('#loading-overlay').addClass('d-none');
+
+                        showSuccess("Password changed successfully");
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        // Hide the full-page loading overlay on error
+                        $('#loading-overlay').addClass('d-none');
+
+                        showError(error.responseText);
+
+
+                    }
+                });
+            });
+
+            function showError(message) {
+                $("#errorText").text(message);
+                $("#errorAlert").show();
+
+                setTimeout(function () {
+                    $("#errorAlert").hide();
+                }, 5000);
+            }
+
+            function showSuccess(message) {
+                // You can create a similar function for showing success messages.
+                alert(message); // For simplicity, we're using the alert function here.
+            }
+
             function getUserProfileInfo() {
                 $.ajax({
                     url: "/api/user/profile",
@@ -383,6 +446,8 @@
                 $("#roleInput").val(data.role)
                 $("#departmentInput").val(data.department)
             }
+
+
 
             getUserProfileInfo()
         }
