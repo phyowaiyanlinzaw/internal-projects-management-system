@@ -23,8 +23,6 @@ public class Amount implements Serializable {
     private int unit_testing;
     private int integrated_testing;
 
-    @OneToOne(mappedBy = "amount")
-    private Project project;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
