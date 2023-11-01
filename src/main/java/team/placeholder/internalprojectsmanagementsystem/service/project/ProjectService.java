@@ -13,6 +13,8 @@ public interface ProjectService {
 
     ProjectDto updateProject(ProjectDto projectDto);
 
+    long getCountByDepartment(long id);
+
 
 
 

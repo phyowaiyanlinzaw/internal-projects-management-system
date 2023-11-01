@@ -11,15 +11,19 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Proje
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/project")
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectServiceImpl projectService;
+    private final UserServiceImpl userService;
 
 
     @PostMapping("save")
@@ -28,7 +32,7 @@ public class ProjectController {
         return ResponseEntity.ok("User save successfully");
     }
 
-    @GetMapping("projectlist")
+    @GetMapping("/projectlist")
     public ResponseEntity<List<ProjectDto>> getAllProjects(){
         List<ProjectDto> projects = projectService.getAllProjects();
         return new ResponseEntity<>(projects, HttpStatus.OK);
@@ -53,6 +57,17 @@ public class ProjectController {
         }else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
+        long pcount = projectService.getCountByDepartment(id);
+        long ecount = userService.getMemberCount(id);
+        Map<String, Long> counts = new HashMap<>();
+        counts.put("projectCount : ", pcount);
+        counts.put("memberCount : ", ecount);
+        return ResponseEntity.ok(counts);
     }
 
 

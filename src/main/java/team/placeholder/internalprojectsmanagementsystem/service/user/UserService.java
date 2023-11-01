@@ -24,6 +24,8 @@ public interface UserService {
 
     void sendEmail(String to);
 
+    long getMemberCount(long id);
+
 
 
 

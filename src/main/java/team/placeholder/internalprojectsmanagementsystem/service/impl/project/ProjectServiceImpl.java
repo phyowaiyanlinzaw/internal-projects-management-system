@@ -10,11 +10,9 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.Deli
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,4 +82,11 @@ private final ProjectRepository projectRepository;
         }
 
     }
+
+    @Override
+    public long getCountByDepartment(long id) {
+        return projectRepository.countByDepartmentId(id);
+    }
+
+
 }

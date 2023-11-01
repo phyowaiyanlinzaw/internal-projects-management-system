@@ -12,6 +12,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Project findById(long id);
     Project findByName(String name);
 
-
+    long countByDepartmentId(long id);
 
 }
