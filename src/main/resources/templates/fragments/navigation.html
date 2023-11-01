@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="UTF-8" />
         <title>Navigation</title>
@@ -255,7 +255,7 @@
                                 style="width: 40px; height: 40px"
                             />
                             <span class="d-none d-lg-inline-flex"
-                                >John Doe</span
+                                  sec:authentication="principal.username" ></span
                             >
                         </a>
                         <div

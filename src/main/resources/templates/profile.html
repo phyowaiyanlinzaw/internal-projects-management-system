@@ -2,17 +2,19 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 
-<head></head>
+<head>
+</head>
 
 <body layout:fragment="content">
 
-    <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-    <!-- Spinner End -->
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
 
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
@@ -49,7 +51,7 @@
         </div>
         <div class="container-fluid">
             <div class="row row-cols-1">
-                <div class="col col-xl-3">
+                <div class="col mb-2">
                     <div class="card">
                         <div
                                 class="card-body profile-card pt-4 d-flex flex-column align-items-center"
@@ -60,28 +62,13 @@
                                     class="rounded-circle"
                                     style="height: 100px; width: 100px"
                             />
-                            <h4 style="margin-top: 10px">
-                                Kevin Anderson
+                            <h4 style="margin-top: 10px" id="name" class="display-4">
                             </h4>
-                            <h5>Web Designer</h5>
-                            <div class="social-links mt-2">
-                                <a href="#" class="twitter"
-                                ><i class="bi bi-twitter"></i
-                                ></a>
-                                <a href="#" class="facebook"
-                                ><i class="bi bi-facebook"></i
-                                ></a>
-                                <a href="#" class="instagram"
-                                ><i class="bi bi-instagram"></i
-                                ></a>
-                                <a href="#" class="linkedin"
-                                ><i class="bi bi-linkedin"></i
-                                ></a>
-                            </div>
+                            <h5 id="role">Web Designer</h5>
                         </div>
                     </div>
                 </div>
-                <div class="col col-xl-9">
+                <div class="col">
                     <div class="card">
                         <div class="card-body">
                             <!-- Bordered Tabs -->
@@ -135,38 +122,10 @@
                                         <div
                                                 class="col-lg-3 col col-md-4 label"
                                         >
-                                            Name
-                                        </div>
-                                        <div class="col-lg-9 col col-md-8">
-                                            Hnin Aye Lwin
-                                        </div>
-                                    </div>
-
-                                    <div
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
-                                        <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
                                             Email
                                         </div>
-                                        <div class="col-lg-9 col col-md-8">
-                                            nunhun879@gmail.com
-                                        </div>
-                                    </div>
+                                        <div class="col-lg-9 col col-md-8" id="email">
 
-                                    <div
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
-                                        <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
-                                            Role
-                                        </div>
-                                        <div class="col-lg-9 col col-md-8">
-                                            Project Manager
                                         </div>
                                     </div>
 
@@ -179,8 +138,21 @@
                                         >
                                             Department
                                         </div>
-                                        <div class="col-lg-9 col col-md-8">
-                                            Department1
+                                        <div class="col-lg-9 col col-md-8" id="department">
+
+                                        </div>
+                                    </div>
+                                    <div
+                                            class="row"
+                                            style="margin-top: 20px"
+                                    >
+                                        <div
+                                                class="col-lg-3 col col-md-4 label"
+                                        >
+                                            Project Count
+                                        </div>
+                                        <div class="col-lg-9 col col-md-8" id="projectCount">
+
                                         </div>
                                     </div>
                                 </div>
@@ -202,6 +174,7 @@
                                                         name="name"
                                                         type="text"
                                                         class="form-control"
+                                                        id="nameInput"
                                                 />
                                             </div>
                                         </div>
@@ -218,38 +191,8 @@
                                                         name="email"
                                                         type="email"
                                                         class="form-control"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Role</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="role"
-                                                        type="text"
-                                                        class="form-control"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Department</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="department"
-                                                        type="text"
-                                                        class="form-control"
+                                                        id="emailInput"
+                                                        disabled
                                                 />
                                             </div>
                                         </div>
@@ -271,62 +214,53 @@
                                         id="profile-change-password"
                                 >
                                     <!-- Change Password Form -->
-                                    <form id="login-form">
-                                        <div class="row mb-3">
-                                            <label
-                                                    for="currentPassword"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Current Password</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="password"
-                                                        type="password"
-                                                        class="form-control"
-                                                        id="currentPassword"
-                                                        data-type="password"
-                                                />
+
+                                    <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                        <strong>Error:</strong> <span id="errorText"></span>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; position: absolute; top: 0; right: 0;">&times;</button>
+                                    </div>
+
+
+
+                                    <div class="row mb-3">
+                                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <div class="input-group">
+                                                    <input name="password" type="password" class="form-control" id="currentPassword" data-type="password" />
+                                                    <div class="input-group-append border-1 border">
+                                                        <button class="btn btn-light toggle-password" type="button" pw-target="currentPassword">
+                                                            <i class="fas fa-eye passwordIcon"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label
-                                                    for="newPassword"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >New Password</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="newpassword"
-                                                        type="password"
-                                                        class="form-control"
-                                                        id="newPassword"
-                                                        data-type="newpassword"
-                                                />
+                                            <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <div class="input-group">
+                                                    <input name="password" type="password" class="form-control" id="newPassword" data-type="password" />
+                                                    <div class="input-group-append border-1 border">
+                                                        <button class="btn btn-light toggle-password" type="button" pw-target="newPassword">
+                                                            <i class="fas fa-eye passwordIcon"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label
-                                                    for="renewPassword"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Re-enter New
-                                                Password</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="renewpassword"
-                                                        type="password"
-                                                        class="form-control"
-                                                        id="renewPassword"
-                                                        data-type="confirmpassword"
-                                                />
+                                            <label for="confirmNewPassword" class="col-md-4 col-lg-3 col-form-label">Confirm New Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <div class="input-group">
+                                                    <input name="password" type="password" class="form-control" id="confirmNewPassword" data-type="password" />
+                                                    <div class="input-group-append border-1 border">
+                                                        <button class="btn btn-light toggle-password" type="button" pw-target="confirmNewPassword">
+                                                            <i class="fas fa-eye passwordIcon"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -334,12 +268,18 @@
                                             <button
                                                     type="submit"
                                                     class="btn btn-primary"
+                                                    id="changePasswordBtn"
                                             >
                                                 Change Password
                                             </button>
                                         </div>
-                                    </form>
                                     <!-- End Change Password Form -->
+                                    <!-- Add a full-page loading overlay -->
+                                    <div id="loading-overlay" class="d-none position-fixed w-100 h-100 top-0 start-0 d-flex align-items-center justify-content-center bg-light opacity-75">
+                                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- End Bordered Tabs -->
@@ -382,6 +322,137 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
+<script>
+    $(document).ready(
+        function () {
+
+            //password eye toggle
+            $(".toggle-password").on("click", function () {
+                const targetInputId = $(this).attr("pw-target");
+                const targetInput = $("#" + targetInputId);
+                const passwordIcon = $(this).find(".passwordIcon");
+
+                if (targetInput.attr("data-type") === "password") {
+                    targetInput.attr("type", "text");
+                    targetInput.attr("data-type", "text");
+                    passwordIcon.removeClass("fa-eye");
+                    passwordIcon.addClass("fa-eye-slash");
+                } else {
+                    targetInput.attr("type", "password");
+                    targetInput.attr("data-type", "password");
+                    passwordIcon.removeClass("fa-eye-slash");
+                    passwordIcon.addClass("fa-eye");
+                }
+            });
+
+            // Change password button AJAX
+            $("#changePasswordBtn").on("click", function (e) {
+                e.preventDefault();
+                const currentPassword = $("#currentPassword").val();
+                const newPassword = $("#newPassword").val();
+                const confirmNewPassword = $("#confirmNewPassword").val();
+
+                if (currentPassword === "" || newPassword === "" || confirmNewPassword === "") {
+                    showError("Please fill in all fields");
+                    return;
+                }
+
+                if (newPassword !== confirmNewPassword) {
+                    showError("New password and confirm new password do not match");
+                    return;
+                }
+
+                // Show the full-page loading overlay
+                $('#loading-overlay').removeClass('d-none');
+
+                $.ajax({
+                    url: "/api/user/change-password",
+                    type: "POST",
+                    data: {
+                        oldPassword: currentPassword,
+                        newPassword: newPassword
+                    },
+                    success: function (data) {
+                        // Hide the full-page loading overlay on success
+                        $('#loading-overlay').addClass('d-none');
+
+                        showSuccess("Password changed successfully");
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        // Hide the full-page loading overlay on error
+                        $('#loading-overlay').addClass('d-none');
+
+                        showError(error.responseText);
+
+
+                    }
+                });
+            });
+
+            function showError(message) {
+                $("#errorText").text(message);
+                $("#errorAlert").show();
+
+                setTimeout(function () {
+                    $("#errorAlert").hide();
+                }, 5000);
+            }
+
+            function showSuccess(message) {
+                // You can create a similar function for showing success messages.
+                alert(message); // For simplicity, we're using the alert function here.
+            }
+
+            function getUserProfileInfo() {
+                $.ajax({
+                    url: "/api/user/profile",
+                    type: "GET",
+                    success: function (data) {
+                        console.log(data)
+                        updateUserInfo(data)
+                        updateEditInput(data)
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+
+                })
+            }
+
+            function updateUserInfo(data) {
+                $("#name").html(data.name.toUpperCase())
+                $("#role").html(data.role)
+
+                $(".profile-overview .col-lg-9.col, .profile-overview .col-md-8").each(function () {
+                    if ($(this).attr("id") === "email") {
+                        $(this).html(data.email)
+                    } else if ($(this).attr("id") === "department") {
+                        $(this).html(data.department)
+                    } else if ($(this).attr("id") === "projectCount") {
+                        if (data.projectCount === null)
+                            $(this).html("-")
+                        else
+                            $(this).html(data.projectCount)
+                        $(this).html(data.projectCount)
+                    }
+                })
+
+            }
+
+            function updateEditInput(data) {
+                $("#nameInput").val(data.name)
+                $("#emailInput").val(data.email)
+                $("#roleInput").val(data.role)
+                $("#departmentInput").val(data.department)
+            }
+
+
+
+            getUserProfileInfo()
+        }
+    )
+</script>
 </body>
 
 </html>
