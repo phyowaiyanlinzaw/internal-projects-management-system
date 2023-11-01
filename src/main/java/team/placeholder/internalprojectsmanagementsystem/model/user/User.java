@@ -64,6 +64,10 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Issue> pic;
 
+    @ManyToOne
+    @JoinColumn(name = "pm_id", referencedColumnName = "id")
+    private User projectManager;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
