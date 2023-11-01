@@ -53,6 +53,7 @@ private final ProjectRepository projectRepository;
     @Override
     public ProjectDto getProjectByName(String name) {
         Project project = projectRepository.findByName(name).orElse(null);
+        System.out.println(project);
         if (project!=null){
             return ProjectMapper.toProjectDto(project);
         }else {

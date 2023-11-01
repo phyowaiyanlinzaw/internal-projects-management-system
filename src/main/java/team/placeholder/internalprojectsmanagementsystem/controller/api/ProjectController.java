@@ -34,6 +34,27 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+    @GetMapping("/lists/{id}")
+    public ResponseEntity<ProjectDto> getProjectById(@PathVariable long id){
+        ProjectDto projects = projectService.getProjectById(id);
+        if (projects!=null){
+            return ResponseEntity.ok(projects);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/lists/byName/{name}")
+    public ResponseEntity<ProjectDto> getProjectByName(@PathVariable String name){
+        ProjectDto project = projectService.getProjectByName(name);
+        System.out.println("Project Name :" +project);
+        if (project!= null){
+            return ResponseEntity.ok(project);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 }
