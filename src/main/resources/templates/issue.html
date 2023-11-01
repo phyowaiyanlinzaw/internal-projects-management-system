@@ -273,18 +273,18 @@
                     <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
 
                     <!-- issue modal start -->
-                    <form class="row g-3 ">
+                    <form class="row g-3 " id="addIssue" action="#" >
                         <div class="col-lg-6">
-                            <label for="title" class="col-sm-12 col-form-label" name="name">Issue Title<span
+                            <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
                                     style="color:#e86666"> *</span></label>
                             <input type="text" class="form-control " id="title" name="title" placeholder="Title">
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="categories" class="col-sm-12 col-form-label" name="name">Issue Category<span
+                            <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
                                     style="color:red"> *</span></label>
-                            <select class="four-control border-task" name="countries" id="categories" multiple>
-                                <option value="1">Afghanistan</option>
+                            <select class="four-control" name="issue_category" id="issue_category" multiple>
+                                <option value="1">Error</option>
                                 <option value="2">Australia</option>
                                 <option value="3">Germany</option>
                                 <option value="4">Canada</option>
@@ -296,66 +296,65 @@
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="person_in_charge" class="col-sm-12 col-form-label" name="client">Person In Charge <span
+                            <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control" aria-label="Select Clients" data-live-search="true"
-                                    id="person_in_charge" name="client">
+                            <select class="form-control" aria-label="Select Clients" data-live-search="true" id="user_pic" name="user_pic">
                                 <option>PIC</option>
-                                <option>Phyo Wai Yan Lin Zaw</option>
-                                <option>Zaw Lin Shein</option>
-                                <option>Ei Ei Phyo</option>
-                                <option>Hnin Aye Lwin</option>
-                                <option>Thant Htet Ko</option>
+                                <option value="PWYLZ">Phyo Wai Yan Lin Zaw</option>
+                                <option value="ZLS">Zaw Lin Shein</option>
+                                <option value="EEP">Ei Ei Phyo</option>
+                                <option value="HAL">Hnin Aye Lwin</option>
+                                <option value="THK">Thant Htet Ko</option>
                             </select>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="responsible_party" class="col-sm-12 col-form-label" name="client">Responsible Party <span
+                            <label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_party">Responsible Party <span
                                     style="color:red"> *</span></label>
                             <select class="form-control" aria-label="Select Clients" data-live-search="true"
-                                    id="responsible_party" name="client">
+                                    id="responsible_party" name="responsible_party">
                                 <option>RP</option>
-                                <option>Phyo Wai Yan Lin Zaw</option>
-                                <option>Zaw Lin Shein</option>
-                                <option>Ei Ei Phyo</option>
-                                <option>Hnin Aye Lwin</option>
-                                <option>Thant Htet Ko</option>
+                                <option value="1">Phyo Wai Yan Lin Zaw</option>
+                                <option value="2">Zaw Lin Shein</option>
+                                <option value="3">Ei Ei Phyo</option>
+                                <option value="4">Hnin Aye Lwin</option>
+                                <option value="5">Thant Htet Ko</option>
                             </select>
                         </div>
 
                         <div class="col-lg-12" style="margin-bottom: 80px;">
-                            <label for="editor" class="col-sm-12 col-form-label" name="name">Description<span
+                            <label for="description" class="col-sm-12 col-form-label" name="name">Description<span
                                     style="color:#e86666"> *</span></label>
-                            <div class="quill-editor-bubble form-control" id="editor"></div>
+                            <div class="quill-editor-bubble form-control" id="description" name="description"></div>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="directcause" class="col-sm-12 col-form-label" name="name">Direct Cause<span
+                            <label for="direct_cause" class="col-sm-12 col-form-label" name="direct_cause">Direct Cause<span
                                     style="color:#e86666"> *</span></label>
 
-                            <textarea class="form-control" id="directcause"></textarea>
+                            <textarea class="form-control" id="direct_cause" name="direct_cause"></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="rootcause" class="col-sm-12 col-form-label" name="name">Root Cause<span
+                            <label for="root_cause" class="col-sm-12 col-form-label" name="root_cause">Root Cause<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="rootcause"></textarea>
+                            <textarea class="form-control" id="root_cause"></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="impact" class="col-sm-12 col-form-label" name="name">Direct Cause<span
+                            <label for="place" class="col-sm-12 col-form-label" name="place">Place<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="impact"></textarea>
+                            <textarea class="form-control" id="place" name="place"></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="place" class="col-sm-12 col-form-label" name="name">Impact<span
+                            <label for="impact" class="col-sm-12 col-form-label" name="impact">Impact<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="place"></textarea>
+                            <textarea class="form-control" id="impact" name="impact"></textarea>
                         </div>
 
                         <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <button type="submit" class="btn btn-primary" data-bs-target="#">Add New Issue</button>
+                            <button type="submit" class="btn btn-primary" >Add New Issue</button>
                         </div>
 
                     </form>
@@ -376,6 +375,9 @@
     ><i class="bi bi-arrow-up"></i
     ></a>
 </div>
+
+
+
 
 <!--    for select drop-drown-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
@@ -410,6 +412,58 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#bookForm").submit(function (event) {
+            event.preventDefault();
+            ajaxPost();
+        });
+
+
+        function ajaxPost() {
+            var formData = {
+                title: $("#title").val(),
+                description: $("#description").val(),
+                place: $("#place").val(),
+                impact: $("#impact").val(),
+                root_cause: $("#root_cause").val(),
+                direct_cause: $("#direct_cause").val(),
+                responsible_party: $("#responsible_party").val(),
+                user_pic: $("#user_pic").val(),
+                issue_category: $("#issue_category").val()
+
+            }
+
+
+            $.ajax({
+                type: 'POST',
+                contentType: "application/json",
+                url: '/api/issue/save',
+                data: $('#addIssue').serialize(),
+                dataType: 'json',
+                success: function (result) {
+                    if (result.status == "success") {
+                        $("#postResultDiv").html(
+                            "" + result.data.title
+                            + "Post Successfully! <br>"
+                            + "---> Congrats !!" + "</p>");
+                    } else {
+                        $("#postResultDiv").html("<strong>Error</strong>");
+                    }
+                    console.log(result);
+                },
+                error: function (e) {
+                    alert("Error!")
+                    console.log("ERROR: ", e);
+                }
+            });
+        }
+
+    });
+
+</script>
 
 <script>
 
@@ -506,7 +560,7 @@
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.com
 
-    new MultiSelectTag("categories"), new MultiSelectTag("state"); // id
+    new MultiSelectTag("issue_category"), new MultiSelectTag("state"); // id
 
     const issue1 = {
         id: 1,

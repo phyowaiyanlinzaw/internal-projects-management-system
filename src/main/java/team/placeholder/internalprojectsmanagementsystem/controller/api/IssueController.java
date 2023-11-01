@@ -32,8 +32,8 @@ public class IssueController {
         }
     }
 
-    @GetMapping("/lists/{id}")
-    public ResponseEntity<IssueDto> getIssueById(long id) {
+    @GetMapping("/lists/byId/{id}")
+    public ResponseEntity<IssueDto> getIssueById(@PathVariable long id) {
         IssueDto issue = issueService.getIssueById(id);
 
         if (issue != null) {
@@ -43,9 +43,9 @@ public class IssueController {
         }
     }
 
-    @GetMapping("/lists/{name}")
-    public ResponseEntity<IssueDto> getIssueByName(String name) {
-        IssueDto issue = issueService.getIssueByName(name);
+    @GetMapping("/lists/byTitle/{title}")
+    public ResponseEntity<IssueDto> getIssueByTitle(@PathVariable String title) {
+        IssueDto issue = issueService.getIssueByTitle(title);
 
         if (issue != null) {
             return ResponseEntity.ok(issue);
@@ -56,6 +56,8 @@ public class IssueController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateIssue(@PathVariable long id, @RequestBody IssueDto issueDto) {
+        issueDto.setId(id);
+
         IssueDto updatedIssue = issueService.updateIssue(issueDto);
 
         if (updatedIssue != null) {
@@ -64,6 +66,7 @@ public class IssueController {
             return ResponseEntity.badRequest().body("Failed to update issue");
         }
     }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteIssue(@RequestBody IssueDto issueDto) {

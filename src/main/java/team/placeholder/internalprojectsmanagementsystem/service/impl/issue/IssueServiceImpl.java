@@ -60,47 +60,33 @@ public class IssueServiceImpl implements IssueService {
         }
     }
 
+
     @Override
-    public IssueDto getIssueByName(String name) {
-        Issue issue = issueRepository.findByTitle(name);
+    public IssueDto updateIssue(IssueDto issueDto) {
+        Issue issue = issueRepository.findById(issueDto.getId());
         if(issue != null) {
+            issue.setTitle(issueDto.getTitle());
+            issue.setDescription(issueDto.getDescription());
+            issue.setPlace(issueDto.getPlace());
+            issue.setImpact(issueDto.getImpact());
+            issue.setRoot_cause(issueDto.getRoot_cause());
+            issue.setDirect_cause(issueDto.getDirect_cause());
+            issue.setCorrective_action(issueDto.getCorrective_action());
+            issue.setPreventive_action(issueDto.getPreventive_action());
+            issue.setResponsible_party(issueDto.getResponsible_party());
+            issue.setSolved(issueDto.isSolved());
+            issue.setCreated_date(issueDto.getCreated_date());
+            issue.setUpdated_date(issueDto.getUpdated_date());
+            issue.setSolved_date(issueDto.getSolved_date());
+            issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
+            issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
+            issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
+            issueRepository.save(issue);
             return IssueMapper.toIssueDto(issue);
         }else {
             return null;
         }
     }
-
-    @Override
-    public IssueDto updateIssue(IssueDto issueDto) {
-        return null;
-    }
-
-//    @Override
-//    public IssueDto updateIssue(IssueDto issueDto) {
-//        Issue issue = issueRepository.findById(issueDto.getId());
-//        if(issue != null) {
-//            issue.setTitle(issueDto.getTitle());
-//            issue.setDescription(issueDto.getDescription());
-//            issue.setPlace(issueDto.getPlace());
-//            issue.setImpact(issueDto.getImpact());
-//            issue.setRoot_cause(issueDto.getRoot_cause());
-//            issue.setDirect_cause(issueDto.getDirect_cause());
-//            issue.setCorrective_action(issueDto.getCorrective_action());
-//            issue.setPreventive_action(issueDto.getPreventive_action());
-//            issue.setClint_or_user(issueDto.getClient_or_user());
-//            issue.setSolved(issueDto.isSolved());
-//            issue.setCreated_date(issueDto.getCreated_date());
-//            issue.setUpdated_date(issueDto.getUpdated_date());
-//            issue.setIssueCategory(issueDto.getIssueCategory());
-//            issue.setProject(issueDto.getProject());
-//            issue.setUser_uploader(issueDto.getUser_uploader());
-//            issue.setUser_pic(issueDto.getUser_pic());
-//            issueRepository.save(issue);
-//            return IssueMapper.toIssueDto(issue);
-//        }else {
-//            return null;
-//        }
-//    }
 
     @Override
     public void deleteIssue(long id) {
@@ -112,6 +98,17 @@ public class IssueServiceImpl implements IssueService {
         }
 
     }
+
+    @Override
+    public IssueDto getIssueByTitle(String title) {
+        Issue issue = issueRepository.findByTitle(title);
+        if(issue != null) {
+            return IssueMapper.toIssueDto(issue);
+        }else {
+            return null;
+        }
+    }
+
 
 }
 
