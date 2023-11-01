@@ -137,6 +137,12 @@ class UserServiceImplTest {
 
     }
 
+    @Test
+    public void testResetPassword(){
+        String password = "12345678";
+        assertEquals(password.length(),PasswordGenerator.generatePassword(8).length());
+    }
+
 
 
 

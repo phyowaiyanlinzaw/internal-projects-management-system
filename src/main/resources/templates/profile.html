@@ -60,24 +60,9 @@
                                     class="rounded-circle"
                                     style="height: 100px; width: 100px"
                             />
-                            <h4 style="margin-top: 10px">
-                                Kevin Anderson
+                            <h4 style="margin-top: 10px" id="name" class="display-4">
                             </h4>
-                            <h5>Web Designer</h5>
-                            <div class="social-links mt-2">
-                                <a href="#" class="twitter"
-                                ><i class="bi bi-twitter"></i
-                                ></a>
-                                <a href="#" class="facebook"
-                                ><i class="bi bi-facebook"></i
-                                ></a>
-                                <a href="#" class="instagram"
-                                ><i class="bi bi-instagram"></i
-                                ></a>
-                                <a href="#" class="linkedin"
-                                ><i class="bi bi-linkedin"></i
-                                ></a>
-                            </div>
+                            <h5 id="role">Web Designer</h5>
                         </div>
                     </div>
                 </div>
@@ -135,38 +120,10 @@
                                         <div
                                                 class="col-lg-3 col col-md-4 label"
                                         >
-                                            Name
-                                        </div>
-                                        <div class="col-lg-9 col col-md-8">
-                                            Hnin Aye Lwin
-                                        </div>
-                                    </div>
-
-                                    <div
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
-                                        <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
                                             Email
                                         </div>
-                                        <div class="col-lg-9 col col-md-8">
-                                            nunhun879@gmail.com
-                                        </div>
-                                    </div>
+                                        <div class="col-lg-9 col col-md-8" id="email">
 
-                                    <div
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
-                                        <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
-                                            Role
-                                        </div>
-                                        <div class="col-lg-9 col col-md-8">
-                                            Project Manager
                                         </div>
                                     </div>
 
@@ -179,8 +136,8 @@
                                         >
                                             Department
                                         </div>
-                                        <div class="col-lg-9 col col-md-8">
-                                            Department1
+                                        <div class="col-lg-9 col col-md-8" id="department">
+
                                         </div>
                                     </div>
                                 </div>
@@ -202,6 +159,7 @@
                                                         name="name"
                                                         type="text"
                                                         class="form-control"
+                                                        id="nameInput"
                                                 />
                                             </div>
                                         </div>
@@ -218,6 +176,8 @@
                                                         name="email"
                                                         type="email"
                                                         class="form-control"
+                                                        id="emailInput"
+                                                        disabled
                                                 />
                                             </div>
                                         </div>
@@ -234,6 +194,7 @@
                                                         name="role"
                                                         type="text"
                                                         class="form-control"
+                                                        id="roleInput"
                                                 />
                                             </div>
                                         </div>
@@ -250,6 +211,7 @@
                                                         name="department"
                                                         type="text"
                                                         class="form-control"
+                                                        id="departmentInput"
                                                 />
                                             </div>
                                         </div>
@@ -382,6 +344,51 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
+<script>
+    $(document).ready(
+        function(){
+            function getUserProfileInfo(){
+                $.ajax({
+                    url: "/api/user/profile",
+                    type: "GET",
+                    success: function (data) {
+                        console.log(data)
+                        updateUserInfo(data)
+                        updateEditInput(data)
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+
+                })
+            }
+
+            function updateUserInfo(data){
+                $("#name").html(data.name)
+                $("#role").html(data.role)
+
+                $(".profile-overview .col-lg-9.col, .profile-overview .col-md-8").each(function () {
+                    if($(this).attr("id") === "email"){
+                        $(this).html(data.email)
+                    }
+                    else if($(this).attr("id") === "department"){
+                        $(this).html(data.department)
+                    }
+                })
+
+            }
+
+            function updateEditInput(data){
+                $("#nameInput").val(data.name)
+                $("#emailInput").val(data.email)
+                $("#roleInput").val(data.role)
+                $("#departmentInput").val(data.department)
+            }
+            getUserProfileInfo()
+        }
+
+    )
+</script>
 </body>
 
 </html>
