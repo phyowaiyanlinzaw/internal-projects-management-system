@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.security.CustomerUserDetails;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
@@ -58,9 +59,11 @@ public class UserController {
 
     @PostMapping("register-employee")
     public ResponseEntity<String> registerEmployee(@RequestBody UserDto data) {
-        System.out.println(data.getProjectManager().getId());
+        System.out.println("project manager id" + data.getProjectManager().getId());
         try {
-            data.setProjectManager(userService.getUserById(data.getProjectManager().getId()));
+            UserDto user = userService.getUserById(data.getProjectManager().getId());
+            data.setProjectManager(user);
+            System.out.println(data);
             userService.registerUser(data);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

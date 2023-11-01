@@ -948,6 +948,7 @@ vs
                     }
                     taskDiv.addEventListener("dragstart", (e) => {
                         taskDiv.classList.add("is-dragging");
+                        currentZone = taskDiv.parentElement;
                         console.log("deagging");
                         currentTask = taskDiv;
                         console.log("CURRENT TASK ", currentTask)
@@ -964,11 +965,13 @@ vs
                             taskList[
                                 parseInt(currentTask.getAttribute("index"))
                             ];
-                        currentTaskData.status = currentZone.getAttribute("id")
                         console.log("CURRENT TASK DATA", currentTaskData)
                         if (currentZone.classList.contains("dummy-trash")) {
                             bModal.show();
                         } else if (status.some(a => currentZone.getAttribute("id") === a)) {
+                            console.log("the task indeed drop on the one of the three zone")
+                            console.log(currentTaskData.status, currentZone.getAttribute("id"))
+                            if(currentTaskData.status !== currentZone.getAttribute("id")) {
                             sendData(
                             "/api/task/update",
                             "POST",
@@ -981,9 +984,11 @@ vs
                                         "Response for URL /api/task/update",
                                         response
                                     );
+
                                 }
+                                currentTaskData.status = currentZone.getAttribute("id")
                             }
-                        );
+                        )}
                         }
                         
                         taskDiv.classList.remove("is-dragging");

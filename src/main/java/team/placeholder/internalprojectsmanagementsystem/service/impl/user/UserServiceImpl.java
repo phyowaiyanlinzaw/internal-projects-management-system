@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
         user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
 
         // Set the project manager by retrieving it from the database based on its ID
-        user.setProjectManager(userRepository.findById(userDto.getProjectManager().getId()));
+        user.setProjectManager(UserMapper.toUser(userDto.getProjectManager()));
 
         // Attempt to save the user to the repository
         try {
@@ -166,5 +166,15 @@ public class UserServiceImpl implements UserService {
         return users.stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> getAllUsersByPMId(Long id) {
+        return null;
+    }
+
+    @Override
+    public long getMemberCount(long id) {
+        return 0;
     }
 }
