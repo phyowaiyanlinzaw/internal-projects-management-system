@@ -2,17 +2,19 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 
-<head></head>
+<head>
+</head>
 
 <body layout:fragment="content">
 
-    <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-    <!-- Spinner End -->
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
 
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
@@ -140,6 +142,19 @@
 
                                         </div>
                                     </div>
+                                    <div
+                                            class="row"
+                                            style="margin-top: 20px"
+                                    >
+                                        <div
+                                                class="col-lg-3 col col-md-4 label"
+                                        >
+                                            Project Count
+                                        </div>
+                                        <div class="col-lg-9 col col-md-8" id="projectCount">
+
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div
@@ -182,40 +197,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="row mb-3">
-                                            <label
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Role</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="role"
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="roleInput"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <label
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Department</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="department"
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="departmentInput"
-                                                />
-                                            </div>
-                                        </div>
-
                                         <div class="text-center">
                                             <button
                                                     type="submit"
@@ -235,21 +216,16 @@
                                     <!-- Change Password Form -->
                                     <form id="login-form">
                                         <div class="row mb-3">
-                                            <label
-                                                    for="currentPassword"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Current Password</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="password"
-                                                        type="password"
-                                                        class="form-control"
-                                                        id="currentPassword"
-                                                        data-type="password"
-                                                />
+                                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <div class="input-group">
+                                                    <input name="password" type="password" class="form-control" id="currentPassword" data-type="password" />
+                                                    <div class="input-group-append border-1 border">
+                                                        <button class="btn btn-light toggle-password" type="button">
+                                                            <i class="fas fa-eye" id="passwordIcon"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -346,8 +322,26 @@
 <script src="/js/custome.js"></script>
 <script>
     $(document).ready(
-        function(){
-            function getUserProfileInfo(){
+        function () {
+
+            //password eye toggle
+            $(".toggle-password").on("click", function () {
+                var passwordInput = $("#currentPassword");
+                var passwordIcon = $("#passwordIcon");
+
+                if (passwordInput.attr("data-type") === "password") {
+                    passwordInput.attr("type", "text");
+                    passwordInput.attr("data-type", "text");
+                    passwordIcon.removeClass("fa-eye");
+                    passwordIcon.addClass("fa-eye-slash");
+                } else {
+                    passwordInput.attr("type", "password");
+                    passwordInput.attr("data-type", "password");
+                    passwordIcon.removeClass("fa-eye-slash");
+                    passwordIcon.addClass("fa-eye");
+                }
+            });
+            function getUserProfileInfo() {
                 $.ajax({
                     url: "/api/user/profile",
                     type: "GET",
@@ -363,30 +357,35 @@
                 })
             }
 
-            function updateUserInfo(data){
-                $("#name").html(data.name)
+            function updateUserInfo(data) {
+                $("#name").html(data.name.toUpperCase())
                 $("#role").html(data.role)
 
                 $(".profile-overview .col-lg-9.col, .profile-overview .col-md-8").each(function () {
-                    if($(this).attr("id") === "email"){
+                    if ($(this).attr("id") === "email") {
                         $(this).html(data.email)
-                    }
-                    else if($(this).attr("id") === "department"){
+                    } else if ($(this).attr("id") === "department") {
                         $(this).html(data.department)
+                    } else if ($(this).attr("id") === "projectCount") {
+                        if (data.projectCount === null)
+                            $(this).html("-")
+                        else
+                            $(this).html(data.projectCount)
+                        $(this).html(data.projectCount)
                     }
                 })
 
             }
 
-            function updateEditInput(data){
+            function updateEditInput(data) {
                 $("#nameInput").val(data.name)
                 $("#emailInput").val(data.email)
                 $("#roleInput").val(data.role)
                 $("#departmentInput").val(data.department)
             }
+
             getUserProfileInfo()
         }
-
     )
 </script>
 </body>
