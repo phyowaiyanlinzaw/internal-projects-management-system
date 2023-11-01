@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequestMapping("/api/project")
 @RequiredArgsConstructor
 public class ProjectController {
-    private final ProjectService projectService;
+    private final ProjectServiceImpl projectService;
 
 
     @PostMapping("save")

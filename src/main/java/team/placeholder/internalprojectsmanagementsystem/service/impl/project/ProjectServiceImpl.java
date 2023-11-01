@@ -4,19 +4,14 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.AmountMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.DeliverableMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
@@ -26,7 +21,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
-private ProjectRepository projectRepository;
+private final ProjectRepository projectRepository;
+
+
 
     @Override
     public ProjectDto save(ProjectDto projectDto) {
