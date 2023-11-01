@@ -28,14 +28,9 @@
 
 <div th:replace="fragments/sidebar :: sidebar"></div>
 
-<div
-        class="container-fluid position-relative bg-white d-flex p-0"
-
->
+<div class="container-fluid position-relative bg-white d-flex p-0">
     <!-- Content Start -->
-    <div
-            class="content"
-            style="
+    <div class="content" style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
@@ -43,35 +38,19 @@
                         #e5e5f7 0.6000000000000001px
                     );
                     background-size: 12px 12px;
-                "
-    >
+                ">
         <!-- Navbar Start -->
         <div th:replace="fragments/navigation :: navigation-with-search"></div>
         <!-- Navbar End -->
 
         <!-- Search Start -->
-        <div
-                class="container-fluid d-md-block pt-2 ps-s pe-2"
-                id="dropdrown-search-bar"
-        >
+        <div class="container-fluid d-md-block pt-2 ps-s pe-2" id="dropdrown-search-bar">
             <div class="d-flex flex-row justify-content-end gap-2">
                 <form class="d-inline-block">
-                    <input
-                            class="form-control border-0"
-                            type="search"
-                            placeholder="Search"
-                    />
+                    <input class="form-control border-0" type="search" placeholder="Search"/>
                 </form>
-                <!-- modal toggle button start -->
-                <button
-                        type="button"
-                        class="btn btn-light align-self-start"
-                        data-bs-toggle="modal"
-                        data-bs-target="#add-department-modal"
-                >
-                    <i class="bi bi-plus-lg"></i>
-                </button>
-                <!-- modal toggle button end -->
+
+
                 <!-- add department modal start -->
 
                 <!-- add department modal end -->
@@ -85,160 +64,74 @@
 
         <!-- department start -->
 
-        <div
-                id="grid"
-                class="item-content animate__animated animate__fadeIn active"
-                data-toggle-extra="tab-content"
-        >
+        <div id="grid" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
             <div class="row" id="sort-container" style="margin: 10px">
-                <div
-                        class="col-lg-4 col-md-4"
-                        style="padding-bottom: 20px"
-                >
-                    <div
-                            class="card card-block card-stretch card-height"
-                            style="background-color: rgb(242, 247, 248)"
-                    >
+                <div class="col-lg-4 col-md-4" style="padding-bottom: 20px">
+                    <div class="card card-block card-stretch card-height" style="background-color: rgb(242, 247, 248)">
                         <div class="card-body">
-                            <div
-                                    class="d-flex align-items-center justify-content-between mb-4"
-                            >
-                                <img
-                                        src="https://source.unsplash.com/random/200x200?sig=1"
-                                        style="height: 100px; width: 100px"
-                                />
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <img src="https://source.unsplash.com/random/200x200?sig=1" style="height: 100px; width: 100px"/>
                             </div>
 
-                            <h5
-                                    class="mb-1 card-title modal-detail-title"
-                            >
-                                Development
-                            </h5>
-                            <p class="mb-3">
-                                Preparing framework of block-based
-                                WordPress Theme.
-                            </p>
-                            <div
-                                    class="d-flex align-items-center justify-content-between pt-3 border-top"
-                            >
+                            <h5 class="mb-1 card-title modal-detail-title">Development</h5>
+                            <p class="mb-3">Preparing framework of block-based WordPress Theme.</p>
+                            <div class="d-flex align-items-center justify-content-between pt-3 border-top">
                                 <div class="iq-media-group">
                                     <a href="#" class="iq-media">
-                                        <img
-                                                class="img-fluid avatar-40 rounded-circle"
-                                                src="https://source.unsplash.com/random/200x200?sig=1"
-                                                alt=""
-                                                style="
+                                        <img class="img-fluid avatar-40 rounded-circle" src="https://source.unsplash.com/random/200x200?sig=1" alt="" style="
                                                         height: 40px;
                                                         width: 40px;
-                                                    "
-                                        />
+                                                    " />
                                     </a>
                                     <a href="#" class="iq-media">
-                                        <img
-                                                class="img-fluid avatar-40 rounded-circle"
-                                                src="https://source.unsplash.com/random/200x200?sig=1"
-                                                alt=""
-                                                style="
+                                        <img class="img-fluid avatar-40 rounded-circle" src="https://source.unsplash.com/random/200x200?sig=1" alt="" style="
                                                         height: 40px;
                                                         width: 40px;
-                                                    "
-                                        />
+                                                    " />
                                     </a>
                                     <a href="#" class="iq-media">
-                                        <img
-                                                class="img-fluid avatar-40 rounded-circle"
-                                                src="https://source.unsplash.com/random/200x200?sig=1"
-                                                alt=""
-                                                style="
+                                        <img class="img-fluid avatar-40 rounded-circle" src="https://source.unsplash.com/random/200x200?sig=1" alt="" style="
                                                         height: 40px;
                                                         width: 40px;
-                                                    "
-                                        />
+                                                    "/>
                                     </a>
                                 </div>
-                                <a
-                                        href=""
-                                        class="btn btn-white text-secondary link-shadow"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#department-details"
-                                >See More</a
-                                >
+                                <a href="" class="btn btn-white text-secondary link-shadow" data-bs-toggle="modal" data-bs-target="#department-details">See More</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div
-                        class="col-lg-4 col-md-4"
-                        style="padding-bottom: 20px"
-                >
-                    <div
-                            class="card card-block card-stretch card-height"
-                            style="background-color: rgb(242, 247, 248)"
-                    >
+                <div class="col-lg-4 col-md-4" style="padding-bottom: 20px">
+                    <div class="card card-block card-stretch card-height" style="background-color: rgb(242, 247, 248)">
                         <div class="card-body">
-                            <div
-                                    class="d-flex align-items-center justify-content-between mb-4"
-                            >
-                                <img
-                                        src="https://source.unsplash.com/random/200x200?sig=1"
-                                        style="height: 100px; width: 100px"
-                                />
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <img src="https://source.unsplash.com/random/200x200?sig=1" style="height: 100px; width: 100px"/>
                             </div>
 
-                            <h5
-                                    class="mb-1 card-title modal-detail-title"
-                            >
-                                Castle
-                            </h5>
-                            <p class="mb-3">
-                                Preparing framework of block-based
-                                WordPress Theme.
-                            </p>
-                            <div
-                                    class="d-flex align-items-center justify-content-between pt-3 border-top"
-                            >
+                            <h5 class="mb-1 card-title modal-detail-title">Castle</h5>
+                            <p class="mb-3"> Preparing framework of block-based WordPress Theme.</p>
+                            <div class="d-flex align-items-center justify-content-between pt-3 border-top">
                                 <div class="iq-media-group">
                                     <a href="#" class="iq-media">
-                                        <img
-                                                class="img-fluid avatar-40 rounded-circle"
-                                                src="https://source.unsplash.com/random/200x200?sig=1"
-                                                alt=""
-                                                style="
+                                        <img class="img-fluid avatar-40 rounded-circle" src="https://source.unsplash.com/random/200x200?sig=1" alt="" style="
                                                         height: 40px;
                                                         width: 40px;
-                                                    "
-                                        />
+                                                    "/>
                                     </a>
                                     <a href="#" class="iq-media">
-                                        <img
-                                                class="img-fluid avatar-40 rounded-circle"
-                                                src="https://source.unsplash.com/random/200x200?sig=1"
-                                                alt=""
-                                                style="
+                                        <img class="img-fluid avatar-40 rounded-circle" src="https://source.unsplash.com/random/200x200?sig=1" alt="" style="
                                                         height: 40px;
                                                         width: 40px;
-                                                    "
-                                        />
+                                                    "/>
                                     </a>
                                     <a href="#" class="iq-media">
-                                        <img
-                                                class="img-fluid avatar-40 rounded-circle"
-                                                src="https://source.unsplash.com/random/200x200?sig=1"
-                                                alt=""
-                                                style="
+                                        <img class="img-fluid avatar-40 rounded-circle" src="https://source.unsplash.com/random/200x200?sig=1" alt="" style="
                                                         height: 40px;
                                                         width: 40px;
-                                                    "
-                                        />
+                                                    "/>
                                     </a>
                                 </div>
-                                <a
-                                        href=""
-                                        class="btn btn-white text-secondary link-shadow"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#department-details"
-                                >See More</a
-                                >
+                                <a href="" class="btn btn-white text-secondary link-shadow" data-bs-toggle="modal" data-bs-target="#department-details" >See More</a>
                             </div>
                         </div>
                     </div>
@@ -251,55 +144,28 @@
 
     <!-- modal for department's details -->
     <div class="modal fade" id="department-details" data-bs-keyboard="true">
-        <div
-                class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down modal-fullscreen-lg-down"
-        >
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down modal-fullscreen-lg-down">
             <div class="modal-content">
-                <div
-                        class="modal-header"
-                        style="background-color: #369; color: white"
-                >
+                <div class="modal-header" style="background-color: #369; color: white">
                     <h5 class="modal-title" id="staticBackdropLabel">
                         Department Details
                     </h5>
-                    <button
-                            type="button"
-                            class="btn-close text-white btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
+                    <button type="button" class="btn-close text-white btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
                     <div class="container-fluid">
                         <div class="row">
                             <div class="card">
-                                <div
-                                        class="card-body profile-card pt-4 d-flex flex-column align-items-center"
-                                >
-                                    <img
-                                            src="https://source.unsplash.com/random/200x200?sig=1"
-                                            alt="Profile"
-                                            class="rounded-circle"
-                                            style="height: 100px; width: 100px"
-                                    />
-                                    <h4 style="margin-top: 10px">
-                                        Department Head
-                                    </h4>
+                                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                                    <img src="https://source.unsplash.com/random/200x200?sig=1" alt="Profile" class="rounded-circle" style="height: 100px; width: 100px"/>
+                                    <h4 style="margin-top: 10px">Department Head</h4>
                                     <h5>Lai Kuan Lin</h5>
                                     <div class="social-links mt-2">
-                                        <a href="#" class="twitter"
-                                        ><i class="bi bi-twitter"></i
-                                        ></a>
-                                        <a href="#" class="facebook"
-                                        ><i class="bi bi-facebook"></i
-                                        ></a>
-                                        <a href="#" class="instagram"
-                                        ><i class="bi bi-instagram"></i
-                                        ></a>
-                                        <a href="#" class="linkedin"
-                                        ><i class="bi bi-linkedin"></i
-                                        ></a>
+                                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -307,114 +173,53 @@
                                 <!-- Bordered Tabs -->
                                 <ul class="nav nav-tabs nav-tabs-bordered">
                                     <li class="nav-item">
-                                        <button
-                                                class="nav-link active"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#profile-overview"
-                                        >
-                                            Overview
-                                        </button>
+                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
                                     </li>
 
                                     <li class="nav-item">
-                                        <button
-                                                class="nav-link"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#profile-edit"
-                                        >
-                                            Edit
-                                        </button>
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit</button>
                                     </li>
                                 </ul>
                                 <div class="tab-content pt-3">
-                                    <div
-                                            class="tab-pane fade show active profile-overview"
-                                            id="profile-overview"
-                                    >
-                                        <div
-                                                class="row row-cols-lg-1 row-cols-sm-1 row-cols-md-1 row-cols-xl-2"
-                                        >
+                                    <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                        <div class="row row-cols-lg-1 row-cols-sm-1 row-cols-md-1 row-cols-xl-2">
                                             <ul class="list-group col" style="padding: 0;">
-                                                <li
-                                                        class="list-group-item d-flex justify-content-between align-items-center"
-                                                >
-                                                    Total Project
-                                                    <span
-                                                            class="badge bg-primary rounded-pill"
-                                                    >14</span
-                                                    >
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Total Project<span class="badge bg-primary rounded-pill">14</span>
                                                 </li>
                                                 <br/>
-                                                <li
-                                                        class="list-group-item d-flex justify-content-between align-items-center"
-                                                >
-                                                    Total Member
-                                                    <span
-                                                            class="badge bg-primary rounded-pill"
-                                                    >100</span
-                                                    >
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Total Member<span class="badge bg-primary rounded-pill">100</span>
                                                 </li>
                                             </ul>
                                             <div class="col">
-                                                <canvas
-                                                        style="max-width: 960px; padding: 0; min-width: 300px"
-                                                        id="department-projects-chart" height="200"
-                                                ></canvas>
+                                                <canvas style="max-width: 960px; padding: 0; min-width: 300px" id="department-projects-chart" height="200"></canvas>
                                             </div>
 
                                         </div>
                                     </div>
 
-                                    <div
-                                            class="tab-pane fade profile-edit pt-3"
-                                            id="profile-edit"
-                                    >
+                                    <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
                                         <form>
                                             <div>
-                                                <label
-                                                >Department Name</label
-                                                >
+                                                <label>Department Name</label>
                                                 <br/><br/>
-                                                <input
-                                                        type="text"
-                                                        class="form-control"
-                                                        name="departmentname"
-                                                        placeholder="Department Name"
-                                                />
+                                                <input type="text" class="form-control" name="departmentname" placeholder="Department Name"/>
                                             </div>
                                             <br/>
                                             <div>
-                                                <label for="departmenthead"
-                                                >Choose Deparment
-                                                    Head:</label
-                                                ><br/><br/>
-                                                <select
-                                                        name="departmenthead"
-                                                        class="form-control"
-                                                >
-                                                    <option value="volvo">
-                                                        Phyoe Wai Yan
-                                                    </option>
-                                                    <option value="saab">
-                                                        Zaw Lin Shein
-                                                    </option>
-                                                    <option value="opel">
-                                                        Thant Htet Ko
-                                                    </option>
+                                                <label for="departmenthead" >Choose Deparment Head:</label><br/><br/>
+                                                <select name="departmenthead" class="form-control">
+                                                    <option value="volvo">Phyoe Wai Yan</option>
+                                                    <option value="saab">Zaw Lin Shein</option>
+                                                    <option value="opel">Thant Htet Ko</option>
                                                 </select>
                                             </div>
                                             <br/>
 
-                                            <button
-                                                    style="
+                                            <button style="
                                                         background-color: #369;
-                                                    "
-                                                    type="submit"
-                                                    class="btn btn-primary py-2 w-100 mb-3"
-                                                    id="loign-btn"
-                                            >
-                                                Edit
-                                            </button>
+                                                    " type="submit" class="btn btn-primary py-2 w-100 mb-3" id="loign-btn">Edit</button>
                                         </form>
                                     </div>
                                 </div>
@@ -443,18 +248,14 @@
                                     text-align: center;
                                     color: #369;
                                     font-weight: bold;
-                                ">
-                        Add Department
-                    </h1>
+                                ">Add Department</h1>
                     <div>
                         <label>Department Name</label> <br/><br/>
-                        <input type="text" class="form-control" name="departmentname"
-                               placeholder="Department Name"/>
+                        <input type="text" class="form-control" name="departmentname" placeholder="Department Name"/>
                     </div>
                     <br/>
                     <div>
-                        <label for="departmenthead">Choose Deparment
-                            Head:</label><br/><br/>
+                        <label for="departmenthead">Choose Deparment Head:</label><br/><br/>
                         <select name="departmenthead" id="departmenthead" class="form-control">
                             <option value="volvo">Phyoe Wai Yan</option>
                             <option value="saab">Zaw Lin Shein</option>

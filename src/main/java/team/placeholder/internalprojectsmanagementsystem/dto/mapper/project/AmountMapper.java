@@ -17,4 +17,18 @@ public class AmountMapper {
         amountDto.setIntegrated_testing(amount.getIntegrated_testing());
         return amountDto;
     }
+
+    public static Amount toAmount(AmountDto amountDto) {
+        if (amountDto==null){
+            return null;
+        }
+        Amount amount= new Amount();
+        amount.setId(amount.getId());
+        amount.setBasic_design(amountDto.getBasic_design());
+        amount.setDetail_design(amountDto.getDetail_design());
+        amount.setCoding(amountDto.getCoding());
+        amount.setUnit_testing(amountDto.getUnit_testing());
+        amount.setIntegrated_testing(amountDto.getIntegrated_testing());
+        return amount;
+    }
 }

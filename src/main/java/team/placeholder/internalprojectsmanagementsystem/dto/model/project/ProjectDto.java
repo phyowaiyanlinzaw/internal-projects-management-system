@@ -13,6 +13,8 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,10 +31,12 @@ public class ProjectDto {
     private UserDto userDto;
     private DepartmentDto departmentDto;
     private AmountDto amountDto;
-    private ArchitectureDto architectureDto;
+    private Set<ArchitectureDto>  architectureDto;
     private ReviewDto reviewDto;
-    private SystemOutLineDto systemOutLineDto;
-    private DeliverableDto deliverableDto;
+    private List<SystemOutLineDto> systemOutLineDto;
+    private List <DeliverableDto> deliverableDto;
+
+
     private TasksDto tasksDto;
     private IssueDto issueDto;
 

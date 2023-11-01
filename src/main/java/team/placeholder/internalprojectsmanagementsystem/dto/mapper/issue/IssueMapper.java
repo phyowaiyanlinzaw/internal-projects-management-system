@@ -29,12 +29,9 @@ public class IssueMapper {
         issueDto.setIssue_category(issue.getIssue_category());
         issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
         return issueDto;
-
-
-
     }
 
-    private static Issue toIssue(IssueDto issueDto) {
+    public static Issue toIssue(IssueDto issueDto) {
         if (issueDto == null) {
             return null;
         }
@@ -55,7 +52,6 @@ public class IssueMapper {
         issue.setUpdated_date(issueDto.getUpdated_date());
         issue.setIssue_category(issueDto.getIssue_category());
         issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
-
         return issue;
     }
 

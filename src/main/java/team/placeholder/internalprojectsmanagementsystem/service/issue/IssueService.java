@@ -5,19 +5,16 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDt
 import java.util.List;
 
 public interface IssueService {
-
-
     IssueDto save(IssueDto issueDto);
 
     List<IssueDto> getAllIssues();
 
     IssueDto getIssueById(long id);
 
-    IssueDto getIssueByName(String name);
-
-    IssueDto updateIssue(IssueDto issueDto);
+        IssueDto updateIssue(IssueDto issueDto);
 
    void deleteIssue(long id);
 
 
+    IssueDto getIssueByTitle(String title);
 }
