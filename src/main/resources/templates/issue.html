@@ -349,7 +349,7 @@
                         </div>
 
                         <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <button type="button" class="btn btn-primary" id="save">Add New Issue</button>
+                            <button type="submit" class="btn btn-primary">Add New Issue</button>
                         </div>
 
                     </form>
@@ -407,50 +407,45 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 <script>
     $(document).ready(function() {
-        console.log("ready!");
+        $("#addIssue").submit(function(e) {
+            e.preventDefault();
 
-        // Attach a click event handler to the "Add New Issue" button
-        $("#save").click(function() {
-            addIssue();
+            var formData = {
+                title: $('#title').val(),
+                description: $('#description').val(),
+                place: $('#place').val(),
+                impact: $('#impact').val(),
+                root_cause: $('#root_cause').val(),
+                direct_cause: $('#direct_cause').val(),
+                responsible_party: $('#responsible_party').val(),
+                user_pic: $('#user_pic').val(),
+                issue_category: $('#issue_category').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/api/issue/save',
+                data: JSON.stringify(formData),
+                dataType: 'json', // Specify the expected data type of the response
+                success: function(response) {
+                    console.log(response);
+                    // Handle the response as needed
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error(xhr.status + ' ' + textStatus + ' ' + errorThrown);
+                    // Handle errors, e.g., display an error message to the user
+                }
+            });
         });
     });
-
-    function addIssue() {
-        this.event.preventDefault();
-        let issue = {};
-        issue['title'] = $('#title').val();
-        issue['description'] = $('#description').val();
-        issue['place'] = $('#place').val();
-        issue['impact'] = $('#impact').val();
-        issue['root_cause'] = $('#root_cause').val();
-        issue['direct_cause'] = $('#direct_cause').val();
-        issue['responsible_party'] = $('#responsible_party').val();
-        issue['user_pic'] = $('#user_pic').val();
-        issue['issue_category'] = $('#issue_category').val();
-        console.log(issue);
-        $.ajax({
-            type: 'POST',
-            url: '/api/issue/save',
-            data: JSON.stringify(issue),
-            contentType: 'application/json',
-            dataType: 'json',
-            success: function(result) {
-                if (result.status == "success") {
-                    console.log(result);
-                }
-            },
-            error: function(e) {
-                alert("Error!");
-                console.log("ERROR: ", e);
-            }
-        });
-    }
-
 </script>
+
 
 
 <script>

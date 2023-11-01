@@ -23,15 +23,18 @@ public class IssueController {
         return new ResponseEntity<>(issueDtos, HttpStatus.OK);
     }
 
-    @PostMapping(value = "save")
+    @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody IssueDto dto) {
-        System.out.println("Issue to save: " + dto);
-        IssueDto savedIssue = issueService.save(dto);
-        System.out.println("Issue saved successfully");
-        if (savedIssue != null) {
-            return ResponseEntity.ok("Issue saved successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to save issue");
+        try {
+            IssueDto savedIssue = issueService.save(dto);
+            if (savedIssue != null) {
+                return ResponseEntity.ok("Issue saved successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Failed to save issue. Check your data.");
+            }
+        } catch (Exception e) {
+            // Handle unexpected exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request.");
         }
     }
 
