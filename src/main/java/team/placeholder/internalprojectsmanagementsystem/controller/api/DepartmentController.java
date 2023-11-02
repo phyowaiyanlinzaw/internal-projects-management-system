@@ -21,7 +21,7 @@ public class DepartmentController {
 
     private final DepartmentServiceImpl departmentService;
 
-    @GetMapping("lists")
+    @GetMapping("list")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
         List<DepartmentDto> departmentDtos = departmentService.getAllDepartments();
         return new ResponseEntity<>(departmentDtos, HttpStatus.OK);
