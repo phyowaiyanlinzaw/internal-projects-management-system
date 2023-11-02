@@ -217,7 +217,9 @@
 
                                     <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
                                         <strong>Error:</strong> <span id="errorText"></span>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; position: absolute; top: 0; right: 0;">&times;</button>
+                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                            &times;
+                                        </button>
                                     </div>
 
 
@@ -324,6 +326,7 @@
 <script src="/js/custome.js"></script>
 <script>
     $(document).ready(
+
         function () {
 
             //password eye toggle
@@ -385,6 +388,27 @@
 
                         showError(error.responseText);
 
+                    },
+                    complete: function () {
+                        // Hide the full-page loading overlay on complete
+                        $('#loading-overlay').addClass('d-none');
+
+                        // Clear all password fields
+                        $("#currentPassword").val("");
+                        $("#newPassword").val("");
+                        $("#confirmNewPassword").val("");
+
+                        // Reset all password icons
+                        $(".passwordIcon").removeClass("fa-eye-slash");
+                        $(".passwordIcon").addClass("fa-eye");
+
+                        // Reset all password input types
+                        $("[data-type='text']").attr("type", "password");
+                        $("[data-type='text']").attr("data-type", "password");
+
+                        // reload page
+                        getUserProfileInfo();
+
 
                     }
                 });
@@ -396,13 +420,19 @@
 
                 setTimeout(function () {
                     $("#errorAlert").hide();
-                }, 5000);
+                }, 10000);
+
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#errorAlert").hide();
+                });
             }
 
             function showSuccess(message) {
                 // You can create a similar function for showing success messages.
                 alert(message); // For simplicity, we're using the alert function here.
             }
+
 
             function getUserProfileInfo() {
                 $.ajax({
@@ -428,13 +458,20 @@
                     if ($(this).attr("id") === "email") {
                         $(this).html(data.email)
                     } else if ($(this).attr("id") === "department") {
-                        $(this).html(data.department)
-                    } else if ($(this).attr("id") === "projectCount") {
-                        if (data.projectCount === null)
-                            $(this).html("-")
-                        else
-                            $(this).html(data.projectCount)
-                        $(this).html(data.projectCount)
+                        $(this).html(data.department.name)
+                    }
+                    // Make an AJAX request to fetch project count data
+                    else if ($(this).attr("id") === "projectCount") {
+                        $.ajax({
+                            url: "/api/project/count/user/" + data.id,
+                            type: "GET",
+                            success: function (projectCount) {
+                                $(this).html(projectCount)
+                            }.bind(this),
+                            error: function (error) {
+                                console.log(error)
+                            }
+                        })
                     }
                 })
 

@@ -50,8 +50,10 @@ public class ArchitectureMapper {
         }
         Set<Architecture> architectures = new HashSet<>();
         for (ArchitectureDto architectureDto : architectureDtos){
+            System.out.println(architectureDto);
             architectures.add(toArchitecture(architectureDto));
         }
+        System.out.println(architectures);
         return architectures;
     }
 }

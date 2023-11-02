@@ -123,7 +123,7 @@
                                 style="width: 40px; height: 40px"
                             />
                             <span class="d-none d-lg-inline-flex"
-                                >John Doe</span
+                                ></span
                             >
                         </a>
                         <div
@@ -254,8 +254,7 @@
                                 alt
                                 style="width: 40px; height: 40px"
                             />
-                            <span class="d-none d-lg-inline-flex"
-                                  sec:authentication="principal.username" ></span
+                            <span class="d-none d-lg-inline-flex" id="username" sec:authentication="principal."></span
                             >
                         </a>
                         <div
@@ -278,6 +277,18 @@
                 </div>
             </nav>
             <!-- Navbar No Search End -->
-
+    <script>
+        $(document).ready(function () {
+            console.log("navigation");
+            //ajax call api/user/profile to get current user name to set #username
+            $.ajax({
+                url: "/api/user/profile",
+                type: "GET",
+                success: function (data) {
+                    $("#username").text(data.username);
+                },
+            });
+        });
+    </script>
     </body>
 </html>

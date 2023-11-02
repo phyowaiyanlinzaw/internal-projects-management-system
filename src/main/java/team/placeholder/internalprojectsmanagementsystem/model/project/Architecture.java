@@ -34,11 +34,20 @@ public class Architecture implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Architecture other = (Architecture) o;
-        return id == other.id;
+        return tech_name == other.tech_name;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Architecture{" +
+                "id=" + id +
+                ", tech_name='" + tech_name + '\'' +
+                ", projects=" + projects +
+                '}';
     }
 }

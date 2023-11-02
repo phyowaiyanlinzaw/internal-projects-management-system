@@ -36,4 +36,15 @@ public class ClientServiceImpl implements ClientService {
                 .collect(java.util.stream.Collectors.toList());
 
     }
+
+    @Override
+    public Long countAll() {
+        return clientRepository.count();
+    }
+
+    @Override
+    public ClientDto findByProjectName(String projectName) {
+        Client client = clientRepository.findByProjectName(projectName);
+        return ClientMapper.toClientDto(client);
+    }
 }

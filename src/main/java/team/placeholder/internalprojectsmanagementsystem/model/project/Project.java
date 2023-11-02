@@ -32,6 +32,7 @@ public class Project implements Serializable {
     private long start_date;
     private long end_date;
     private DevelopmentPhase current_phase;
+    @Column(length = 1000)
     private String objective;
 
 
@@ -68,9 +69,13 @@ public class Project implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="pm_id")
-    private User user;
+    private User projectManager;
 
-    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "user_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users = new HashSet<>();
 
     @Override
