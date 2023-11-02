@@ -35,5 +35,7 @@ public interface UserService {
     Long countAll();
 
 
+    List<UserDto> getAllUsersByPMId(Long id);
 
+    long getMemberCount(long id);
 }

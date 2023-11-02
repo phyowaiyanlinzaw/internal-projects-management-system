@@ -7,7 +7,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.security.CustomerUserDetails;
 import team.placeholder.internalprojectsmanagementsystem.service.department.DepartmentService;
@@ -63,7 +65,7 @@ public class UserController {
 
     @PostMapping("register-employee")
     public ResponseEntity<String> registerEmployee(@RequestBody UserDto data) {
-        System.out.println(data.getProjectManager().getId());
+        System.out.println("project manager id" + data.getProjectManager().getId());
         try {
             if (!data.getRole().equals(Role.PROJECT_MANAGER)){
                 data.setProjectManager(userService.getUserById(data.getProjectManager().getId()));
