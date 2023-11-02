@@ -283,7 +283,7 @@
                         <div class="col-lg-6">
                             <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
                                     style="color:red"> *</span></label>
-                            <select class="four-control" name="issue_category" id="issue_category" multiple>
+                            <select class="four-control" name="issue_category" id="issue_category" >
                                  <option value="ERROR">Error</option>
                                 <option value="BUG">Bug</option>
 
@@ -293,19 +293,15 @@
                         <div class="col-lg-6">
                             <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control selectpicker" data-live-search="true" aria-label="Select Clients"  id="user_pic" name="user_pic" multiple>
-<!--                                <option value="PWYLZ">Phyo Wai Yan Lin Zaw</option>-->
-<!--                                <option value="ZLS">Zaw Lin Shein</option>-->
-<!--                                <option value="EEP">Ei Ei Phyo</option>-->
-<!--                                <option value="HAL">Hnin Aye Lwin</option>-->
-<!--                                <option value="THK">Thant Htet Ko</option>-->
+                            <select class="form-control selectpicker" data-live-search="true" aria-label="Select Clients"  id="user_pic" name="user_pic" >
+
                             </select>
                         </div>
 
                         <div class="col-lg-6">
                             <label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_party">Responsible Party <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control selectpicker" aria-label="Select Clients" data-live-search="true" id="responsible_party" name="responsible_party" multiple>
+                            <select class="form-control selectpicker" aria-label="Select Clients" data-live-search="true" id="responsible_party" name="responsible_party" >
                                 <option value="1">Phyo Wai Yan Lin Zaw</option>
                                 <option value="2">Zaw Lin Shein</option>
                                 <option value="3">Ei Ei Phyo</option>
@@ -346,7 +342,7 @@
                         </div>
 
                         <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <button type="submit" id="addIssue"   class="btn btn-primary" >Save Data</button>
+                            <button type="button" id="addIssue" class="btn btn-primary" >Save Data</button>
                         </div>
 
                     </div>
@@ -374,7 +370,6 @@
 <!--    for select drop-drown-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
 
 <!-- fontawesome -->
 <script src="/js/fontawesome.js"></script>
@@ -413,7 +408,7 @@
     const issueEditBtn = document.getElementById('issue-edit-btn')
 
     editOpenBtn.addEventListener('click', function (e) {
-        // TODO :: SHOULD CALL AJAX FUNCTION WHEN CLICK AND CREATE DIV 
+        // TODO :: SHOULD CALL AJAX FUNCTION WHEN CLICK AND CREATE DIV
         console.log("open issue detail modal")
         issueEditBtn.innerText = 'edit'
     })
@@ -449,67 +444,9 @@
     });
 
 
-    let quillEditors = document.querySelectorAll(
-        ".quill-editor-bubble"
-    );
-
-    let toolbaroptions = [
-        // Test-style
-        ["bold", "italic", "underline"],
-
-        // Bullet points style...
-        [{list: "ordered"}, {list: "bullet"}],
-
-        // Sub and super script...
-        [{script: "sub"}, {script: "super"}],
-
-        // Indentation...
-        [{indent: "+1"}, {indent: "-1"}],
-
-        // Alignment
-        [{align: []}],
-
-        // Header for test, e.g., h1, h2...
-        [{header: [1, 2, 3, 4, 5, 6, false]}],
-
-        // Adding image, link, video, or formula
-        ["link"],
-
-        // Adding code snippet or blockquote
-        ["code-block", "blockquote"],
-    ];
-
-    // Initialize Quill for each selected element
-    quillEditors.forEach(function (editor) {
-        new Quill(editor, {
-            modules: {
-                toolbar: toolbaroptions,
-            },
-            theme: "snow",
-        });
-    });
-
-    let fullQuillEditor = document.querySelector(".quill-editor-full");
-
-    const a = new Quill(fullQuillEditor, {
-        modules: {
-            toolbar: toolbaroptions,
-        },
-        theme: "snow",
-    });
-
-    // function getData(){
-    //     const userInput = quill.root.innerHTML;
-    //     console.log(userInput);
-    // }
-    //
 
     // Author: Habib Mhamadi
-    // Email: habibmhamadi@gmail.com
-
-    new MultiSelectTag("issue_category"), new MultiSelectTag("state"); // id
-
-
+    // Email: habibmhamadi@gmail.comd
     function getTimeAgo(timestamp) {
         const date = new Date(timestamp);
         const currentDate = new Date();
@@ -578,6 +515,71 @@
         document.querySelector("#sort-container").innerHTML += currDiv;
     }
 
+
+
+</script>
+
+<!--<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>-->
+
+
+<!--<script>-->
+
+<!--    new MultiSelectTag("issue_category"), new MultiSelectTag("state"); // id-->
+<!--</script>-->
+
+
+<script>
+
+    let quillEditors = document.querySelectorAll(
+        ".quill-editor-bubble"
+    );
+
+    let toolbaroptions = [
+        // Test-style
+        ["bold", "italic", "underline"],
+
+        // Bullet points style...
+        [{list: "ordered"}, {list: "bullet"}],
+
+        // Sub and super script...
+        [{script: "sub"}, {script: "super"}],
+
+        // Indentation...
+        [{indent: "+1"}, {indent: "-1"}],
+
+        // Alignment
+        [{align: []}],
+
+        // Header for test, e.g., h1, h2...
+        [{header: [1, 2, 3, 4, 5, 6, false]}],
+
+        // Adding image, link, video, or formula
+        ["link"],
+
+        // Adding code snippet or blockquote
+        ["code-block", "blockquote"],
+    ];
+
+    // // Initialize Quill for each selected element
+    // quillEditors.forEach(function (editor) {
+    //     new Quill(editor, {
+    //         modules: {
+    //             toolbar: toolbaroptions,
+    //         },
+    //         theme: "snow",
+    //     });
+    // });
+
+    // If you want to initialize Quill for a specific element, you can do it like this:
+    let specificQuillEditor = document.querySelector("#description"); // Change the selector as needed
+    const a = new Quill(specificQuillEditor, {
+        modules: {
+            toolbar: toolbaroptions,
+        },
+        theme: "snow",
+    });
+
+       // Assuming 'user_pic' is a <select> element
     var user_pic = $('#user_pic');
 
     $.get('api/user/list', function (data) {
@@ -592,8 +594,17 @@
 
     $('#addIssue').on('click', function () {
         var title = $('#title').val();
-        var description = a.root.innerHTML;
-        console.log('jjjjjjjjjjjjjjjjjjjjjjj',description);
+
+         // var description = "";
+         //
+         // if (a && a.root) {
+         //     description = a.root.innerHTML;
+         //     console.log(description);
+         // } else {
+         //     console.log('Quill editor (a) is not properly initialized or its root does not exist');
+         // }
+        var description = a.root.innerHTML;// Check if a.root exists
+        console.log(description);
         var place = $('#place').val();
         var impact = $('#impact').val();
         var root_cause = $('#root_cause').val();
@@ -619,7 +630,7 @@
             return;
         }
 
-        var requestData = {
+        const requestData = {
             title: title,
             description: description,
             place: place,
@@ -627,9 +638,13 @@
             root_cause: root_cause,
             direct_cause: direct_cause,
             responsible_party: responsible_party,
-            user_pic: user_pic,
+            user_pic: {
+                id: user_pic
+            },
             issue_category: issue_category
         };
+
+        console.log(requestData+"request data");
 
         $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...');
         $(this).prop('disabled', true);
@@ -643,14 +658,11 @@
                 alert("Issue Added Successfully");
                 // Optionally reset the form or perform other actions
             },
-            error: function(xhr) {
-                var response = xhr.responseJSON;
-                console.log(response);
-                if (response && response.status === 400) {
-                    alert("Bad Request: " + response.message);
-                } else {
-                    alert("An error occurred. Please try again later.");
-                }
+
+          error: function (data,xhr) {
+                alert('Error registering employee');
+                $('#addIssue').html('Issue Add').prop('disabled', false);
+
             },
 
             complete: function () {
@@ -660,7 +672,6 @@
     });
 
 </script>
-
 
 </body>
 </html>
