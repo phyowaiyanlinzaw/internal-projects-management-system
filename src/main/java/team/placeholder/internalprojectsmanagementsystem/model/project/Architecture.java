@@ -34,7 +34,7 @@ public class Architecture implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Architecture other = (Architecture) o;
-        return tech_name == other.tech_name;
+        return id == other.id;
     }
 
     @Override

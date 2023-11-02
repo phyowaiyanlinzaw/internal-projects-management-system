@@ -90,4 +90,29 @@ public class Project implements Serializable {
     public Project orElse(Object o) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", background='" + background + '\'' +
+                ", duration=" + duration +
+                ", start_date=" + start_date +
+                ", end_date=" + end_date +
+                ", current_phase=" + current_phase +
+                ", objective='" + objective + '\'' +
+                ", reviews=" + reviews +
+                ", tasks=" + tasks +
+                ", systemOutLines=" + systemOutLines +
+                ", deliverables=" + deliverables +
+                ", amount=" + amount +
+                ", issues=" + issues +
+                ", architectures=" + architectures +
+                ", department=" + department +
+                ", client=" + client +
+                ", user=" + user +
+                ", users=" + users +
+                '}';
+    }
 }
