@@ -40,4 +40,6 @@ public interface UserService {
     UserDto getUserByDepartmentIdAndRole(Long departmentId, Role role);
 
     Long countAllByDepartmentId(Long departmentId);
+
+    List<UserDto> getAllUsersByProjectId(Long projectId);
 }

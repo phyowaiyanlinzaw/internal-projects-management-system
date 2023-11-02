@@ -86,10 +86,10 @@
                                 <p class="lead">Monthly Man-Month</p>
 
                                 <div class="dropdown">
-                                    <a class="dropdown-toggle text-decoration-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="dropdown-toggle text-decoration-none" type="button" id="projectDropDown" data-bs-toggle="dropdown" aria-expanded="false">
                                         Projects List
                                     </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <ul class="dropdown-menu" aria-labelledby="projectDropDown">
                                     </ul>
                                 </div>
                             </div>
@@ -219,20 +219,17 @@
                  url: '/api/project/list', // Replace with your API endpoint
                  method: 'GET',
                  success: function(data) {
-                     const projectDropdown = $('#projectDropdown');
-                     projectDropdown.empty(); // Clear the dropdown
-                     data.forEach(function(project) {
-                         const projectItem = $('<li>').append($('<a>', {
-                             class: 'dropdown-item',
-                             href: '#',
-                             text: project.name,
-                             'data-value': project.name, // Add a data-value attribute with the project name
-                         }));
-                         projectDropdown.append(projectItem);
+                     console.log("PROJECTS LIST", data);
+                     const projectDropdown = $('#projectDropDown'); // Corrected the ID here
+                     const dropdownMenu = projectDropdown.next('.dropdown-menu');
+                     dropdownMenu.empty(); // Clear the dropdown menu
+
+                     $.each(data, function (index, project) {
+                         dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${project.id}">${project.name}</a></li>`);
                      });
 
                      // Handle click event on the dynamic items
-                     projectDropdown.on('click', '.dropdown-item', function() {
+                     dropdownMenu.on('click', '.dropdown-item', function() {
                          const selectedValue = $(this).data('value');
                          alert(`Selected project: ${selectedValue}`);
                      });
@@ -242,11 +239,12 @@
                  }
              });
 
+
              // Dummy data
              const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
                  "October", "November", "December"];
-             const actualData = [null,null,null,80, 70, 90, 85, 80];
-             const targetData = [60, 65, 70, 75, 80, 85, 90, 95, 100, 100, 100, 1000];
+             const actualData = [null,null,null,80, 70, 90, 850, 80];
+             const targetData = [60, 65, 70, 75, 80, 85, 90, 95, 100, 800, 100, 1000];
 
              // Get the chart canvas
              const ctx = document.getElementById("man-month-chart").getContext('2d');

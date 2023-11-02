@@ -196,4 +196,12 @@ public class UserServiceImpl implements UserService {
     public Long countAllByDepartmentId(Long departmentId) {
         return userRepository.countAllByDepartmentId(departmentId);
     }
+
+    @Override
+    public List<UserDto> getAllUsersByProjectId(Long projectId) {
+        List<User> users = userRepository.findAllByProjectId(projectId);
+        return users.stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
+    }
 }

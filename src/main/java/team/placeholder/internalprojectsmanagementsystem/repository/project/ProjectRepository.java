@@ -14,4 +14,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     long countByDepartmentId(long id);
 
+    Long countByUserId(long id);
+
+    List<Project> findAllByUserId(long id);
+
+    List<Project> findAllByDepartmentId(long id);
+
 }
