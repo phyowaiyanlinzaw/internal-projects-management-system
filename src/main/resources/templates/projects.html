@@ -7,579 +7,568 @@
  -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Internal Project Management</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta
+    <head>
+        <meta charset="UTF-8" />
+        <title>Internal Project Management</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta
             name="keywords"
             content="project, management, project management, teamplaceholder project management"
-    />
-    <meta content name="description"/>
-    <meta name="author" content="teamplaceholder's project"/>
+        />
+        <meta content name="description" />
+        <meta name="author" content="teamplaceholder's project" />
 
-    <!-- Favicon -->
-    <!-- <link href="/images/favicon.ico" rel="icon"> -->
+        <!-- Favicon -->
+        <!-- <link href="/images/favicon.ico" rel="icon"> -->
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
             href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
             rel="stylesheet"
-    />
+        />
 
-    <!-- bootstrap icons -->
-    <link rel="stylesheet" href="/font/bootstrap-icons.min.css"/>
+        <!-- bootstrap icons -->
+        <link rel="stylesheet" href="/font/bootstrap-icons.min.css" />
 
-    <!-- Libraries Stylesheet -->
-    <link
+        <!-- Libraries Stylesheet -->
+        <link
             href="/lib/owlcarousel/assets/owl.carousel.min.css"
             rel="stylesheet"
-    />
-    <link
+        />
+        <link
             href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
             rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/lib/quill/quill.bubble.css"/>
-    <link rel="stylesheet" href="/lib/quill/quill.snow.css"/>
-    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+        />
+        <link rel="stylesheet" href="/lib/quill/quill.bubble.css" />
+        <link rel="stylesheet" href="/lib/quill/quill.snow.css" />
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
 
-    <link
+        <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"
-    />
+        />
 
-    <link href="/css/daypilot.css" rel="stylesheet" type="text/css"/>
+        <link href="/css/daypilot.css" rel="stylesheet" type="text/css" />
 
-    <!-- datepicker -->
-    <link
+        <!-- datepicker -->
+        <link
             rel="stylesheet"
             type="text/css"
             href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"
-    />
-    <link
+        />
+        <link
             rel="stylesheet"
             type="text/css"
             href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css"
-    />
+        />
 
-    <!--  select-->
-    <!-- <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"> -->
+        <!--  select-->
+        <!-- <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"> -->
 
-    <!-- Bootstrap Tables -->
-    <link
+        <!-- Bootstrap Tables -->
+        <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/bootstrap-table.min.css"
-    />
+        />
 
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/css/bootstrap-select.min.css"> -->
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/css/bootstrap-select.min.css"> -->
 
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"> -->
-    <!-- Template Stylesheet -->
-    <link href="/css/style.css" rel="stylesheet"/>
-    <!-- <link href="/css/bootstrap-select2.min.css" rel="stylesheet" /> -->
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"> -->
+        <!-- Template Stylesheet -->
+        <link href="/css/style.css" rel="stylesheet" />
+        <!-- <link href="/css/bootstrap-select2.min.css" rel="stylesheet" /> -->
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.css">
+        
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <script src="/js/custome.js" defer></script>
+        <script type="module" defer>
+            const architectureInput = document.querySelector('input[name="architectures"]');
+            const systemOutlinesInput = document.querySelector('input[name="systemOutlines"]');
+            const deliverableInput = document.querySelector('input[name="deliverable"]');
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
-    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
-
-    <style>
-        .tab-pane {
-            padding: 10px;
-        }
-        /*tab-pane hover pointer cursor*/
-        .nav-item:hover {
-            cursor: pointer;
-        }
-
-    </style>
-
-    <script src="/js/custome.js" defer></script>
-    <script type="module" defer>
-        const architectureInput = document.querySelector('input[name="architectures"]');
-        const systemOutlinesInput = document.querySelector('input[name="systemOutlines"]');
-        const deliverableInput = document.querySelector('input[name="deliverable"]');
-
-        function initializeTagify(input) {
-            return new Tagify(input, {
-                whitelist: ["A# .NET", "A# (Axiom)", "A-0 System", "A+", "A++", "ABAP", "ABC", "ABC ALGOL", "ABSET", "ABSYS", "ACC", "Accent", "Ace DASL", "ACL2", "Avicsoft", "ACT-III", "Action!", "ActionScript", "BCPL", "BeanShell", "Batch (Windows/Dos)", "Bertrand", "BETA", "Bigwig", "Bistro", "BitC", "BLISS", "Blockly", "BlooP", "Blue", "Boo", "Boomerang", "Bourne shell (including bash and ksh)", "BREW", "BPEL", "B", "C--", "C++ – ISO/IEC 14882", "C# – ISO/IEC 23270", "C/AL", "Caché ObjectScript", "C Shell", "Caml", "Cayenne", "CDuce", "Cecil", "Cesil", "Céu", "Ceylon", "CFEngine", "CFML", "Cg", "Ch", "Chapel", "Charity", "Charm", "Chef", "CHILL", "CHIP-8", "chomski", "ChucK", "CICS", "Cilk", "Citrine (programming language)", "CL (IBM)", "Claire", "Clarion", "Clean", "Clipper", "CLIPS", "CLIST", "Clojure", "CLU", "CMS-2", "COBOL – ISO/IEC 1989", "CobolScript – COBOL Scripting language", "Cobra", "CODE", "CoffeeScript", "ColdFusion", "COMAL", "Combined Programming Language (CPL)", "COMIT", "Common Intermediate Language (CIL)", "Common Lisp (also known as CL)", "COMPASS", "Component Pascal", "Constraint Handling Rules (CHR)", "COMTRAN", "Converge", "Cool", "Coq", "Coral 66", "Corn", "CorVision", "COWSEL", "CPL", "CPL", "Cryptol", "csh", "Csound", "CSP", "CUDA", "Curl", "Curry", "Cybil", "Cyclone", "Cython", "Java", "Javascript", "M2001", "M4", "M#", "Machine code", "MAD (Michigan Algorithm Decoder)", "MAD/I", "Magik", "Magma", "make", "Maple", "MAPPER now part of BIS", "MARK-IV now VISION:BUILDER", "Mary", "MASM Microsoft Assembly x86", "MATH-MATIC", "Mathematica", "MATLAB", "Maxima (see also Macsyma)", "Max (Max Msp – Graphical Programming Environment)", "Maya (MEL)", "MDL", "Mercury", "Mesa", "Metafont", "Microcode", "MicroScript", "MIIS", "Milk (programming language)", "MIMIC", "Mirah", "Miranda", "MIVA Script", "ML", "Model 204", "Modelica", "Modula", "Modula-2", "Modula-3", "Mohol", "MOO", "Mortran", "Mouse", "MPD", "Mathcad", "MSIL – deprecated name for CIL", "MSL", "MUMPS", "Mystic Programming L"],
-                maxTags: 10,
-                dropdown: {
-                    consoleLog: true,
-                    maxItems: 30,
-                    classname: "tags-look",
-                    enabled: 0,
-                    closeOnSelect: true,
-                },
-            });
-        }
-
-
-        let a = initializeTagify(architectureInput);
-        console.log(a)
-        initializeTagify(systemOutlinesInput);
-        initializeTagify(deliverableInput);
-        // **********************end
-        import {
-            formatDateFromMilliseconds,
-            MONTH_NAMES,
-            calculateDuration,
-        } from "/js/time.js";
-
-        const startDateInput = document.getElementById("start_date");
-        const endDateInput = document.getElementById("end_date");
-
-        startDateInput.addEventListener("change", function () {
-            const startDate = new Date(startDateInput.value);
-            const minEndDate = new Date(startDate);
-            minEndDate.setMonth(startDate.getMonth() + 1);
-
-            endDateInput.min = minEndDate.toISOString().split("T")[0];
-            endDateInput.disabled = false;
-        });
-
-        const toolbaroptions = [
-            // Test-style
-            ["bold", "italic", "underline"],
-
-            // Bullet points style...
-            [{list: "ordered"}, {list: "bullet"}],
-
-            // Indentation...
-            [{indent: "+1"}, {indent: "-1"}],
-
-            // Alignment
-            [{align: []}],
-
-            // Header for test, e.g., h1, h2...
-            [{header: [1, 2, 3, 4, 5, 6, false]}],
-
-            // Adding image, link, video, or formula
-            ["link"],
-        ];
-
-        const arcList = [
-            {
-                id: 1,
-                tech_name: "js",
-            },
-            {
-                id: 2,
-                tech_name: "html",
-            },
-            {
-                id: 3,
-                tech_name: "css",
-            },
-        ];
-
-        // for (let i = 0; i < arcList.length; i++) {
-        //     const curArc = arcList[i];
-        //     const option = document.createElement("option");
-        //     if (i === 1) {
-        //         option.selected = true;
-        //     }
-        //     option.setAttribute("value", curArc.id);
-        //     option.innerText = curArc.tech_name;
-        //     document
-        //         .querySelector("#architectures")
-        //         .appendChild(option);
-        // }
-
-        const clientList = [
-            {
-                id: 1,
-                name: "zawlinshein",
-            },
-            {
-                id: 2,
-                name: "dog",
-            },
-            {
-                id: 3,
-                name: "papaya",
-            },
-        ];
-
-        // for (let i = 0; i < clientList.length; i++) {
-        //     const curClient = clientList[i];
-        //     const option = document.createElement("option");
-        //     option.setAttribute("value", JSON.stringify(curClient));
-        //     option.innerText = curClient.name;
-        //     document.querySelector("#client").appendChild(option);
-        // }
-
-        const proListFromBack = [
-            {
-                id: 1,
-                name: "project name",
-                start_date: 1696377600000,
-                end_date: 1701648000000,
-                user: {id: 2, name: "zawlinshein"},
-                background: "project background",
-                currentPhase: "TESTING",
-                department: {id: 1, name: "department name"},
-                objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
-                inReview: 25,
-                exReview: 2,
-                client: {
-                    id: 1,
-                    name: "Dat",
-                    phone: "09 77558833",
-                    email: "suckmyfingure@gmail.com",
-                },
-                totalTask: 100,
-                doneTask: 50,
-                amount: {
-                    basicDesign: 0,
-                    detailDesign: 0,
-                    coding: 0,
-                    unitTesting: 0,
-                    integratedTesting: 0,
-                },
-                systemOutline: {
-                    analysis: true,
-                    sys_design: true,
-                    coding: false,
-                    testing: false,
-                    deploy: true,
-                    maintenance: true,
-                    document: true,
-                },
-                architecutre: [
-                    {id: 1, tech_name: "html"},
-                    {id: 2, tech_name: "mysql"},
-                    {id: 3, tech_name: "js"},
-                    {id: 4, tech_name: "java"},
-                    {id: 5, tech_name: "spring boot"},
-                ],
-            },
-        ];
-
-        const fullQuillEditor = document.querySelector(".quill-editor-full");
-
-        const editor = new Quill(fullQuillEditor, {
-            modules: {
-                toolbar: toolbaroptions,
-            },
-            theme: "snow",
-        });
-
-        const checkboxes = document.querySelectorAll('input[name="systemOutline"]');
-        const systemOutlineData = {};
-
-        document.querySelector("#validation-form").addEventListener('submit', function (e) {
-            e.preventDefault()
-            checkboxes.forEach((checkbox) => {
-                systemOutlineData[checkbox.value] = checkbox.checked;
-            });
-            console.log(systemOutlineData)
-            console.log('quill', editor.root.innerHTML)
-        })
-
-        const motherContainer = document.querySelector("#sort-container");
-
-        const fragment = document.createDocumentFragment();
-
-        for (let i = 0; i < proListFromBack.length; i++) {
-            let currentProject = proListFromBack[i];
-
-            const div = document.createElement("div");
-            div.classList.add(
-                "p-md-3",
-                "p-sm-2",
-                "active-card",
-                "mt-3",
-                "mt-md-0",
-                "mt-lg-0",
-                "mt-xl-0"
-            );
-            div.id = `project-${currentProject.id}`;
-
-            const card = document.createElement("div");
-            card.classList.add("card", "border-success");
-
-            const cardHeader = document.createElement("div");
-            cardHeader.classList.add("card-header");
-
-            const dFlexContainer = document.createElement("div");
-            dFlexContainer.classList.add("d-flex", "flex-column");
-
-            const h2 = document.createElement("h2");
-            h2.classList.add(
-                "card-title",
-                "text-center",
-                "text-primary",
-                "modal-detail-title"
-            );
-            h2.innerText = currentProject.name;
-
-            const dFlexBetween = document.createElement("div");
-            dFlexBetween.classList.add("d-flex", "justify-content-between");
-
-            const dFlexInner = document.createElement("div");
-            dFlexInner.classList.add("d-flex");
-
-            const img = document.createElement("img");
-            img.src = `https://source.unsplash.com/random/200x200?sig=${currentProject.id}`;
-            img.classList.add(
-                "img-fluid",
-                "rounded-circle",
-                "d-none",
-                "d-md-block",
-                "d-sm-block"
-            );
-            img.style.width = "40px";
-            img.alt = "Profile Image";
-
-            const h5 = document.createElement("h5");
-            h5.classList.add(
-                "card-text",
-                "text-center",
-                "text-align-center",
-                "my-auto",
-                "fst-italic",
-                "fs-6",
-                "ms-2"
-            );
-            h5.innerText = currentProject.user.name;
-
-            const a = document.createElement("a");
-            a.href = "#";
-            a.id = currentProject.id;
-            a.classList.add(
-                "btn",
-                "btn-white",
-                "text-secondary",
-                "link-shadow"
-            );
-            a.setAttribute("data-bs-toggle", "modal");
-            a.setAttribute("data-bs-target", "#project-details");
-            a.innerText = "See More";
-
-            // Create and append the progress-related elements
-            const cardBody = document.createElement("div");
-            cardBody.classList.add(
-                "card-body",
-                "position-relative",
-                "mx-auto"
-            );
-
-            const progressTitle = document.createElement("p");
-            progressTitle.classList.add(
-                "card-title",
-                "text-center",
-                "fs-6",
-                "mb-1"
-            );
-            progressTitle.innerText = "progress";
-
-            const progressCircle = document.createElement("div");
-            progressCircle.id = `circle-progress-${currentProject.id}`;
-            progressCircle.classList.add(
-                "circle-progress",
-                "rounded-circle"
-            );
-            progressCircle.setAttribute("data-min-value", "0");
-            progressCircle.setAttribute("data-max-value", "100");
-            progressCircle.setAttribute(
-                "data-value",
-                (
-                    (currentProject.doneTask / currentProject.totalTask) *
-                    100
-                ).toString()
-            );
-            progressCircle.setAttribute("data-type", "percent");
-
-            dFlexInner.appendChild(img);
-            dFlexInner.appendChild(h5);
-            dFlexBetween.appendChild(dFlexInner);
-            dFlexBetween.appendChild(a);
-            dFlexContainer.appendChild(h2);
-            dFlexContainer.appendChild(dFlexBetween);
-            cardHeader.appendChild(dFlexContainer);
-            card.appendChild(cardHeader);
-
-            cardBody.appendChild(progressTitle);
-            cardBody.appendChild(progressCircle);
-            card.appendChild(cardBody);
-
-            div.appendChild(card);
-            fragment.appendChild(div);
-        }
-
-        motherContainer.appendChild(fragment);
-
-        const detailMoal = document.querySelector("#project-details");
-
-        motherContainer.addEventListener("click", function (e) {
-            let target = e.target;
-
-            if (target.hasAttribute("data-bs-target")) {
-                let id = parseInt(target.getAttribute("id"));
-                let targetData = proListFromBack.find((a) => a.id == id);
-                let duration = calculateDuration(
-                    targetData.start_date,
-                    targetData.end_date
-                );
-                detailMoal.querySelector(".modal-title").innerText =
-                    targetData.name;
-                detailMoal.querySelector("#project-background").innerText =
-                    targetData.background;
-                detailMoal.querySelector("#project-name").innerText =
-                    targetData.name;
-                detailMoal.querySelector(
-                    "#project-department-name"
-                ).innerHTML = targetData.department.name;
-                detailMoal.querySelector(
-                    "#project-internal-review-count"
-                ).innerText = targetData.inReview;
-                detailMoal.querySelector(
-                    "#project-external-review-count"
-                ).innerText = targetData.exReview;
-                detailMoal.querySelector(
-                    "#project-duration"
-                ).innerText = `${duration}`;
-                detailMoal.querySelector("#project-start-date").innerText =
-                    formatDateFromMilliseconds(targetData.start_date);
-                detailMoal.querySelector("#project-end-date").innerText =
-                    formatDateFromMilliseconds(targetData.end_date);
-                detailMoal.querySelector(
-                    "#project-current-phase"
-                ).innerText = targetData.currentPhase;
-                detailMoal.querySelector("#project-client-name").innerText =
-                    targetData.client.name;
+            function initializeTagify(input) {
+                return new Tagify(input, {
+                    whitelist: ["A# .NET", "A# (Axiom)", "A-0 System", "A+", "A++", "ABAP", "ABC", "ABC ALGOL", "ABSET", "ABSYS", "ACC", "Accent", "Ace DASL", "ACL2", "Avicsoft", "ACT-III", "Action!", "ActionScript", "BCPL", "BeanShell", "Batch (Windows/Dos)", "Bertrand", "BETA", "Bigwig", "Bistro", "BitC", "BLISS", "Blockly", "BlooP", "Blue", "Boo", "Boomerang", "Bourne shell (including bash and ksh)", "BREW", "BPEL", "B", "C--", "C++ – ISO/IEC 14882", "C# – ISO/IEC 23270", "C/AL", "Caché ObjectScript", "C Shell", "Caml", "Cayenne", "CDuce", "Cecil", "Cesil", "Céu", "Ceylon", "CFEngine", "CFML", "Cg", "Ch", "Chapel", "Charity", "Charm", "Chef", "CHILL", "CHIP-8", "chomski", "ChucK", "CICS", "Cilk", "Citrine (programming language)", "CL (IBM)", "Claire", "Clarion", "Clean", "Clipper", "CLIPS", "CLIST", "Clojure", "CLU", "CMS-2", "COBOL – ISO/IEC 1989", "CobolScript – COBOL Scripting language", "Cobra", "CODE", "CoffeeScript", "ColdFusion", "COMAL", "Combined Programming Language (CPL)", "COMIT", "Common Intermediate Language (CIL)", "Common Lisp (also known as CL)", "COMPASS", "Component Pascal", "Constraint Handling Rules (CHR)", "COMTRAN", "Converge", "Cool", "Coq", "Coral 66", "Corn", "CorVision", "COWSEL", "CPL", "CPL", "Cryptol", "csh", "Csound", "CSP", "CUDA", "Curl", "Curry", "Cybil", "Cyclone", "Cython", "Java", "Javascript", "M2001", "M4", "M#", "Machine code", "MAD (Michigan Algorithm Decoder)", "MAD/I", "Magik", "Magma", "make", "Maple", "MAPPER now part of BIS", "MARK-IV now VISION:BUILDER", "Mary", "MASM Microsoft Assembly x86", "MATH-MATIC", "Mathematica", "MATLAB", "Maxima (see also Macsyma)", "Max (Max Msp – Graphical Programming Environment)", "Maya (MEL)", "MDL", "Mercury", "Mesa", "Metafont", "Microcode", "MicroScript", "MIIS", "Milk (programming language)", "MIMIC", "Mirah", "Miranda", "MIVA Script", "ML", "Model 204", "Modelica", "Modula", "Modula-2", "Modula-3", "Mohol", "MOO", "Mortran", "Mouse", "MPD", "Mathcad", "MSIL – deprecated name for CIL", "MSL", "MUMPS", "Mystic Programming L"],
+                    maxTags: 10,
+                    dropdown: {
+                        consoleLog: true,
+                        maxItems: 30,
+                        classname: "tags-look",
+                        enabled: 0,
+                        closeOnSelect: true,
+                    },
+                });
             }
-        });
 
-        let dateFilter = document.querySelector("#month-filter");
 
-        dateFilter.addEventListener("input", function (e) {
-            console.log("lee");
-            let allData =
-                document.getElementById("sort-container").children;
-            let currentTime = dateFilter.value;
-
-            let targetProject = proListFromBack.find((a) => {
-                const projectDate = new Date(a.startDate);
-
-                const projectMonth = projectDate.getMonth();
-
-                console.log(projectMonth);
-
-                console.log(MONTH_NAMES[projectMonth]);
-
-                console.log(currentTime);
-
-                console.log(MONTH_NAMES[projectMonth] === currentTime);
-
-                return MONTH_NAMES[projectMonth] === currentTime;
-            });
-
-            console.log(targetProject);
-
-            for (let i = 0; i < allData.length; i++) {
-                if (
-                    targetProject &&
-                    targetProject.id ===
-                    parseInt(allData[i].getAttribute("id"))
-                ) {
-                    allData[i].style.display = "block";
-                } else {
-                    allData[i].style.display = "none";
-                }
-            }
-        });
-
-        document
-            .querySelector("#reset-btn")
-            .addEventListener("click", function (e) {
-                let allData =
-                    document.getElementById("sort-container").children;
-
-                for (let i = 0; i < allData.length; i++) {
-                    allData[i].style.display = "block";
-                }
-            });
-
-        $(document).ready(function () {
-            console.log("Document is ready!");
-
-            let a = $("#architectures-list, #deliverable").select2({
-                tags: true,
-                width: "100%",
-            });
+            let a = initializeTagify(architectureInput);
             console.log(a)
-        });
+            initializeTagify(systemOutlinesInput);
+            initializeTagify(deliverableInput);
+            // **********************end
+            import {
+                formatDateFromMilliseconds,
+                MONTH_NAMES,
+                calculateDuration,
+            } from "/js/time.js";
 
-        console.log("error");
+            const startDateInput = document.getElementById("start_date");
+            const endDateInput = document.getElementById("end_date");
 
-        let quillEditors = document.querySelectorAll(
-            ".quill-editor-bubble"
-        );
+            startDateInput.addEventListener("change", function () {
+                const startDate = new Date(startDateInput.value);
+                const minEndDate = new Date(startDate);
+                minEndDate.setMonth(startDate.getMonth() + 1);
 
+                endDateInput.min = minEndDate.toISOString().split("T")[0];
+                endDateInput.disabled = false;
+            });
 
-        // Initialize Quill for each selected element
-        quillEditors.forEach(function (editor) {
-            new Quill(editor, {
+            const toolbaroptions = [
+                // Test-style
+                ["bold", "italic", "underline"],
+
+                // Bullet points style...
+                [{ list: "ordered" }, { list: "bullet" }],
+
+                // Indentation...
+                [{ indent: "+1" }, { indent: "-1" }],
+
+                // Alignment
+                [{ align: [] }],
+
+                // Header for test, e.g., h1, h2...
+                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+                // Adding image, link, video, or formula
+                ["link"],
+            ];
+
+            const arcList = [
+                {
+                    id: 1,
+                    tech_name: "js",
+                },
+                {
+                    id: 2,
+                    tech_name: "html",
+                },
+                {
+                    id: 3,
+                    tech_name: "css",
+                },
+            ];
+
+            // for (let i = 0; i < arcList.length; i++) {
+            //     const curArc = arcList[i];
+            //     const option = document.createElement("option");
+            //     if (i === 1) {
+            //         option.selected = true;
+            //     }
+            //     option.setAttribute("value", curArc.id);
+            //     option.innerText = curArc.tech_name;
+            //     document
+            //         .querySelector("#architectures")
+            //         .appendChild(option);
+            // }
+
+            const clientList = [
+                {
+                    id: 1,
+                    name: "zawlinshein",
+                },
+                {
+                    id: 2,
+                    name: "dog",
+                },
+                {
+                    id: 3,
+                    name: "papaya",
+                },
+            ];
+
+            // for (let i = 0; i < clientList.length; i++) {
+            //     const curClient = clientList[i];
+            //     const option = document.createElement("option");
+            //     option.setAttribute("value", JSON.stringify(curClient));
+            //     option.innerText = curClient.name;
+            //     document.querySelector("#client").appendChild(option);
+            // }
+
+            const proListFromBack = [
+                {
+                    id: 1,
+                    name: "project name",
+                    start_date: 1696377600000,
+                    end_date: 1701648000000,
+                    user: { id: 2, name: "zawlinshein" },
+                    background: "project background",
+                    currentPhase: "TESTING",
+                    department: { id: 1, name: "department name" },
+                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
+                    inReview: 25,
+                    exReview: 2,
+                    client: {
+                        id: 1,
+                        name: "Dat",
+                        phone: "09 77558833",
+                        email: "suckmyfingure@gmail.com",
+                    },
+                    totalTask: 100,
+                    doneTask: 50,
+                    amount: {
+                        basicDesign: 0,
+                        detailDesign: 0,
+                        coding: 0,
+                        unitTesting: 0,
+                        integratedTesting: 0,
+                    },
+                    systemOutline: {
+                        analysis: true,
+                        sys_design: true,
+                        coding: false,
+                        testing: false,
+                        deploy: true,
+                        maintenance: true,
+                        document: true,
+                    },
+                    architecutre: [
+                        { id: 1, tech_name: "html" },
+                        { id: 2, tech_name: "mysql" },
+                        { id: 3, tech_name: "js" },
+                        { id: 4, tech_name: "java" },
+                        { id: 5, tech_name: "spring boot" },
+                    ],
+                },
+            ];
+
+            const fullQuillEditor = document.querySelector(".quill-editor-full");
+
+            const editor = new Quill(fullQuillEditor, {
                 modules: {
                     toolbar: toolbaroptions,
                 },
                 theme: "snow",
             });
-        });
 
-        function getData() {
-            const userInput = quill.root.innerHTML;
-            console.log(userInput);
-        }
+            const checkboxes = document.querySelectorAll('input[name="systemOutline"]');
+            const systemOutlineData = {};
 
-        let minusButtons = document.querySelectorAll(".minus");
-        let plusButtons = document.querySelectorAll(".plus");
+            document.querySelector("#validation-form").addEventListener('submit', function(e) {
+                e.preventDefault()
+                checkboxes.forEach((checkbox) => {
+                    systemOutlineData[checkbox.value] = checkbox.checked;
+                });
+                console.log(systemOutlineData)
+                console.log('quill', editor.root.innerHTML)
+            })
 
-        minusButtons.forEach(function (minusButton) {
-            minusButton.addEventListener("click", function () {
-                let input = this.parentElement.querySelector("input");
-                let count = parseInt(input.value) - 1;
-                count = count < 0 ? 0 : count;
-                input.value = count;
-                console.log(input, count);
-                //input.dispatchEvent(new Event('change'));
-                return false;
+            const motherContainer = document.querySelector("#sort-container");
+
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < proListFromBack.length; i++) {
+                let currentProject = proListFromBack[i];
+
+                const div = document.createElement("div");
+                div.classList.add(
+                    "p-md-3",
+                    "p-sm-2",
+                    "active-card",
+                    "mt-3",
+                    "mt-md-0",
+                    "mt-lg-0",
+                    "mt-xl-0"
+                );
+                div.id = `project-${currentProject.id}`;
+
+                const card = document.createElement("div");
+                card.classList.add("card", "border-success");
+
+                const cardHeader = document.createElement("div");
+                cardHeader.classList.add("card-header");
+
+                const dFlexContainer = document.createElement("div");
+                dFlexContainer.classList.add("d-flex", "flex-column");
+
+                const h2 = document.createElement("h2");
+                h2.classList.add(
+                    "card-title",
+                    "text-center",
+                    "text-primary",
+                    "modal-detail-title"
+                );
+                h2.innerText = currentProject.name;
+
+                const dFlexBetween = document.createElement("div");
+                dFlexBetween.classList.add("d-flex", "justify-content-between");
+
+                const dFlexInner = document.createElement("div");
+                dFlexInner.classList.add("d-flex");
+
+                const img = document.createElement("img");
+                img.src = `https://source.unsplash.com/random/200x200?sig=${currentProject.id}`;
+                img.classList.add(
+                    "img-fluid",
+                    "rounded-circle",
+                    "d-none",
+                    "d-md-block",
+                    "d-sm-block"
+                );
+                img.style.width = "40px";
+                img.alt = "Profile Image";
+
+                const h5 = document.createElement("h5");
+                h5.classList.add(
+                    "card-text",
+                    "text-center",
+                    "text-align-center",
+                    "my-auto",
+                    "fst-italic",
+                    "fs-6",
+                    "ms-2"
+                );
+                h5.innerText = currentProject.user.name;
+
+                const a = document.createElement("a");
+                a.href = "#";
+                a.id = currentProject.id;
+                a.classList.add(
+                    "btn",
+                    "btn-white",
+                    "text-secondary",
+                    "link-shadow"
+                );
+                a.setAttribute("data-bs-toggle", "modal");
+                a.setAttribute("data-bs-target", "#project-details");
+                a.innerText = "See More";
+
+                // Create and append the progress-related elements
+                const cardBody = document.createElement("div");
+                cardBody.classList.add(
+                    "card-body",
+                    "position-relative",
+                    "mx-auto"
+                );
+
+                const progressTitle = document.createElement("p");
+                progressTitle.classList.add(
+                    "card-title",
+                    "text-center",
+                    "fs-6",
+                    "mb-1"
+                );
+                progressTitle.innerText = "progress";
+
+                const progressCircle = document.createElement("div");
+                progressCircle.id = `circle-progress-${currentProject.id}`;
+                progressCircle.classList.add(
+                    "circle-progress",
+                    "rounded-circle"
+                );
+                progressCircle.setAttribute("data-min-value", "0");
+                progressCircle.setAttribute("data-max-value", "100");
+                progressCircle.setAttribute(
+                    "data-value",
+                    (
+                        (currentProject.doneTask / currentProject.totalTask) *
+                        100
+                    ).toString()
+                );
+                progressCircle.setAttribute("data-type", "percent");
+
+                dFlexInner.appendChild(img);
+                dFlexInner.appendChild(h5);
+                dFlexBetween.appendChild(dFlexInner);
+                dFlexBetween.appendChild(a);
+                dFlexContainer.appendChild(h2);
+                dFlexContainer.appendChild(dFlexBetween);
+                cardHeader.appendChild(dFlexContainer);
+                card.appendChild(cardHeader);
+
+                cardBody.appendChild(progressTitle);
+                cardBody.appendChild(progressCircle);
+                card.appendChild(cardBody);
+
+                div.appendChild(card);
+                fragment.appendChild(div);
+            }
+
+            motherContainer.appendChild(fragment);
+
+            const detailMoal = document.querySelector("#project-details");
+
+            motherContainer.addEventListener("click", function (e) {
+                let target = e.target;
+
+                if (target.hasAttribute("data-bs-target")) {
+                    let id = parseInt(target.getAttribute("id"));
+                    let targetData = proListFromBack.find((a) => a.id == id);
+                    let duration = calculateDuration(
+                        targetData.start_date,
+                        targetData.end_date
+                    );
+                    detailMoal.querySelector(".modal-title").innerText =
+                        targetData.name;
+                    detailMoal.querySelector("#project-background").innerText =
+                        targetData.background;
+                    detailMoal.querySelector("#project-name").innerText =
+                        targetData.name;
+                    detailMoal.querySelector(
+                        "#project-department-name"
+                    ).innerHTML = targetData.department.name;
+                    detailMoal.querySelector(
+                        "#project-internal-review-count"
+                    ).innerText = targetData.inReview;
+                    detailMoal.querySelector(
+                        "#project-external-review-count"
+                    ).innerText = targetData.exReview;
+                    detailMoal.querySelector(
+                        "#project-duration"
+                    ).innerText = `${duration}`;
+                    detailMoal.querySelector("#project-start-date").innerText =
+                        formatDateFromMilliseconds(targetData.start_date);
+                    detailMoal.querySelector("#project-end-date").innerText =
+                        formatDateFromMilliseconds(targetData.end_date);
+                    detailMoal.querySelector(
+                        "#project-current-phase"
+                    ).innerText = targetData.currentPhase;
+                    detailMoal.querySelector("#project-client-name").innerText =
+                        targetData.client.name;
+                }
             });
-        });
 
-        plusButtons.forEach(function (plusButton) {
-            plusButton.addEventListener("click", function () {
-                let input = this.parentElement.querySelector("input");
-                input.value = parseInt(input.value) + 1;
-                //input.dispatchEvent(new Event('change'));
-                return false;
+            let dateFilter = document.querySelector("#month-filter");
+
+            dateFilter.addEventListener("input", function (e) {
+                console.log("lee");
+                let allData =
+                    document.getElementById("sort-container").children;
+                let currentTime = dateFilter.value;
+
+                let targetProject = proListFromBack.find((a) => {
+                    const projectDate = new Date(a.startDate);
+
+                    const projectMonth = projectDate.getMonth();
+
+                    console.log(projectMonth);
+
+                    console.log(MONTH_NAMES[projectMonth]);
+
+                    console.log(currentTime);
+
+                    console.log(MONTH_NAMES[projectMonth] === currentTime);
+
+                    return MONTH_NAMES[projectMonth] === currentTime;
+                });
+
+                console.log(targetProject);
+
+                for (let i = 0; i < allData.length; i++) {
+                    if (
+                        targetProject &&
+                        targetProject.id ===
+                            parseInt(allData[i].getAttribute("id"))
+                    ) {
+                        allData[i].style.display = "block";
+                    } else {
+                        allData[i].style.display = "none";
+                    }
+                }
             });
-        });
-    </script>
-</head>
 
-<body>
-<div class="container-fluid position-relative bg-white d-flex p-0">
-    <!-- Spinner Start -->
-    <div
-            id="spinner"
-            class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
-    >
-        <div
-                class="spinner-border text-primary"
-                style="width: 3rem; height: 3rem"
-                role="status"
-        >
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-    <!-- Spinner End -->
+            document
+                .querySelector("#reset-btn")
+                .addEventListener("click", function (e) {
+                    let allData =
+                        document.getElementById("sort-container").children;
+
+                    for (let i = 0; i < allData.length; i++) {
+                        allData[i].style.display = "block";
+                    }
+                });
+
+            $(document).ready(function () {
+                console.log("Document is ready!");
+
+                let a = $("#architectures-list, #deliverable").select2({
+                    tags: true,
+                    width: "100%",
+                });
+                console.log(a)
+            });
+
+            console.log("error");
+
+            let quillEditors = document.querySelectorAll(
+                ".quill-editor-bubble"
+            );
+
+            
+
+            // Initialize Quill for each selected element
+            quillEditors.forEach(function (editor) {
+                new Quill(editor, {
+                    modules: {
+                        toolbar: toolbaroptions,
+                    },
+                    theme: "snow",
+                });
+            });
+
+            function getData() {
+                const userInput = quill.root.innerHTML;
+                console.log(userInput);
+            }
+
+            let minusButtons = document.querySelectorAll(".minus");
+            let plusButtons = document.querySelectorAll(".plus");
+
+            minusButtons.forEach(function (minusButton) {
+                minusButton.addEventListener("click", function () {
+                    let input = this.parentElement.querySelector("input");
+                    let count = parseInt(input.value) - 1;
+                    count = count < 0 ? 0 : count;
+                    input.value = count;
+                    console.log(input, count);
+                    //input.dispatchEvent(new Event('change'));
+                    return false;
+                });
+            });
+
+            plusButtons.forEach(function (plusButton) {
+                plusButton.addEventListener("click", function () {
+                    let input = this.parentElement.querySelector("input");
+                    input.value = parseInt(input.value) + 1;
+                    //input.dispatchEvent(new Event('change'));
+                    return false;
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="container-fluid position-relative bg-white d-flex p-0">
+            <!-- Spinner Start -->
+            <div
+                id="spinner"
+                class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
+            >
+                <div
+                    class="spinner-border text-primary"
+                    style="width: 3rem; height: 3rem"
+                    role="status"
+                >
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <!-- Spinner End -->
 
     <div th:replace="fragments/sidebar :: sidebar"></div>
 
@@ -595,35 +584,35 @@
                     );
                     background-size: 12px 12px;
                 "
-    >
-        <div
-                th:replace="fragments/navigation :: navigation-with-search"
-        ></div>
-        <!-- Search Start -->
-        <div
-                class="container-fluid d-md-block pt-2 ps-s pe-2"
-                id="dropdrown-search-bar"
-        >
-            <div class="d-flex flex-row justify-content-end gap-2">
-                <button class="btn btn-info" id="reset-btn">
-                    reset
-                </button>
-                <div class="d-inline-block">
-                    <select id="month-filter" class="form-control">
-                        <option value="January">January</option>
-                        <option value="February">February</option>
-                        <option value="Match">Match</option>
-                        <option value="April">April</option>
-                        <option value="May">May</option>
-                        <option value="June">June</option>
-                        <option value="July">July</option>
-                        <option value="Auguest">Auguest</option>
-                        <option value="September">September</option>
-                        <option value="October">October</option>
-                        <option value="November">November</option>
-                        <option value="December">December</option>
-                    </select>
-                </div>
+            >
+                <div
+                    th:replace="fragments/navigation :: navigation-with-search"
+                ></div>
+                <!-- Search Start -->
+                <div
+                    class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar"
+                >
+                    <div class="d-flex flex-row justify-content-end gap-2">
+                        <button class="btn btn-info" id="reset-btn">
+                            reset
+                        </button>
+                        <div class="d-inline-block">
+                            <select id="month-filter" class="form-control">
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="Match">Match</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="Auguest">Auguest</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
 
                 <form class="d-inline-block">
                     <input
@@ -674,39 +663,39 @@
     <!-- Content End -->
 </div>
 
-<!--    modal for add project-->
-<div
-        class="modal fade"
-        id="add-department-modal"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
->
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content task-content">
-            <div class="modal-header">
-                <h2 class="modal-title fs-5" style="text-align: center">
-                    Add Project
-                </h2>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                ></button>
-            </div>
-            <!-- Bordered Tabs -->
-            <nav>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a
-                                class="nav-link active"
-                                data-bs-toggle="tab"
-                                data-bs-target="#project-create"
-                        >Project</a
-                        >
-                    </li>
+        <!--    modal for add project-->
+        <div
+            class="modal fade"
+            id="add-department-modal"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content task-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" style="text-align: center">
+                            Add Project
+                        </h2>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <!-- Bordered Tabs -->
+                    <nav>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link active"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#project-create"
+                                    >Project</a
+                                >
+                            </li>
 
                     <li class="nav-item">
                         <a
@@ -725,37 +714,20 @@
                         id="project-create"
                 >
                     <div class="modal-body">
-                        <form
-                                class="row g-3"
-                                id="validation-form"
-                                action=""
-                        >
+
+<!--                        project add-->
+                        <form class="row g-3" id="validation-form" action="">
                             <div class="col-lg-6">
-                                <label
-                                        for="name"
-                                        class="col-sm-12 col-form-label"
-                                        name="name"
-                                >Project Name<span
-                                        style="color: #dec6c6"
-                                >
-                                                *</span
-                                ></label
-                                >
-                                <input
-                                        type="text"
-                                        class="form-control border-task-description"
-                                        id="client-name"
-                                        name="name"
-                                />
+<!--                                name input-->
+                                <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span style="color: #dec6c6">
+                                    *</span></label>
+                                <input type="text" class="form-control border-task-description" id="name" name="name"/>
                             </div>
 
+<!--                            client add-->
                             <div class="col-lg-6">
-                                <label
-                                        for="client"
-                                        class="col-sm-12 col-form-label"
-                                >Client<span style="color: red">
-                                                *</span
-                                ></label>
+                                <label for="client" class="col-sm-12 col-form-label" name="client">Client<span style="color: red">
+                                    *</span></label>
                                 <select class="form-select" id="client" name="client">
                                     <option value="1" selected>DAT1</option>
                                     <option value="2">DAT2</option>
@@ -763,124 +735,79 @@
                                 </select>
                             </div>
 
+<!--                            start date add-->
                             <div class="col-md-6">
-                                <label
-                                        for="start_date"
-                                        class="col-sm-12 col-form-label"
-                                >Start Date
-                                    <span style="color: red">
-                                                *</span
-                                    ></label
-                                >
-                                <input
-                                        type="date"
-                                        class="form-control border-task-description"
-                                        id="start_date"
-                                        name="start_date"
-                                />
+                                <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date<span style="color: red">
+                                    *</span></label>
+                                <input type="date" class="form-control border-task-description" id="start_date" name="start_date"/>
                             </div>
 
+
+<!--                                end date add-->
                             <div class="col-md-6">
-                                <label
-                                        for="end_date"
-                                        class="col-sm-12 col-form-label"
-                                >End Date
-                                    <span style="color: red">
-                                                *</span
-                                    ></label
-                                >
-                                <input
-                                        type="date"
-                                        class="form-control border-task-description"
-                                        id="end_date"
-                                        name="end_date"
-                                        disabled
-                                />
+                                <label for="end_date" class="col-sm-12 col-form-label" name="end_date">End Date<span style="color: red">
+                                    *</span></label>
+                                        <input type="date" class="form-control border-task-description" id="end_date" name="end_date" disabled/>
                             </div>
 
+
+<!--                                background add-->
                             <div class="col-lg-6">
-                                <label
-                                        for="background"
-                                        class="col-sm-12 col-form-label"
-                                >Background<span style="color: red">
-                                                *</span
-                                ></label
-                                >
-                                <textarea
-                                        type="text"
-                                        class="form-control border-task-description"
-                                        id="background"
-                                        name="background"
-                                ></textarea>
+                                <label for="background" class="col-sm-12 col-form-label" name="background">Background<span style="color: red">
+                                    *</span></label>
+                                        <textarea type="text" class="form-control border-task-description" id="background" name="background"></textarea>
                             </div>
 
+
+<!--                                architectures add-->
                             <div class="col-lg-6">
-                                <label
-                                        for="architectures"
-                                        class="col-sm-12 col-form-label"
-                                >Architecture
+                                <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture<span style="color: red"> *</span></label>
+                                <input type="text" class="form-control" id="architectures" name="architectures" placeholder="add value" value="css,html,javascript" />
+                            </div>
+
+
+<!--                                systemoutline add-->
+                            <div class="col-lg-6">
+                                <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">System Outlines
                                     <span style="color: red"> *</span>
                                 </label>
-                                <input type="text" class="form-control" id="architectures" name="architectures"
-                                       placeholder="add value" value="css,html,javascript"/>
+                                <input type="text" class="form-control" id="systemOutlines" name="systemOutlines" placeholder="add value" value="analysis,sys_design" />
                             </div>
 
+
+<!--                                deliverable add-->
                             <div class="col-lg-6">
-                                <label
-                                        for="systemOutlines"
-                                        class="col-sm-12 col-form-label"
-                                >System Outlines
-                                    <span style="color: red"> *</span>
-                                </label>
-                                <input type="text" class="form-control" id="systemOutlines" name="systemOutlines"
-                                       placeholder="add value" value="analysis,sys_design"/>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <label
-                                        for="deliverable"
-                                        class="col-sm-12 col-form-label"
-                                >Deliverable
-                                    <span style="color: red">
-                                                *</span
-                                    ></label
-                                >
-                                <input type="text" class="form-control" id="deliverable" name="deliverable"
-                                       placeholder="add value" value="source code,zip"/>
+                                <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable<span style="color: red">
+                                    *</span></label>
+                                <input type="text" class="form-control" id="deliverable" name="deliverable" placeholder="add value" value="source code,zip" />
 
                             </div>
 
-                            <div
-                                    class="col-lg-12"
-                                    style="margin-bottom: 80px"
-                            >
-                                <label for="objective"
-                                >Objective<span style="color: red">
-                                                *</span
-                                ></label
-                                >
-                                <div
-                                        class="quill-editor-full"
-                                        id="objective"
-                                        name="objective"
-                                ></div>
+                            <div class="col-lg-12" style="margin-bottom: 80px">
+                                <label for="objective">Objective<span style="color: red">
+                                    *</span></label>
+                                <div class="quill-editor-full" id="objective" name="objective"></div>
                             </div>
 
-                            <div class="text-center">
-                                <button
-                                        type="submit"
-                                        class="btn btn-primary col-2"
-                                        data-dismiss="modal"
-                                >
-                                    Add
-                                </button>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">
+                                            Add
+                                        </button>
+                                    </div>
+
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                </div>
+                        </div>
+
+<!--                project add form end-->
 
                 <div class="tab-pane fade" id="client-create">
                     <div class="modal-body modal-lg-6">
+                        <form
+                                class="row g-4"
+                                id="client-form"
+                                action="#"
+                        >
                             <div class="col-md-12">
                                 <label
                                         for="name"
@@ -931,23 +858,23 @@
                                 />
                             </div>
 
-                            <div class="text-center">
-                                <button
-                                        type="submit"
-                                        class="btn btn-primary mr-3"
-                                        data-dismiss="modal"
-                                        id="create-client-btn"
-                                >
-                                    Create
-                                </button>
+                                    <div class="text-center">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary mr-3"
+                                            data-dismiss="modal"
+                                        >
+                                            Create
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<!--    modal for add project-->
+        <!--    modal for add project-->
 
 <!-- modal for project's details -->
 <div class="modal fade" id="project-details" data-bs-keyboard="true">
@@ -1012,37 +939,37 @@
                                         </button>
                                     </li>
 
-                                    <li class="nav-item">
-                                        <button
-                                                class="nav-link"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#project-edit"
-                                        >
-                                            edit
-                                        </button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button
-                                                class="nav-link"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#client-info"
-                                        >
-                                            client info
-                                        </button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content pt-2">
-                                    <div
-                                            class="tab-pane fade show active profile-overview"
-                                            id="project-overview"
-                                    >
-                                        <h5 class="card-title">
-                                            About background
-                                        </h5>
-                                        <p
-                                                class="small fst-italic"
-                                                id="project-background"
-                                        ></p>
+                                            <li class="nav-item">
+                                                <button
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#project-edit"
+                                                >
+                                                    edit
+                                                </button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#client-info"
+                                                >
+                                                    client info
+                                                </button>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content pt-2">
+                                            <div
+                                                class="tab-pane fade show active profile-overview"
+                                                id="project-overview"
+                                            >
+                                                <h5 class="card-title">
+                                                    About background
+                                                </h5>
+                                                <p
+                                                    class="small fst-italic"
+                                                    id="project-background"
+                                                ></p>
 
                                         <h5 class="card-title">
                                             Project Details
@@ -1667,31 +1594,27 @@
 <!-- bootstrap -->
 <script src="/js/bootstrap.bundle.min.js"></script>
 
-<!-- javascript libraries -->
-<script src="/lib/chart/chart.min.js"></script>
-<script src="/lib/easing/easing.min.js"></script>
-<script src="/lib/waypoints/waypoints.min.js"></script>
-<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="/lib/tempusdominus/js/moment.min.js"></script>
-<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-<script src="/lib/quill/quill.min.js"></script>
+        <!-- javascript libraries -->
+        <script src="/lib/chart/chart.min.js"></script>
+        <script src="/lib/easing/easing.min.js"></script>
+        <script src="/lib/waypoints/waypoints.min.js"></script>
+        <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="/lib/tempusdominus/js/moment.min.js"></script>
+        <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+        <script src="/lib/quill/quill.min.js"></script>
 
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
 <script src="/js/forprogresscircleiguess.js"></script>
 
-<!-- sort (department, project), form validation and search bar behavior are all here -->
+        <!-- sort (department, project), form validation and search bar behavior are all here -->
 
-<!-- <script src="/js/bootstrap-select2.min.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
+        <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
 
-<script>
-    $(document).ready(function () {
-
-    });
-</script>
-</body>
+        
+    </body>
 </html>
