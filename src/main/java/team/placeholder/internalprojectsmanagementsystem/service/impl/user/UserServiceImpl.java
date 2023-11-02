@@ -183,7 +183,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public long getMemberCount(long id) {
-        return userRepository.findAllByProjectManagerId(id).size();
+    public UserDto getUserByDepartmentIdAndRole(Long departmentId, Role role) {
+        User user = userRepository.findUserByDepartmentIdAndRole(departmentId, role);
+        if (user != null) {
+            return UserMapper.toUserDto(user);
+        } else {
+            return null;
+        }
     }
 }

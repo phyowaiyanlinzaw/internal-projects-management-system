@@ -90,18 +90,6 @@
                                         Projects List
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item" href="#">Project 1</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 2</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 3</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 4</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 5</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 6</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 7</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 8</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 9</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 10</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 11</a></li>
-                                        <li><a class="dropdown-item" href="#">Project 12</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -226,10 +214,38 @@
          $(document).ready(function () {
              $("#spinner").hide();
 
+             // Make an AJAX request to fetch the project list
+             $.ajax({
+                 url: '/api/project/list', // Replace with your API endpoint
+                 method: 'GET',
+                 success: function(data) {
+                     const projectDropdown = $('#projectDropdown');
+                     projectDropdown.empty(); // Clear the dropdown
+                     data.forEach(function(project) {
+                         const projectItem = $('<li>').append($('<a>', {
+                             class: 'dropdown-item',
+                             href: '#',
+                             text: project.name,
+                             'data-value': project.name, // Add a data-value attribute with the project name
+                         }));
+                         projectDropdown.append(projectItem);
+                     });
+
+                     // Handle click event on the dynamic items
+                     projectDropdown.on('click', '.dropdown-item', function() {
+                         const selectedValue = $(this).data('value');
+                         alert(`Selected project: ${selectedValue}`);
+                     });
+                 },
+                 error: function() {
+                     console.error('Failed to fetch project list.');
+                 }
+             });
+
              // Dummy data
              const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
                  "October", "November", "December"];
-             const actualData = [50, 60, 75, 80, 70, 90, 85, 80, 75, 70, 65, 60];
+             const actualData = [null,null,null,80, 70, 90, 85, 80];
              const targetData = [60, 65, 70, 75, 80, 85, 90, 95, 100, 100, 100, 100];
 
              // Get the chart canvas
@@ -293,7 +309,19 @@
                 });
 
 
-                //show monthly monthly mm chart
+             //get client counts by api/department/count with getData()
+                getData("/api/department/count", function (error,data) {
+                    if(error) {
+                        console.log(
+                            error
+                        )
+                    } else {
+                        console.log(data);
+                            $("#spinner").hide();
+                            $("#departmentCount").text(data);
+                    }
+                });
+
 
          });
      </script>

@@ -39,13 +39,13 @@ public class ProjectController {
         return ResponseEntity.badRequest().body("User save failed");
     }}
 
-    @GetMapping("/projectlist")
+    @GetMapping("/list")
     public ResponseEntity<List<ProjectDto>> getAllProjects(){
         List<ProjectDto> projects = projectService.getAllProjects();
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    @GetMapping("/lists/{id}")
+    @GetMapping("/list/{id}")
     public ResponseEntity<ProjectDto> getProjectById(@PathVariable long id){
         ProjectDto projects = projectService.getProjectById(id);
         System.out.println(projects);

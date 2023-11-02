@@ -18,4 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Long countAllByRole(Role role);
 
     List<User> findAllByProjectManagerId(Long id);
+
+    User findUserByDepartmentIdAndRole(Long departmentId, Role role);
+
+    Long countAllByDepartmentId(Long departmentId);
 }

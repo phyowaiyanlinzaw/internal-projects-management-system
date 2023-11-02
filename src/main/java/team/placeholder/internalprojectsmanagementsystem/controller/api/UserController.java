@@ -123,5 +123,15 @@ public class UserController {
         return ResponseEntity.ok(userService.countAll());
     }
 
+    @GetMapping("{role}/{departmentId}")
+    public ResponseEntity<UserDto> getUserByDepartmentIdAndRole(@PathVariable Role role, @PathVariable Long departmentId) {
+        return ResponseEntity.ok(userService.getUserByDepartmentIdAndRole(departmentId, role));
+    }
+
+    @GetMapping("count/{departmentId}")
+    public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId) {
+        return ResponseEntity.ok(userService.countAllByDepartmentId(departmentId));
+    }
+
 
 }
