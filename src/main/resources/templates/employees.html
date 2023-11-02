@@ -42,10 +42,9 @@
                     <th data-sortable="true" data-formatter="indexFormatter" data-align="left" data-valign="middle" data-width="100" >No.</th>
                     <th data-sortable="true" data-field="email" data-align="left" data-valign="middle" data-width="100" >Email</th>
                     <th data-sortable="true" data-field="name" data-align="left" data-valign="middle" data-width="100" >Name</th>
-                    <th data-sortable="true" data-field="department" data-align="left" data-valign="middle" data-width="100">Department</th>
+                    <th data-sortable="true" data-field="department" data-align="left" data-valign="middle" data-width="100" data-formatter="departmentNameFormatter">Department</th>
                     <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="100">Role</th>
-<!--                    TODO: GET PROJECT COUNT BY USER API -->
-                    <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle" data-width="100" >Project Count</th>
+                    <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle" data-width="100" data-formatter="projectCountFormatter">Project Count</th>
                 </tr>
                 </thead>
 
@@ -144,6 +143,45 @@
     function indexFormatter(value, row, index) {
         return index + 1;
     }
+
+        function departmentNameFormatter(value,row,index){
+            if (value === null) {
+                return '';
+            }
+            return value.name;
+        }
+
+    function projectCountFormatter(value, row, index) {
+        // 'value' may be undefined or empty initially
+        // Replace 'userId' with the actual user ID
+        const userId = row.id; // Assuming 'id' is the user ID property in your data
+
+        //return something if user id not available
+        if (userId === null) {
+            return '';
+        }
+
+        // Make an AJAX request to fetch project count data
+        $.ajax({
+            url: '/api/project/count/user/' + userId,
+            type: 'GET',
+            async: false,
+            success: function (data) {
+                // 'data' is the response object from the AJAX request
+                // 'data.projectCount' is the project count value
+                console.log(data);
+                value = data;
+            },
+            error: function (data) {
+                // Handle the error response object
+                console.log(data);
+            }
+        });
+
+        // Return the project count value
+        return value;
+    }
+
     $(function () {
 
         $('#table').bootstrapTable({
