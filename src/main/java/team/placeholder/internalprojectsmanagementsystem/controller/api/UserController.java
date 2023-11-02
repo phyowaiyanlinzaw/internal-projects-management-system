@@ -37,7 +37,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
-            return ResponseEntity.ok(userService.findByName(authentication.getName()));
+            return ResponseEntity.ok(userService.getUserByEmail(authentication.getName()));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -86,7 +86,7 @@ public class UserController {
     public ResponseEntity<String> changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            UserDto user = userService.findByName(authentication.getName());
+            UserDto user = userService.getUserByEmail(authentication.getName());
             if (user == null) {
                 return ResponseEntity.badRequest().body("User not found");
             }
