@@ -68,6 +68,22 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!-- Modal Header End -->
                     <div class="modal-body">
+
+                        <!--alert message bootstrap-->
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-success" style="display: none">
+                            <strong>Success!</strong> <span id="success-message"></span>
+                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-danger" style="display: none">
+                            <strong>Error!</strong> <span id="error-message"></span>
+                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                &times;
+                            </button>
+                        </div>
+
+
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="floatingText" placeholder="jhondoe" required>
                             <label for="floatingText">Username</label>
@@ -135,6 +151,32 @@
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
 
+        function getDepartmentNameList() {
+            var departmentNameList = [];
+            $.ajax({
+                url: '/api/department/list',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    $.each(data, function (index, department) {
+                        departmentNameList.push(department.name);
+                    });
+                }
+            });
+            return departmentNameList;
+        }
+
+        //initialize department list with department names
+        var departmentNameList = getDepartmentNameList();
+        $('#departmentSelect').empty();
+        $.each(departmentNameList, function (index, departmentName) {
+            $('#departmentSelect').append($('<option>', {
+                value: departmentName.id,
+                text: departmentName
+            }));
+        });
+
+
         $('#memberSelect').change(function() {
             var selectedValue = $(this).val();
             var departmentSelect = $('#departmentSelect');
@@ -173,6 +215,35 @@
             }
         });
 
+        //function show error with parameter message
+        function showError(message) {
+            $('#error-message').text(message);
+            $('#alert-danger').show();
+
+            setTimeout(function() {
+                $('#alert-danger').hide();
+            }, 3000);
+
+            //close alert box
+            $('.btn-close').click(function() {
+                $('#alert-danger').hide();
+            });
+        }
+
+        //function show success with parameter message
+        function showSuccess(message) {
+            $('#success-message').text(message);
+            $('#alert-success').show();
+
+            setTimeout(function() {
+                $('#alert-success').hide();
+            }, 3000);
+
+            //close alert box
+            $('.btn-close').click(function() {
+                $('#alert-success').hide();
+            });
+        }
 
         $('#register-employee-btn').click(function() {
             var username = $('#floatingText').val();
@@ -211,12 +282,14 @@
                     $('#addEmployeeModal').modal('hide');
                     $('#register-employee-btn').html('Register').prop('disabled', false);
                     $('#table').bootstrapTable('refresh');
+                    showSuccess('Employee registered successfully');
 
 
                 },
                 error: function (data,xhr) {
                     alert('Error registering employee');
                     $('#register-employee-btn').html('Register').prop('disabled', false);
+                    $('#alert-danger').show();
 
                 },
                 complete : function(){
