@@ -148,11 +148,10 @@
                         const imageDiv = document.createElement("div");
                         imageDiv.classList.add("d-flex", "align-items-center", "justify-content-between", "mb-4");
 
-// Create the <img> element for the image
-                        const image = document.createElement("img");
-                        image.src = "https://source.unsplash.com/random/200x200?sig=1";
-                        image.style.height = "100px";
-                        image.style.width = "100px";
+// Create the icon element with bootstrap icon from bootstrap-icons
+                        const image = document.createElement("i");
+                        image.classList.add("bi", "bi-building", "text-primary");
+                        image.style.fontSize = "50px";
 
 // Create the <h5> element with class "mb-1 card-title modal-detail-title"
                         const title = document.createElement("h5");
@@ -166,19 +165,16 @@
                         const mediaGroup = document.createElement("div");
                         mediaGroup.classList.add("iq-media-group");
 
-// Create and append the avatar images
-                        for (let i = 0; i < 3; i++) {
+// Create and append the avatar icons
+                        for (let i = 0; i < 1; i++) {
                             const avatarLink = document.createElement("a");
                             avatarLink.href = "#";
                             avatarLink.classList.add("iq-media")
 
-                            const avatarImage = document.createElement("img");
-                            avatarImage.classList.add("img-fluid", "avatar-40", "rounded-circle");
-                            avatarImage.src = "https://source.unsplash.com/random/200x200?sig=1";
-                            avatarImage.style.height = "40px";
-                            avatarImage.style.width = "40px";
-
-                            avatarLink.appendChild(avatarImage);
+                            const avatarIcon = document.createElement("i");
+                            avatarIcon.classList.add("bi", "bi-person-circle", "text-primary");
+                            avatarIcon.style.fontSize = "30px";
+                            avatarLink.appendChild(avatarIcon);
                             mediaGroup.appendChild(avatarLink);
                         }
 
@@ -332,8 +328,10 @@
                         <div class="row">
                             <div class="card">
                                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                    <img src="https://source.unsplash.com/random/200x200?sig=1" alt="Profile"
-                                         class="rounded-circle" style="height: 100px; width: 100px"/>
+                                    <!--icon-->
+                                    <div class="profile-card-icon">
+                                        <i class="bi bi-building-fill text-primary" style="font-size: 100px"></i>
+                                    </div>
                                     <h4 style="margin-top: 10px">Department Head</h4>
                                     <h5 id = "departmethead">Lai Kuan Lin</h5>
 

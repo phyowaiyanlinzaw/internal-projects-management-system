@@ -109,5 +109,10 @@ private final ProjectRepository projectRepository;
         return projectRepository.countByDepartmentId(id);
     }
 
+    @Override
+    public Long countAllProjects() {
+        return projectRepository.count();
+    }
+
 
 }

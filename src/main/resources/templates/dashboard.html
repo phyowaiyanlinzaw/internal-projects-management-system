@@ -246,7 +246,7 @@
              const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
                  "October", "November", "December"];
              const actualData = [null,null,null,80, 70, 90, 85, 80];
-             const targetData = [60, 65, 70, 75, 80, 85, 90, 95, 100, 100, 100, 100];
+             const targetData = [60, 65, 70, 75, 80, 85, 90, 95, 100, 100, 100, 1000];
 
              // Get the chart canvas
              const ctx = document.getElementById("man-month-chart").getContext('2d');
@@ -328,6 +328,18 @@
                     }
                 });
 
+                //get project counts by api/project/count/all with getData()
+                getData("/api/project/count/all", function (error,data) {
+                    if(error) {
+                        console.log(
+                            error
+                        )
+                    } else {
+                        console.log(data);
+                            $("#spinner").hide();
+                            $("#projectCount").text(data);
+                    }
+                });
 
          });
      </script>

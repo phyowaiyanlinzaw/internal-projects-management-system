@@ -98,4 +98,10 @@ public class ProjectController {
         return new ResponseEntity<>(architectureDtos, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/count/all")
+    public ResponseEntity<Long> countAllProjects(){
+        Long count = projectService.countAllProjects();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
 }
