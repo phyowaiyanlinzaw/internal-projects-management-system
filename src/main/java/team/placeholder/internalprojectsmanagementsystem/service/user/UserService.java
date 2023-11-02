@@ -1,12 +1,14 @@
 package team.placeholder.internalprojectsmanagementsystem.service.user;
 
 
+import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
 @Service
 public interface UserService {
@@ -24,7 +26,6 @@ public interface UserService {
 
     void sendEmail(String to);
 
-    long getMemberCount(long id);
 
 
 

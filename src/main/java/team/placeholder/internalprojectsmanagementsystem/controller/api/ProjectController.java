@@ -7,9 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
@@ -39,15 +43,25 @@ public class ProjectController {
     }
 
 
-    @GetMapping("/count/{id}")
-    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
-        long pcount = projectService.getCountByDepartment(id);
-        long ecount = userService.getMemberCount(id);
-        Map<String, Long> counts = new HashMap<>();
-        counts.put("projectCount : ", pcount);
-        counts.put("memberCount : ", ecount);
-        return ResponseEntity.ok(counts);
-    }
+//    @GetMapping("/count/{id}")
+//    public ResponseEntity<Map<String, Object>> getCount(@PathVariable long id) {
+//        long pcount = projectService.getCountByDepartment(id);
+//        long ecount = userService.getMemberCount(id);
+//
+//        List<UserDto> departmentHead = userService.getDepartmentHeadByRole(Role.DEPARTMENT_HEAD);
+//        DepartmentDto department = new DepartmentDto();
+//        department.setId(id);
+//        UserDto user = new UserDto();
+//        user.setDepartmentdto(department);
+//
+//        UserDto departmentHead = userService.getDepartmentHead(id,Role.DEPARTMENT_HEAD);
+//
+//        Map<String, Object> counts = new HashMap<>();
+//        counts.put("projectCount : ", pcount);
+//        counts.put("memberCount : ", ecount);
+//        counts.put("departmentHead : ","departmentHead");
+//        return ResponseEntity.ok(counts);
+//    }
 
 
 
