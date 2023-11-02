@@ -31,5 +31,7 @@ public interface UserService {
     List<UserDto> getAllByRole(Role role);
 
 
+    List<UserDto> getAllUsersByPMId(Long id);
 
+    long getMemberCount(long id);
 }
