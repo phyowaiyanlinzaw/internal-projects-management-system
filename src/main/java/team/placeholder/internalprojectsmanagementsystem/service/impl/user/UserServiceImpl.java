@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(long id) {
-        User user = userRepository.findById(id).orElseNull();
+        User user = userRepository.findById(id);
         if (user != null) {
             return UserMapper.toUserDto(user);
         } else {
@@ -123,10 +123,8 @@ public class UserServiceImpl implements UserService {
         user.setName(userDto.getName());
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setRole(userDto.getRole());
-        user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
 
-        // Set the project manager by retrieving it from the database based on its ID
-        user.setProjectManager(userRepository.findById(userDto.getProjectManager().getId()));
+        System.out.println(user);
 
         // Attempt to save the user to the repository
         try {
@@ -166,5 +164,15 @@ public class UserServiceImpl implements UserService {
         return users.stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> getAllUsersByPMId(Long id) {
+        return null;
+    }
+
+    @Override
+    public long getMemberCount(long id) {
+        return 0;
     }
 }

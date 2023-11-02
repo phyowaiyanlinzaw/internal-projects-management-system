@@ -1,10 +1,26 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.ui;
 
+import javax.swing.text.View;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
+
 @Controller
 public class ViewController {
+
+    UserServiceImpl userServiceImpl;
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    public ViewController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @GetMapping("/accessDenied")
     public String accessDenied(){
@@ -13,11 +29,33 @@ public class ViewController {
 
     @GetMapping("/login")
     public String loginFormView(){
+
+        if(authentication != null && authentication.isAuthenticated()) {
+            return "/dashboard";
+        }
+
         return "login";
     }
 
     @GetMapping("/dashboard")
-    public String home(){
+    public String home(HttpSession session){
+
+        if (authentication != null && authentication.isAuthenticated()) {
+
+            String loginEmail = authentication.getName();
+
+            UserDto userDto = userServiceImpl.getUserByEmail(loginEmail);
+
+            session.setAttribute("login-user-id", userDto.getId());
+            session.setAttribute("loing-user-role", userDto.getRole());
+            session.setAttribute("login-user-dp-id", userDto.getDepartmentdto().getId());
+            
+            if(userDto.getProjectManager() != null) {
+                session.setAttribute("login-user-pm-id", userDto);
+            }
+
+        }
+
         return "dashboard";
     }
 
