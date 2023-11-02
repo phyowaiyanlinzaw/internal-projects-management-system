@@ -191,7 +191,8 @@
                                 if(error) {
                                     console.error(error)
                                 } else {
-                                    document.querySelector("#edit-department-name").value = data.name
+                                    document.querySelector("#department-id").value = data.id;
+                                    document.querySelector("#edit-department-name").value = data.name;
                                 }
 
                             });
@@ -427,7 +428,10 @@
                                     </div>
 
                                     <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                        <form>
+                                        <form id="edit-department">
+                                            <div>
+                                                <input type="hidden" id="department-id" name="department-id">
+                                            </div>
                                             <div>
                                                 <label >Department Name</label>
                                                 <br/><br/>
@@ -436,7 +440,7 @@
                                             </div>
                                             <br/>
                                             <div>
-                                                <label for="departmenthead">Choose Deparment Head:</label><br/><br/>
+                                                <label for="department-head">Choose Deparment Head:</label><br/><br/>
                                                 <select name="departmenthead" id="departmenthead" class="form-control">
 
                                                 </select>
@@ -446,7 +450,7 @@
                                             <button style="
                                                         background-color: #369;
                                                     " type="submit" class="btn btn-primary py-2 w-100 mb-3"
-                                                    id="loign-btn">Edit
+                                                    id="update-btn">Edit
                                             </button>
                                         </form>
                                     </div>
@@ -498,26 +502,6 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 <script>
-
-    function fetchDepartments() {
-        var departmentId = $('#departmentId').val();
-        $.ajax({
-            url: '/lists?id=' + departmentId,  // Include the ID in the URL as a query parameter
-            type: 'GET',
-            success: function (data) {
-                // Handle the successful response here
-                var departmentList = $('#departmentList');
-                departmentList.empty();  // Clear the previous content
-                $.each(data, function (index, department) {
-                    departmentList.append('<p>' + department.name + '</p>');  // Assuming "name" is a field in DepartmentDto
-                });
-            },
-            error: function (error) {
-                // Handle any errors here
-                console.error(error);
-            }
-        });
-    }
 
     const ctx = document.getElementById("department-projects-chart");
 
@@ -609,41 +593,6 @@
     console.log(firstChart);
     firstChart.config.options.animation.duration = 5000;
 
-    let departmentHeads;
-    function getDepartmentHeads() {
-        fetch('api/user/departmenthead')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                departmentHeads = data;
-            })
-            .catch(error => {
-                console.error("Error fetching data via Fetch:", error);
-            });
-    }
-    $('#departmenthead').change(function() {
-        var selectDepartmentHead = $("selectDepartmentHead");
-        var selectedDepartmentHead = "";
-
-
-
-
-    $.get('/api/user/list/DEPARTMENT_HEAD', function(data) {
-        selectDepartmentHead.empty();
-        $.each(data, function(index, department) {
-            selectDepartmentHead.append($('<option>', {
-                value: department.id, // Adjust this based on your data
-                text: department.name // Adjust this based on your data
-            }));
-        });
-    });
-    });
-
-
 
     $(document).ready(function() {
         $("#load-data").click(function() {
@@ -659,6 +608,37 @@
                     // Handle errors
                     console.log("Error: " + textStatus, errorThrown);
                 }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $("#edit-department").submit(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Gather data from the form
+            var departmentId = $("#department-id").val();
+            var departmentName = $("#edit-department-name").val();
+
+            console.log("Id : " + departmentId);
+
+            // Create an object to represent the data to be sent to the server
+            var data = {
+                departmentId : departmentId,
+                departmentname: departmentName,
+            };
+
+
+            // Send an AJAX request to update the department
+            $.ajax({
+                type: "PUT", // Use PUT method to update data
+                url: `/lists/update/${departmentId}`, // Replace with your server-side endpoint URL
+                data: data,
+                success: function(response) {
+                    // Handle the success response from the server, e.g., display a success message
+                    alert("Department updated successfully: " + response);
+                },
+
             });
         });
     });
