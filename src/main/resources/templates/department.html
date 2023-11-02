@@ -199,14 +199,14 @@
                                 }
 
                             })
-                            getData(`/api/user/count/departmentId = ${currentDp.id}`,(error, data) => {
+                            getData(`/api/user/count/departmentId/${currentDp.id}`,(error, data) => {
                                 if(error){
                                     a(error)
                                 } else{
-                                    document.querySelector("totalMember").value = data.count
+                                    document.querySelector("totalMember").value = data
                                 }
                             })
-
+                            getData(`/api/`)
                         })
 
 // Append elements to construct the structure
