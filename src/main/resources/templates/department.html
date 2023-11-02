@@ -202,7 +202,13 @@
                                     document.querySelector("#total-member").textContent = data
                                 }
                             })
-
+                            getData(`/api/project/count/departmentId/${currentDp.id}` , (error,data) => {
+                                if(error){
+                                    console.error(error)
+                                }else{
+                                    document.querySelector("#total-project").textContent = data
+                                }
+                            })
 
                             let seleced_department_head;
                             getData(`/api/user/role/DEPARTMENT_HEAD/departmentId/${currentDp.id}`,(error,data) =>{
