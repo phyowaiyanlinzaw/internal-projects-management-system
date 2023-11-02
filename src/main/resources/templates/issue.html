@@ -61,63 +61,64 @@
                 </div>
             </div>
 
-
-
-
-
             <div class="row row-cols-1" id="sort">
-                <div class="p-md-3 p-sm-2 mt-3">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark">
 
-                            <div class="d-flex justify-content-between align-items-center gap-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>
-
-                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                       Hnin Aye Lwin
-                                      </p>
-
-                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
-                                        Ei Ei Phyo
-                                    </p>
-                                </div>
-                                <span class="card-title badge rounded-pill bg-success">Success</span>
-                            </div>
-
-                            <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <p>Posted</p><span>3 days ago</span>
-                                    <p>Modified at</p><span>1 minute ago</span>
-
-                                </div>
-                                <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                    See More
-                                </button>
-                            </div>
-
-
-                            <div class="col issue-time-line d-flex gap-2">
-                                <p class="btn custom-color rounded-pill">java</p>
-                                <p class="btn custom-color rounded-pill">error</p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="code-block">
-                                <p> this code does not work help me please</p>
-                                <pre>private final CustomUserDetailsService userDetailsService;
-  &#64;Bean
-  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
-      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;
-      authProvider.setUserDetailsService&#40;userDetailsService&#41;;
-      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
-      return authProvider;
-  &#125;</pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+
+
+<!--            <div class="row row-cols-1" id="sort">-->
+<!--                <div class="p-md-3 p-sm-2 mt-3">-->
+<!--                    <div class="card">-->
+<!--                        <div class="card-header border-bottom text-dark">-->
+
+<!--                            <div class="d-flex justify-content-between align-items-center gap-2" id="getAllIssue">-->
+<!--                                <div class="d-flex align-items-center gap-2">-->
+<!--                                    <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>-->
+
+<!--                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">-->
+<!--                                       Hnin Aye Lwin-->
+<!--                                      </p>-->
+
+<!--                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">-->
+<!--                                        Ei Ei Phyo-->
+<!--                                    </p>-->
+<!--                                </div>-->
+<!--                                <span class="card-title badge rounded-pill bg-success">Success</span>-->
+<!--                            </div>-->
+
+<!--                            <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">-->
+<!--                                <div class="d-flex align-items-center gap-2">-->
+<!--                                    <p>Posted</p><span>3 days ago</span>-->
+<!--                                    <p>Modified at</p><span>1 minute ago</span>-->
+
+<!--                                </div>-->
+<!--                                <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">-->
+<!--                                    See More-->
+<!--                                </button>-->
+<!--                            </div>-->
+
+
+<!--                            <div class="col issue-time-line d-flex gap-2">-->
+<!--                                <p class="btn custom-color rounded-pill">java</p>-->
+<!--                                <p class="btn custom-color rounded-pill">error</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="card-body">-->
+<!--                            <div class="code-block">-->
+<!--                                <p> this code does not work help me please</p>-->
+<!--                                <pre>private final CustomUserDetailsService userDetailsService;-->
+<!--  &#64;Bean-->
+<!--  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;-->
+<!--      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;-->
+<!--      authProvider.setUserDetailsService&#40;userDetailsService&#41;;-->
+<!--      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;-->
+<!--      return authProvider;-->
+<!--  &#125;</pre>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <div class="row row-cols-1" id="sort-container">
                 <div class="p-md-3 p-sm-2 mt-3">
@@ -277,31 +278,46 @@
                         <div class="col-lg-6">
                             <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
                                     style="color:#e86666"> *</span></label>
-                            <input type="text" class="form-control " id="title" name="title" placeholder="Title">
+                            <input type="text" class="form-control border-task-description" id="title" name="title" placeholder="Title">
                         </div>
 
                         <div class="col-lg-6">
                             <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
                                     style="color:red"> *</span></label>
-                            <select class="four-control" name="issue_category" id="issue_category" >
-                                 <option value="ERROR">Error</option>
-                                <option value="BUG">Bug</option>
-
+                            <select class="form-select border-task-description" name="issue_category" id="issue_category" >
+                                <option selected disabled hidden>Select Issue Category</option>
+                                <option value="error">Error</option>
+                                <option value="bug">Bug</option>
+                                <option value="communication">Communication</option>
+                                <option value="technical">Technical</option>
+                                <option value="budget">Budget</option>
+                                <option value="design">Design</option>
+                                <option value="testing">Testing</option>
+                                <option value="other">Other</option>
+<!--                                 <option value="ERROR">Error</option>-->
+<!--                                <option value="BUG">Bug</option>-->
+<!--                                <option value="COMMUNICATION">Communication</option>-->
+<!--                                <option value="TECHNICAL">Technical</option>-->
+<!--                                <option value="BUDGET">Budget</option>-->
+<!--                                <option value="DESIGN">Design</option>-->
+<!--                                <option value="TESTING">Testing</option>-->
+<!--                                <option value="OTHER">Other</option>-->
                             </select>
                         </div>
 
                         <div class="col-lg-6">
                             <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control selectpicker" data-live-search="true" aria-label="Select Clients"  id="user_pic" name="user_pic" >
-
+                            <select class="form-select border-task-description" data-live-search="true" aria-label="Select Clients"  id="user_pic" name="user_pic" >
+                                <option selected disabled>Select Person In Charge</option>
                             </select>
                         </div>
 
                         <div class="col-lg-6">
                             <label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_party">Responsible Party <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control selectpicker" aria-label="Select Clients" data-live-search="true" id="responsible_party" name="responsible_party" >
+                            <select class="form-select border-task-description" aria-label="Select Clients"  id="responsible_party" name="responsible_party" >
+                                <option selected disabled>Select Responsible Party</option>
                                 <option value="1">Phyo Wai Yan Lin Zaw</option>
                                 <option value="2">Zaw Lin Shein</option>
                                 <option value="3">Ei Ei Phyo</option>
@@ -320,25 +336,25 @@
                             <label for="direct_cause" class="col-sm-12 col-form-label" name="direct_cause">Direct Cause<span
                                     style="color:#e86666"> *</span></label>
 
-                            <textarea class="form-control" id="direct_cause" name="direct_cause"></textarea>
+                            <textarea class="form-control border-task-description" id="direct_cause" name="direct_cause"></textarea>
                         </div>
 
                         <div class="col-lg-6">
                             <label for="root_cause" class="col-sm-12 col-form-label" name="root_cause">Root Cause<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="root_cause"></textarea>
+                            <textarea class="form-control border-task-description" id="root_cause"></textarea>
                         </div>
 
                         <div class="col-lg-6">
                             <label for="place" class="col-sm-12 col-form-label" name="place">Place<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="place" name="place"></textarea>
+                            <textarea class="form-control border-task-description" id="place" name="place"></textarea>
                         </div>
 
                         <div class="col-lg-6">
                             <label for="impact" class="col-sm-12 col-form-label" name="impact">Impact<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="impact" name="impact"></textarea>
+                            <textarea class="form-control border-task-description" id="impact" name="impact"></textarea>
                         </div>
 
                         <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
@@ -400,6 +416,8 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 
+
+<!--<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>-->
 
 <script>
 
@@ -514,21 +532,12 @@
 
         document.querySelector("#sort-container").innerHTML += currDiv;
     }
-
-
-
+    // new MultiSelectTag("issue_category"), new MultiSelectTag("state"); // id
 </script>
-
-<!--<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>-->
-
-
-<!--<script>-->
-
-<!--    new MultiSelectTag("issue_category"), new MultiSelectTag("state"); // id-->
-<!--</script>-->
 
 
 <script>
+
 
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
@@ -560,16 +569,6 @@
         ["code-block", "blockquote"],
     ];
 
-    // // Initialize Quill for each selected element
-    // quillEditors.forEach(function (editor) {
-    //     new Quill(editor, {
-    //         modules: {
-    //             toolbar: toolbaroptions,
-    //         },
-    //         theme: "snow",
-    //     });
-    // });
-
     // If you want to initialize Quill for a specific element, you can do it like this:
     let specificQuillEditor = document.querySelector("#description"); // Change the selector as needed
     const a = new Quill(specificQuillEditor, {
@@ -595,23 +594,15 @@
     $('#addIssue').on('click', function () {
         var title = $('#title').val();
 
-         // var description = "";
-         //
-         // if (a && a.root) {
-         //     description = a.root.innerHTML;
-         //     console.log(description);
-         // } else {
-         //     console.log('Quill editor (a) is not properly initialized or its root does not exist');
-         // }
-        var description = a.root.innerHTML;// Check if a.root exists
+        var description = a.root.innerHTML;
         console.log(description);
         var place = $('#place').val();
         var impact = $('#impact').val();
         var root_cause = $('#root_cause').val();
         var direct_cause = $('#direct_cause').val();
         var responsible_party = $('#responsible_party').val();
-        var user_pic = $('#user_pic').val();
-        console.log(user_pic);
+        var user_picValue = user_pic.val();
+        console.log("Selected User Pic:", user_picValue);
         var issue_category = $('#issue_category').val();
 
         // Check if any of the required fields are empty
@@ -623,7 +614,7 @@
             root_cause === "" ||
             direct_cause === "" ||
             responsible_party === null ||
-            user_pic === null ||
+            user_picValue === null ||
             issue_category === null
         ) {
             alert("Please fill in all the required fields.");
@@ -638,9 +629,7 @@
             root_cause: root_cause,
             direct_cause: direct_cause,
             responsible_party: responsible_party,
-            user_pic: {
-                id: user_pic
-            },
+            user_pic: user_picValue,
             issue_category: issue_category
         };
 
@@ -656,7 +645,7 @@
             data: JSON.stringify(requestData),
             success: function (data) {
                 alert("Issue Added Successfully");
-                // Optionally reset the form or perform other actions
+
             },
 
           error: function (data,xhr) {
@@ -669,6 +658,75 @@
                 $('#addIssue').html('Add New Issue').prop('disabled', false);
             }
         });
+    });
+
+
+
+    // All Issue
+    function loadData() {
+        $.ajax({
+            url: 'api/issue/lists',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                const sortContainer = $('#sort');
+
+                // Loop through the retrieved data and create content for each item
+                data.forEach(item => {
+                    const issueDiv = `
+                    <div class="p-md-3 p-sm-2 mt-3">
+                        <div class="card">
+                            <div class="card-header border-bottom text-dark">
+                                <div class="d-flex justify-content-between align-items-center gap-2" id="getAllIssue">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="card-title">${item.title}</h6>
+                                        <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                           ${item.user_pic}
+                                        </p>
+                                    </div>
+                                    <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
+                                        ${item.status === 'true' ? 'Solved' : 'Unsolved'}
+                                    </span>
+                                </div>
+                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <p>Posted</p>
+                                       <span>${getTimeAgo(item.created_date)}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <p>Modified at</p>
+                                        <span>${getTimeAgo(item.updated_date)}</span>
+                                    </div>
+                                </div>
+                            <div class="col issue-time-line d-flex gap-2">
+                              <p class="btn custom-color rounded-pill">${item.issue_category}</p>
+                            </div>
+
+
+                            </div>
+                            <div class="card-body">
+                                <div class="code-block">
+                                    <p>${item.description}</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                    sortContainer.append(issueDiv);
+                });
+            },
+            error: function (error) {
+                console.error('Error fetching data:', error);
+                console.error('Error details:', error.responseText); // Log additional error details from the server
+            }
+
+        });
+    }
+    $(document).ready(function() {
+        loadData();
     });
 
 </script>
