@@ -459,12 +459,19 @@
                         $(this).html(data.email)
                     } else if ($(this).attr("id") === "department") {
                         $(this).html(data.department.name)
-                    } else if ($(this).attr("id") === "projectCount") {
-                        if (data.projectCount === null)
-                            $(this).html("-")
-                        else
-                            $(this).html(data.projectCount)
-                        $(this).html(data.projectCount)
+                    }
+                    // Make an AJAX request to fetch project count data
+                    else if ($(this).attr("id") === "projectCount") {
+                        $.ajax({
+                            url: "/api/project/count/user/" + data.id,
+                            type: "GET",
+                            success: function (projectCount) {
+                                $(this).html(projectCount)
+                            }.bind(this),
+                            error: function (error) {
+                                console.log(error)
+                            }
+                        })
                     }
                 })
 
