@@ -35,7 +35,7 @@ public class TaskController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<TasDto>> taskList(@PathVariable long projectId) {
+    public ResponseEntity<List<TasDto>> taskList() {
 
         List<TasDto> taskList = new ArrayList<TasDto>();
 
