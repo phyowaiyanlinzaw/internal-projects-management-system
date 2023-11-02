@@ -95,7 +95,7 @@
                             </div>
 
                             <div class="bar-chart-con">
-                                <canvas id="man-month-chart" height="500"></canvas>
+                                <canvas id="man-month-chart" height="400"></canvas>
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                             </div>
 
                             <div class="bar-chart-con">
-                                <canvas id="productivity-1-chart"></canvas>
+                                <canvas id="productivity-1-chart" height="400"></canvas>
                             </div>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                     <div class="card border">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <p class="lead">Productivity</p>
+                                <p class="lead">KPI</p>
 
                                 <div class="dropdown">
                                     <a class="dropdown-toggle text-decoration-none" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
@@ -161,7 +161,7 @@
                             </div>
 
                             <div class="bar-chart-con">
-                                <canvas id="productivity-2-chart"></canvas>
+                                <canvas id="productivity-2-chart" height="400"></canvas>
                             </div>
                         </div>
                     </div>
@@ -241,16 +241,40 @@
 
 
              // Dummy data
-             const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-                 "October", "November", "December"];
-             const actualData = [null,null,null,80, 70, 90, 850, 80];
-             const targetData = [60, 65, 70, 75, 80, 85, 90, 95, 100, 800, 100, 1000];
+             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct","Nov","Dec"];
+             const actualData = [null,null,null,80, 70, 90, 850, 480];
+             const targetData = [null,null,null,80, 85, 90, 780, 1000];
 
-             // Get the chart canvas
-             const ctx = document.getElementById("man-month-chart").getContext('2d');
+             // Calculate percentage difference between actualData and targetData
+                const percentageDifferenceData = actualData.map((actual, index) => {
+                    if(actual === null) {
+                        return null;
+                    }
+                    return Math.round(((actual - targetData[index]) / targetData[index]) * 100);
+                });
 
-             // Create the line chart
-             const lineChart = new Chart(ctx, {
+                //Dummy data for kpi chart
+             const screenCountsData = [120, 130, 140, 135, 150, 155, 160, 165, 170, 175, 180, 185];
+             const testCasesData = [100, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160];
+             const kStepData = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105];
+             const reviewCountsData = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]; // Assuming review counts
+
+             // Calculate the ratios
+             const screenToReviewRatios = screenCountsData.map((screenCount, index) => (screenCount / reviewCountsData[index]).toFixed(2));
+             const testToReviewRatios = testCasesData.map((testCaseCount, index) => (testCaseCount / reviewCountsData[index]).toFixed(2));
+             const kStepToReviewRatios = kStepData.map((kStepCount, index) => (kStepCount / reviewCountsData[index]).toFixed(2));
+
+             // Get the mm chart canvas
+             const mmctx = document.getElementById("man-month-chart").getContext('2d');
+
+             //Get Productivity Chart Canvas
+                const p1ctx = document.getElementById("productivity-1-chart").getContext('2d');
+
+                //Get KPI chart Canvas
+                const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
+
+             // Create the line chart for mm
+             const lineChart = new Chart(mmctx, {
                  type: 'bar',
                  data: {
                      labels: months,
@@ -284,8 +308,77 @@
                  }
              });
 
+             //Create bar chart for p1ctx with percentageDifferenceData
+                const barChart = new Chart(p1ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Percentage Difference',
+                            data: percentageDifferenceData,
+                            backgroundColor: '#444cf7',
+                            borderColor: '#444cf7',
+                            borderWidth: 1,//border width
+                            fill: false,
+                            tension: 0.1,//line tension
+                            categoryPercentage: 0.5,//bar width
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                            }
+                        }
+                    }
+                });
 
-             getData("/api/user/count", function (error,data) {
+                //Create bar chart for p2ctx with screenToReviewRatios
+                const barChart2 = new Chart(p2ctx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: "Screen Counts",
+                                data: screenCountsData,
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                borderColor: "rgba(75, 192, 192, 1)",
+                                borderWidth: 1,
+                            },
+                            {
+                                label: "Test Cases",
+                                data: testCasesData,
+                                backgroundColor: "rgba(192, 75, 75, 0.2)",
+                                borderColor: "rgba(192, 75, 75, 1)",
+                                borderWidth: 1,
+                            },
+                            {
+                                label: "KSTEP",
+                                data: kStepData,
+                                backgroundColor: "rgba(75, 75, 192, 0.2)",
+                                borderColor: "rgba(75, 75, 192, 1)",
+                                borderWidth: 1,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                            }
+                        }
+                    }
+                });
+
+
+             getData("/api/user/count/all", function (error,data) {
                  if(error) {
                      console.log(
                          error
