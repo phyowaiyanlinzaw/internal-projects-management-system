@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(long id) {
-        User user = userRepository.findById(id).orElseNull();
+        User user = userRepository.findById(id);
         if (user != null) {
             return UserMapper.toUserDto(user);
         } else {
@@ -123,6 +123,8 @@ public class UserServiceImpl implements UserService {
         user.setName(userDto.getName());
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setRole(userDto.getRole());
+
+        System.out.println(user);
 
         // Attempt to save the user to the repository
         try {

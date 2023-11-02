@@ -264,30 +264,11 @@ vs
                                     <span class="text-align-center">
                                         <i class="fa-solid fa-users"></i>
                                     </span>
-                                    <select
-                                        id="member"
-                                        name="member"
-                                        class="form-control selectpicker editable-input"
-                                        data-live-search="true"
-                                        multiple
-                                        dir="auto"
-                                        data-width="50%"
-                                        data-autosize="true"
-                                        style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 36.8px;
-                                            display: none;
-                                        "
-                                        onblur="updateTitle(this)"
-                                    >
-                                        <option value="John Doe" selected>
-                                            John Doe
-                                        </option>
-                                        <option value="Smith">Smith</option>
-                                        <option value="Peter">Peter</option>    
-                                        <option value="James">James</option>
-                                    </select>
+                                    <input
+                                        type="text"
+                                        name="pm-tags"
+                                        value="abatisse2@nih.gov, Justinian Hattersley"
+                                    />
                                 </div>
 
                                 <div class="col-lg-6">
@@ -597,13 +578,9 @@ vs
             <!--    for assign member-->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
 
-            <script type="module">
+            <script>
 
-                import { getTaskList } from '/js/callDataForTask.js';
-
-                console.log("xxxxxxxxxxxxxxxxxx", getTaskList());
-
-                var inputElm = document.querySelector("input[name=pm-tags]");
+                var inputElm = document.querySelectorAll("input[name=pm-tags]");
                 function tagTemplate(tagData) {
                     return `
         <tag title="${tagData.email}"
@@ -660,8 +637,10 @@ vs
     `;
                 }
 
+                for(let i = 0; i < inputElm.length; i++) {
+                    let a = inputElm[i]
                 // initialize Tagify on the above input node reference
-                var tagify = new Tagify(inputElm, {
+                var tagify = new Tagify(a, {
                     tagTextProp: "name", // very important since a custom template is used with this property as text
                     // enforceWhitelist: true,
                     skipInvalid: true, // do not remporarily add invalid tags
@@ -769,6 +748,7 @@ vs
                         return true;
                     },
                 });
+            }
 
                 // attach events listeners
                 tagify
