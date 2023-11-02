@@ -123,10 +123,6 @@ public class UserServiceImpl implements UserService {
         user.setName(userDto.getName());
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setRole(userDto.getRole());
-        user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
-
-        // Set the project manager by retrieving it from the database based on its ID
-        user.setProjectManager(UserMapper.toUser(userDto.getProjectManager()));
 
         // Attempt to save the user to the repository
         try {
