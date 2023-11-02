@@ -210,17 +210,53 @@
                                 }
                             })
 
-                            let seleced_department_head;
-                            getData(`/api/user/role/DEPARTMENT_HEAD/departmentId/${currentDp.id}`,(error,data) =>{
-                                console.log("Selecte Department Head : " + data)
-                                if(error){
+                            // First, get the selected department head's information and display it
+                            let selected_department_head;
+
+                            getData(`/api/user/role/DEPARTMENT_HEAD/departmentId/${currentDp.id}`, (error, data) => {
+                                if (error) {
                                     console.error(error);
-                                }else{
-                                    document.querySelector("#department-head").textContent = data.name
-                                    seleced_department_head = data;
+                                } else {
+                                    const departmentHeadElement = document.querySelector("#department-head");
+                                    departmentHeadElement.textContent = data.name;
+                                    selected_department_head = data;
+
+                                    // Call the function to populate the select box using the selected_department_head
                                     populateSelectBox(selected_department_head);
                                 }
-                            })
+                            });
+
+                            function populateSelectBox(selectedData) {
+                                // Get the list of department heads
+                                getData(`/api/user/list/role/DEPARTMENT_HEAD`, (error, dataList) => {
+                                    console.log("All Department Head : " + dataList);
+                                    console.log("Selected Department Head : " + selectedData.name);
+                                    if (error) {
+                                        console.error(error);
+                                    } else {
+                                        const selectElement = document.querySelector("#departmenthead");
+
+                                        // Clear existing options
+                                        selectElement.innerHTML = '';
+
+                                        // Iterate over the data and add new options
+                                        dataList.forEach(departmentHead => {
+                                            const option = document.createElement("option");
+                                            option.value = departmentHead.id; // Set the value as needed
+                                            option.text = departmentHead.name; // Set the text as needed
+                                            selectElement.appendChild(option);
+
+                                            // Pre-select the department head that matches the selected department head
+                                            if (selectedData.id === departmentHead.id) {
+                                                option.selected = true;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+
+
                         });
 
 
