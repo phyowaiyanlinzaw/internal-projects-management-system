@@ -88,24 +88,25 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
         <script src="/js/custome.js" defer></script>
         <script type="module" defer>
+            import {
+                formatDateFromMilliseconds,
+                MONTH_NAMES,
+                calculateDuration,
+            } from "/js/time.js";
+
+            import {
+                sendData,
+                getData
+            } from "/js/api-function.js";
+
             const architectureInput = document.querySelector('input[name="architectures"]');
             const systemOutlinesInput = document.querySelector('input[name="systemOutlines"]');
             const deliverableInput = document.querySelector('input[name="deliverable"]');
 
-            function initializeTagify(input) {
+            function initializeTagify(input, whiteList) {
                 return new Tagify(input, {
-
-                    $.get('/api/project/architecturelist', function(data) {
-                        architectureSelect.empty();
-                        $.each(data, function(index, architecture) {
-                            architectureSelect.append($('<option>', {
-                                value: architecture,
-                                text: architecture
-                            }));
-                        });
-
-                    whitelist: [],
-                        maxTags: 10,
+                    whitelist: whiteList.map(item => item.tech_name),
+                    maxTags: 10,
                     dropdown: {
                         consoleLog: true,
                         maxItems: 30,
@@ -116,17 +117,28 @@
                 });
             }
 
+            let arcccList;
 
-            let a = initializeTagify(architectureInput);
-            console.log(a)
-            initializeTagify(systemOutlinesInput);
-            initializeTagify(deliverableInput);
+            $('document').ready(() => {
+                getData("/api/project/architecturelist", (error, data) => {
+                    if(error) {
+                        console.log(error)
+                    } else {
+                        arcccList = data
+                        console.log('asdfasdfasdfasd',arcccList)
+                        initializeTagify(document.querySelector('input[name="architectures"]'), data);
+                    }
+                })
+            })
+
+
+
+            // let a = initializeTagify(architectureInput);
+            // console.log(a)
+            // initializeTagify(systemOutlinesInput);
+            // initializeTagify(deliverableInput);
             // **********************end
-            import {
-                formatDateFromMilliseconds,
-                MONTH_NAMES,
-                calculateDuration,
-            } from "/js/time.js";
+
 
             const startDateInput = document.getElementById("start_date");
             const endDateInput = document.getElementById("end_date");
@@ -532,10 +544,10 @@
                 });
             });
 
-            function getData() {
-                const userInput = quill.root.innerHTML;
-                console.log(userInput);
-            }
+            // function getData() {
+            //     const userInput = quill.root.innerHTML;
+            //     console.log(userInput);
+            // }
 
             let minusButtons = document.querySelectorAll(".minus");
             let plusButtons = document.querySelectorAll(".plus");
@@ -615,6 +627,7 @@
                     });
                 });
             });
+            console.log('xxxxxxxxxxxxxxxxxxxxxx',arcccList)
         </script>
     </head>
 
