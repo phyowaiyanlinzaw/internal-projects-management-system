@@ -114,13 +114,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Long countByUserId(long id) {
-        return projectRepository.countByUserId(id);
+    public Long countAllProjectsByUsersId(long id) {
+        return projectRepository.countAllByUsersId(id);
     }
 
     @Override
-    public List<ProjectDto> getAllProjectsByUserId(long id) {
-        return projectRepository.findAllByUserId(id).stream()
+    public List<ProjectDto> getAllProjectsByUsersId(long id) {
+        return projectRepository.findAllByUsersId(id).stream()
                 .map(ProjectMapper::toProjectDto)
                 .collect(Collectors.toList());
     }
