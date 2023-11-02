@@ -61,10 +61,8 @@ public class User implements Serializable {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToMany
-    @JoinTable(name="user_project",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="project_id"))
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "users",cascade = CascadeType.ALL)
     private Set<Project> projects = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -73,7 +71,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "projectManager", cascade = CascadeType.ALL)
     private List<Project> project;
 
     @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL)

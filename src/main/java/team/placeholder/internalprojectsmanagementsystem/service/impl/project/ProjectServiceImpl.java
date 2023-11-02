@@ -23,13 +23,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
-private final ProjectRepository projectRepository;
-
+    private final ProjectRepository projectRepository;
 
 
     @Override
     public ProjectDto save(ProjectDto projectDto) {
-     Project project= ProjectMapper.toProject(projectDto);
+        Project project = ProjectMapper.toProject(projectDto);
         project.setName(projectDto.getName());
         project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
         project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
@@ -46,7 +45,7 @@ private final ProjectRepository projectRepository;
 
         project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
 
-        Project savedProject =projectRepository.save(project);
+        Project savedProject = projectRepository.save(project);
         return ProjectMapper.toProjectDto(savedProject);
     }
 
@@ -61,9 +60,9 @@ private final ProjectRepository projectRepository;
     @Override
     public ProjectDto getProjectById(long id) {
         Project project = projectRepository.findById(id);
-        if (project!=null){
+        if (project != null) {
             return ProjectMapper.toProjectDto(project);
-        }else {
+        } else {
             return null;
         }
     }
@@ -72,9 +71,9 @@ private final ProjectRepository projectRepository;
     public ProjectDto getProjectByName(String name) {
         Project project = projectRepository.findByName(name);
         System.out.println(project);
-        if (project!=null){
+        if (project != null) {
             return ProjectMapper.toProjectDto(project);
-        }else {
+        } else {
             return null;
         }
     }
@@ -83,7 +82,7 @@ private final ProjectRepository projectRepository;
     public ProjectDto updateProject(ProjectDto projectDto) {
         Project project = projectRepository.findById(projectDto.getId());
 
-        if (project!=null){
+        if (project != null) {
             project.setName(projectDto.getName());
             project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
             project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
@@ -97,7 +96,7 @@ private final ProjectRepository projectRepository;
             project.setObjective(projectDto.getObjective());
             projectRepository.save(project);
             return ProjectMapper.toProjectDto(project);
-        }else{
+        } else {
             return null;
         }
 
@@ -107,6 +106,30 @@ private final ProjectRepository projectRepository;
     public long getCountByDepartment(long id) {
 
         return projectRepository.countByDepartmentId(id);
+    }
+
+    @Override
+    public Long countAllProjects() {
+        return projectRepository.count();
+    }
+
+    @Override
+    public Long countAllProjectsByUsersId(long id) {
+        return projectRepository.countAllByUsersId(id);
+    }
+
+    @Override
+    public List<ProjectDto> getAllProjectsByUsersId(long id) {
+        return projectRepository.findAllByUsersId(id).stream()
+                .map(ProjectMapper::toProjectDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProjectDto> getAllProjectsByDepartmentId(long id) {
+        return projectRepository.findAllByDepartmentId(id).stream()
+                .map(ProjectMapper::toProjectDto)
+                .collect(Collectors.toList());
     }
 
 

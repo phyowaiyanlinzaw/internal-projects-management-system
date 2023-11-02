@@ -37,7 +37,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
-            return ResponseEntity.ok(userService.findByName(authentication.getName()));
+            return ResponseEntity.ok(userService.getUserByEmail(authentication.getName()));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -86,7 +86,7 @@ public class UserController {
     public ResponseEntity<String> changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            UserDto user = userService.findByName(authentication.getName());
+            UserDto user = userService.getUserByEmail(authentication.getName());
             if (user == null) {
                 return ResponseEntity.badRequest().body("User not found");
             }
@@ -94,8 +94,8 @@ public class UserController {
             if (!new BCryptPasswordEncoder().matches(oldPassword, user.getPassword())) {
                 return ResponseEntity.badRequest().body("Old password is incorrect");
             }
-//set new password
-            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            //set new password
+            user.setPassword(newPassword);
             userService.save(user);
             return ResponseEntity.ok("Password changed successfully");
         } else {
@@ -108,9 +108,44 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("list/{role}")
+    @GetMapping("list/role/{role}")
     public ResponseEntity<List<UserDto>> getAllUsersByRole(@PathVariable Role role) {
         return ResponseEntity.ok(userService.getAllByRole(role));
+    }
+
+    @GetMapping("list/departmentId/{departmentId}")
+    public ResponseEntity<List<UserDto>> getAllUsersByDepartmentId(@PathVariable Long departmentId) {
+        return ResponseEntity.ok(userService.getAllUsersByProjectId(departmentId));
+    }
+
+    @GetMapping("list/projectManagerId/{projectManagerId}")
+    public ResponseEntity<List<UserDto>> getAllUsersByProjectManagerId(@PathVariable Long projectManagerId) {
+        return ResponseEntity.ok(userService.getAllUsersByPMId(projectManagerId));
+    }
+
+    @GetMapping("list/projectId/{projectId}")
+    public ResponseEntity<List<UserDto>> getAllUsersByProjectId(@PathVariable Long projectId) {
+        return ResponseEntity.ok(userService.getAllUsersByProjectId(projectId));
+    }
+
+    @GetMapping("count/role/{role}")
+    public ResponseEntity<Long> countAllByRole(@PathVariable Role role) {
+        return ResponseEntity.ok(userService.countAllByRole(role));
+    }
+
+    @GetMapping("count/all")
+    public ResponseEntity<Long> countAll() {
+        return ResponseEntity.ok(userService.countAll());
+    }
+
+    @GetMapping("role/{role}/departmentId/{departmentId}")
+    public ResponseEntity<UserDto> getUserByDepartmentIdAndRole(@PathVariable Role role, @PathVariable Long departmentId) {
+        return ResponseEntity.ok(userService.getUserByDepartmentIdAndRole(departmentId, role));
+    }
+
+    @GetMapping("count/departmentId/{departmentId}")
+    public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId) {
+        return ResponseEntity.ok(userService.countAllByDepartmentId(departmentId));
     }
 
 

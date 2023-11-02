@@ -81,8 +81,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
-
-
+    @Override
+    public long getDeprtmentCount() {
+        return departmentRepository.count();
+    }
 
 
 }

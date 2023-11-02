@@ -45,7 +45,7 @@
                         <div class="ms-3">
                             <p class="mb-2">Today Project</p>
                             <!-- TODO :: SHOW THE NUMBER OF PROJECTS -->
-                            <h6 class="mb-0">1234</h6>
+                            <h6 class="mb-0" id="projectCount"></h6>
                         </div>
                     </div>
                 </div>
@@ -55,17 +55,17 @@
                         <div class="ms-3">
                             <p class="mb-2">Total Employee</p>
                             <!-- TODO :: SHOW THE NUMBER OF EMPLOYEE -->
-                            <h6 class="mb-0">100000</h6>
+                            <h6 class="mb-0" id="employeeCount"></h6>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa-solid fa-dog fa-3x text-dark"></i>
+                        <i class="fa-solid fa-dog fa-3x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Today Client</p>
                             <!-- TODO :: SHOW THE NUMBER OF CLIENT -->
-                            <h6 class="mb-0">999999</h6>
+                            <h6 class="mb-0" id="clientCount"></h6>
                         </div>
                     </div>
                 </div>
@@ -75,24 +75,96 @@
                         <div class="ms-3">
                             <p class="mb-2">Total Department</p>
                             <!-- TODO :: SHOW THE NUMBER OF DEPARTMENT -->
-                            <h6 class="mb-0">1234</h6>
+                            <h6 class="mb-0" id="departmentCount"></h6>
                         </div>
                     </div>
                 </div>
-                <div class="col col-md-12 border border-dark" style="height: 400px">
-                    <!-- TODO :: PUT CHART HERE -->
-                    <div>Monthly MM Chart here</div>
+                <div class="col col-md-12">
+                    <div class="card border">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <p class="lead">Monthly Man-Month</p>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle text-decoration-none" type="button" id="projectDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Projects List
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="projectDropDown">
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bar-chart-con">
+                                <canvas id="man-month-chart" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-12 col-md-6 border border-dark" style="height: 400px">
-                    <!-- TODO :: PUT CHART HERE -->
-                    <div>Productivity Chart here</div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="card border">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <p class="lead">Productivity</p>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle text-decoration-none" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Month
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                        <li><a class="dropdown-item" href="#">January</a></li>
+                                        <li><a class="dropdown-item" href="#">February</a></li>
+                                        <li><a class="dropdown-item" href="#">March</a></li>
+                                        <li><a class="dropdown-item" href="#">April</a></li>
+                                        <li><a class="dropdown-item" href="#">May</a></li>
+                                        <li><a class="dropdown-item" href="#">June</a></li>
+                                        <li><a class="dropdown-item" href="#">July</a></li>
+                                        <li><a class="dropdown-item" href="#">August</a></li>
+                                        <li><a class="dropdown-item" href="#">September</a></li>
+                                        <li><a class="dropdown-item" href="#">October</a></li>
+                                        <li><a class="dropdown-item" href="#">November</a></li>
+                                        <li><a class="dropdown-item" href="#">December</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bar-chart-con">
+                                <canvas id="productivity-1-chart" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-12 col-md-6 border border-dark" style="height: 400px">
-                    <!-- TODO :: PUT CHART HERE -->
-                    <div>Productivity Chart here</div>
-                    <!--                    <p th:text="${#httpServletRequest.requestURI}"></p>-->
-                    <!--                    <a th:href="@{__${#httpServletRequest.requestURI}__}">Click to More</a>-->
-                    <!--                    <p>The current URL is: <span th:text="${#httpServletRequest.getRequestURL()}"></span></p>-->
+                <div class="col-sm-12 col-md-6" >
+                    <div class="card border">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <p class="lead">KPI</p>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle text-decoration-none" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Month
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                                        <li><a class="dropdown-item" href="#">January</a></li>
+                                        <li><a class="dropdown-item" href="#">February</a></li>
+                                        <li><a class="dropdown-item" href="#">March</a></li>
+                                        <li><a class="dropdown-item" href="#">April</a></li>
+                                        <li><a class="dropdown-item" href="#">May</a></li>
+                                        <li><a class="dropdown-item" href="#">June</a></li>
+                                        <li><a class="dropdown-item" href="#">July</a></li>
+                                        <li><a class="dropdown-item" href="#">August</a></li>
+                                        <li><a class="dropdown-item" href="#">September</a></li>
+                                        <li><a class="dropdown-item" href="#">October</a></li>
+                                        <li><a class="dropdown-item" href="#">November</a></li>
+                                        <li><a class="dropdown-item" href="#">December</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bar-chart-con">
+                                <canvas id="productivity-2-chart" height="400"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,9 +173,7 @@
     </div>
     <!-- Content End -->
 
-    <script>
-        console.log("hi guys")
-    </script>
+
 
 </div>
 
@@ -134,12 +204,236 @@
 
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
-<script src="/js/forprogresscircleiguess.js"></script>
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 
+     <script type="module">
+         import { sendData, getData} from "/js/api-function.js";
 
+         $(document).ready(function () {
+             $("#spinner").hide();
+
+             // Make an AJAX request to fetch the project list
+             $.ajax({
+                 url: '/api/project/list', // Replace with your API endpoint
+                 method: 'GET',
+                 success: function(data) {
+                     console.log("PROJECTS LIST", data);
+                     const projectDropdown = $('#projectDropDown'); // Corrected the ID here
+                     const dropdownMenu = projectDropdown.next('.dropdown-menu');
+                     dropdownMenu.empty(); // Clear the dropdown menu
+
+                     $.each(data, function (index, project) {
+                         dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${project.id}">${project.name}</a></li>`);
+                     });
+
+                     // Handle click event on the dynamic items
+                     dropdownMenu.on('click', '.dropdown-item', function() {
+                         const selectedValue = $(this).data('value');
+                         alert(`Selected project: ${selectedValue}`);
+                     });
+                 },
+                 error: function() {
+                     console.error('Failed to fetch project list.');
+                 }
+             });
+
+
+             // Dummy data
+             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct","Nov","Dec"];
+             const actualData = [null,null,null,80, 70, 90, 850, 480];
+             const targetData = [null,null,null,80, 85, 90, 780, 1000];
+
+             // Calculate percentage difference between actualData and targetData
+                const percentageDifferenceData = actualData.map((actual, index) => {
+                    if(actual === null) {
+                        return null;
+                    }
+                    return Math.round(((actual - targetData[index]) / targetData[index]) * 100);
+                });
+
+                //Dummy data for kpi chart
+             const screenCountsData = [120, 130, 140, 135, 150, 155, 160, 165, 170, 175, 180, 185];
+             const testCasesData = [100, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160];
+             const kStepData = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105];
+             const reviewCountsData = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]; // Assuming review counts
+
+             // Calculate the ratios
+             const screenToReviewRatios = screenCountsData.map((screenCount, index) => (screenCount / reviewCountsData[index]).toFixed(2));
+             const testToReviewRatios = testCasesData.map((testCaseCount, index) => (testCaseCount / reviewCountsData[index]).toFixed(2));
+             const kStepToReviewRatios = kStepData.map((kStepCount, index) => (kStepCount / reviewCountsData[index]).toFixed(2));
+
+             // Get the mm chart canvas
+             const mmctx = document.getElementById("man-month-chart").getContext('2d');
+
+             //Get Productivity Chart Canvas
+                const p1ctx = document.getElementById("productivity-1-chart").getContext('2d');
+
+                //Get KPI chart Canvas
+                const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
+
+             // Create the line chart for mm
+             const lineChart = new Chart(mmctx, {
+                 type: 'bar',
+                 data: {
+                     labels: months,
+                     datasets: [{
+                         label: 'Actual',
+                         data: actualData,
+                         backgroundColor: '#444cf7',
+                         borderColor: '#444cf7',
+                         borderWidth: 1,
+                         fill: false,
+                         tension: 0.1
+                     }, {
+                         label: 'Target',
+                         data: targetData,
+                         backgroundColor: '#e5e5f7',
+                         borderColor: '#e5e5f7',
+                         borderWidth: 1,
+                         fill: false,
+                         tension: 0.1
+                     }]
+                 },
+                 options: {
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     scales: {
+                         y: {
+                             beginAtZero: true,
+                             max: 100,
+                         }
+                     }
+                 }
+             });
+
+             //Create bar chart for p1ctx with percentageDifferenceData
+                const barChart = new Chart(p1ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Percentage Difference',
+                            data: percentageDifferenceData,
+                            backgroundColor: '#444cf7',
+                            borderColor: '#444cf7',
+                            borderWidth: 1,//border width
+                            fill: false,
+                            tension: 0.1,//line tension
+                            categoryPercentage: 0.5,//bar width
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                            }
+                        }
+                    }
+                });
+
+                //Create bar chart for p2ctx with screenToReviewRatios
+                const barChart2 = new Chart(p2ctx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: "Screen Counts",
+                                data: screenCountsData,
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                borderColor: "rgba(75, 192, 192, 1)",
+                                borderWidth: 1,
+                            },
+                            {
+                                label: "Test Cases",
+                                data: testCasesData,
+                                backgroundColor: "rgba(192, 75, 75, 0.2)",
+                                borderColor: "rgba(192, 75, 75, 1)",
+                                borderWidth: 1,
+                            },
+                            {
+                                label: "KSTEP",
+                                data: kStepData,
+                                backgroundColor: "rgba(75, 75, 192, 0.2)",
+                                borderColor: "rgba(75, 75, 192, 1)",
+                                borderWidth: 1,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                            }
+                        }
+                    }
+                });
+
+
+             getData("/api/user/count/all", function (error,data) {
+                 if(error) {
+                     console.log(
+                         error
+                     )
+                 } else {
+                     console.log(data);
+                        $("#spinner").hide();
+                        $("#employeeCount").text(data);
+                 }
+             });
+
+             //get client counts by api/client/count
+                $.ajax({
+                    url: "/api/client/count",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#spinner").hide();
+                        $("#clientCount").text(data);
+                    },
+                    error: function (error) {
+                        $("#spinner").hide();
+                        console.log(error);
+                    }
+                });
+
+
+             //get client counts by api/department/count with getData()
+                getData("/api/department/count", function (error,data) {
+                    if(error) {
+                        console.log(
+                            error
+                        )
+                    } else {
+                        console.log(data);
+                            $("#spinner").hide();
+                            $("#departmentCount").text(data);
+                    }
+                });
+
+                //get project counts by api/project/count/all with getData()
+                getData("/api/project/count/all", function (error,data) {
+                    if(error) {
+                        console.log(
+                            error
+                        )
+                    } else {
+                        console.log(data);
+                            $("#spinner").hide();
+                            $("#projectCount").text(data);
+                    }
+                });
+
+         });
+     </script>
 </body>
 
 </html>

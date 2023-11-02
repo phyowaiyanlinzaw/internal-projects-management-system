@@ -42,10 +42,9 @@
                     <th data-sortable="true" data-formatter="indexFormatter" data-align="left" data-valign="middle" data-width="100" >No.</th>
                     <th data-sortable="true" data-field="email" data-align="left" data-valign="middle" data-width="100" >Email</th>
                     <th data-sortable="true" data-field="name" data-align="left" data-valign="middle" data-width="100" >Name</th>
-                    <th data-sortable="true" data-field="department" data-align="left" data-valign="middle" data-width="100">Department</th>
+                    <th data-sortable="true" data-field="department" data-align="left" data-valign="middle" data-width="100" data-formatter="departmentNameFormatter">Department</th>
                     <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="100">Role</th>
-<!--                    TODO: GET PROJECT COUNT BY USER API -->
-                    <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle" data-width="100" >Project Count</th>
+                    <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle" data-width="100" data-formatter="projectCountFormatter">Project Count</th>
                 </tr>
                 </thead>
 
@@ -68,6 +67,22 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><!-- Modal Header End -->
                     <div class="modal-body">
+
+                        <!--alert message bootstrap-->
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-success" style="display: none">
+                            <strong>Success!</strong> <span id="success-message"></span>
+                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-danger" style="display: none">
+                            <strong>Error!</strong> <span id="error-message"></span>
+                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                &times;
+                            </button>
+                        </div>
+
+
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="floatingText" placeholder="jhondoe" required>
                             <label for="floatingText">Username</label>
@@ -128,12 +143,77 @@
     function indexFormatter(value, row, index) {
         return index + 1;
     }
+
+        function departmentNameFormatter(value,row,index){
+            if (value === null) {
+                return '';
+            }
+            return value.name;
+        }
+
+    function projectCountFormatter(value, row, index) {
+        // 'value' may be undefined or empty initially
+        // Replace 'userId' with the actual user ID
+        const userId = row.id; // Assuming 'id' is the user ID property in your data
+
+        //return something if user id not available
+        if (userId === null) {
+            return '';
+        }
+
+        // Make an AJAX request to fetch project count data
+        $.ajax({
+            url: '/api/project/count/user/' + userId,
+            type: 'GET',
+            async: false,
+            success: function (data) {
+                // 'data' is the response object from the AJAX request
+                // 'data.projectCount' is the project count value
+                console.log(data);
+                value = data;
+            },
+            error: function (data) {
+                // Handle the error response object
+                console.log(data);
+            }
+        });
+
+        // Return the project count value
+        return value;
+    }
+
     $(function () {
 
         $('#table').bootstrapTable({
         });
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
+
+        function getDepartmentNameList() {
+            var departmentNameList = [];
+            $.ajax({
+                url: '/api/department/list',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    $.each(data, function (index, department) {
+                        departmentNameList.push(department.name);
+                    });
+                }
+            });
+            return departmentNameList;
+        }
+
+        //initialize department list with department names
+        var departmentNameList = getDepartmentNameList();
+        $('#departmentSelect').empty();
+        $.each(departmentNameList, function (index, departmentName) {
+            $('#departmentSelect').append($('<option>', {
+                value: departmentName.id,
+                text: departmentName
+            }));
+        });
+
 
         $('#memberSelect').change(function() {
             var selectedValue = $(this).val();
@@ -173,6 +253,35 @@
             }
         });
 
+        //function show error with parameter message
+        function showError(message) {
+            $('#error-message').text(message);
+            $('#alert-danger').show();
+
+            setTimeout(function() {
+                $('#alert-danger').hide();
+            }, 3000);
+
+            //close alert box
+            $('.btn-close').click(function() {
+                $('#alert-danger').hide();
+            });
+        }
+
+        //function show success with parameter message
+        function showSuccess(message) {
+            $('#success-message').text(message);
+            $('#alert-success').show();
+
+            setTimeout(function() {
+                $('#alert-success').hide();
+            }, 3000);
+
+            //close alert box
+            $('.btn-close').click(function() {
+                $('#alert-success').hide();
+            });
+        }
 
         $('#register-employee-btn').click(function() {
             var username = $('#floatingText').val();
@@ -211,12 +320,14 @@
                     $('#addEmployeeModal').modal('hide');
                     $('#register-employee-btn').html('Register').prop('disabled', false);
                     $('#table').bootstrapTable('refresh');
+                    showSuccess('Employee registered successfully');
 
 
                 },
                 error: function (data,xhr) {
                     alert('Error registering employee');
                     $('#register-employee-btn').html('Register').prop('disabled', false);
+                    $('#alert-danger').show();
 
                 },
                 complete : function(){
@@ -227,6 +338,8 @@
         });
 
         });
+
+
 </script>
 </body>
 </html>
