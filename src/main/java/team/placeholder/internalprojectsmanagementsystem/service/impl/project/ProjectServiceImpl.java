@@ -133,4 +133,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 
+    public Long countAllProjectsByDepartmentId(Long departmentId) {
+        return projectRepository.countAllByDepartmentId(departmentId);
+    }
 }
