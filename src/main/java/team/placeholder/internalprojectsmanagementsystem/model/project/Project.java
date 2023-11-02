@@ -32,6 +32,7 @@ public class Project implements Serializable {
     private long start_date;
     private long end_date;
     private DevelopmentPhase current_phase;
+    @Column(length = 1000)
     private String objective;
 
 

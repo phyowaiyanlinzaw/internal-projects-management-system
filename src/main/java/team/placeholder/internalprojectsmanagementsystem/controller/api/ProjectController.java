@@ -7,9 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
@@ -24,11 +26,14 @@ import java.util.Map;
 public class ProjectController {
     private final ProjectServiceImpl projectService;
     private final UserServiceImpl userService;
+    private final ArchitectureServiceImpl architectureService;
 
 
     @PostMapping("save")
     public ResponseEntity<String> save(@RequestBody ProjectDto project){
+        System.out.println("from front end" + project);
         ProjectDto savedProject = projectService.save(project);
+        System.out.println(savedProject);
         if (savedProject!=null){
             return ResponseEntity.ok("Project save successfully");
         }else {
@@ -64,15 +69,15 @@ public class ProjectController {
     }
 
 
-    @GetMapping("/count/{id}")
-    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
-        long pcount = projectService.getCountByDepartment(id);
-        long ecount = userService.getMemberCount(id);
-        Map<String, Long> counts = new HashMap<>();
-        counts.put("projectCount : ", pcount);
-        counts.put("memberCount : ", ecount);
-        return ResponseEntity.ok(counts);
-    }
+//    @GetMapping("/count/{id}")
+//    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
+//        long pcount = projectService.getCountByDepartment(id);
+//        long ecount = userService.getMemberCount(id);
+//        Map<String, Long> counts = new HashMap<>();
+//        counts.put("projectCount : ", pcount);
+//        counts.put("memberCount : ", ecount);
+//        return ResponseEntity.ok(counts);
+//    }
 
     @PutMapping(value = "/projectupdate/{id}", consumes ="application/Json")
     public ResponseEntity<String> updatePrject(@PathVariable long id, @RequestBody ProjectDto projectDto){
@@ -87,6 +92,10 @@ public class ProjectController {
         }
     }
 
-
+    @GetMapping(value = "/architecturelist")
+    public ResponseEntity <List <ArchitectureDto>> getAllArchitecture(){
+        List<ArchitectureDto> architectureDtos= architectureService.getAllArchitecture();
+        return new ResponseEntity<>(architectureDtos, HttpStatus.OK);
+    }
 
 }

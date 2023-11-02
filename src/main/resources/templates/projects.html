@@ -94,8 +94,18 @@
 
             function initializeTagify(input) {
                 return new Tagify(input, {
-                    whitelist: ["A# .NET", "A# (Axiom)", "A-0 System", "A+", "A++", "ABAP", "ABC", "ABC ALGOL", "ABSET", "ABSYS", "ACC", "Accent", "Ace DASL", "ACL2", "Avicsoft", "ACT-III", "Action!", "ActionScript", "BCPL", "BeanShell", "Batch (Windows/Dos)", "Bertrand", "BETA", "Bigwig", "Bistro", "BitC", "BLISS", "Blockly", "BlooP", "Blue", "Boo", "Boomerang", "Bourne shell (including bash and ksh)", "BREW", "BPEL", "B", "C--", "C++ – ISO/IEC 14882", "C# – ISO/IEC 23270", "C/AL", "Caché ObjectScript", "C Shell", "Caml", "Cayenne", "CDuce", "Cecil", "Cesil", "Céu", "Ceylon", "CFEngine", "CFML", "Cg", "Ch", "Chapel", "Charity", "Charm", "Chef", "CHILL", "CHIP-8", "chomski", "ChucK", "CICS", "Cilk", "Citrine (programming language)", "CL (IBM)", "Claire", "Clarion", "Clean", "Clipper", "CLIPS", "CLIST", "Clojure", "CLU", "CMS-2", "COBOL – ISO/IEC 1989", "CobolScript – COBOL Scripting language", "Cobra", "CODE", "CoffeeScript", "ColdFusion", "COMAL", "Combined Programming Language (CPL)", "COMIT", "Common Intermediate Language (CIL)", "Common Lisp (also known as CL)", "COMPASS", "Component Pascal", "Constraint Handling Rules (CHR)", "COMTRAN", "Converge", "Cool", "Coq", "Coral 66", "Corn", "CorVision", "COWSEL", "CPL", "CPL", "Cryptol", "csh", "Csound", "CSP", "CUDA", "Curl", "Curry", "Cybil", "Cyclone", "Cython", "Java", "Javascript", "M2001", "M4", "M#", "Machine code", "MAD (Michigan Algorithm Decoder)", "MAD/I", "Magik", "Magma", "make", "Maple", "MAPPER now part of BIS", "MARK-IV now VISION:BUILDER", "Mary", "MASM Microsoft Assembly x86", "MATH-MATIC", "Mathematica", "MATLAB", "Maxima (see also Macsyma)", "Max (Max Msp – Graphical Programming Environment)", "Maya (MEL)", "MDL", "Mercury", "Mesa", "Metafont", "Microcode", "MicroScript", "MIIS", "Milk (programming language)", "MIMIC", "Mirah", "Miranda", "MIVA Script", "ML", "Model 204", "Modelica", "Modula", "Modula-2", "Modula-3", "Mohol", "MOO", "Mortran", "Mouse", "MPD", "Mathcad", "MSIL – deprecated name for CIL", "MSL", "MUMPS", "Mystic Programming L"],
-                    maxTags: 10,
+
+                    $.get('/api/project/architecturelist', function(data) {
+                        architectureSelect.empty();
+                        $.each(data, function(index, architecture) {
+                            architectureSelect.append($('<option>', {
+                                value: architecture,
+                                text: architecture
+                            }));
+                        });
+
+                    whitelist: [],
+                        maxTags: 10,
                     dropdown: {
                         consoleLog: true,
                         maxItems: 30,
@@ -550,6 +560,61 @@
                     return false;
                 });
             });
+
+            let log = console.log
+            $(document).ready(function() {
+                $('#validation-form').submit(function(event) {
+                    event.preventDefault(); // Prevent the form from submitting the traditional way
+
+                    const projectName = $('#name').val();
+                    const client = $('#client').val();
+                    const startDate = new Date($('#start_date').val()).getTime();
+                    const endDate = new Date($('#end_date').val()).getTime();
+
+                    const background = $('#background').val();
+                    const architectures = JSON.parse($('#architectures').val());
+                    const systemOutlines = $('#systemOutlines').val();
+                    const deliverable = $('#deliverable').val();
+                    const objective = editor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                    let newArc = []
+
+                    for(let i = 0; i < architectures.length; i++) {
+                        const ar = architectures[i]
+                        log(ar)
+                        log(ar.value)
+                        newArc.push({tech_name : ar.value})
+                    }
+                    // You may want to add some form validation here before sending the data
+                    log(objective)
+                    log(architectures)
+                    log(newArc)
+                    // Perform the AJAX request
+                    $.ajax({
+                        url: '/api/project/save', // Replace with the actual URL for your project registration endpoint
+                        type: 'POST',
+                        data: JSON.stringify({
+                            name: projectName,
+                            client: client,
+                            start_date: startDate,
+                            end_date: endDate,
+                            background: background,
+                            architectureDto: newArc,
+                            system_outlines: systemOutlines,
+                            deliverable: deliverable,
+                            objective: objective,
+                        }),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            alert('Project registered successfully');
+                            // Reset the form if needed
+                            $('#validation-form')[0].reset();
+                        },
+                        error: function (data) {
+                            alert('Error registering project');
+                        }
+                    });
+                });
+            });
         </script>
     </head>
 
@@ -716,7 +781,7 @@
                     <div class="modal-body">
 
 <!--                        project add-->
-                        <form class="row g-3" id="validation-form" action="">
+                        <form class="row g-3" id="validation-form">
                             <div class="col-lg-6">
 <!--                                name input-->
                                 <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span style="color: #dec6c6">
@@ -1607,6 +1672,10 @@
 
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
+        <script>
+
+
+        </script>
 <script src="/js/forprogresscircleiguess.js"></script>
 
         <!-- sort (department, project), form validation and search bar behavior are all here -->
