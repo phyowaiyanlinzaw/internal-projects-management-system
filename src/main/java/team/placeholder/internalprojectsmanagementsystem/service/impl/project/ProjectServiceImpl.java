@@ -3,6 +3,7 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.AmountMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
@@ -26,12 +27,12 @@ public class ProjectServiceImpl implements ProjectService {
 private final ProjectRepository projectRepository;
 
 
-
+    @Transactional
     @Override
-    public ProjectDto save(ProjectDto projectDto) {
-     Project project= ProjectMapper.toProject(projectDto);
+    public Project save(Project project) {
+        System.out.println("XXXXXXXXXXXXXXXXXX" + projectRepository.save(project));
         Project savedProject =projectRepository.save(project);
-        return ProjectMapper.toProjectDto(savedProject);
+        return savedProject;
     }
 
     @Override

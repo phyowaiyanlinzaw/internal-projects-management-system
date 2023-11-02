@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Architecture implements Serializable {
+public class Architecture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,11 +22,7 @@ public class Architecture implements Serializable {
     @Column(unique = true, nullable = false)
     private String tech_name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "architecture_project",
-            joinColumns = @JoinColumn(name = "architecture_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @ManyToMany(mappedBy = "architectures")
     private Set<Project> projects = new HashSet<>();
 
     @Override

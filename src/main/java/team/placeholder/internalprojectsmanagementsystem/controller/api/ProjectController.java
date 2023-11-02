@@ -7,18 +7,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/project")
@@ -31,8 +37,17 @@ public class ProjectController {
 
     @PostMapping("save")
     public ResponseEntity<String> save(@RequestBody ProjectDto project){
+
+        Set<Architecture> architecture = new HashSet<>();
+        
+        for(ArchitectureDto architectureDto : project.getArchitectureDto()) {
+            architecture.add(architectureService.save(architectureDto));
+        }
+
         System.out.println("from front end" + project);
-        ProjectDto savedProject = projectService.save(project);
+        Project project2 = ProjectMapper.toProject(project);
+        project2.setArchitectures(architecture);
+        Project savedProject = projectService.save(project2);
         System.out.println(savedProject);
         if (savedProject!=null){
             return ResponseEntity.ok("Project save successfully");

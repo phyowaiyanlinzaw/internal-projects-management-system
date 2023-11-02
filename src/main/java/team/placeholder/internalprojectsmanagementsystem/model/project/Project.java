@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name="project")
 @Getter
 @Setter
-public class Project implements Serializable {
+public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +56,9 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Issue> issues;
 
-    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
+    @ManyToMany(cascade = { CascadeType.PERSIST,
+            CascadeType.MERGE })
+    @JoinTable(name = "project_architecture", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "architecture_id"))
     private Set<Architecture> architectures = new HashSet<>();
 
     @ManyToOne
@@ -85,10 +87,6 @@ public class Project implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public Project orElse(Object o) {
-        return null;
     }
 
     @Override

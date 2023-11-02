@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
@@ -28,13 +29,9 @@ public class ClientController {
     }
 
     @PostMapping("save")
-    public ResponseEntity<String> save(ClientDto clientDto) {
-        ClientDto savedClient = clientService.save(clientDto);
-        if (savedClient != null) {
-            return ResponseEntity.ok("Client saved successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to save client");
-        }
+    public ResponseEntity<ClientDto> save(@RequestBody ClientDto clientDto) {
+        System.out.println(clientDto);
+        return new ResponseEntity<>(clientService.save(clientDto), HttpStatus.OK);
     }
 
 
