@@ -40,7 +40,7 @@ public class ProjectController {
         return ResponseEntity.badRequest().body("User save failed");
     }}
 
-    @GetMapping("/projectlist")
+    @GetMapping("/list")
     public ResponseEntity<List<ProjectDto>> getAllProjects(){
         List<ProjectDto> projects = projectService.getAllProjects();
         return new ResponseEntity<>(projects, HttpStatus.OK);
