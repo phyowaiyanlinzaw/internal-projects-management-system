@@ -21,10 +21,14 @@ public class ClientController {
     private final ClientServiceImpl clientService;
 
 
-    @GetMapping("lists")
+    @GetMapping("list")
     public ResponseEntity<List<ClientDto>> getAllClients() {
-        List<ClientDto> clientDtos = clientService.getAllClient();
-        return new ResponseEntity<>(clientDtos, HttpStatus.OK);
+        List<ClientDto> clients = clientService.getAllClient();
+        if (clients != null) {
+            return ResponseEntity.ok(clients);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @PostMapping("save")

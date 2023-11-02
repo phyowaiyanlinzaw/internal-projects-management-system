@@ -82,7 +82,7 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Old password is incorrect");
             }
 //set new password
-            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            user.setPassword(newPassword);
             userService.save(user);
             return ResponseEntity.ok("Password changed successfully");
         } else {

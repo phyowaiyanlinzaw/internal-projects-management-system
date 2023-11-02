@@ -217,7 +217,9 @@
 
                                     <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
                                         <strong>Error:</strong> <span id="errorText"></span>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background: transparent; position: absolute; top: 0; right: 0;">&times;</button>
+                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                            &times;
+                                        </button>
                                     </div>
 
 
@@ -324,6 +326,7 @@
 <script src="/js/custome.js"></script>
 <script>
     $(document).ready(
+
         function () {
 
             //password eye toggle
@@ -377,6 +380,8 @@
                         $('#loading-overlay').addClass('d-none');
 
                         showSuccess("Password changed successfully");
+                        //reload page
+                        window.location.reload();
                     },
                     error: function (error) {
                         console.log(error);
@@ -384,7 +389,6 @@
                         $('#loading-overlay').addClass('d-none');
 
                         showError(error.responseText);
-
 
                     }
                 });
@@ -396,13 +400,19 @@
 
                 setTimeout(function () {
                     $("#errorAlert").hide();
-                }, 5000);
+                }, 10000);
+
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#errorAlert").hide();
+                });
             }
 
             function showSuccess(message) {
                 // You can create a similar function for showing success messages.
                 alert(message); // For simplicity, we're using the alert function here.
             }
+
 
             function getUserProfileInfo() {
                 $.ajax({

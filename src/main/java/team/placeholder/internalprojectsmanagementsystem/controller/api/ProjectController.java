@@ -60,15 +60,15 @@ public class ProjectController {
     }
 
 
-    @GetMapping("/count/{id}")
-    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
-        long pcount = projectService.getCountByDepartment(id);
-        long ecount = userService.getMemberCount(id);
-        Map<String, Long> counts = new HashMap<>();
-        counts.put("projectCount : ", pcount);
-        counts.put("memberCount : ", ecount);
-        return ResponseEntity.ok(counts);
-    }
+//    @GetMapping("/count/{id}")
+//    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
+//        long pcount = projectService.getCountByDepartment(id);
+//        long ecount = userService.getMemberCount(id);
+//        Map<String, Long> counts = new HashMap<>();
+//        counts.put("projectCount : ", pcount);
+//        counts.put("memberCount : ", ecount);
+//        return ResponseEntity.ok(counts);
+//    }
 
 
 
