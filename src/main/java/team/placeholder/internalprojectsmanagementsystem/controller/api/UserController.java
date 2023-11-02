@@ -113,7 +113,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllByRole(role));
     }
 
-    @GetMapping("count/{role}")
+    @GetMapping("count/role={role}")
     public ResponseEntity<Long> countAllByRole(@PathVariable Role role) {
         return ResponseEntity.ok(userService.countAllByRole(role));
     }
@@ -128,7 +128,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByDepartmentIdAndRole(departmentId, role));
     }
 
-    @GetMapping("count/{departmentId}")
+    @GetMapping("count/departmentId={departmentId}")
     public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId) {
         return ResponseEntity.ok(userService.countAllByDepartmentId(departmentId));
     }

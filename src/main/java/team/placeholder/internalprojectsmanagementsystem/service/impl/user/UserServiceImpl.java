@@ -191,4 +191,9 @@ public class UserServiceImpl implements UserService {
             return null;
         }
     }
+
+    @Override
+    public Long countAllByDepartmentId(Long departmentId) {
+        return userRepository.countAllByDepartmentId(departmentId);
+    }
 }
