@@ -1,7 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.repository.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
@@ -14,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
     User findById(long id);
 
-
+    List<User> findAllByRole(Role role);
 }

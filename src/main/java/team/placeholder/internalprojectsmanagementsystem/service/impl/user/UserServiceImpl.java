@@ -2,13 +2,13 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
@@ -16,7 +16,6 @@ import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRep
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,15 +49,15 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             return UserMapper.toUserDto(user);
 
-        }else{
+        } else {
             return null;
 
         }
-}
+    }
 
 
-        @Override
-        public UserDto save(UserDto userDto) {
+    @Override
+    public UserDto save(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
 
         // Set user properties
@@ -76,13 +75,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public UserDto getUserById(long id) {
         User user = userRepository.findById(id).orElseNull();
-        if(user != null) {
+        if (user != null) {
             return UserMapper.toUserDto(user);
-        }else{
+        } else {
             return null;
         }
 
@@ -90,39 +88,83 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByEmail(String email) {
-       User user= userRepository.findByEmail(email);
-         if(user != null) {
-             return UserMapper.toUserDto(user);
-         }else{
-             return null;
-         }
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            return UserMapper.toUserDto(user);
+        } else {
+            return null;
+        }
 
     }
 
 
     @Override
-    public UserDto changePassword(UserDto userDto, String newPassword) {
-        User user = userRepository.findById(userDto.getId());
-        if(user != null) {
-            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
-            user = userRepository.save(user);
+    public void resetPassword(String email) {
+        String newPassword = PasswordGenerator.generatePassword(8);
+        sendEmail(email, "New Password", newPassword);
+    }
+
+    @Override
+    public void sendEmail(String to, String subject, String password) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText("Your Temporary Password is: " + password);
+        mailSender.send(message);
+    }
+
+    @Override
+    public UserDto registerUser(UserDto userDto) {
+        // Generate a random password
+        String password = PasswordGenerator.generatePassword(8);
+
+        // Create a new user entity
+        User user = UserMapper.toUser(userDto);
+        user.setName(userDto.getName());
+        user.setPassword(new BCryptPasswordEncoder().encode(password));
+        user.setRole(userDto.getRole());
+        user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
+
+        // Set the project manager by retrieving it from the database based on its ID
+        user.setProjectManager(userRepository.findById(userDto.getProjectManager().getId()));
+
+        // Attempt to save the user to the repository
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            // Handle data integrity violation (e.g., duplicate email or username)
+            // You can return an error response or handle it as appropriate
+            throw ex;
+        }
+
+        try {
+            // Send a new password to the user's email
+            sendEmail(userDto.getEmail(), "New Password", password);
+        } catch (Exception e) {
+            // Handle email sending error (log, report, or take appropriate action)
+        }
+
+        // Return the UserDto
+        return UserMapper.toUserDto(user);
+    }
+
+    @Override
+    public UserDto findByName(String name) {
+        User user = userRepository.findByName(name);
+
+        if (user!=null){
             return UserMapper.toUserDto(user);
-        }else{
+        }else {
             return null;
         }
 
     }
 
     @Override
-    public void sendEmail(String to) {
-        String generatedOtp = PasswordGenerator.generatePassword(8);
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject("OTP");
-        message.setText("Your OTP is: " + generatedOtp);
-        mailSender.send(message);
+    public List<UserDto> getAllByRole(Role role) {
+        List<User> users = userRepository.findAllByRole(role);
+        return users.stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
-
-
-
 }

@@ -1,13 +1,11 @@
 package team.placeholder.internalprojectsmanagementsystem.service.user;
 
 
-import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
 @Service
@@ -22,11 +20,15 @@ public interface UserService {
 
     UserDto updateProfile(UserDto userDto);
 
-    UserDto changePassword(UserDto userDto, String newPassword);
+    void resetPassword(String email);
 
-    void sendEmail(String to);
+    void sendEmail(String to, String subject, String text);
 
+    UserDto registerUser(UserDto userDto);
 
+    UserDto findByName(String name);
+
+    List<UserDto> getAllByRole(Role role);
 
 
 

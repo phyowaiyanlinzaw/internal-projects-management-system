@@ -32,14 +32,39 @@ public class ProjectController {
 
     @PostMapping("save")
     public ResponseEntity<String> save(@RequestBody ProjectDto project){
-        projectService.save(project);
-        return ResponseEntity.ok("User save successfully");
-    }
+        ProjectDto savedProject = projectService.save(project);
+        if (savedProject!=null){
+            return ResponseEntity.ok("Project save successfully");
+        }else {
+        return ResponseEntity.badRequest().body("User save failed");
+    }}
 
     @GetMapping("/projectlist")
     public ResponseEntity<List<ProjectDto>> getAllProjects(){
         List<ProjectDto> projects = projectService.getAllProjects();
         return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @GetMapping("/lists/{id}")
+    public ResponseEntity<ProjectDto> getProjectById(@PathVariable long id){
+        ProjectDto projects = projectService.getProjectById(id);
+        System.out.println(projects);
+        if (projects!=null){
+            return ResponseEntity.ok(projects);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/lists/byName/{name}")
+    public ResponseEntity<ProjectDto> getProjectByName(@PathVariable String name){
+        ProjectDto project = projectService.getProjectByName(name);
+        System.out.println("Project Name :" +project);
+        if (project!= null){
+            return ResponseEntity.ok(project);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
@@ -62,6 +87,19 @@ public class ProjectController {
 //        counts.put("departmentHead : ","departmentHead");
 //        return ResponseEntity.ok(counts);
 //    }
+
+    @PutMapping(value = "/projectupdate/{id}", consumes ="application/Json")
+    public ResponseEntity<String> updatePrject(@PathVariable long id, @RequestBody ProjectDto projectDto){
+        ProjectDto updateProject = projectService.updateProject(projectDto);
+        if (updateProject!=null){
+            return ResponseEntity.ok("Issue Updated success");
+
+
+
+        }else {
+            return ResponseEntity.badRequest().body("Failed Updated");
+        }
+    }
 
 
 
