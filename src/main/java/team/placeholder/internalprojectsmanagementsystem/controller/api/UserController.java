@@ -94,7 +94,7 @@ public class UserController {
             if (!new BCryptPasswordEncoder().matches(oldPassword, user.getPassword())) {
                 return ResponseEntity.badRequest().body("Old password is incorrect");
             }
-//set new password
+            //set new password
             user.setPassword(newPassword);
             userService.save(user);
             return ResponseEntity.ok("Password changed successfully");

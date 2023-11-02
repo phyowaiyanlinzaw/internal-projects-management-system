@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -18,7 +18,7 @@
                 <a th:href="@{/dashboard}" class="nav-item nav-link"><i
                         class="bi bi-clipboard-data-fill me-1"></i>Dashboard</a>
                 <a th:href="@{/department}" class="nav-item nav-link"><i
-                        class="fa-solid fa-building"></i>Department</a>
+                        class="fa-solid fa-building" sec:authorize="hasAnyRole('PMO','DEPARTMENT_HEAD','SDQC')"></i>Department</a>
                 <a th:href="@{/project/all}" class="nav-item nav-link"><i class="bi bi-collection-fill me-1"></i>All
                     Projects</a>
                 <a th:href="@{/employees}" class="nav-item nav-link"><i class="fa-solid fa-users-rectangle"></i>Employees</a>

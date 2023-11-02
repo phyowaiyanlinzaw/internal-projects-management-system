@@ -173,4 +173,17 @@ public class UserServiceImpl implements UserService {
     public Long countAll() {
         return userRepository.count();
     }
+
+    @Override
+    public List<UserDto> getAllUsersByPMId(Long id) {
+        List<User> users = userRepository.findAllByProjectManagerId(id);
+        return users.stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public long getMemberCount(long id) {
+        return userRepository.findAllByProjectManagerId(id).size();
+    }
 }

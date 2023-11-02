@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-sm-6 col-xl-3">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa-solid fa-dog fa-3x text-dark"></i>
+                        <i class="fa-solid fa-dog fa-3x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Today Client</p>
                             <!-- TODO :: SHOW THE NUMBER OF CLIENT -->
@@ -221,22 +221,39 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 
-     <script>
+     <script type="module">
+         import { sendData, getData} from "/js/api-function.js";
+
          $(document).ready(function () {
              $("#spinner").hide();
 
-             //get employee counts by api/user/count
-             $.ajax({
-                 url: "/api/user/count",
-                 type: "GET",
-                 dataType: "json",
-                 success: function (data) {
-                     $("#spinner").hide();
-                     $("#employeeCount").text(data);
+             //monthly man-month chart
+             const mm_ctx = new Chart(document.getElementById("#man-month-chart"),mmconfig);
+
+             const mmconfig = {
+                 type: 'bar',
+                 data: {
+                     labels: ['A', 'B', 'C'],
+                     datasets: [{
+                         label: 'Easy as',
+                         data: [1, 2, 3],
+                     }],
                  },
-                 error: function (error) {
-                     $("#spinner").hide();
-                     console.log(error);
+                 options: {
+                     indexAxis: 'y', // <-- here
+                     responsive: true
+                 }
+             }
+
+
+             getData("/api/user/count", function (error,data) {
+                 if(error) {
+                     console.log(
+                         error
+                     )
+                 } else {
+                        $("#spinner").hide();
+                        $("#employeeCount").text(data);
                  }
              });
 
