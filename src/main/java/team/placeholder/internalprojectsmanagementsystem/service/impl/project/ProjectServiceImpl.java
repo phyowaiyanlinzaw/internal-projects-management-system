@@ -10,10 +10,14 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.Deli
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,9 +38,14 @@ private final ProjectRepository projectRepository;
         project.setBackground(projectDto.getBackground());
         project.setCurrent_phase(projectDto.getCurrent_phase());
         project.setDuration(projectDto.getDuration());
-        project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
         project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
         project.setObjective(projectDto.getObjective());
+
+        Set<Architecture> arList = new HashSet<>();
+
+
+        project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
+
         Project savedProject =projectRepository.save(project);
         return ProjectMapper.toProjectDto(savedProject);
     }
