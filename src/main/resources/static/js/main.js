@@ -58,6 +58,20 @@
         nav : false
     });
 
+    //ajax call api/user/profile to get current user name to set #username
+    $.ajax({
+        url: '/api/user/profile',
+        type: 'GET',
+        success: function (data) {
+            console.log(data);
+            $('#navbar-username').text(data.name);
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+
+
 
     // // Worldwide Sales Chart
     // var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
