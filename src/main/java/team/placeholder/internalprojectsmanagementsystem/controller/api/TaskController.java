@@ -34,7 +34,7 @@ public class TaskController {
         return new ResponseEntity<>(userServiceImpl.getAllUsersByPMId(id), HttpStatus.OK);
     }
 
-    @GetMapping("/{projectId}/list")
+    @GetMapping("/list")
     public ResponseEntity<List<TasDto>> taskList(@PathVariable long projectId) {
 
         List<TasDto> taskList = new ArrayList<TasDto>();
@@ -94,7 +94,7 @@ public class TaskController {
                 userList);
         taskList.add(task3);
 
-        return ResponseEntity.ok(taskList);
+        return new ResponseEntity<>(taskList, HttpStatus.OK);
     }
 
 }
