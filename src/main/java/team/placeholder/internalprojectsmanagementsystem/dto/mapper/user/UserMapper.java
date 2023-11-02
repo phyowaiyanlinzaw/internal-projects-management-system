@@ -2,9 +2,7 @@ package team.placeholder.internalprojectsmanagementsystem.dto.mapper.user;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 
 public class UserMapper {
     public static UserDto toUserDto(User user) {
@@ -17,6 +15,10 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
         userDto.setRole(user.getRole());
+
+        if(user.getProjectManager() != null) {
+            userDto.setProjectManager(toUserDto(user.getProjectManager()));
+        }
 
         // Convert Department to DepartmentDto
         userDto.setDepartmentdto(DepartmentMapper.toDepartmentDto(user.getDepartment()));

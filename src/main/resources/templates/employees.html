@@ -32,64 +32,20 @@
 
         <div class="container-fluid">
             <div id="toolbar"
-                 class="ms-3"
-            >
-                <a href="" class="btn btn-primary"
-                     data-bs-toggle="modal"
-                     data-bs-target="#addEmployeeModal"
-
-                >Add Employee</a><!--open modal to register employee account-->
+                 class="ms-3">
+                <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add Employee</a>
+                <!--open modal to register employee account-->
             </div>
-            <table
-                    id="table"
-                    data-toggle="table"
-                    data-toolbar="#toolbar"
-                    data-toolbar-align="right"
-                    data-search="true"
-                    data-header-style="headerStyle"
-                    data-url="/api/user/list"
-            >
-                <thead
-               class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5"
-                >
+            <table id="table" data-toggle="table" data-toolbar="#toolbar" data-toolbar-align="right" data-search="true" data-header-style="headerStyle" data-url="/api/user/list">
+                <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5">
                 <tr>
-                    <th data-sortable="true"
-                        data-formatter="indexFormatter"
-                        data-align="left"
-                        data-valign="middle"
-                        data-width="100"
-                    >No.</th>
-                    <th data-sortable="true"
-                        data-field="email"
-                        data-align="left"
-                        data-valign="middle"
-                        data-width="100"
-                    >Email</th>
-                    <th data-sortable="true"
-                        data-field="name"
-                        data-align="left"
-                        data-valign="middle"
-                        data-width="100"
-                    >Name</th>
-                    <th data-sortable="true"
-                        data-field="department"
-                        data-align="left"
-                        data-valign="middle"
-                        data-width="100"
-                    >Department</th>
-                    <th data-sortable="true"
-                        data-field="role"
-                        data-align="left"
-                        data-valign="middle"
-                        data-width="100"
-                    >Role</th>
+                    <th data-sortable="true" data-formatter="indexFormatter" data-align="left" data-valign="middle" data-width="100" >No.</th>
+                    <th data-sortable="true" data-field="email" data-align="left" data-valign="middle" data-width="100" >Email</th>
+                    <th data-sortable="true" data-field="name" data-align="left" data-valign="middle" data-width="100" >Name</th>
+                    <th data-sortable="true" data-field="department" data-align="left" data-valign="middle" data-width="100">Department</th>
+                    <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="100">Role</th>
 <!--                    TODO: GET PROJECT COUNT BY USER API -->
-                    <th data-sortable="true"
-                        data-field="projectCount"
-                        data-align="left"
-                        data-valign="middle"
-                        data-width="100"
-                    >Project Count</th>
+                    <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle" data-width="100" >Project Count</th>
                 </tr>
                 </thead>
 
@@ -194,8 +150,8 @@
                     departmentSelect.empty();
                     $.each(data, function(index, department) {
                         departmentSelect.append($('<option>', {
-                            value: department,
-                            text: department
+                            value: department.id,
+                            text: department.name
                         }));
                     });
                 });
@@ -222,11 +178,11 @@
             var username = $('#floatingText').val();
             var email = $('#floatingInput').val();
             var role = $('#memberSelect').val();
-            var department = $('#departmentSelect').val();
+            var departmentId = $('#departmentSelect').val();
             var projectManagerId = $('#projectManagerSelect').val();
             console.log(projectManagerId);
 
-            if (username === '' || email === '' || role === '' || department === '') {
+            if (username === '' || email === '' || role === '' || departmentId === '' || projectManagerId==='') {
                 alert('Please fill all the fields');
                 return;
             }
@@ -242,7 +198,9 @@
                     name: username,
                     email: email,
                     role: role,
-                    department: department,
+                    department: {
+                        id:departmentId
+                    },
                     project_manager : {
                         id: projectManagerId
                     }

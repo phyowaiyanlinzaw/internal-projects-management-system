@@ -93,4 +93,23 @@ public class User implements Serializable {
     public User orElseThrow(Object o) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", department=" + department +
+                ", projects=" + projects +
+                ", tasks=" + tasks +
+                ", reviews=" + reviews +
+                ", project=" + project +
+                ", uploader=" + uploader +
+                ", pic=" + pic +
+                ", projectManager=" + projectManager +
+                '}';
+    }
 }

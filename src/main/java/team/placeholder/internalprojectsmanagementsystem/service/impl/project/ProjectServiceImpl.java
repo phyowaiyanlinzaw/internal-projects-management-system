@@ -25,9 +25,20 @@ private final ProjectRepository projectRepository;
 
     @Override
     public ProjectDto save(ProjectDto projectDto) {
-        Project project = ProjectMapper.toProject(projectDto);
-        project = projectRepository.save(project);
-        return ProjectMapper.toProjectDto(project);
+     Project project= ProjectMapper.toProject(projectDto);
+        project.setName(projectDto.getName());
+        project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
+        project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
+        project.setStart_date(projectDto.getStart_date());
+        project.setEnd_date(projectDto.getEnd_date());
+        project.setBackground(projectDto.getBackground());
+        project.setCurrent_phase(projectDto.getCurrent_phase());
+        project.setDuration(projectDto.getDuration());
+        project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
+        project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
+        project.setObjective(projectDto.getObjective());
+        Project savedProject =projectRepository.save(project);
+        return ProjectMapper.toProjectDto(savedProject);
     }
 
     @Override
@@ -40,7 +51,7 @@ private final ProjectRepository projectRepository;
 
     @Override
     public ProjectDto getProjectById(long id) {
-        Project project = projectRepository.findById(id).orElse(null);
+        Project project = projectRepository.findById(id);
         if (project!=null){
             System.out.println(project);
             return ProjectMapper.toProjectDto(project);
@@ -51,7 +62,7 @@ private final ProjectRepository projectRepository;
 
     @Override
     public ProjectDto getProjectByName(String name) {
-        Project project = projectRepository.findByName(name).orElse(null);
+        Project project = projectRepository.findByName(name);
         System.out.println(project);
         if (project!=null){
             return ProjectMapper.toProjectDto(project);
@@ -62,7 +73,7 @@ private final ProjectRepository projectRepository;
 
     @Override
     public ProjectDto updateProject(ProjectDto projectDto) {
-        Project project = projectRepository.findById(projectDto.getId()).orElse(null);
+        Project project = projectRepository.findById(projectDto.getId());
 
         if (project!=null){
             project.setName(projectDto.getName());
@@ -86,6 +97,7 @@ private final ProjectRepository projectRepository;
 
     @Override
     public long getCountByDepartment(long id) {
+
         return projectRepository.countByDepartmentId(id);
     }
 

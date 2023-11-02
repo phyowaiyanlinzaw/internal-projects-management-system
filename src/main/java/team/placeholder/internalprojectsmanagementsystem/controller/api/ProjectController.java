@@ -7,9 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
@@ -28,9 +32,12 @@ public class ProjectController {
 
     @PostMapping("save")
     public ResponseEntity<String> save(@RequestBody ProjectDto project){
-        projectService.save(project);
-        return ResponseEntity.ok("User save successfully");
-    }
+        ProjectDto savedProject = projectService.save(project);
+        if (savedProject!=null){
+            return ResponseEntity.ok("Project save successfully");
+        }else {
+        return ResponseEntity.badRequest().body("User save failed");
+    }}
 
     @GetMapping("/projectlist")
     public ResponseEntity<List<ProjectDto>> getAllProjects(){
@@ -40,11 +47,9 @@ public class ProjectController {
 
     @GetMapping("/lists/{id}")
     public ResponseEntity<ProjectDto> getProjectById(@PathVariable long id){
-        System.out.println("Project Id :" +id);
-
         ProjectDto projects = projectService.getProjectById(id);
+        System.out.println(projects);
         if (projects!=null){
-            System.out.println("Project" +projects);
             return ResponseEntity.ok(projects);
         }else {
             return ResponseEntity.notFound().build();
@@ -64,14 +69,37 @@ public class ProjectController {
 
 
 //    @GetMapping("/count/{id}")
-//    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
+//    public ResponseEntity<Map<String, Object>> getCount(@PathVariable long id) {
 //        long pcount = projectService.getCountByDepartment(id);
 //        long ecount = userService.getMemberCount(id);
-//        Map<String, Long> counts = new HashMap<>();
+//
+//        List<UserDto> departmentHead = userService.getDepartmentHeadByRole(Role.DEPARTMENT_HEAD);
+//        DepartmentDto department = new DepartmentDto();
+//        department.setId(id);
+//        UserDto user = new UserDto();
+//        user.setDepartmentdto(department);
+//
+//        UserDto departmentHead = userService.getDepartmentHead(id,Role.DEPARTMENT_HEAD);
+//
+//        Map<String, Object> counts = new HashMap<>();
 //        counts.put("projectCount : ", pcount);
 //        counts.put("memberCount : ", ecount);
+//        counts.put("departmentHead : ","departmentHead");
 //        return ResponseEntity.ok(counts);
 //    }
+
+    @PutMapping(value = "/projectupdate/{id}", consumes ="application/Json")
+    public ResponseEntity<String> updatePrject(@PathVariable long id, @RequestBody ProjectDto projectDto){
+        ProjectDto updateProject = projectService.updateProject(projectDto);
+        if (updateProject!=null){
+            return ResponseEntity.ok("Issue Updated success");
+
+
+
+        }else {
+            return ResponseEntity.badRequest().body("Failed Updated");
+        }
+    }
 
 
 
