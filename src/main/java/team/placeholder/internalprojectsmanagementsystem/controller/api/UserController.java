@@ -111,5 +111,15 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllByRole(role));
     }
 
+    @GetMapping("count/{role}")
+    public ResponseEntity<Long> countAllByRole(@PathVariable Role role) {
+        return ResponseEntity.ok(userService.countAllByRole(role));
+    }
+
+    @GetMapping("count")
+    public ResponseEntity<Long> countAll() {
+        return ResponseEntity.ok(userService.countAll());
+    }
+
 
 }

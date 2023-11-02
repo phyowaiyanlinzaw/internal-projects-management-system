@@ -163,4 +163,14 @@ public class UserServiceImpl implements UserService {
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Long countAllByRole(Role role) {
+        return userRepository.countAllByRole(role);
+    }
+
+    @Override
+    public Long countAll() {
+        return userRepository.count();
+    }
 }

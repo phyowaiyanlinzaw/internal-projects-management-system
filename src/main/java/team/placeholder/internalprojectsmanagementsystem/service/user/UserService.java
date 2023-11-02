@@ -30,6 +30,10 @@ public interface UserService {
 
     List<UserDto> getAllByRole(Role role);
 
+    Long countAllByRole(Role role);
+
+    Long countAll();
+
 
 
 }
