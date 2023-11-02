@@ -45,7 +45,7 @@
                         <div class="ms-3">
                             <p class="mb-2">Today Project</p>
                             <!-- TODO :: SHOW THE NUMBER OF PROJECTS -->
-                            <h6 class="mb-0">1234</h6>
+                            <h6 class="mb-0" id="projectCount"></h6>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                         <div class="ms-3">
                             <p class="mb-2">Total Employee</p>
                             <!-- TODO :: SHOW THE NUMBER OF EMPLOYEE -->
-                            <h6 class="mb-0">100000</h6>
+                            <h6 class="mb-0" id="employeeCount"></h6>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         <div class="ms-3">
                             <p class="mb-2">Today Client</p>
                             <!-- TODO :: SHOW THE NUMBER OF CLIENT -->
-                            <h6 class="mb-0">999999</h6>
+                            <h6 class="mb-0" id="clientCount"></h6>
                         </div>
                     </div>
                 </div>
@@ -75,24 +75,108 @@
                         <div class="ms-3">
                             <p class="mb-2">Total Department</p>
                             <!-- TODO :: SHOW THE NUMBER OF DEPARTMENT -->
-                            <h6 class="mb-0">1234</h6>
+                            <h6 class="mb-0" id="departmentCount"></h6>
                         </div>
                     </div>
                 </div>
-                <div class="col col-md-12 border border-dark" style="height: 400px">
-                    <!-- TODO :: PUT CHART HERE -->
-                    <div>Monthly MM Chart here</div>
+                <div class="col col-md-12">
+                    <div class="card border">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <p class="lead">Monthly Man-Month</p>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle text-decoration-none" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Month
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" href="#">January</a></li>
+                                        <li><a class="dropdown-item" href="#">February</a></li>
+                                        <li><a class="dropdown-item" href="#">March</a></li>
+                                        <li><a class="dropdown-item" href="#">April</a></li>
+                                        <li><a class="dropdown-item" href="#">May</a></li>
+                                        <li><a class="dropdown-item" href="#">June</a></li>
+                                        <li><a class="dropdown-item" href="#">July</a></li>
+                                        <li><a class="dropdown-item" href="#">August</a></li>
+                                        <li><a class="dropdown-item" href="#">September</a></li>
+                                        <li><a class="dropdown-item" href="#">October</a></li>
+                                        <li><a class="dropdown-item" href="#">November</a></li>
+                                        <li><a class="dropdown-item" href="#">December</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bar-chart-con">
+                                <canvas id="man-month-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-12 col-md-6 border border-dark" style="height: 400px">
-                    <!-- TODO :: PUT CHART HERE -->
-                    <div>Productivity Chart here</div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="card border">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <p class="lead">Productivity</p>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle text-decoration-none" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Month
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                        <li><a class="dropdown-item" href="#">January</a></li>
+                                        <li><a class="dropdown-item" href="#">February</a></li>
+                                        <li><a class="dropdown-item" href="#">March</a></li>
+                                        <li><a class="dropdown-item" href="#">April</a></li>
+                                        <li><a class="dropdown-item" href="#">May</a></li>
+                                        <li><a class="dropdown-item" href="#">June</a></li>
+                                        <li><a class="dropdown-item" href="#">July</a></li>
+                                        <li><a class="dropdown-item" href="#">August</a></li>
+                                        <li><a class="dropdown-item" href="#">September</a></li>
+                                        <li><a class="dropdown-item" href="#">October</a></li>
+                                        <li><a class="dropdown-item" href="#">November</a></li>
+                                        <li><a class="dropdown-item" href="#">December</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bar-chart-con">
+                                <canvas id="productivity-1-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-12 col-md-6 border border-dark" style="height: 400px">
-                    <!-- TODO :: PUT CHART HERE -->
-                    <div>Productivity Chart here</div>
-                    <!--                    <p th:text="${#httpServletRequest.requestURI}"></p>-->
-                    <!--                    <a th:href="@{__${#httpServletRequest.requestURI}__}">Click to More</a>-->
-                    <!--                    <p>The current URL is: <span th:text="${#httpServletRequest.getRequestURL()}"></span></p>-->
+                <div class="col-sm-12 col-md-6" >
+                    <div class="card border">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <p class="lead">Productivity</p>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle text-decoration-none" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Month
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                                        <li><a class="dropdown-item" href="#">January</a></li>
+                                        <li><a class="dropdown-item" href="#">February</a></li>
+                                        <li><a class="dropdown-item" href="#">March</a></li>
+                                        <li><a class="dropdown-item" href="#">April</a></li>
+                                        <li><a class="dropdown-item" href="#">May</a></li>
+                                        <li><a class="dropdown-item" href="#">June</a></li>
+                                        <li><a class="dropdown-item" href="#">July</a></li>
+                                        <li><a class="dropdown-item" href="#">August</a></li>
+                                        <li><a class="dropdown-item" href="#">September</a></li>
+                                        <li><a class="dropdown-item" href="#">October</a></li>
+                                        <li><a class="dropdown-item" href="#">November</a></li>
+                                        <li><a class="dropdown-item" href="#">December</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bar-chart-con">
+                                <canvas id="productivity-2-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,9 +185,7 @@
     </div>
     <!-- Content End -->
 
-    <script>
-        console.log("hi guys")
-    </script>
+
 
 </div>
 
@@ -139,7 +221,45 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 
+     <script>
+         $(document).ready(function () {
+             $("#spinner").hide();
 
+             //get employee counts by api/user/count
+             $.ajax({
+                 url: "/api/user/count",
+                 type: "GET",
+                 dataType: "json",
+                 success: function (data) {
+                     $("#spinner").hide();
+                     $("#employeeCount").text(data);
+                 },
+                 error: function (error) {
+                     $("#spinner").hide();
+                     console.log(error);
+                 }
+             });
+
+             //get client counts by api/client/count
+                $.ajax({
+                    url: "/api/client/count",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#spinner").hide();
+                        $("#clientCount").text(data);
+                    },
+                    error: function (error) {
+                        $("#spinner").hide();
+                        console.log(error);
+                    }
+                });
+
+
+                //show monthly monthly mm chart
+
+         });
+     </script>
 </body>
 
 </html>

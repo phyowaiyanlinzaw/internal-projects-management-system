@@ -458,7 +458,7 @@
                     if ($(this).attr("id") === "email") {
                         $(this).html(data.email)
                     } else if ($(this).attr("id") === "department") {
-                        $(this).html(data.department)
+                        $(this).html(data.department.name)
                     } else if ($(this).attr("id") === "projectCount") {
                         if (data.projectCount === null)
                             $(this).html("-")
