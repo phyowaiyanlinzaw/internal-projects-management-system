@@ -253,19 +253,25 @@
 
              // Create the line chart
              const lineChart = new Chart(ctx, {
-                 type: 'line',
+                 type: 'bar',
                  data: {
                      labels: months,
                      datasets: [{
-                         label: 'Actual Productivity',
+                         label: 'Actual',
                          data: actualData,
-                         borderColor: 'blue',
-                         fill: false
+                         backgroundColor: '#444cf7',
+                         borderColor: '#444cf7',
+                         borderWidth: 1,
+                         fill: false,
+                         tension: 0.1
                      }, {
-                         label: 'Target Productivity',
+                         label: 'Target',
                          data: targetData,
-                         borderColor: 'green',
-                         fill: false
+                         backgroundColor: '#e5e5f7',
+                         borderColor: '#e5e5f7',
+                         borderWidth: 1,
+                         fill: false,
+                         tension: 0.1
                      }]
                  },
                  options: {
@@ -274,7 +280,7 @@
                      scales: {
                          y: {
                              beginAtZero: true,
-                             max: 100 // Set the maximum value on the Y-axis
+                             max: 100,
                          }
                      }
                  }
