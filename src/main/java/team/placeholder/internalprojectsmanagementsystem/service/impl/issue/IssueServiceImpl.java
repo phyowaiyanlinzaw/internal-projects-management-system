@@ -26,6 +26,7 @@ public class IssueServiceImpl implements IssueService {
         return IssueMapper.toIssueDto(savedIssue);
     }
 
+
     @Override
     public List<IssueDto> getAllIssues() {
         List<Issue> issues = issueRepository.findAll();

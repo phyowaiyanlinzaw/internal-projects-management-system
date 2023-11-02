@@ -28,15 +28,15 @@ public class IssueController {
         try {
             IssueDto savedIssue = issueService.save(dto);
             if (savedIssue != null) {
-                return ResponseEntity.ok("Issue saved successfully");
+                return ResponseEntity.ok("Issue added successfully");
             } else {
                 return ResponseEntity.badRequest().body("Failed to save issue. Check your data.");
             }
         } catch (Exception e) {
-            // Handle unexpected exceptions
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request.");
         }
     }
+
 
     @GetMapping("/lists/byId/{id}")
     public ResponseEntity<IssueDto> getIssueById(@PathVariable long id) {

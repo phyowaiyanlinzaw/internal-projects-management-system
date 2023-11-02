@@ -1,4 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.issue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
@@ -29,8 +30,13 @@ public class IssueDto implements Serializable {
 
     private Category issue_category;
 
+    @JsonProperty("project")
     private ProjectDto projectDto;
+
+    @JsonProperty("user-uploader")
     private UserDto user_uploader;
+
+    @JsonProperty("user-pic")
     private UserDto user_pic;
 
 

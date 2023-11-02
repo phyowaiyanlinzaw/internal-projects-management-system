@@ -273,7 +273,7 @@
                     <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
 
                     <!-- issue modal start -->
-                    <form class="row g-3 " id="addIssue" >
+                    <div class="row g-3 " >
                         <div class="col-lg-6">
                             <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
                                     style="color:#e86666"> *</span></label>
@@ -284,7 +284,7 @@
                             <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
                                     style="color:red"> *</span></label>
                             <select class="four-control" name="issue_category" id="issue_category" multiple>
-                                <option value="ERROR">Error</option>
+                                 <option value="ERROR">Error</option>
                                 <option value="BUG">Bug</option>
 
                             </select>
@@ -293,22 +293,19 @@
                         <div class="col-lg-6">
                             <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control" aria-label="Select Clients" data-live-search="true" id="user_pic" name="user_pic">
-                                <option>PIC</option>
-                                <option value="PWYLZ">Phyo Wai Yan Lin Zaw</option>
-                                <option value="ZLS">Zaw Lin Shein</option>
-                                <option value="EEP">Ei Ei Phyo</option>
-                                <option value="HAL">Hnin Aye Lwin</option>
-                                <option value="THK">Thant Htet Ko</option>
+                            <select class="form-control selectpicker" data-live-search="true" aria-label="Select Clients"  id="user_pic" name="user_pic" multiple>
+<!--                                <option value="PWYLZ">Phyo Wai Yan Lin Zaw</option>-->
+<!--                                <option value="ZLS">Zaw Lin Shein</option>-->
+<!--                                <option value="EEP">Ei Ei Phyo</option>-->
+<!--                                <option value="HAL">Hnin Aye Lwin</option>-->
+<!--                                <option value="THK">Thant Htet Ko</option>-->
                             </select>
                         </div>
 
                         <div class="col-lg-6">
                             <label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_party">Responsible Party <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control" aria-label="Select Clients" data-live-search="true"
-                                    id="responsible_party" name="responsible_party">
-                                <option>RP</option>
+                            <select class="form-control selectpicker" aria-label="Select Clients" data-live-search="true" id="responsible_party" name="responsible_party" multiple>
                                 <option value="1">Phyo Wai Yan Lin Zaw</option>
                                 <option value="2">Zaw Lin Shein</option>
                                 <option value="3">Ei Ei Phyo</option>
@@ -349,10 +346,10 @@
                         </div>
 
                         <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <button type="submit" class="btn btn-primary">Add New Issue</button>
+                            <button type="submit" id="addIssue"   class="btn btn-primary" >Save Data</button>
                         </div>
 
-                    </form>
+                    </div>
                     <!-- issue modal end -->
 
                 </div>
@@ -407,45 +404,6 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-<script>
-    $(document).ready(function() {
-        $("#addIssue").submit(function(e) {
-            e.preventDefault();
-
-            var formData = {
-                title: $('#title').val(),
-                description: $('#description').val(),
-                place: $('#place').val(),
-                impact: $('#impact').val(),
-                root_cause: $('#root_cause').val(),
-                direct_cause: $('#direct_cause').val(),
-                responsible_party: $('#responsible_party').val(),
-                user_pic: $('#user_pic').val(),
-                issue_category: $('#issue_category').val()
-            };
-
-            $.ajax({
-                type: 'POST',
-                contentType: 'application/json',
-                url: '/api/issue/save',
-                data: JSON.stringify(formData),
-                dataType: 'json', // Specify the expected data type of the response
-                success: function(response) {
-                    console.log(response);
-                    // Handle the response as needed
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.error(xhr.status + ' ' + textStatus + ' ' + errorThrown);
-                    // Handle errors, e.g., display an error message to the user
-                }
-            });
-        });
-    });
-</script>
-
 
 
 <script>
@@ -533,79 +491,24 @@
 
     let fullQuillEditor = document.querySelector(".quill-editor-full");
 
-    new Quill(fullQuillEditor, {
+    const a = new Quill(fullQuillEditor, {
         modules: {
             toolbar: toolbaroptions,
         },
         theme: "snow",
     });
 
-
+    // function getData(){
+    //     const userInput = quill.root.innerHTML;
+    //     console.log(userInput);
+    // }
+    //
 
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.com
 
     new MultiSelectTag("issue_category"), new MultiSelectTag("state"); // id
 
-    const issue1 = {
-        id: 1,
-        title: "head",
-        uploader: { id: 1, name: "thant" },
-        status: true, // complete or not
-        createdDate: 1702000000000,
-        modified: 3,
-        category: ["error", "bug"],
-        description: `<div class="code-block">
-                                <p>"this code does not work"</p>
-                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
-                            </div>`,
-        corractive: "bla",
-        preventive: "bla",
-        direct: "bla",
-        root: "bla",
-        impact: "bla",
-        place: "bla"
-    };
-    const issue2 = {
-        id: 2,
-        title: "body",
-        uploader: { id: 2, name: "zaw" },
-        status: false, // complete or not
-        createdDate: 1712000000000,
-        modified: 2,
-        category: ["error", "bug"],
-        description: `<div class="code-block">
-                                <p>"this is alitte work"</p>
-                                <pre class="ql-syntax" spellcheck="false">fjfjfdf{}@#!@#!@</pre>
-                            </div>`,
-        corractive: "bla",
-        preventive: "bla",
-        direct: "bla",
-        root: "bla",
-        impact: "bla",
-        place: "bla"
-    };
-    const issue3 = {
-        id: 3,
-        title: "foot",
-        uploader: { id: 3, name: "phyoe" },
-        status: true, // complete or not
-        createdDate: 1322000000000,
-        modified: 0,
-        category: ["error", "bug"],
-        description: `<div class="code-block">
-                                <p>"this code work"</p>
-                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
-                            </div>`,
-        corractive: "bla",
-        preventive: "bla",
-        direct: "bla",
-        root: "bla",
-        impact: "bla",
-        place: "bla"
-    };
-
-    const issueArray = [issue1, issue2, issue3];
 
     function getTimeAgo(timestamp) {
         const date = new Date(timestamp);
@@ -675,6 +578,89 @@
         document.querySelector("#sort-container").innerHTML += currDiv;
     }
 
+    var user_pic = $('#user_pic');
+
+    $.get('api/user/list', function (data) {
+        user_pic.empty();
+        $.each(data, function (index, pic) {
+            user_pic.append($('<option>', {
+                value: pic.id, // You may need to adjust this based on your API response
+                text: pic.name, // You may need to adjust this based on your API response
+            }));
+        });
+    });
+
+    $('#addIssue').on('click', function () {
+        var title = $('#title').val();
+        var description = a.root.innerHTML;
+        console.log('jjjjjjjjjjjjjjjjjjjjjjj',description);
+        var place = $('#place').val();
+        var impact = $('#impact').val();
+        var root_cause = $('#root_cause').val();
+        var direct_cause = $('#direct_cause').val();
+        var responsible_party = $('#responsible_party').val();
+        var user_pic = $('#user_pic').val();
+        console.log(user_pic);
+        var issue_category = $('#issue_category').val();
+
+        // Check if any of the required fields are empty
+        if (
+            title === "" ||
+            description === "" ||
+            place === "" ||
+            impact === "" ||
+            root_cause === "" ||
+            direct_cause === "" ||
+            responsible_party === null ||
+            user_pic === null ||
+            issue_category === null
+        ) {
+            alert("Please fill in all the required fields.");
+            return;
+        }
+
+        var requestData = {
+            title: title,
+            description: description,
+            place: place,
+            impact: impact,
+            root_cause: root_cause,
+            direct_cause: direct_cause,
+            responsible_party: responsible_party,
+            user_pic: user_pic,
+            issue_category: issue_category
+        };
+
+        $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...');
+        $(this).prop('disabled', true);
+
+        $.ajax({
+            url: '/api/issue/save',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function (data) {
+                alert("Issue Added Successfully");
+                // Optionally reset the form or perform other actions
+            },
+            error: function(xhr) {
+                var response = xhr.responseJSON;
+                console.log(response);
+                if (response && response.status === 400) {
+                    alert("Bad Request: " + response.message);
+                } else {
+                    alert("An error occurred. Please try again later.");
+                }
+            },
+
+            complete: function () {
+                $('#addIssue').html('Add New Issue').prop('disabled', false);
+            }
+        });
+    });
+
 </script>
+
+
 </body>
 </html>
