@@ -78,7 +78,7 @@ public class DepartmentController {
         return ResponseEntity.ok("Department deleted successfully");
     }
 
-    @GetMapping("/dpcount")
+    @GetMapping("/count")
     public long dpCount(){
         return departmentService.getDeprtmentCount();
     }
