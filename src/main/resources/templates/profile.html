@@ -380,8 +380,6 @@
                         $('#loading-overlay').addClass('d-none');
 
                         showSuccess("Password changed successfully");
-                        //reload page
-                        window.location.reload();
                     },
                     error: function (error) {
                         console.log(error);
@@ -389,6 +387,28 @@
                         $('#loading-overlay').addClass('d-none');
 
                         showError(error.responseText);
+
+                    },
+                    complete: function () {
+                        // Hide the full-page loading overlay on complete
+                        $('#loading-overlay').addClass('d-none');
+
+                        // Clear all password fields
+                        $("#currentPassword").val("");
+                        $("#newPassword").val("");
+                        $("#confirmNewPassword").val("");
+
+                        // Reset all password icons
+                        $(".passwordIcon").removeClass("fa-eye-slash");
+                        $(".passwordIcon").addClass("fa-eye");
+
+                        // Reset all password input types
+                        $("[data-type='text']").attr("type", "password");
+                        $("[data-type='text']").attr("data-type", "password");
+
+                        // reload page
+                        getUserProfileInfo();
+
 
                     }
                 });
