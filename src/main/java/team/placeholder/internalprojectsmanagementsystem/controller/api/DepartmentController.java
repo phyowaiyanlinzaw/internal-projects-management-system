@@ -78,6 +78,11 @@ public class DepartmentController {
         return ResponseEntity.ok("Department deleted successfully");
     }
 
+    @GetMapping("/dpcount")
+    public long dpCount(){
+        return departmentService.getDeprtmentCount();
+    }
+
 
 
 

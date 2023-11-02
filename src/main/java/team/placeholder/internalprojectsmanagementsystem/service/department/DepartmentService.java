@@ -19,6 +19,8 @@ public interface DepartmentService {
 
     void deleteDepartment(long id);
 
+    long getDeprtmentCount();
+
 
 
 }
