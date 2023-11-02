@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(long id) {
-        User user = userRepository.findById(id).orElseNull();
+        User user = userRepository.findById(id);
         if (user != null) {
             return UserMapper.toUserDto(user);
         } else {
@@ -127,6 +127,8 @@ public class UserServiceImpl implements UserService {
 
         // Set the project manager by retrieving it from the database based on its ID
         user.setProjectManager(UserMapper.toUser(userDto.getProjectManager()));
+
+        System.out.println(user);
 
         // Attempt to save the user to the repository
         try {
