@@ -568,8 +568,28 @@
         },
     });
 
+
     console.log(firstChart);
     firstChart.config.options.animation.duration = 5000;
+
+    let departmentHeads;
+    function getDepartmentHeads() {
+        fetch('api/user/departmenthead')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                departmentHeads = data;
+            })
+            .catch(error => {
+                console.error("Error fetching data via Fetch:", error);
+            });
+    }
+
+
 </script>
 </body>
 </html>
