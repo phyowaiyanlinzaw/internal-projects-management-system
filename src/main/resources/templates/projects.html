@@ -87,6 +87,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
         <script src="/js/custome.js" defer></script>
+        <script src="/js/archListCall.js" type="module" async></script>
         <script type="module" defer>
             import {
                 formatDateFromMilliseconds,
@@ -98,6 +99,10 @@
                 sendData,
                 getData
             } from "/js/api-function.js";
+
+            import  {
+                getArchitecturelist
+            } from "/js/archListCall.js";
 
             const architectureInput = document.querySelector('input[name="architectures"]');
             const systemOutlinesInput = document.querySelector('input[name="systemOutlines"]');
@@ -117,28 +122,9 @@
                 });
             }
 
-            let arcccList;
+            let arcccList = getArchitecturelist();
 
-            $('document').ready(() => {
-                getData("/api/project/architecturelist", (error, data) => {
-                    if(error) {
-                        console.log(error)
-                    } else {
-                        arcccList = data
-                        console.log('asdfasdfasdfasd',arcccList)
-                        initializeTagify(document.querySelector('input[name="architectures"]'), data);
-                    }
-                })
-            })
-
-
-
-            // let a = initializeTagify(architectureInput);
-            // console.log(a)
-            // initializeTagify(systemOutlinesInput);
-            // initializeTagify(deliverableInput);
-            // **********************end
-
+            initializeTagify(document.querySelector('input[name="architectures"]'), arcccList);
 
             const startDateInput = document.getElementById("start_date");
             const endDateInput = document.getElementById("end_date");
@@ -171,57 +157,6 @@
                 // Adding image, link, video, or formula
                 ["link"],
             ];
-
-            const arcList = [
-                {
-                    id: 1,
-                    tech_name: "js",
-                },
-                {
-                    id: 2,
-                    tech_name: "html",
-                },
-                {
-                    id: 3,
-                    tech_name: "css",
-                },
-            ];
-
-            // for (let i = 0; i < arcList.length; i++) {
-            //     const curArc = arcList[i];
-            //     const option = document.createElement("option");
-            //     if (i === 1) {
-            //         option.selected = true;
-            //     }
-            //     option.setAttribute("value", curArc.id);
-            //     option.innerText = curArc.tech_name;
-            //     document
-            //         .querySelector("#architectures")
-            //         .appendChild(option);
-            // }
-
-            const clientList = [
-                {
-                    id: 1,
-                    name: "zawlinshein",
-                },
-                {
-                    id: 2,
-                    name: "dog",
-                },
-                {
-                    id: 3,
-                    name: "papaya",
-                },
-            ];
-
-            // for (let i = 0; i < clientList.length; i++) {
-            //     const curClient = clientList[i];
-            //     const option = document.createElement("option");
-            //     option.setAttribute("value", JSON.stringify(curClient));
-            //     option.innerText = curClient.name;
-            //     document.querySelector("#client").appendChild(option);
-            // }
 
             const proListFromBack = [
                 {
@@ -627,7 +562,6 @@
                     });
                 });
             });
-            console.log('xxxxxxxxxxxxxxxxxxxxxx',arcccList)
         </script>
     </head>
 

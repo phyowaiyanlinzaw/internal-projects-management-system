@@ -2,7 +2,6 @@ import { sendData, getData } from '/js/api-function.js';
 
 let taskList = [];
 
-
 getData("/api/task/list", (error, response) => {
     if (error) {
         console.error('Error:', error);
