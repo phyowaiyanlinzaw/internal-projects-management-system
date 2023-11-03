@@ -113,7 +113,7 @@ public class Project {
                 ", architectures=" + architectures +
                 ", department=" + department +
                 ", client=" + client +
-                ", user=" + user +
+                ", projectManager=" + projectManager +
                 ", users=" + users +
                 '}';
     }

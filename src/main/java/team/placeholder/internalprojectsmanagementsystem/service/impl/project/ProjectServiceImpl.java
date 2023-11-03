@@ -28,26 +28,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public ProjectDto save(ProjectDto projectDto) {
-        Project project = ProjectMapper.toProject(projectDto);
-        project.setName(projectDto.getName());
-        project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
-        project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
-        project.setStart_date(projectDto.getStart_date());
-        project.setEnd_date(projectDto.getEnd_date());
-        project.setBackground(projectDto.getBackground());
-        project.setCurrent_phase(projectDto.getCurrent_phase());
-        project.setDuration(projectDto.getDuration());
-        project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
-        project.setObjective(projectDto.getObjective());
-
-        Set<Architecture> arList = new HashSet<>();
-
-
-        project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
-
-        Project savedProject = projectRepository.save(project);
-        return ProjectMapper.toProjectDto(savedProject);
+    public Project save(Project project) {
+        System.out.println("XXXXXXXXXXXXXXXXXX" + projectRepository.save(project));
+        Project savedProject =projectRepository.save(project);
+        return savedProject;
     }
 
     @Override

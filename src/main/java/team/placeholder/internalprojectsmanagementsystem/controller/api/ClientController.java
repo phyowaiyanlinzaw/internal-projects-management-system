@@ -18,7 +18,7 @@ public class ClientController {
     private final ClientServiceImpl clientService;
 
 
-    @GetMapping("list")
+    @GetMapping("lists")
     public ResponseEntity<List<ClientDto>> getAllClients() {
         List<ClientDto> clients = clientService.getAllClient();
         if (clients != null) {
