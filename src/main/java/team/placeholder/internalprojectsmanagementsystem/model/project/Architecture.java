@@ -38,12 +38,4 @@ public class Architecture {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "Architecture{" +
-                "id=" + id +
-                ", tech_name='" + tech_name + '\'' +
-                ", projects=" + projects +
-                '}';
-    }
 }
