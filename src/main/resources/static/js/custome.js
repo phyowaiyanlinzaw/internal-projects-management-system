@@ -35,6 +35,7 @@ $(document).ready(function () {
         sortIcon.addEventListener("click", function () {
             let isAsc = sortIcon.classList.contains("bi-sort-alpha-down");
             sortCards(this, isAsc);
+            console.log(isAsc)
         });
     }
     $(".circle-progress").each(function () {

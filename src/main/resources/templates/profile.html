@@ -161,7 +161,6 @@
                                         class="tab-pane fade profile-edit pt-3"
                                         id="profile-edit"
                                 >
-                                    <form>
                                         <div class="row mb-3">
                                             <label
                                                     class="col-md-4 col-lg-3 col-form-label"
@@ -202,11 +201,11 @@
                                                     type="submit"
                                                     class="btn btn-primary"
                                                     style="width: 20%"
+                                                    id="change-username-btn"
                                             >
                                                 Edit
                                             </button>
                                         </div>
-                                    </form>
                                 </div>
 
                                 <div
@@ -413,6 +412,20 @@
                     }
                 });
             });
+
+            //Change User Name AJAX
+            $("#change-username-btn").on("click",function(e){
+                e.preventDefault();
+                const usernameInput = $("nameInput").val();
+
+                $.ajax({
+                    url: 'api/user/update/name/'+ usernameInput,
+                    type: 'POST',
+                    success: function (data){
+
+                    }
+                })
+            })
 
             function showError(message) {
                 $("#errorText").text(message);
