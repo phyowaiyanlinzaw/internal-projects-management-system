@@ -1,6 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,7 @@ import java.util.Set;
 @Table(name="project")
 @Getter
 @Setter
-public class Project implements Serializable{
+public class Project implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,9 +43,8 @@ public class Project implements Serializable{
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> tasks;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "system_outline_id")
-    private SystemOutLine systemOutLine;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SystemOutLine> systemOutLines ;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Deliverable> deliverables ;
@@ -58,9 +56,7 @@ public class Project implements Serializable{
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Issue> issues;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST,
-            CascadeType.MERGE })
-    @JoinTable(name = "project_architecture", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "architecture_id"))
+    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
     private Set<Architecture> architectures = new HashSet<>();
 
     @ManyToOne
@@ -94,5 +90,6 @@ public class Project implements Serializable{
     public int hashCode() {
         return Objects.hash(id);
     }
+
 
 }
