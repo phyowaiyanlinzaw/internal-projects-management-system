@@ -161,6 +161,13 @@
                                         class="tab-pane fade profile-edit pt-3"
                                         id="profile-edit"
                                 >
+
+                                    <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                        <strong>Error:</strong> <span id="successText"></span>
+                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                            &times;
+                                        </button>
+                                    </div>
                                         <div class="row mb-3">
                                             <label
                                                     class="col-md-4 col-lg-3 col-form-label"
@@ -416,15 +423,37 @@
             //Change User Name AJAX
             $("#change-username-btn").on("click",function(e){
                 e.preventDefault();
-                const usernameInput = $("nameInput").val();
+                const usernameInput = $("#nameInput").val();
+                const email = $("#emailInput").val();
+
+                if(usernameInput === ""){
+                    showError("Please fill in all fields");
+                    return;
+                }
 
                 $.ajax({
-                    url: 'api/user/update/name/'+ usernameInput,
-                    type: 'POST',
-                    success: function (data){
-
+                    url: "/api/user/change-username",
+                    type: "POST",
+                    data: {
+                        name: usernameInput,
+                        email: email
+                    },
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function (data) {
+                        console.log(data)
+                        showSuccess("Username changed successfully");
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        showError(error.responseText);
+                    },
+                    complete: function () {
+                        // Clear all password fields
+                        $("#nameInput").val("");
+                        // reload page
+                        getUserProfileInfo();
                     }
-                })
+                });
             })
 
             function showError(message) {
@@ -442,8 +471,17 @@
             }
 
             function showSuccess(message) {
-                // You can create a similar function for showing success messages.
-                alert(message); // For simplicity, we're using the alert function here.
+                $("#successText").text(message);
+                $("#successAlert").show();
+
+                setTimeout(function () {
+                    $("#successAlert").hide();
+                }, 10000);
+
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#successAlert").hide();
+                });
             }
 
 

@@ -148,5 +148,22 @@ public class UserController {
         return ResponseEntity.ok(userService.countAllByDepartmentId(departmentId));
     }
 
+    @PostMapping("change-username")
+    public ResponseEntity<String> changeUsername(@RequestBody UserDto userDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            UserDto user = userService.getUserByEmail(authentication.getName());
+            if (user == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+            //set new username
+            user.setName(userDto.getName());
+            userService.save(user);
+            return ResponseEntity.ok("Username changed successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }
