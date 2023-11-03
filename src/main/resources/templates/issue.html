@@ -61,64 +61,13 @@
                 </div>
             </div>
 
+
+<!--            issue list-->
             <div class="row row-cols-1" id="sort">
 
             </div>
 
 
-<!--            <div class="row row-cols-1" id="sort">-->
-<!--                <div class="p-md-3 p-sm-2 mt-3">-->
-<!--                    <div class="card">-->
-<!--                        <div class="card-header border-bottom text-dark">-->
-
-<!--                            <div class="d-flex justify-content-between align-items-center gap-2" id="getAllIssue">-->
-<!--                                <div class="d-flex align-items-center gap-2">-->
-<!--                                    <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>-->
-
-<!--                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">-->
-<!--                                       Hnin Aye Lwin-->
-<!--                                      </p>-->
-
-<!--                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">-->
-<!--                                        Ei Ei Phyo-->
-<!--                                    </p>-->
-<!--                                </div>-->
-<!--                                <span class="card-title badge rounded-pill bg-success">Success</span>-->
-<!--                            </div>-->
-
-<!--                            <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">-->
-<!--                                <div class="d-flex align-items-center gap-2">-->
-<!--                                    <p>Posted</p><span>3 days ago</span>-->
-<!--                                    <p>Modified at</p><span>1 minute ago</span>-->
-
-<!--                                </div>-->
-<!--                                <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">-->
-<!--                                    See More-->
-<!--                                </button>-->
-<!--                            </div>-->
-
-
-<!--                            <div class="col issue-time-line d-flex gap-2">-->
-<!--                                <p class="btn custom-color rounded-pill">java</p>-->
-<!--                                <p class="btn custom-color rounded-pill">error</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="card-body">-->
-<!--                            <div class="code-block">-->
-<!--                                <p> this code does not work help me please</p>-->
-<!--                                <pre>private final CustomUserDetailsService userDetailsService;-->
-<!--  &#64;Bean-->
-<!--  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;-->
-<!--      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;-->
-<!--      authProvider.setUserDetailsService&#40;userDetailsService&#41;;-->
-<!--      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;-->
-<!--      return authProvider;-->
-<!--  &#125;</pre>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
 
             <div class="row row-cols-1" id="sort-container">
                 <div class="p-md-3 p-sm-2 mt-3">
@@ -205,10 +154,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
+                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2" id="issue_detail">
                             <div class="col">
                                 <h4>corrective action</h4>
-                                <div class="editable text-wrap">
+                                <div class="editable text-wrap" id="corrective_action">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -216,7 +165,7 @@
                             </div>
                             <div class="col">
                                 <h4>preventive action</h4>
-                                <div class="editable text-break">
+                                <div class="editable text-break" id="preventive_action">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -224,7 +173,7 @@
                             </div>
                             <div class="col">
                                 <h4>direct cause</h4>
-                                <div class="editable text-break">
+                                <div class="editable text-break" id="direct_causeValue">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -232,7 +181,7 @@
                             </div>
                             <div class="col">
                                 <h4>root cause</h4>
-                                <div class="editable text-break">
+                                <div class="editable text-break" id="root_causeValue">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -240,7 +189,7 @@
                             </div>
                             <div class="col">
                                 <h4>impact</h4>
-                                <div class="editable text-break">
+                                <div class="editable text-break" id="impactValue">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -248,7 +197,7 @@
                             </div>
                             <div class="col">
                                 <h4>place</h4>
-                                <div class="editable text-break">
+                                <div class="editable text-break" id="placeValue">
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
                                     a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
                                     voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
@@ -286,22 +235,14 @@
                                     style="color:red"> *</span></label>
                             <select class="form-select border-task-description" name="issue_category" id="issue_category" >
                                 <option selected disabled hidden>Select Issue Category</option>
-                                <option value="error">Error</option>
-                                <option value="bug">Bug</option>
-                                <option value="communication">Communication</option>
-                                <option value="technical">Technical</option>
-                                <option value="budget">Budget</option>
-                                <option value="design">Design</option>
-                                <option value="testing">Testing</option>
-                                <option value="other">Other</option>
-<!--                                 <option value="ERROR">Error</option>-->
-<!--                                <option value="BUG">Bug</option>-->
-<!--                                <option value="COMMUNICATION">Communication</option>-->
-<!--                                <option value="TECHNICAL">Technical</option>-->
-<!--                                <option value="BUDGET">Budget</option>-->
-<!--                                <option value="DESIGN">Design</option>-->
-<!--                                <option value="TESTING">Testing</option>-->
-<!--                                <option value="OTHER">Other</option>-->
+                                <option value="ERROR">Error</option>
+                                <option value="BUG">Bug</option>
+                                <option value="COMMUNICATION">Communication</option>
+                                <option value="TECHNICAL">Technical</option>
+                                <option value="BUDGET">Budget</option>
+                                <option value="DESIGN">Design</option>
+                                <option value="TESTING">Testing</option>
+                                <option value="OTHER">Other</option>
                             </select>
                         </div>
 
@@ -536,8 +477,29 @@
 </script>
 
 
-<script>
+<script type="module">
 
+    // import { sendData, getData} from "/js/api-function";
+    //
+    // sendData("/api", "POST", {
+    //     title: title,
+    //         description: description,
+    //         place: place,
+    //         impact: impact,
+    //         root_cause: root_cause,
+    //         direct_cause: direct_cause,
+    //         responsible_party: responsible_party,
+    //         user_pic: user_picValue,
+    //         issue_category: issue_category
+    // }).then(
+    //
+    // )
+    //
+    // async function getIssueData() {
+    //     return await getData("/api/")
+    // }
+    //
+    // let a = await getIssueData();
 
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
@@ -585,8 +547,8 @@
         user_pic.empty();
         $.each(data, function (index, pic) {
             user_pic.append($('<option>', {
-                value: pic.id, // You may need to adjust this based on your API response
-                text: pic.name, // You may need to adjust this based on your API response
+                value: pic.id,
+                text: pic.name,
             }));
         });
     });
@@ -658,6 +620,8 @@
                 $('#addIssue').html('Add New Issue').prop('disabled', false);
             }
         });
+
+
     });
 
 
@@ -693,11 +657,14 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <p>Posted</p>
                                        <span>${getTimeAgo(item.created_date)}</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <p>Modified at</p>
+
+                                       <p>Modified at</p>
                                         <span>${getTimeAgo(item.updated_date)}</span>
                                     </div>
+
+                                     <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                        See More
+                                    </button>
                                 </div>
                             <div class="col issue-time-line d-flex gap-2">
                               <p class="btn custom-color rounded-pill">${item.issue_category}</p>
@@ -728,6 +695,19 @@
     $(document).ready(function() {
         loadData();
     });
+
+
+
+    // $(document).ready(function () {
+    //     $.ajax({
+    //         url: "/api/issue/update/{id}",
+    //         type: "PUT",
+    //         success: function (data) {
+    //             $("#username").text(data.username);
+    //         },
+    //     });
+    // });
+
 
 </script>
 

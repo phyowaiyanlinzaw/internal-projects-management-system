@@ -1,6 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum;
 
 public enum Category {
-//    ERROR,BUG,COMMUNICATION,TECHNICAL,BUDGET,DESIGN,TESTING,OTHER;
-    bug,error,communication,technical,budget,design,testing,other;
+    ERROR,BUG,COMMUNICATION,TECHNICAL,BUDGET,DESIGN,TESTING,OTHER;
+//    bug,error,communication,technical,budget,design,testing,other;
 }
