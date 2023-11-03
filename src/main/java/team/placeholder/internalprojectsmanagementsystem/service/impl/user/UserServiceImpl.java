@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).orElseNull();
         if (user != null) {
             return UserMapper.toUserDto(user);
         } else {
@@ -124,8 +124,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setRole(userDto.getRole());
 
-        System.out.println(user);
-
         // Attempt to save the user to the repository
         try {
             userRepository.save(user);
@@ -166,16 +164,43 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    public Long countAllByRole(Role role) {
+        return userRepository.countAllByRole(role);
+    }
+
+    @Override
+    public Long countAll() {
+        return userRepository.count();
+    }
+
     @Override
     public List<UserDto> getAllUsersByPMId(Long id) {
-        return userRepository.findByProjectManagerId(id)
-                .stream()
+        List<User> users = userRepository.findAllByProjectManagerId(id);
+        return users.stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public long getMemberCount(long id) {
-        return 0;
+    public UserDto getUserByDepartmentIdAndRole(Long departmentId, Role role) {
+        User user = userRepository.findUserByDepartmentIdAndRole(departmentId, role);
+        if (user != null) {
+            return UserMapper.toUserDto(user);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Long countAllByDepartmentId(Long departmentId) {
+        return userRepository.countAllByDepartmentId(departmentId);
+    }
+
+    @Override
+    public List<UserDto> getAllUsersByProjectId(Long projectId) {
+        List<User> users = userRepository.findAllByProjectId(projectId);
+        return users.stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 }

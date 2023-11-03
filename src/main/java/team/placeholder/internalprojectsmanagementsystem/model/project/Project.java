@@ -71,9 +71,13 @@ public class Project {
 
     @ManyToOne
     @JoinColumn(name="pm_id")
-    private User user;
+    private User projectManager;
 
-    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "user_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users = new HashSet<>();
 
     @Override

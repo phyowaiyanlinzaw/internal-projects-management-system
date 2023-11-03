@@ -55,13 +55,13 @@ public class ProjectController {
         return ResponseEntity.badRequest().body("User save failed");
     }}
 
-    @GetMapping("/projectlist")
+    @GetMapping("/list")
     public ResponseEntity<List<ProjectDto>> getAllProjects(){
         List<ProjectDto> projects = projectService.getAllProjects();
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    @GetMapping("/lists/{id}")
+    @GetMapping("/list/{id}")
     public ResponseEntity<ProjectDto> getProjectById(@PathVariable long id){
         ProjectDto projects = projectService.getProjectById(id);
         System.out.println(projects);
@@ -72,7 +72,13 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("/lists/byName/{name}")
+    @GetMapping("/list/user/{id}")
+    public ResponseEntity<List<ProjectDto>> getAllProjectsByUserId(@PathVariable long id){
+        List<ProjectDto> projects = projectService.getAllProjectsByUsersId(id);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @GetMapping("/list/name/{name}")
     public ResponseEntity<ProjectDto> getProjectByName(@PathVariable String name){
         ProjectDto project = projectService.getProjectByName(name);
         System.out.println("Project Name :" +project);
@@ -94,7 +100,7 @@ public class ProjectController {
 //        return ResponseEntity.ok(counts);
 //    }
 
-    @PutMapping(value = "/projectupdate/{id}", consumes ="application/Json")
+    @PutMapping(value = "/update/{id}", consumes ="application/Json")
     public ResponseEntity<String> updatePrject(@PathVariable long id, @RequestBody ProjectDto projectDto){
         ProjectDto updateProject = projectService.updateProject(projectDto);
         if (updateProject!=null){
@@ -111,6 +117,23 @@ public class ProjectController {
     public ResponseEntity <List <ArchitectureDto>> getAllArchitecture(){
         List<ArchitectureDto> architectureDtos= architectureService.getAllArchitecture();
         return new ResponseEntity<>(architectureDtos, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/count/all")
+    public ResponseEntity<Long> countAllProjects(){
+        Long count = projectService.countAllProjects();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/count/user/{id}")
+    public ResponseEntity<Long> countByUserId(@PathVariable long id){
+        Long count = projectService.countAllProjectsByUsersId(id);
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/count/departmentId/{departmentId}")
+    public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId){
+        return ResponseEntity.ok(projectService.countAllProjectsByDepartmentId(departmentId));
     }
 
 }

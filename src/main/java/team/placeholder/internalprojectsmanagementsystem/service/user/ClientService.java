@@ -10,5 +10,9 @@ public interface ClientService {
 
     List<ClientDto> getAllClient();
 
+    Long countAll();
+
+    ClientDto findByProjectName(String projectName);
+
 
 }

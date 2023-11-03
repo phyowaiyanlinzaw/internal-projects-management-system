@@ -93,8 +93,7 @@
     <script src="/js/custome.js" defer></script>
     <script type="module" defer>
 
-        const a = console.log;
-
+        import {getData} from "/js/api-function.js";
 
         const motherContainer = document.querySelector("#sort-container");
 
@@ -120,12 +119,12 @@
         getAllDepartments()
             .then(data => {
                 dpList = [...data];
-                a('dp list', dpList);
+
 
                     // let currentProject = dpList[i];
                     // Do something with currentProject
                     for (let i = 0; i < dpList.length; i++) {
-                        a(dpList[i])
+
                         let currentDp = dpList[i];
 
                         // Create the outermost <div> with class "col-lg-4 col-md-4" and style
@@ -146,11 +145,10 @@
                         const imageDiv = document.createElement("div");
                         imageDiv.classList.add("d-flex", "align-items-center", "justify-content-between", "mb-4");
 
-// Create the <img> element for the image
-                        const image = document.createElement("img");
-                        image.src = "https://source.unsplash.com/random/200x200?sig=1";
-                        image.style.height = "100px";
-                        image.style.width = "100px";
+// Create the icon element with bootstrap icon from bootstrap-icons
+                        const image = document.createElement("i");
+                        image.classList.add("bi", "bi-building", "text-primary");
+                        image.style.fontSize = "50px";
 
 // Create the <h5> element with class "mb-1 card-title modal-detail-title"
                         const title = document.createElement("h5");
@@ -164,19 +162,16 @@
                         const mediaGroup = document.createElement("div");
                         mediaGroup.classList.add("iq-media-group");
 
-// Create and append the avatar images
-                        for (let i = 0; i < 3; i++) {
+// Create and append the avatar icons
+                        for (let i = 0; i < 1; i++) {
                             const avatarLink = document.createElement("a");
                             avatarLink.href = "#";
                             avatarLink.classList.add("iq-media")
 
-                            const avatarImage = document.createElement("img");
-                            avatarImage.classList.add("img-fluid", "avatar-40", "rounded-circle");
-                            avatarImage.src = "https://source.unsplash.com/random/200x200?sig=1";
-                            avatarImage.style.height = "40px";
-                            avatarImage.style.width = "40px";
-
-                            avatarLink.appendChild(avatarImage);
+                            const avatarIcon = document.createElement("i");
+                            avatarIcon.classList.add("bi", "bi-person-circle", "text-primary");
+                            avatarIcon.style.fontSize = "30px";
+                            avatarLink.appendChild(avatarIcon);
                             mediaGroup.appendChild(avatarLink);
                         }
 
@@ -185,9 +180,89 @@
                         seeMoreButton.href = "";
                         seeMoreButton.classList.add("btn", "btn-white", "text-secondary", "link-shadow");
                         seeMoreButton.setAttribute("dp-id", currentDp.id);
+                        console.log("Department Id : "+currentDp.id);
                         seeMoreButton.dataset.bsToggle = "modal";
                         seeMoreButton.dataset.bsTarget = "#department-details";
                         seeMoreButton.textContent = "See More";
+
+                        seeMoreButton.addEventListener("click", function (e) {
+
+                            getData(`/api/department/byId/${currentDp.id}`, (error, data) => {
+                                if(error) {
+                                    console.error(error)
+                                } else {
+                                    document.querySelector("#department-id").value = data.id;
+                                    document.querySelector("#edit-department-name").value = data.name;
+                                }
+
+                            });
+                            getData(`/api/user/count/departmentId/${currentDp.id}` , (error,data) => {
+                                if(error){
+                                    console.error(error)
+                                }else{
+                                    document.querySelector("#total-member").textContent = data
+                                }
+                            })
+                            getData(`/api/project/count/departmentId/${currentDp.id}` , (error,data) => {
+                                if(error){
+                                    console.error(error)
+                                }else{
+                                    document.querySelector("#total-project").textContent = data
+                                }
+                            })
+
+                            // First, get the selected department head's information and display it
+                            let selected_department_head;
+
+                            getData(`/api/user/role/DEPARTMENT_HEAD/departmentId/${currentDp.id}`, (error, data) => {
+                                if (error) {
+                                    console.error(error);
+                                } else {
+                                    const departmentHeadElement = document.querySelector("#department-head");
+                                    departmentHeadElement.textContent = data.name;
+                                    selected_department_head = data;
+
+                                    // Call the function to populate the select box using the selected_department_head
+                                    populateSelectBox(selected_department_head);
+                                }
+                            });
+
+                            function populateSelectBox(selectedData) {
+                                // Get the list of department heads
+                                getData(`/api/user/list/role/DEPARTMENT_HEAD`, (error, dataList) => {
+                                    console.log("All Department Head : " + dataList);
+                                    console.log("Selected Department Head : " + selectedData.name);
+                                    if (error) {
+                                        console.error(error);
+                                    } else {
+                                        const selectElement = document.querySelector("#departmenthead");
+
+                                        // Clear existing options
+                                        selectElement.innerHTML = '';
+
+                                        // Iterate over the data and add new options
+                                        dataList.forEach(departmentHead => {
+                                            const option = document.createElement("option");
+                                            option.value = departmentHead.id; // Set the value as needed
+                                            option.text = departmentHead.name; // Set the text as needed
+                                            selectElement.appendChild(option);
+
+                                            // Pre-select the department head that matches the selected department head
+                                            if (selectedData.id === departmentHead.id) {
+                                                option.selected = true;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+
+
+                        });
+
+
+
+
 
 // Append elements to construct the structure
                         outerDiv.appendChild(cardDiv);
@@ -215,7 +290,7 @@
 
 
 
-        a('fragment : ', fragment)
+
 
         fragment.childNodes.forEach(node => {
             console.log('fragment child',node);
@@ -226,6 +301,8 @@
             // Including the code that appends elements to the DOM
 
         });
+
+
 
     </script>
 </head>
@@ -298,22 +375,21 @@
                     <button type="button" class="btn-close text-white btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
+
+
                 <div class="modal-body">
                     <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
                     <div class="container-fluid">
                         <div class="row">
                             <div class="card">
                                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                    <img src="https://source.unsplash.com/random/200x200?sig=1" alt="Profile"
-                                         class="rounded-circle" style="height: 100px; width: 100px"/>
-                                    <h4 style="margin-top: 10px">Department Head</h4>
-                                    <h5>Lai Kuan Lin</h5>
-                                    <div class="social-links mt-2">
-                                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                    <!--icon-->
+                                    <div class="profile-card-icon">
+                                        <i class="bi bi-building-fill text-primary" style="font-size: 100px"></i>
                                     </div>
+                                    <h4 style="margin-top: 10px">Department Head</h4>
+                                    <h5 id="department-head"></h5>
+
                                 </div>
                             </div>
                             <div class="pt-3">
@@ -336,11 +412,11 @@
                                         <div class="row row-cols-lg-1 row-cols-sm-1 row-cols-md-1 row-cols-xl-2">
                                             <ul class="list-group col" style="padding: 0;">
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Total Project<span class="badge bg-primary rounded-pill">14</span>
+                                                    Total Project<span class="badge bg-primary rounded-pill" id="total-project"></span>
                                                 </li>
                                                 <br/>
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Total Member<span class="badge bg-primary rounded-pill">100</span>
+                                                    Total Member<span class="badge bg-primary rounded-pill" id="total-member"></span>
                                                 </li>
                                             </ul>
                                             <div class="col">
@@ -352,20 +428,21 @@
                                     </div>
 
                                     <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                        <form>
+                                        <form id="edit-department">
                                             <div>
-                                                <label>Department Name</label>
+                                                <input type="hidden" id="department-id" name="department-id">
+                                            </div>
+                                            <div>
+                                                <label >Department Name</label>
                                                 <br/><br/>
                                                 <input type="text" class="form-control" name="departmentname"
-                                                       placeholder="Department Name"/>
+                                                       placeholder="Department Name" id="edit-department-name"/>
                                             </div>
                                             <br/>
                                             <div>
-                                                <label for="departmenthead">Choose Deparment Head:</label><br/><br/>
-                                                <select name="departmenthead" class="form-control">
-                                                    <option value="volvo">Phyoe Wai Yan</option>
-                                                    <option value="saab">Zaw Lin Shein</option>
-                                                    <option value="opel">Thant Htet Ko</option>
+                                                <label for="department-head">Choose Deparment Head:</label><br/><br/>
+                                                <select name="departmenthead" id="departmenthead" class="form-control">
+
                                                 </select>
                                             </div>
                                             <br/>
@@ -373,7 +450,7 @@
                                             <button style="
                                                         background-color: #369;
                                                     " type="submit" class="btn btn-primary py-2 w-100 mb-3"
-                                                    id="loign-btn">Edit
+                                                    id="update-btn">Edit
                                             </button>
                                         </form>
                                     </div>
@@ -391,43 +468,7 @@
     <!-- Back to Top -->
 </div>
 
-<!-- add department modal -->
-<div class="modal fade" id="add-department-modal" data-bs-keyboard="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
-                <form>
-                    <h1 class="modal-title fs-5" style="
-                                    margin-bottom: 10px;
-                                    text-align: center;
-                                    color: #369;
-                                    font-weight: bold;
-                                ">Add Department</h1>
-                    <div>
-                        <label>Department Name</label> <br/><br/>
-                        <input type="text" class="form-control" name="departmentname" placeholder="Department Name"/>
-                    </div>
-                    <br/>
-                    <div>
-                        <label for="departmenthead">Choose Deparment Head:</label><br/><br/>
-                        <select name="departmenthead" id="departmenthead" class="form-control">
-                            <option value="volvo">Phyoe Wai Yan</option>
-                            <option value="saab">Zaw Lin Shein</option>
-                            <option value="opel">Thant Htet Ko</option>
-                        </select>
-                    </div>
-                    <br/>
 
-                    <button style="background-color: #369" type="submit" class="btn btn-primary py-2 w-100 mb-3">
-                        Add
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- add department modal -->
 
 <!--    for select drop-drown-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
@@ -461,26 +502,6 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 <script>
-
-    function fetchDepartments() {
-        var departmentId = $('#departmentId').val();
-        $.ajax({
-            url: '/lists?id=' + departmentId,  // Include the ID in the URL as a query parameter
-            type: 'GET',
-            success: function (data) {
-                // Handle the successful response here
-                var departmentList = $('#departmentList');
-                departmentList.empty();  // Clear the previous content
-                $.each(data, function (index, department) {
-                    departmentList.append('<p>' + department.name + '</p>');  // Assuming "name" is a field in DepartmentDto
-                });
-            },
-            error: function (error) {
-                // Handle any errors here
-                console.error(error);
-            }
-        });
-    }
 
     const ctx = document.getElementById("department-projects-chart");
 
@@ -568,8 +589,62 @@
         },
     });
 
+
     console.log(firstChart);
     firstChart.config.options.animation.duration = 5000;
+
+
+    $(document).ready(function() {
+        $("#load-data").click(function() {
+            $.ajax({
+                url: "api/user/count", // URL to the API endpoint
+                type: "GET", // HTTP method (GET, POST, etc.)
+                dataType: "json", // Data type to expect in response
+                success: function(data) {
+
+                    console.log(data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle errors
+                    console.log("Error: " + textStatus, errorThrown);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        $("#edit-department").submit(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Gather data from the form
+            var departmentId = $("#department-id").val();
+            var departmentName = $("#edit-department-name").val();
+
+            console.log("Id : " + departmentId);
+
+            // Create an object to represent the data to be sent to the server
+            var data = {
+                departmentId : departmentId,
+                departmentname: departmentName,
+            };
+
+
+            // Send an AJAX request to update the department
+            $.ajax({
+                type: "PUT", // Use PUT method to update data
+                url: `/lists/update/${departmentId}`, // Replace with your server-side endpoint URL
+                data: data,
+                success: function(response) {
+                    // Handle the success response from the server, e.g., display a success message
+                    alert("Department updated successfully: " + response);
+                },
+
+            });
+        });
+    });
+
+
+
 </script>
 </body>
 </html>

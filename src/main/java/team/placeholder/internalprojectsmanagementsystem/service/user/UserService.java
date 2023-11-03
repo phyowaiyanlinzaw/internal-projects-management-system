@@ -6,6 +6,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
 @Service
@@ -30,8 +31,15 @@ public interface UserService {
 
     List<UserDto> getAllByRole(Role role);
 
+    Long countAllByRole(Role role);
+
+    Long countAll();
 
     List<UserDto> getAllUsersByPMId(Long id);
 
-    long getMemberCount(long id);
+    UserDto getUserByDepartmentIdAndRole(Long departmentId, Role role);
+
+    Long countAllByDepartmentId(Long departmentId);
+
+    List<UserDto> getAllUsersByProjectId(Long projectId);
 }
