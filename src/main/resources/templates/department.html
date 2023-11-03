@@ -234,6 +234,7 @@
 
                             }
 
+
                         });
 
 
@@ -266,12 +267,11 @@
 
         $("#edit-department").click(function(e) {
             // Prevent the default form submission
-            console.log("Reach In Function.")
             // Gather data from the form
             var departmentId = $("#department-id").val();
             var departmentName = $("#edit-department-name").val();
-
-            console.log("Id : " + departmentId);
+            var departmentHead = $("#departmenthead").val();
+            console.log("Department Head : " + departmentHead)
 
             // Create an object to represent the data to be sent to the server
             var data = {
@@ -279,9 +279,8 @@
                 name: departmentName,
             };
 
-            console.log("ID : " +data)
-            console.log("Data Id : " + data.id)
-            console.log("Data Name : " + data.name)
+
+
             // Send an AJAX request to update the department
             $.ajax({
                 type: "PUT", // Use PUT method to update data
@@ -290,10 +289,20 @@
                 contentType:"application/json",
                 success: function(response) {
                     // Handle the success response from the server, e.g., display a success message
-                    $(`#DH-id-${response.id}`).text(response.name)
-                    $('#staticBackdropLabel').text(response.name)
-                },
 
+
+                    $.ajax({
+                        type: "GET", // Use GET method to fetch data
+                        url: `api/user/update/departmentId/${departmentId}`, // Replace with the endpoint URL for department head
+                        data: JSON.stringify(departmentHead),
+                        contentType:"application/json",
+                        success: function(response) {
+                            $(`#DH-id-${response.id}`).text(response.name)
+                            $('#staticBackdropLabel').text(response.name)
+                        },
+                    });
+
+                },
 
             });
         });
