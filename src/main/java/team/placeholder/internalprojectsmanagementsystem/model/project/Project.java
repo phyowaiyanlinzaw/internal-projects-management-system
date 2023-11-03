@@ -1,6 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,7 @@ import java.util.Set;
 @Table(name="project")
 @Getter
 @Setter
-public class Project implements Serializable{
+public class Project implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,5 +93,6 @@ public class Project implements Serializable{
     public int hashCode() {
         return Objects.hash(id);
     }
+
 
 }
