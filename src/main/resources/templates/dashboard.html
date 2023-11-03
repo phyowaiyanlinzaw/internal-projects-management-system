@@ -250,7 +250,9 @@
                     if(actual === null) {
                         return null;
                     }
-                    return Math.round(((actual - targetData[index]) / targetData[index]) * 100);
+
+                    //divide actual by target then multiply by 100 and round to the nearest integer
+                    return Math.round((actual / targetData[index]) * 100);
                 });
 
                 //Dummy data for kpi chart
@@ -310,7 +312,7 @@
 
              //Create bar chart for p1ctx with percentageDifferenceData
                 const barChart = new Chart(p1ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                         labels: months,
                         datasets: [{
@@ -322,7 +324,15 @@
                             fill: false,
                             tension: 0.1,//line tension
                             categoryPercentage: 0.5,//bar width
-                        }]
+                        },
+                            {
+                                label: 'Target Productivity',
+                                data: Array(targetData.length).fill(100), // Creates an array of 100s matching the length of the data
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)', // Set a different color for the target line
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderDash: [5, 5], // Dotted line for target productivity
+                            },
+                        ]
                     },
                     options: {
                         responsive: true,
@@ -330,7 +340,7 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                max: 100,
+                                max: 200,
                             }
                         }
                     }

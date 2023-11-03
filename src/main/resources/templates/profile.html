@@ -431,29 +431,42 @@
                     return;
                 }
 
+                // Show the loading spinner on the button
+                $(this).html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+                );
+                $(this).attr("disabled", true);
+
                 $.ajax({
                     url: "/api/user/change-username",
                     type: "POST",
-                    data: {
+                    data: JSON.stringify({
                         name: usernameInput,
                         email: email
-                    },
-                    contentType: "application/x-www-form-urlencoded",
+                    }),
+                    contentType:'application/json',
                     success: function (data) {
                         console.log(data)
                         showSuccess("Username changed successfully");
+                        //reenable button
+                        $("#change-username-btn").html("Edit").attr("disabled", false);
                     },
                     error: function (error) {
                         console.log(error);
                         showError(error.responseText);
+                        //reenable button
+                        $("#change-username-btn").html("Edit").attr("disabled", false);
                     },
                     complete: function () {
                         // Clear all password fields
                         $("#nameInput").val("");
+
                         // reload page
                         getUserProfileInfo();
                     }
                 });
+
+
             })
 
             function showError(message) {

@@ -63,7 +63,13 @@ public class UserServiceImpl implements UserService {
         // Set user properties
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
+        // Encrypt the password if it is not null
+        if (userDto.getPassword() == null) {
+            user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
+        }else {
+            user.setPassword(userDto.getPassword());
+        }
+
         user.setRole(userDto.getRole());
 
         // Set the department using getDepartmentdto method
@@ -205,5 +211,13 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void changeUsername(UserDto userDto) {
+        User user = userRepository.findByEmail(userDto.getEmail());
+        if (user != null) {
+            user.setName(userDto.getName());
+            userRepository.save(user);
+        }
+    }
 
 }
