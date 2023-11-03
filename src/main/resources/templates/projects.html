@@ -291,136 +291,7 @@
                 console.log('quill', editor.root.innerHTML)
             })
 
-            const motherContainer = document.querySelector("#sort-container");
 
-            const fragment = document.createDocumentFragment();
-
-            for (let i = 0; i < proListFromBack.length; i++) {
-                let currentProject = proListFromBack[i];
-
-                const div = document.createElement("div");
-                div.classList.add(
-                    "p-md-3",
-                    "p-sm-2",
-                    "active-card",
-                    "mt-3",
-                    "mt-md-0",
-                    "mt-lg-0",
-                    "mt-xl-0"
-                );
-                div.id = `project-${currentProject.id}`;
-
-                const card = document.createElement("div");
-                card.classList.add("card", "border-success");
-
-                const cardHeader = document.createElement("div");
-                cardHeader.classList.add("card-header");
-
-                const dFlexContainer = document.createElement("div");
-                dFlexContainer.classList.add("d-flex", "flex-column");
-
-                const h2 = document.createElement("h2");
-                h2.classList.add(
-                    "card-title",
-                    "text-center",
-                    "text-primary",
-                    "modal-detail-title"
-                );
-                h2.innerText = currentProject.name;
-
-                const dFlexBetween = document.createElement("div");
-                dFlexBetween.classList.add("d-flex", "justify-content-between");
-
-                const dFlexInner = document.createElement("div");
-                dFlexInner.classList.add("d-flex");
-
-                const img = document.createElement("img");
-                img.src = `https://source.unsplash.com/random/200x200?sig=${currentProject.id}`;
-                img.classList.add(
-                    "img-fluid",
-                    "rounded-circle",
-                    "d-none",
-                    "d-md-block",
-                    "d-sm-block"
-                );
-                img.style.width = "40px";
-                img.alt = "Profile Image";
-
-                const h5 = document.createElement("h5");
-                h5.classList.add(
-                    "card-text",
-                    "text-center",
-                    "text-align-center",
-                    "my-auto",
-                    "fst-italic",
-                    "fs-6",
-                    "ms-2"
-                );
-                h5.innerText = currentProject.user.name;
-
-                const a = document.createElement("a");
-                a.href = "#";
-                a.id = currentProject.id;
-                a.classList.add(
-                    "btn",
-                    "btn-white",
-                    "text-secondary",
-                    "link-shadow"
-                );
-                a.setAttribute("data-bs-toggle", "modal");
-                a.setAttribute("data-bs-target", "#project-details");
-                a.innerText = "See More";
-
-                // Create and append the progress-related elements
-                const cardBody = document.createElement("div");
-                cardBody.classList.add(
-                    "card-body",
-                    "position-relative",
-                    "mx-auto"
-                );
-
-                const progressTitle = document.createElement("p");
-                progressTitle.classList.add(
-                    "card-title",
-                    "text-center",
-                    "fs-6",
-                    "mb-1"
-                );
-                progressTitle.innerText = "progress";
-
-                const progressCircle = document.createElement("div");
-                progressCircle.id = `circle-progress-${currentProject.id}`;
-                progressCircle.classList.add(
-                    "circle-progress",
-                    "rounded-circle"
-                );
-                progressCircle.setAttribute("data-min-value", "0");
-                progressCircle.setAttribute("data-max-value", "100");
-                progressCircle.setAttribute(
-                    "data-value",
-                    (
-                        (currentProject.doneTask / currentProject.totalTask) *
-                        100
-                    ).toString()
-                );
-                progressCircle.setAttribute("data-type", "percent");
-
-                dFlexInner.appendChild(img);
-                dFlexInner.appendChild(h5);
-                dFlexBetween.appendChild(dFlexInner);
-                dFlexBetween.appendChild(a);
-                dFlexContainer.appendChild(h2);
-                dFlexContainer.appendChild(dFlexBetween);
-                cardHeader.appendChild(dFlexContainer);
-                card.appendChild(cardHeader);
-
-                cardBody.appendChild(progressTitle);
-                cardBody.appendChild(progressCircle);
-                card.appendChild(cardBody);
-
-                div.appendChild(card);
-                fragment.appendChild(div);
-            }
 
             motherContainer.appendChild(fragment);
 
@@ -628,6 +499,79 @@
                 });
             });
             console.log('xxxxxxxxxxxxxxxxxxxxxx',arcccList)
+        </script>
+
+        <script>
+            // start project list
+            const motherContainer = document.querySelector("#sort-container");
+            const fragment = document.createDocumentFragment();
+
+            function getAllProjects(){
+                return fetch('/api/project/list')
+                    .then(response => {
+                            if (!response.ok){
+                                throw new Error('Network response was not ok');
+
+                            }
+                            return response.json();
+                        }
+                    )
+                    .catch(error =>{
+                        console.error('Fetch error:', error);
+                        throw error;
+                    });
+            }
+
+            let projectList=[];
+            getAllProjects()
+                .then(data =>{
+                    projectList = [...data];
+
+                    for (let i=0; i<projectList.l; i++){
+                        let currentProject = projectList[i];
+
+                        const outerDiv = document.createElement("div");
+                        outerDiv.classList.add("col-lg-4", "col-md-4");
+                        outerDiv.style.paddingBottom="20px";
+
+                        const cardDiv = document.createElement("div");
+                        cardDiv.classList.add("card", "card-block", "card-stretch", "card-height");
+                        cardDiv.style.backgroundColor ="rgb(242, 247, 248)";
+
+                        const cardBodyDiv = document.createElement("div");
+                        cardBodyDiv.classList.add("card-body");
+
+                        const imageDiv = document.createElement("div");
+                        imageDiv.classList.add("d-flex", "align-items-center", "justify-content-between", "mb-4");
+
+                        const image = document.createElement("i");
+                        image.classList.add("bi", "bi-building", "text-primary");
+                        image.style.fontSize ="50px";
+
+                        const title = document.createElement("h5");
+                        title.classList.add("mb-1", "card-title", "modal-detail-title");
+                        title.textContent= currentProject.name;
+
+                        const avatarGroupDiv = document.createElement("div");
+                        avatarGroupDiv.classList.add("d-flex", "align-items-center", "justify-content-between", "pt-3", "border-top");
+
+                        const mediaGroup = document.createElement("div");
+                        mediaGroup.classList.add("iq-media-group");
+
+                        for (let i=0; i<1; i++){
+                            const avatarLink = document.createElement("a");
+                            avatarLink.href="#";
+                            avatarLink.classList.add("iq-media")
+
+                            const avatarIcon = document.createElement("i");
+                            avatarIcon.classList.add("bi", "bi-person-circle", "text-primary");
+                            avatarIcon.style.fontSize ="30px";
+                            avatarLink.appendChild(avatarIcon);
+                            mediaGroup.appendChild(avatarLink);
+                        }
+                    }
+                })
+            //list project end
         </script>
     </head>
 
@@ -973,28 +917,12 @@
                 <div class="row">
                     <div class="col-xl-4">
                         <div class="card">
-                            <div
-                                    class="card-body profile-card pt-4 d-flex flex-column align-items-center"
-                            >
-                                <img
-                                        src="https://source.unsplash.com/random/200x200?sig=1"
-                                        alt="Profile"
-                                        class="rounded-circle"
-                                />
-                                <h2>Kevin Anderson</h2>
+                            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                                <img src="https://source.unsplash.com/random/200x200?sig=1" alt="Profile" class="rounded-circle"/>
+                                <h4>Kevin Anderson</h4>
                                 <div class="social-links mt-2">
-                                    <a href="#" class="twitter"
-                                    ><i class="bi bi-twitter"></i
-                                    ></a>
-                                    <a href="#" class="facebook"
-                                    ><i class="bi bi-facebook"></i
-                                    ></a>
-                                    <a href="#" class="instagram"
-                                    ><i class="bi bi-instagram"></i
-                                    ></a>
-                                    <a href="#" class="linkedin"
-                                    ><i class="bi bi-linkedin"></i
-                                    ></a>
+                                <h5>Project Manager</h5>
                                 </div>
                             </div>
                         </div>
@@ -1004,197 +932,114 @@
                         <div class="card">
                             <div class="card-body pt-3">
                                 <!-- Bordered Tabs -->
-                                <ul
-                                        class="nav nav-tabs nav-tabs-bordered"
-                                >
+                                <ul class="nav nav-tabs nav-tabs-bordered">
                                     <li class="nav-item">
-                                        <button
-                                                class="nav-link active"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#project-overview"
-                                        >
+                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#project-overview">
                                             Overview
                                         </button>
                                     </li>
 
                                             <li class="nav-item">
-                                                <button
-                                                    class="nav-link"
-                                                    data-bs-toggle="tab"
-                                                    data-bs-target="#project-edit"
-                                                >
-                                                    edit
-                                                </button>
+                                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#project-edit">Edit</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button
-                                                    class="nav-link"
-                                                    data-bs-toggle="tab"
-                                                    data-bs-target="#client-info"
-                                                >
-                                                    client info
+                                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#client-info">
+                                                    Client info
                                                 </button>
                                             </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#amount">
+                                            Amount
+                                        </button>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#review">
+                                            Review
+                                        </button>
+                                    </li>
                                         </ul>
                                         <div class="tab-content pt-2">
                                             <div
                                                 class="tab-pane fade show active profile-overview"
-                                                id="project-overview"
-                                            >
+                                                id="project-overview">
                                                 <h5 class="card-title">
                                                     About background
                                                 </h5>
-                                                <p
-                                                    class="small fst-italic"
-                                                    id="project-background"
-                                                ></p>
+                                                <p class="small fst-italic" id="project-background"></p>
 
                                         <h5 class="card-title">
                                             Project Details
                                         </h5>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Department name
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-department-name"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-department-name">
                                                 dance club
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Project name
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-name"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-name">
                                                 find nemo
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Internal review
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-internal-review-count"
-                                            >
-                                                25
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                External review
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-external-review-count"
-                                            >
-                                                1
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Duration
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-duration"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-duration">
                                                 3 Months
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Start date
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-start-date"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-start-date">
                                                 25 september 2022
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 End date
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-end-date"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-end-date">
                                                 25 december 2022
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Current phase
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-current-phase"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-current-phase">
                                                 Basic design
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Client
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-client-name"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">Client</div>
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-client-name">
                                                 DAT
                                             </div>
                                         </div>
-                                        <div
-                                                class="accordion"
-                                                id="accordionExample"
-                                        >
+                                        <div class="accordion" id="accordionExample">
                                             <div class="accordion-item">
-                                                <h2
-                                                        class="accordion-header"
-                                                        id="headingOne"
-                                                >
-                                                    <button
-                                                            class="accordion-button collapsed"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
+                                                <h2 class="accordion-header" id="headingOne">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                             data-bs-target="#collapseOne"
                                                             aria-expanded="false"
-                                                            aria-controls="collapseOne"
-                                                    >
+                                                            aria-controls="collapseOne">
                                                         System Outline
                                                     </button>
                                                 </h2>
@@ -1202,72 +1047,42 @@
                                                         id="collapseOne"
                                                         class="accordion-collapse collapse"
                                                         aria-labelledby="headingOne"
-                                                        data-bs-parent="#accordionExample"
-                                                >
-                                                    <ul
-                                                            class="list-group accordion-body p-2 rounded-end"
-                                                    >
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Analysis<i
-                                                                class="bi bi-check2-all text-success fs-4"
-                                                        ></i>
+                                                        data-bs-parent="#accordionExample">
+                                                    <ul class="list-group accordion-body p-2 rounded-end">
+                                                        <li class="list-group-item d-flex justify-content-between">
+                                                            Analysis<i class="bi bi-check2-all text-success fs-4"></i>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            System
-                                                            Design<i
-                                                                class="bi bi-check2-all text-success fs-4"
-                                                        ></i>
+                                                        <li class="list-group-item d-flex justify-content-between">
+                                                            System Design<i class="bi bi-check2-all text-success fs-4"></i>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
+                                                        <li class="list-group-item d-flex justify-content-between">
                                                             Source
-                                                            Code<i
-                                                                class="bi bi-check2-all text-success fs-4"
-                                                        ></i>
+                                                            Code<i class="bi bi-check2-all text-success fs-4"></i>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Testing<i
-                                                                class="bi bi-check2-all text-success fs-4"
-                                                        ></i>
+                                                        <li class="list-group-item d-flex justify-content-between">
+                                                            Testing<i class="bi bi-check2-all text-success fs-4"></i>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
+                                                        <li class="list-group-item d-flex justify-content-between">
                                                             Deploy
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
+                                                        <li class="list-group-item d-flex justify-content-between">
                                                             Maintence
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
+                                                        <li class="list-group-item d-flex justify-content-between">
                                                             Document
                                                         </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <div class="accordion-item">
-                                                <h2
-                                                        class="accordion-header"
-                                                        id="headingTwo"
-                                                >
+                                                <h2 class="accordion-header" id="headingTwo">
                                                     <button
                                                             class="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#collapseTwo"
                                                             aria-expanded="false"
-                                                            aria-controls="collapseTwo"
-                                                    >
+                                                            aria-controls="collapseTwo">
                                                         Amount
                                                     </button>
                                                 </h2>
@@ -1275,134 +1090,39 @@
                                                         id="collapseTwo"
                                                         class="accordion-collapse collapse"
                                                         aria-labelledby="headingTwo"
-                                                        data-bs-parent="#accordionExample"
-                                                >
-                                                    <ul
-                                                            class="list-group accordion-body p-2 rounded-end"
-                                                    >
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Basic design
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+                                                        data-bs-parent="#accordionExample">
+                                                    <ul class="list-group accordion-body p-2 rounded-end">
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Basic Design<span class="badge bg-primary rounded-pill" id="">11</span>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Detail
-                                                            design
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Detail Design<span class="badge bg-primary rounded-pill" id="dd">11</span>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Coding
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Coding<span class="badge bg-primary rounded-pill" id="ing">11</span>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Unit testing
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Unit Testing<span class="badge bg-primary rounded-pill" id="ut">11</span>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Integrated
-                                                            testing
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Integrated Testing<span class="badge bg-primary rounded-pill" id="it">11</span>
                                                         </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <div class="accordion-item">
-                                                <h2
-                                                        class="accordion-header"
-                                                        id="headingThree"
-                                                >
+                                                <h2 class="accordion-header" id="headingThree">
                                                     <button
                                                             class="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#collapseThree"
                                                             aria-expanded="false"
-                                                            aria-controls="collapseThree"
-                                                    >
+                                                            aria-controls="collapseThree">
                                                         Objective
                                                     </button>
                                                 </h2>
@@ -1410,237 +1130,197 @@
                                                         id="collapseThree"
                                                         class="accordion-collapse collapse"
                                                         aria-labelledby="headingThree"
-                                                        data-bs-parent="#accordionExample"
-                                                >
-                                                    <div
-                                                            class="accordion-body position-relative"
-                                                    >
-                                                        <div
-                                                                class="position-absolute bottom-0 end-0 rounded-circle p-1 fs-6 bg-primary text-white"
-                                                        >
-                                                            <i
-                                                                    class="bi bi-pencil"
-                                                            ></i>
+                                                        data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body position-relative">
+                                                        <div class="position-absolute bottom-0 end-0 rounded-circle p-1 fs-6 bg-primary text-white">
+
                                                         </div>
-                                                        <strong
-                                                        >This is the
-                                                            third item's
-                                                            accordion
-                                                            body.</strong
-                                                        >
-                                                        It is hidden by
-                                                        default, until
-                                                        the collapse
-                                                        plugin adds the
-                                                        appropriate
-                                                        classes that we
-                                                        use to style
-                                                        each element.
-                                                        These classes
-                                                        control the
-                                                        overall
-                                                        appearance, as
-                                                        well as the
-                                                        showing and
-                                                        hiding via CSS
-                                                        transitions. You
-                                                        can modify any
-                                                        of this with
-                                                        custom CSS or
-                                                        overriding our
-                                                        default
-                                                        variables. It's
-                                                        also worth
-                                                        noting that just
-                                                        about any HTML
-                                                        can go within
+                                                        <strong>This is the third item's accordion body.</strong>
+                                                        It is hidden by default, until the collapse plugin adds the
+                                                        appropriate classes that we use to style each element.
+                                                        These classes control the overall appearance, as well as the
+                                                        showing and hiding via CSS transitions. You can modify any
+                                                        of this with custom CSS or overriding our default variables. It's
+                                                        also worth noting that just about any HTML can go within
                                                         the
-                                                        <code
-                                                        >.accordion-body</code
-                                                        >, though the
-                                                        transition does
-                                                        limit overflow.
+                                                        <code>.accordion-body</code>, though the transition does limit overflow.
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div
-                                            class="tab-pane fade profile-edit pt-3"
-                                            id="project-edit"
-                                    >
+                                    <div class="tab-pane fade profile-edit pt-3" id="project-edit">
                                         <!-- Profile Edit Form -->
                                         <form>
                                             <div class="row mb-3">
-                                                <label
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >About
-                                                    background</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9 overflow-hidden border border-dark p-0"
-                                                >
-                                                    <div
-                                                            class="quill-editor-bubble"
-                                                    >
-                                                        <p>
-                                                            Hello World!
-                                                        </p>
-                                                        <p>
-                                                            This is
-                                                            Quill
-                                                            <strong
-                                                            >full</strong
-                                                            >
-                                                            editor
-                                                        </p>
-                                                    </div>
+                                                <label  for="background" class="col-md-4 col-lg-3 col-form-label">Background</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                <textarea type="text" class="form-control border-task-description" id="background" name="background"></textarea>
                                                 </div>
-                                            </div>
+                                                </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="project_name"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >Project name</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <input
-                                                            name="project_name"
+                                                <label for="project_name" class="col-md-4 col-lg-3 col-form-label">Project name</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="project_name"
                                                             type="text"
                                                             class="form-control"
                                                             id="project_name"
-                                                            value="find nemo"
-                                                    />
+                                                            value="find nemo"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="start-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >start date</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <input
-                                                            name="start_date"
-                                                            type="date"
-                                                            class="form-control"
-                                                            id="start-date"
-                                                            value="2017-06-01"
-                                                    />
+                                                <label for="start-date" class="col-md-4 col-lg-3 col-form-label">start date</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="start_date" type="date" class="form-control" id="start-date" value="2017-06-01"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="end-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >end date</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
+                                                <label for="end-date" class="col-md-4 col-lg-3 col-form-label">end date</label>
+                                                <div class="col-md-8 col-lg-9">
                                                     <input
                                                             name="end_date"
                                                             type="date"
                                                             class="form-control"
-                                                            id="end-date"
-                                                    />
+                                                            id="end-date"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="end-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >Objective</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9 overflow-hidden border border-dark p-0"
-                                                >
-                                                    <div
-                                                            class="quill-editor-bubble"
-                                                    >
-                                                        <p>
-                                                            Hello World!
-                                                        </p>
-                                                        <p>
-                                                            This is
-                                                            Quill
-                                                            <strong
-                                                            >full</strong
-                                                            >
-                                                            editor
-                                                        </p>
-                                                    </div>
+                                                <label  for="objective" class="col-md-4 col-lg-3 col-form-label">Objective</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <textarea type="text" class="form-control border-task-description" id="" name="objective"></textarea>
                                                 </div>
                                             </div>
 
                                             <div class="text-center">
-                                                <button
-                                                        type="submit"
-                                                        class="btn btn-primary"
-                                                >
+                                                <button type="submit" class="btn btn-primary">
                                                     Save Changes
                                                 </button>
                                             </div>
                                         </form>
                                         <!-- End Profile Edit Form -->
                                     </div>
-                                    <div
-                                            class="tab-pane fade profile-edit pt-3"
-                                            id="client-info"
-                                    >
+                                    <div class="tab-pane fade profile-edit pt-3" id="client-info">
                                         <div class="row">
-                                            <div
-                                                    class="fs-2 text-center"
-                                            >
+                                            <div class="fs-2 text-center">
                                                 DAT
                                             </div>
-                                            <div
-                                                    class="row row-cols-1 gap-2"
-                                            >
-                                                <div
-                                                        class="d-flex justify-content-start align-items-center gap-2"
-                                                >
-                                                    <div
-                                                            class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
-                                                    >
-                                                        <i
-                                                                class="bi bi-envelope-at"
-                                                        ></i>
+                                            <div class="row row-cols-1 gap-2">
+                                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                                    <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
+                                                        <i class="bi bi-envelope-at"></i>
                                                     </div>
-                                                    <div
-                                                            class="align-self-center"
-                                                    >
+                                                    <div class="align-self-center">
                                                         suckmyfingure@gmail.com
                                                     </div>
                                                 </div>
-                                                <div
-                                                        class="d-flex justify-content-start align-items-center gap-2"
-                                                >
-                                                    <div
-                                                            class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
-                                                    >
-                                                        <i
-                                                                class="bi bi-telephone"
-                                                        ></i>
+                                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                                    <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
+                                                        <i class="bi bi-telephone"></i>
                                                     </div>
-                                                    <div
-                                                            class="align-self-center"
-                                                    >
+                                                    <div class="align-self-center">
                                                         09 77558822
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+
+                                            <div class="tab-pane fade  pt-3" id="amount">
+
+
+
+                                                        <ul class="list-group accordion-body p-2 rounded-end">
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Basic design
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Detail
+                                                                design
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Coding
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Unit testing
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Integrated
+                                                                testing
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="text-center">
+
+                                                                    <a href="" class="btn btn-primary" style="background-color: #369;">Save Amount</a>
+
+
+                                                        </div>
+
+                                            </div>
+
+
+
+
+                                            <div class="tab-pane fade  pt-3" id="review">
+                                                <div class="row mb-3">
+                                                    <label for="project_name" class="col-md-4 col-lg-3 col-form-label">External Review</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="project_name"
+                                                               type="text"
+                                                               class="form-control"
+                                                               id=""
+                                                               value="find nemo"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-3">
+                                                    <label for="project_name" class="col-md-4 col-lg-3 col-form-label">Internal Review</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="project_name"
+                                                               type="text"
+                                                               class="form-control"
+                                                               id=""
+                                                               value="find nemo"/>
+                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+
+                                                    <a href="" class="btn btn-primary" style="background-color: #369;">Save Review</a>
+
+
+                                                </div>
+
+                                            </div>
                                 </div>
                                 <!-- End Bordered Tabs -->
                             </div>
@@ -1649,9 +1329,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="/project" class="btn btn-primary"
-                >manage task</a
-                >
+                <a href="/project" class="btn btn-primary">manage task</a>
             </div>
         </div>
     </div>
