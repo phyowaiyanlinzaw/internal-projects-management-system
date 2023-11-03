@@ -1,21 +1,9 @@
 import { sendData, getData } from '/js/api-function.js';
 
-let taskList = [];
-
-
-getData("/api/task/list", (error, response) => {
-    if (error) {
-        console.error('Error:', error);
-    } else {
-        console.log('Data:', response);
-        taskList = response
+export async function getTaskList() {
+    try {
+        return await getData("/api/task/list");
+    } catch (error) {
+        return error;
     }
-})
-
-export function getTaskList () {
-    return taskList;
-}
-
-export function removeAnItemFromTaskList(i) {
-    taskList.splice(i, 1);
 }

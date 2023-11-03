@@ -7,18 +7,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
+import java.sql.Date;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/project")
@@ -27,13 +39,26 @@ public class ProjectController {
     private final ProjectServiceImpl projectService;
     private final UserServiceImpl userService;
     private final ArchitectureServiceImpl architectureService;
+    private final ArchitectureRepository architectureRepository;
 
 
-    @PostMapping("save")
+    @PostMapping(value = "/save")
     public ResponseEntity<String> save(@RequestBody ProjectDto project){
-        System.out.println("from front end" + project);
+
+//        Set<Architecture> architecture = new HashSet<>();
+//
+//        for(ArchitectureDto architectureDto : project.getArchitectureDto()) {
+//            if(architectureDto.getId() == null) {
+//                architecture.add(architectureService.save(architectureDto));
+//            } else {
+//                System.out.println("arch exist so find it and than store in architecture");
+//                architecture.add(architectureRepository.getReferenceById(architectureDto.getId()));
+//            }
+//        }
+////        System.out.println(architecture);
+//        Project project2 = ProjectMapper.toProject(project);
+//        project2.setArchitectures(architecture);
         ProjectDto savedProject = projectService.save(project);
-        System.out.println(savedProject);
         if (savedProject!=null){
             return ResponseEntity.ok("Project save successfully");
         }else {
@@ -75,15 +100,6 @@ public class ProjectController {
     }
 
 
-//    @GetMapping("/count/{id}")
-//    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
-//        long pcount = projectService.getCountByDepartment(id);
-//        long ecount = userService.getMemberCount(id);
-//        Map<String, Long> counts = new HashMap<>();
-//        counts.put("projectCount : ", pcount);
-//        counts.put("memberCount : ", ecount);
-//        return ResponseEntity.ok(counts);
-//    }
 
     @PutMapping(value = "/update/{id}", consumes ="application/Json")
     public ResponseEntity<String> updatePrject(@PathVariable long id, @RequestBody ProjectDto projectDto){
@@ -115,5 +131,14 @@ public class ProjectController {
         Long count = projectService.countAllProjectsByUsersId(id);
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/count/departmentId/{departmentId}")
+    public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId){
+        return ResponseEntity.ok(projectService.countAllProjectsByDepartmentId(departmentId));
+    }
+
+
+
+
 
 }

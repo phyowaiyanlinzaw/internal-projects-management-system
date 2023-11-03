@@ -93,28 +93,20 @@
     <script src="/js/custome.js" defer></script>
     <script type="module" defer>
 
+
+        //department list ________________________________________________
+        //________________________________________________________________
         import {getData} from "/js/api-function.js";
 
-        const a = console.log;
-
+        async function getAllDepartments() {
+            return await getData('/api/department/list')
+        }
 
         const motherContainer = document.querySelector("#sort-container");
 
         const fragment = document.createDocumentFragment();
 
-        function getAllDepartments() {
-            return fetch('/api/department/list')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    throw error;
-                });
-        }
+
 
         let dpList = [];
 
@@ -122,12 +114,12 @@
         getAllDepartments()
             .then(data => {
                 dpList = [...data];
-                a('dp list', dpList);
+
 
                     // let currentProject = dpList[i];
                     // Do something with currentProject
                     for (let i = 0; i < dpList.length; i++) {
-                        a(dpList[i])
+
                         let currentDp = dpList[i];
 
                         // Create the outermost <div> with class "col-lg-4 col-md-4" and style
@@ -156,6 +148,7 @@
 // Create the <h5> element with class "mb-1 card-title modal-detail-title"
                         const title = document.createElement("h5");
                         title.classList.add("mb-1", "card-title", "modal-detail-title");
+                        title.setAttribute("id", `DH-id-${currentDp.id}`)
                         title.textContent = currentDp.name;
 
 // Create the <div> for the group of avatar images
@@ -177,37 +170,81 @@
                             avatarLink.appendChild(avatarIcon);
                             mediaGroup.appendChild(avatarLink);
                         }
-
+//department list end_________________________________________________________________________
+//____________________________________________________________________________________________
 // Create the "See More" button
                         const seeMoreButton = document.createElement("a");
                         seeMoreButton.href = "";
                         seeMoreButton.classList.add("btn", "btn-white", "text-secondary", "link-shadow");
                         seeMoreButton.setAttribute("dp-id", currentDp.id);
-                        a("Department Id : "+currentDp.id);
+                        console.log("Department Id : "+currentDp.id);
                         seeMoreButton.dataset.bsToggle = "modal";
                         seeMoreButton.dataset.bsTarget = "#department-details";
                         seeMoreButton.textContent = "See More";
 
                         seeMoreButton.addEventListener("click", function (e) {
 
-                            getData(`/api/department/byId/${currentDp.id}`, (error, data) => {
-
-                                if(error) {
-                                    a(error)
-                                } else {
-                                    document.querySelector("#edit-department-name").value = data.name
+                            getData(`/api/department/byId/${currentDp.id}`).then(data => {
+                                console.log(data)
+                                    document.querySelector("#department-id").value = data.id;
+                                    document.querySelector("#edit-department-name").value = data.name;
                                 }
+                            ).catch(error => console.log(error))
+                            getData(`/api/user/count/departmentId/${currentDp.id}`).then(data => {
+                                document.querySelector("#total-member").textContent = data
+                            }).catch(error => console.log(error))
 
-                            })
-                            getData(`/api/user/count/departmentId/${currentDp.id}`,(error, data) => {
-                                if(error){
-                                    a(error)
-                                } else{
-                                    document.querySelector("totalMember").value = data
-                                }
-                            })
-                            getData(`/api/`)
-                        })
+                            getData(`/api/project/count/departmentId/${currentDp.id}`).then(data => {
+                                document.querySelector("#total-project").textContent = data
+                            }).catch(error => console.log(error))
+
+                            // First, get the selected department head's information and display it
+                            let selected_department_head;
+
+                            getData(`/api/user/role/DEPARTMENT_HEAD/departmentId/${currentDp.id}`).then(data => {
+                                const departmentHeadElement = document.querySelector("#department-head");
+                                departmentHeadElement.textContent = data.name;
+                                selected_department_head = data;
+                                console.log("DH for the current dp", data)
+                                // Call the function to populate the select box using the selected_department_head
+                                populateSelectBox(selected_department_head);
+                            }).catch(error => console.log(error))
+
+                            function populateSelectBox(selectedData) {
+                                // Get the list of department heads
+                                getData(`/api/user/list/role/DEPARTMENT_HEAD`).then(dataList => {
+
+                                    console.log("All Department Head : " + dataList);
+                                    console.log("Selected Department Head : " + selectedData.name);
+
+                                    const selectElement = document.querySelector("#departmenthead");
+
+                                    // Clear existing options
+                                    selectElement.innerHTML = '';
+
+                                    // Iterate over the data and add new options
+                                    dataList.forEach(departmentHead => {
+                                        const option = document.createElement("option");
+                                        option.value = departmentHead.id; // Set the value as needed
+                                        option.text = departmentHead.name; // Set the text as needed
+                                        selectElement.appendChild(option);
+
+                                        // Pre-select the department head that matches the selected department head
+                                        if (selectedData.id === departmentHead.id) {
+                                            option.selected = true;
+                                        }
+                                    });
+                                }).catch(error => console.log(error))
+
+                            }
+
+
+                        });
+//sermore end _________________________________________________________
+//_____________________________________________________________________
+
+
+
 
 // Append elements to construct the structure
                         outerDiv.appendChild(cardDiv);
@@ -233,7 +270,47 @@
             });
 
 
+        $("#edit-department").click(function(e) {
+            // Prevent the default form submission
+            // Gather data from the form
+            var departmentId = $("#department-id").val();
+            var departmentName = $("#edit-department-name").val();
+            var departmentHead = $("#departmenthead").val();
+            console.log("Department Head : " + departmentHead)
 
+            // Create an object to represent the data to be sent to the server
+            var data = {
+                id : departmentId,
+                name: departmentName,
+            };
+
+
+
+            // Send an AJAX request to update the department
+            $.ajax({
+                type: "PUT", // Use PUT method to update data
+                url: `api/department/lists/update/${departmentId}`, // Replace with your server-side endpoint URL
+                data: JSON.stringify(data),
+                contentType:"application/json",
+                success: function(response) {
+                    // Handle the success response from the server, e.g., display a success message
+
+
+                    $.ajax({
+                        type: "GET", // Use GET method to fetch data
+                        url: `api/user/update/departmentId/${departmentId}`, // Replace with the endpoint URL for department head
+                        data: JSON.stringify(departmentHead),
+                        contentType:"application/json",
+                        success: function(response) {
+                            $(`#DH-id-${response.id}`).text(response.name)
+                            $('#staticBackdropLabel').text(response.name)
+                        },
+                    });
+
+                },
+
+            });
+        });
 
 
 
@@ -333,7 +410,7 @@
                                         <i class="bi bi-building-fill text-primary" style="font-size: 100px"></i>
                                     </div>
                                     <h4 style="margin-top: 10px">Department Head</h4>
-                                    <h5 id = "departmethead">Lai Kuan Lin</h5>
+                                    <h5 id="department-head"></h5>
 
                                 </div>
                             </div>
@@ -357,11 +434,11 @@
                                         <div class="row row-cols-lg-1 row-cols-sm-1 row-cols-md-1 row-cols-xl-2">
                                             <ul class="list-group col" style="padding: 0;">
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Total Project<span class="badge bg-primary rounded-pill" id="totalProject"></span>
+                                                    Total Project<span class="badge bg-primary rounded-pill" id="total-project"></span>
                                                 </li>
                                                 <br/>
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Total Member<span class="badge bg-primary rounded-pill" id="totalMember"></span>
+                                                    Total Member<span class="badge bg-primary rounded-pill" id="total-member"></span>
                                                 </li>
                                             </ul>
                                             <div class="col">
@@ -373,7 +450,10 @@
                                     </div>
 
                                     <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                        <form>
+
+                                            <div>
+                                                <input type="hidden" id="department-id" name="department-id">
+                                            </div>
                                             <div>
                                                 <label >Department Name</label>
                                                 <br/><br/>
@@ -382,21 +462,17 @@
                                             </div>
                                             <br/>
                                             <div>
-                                                <label for="departmenthead">Choose Deparment Head:</label><br/><br/>
-                                                <select name="departmenthead" class="form-control">
-                                                    <option value="volvo">Phyoe Wai Yan</option>
-                                                    <option value="saab">Zaw Lin Shein</option>
-                                                    <option value="opel">Thant Htet Ko</option>
+                                                <label for="department-head">Choose Deparment Head:</label><br/><br/>
+                                                <select name="departmenthead" id="departmenthead" class="form-control">
+
                                                 </select>
                                             </div>
                                             <br/>
 
-                                            <button style="
-                                                        background-color: #369;
-                                                    " type="submit" class="btn btn-primary py-2 w-100 mb-3"
-                                                    id="loign-btn">Edit
+                                            <button  style="background-color: #369;" type="submit" class="btn btn-primary py-2 w-100 mb-3"
+                                                    id="edit-department">Edit
                                             </button>
-                                        </form>
+
                                     </div>
                                 </div>
                                 <!-- End Bordered Tabs -->
@@ -412,43 +488,7 @@
     <!-- Back to Top -->
 </div>
 
-<!-- add department modal -->
-<div class="modal fade" id="add-department-modal" data-bs-keyboard="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
-                <form>
-                    <h1 class="modal-title fs-5" style="
-                                    margin-bottom: 10px;
-                                    text-align: center;
-                                    color: #369;
-                                    font-weight: bold;
-                                ">Add Department</h1>
-                    <div>
-                        <label>Department Name</label> <br/><br/>
-                        <input type="text" class="form-control" name="departmentname" placeholder="Department Name"/>
-                    </div>
-                    <br/>
-                    <div>
-                        <label for="departmenthead">Choose Deparment Head:</label><br/><br/>
-                        <select name="departmenthead" id="departmenthead" class="form-control">
-                            <option value="volvo">Phyoe Wai Yan</option>
-                            <option value="saab">Zaw Lin Shein</option>
-                            <option value="opel">Thant Htet Ko</option>
-                        </select>
-                    </div>
-                    <br/>
 
-                    <button style="background-color: #369" type="submit" class="btn btn-primary py-2 w-100 mb-3">
-                        Add
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- add department modal -->
 
 <!--    for select drop-drown-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
@@ -481,27 +521,7 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
-<script>
-
-    function fetchDepartments() {
-        var departmentId = $('#departmentId').val();
-        $.ajax({
-            url: '/lists?id=' + departmentId,  // Include the ID in the URL as a query parameter
-            type: 'GET',
-            success: function (data) {
-                // Handle the successful response here
-                var departmentList = $('#departmentList');
-                departmentList.empty();  // Clear the previous content
-                $.each(data, function (index, department) {
-                    departmentList.append('<p>' + department.name + '</p>');  // Assuming "name" is a field in DepartmentDto
-                });
-            },
-            error: function (error) {
-                // Handle any errors here
-                console.error(error);
-            }
-        });
-    }
+<script type="module">
 
     const ctx = document.getElementById("department-projects-chart");
 
@@ -593,41 +613,6 @@
     console.log(firstChart);
     firstChart.config.options.animation.duration = 5000;
 
-    let departmentHeads;
-    function getDepartmentHeads() {
-        fetch('api/user/departmenthead')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                departmentHeads = data;
-            })
-            .catch(error => {
-                console.error("Error fetching data via Fetch:", error);
-            });
-    }
-    $('#departmenthead').change(function() {
-        var selectDepartmentHead = $("selectDepartmentHead");
-        var selectedDepartmentHead = "";
-
-
-
-
-    $.get('/api/user/list/DEPARTMENT_HEAD', function(data) {
-        selectDepartmentHead.empty();
-        $.each(data, function(index, department) {
-            selectDepartmentHead.append($('<option>', {
-                value: department.id, // Adjust this based on your data
-                text: department.name // Adjust this based on your data
-            }));
-        });
-    });
-    });
-
-
 
     $(document).ready(function() {
         $("#load-data").click(function() {
@@ -645,6 +630,10 @@
                 }
             });
         });
+    });
+
+    $(document).ready(function() {
+
     });
 
 

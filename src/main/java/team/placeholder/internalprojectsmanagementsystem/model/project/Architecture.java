@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
+import groovy.util.logging.Slf4j;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Architecture implements Serializable {
+public class Architecture implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,11 +23,7 @@ public class Architecture implements Serializable {
     @Column(unique = true, nullable = false)
     private String tech_name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "architecture_project",
-            joinColumns = @JoinColumn(name = "architecture_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @ManyToMany(mappedBy = "architectures")
     private Set<Project> projects = new HashSet<>();
 
     @Override
@@ -34,7 +31,7 @@ public class Architecture implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Architecture other = (Architecture) o;
-        return tech_name == other.tech_name;
+        return id == other.id;
     }
 
     @Override
@@ -42,12 +39,4 @@ public class Architecture implements Serializable {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "Architecture{" +
-                "id=" + id +
-                ", tech_name='" + tech_name + '\'' +
-                ", projects=" + projects +
-                '}';
-    }
 }

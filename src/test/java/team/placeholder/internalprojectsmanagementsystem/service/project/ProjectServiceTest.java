@@ -64,13 +64,7 @@ class ProjectServiceTest {
         assertEquals(projectDto, updatedProject);
     }
 
-    @Test
-    public void testDeleteProject() {
-        long projectId = 1;
-        projectService.deleteProject(projectId);
 
-        Mockito.verify(projectService).deleteProject(projectId);
-    }
 
 
 

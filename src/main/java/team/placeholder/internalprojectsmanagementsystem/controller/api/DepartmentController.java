@@ -61,15 +61,15 @@ public class DepartmentController {
 
 
     @PutMapping("/lists/update/{id}")
-    public ResponseEntity<String> updateDepartment(@PathVariable("id") long id, @RequestBody DepartmentDto departmentDto) {
+    public ResponseEntity<DepartmentDto> updateDepartment(@PathVariable("id") long id, @RequestBody DepartmentDto departmentDto) {
 
         departmentDto.setId(id);
         DepartmentDto updatedDepartment = departmentService.updateDepartment(departmentDto);
 
         if (updatedDepartment != null) {
-            return ResponseEntity.ok("Department updated successfully");
+            return ResponseEntity.ok(updatedDepartment);
         } else {
-            return ResponseEntity.badRequest().body("Failed to update department");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
     @DeleteMapping("/lists/delete/{id}")
