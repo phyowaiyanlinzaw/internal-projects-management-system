@@ -77,6 +77,6 @@ public class ProjectMapper {
 
         project.setSystemOutLines(SystemOutLineMapper.tosystemOutLines(projectDto.getSystemOutLineDto()));
         // Convert SystemOutLinesDto to SystemOutLines using UserMapper
-        System.out.println(project);
+        System.out.println("return project from mapper" + project);
         return project;
 }}

@@ -27,5 +27,11 @@ public class ArchitectureServiceImpl implements ArchitectureService {
         // TODO Auto-generated method stub
         return(architectureRepository.save(ArchitectureMapper.toArchitecture(architecture)));
     }
-    
+
+    @Override
+    public Architecture findById(long id) {
+        return architectureRepository.findById(id).orElse(null);
+    }
+
+
 }
