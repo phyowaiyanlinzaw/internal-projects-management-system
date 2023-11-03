@@ -37,29 +37,6 @@ $(document).ready(function () {
             sortCards(this, isAsc);
         });
     }
-    $(".circle-progress").each(function () {
-        const minValue = $(this).attr("data-min-value");
-        const maxValue = $(this).attr("data-max-value");
-        const value = $(this).attr("data-value");
-        const type = $(this).attr("data-type");
-
-        if (value < 40) {
-            this.classList.add("circle-progress-secondary");
-        } else if (value < 70) {
-            this.classList.add("circle-progress-primary");
-        } else if (value > 69) {
-            this.classList.add("circle-progress-success");
-        }
-
-        if (this.id !== "" && this.id !== null) {
-            new CircleProgress("#" + this.id, {
-                min: minValue,
-                max: maxValue,
-                value: value,
-                textFormat: type,
-            });
-        }
-    });
 
     // ======================== SORT DEPARTMENT AND PROJECT END HERE ========================
 
