@@ -9,4 +9,5 @@ import java.util.List;
 public interface ArchitectureService {
     List<ArchitectureDto> getAllArchitecture();
     Architecture save(ArchitectureDto architectureDto);
+    Architecture findById(long id);
 }
