@@ -51,12 +51,9 @@ public class ProjectController {
             }
         }
 //        System.out.println(architecture);
-        System.out.println("from front end" + project);
         Project project2 = ProjectMapper.toProject(project);
         project2.setArchitectures(architecture);
-        System.out.println("OOOOOOOOOOOOOOOOOOOOOOOOOOO" + project2);
         Project savedProject = projectService.save(project2);
-        System.out.println(savedProject);
         if (savedProject!=null){
             return ResponseEntity.ok("Project save successfully");
         }else {
