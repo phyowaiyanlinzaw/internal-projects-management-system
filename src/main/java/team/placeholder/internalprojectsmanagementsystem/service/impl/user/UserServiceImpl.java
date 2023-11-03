@@ -170,7 +170,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     public Long countAllByRole(Role role) {
         return userRepository.countAllByRole(role);
     }

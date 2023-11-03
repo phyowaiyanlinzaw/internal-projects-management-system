@@ -3,18 +3,21 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.AmountMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.DeliverableMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,28 +27,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
+    private final ArchitectureServiceImpl architectureService;
+    private final ArchitectureRepository architectureRepository;
 
-
+    @Transactional
     @Override
     public ProjectDto save(ProjectDto projectDto) {
-        Project project = ProjectMapper.toProject(projectDto);
-        project.setName(projectDto.getName());
-        project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
-        project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
-        project.setStart_date(projectDto.getStart_date());
-        project.setEnd_date(projectDto.getEnd_date());
-        project.setBackground(projectDto.getBackground());
-        project.setCurrent_phase(projectDto.getCurrent_phase());
-        project.setDuration(projectDto.getDuration());
-        project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
-        project.setObjective(projectDto.getObjective());
 
-        Set<Architecture> arList = new HashSet<>();
-
-
-        project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
-
-        Project savedProject = projectRepository.save(project);
+        Set<Architecture> architecture = new HashSet<>();
+//
+        for(ArchitectureDto architectureDto : projectDto.getArchitectureDto()) {
+            if(architectureDto.getId() == null) {
+                architecture.add(architectureService.save(architectureDto));
+            } else {
+                System.out.println("arch exist so find it and than store in architecture");
+                architecture.add(architectureRepository.getReferenceById(architectureDto.getId()));
+            }
+        }
+        Project project2 = ProjectMapper.toProject(projectDto);
+        project2.setArchitectures(architecture);
+        Project savedProject = projectRepository.save(project2);
         return ProjectMapper.toProjectDto(savedProject);
     }
 
@@ -132,5 +133,32 @@ public class ProjectServiceImpl implements ProjectService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Long countAllProjectsByDepartmentId(long id) {
+        return projectRepository.countAllByDepartmentId(id);
+    }
+
+    public static long calculateEndDateMillis(long startDateMillis, int durationInMonths) {
+        Instant startInstant = Instant.ofEpochMilli(startDateMillis);
+        LocalDate startDate = startInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+
+        int yearsToAdd = durationInMonths / 12;
+        int monthsToAdd = durationInMonths % 12;
+
+        LocalDate endDate = startDate.plusYears(yearsToAdd).plusMonths(monthsToAdd);
+
+        // Adjust for end-of-month cases
+        if (startDate.getDayOfMonth() != endDate.getDayOfMonth()) {
+            endDate = endDate.withDayOfMonth(Math.min(startDate.getDayOfMonth(), endDate.lengthOfMonth()));
+        }
+
+        Instant endInstant = endDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        return endInstant.toEpochMilli();
+    }
+
+    public static LocalDate convertMillisToLocalDate(long millis) {
+        Instant instant = Instant.ofEpochMilli(millis);
+        return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+    }
 
 }

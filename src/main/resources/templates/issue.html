@@ -70,97 +70,192 @@
                     <div class="card">
                         <div class="card-header border-bottom text-dark">
 
-                            <div class="d-flex justify-content-between align-items-center gap-2">
+                            <div class=" justify-content-between align-items-center gap-2">
+
                                 <div class="d-flex align-items-center gap-2">
                                     <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>
 
-                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                       Hnin Aye Lwin
-                                      </p>
 
-                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
-                                        Ei Ei Phyo
-                                    </p>
                                 </div>
-                                <span class="card-title badge rounded-pill bg-success">Success</span>
+
+
+                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <p>Posted</p><span>3 days ago</span>
+                                        <p>Modified at</p><span>1 minute ago</span>
+
+
+
+
+
+
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+
+
+                                        <div class="code-block" style="color: darkred;">
+                                            <span>Java</span>
+                                            <span>Error</span>
+                                        </div>
+
+                                        <div class="code-block" style="color: #369;">
+                                            <span>   this code does not work help me please</span>
+                                        </div>
+
+
+
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
+                                        See More
+                                    </button>
+
+
+                                </div>
+
+
+
+
+
                             </div>
+
+
+
+
+
+
+
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2">
+
+
+                                <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                    Hnin Aye Lwin
+                                </p>
+
+                                <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
+                                    Ei Ei Phyo
+                                </p>
+                                <span class="card-title badge rounded-pill bg-success">Success</span>
+
+
+                            </div>
+
+                            <div class="code-block">
+
+
+                                <pre>private final CustomUserDetailsService userDetailsService;
+  &#64;Bean
+  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
+      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;
+      authProvider.setUserDetailsService&#40;userDetailsService&#41;;
+      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
+      return authProvider;
+  &#125;</pre>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+        <div class="row row-cols-1" id="sort">
+            <div class="p-md-3 p-sm-2 mt-3">
+                <div class="card">
+                    <div class="card-header border-bottom text-dark">
+
+                        <div class=" justify-content-between align-items-center gap-2">
+
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>
+
+
+                            </div>
+
 
                             <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
                                 <div class="d-flex align-items-center gap-2">
                                     <p>Posted</p><span>3 days ago</span>
                                     <p>Modified at</p><span>1 minute ago</span>
 
-                                </div>
-                                <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                    See More
-                                </button>
-                            </div>
 
 
-                            <div class="col issue-time-line d-flex gap-2">
-                                <p class="btn custom-color rounded-pill">java</p>
-                                <p class="btn custom-color rounded-pill">error</p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="code-block">
-                                <p> this code does not work help me please</p>
-                                <pre>private final CustomUserDetailsService userDetailsService;
-  &#64;Bean
-  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
-      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;
-      authProvider.setUserDetailsService&#40;userDetailsService&#41;;
-      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
-      return authProvider;
-  &#125;</pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row row-cols-1" id="sort-container">
-                <div class="p-md-3 p-sm-2 mt-3">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark">
-
-                            <div class="d-flex justify-content-between align-items-center gap-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>
-
-
-                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                        Phyo Wai Yan Lin Zaw
-                                    </p>
-
-                                    <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
-                                        Zaw Lin Shein
-                                    </p>
 
 
                                 </div>
-                                <span class="card-title badge rounded-pill bg-danger">Danger</span>
 
 
                             </div>
 
                             <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <p>Posted</p><span>3 days ago</span>
-                                <p>Modified at</p><span>1 minute ago</span>
-                            </div>
+                                <div class="d-flex align-items-center gap-2">
+
+
+                                    <div class="code-block" style="color: darkred;">
+                                        <span>Java</span>
+                                        <span>Error</span>
+                                    </div>
+
+                                    <div class="code-block" style="color: #369;">
+                                        <span>   this code does not work help me please</span>
+                                    </div>
+
+
+
+                                </div>
                                 <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
                                     See More
                                 </button>
+
+
                             </div>
-                            <div class="col issue-time-line d-flex gap-2">
-                                <p class="btn custom-color rounded-pill">java</p>
-                                <p class="btn custom-color rounded-pill">error</p>
-                            </div>
+
+
+
+
+
                         </div>
-                        <div class="card-body">
-                            <div class="code-block">
-                                <p> this code does not work help me please</p>
+
+
+
+
+
+
+
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-2">
+
+
+                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                Hnin Aye Lwin
+                            </p>
+
+                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
+                                Ei Ei Phyo
+                            </p>
+                            <span class="card-title badge rounded-pill bg-success">Success</span>
+
+
+                        </div>
+
+                        <div class="code-block">
+
+
                                 <pre>private final CustomUserDetailsService userDetailsService;
   &#64;Bean
   public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
@@ -169,14 +264,11 @@
       authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
       return authProvider;
   &#125;</pre>
-                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
     <!-- Content End -->

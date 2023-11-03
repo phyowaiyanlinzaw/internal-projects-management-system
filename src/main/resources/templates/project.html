@@ -908,7 +908,7 @@ vs
                     return taskDiv;
                 }
 
-                let taskList = getTaskList();
+                let taskList = await getTaskList()
 
                 console.log(taskList[0]);
                 for (let i = 0; i < taskList.length; i++) {

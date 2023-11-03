@@ -22,5 +22,16 @@ public class UserDto {
     @JsonProperty("project_manager")
     private UserDto projectManager;
 
-
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", departmentdto=" + departmentdto +
+                ", projectManager=" + projectManager +
+                '}';
+    }
 }

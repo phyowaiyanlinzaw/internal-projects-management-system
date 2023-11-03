@@ -11,4 +11,10 @@ import java.io.Serializable;
 public class ClientDto implements Serializable {
     private long id;
     private String name,email,phone;
+    @Override
+    public String toString() {
+        return "ClientDto [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + "]";
+    }
+
+    
 }

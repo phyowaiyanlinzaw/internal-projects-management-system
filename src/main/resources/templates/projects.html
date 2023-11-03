@@ -81,12 +81,17 @@
         <link href="/css/style.css" rel="stylesheet" />
         <!-- <link href="/css/bootstrap-select2.min.css" rel="stylesheet" /> -->
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.css">
-        
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.css"
+        />
+
+        <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
         <script src="/js/custome.js" defer></script>
+        <script src="/js/getDataForProject.js" type="module" async></script>
+        <script src="/js/currentLoginUser.js" type="module" async></script>
         <script type="module" defer>
             import {
                 formatDateFromMilliseconds,
@@ -94,18 +99,51 @@
                 calculateDuration,
             } from "/js/time.js";
 
-            import {
-                sendData,
-                getData
-            } from "/js/api-function.js";
+            import { sendData, getData } from "/js/api-function.js";
 
-            const architectureInput = document.querySelector('input[name="architectures"]');
-            const systemOutlinesInput = document.querySelector('input[name="systemOutlines"]');
-            const deliverableInput = document.querySelector('input[name="deliverable"]');
+            import {
+                getArchitecturelist,
+                getClientList,
+            } from "/js/getDataForProject.js";
+
+            import { getUser } from "/js/currentLoginUser.js";
+
+            console.log(await getUser());
+
+            const loginUser = await getUser();
+
+            if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+                const addDepartmentButton = document.querySelector(
+                    `button[data-bs-target="#add-department-modal"]`
+                );
+                if (addDepartmentButton) {
+                    addDepartmentButton.classList.remove("d-none");
+                }
+            }
+
+            const clientList = await getClientList();
+            console.log(clientList);
+            const clientSelect = document.querySelector("select[id='client']");
+            clientList.forEach((client) => {
+                const option = document.createElement("option");
+                option.value = JSON.stringify(client);
+                option.textContent = client.name;
+                clientSelect.append(option);
+            });
+
+            const architectureInput = document.querySelector(
+                'input[name="architectures"]'
+            );
+            const systemOutlinesInput = document.querySelector(
+                'input[name="systemOutlines"]'
+            );
+            const deliverableInput = document.querySelector(
+                'input[name="deliverable"]'
+            );
 
             function initializeTagify(input, whiteList) {
                 return new Tagify(input, {
-                    whitelist: whiteList.map(item => item.tech_name),
+                    whitelist: whiteList.map((item) => item.tech_name),
                     maxTags: 10,
                     dropdown: {
                         consoleLog: true,
@@ -117,28 +155,18 @@
                 });
             }
 
-            let arcccList;
+            let arcccList = await getArchitecturelist();
 
-            $('document').ready(() => {
-                getData("/api/project/architecturelist", (error, data) => {
-                    if(error) {
-                        console.log(error)
-                    } else {
-                        arcccList = data
-                        console.log('asdfasdfasdfasd',arcccList)
-                        initializeTagify(document.querySelector('input[name="architectures"]'), data);
-                    }
+            getArchitecturelist()
+                .then((architectureList) => {
+                    const inputElement = document.querySelector(
+                        'input[name="architectures"]'
+                    );
+                    initializeTagify(inputElement, architectureList);
                 })
-            })
-
-
-
-            // let a = initializeTagify(architectureInput);
-            // console.log(a)
-            // initializeTagify(systemOutlinesInput);
-            // initializeTagify(deliverableInput);
-            // **********************end
-
+                .catch((error) => {
+                    console.log("Error:", error);
+                });
 
             const startDateInput = document.getElementById("start_date");
             const endDateInput = document.getElementById("end_date");
@@ -171,57 +199,6 @@
                 // Adding image, link, video, or formula
                 ["link"],
             ];
-
-            const arcList = [
-                {
-                    id: 1,
-                    tech_name: "js",
-                },
-                {
-                    id: 2,
-                    tech_name: "html",
-                },
-                {
-                    id: 3,
-                    tech_name: "css",
-                },
-            ];
-
-            // for (let i = 0; i < arcList.length; i++) {
-            //     const curArc = arcList[i];
-            //     const option = document.createElement("option");
-            //     if (i === 1) {
-            //         option.selected = true;
-            //     }
-            //     option.setAttribute("value", curArc.id);
-            //     option.innerText = curArc.tech_name;
-            //     document
-            //         .querySelector("#architectures")
-            //         .appendChild(option);
-            // }
-
-            const clientList = [
-                {
-                    id: 1,
-                    name: "zawlinshein",
-                },
-                {
-                    id: 2,
-                    name: "dog",
-                },
-                {
-                    id: 3,
-                    name: "papaya",
-                },
-            ];
-
-            // for (let i = 0; i < clientList.length; i++) {
-            //     const curClient = clientList[i];
-            //     const option = document.createElement("option");
-            //     option.setAttribute("value", JSON.stringify(curClient));
-            //     option.innerText = curClient.name;
-            //     document.querySelector("#client").appendChild(option);
-            // }
 
             const proListFromBack = [
                 {
@@ -268,9 +245,95 @@
                         { id: 5, tech_name: "spring boot" },
                     ],
                 },
+                {
+                    id: 2,
+                    name: "project name",
+                    start_date: 1696377600000,
+                    end_date: 1701648000000,
+                    user: { id: 2, name: "zawlinshein" },
+                    background: "project background",
+                    currentPhase: "TESTING",
+                    department: { id: 1, name: "department name" },
+                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
+                    inReview: 25,
+                    exReview: 2,
+                    client: {
+                        id: 1,
+                        name: "Dat",
+                        phone: "09 77558833",
+                        email: "suckmyfingure@gmail.com",
+                    },
+                    totalTask: 100,
+                    doneTask: 50,
+                    amount: {
+                        basicDesign: 0,
+                        detailDesign: 0,
+                        coding: 0,
+                        unitTesting: 0,
+                        integratedTesting: 0,
+                    },
+                    systemOutline: {
+                        analysis: true,
+                        sys_design: true,
+                        coding: false,
+                        testing: false,
+                        deploy: true,
+                        maintenance: true,
+                        document: true,
+                    },
+                    architecutre: [
+                        { id: 1, tech_name: "html" },
+                        { id: 2, tech_name: "mysql" },
+                        { id: 3, tech_name: "js" },
+                        { id: 4, tech_name: "java" },
+                        { id: 5, tech_name: "spring boot" },
+                    ],
+                }
             ];
 
-            const fullQuillEditor = document.querySelector(".quill-editor-full");
+            document
+                .querySelector("#client-form")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    let name = document.querySelector("#client-name").value;
+                    let email = document.querySelector("#client-email").value;
+                    let phone = document.querySelector("#client-phone").value;
+
+                    log(name, email, phone);
+
+                    if (name === "" || email === "" || phone === "") {
+                        alert("client form empty");
+                        return;
+                    }
+
+                    const clientDto = {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                    };
+
+                    sendData("/api/client/save", "POST", clientDto)
+                        .then((response) => {
+                            console.log(response);
+                            const option = document.createElement("option");
+                            option.value = JSON.stringify(response);
+                            option.textContent = response.name;
+                            clientSelect.append(option);
+                            document.querySelector("#client-name").value = "";
+                            document.querySelector("#client-email").value = "";
+                            document.querySelector("#client-phone").value = "";
+                        })
+                        .catch((error) => {
+                            console.error(
+                                "Error in Url : /api/cleient/save ",
+                                error
+                            );
+                        });
+                });
+
+            const fullQuillEditor =
+                document.querySelector(".quill-editor-full");
 
             const editor = new Quill(fullQuillEditor, {
                 modules: {
@@ -279,17 +342,21 @@
                 theme: "snow",
             });
 
-            const checkboxes = document.querySelectorAll('input[name="systemOutline"]');
+            const checkboxes = document.querySelectorAll(
+                'input[name="systemOutline"]'
+            );
             const systemOutlineData = {};
 
-            document.querySelector("#validation-form").addEventListener('submit', function(e) {
-                e.preventDefault()
-                checkboxes.forEach((checkbox) => {
-                    systemOutlineData[checkbox.value] = checkbox.checked;
+            document
+                .querySelector("#validation-form")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    checkboxes.forEach((checkbox) => {
+                        systemOutlineData[checkbox.value] = checkbox.checked;
+                    });
+                    console.log(systemOutlineData);
+                    console.log("quill", editor.root.innerHTML);
                 });
-                console.log(systemOutlineData)
-                console.log('quill', editor.root.innerHTML)
-            })
 
             const motherContainer = document.querySelector("#sort-container");
 
@@ -424,6 +491,30 @@
 
             motherContainer.appendChild(fragment);
 
+            $(".circle-progress").each(function () {
+                const minValue = $(this).attr("data-min-value");
+                const maxValue = $(this).attr("data-max-value");
+                const value = $(this).attr("data-value");
+                const type = $(this).attr("data-type");
+
+                if (value < 40) {
+                    this.classList.add("circle-progress-secondary");
+                } else if (value < 70) {
+                    this.classList.add("circle-progress-primary");
+                } else if (value > 69) {
+                    this.classList.add("circle-progress-success");
+                }
+
+                if (this.id !== "" && this.id !== null) {
+                    new CircleProgress("#" + this.id, {
+                        min: minValue,
+                        max: maxValue,
+                        value: value,
+                        textFormat: type,
+                    });
+                }
+            });
+
             const detailMoal = document.querySelector("#project-details");
 
             motherContainer.addEventListener("click", function (e) {
@@ -516,23 +607,11 @@
                     }
                 });
 
-            $(document).ready(function () {
-                console.log("Document is ready!");
-
-                let a = $("#architectures-list, #deliverable").select2({
-                    tags: true,
-                    width: "100%",
-                });
-                console.log(a)
-            });
-
             console.log("error");
 
             let quillEditors = document.querySelectorAll(
                 ".quill-editor-bubble"
             );
-
-            
 
             // Initialize Quill for each selected element
             quillEditors.forEach(function (editor) {
@@ -573,61 +652,99 @@
                 });
             });
 
-            let log = console.log
-            $(document).ready(function() {
-                $('#validation-form').submit(function(event) {
+            let log = console.log;
+            $(document).ready(function () {
+                $("#validation-form").submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting the traditional way
 
-                    const projectName = $('#name').val();
-                    const client = $('#client').val();
-                    const startDate = new Date($('#start_date').val()).getTime();
-                    const endDate = new Date($('#end_date').val()).getTime();
+                    const projectName = $("#name").val();
+                    const client = JSON.parse($("#client").val());
+                    const startDate = new Date(
+                        $("#start_date").val()
+                    ).getTime();
+                    const endDate = new Date($("#end_date").val()).getTime();
 
-                    const background = $('#background').val();
-                    const architectures = JSON.parse($('#architectures').val());
-                    const systemOutlines = $('#systemOutlines').val();
-                    const deliverable = $('#deliverable').val();
+                    const background = $("#background").val();
+                    const architectures = JSON.parse($("#architectures").val());
+                    const systemOutlines = $("#systemOutlines").val();
+                    const deliverable = $("#deliverable").val();
                     const objective = editor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
-                    let newArc = []
+                    let newArc = [];
 
-                    for(let i = 0; i < architectures.length; i++) {
-                        const ar = architectures[i]
-                        log(ar)
-                        log(ar.value)
-                        newArc.push({tech_name : ar.value})
+                    for (let i = 0; i < architectures.length; i++) {
+                        const ar = architectures[i];
+                        newArc.push({ tech_name: ar.value });
                     }
+
+                    const result = [];
+
+                    newArc.forEach((newObj) => {
+                        const matchingObj = arcccList.find(
+                            (arccObj) => arccObj.tech_name === newObj.tech_name
+                        );
+                        if (!matchingObj) {
+                            result.push(newObj);
+                        } else {
+                            result.push(matchingObj);
+                        }
+                    });
                     // You may want to add some form validation here before sending the data
-                    log(objective)
-                    log(architectures)
-                    log(newArc)
-                    // Perform the AJAX request
+                    log(objective);
+                    log(architectures);
+                    log(newArc);
+                    const project = {
+                        name: projectName,
+                        clientDto: client,
+                        duration:
+                            (new Date(endDate).getFullYear() -
+                                new Date(startDate).getFullYear()) *
+                                12 +
+                            (new Date(endDate).getMonth() -
+                                new Date(startDate).getMonth()),
+                        start_date: startDate,
+                        end_date: endDate,
+                        background: background,
+                        architectureDto: result,
+                        systemOutLineDto: {
+                            analysis : true,
+                            sys_design : true,
+                            coding : true
+                        },
+                        current_phase : 'PLANNING',
+                        deliverableDto: null,
+                        objective: objective,
+                        taskDto : null,
+                        issueDto : null,
+                        amountDto : {
+                            basic_design: 0,
+                            detail_design: 0,
+                            coding : 0,
+                            unit_testing : 0,
+                            integrated_testing : 0
+                        },
+                        departmentDto : null,
+                        reviewDto : null
+                    };
+                    log(project);
+                    //Perform the AJAX request
                     $.ajax({
-                        url: '/api/project/save', // Replace with the actual URL for your project registration endpoint
-                        type: 'POST',
-                        data: JSON.stringify({
-                            name: projectName,
-                            client: client,
-                            start_date: startDate,
-                            end_date: endDate,
-                            background: background,
-                            architectureDto: newArc,
-                            system_outlines: systemOutlines,
-                            deliverable: deliverable,
-                            objective: objective,
-                        }),
-                        contentType: 'application/json',
+                        url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
+                        type: "POST",
+                        data: JSON.stringify(project),
+                        contentType: "application/json",
                         success: function (data) {
-                            alert('Project registered successfully');
+                            alert("Project registered successfully");
                             // Reset the form if needed
-                            $('#validation-form')[0].reset();
+                            $("#validation-form")[0].reset();
                         },
                         error: function (data) {
-                            alert('Error registering project');
-                        }
+                            alert("Error registering project");
+                        },
                     });
                 });
             });
-            console.log('xxxxxxxxxxxxxxxxxxxxxx',arcccList)
+        
+            //list project end
         </script>
     </head>
 
@@ -648,12 +765,12 @@
             </div>
             <!-- Spinner End -->
 
-    <div th:replace="fragments/sidebar :: sidebar"></div>
+            <div th:replace="fragments/sidebar :: sidebar"></div>
 
-    <!-- Content Start -->
-    <div
-            class="content"
-            style="
+            <!-- Content Start -->
+            <div
+                class="content"
+                style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
@@ -692,54 +809,54 @@
                             </select>
                         </div>
 
-                <form class="d-inline-block">
-                    <input
-                            class="form-control border-0"
-                            type="search"
-                            placeholder="Search"
-                    />
-                </form>
-                <!-- modal toggle button start -->
-                <button
-                        type="button"
-                        class="btn btn-light align-self-start"
-                        data-bs-toggle="modal"
-                        data-bs-target="#add-department-modal"
+                        <form class="d-inline-block">
+                            <input
+                                class="form-control border-0"
+                                type="search"
+                                placeholder="Search"
+                            />
+                        </form>
+                        <!-- modal toggle button start -->
+                        <button
+                            type="button"
+                            class="btn btn-light align-self-start d-none"
+                            data-bs-toggle="modal"
+                            data-bs-target="#add-department-modal"
+                        >
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                        <!-- modal toggle button end -->
+                        <!-- add department modal start -->
+
+                        <!-- add department modal end -->
+                        <!-- sortting button -->
+                        <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+
+                        <!-- Modal -->
+                    </div>
+                </div>
+                <!-- Search End -->
+
+                <!-- project start -->
+                <div
+                    id="grid"
+                    class="item-content animate__animated animate__fadeIn active"
+                    data-toggle-extra="tab-content"
                 >
-                    <i class="bi bi-plus-lg"></i>
-                </button>
-                <!-- modal toggle button end -->
-                <!-- add department modal start -->
+                    <div
+                        class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3"
+                        id="sort-container"
+                        style="margin: 10px"
+                    >
+                        <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
 
-                <!-- add department modal end -->
-                <!-- sortting button -->
-                <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
-
-                <!-- Modal -->
+                        <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
+                    </div>
+                </div>
+                <!-- project end -->
             </div>
+            <!-- Content End -->
         </div>
-        <!-- Search End -->
-
-        <!-- project start -->
-        <div
-                id="grid"
-                class="item-content animate__animated animate__fadeIn active"
-                data-toggle-extra="tab-content"
-        >
-            <div
-                    class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3"
-                    id="sort-container"
-                    style="margin: 10px"
-            >
-                <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
-
-                <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
-            </div>
-        </div>
-        <!-- project end -->
-    </div>
-    <!-- Content End -->
-</div>
 
         <!--    modal for add project-->
         <div
@@ -775,166 +892,262 @@
                                 >
                             </li>
 
-                    <li class="nav-item">
-                        <a
-                                class="nav-link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#client-create"
-                        >Client</a
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#client-create"
+                                    >Client</a
+                                >
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="tab-content pt-2">
+                        <div
+                            class="tab-pane fade show active"
+                            id="project-create"
                         >
-                    </li>
-                </ul>
-            </nav>
+                            <div class="modal-body">
+                                <!--                        project add-->
+                                <form class="row g-3" id="validation-form">
+                                    <div class="col-lg-6">
+                                        <!--                                name input-->
+                                        <label
+                                            for="name"
+                                            class="col-sm-12 col-form-label"
+                                            name="name"
+                                            >Project Name<span
+                                                style="color: #dec6c6"
+                                            >
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control border-task-description"
+                                            id="name"
+                                            name="name"
+                                        />
+                                    </div>
 
-            <div class="tab-content pt-2">
-                <div
-                        class="tab-pane fade show active"
-                        id="project-create"
-                >
-                    <div class="modal-body">
+                                    <!--                            client add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="client"
+                                            class="col-sm-12 col-form-label"
+                                            name="client"
+                                            >Client<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <select
+                                            class="form-select"
+                                            id="client"
+                                            name="client"
+                                        ></select>
+                                    </div>
 
-<!--                        project add-->
-                        <form class="row g-3" id="validation-form">
-                            <div class="col-lg-6">
-<!--                                name input-->
-                                <label for="name" class="col-sm-12 col-form-label" name="name">Project Name<span style="color: #dec6c6">
-                                    *</span></label>
-                                <input type="text" class="form-control border-task-description" id="name" name="name"/>
-                            </div>
+                                    <!--                            start date add-->
+                                    <div class="col-md-6">
+                                        <label
+                                            for="start_date"
+                                            class="col-sm-12 col-form-label"
+                                            name="start_date"
+                                            >Start Date<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="date"
+                                            class="form-control border-task-description"
+                                            id="start_date"
+                                            name="start_date"
+                                        />
+                                    </div>
 
-<!--                            client add-->
-                            <div class="col-lg-6">
-                                <label for="client" class="col-sm-12 col-form-label" name="client">Client<span style="color: red">
-                                    *</span></label>
-                                <select class="form-select" id="client" name="client">
-                                    <option value="1" selected>DAT1</option>
-                                    <option value="2">DAT2</option>
-                                    <option value="3">DAT3</option>
-                                </select>
-                            </div>
+                                    <!--                                end date add-->
+                                    <div class="col-md-6">
+                                        <label
+                                            for="end_date"
+                                            class="col-sm-12 col-form-label"
+                                            name="end_date"
+                                            >End Date<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="date"
+                                            class="form-control border-task-description"
+                                            id="end_date"
+                                            name="end_date"
+                                            disabled
+                                        />
+                                    </div>
 
-<!--                            start date add-->
-                            <div class="col-md-6">
-                                <label for="start_date" class="col-sm-12 col-form-label" name="start_date">Start Date<span style="color: red">
-                                    *</span></label>
-                                <input type="date" class="form-control border-task-description" id="start_date" name="start_date"/>
-                            </div>
+                                    <!--                                background add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="background"
+                                            class="col-sm-12 col-form-label"
+                                            name="background"
+                                            >Background<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <textarea
+                                            type="text"
+                                            class="form-control border-task-description"
+                                            id="background"
+                                            name="background"
+                                        ></textarea>
+                                    </div>
 
+                                    <!--                                architectures add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="architectures"
+                                            class="col-sm-12 col-form-label"
+                                            name="architectures"
+                                            >Architecture<span
+                                                style="color: red"
+                                            >
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="architectures"
+                                            name="architectures"
+                                            placeholder="add value"
+                                        />
+                                    </div>
 
-<!--                                end date add-->
-                            <div class="col-md-6">
-                                <label for="end_date" class="col-sm-12 col-form-label" name="end_date">End Date<span style="color: red">
-                                    *</span></label>
-                                        <input type="date" class="form-control border-task-description" id="end_date" name="end_date" disabled/>
-                            </div>
+                                    <!--                                systemoutline add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="systemOutlines"
+                                            class="col-sm-12 col-form-label"
+                                            name="systemOutlines"
+                                            >System Outlines
+                                            <span style="color: red"> *</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="systemOutlines"
+                                            name="systemOutlines"
+                                            placeholder="add value"
+                                            value="analysis,sys_design"
+                                        />
+                                    </div>
 
+                                    <!--                                deliverable add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="deliverable"
+                                            class="col-sm-12 col-form-label"
+                                            name="deliverable"
+                                            >Deliverable<span
+                                                style="color: red"
+                                            >
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="deliverable"
+                                            name="deliverable"
+                                            placeholder="add value"
+                                            value="source code,zip"
+                                        />
+                                    </div>
 
-<!--                                background add-->
-                            <div class="col-lg-6">
-                                <label for="background" class="col-sm-12 col-form-label" name="background">Background<span style="color: red">
-                                    *</span></label>
-                                        <textarea type="text" class="form-control border-task-description" id="background" name="background"></textarea>
-                            </div>
-
-
-<!--                                architectures add-->
-                            <div class="col-lg-6">
-                                <label for="architectures" class="col-sm-12 col-form-label" name="architectures">Architecture<span style="color: red"> *</span></label>
-                                <input type="text" class="form-control" id="architectures" name="architectures" placeholder="add value" value="css,html,javascript" />
-                            </div>
-
-
-<!--                                systemoutline add-->
-                            <div class="col-lg-6">
-                                <label for="systemOutlines" class="col-sm-12 col-form-label" name="systemOutlines">System Outlines
-                                    <span style="color: red"> *</span>
-                                </label>
-                                <input type="text" class="form-control" id="systemOutlines" name="systemOutlines" placeholder="add value" value="analysis,sys_design" />
-                            </div>
-
-
-<!--                                deliverable add-->
-                            <div class="col-lg-6">
-                                <label for="deliverable" class="col-sm-12 col-form-label" name="deliverable">Deliverable<span style="color: red">
-                                    *</span></label>
-                                <input type="text" class="form-control" id="deliverable" name="deliverable" placeholder="add value" value="source code,zip" />
-
-                            </div>
-
-                            <div class="col-lg-12" style="margin-bottom: 80px">
-                                <label for="objective">Objective<span style="color: red">
-                                    *</span></label>
-                                <div class="quill-editor-full" id="objective" name="objective"></div>
-                            </div>
+                                    <div
+                                        class="col-lg-12"
+                                        style="margin-bottom: 80px"
+                                    >
+                                        <label for="objective"
+                                            >Objective<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <div
+                                            class="quill-editor-full"
+                                            id="objective"
+                                            name="objective"
+                                        ></div>
+                                    </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary col-2" data-dismiss="modal">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary col-2"
+                                            data-dismiss="modal"
+                                        >
                                             Add
                                         </button>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
 
-<!--                project add form end-->
+                        <!--                project add form end-->
 
-                <div class="tab-pane fade" id="client-create">
-                    <div class="modal-body modal-lg-6">
-                        <form
-                                class="row g-4"
-                                id="client-form"
-                                action="#"
-                        >
-                            <div class="col-md-12">
-                                <label
-                                        for="name"
-                                        class="col-sm-12 col-form-label"
-                                >Client Name<span
-                                        style="color: red"
-                                >
+                        <div class="tab-pane fade" id="client-create">
+                            <div class="modal-body modal-lg-6">
+                                <form class="row g-4" id="client-form">
+                                    <div class="col-md-12">
+                                        <label
+                                            for="client-name"
+                                            class="col-sm-12 col-form-label"
+                                            >Client Name<span
+                                                style="color: red"
+                                            >
                                                 *</span
-                                ></label
-                                >
-                                <input
-                                        type="text"
-                                        class="form-control border-task-description"
-                                        id="name"
-                                        name="name"
-                                />
-                            </div>
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control border-task-description"
+                                            id="client-name"
+                                            name="name"
+                                        />
+                                    </div>
 
-                            <div class="col-md-12">
-                                <label
-                                        for="email"
-                                        class="col-sm-12 col-form-label"
-                                >Email<span style="color: red">
+                                    <div class="col-md-12">
+                                        <label
+                                            for="client-email"
+                                            class="col-sm-12 col-form-label"
+                                            >Email<span style="color: red">
                                                 *</span
-                                ></label
-                                >
-                                <input
-                                        type="email"
-                                        class="form-control border-task-description"
-                                        id="email"
-                                        name="email"
-                                />
-                            </div>
+                                            ></label
+                                        >
+                                        <input
+                                            type="email"
+                                            class="form-control border-task-description"
+                                            id="client-email"
+                                            name="email"
+                                        />
+                                    </div>
 
-                            <div class="col-md-12">
-                                <label
-                                        for="phone"
-                                        class="col-sm-12 col-form-label"
-                                >Phone<span style="color: red">
+                                    <div class="col-md-12">
+                                        <label
+                                            for="client-phone"
+                                            class="col-sm-12 col-form-label"
+                                            >Phone<span style="color: red">
                                                 *</span
-                                ></label
-                                >
-                                <input
-                                        type="phone"
-                                        class="form-control border-task-description"
-                                        id="phone"
-                                        name="phone"
-                                />
-                            </div>
+                                            ></label
+                                        >
+                                        <input
+                                            type="phone"
+                                            class="form-control border-task-description"
+                                            id="client-phone"
+                                            name="phone"
+                                        />
+                                    </div>
 
                                     <div class="text-center">
                                         <button
@@ -973,28 +1186,12 @@
                 <div class="row">
                     <div class="col-xl-4">
                         <div class="card">
-                            <div
-                                    class="card-body profile-card pt-4 d-flex flex-column align-items-center"
-                            >
-                                <img
-                                        src="https://source.unsplash.com/random/200x200?sig=1"
-                                        alt="Profile"
-                                        class="rounded-circle"
-                                />
-                                <h2>Kevin Anderson</h2>
+                            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                                <img src="https://source.unsplash.com/random/200x200?sig=1" alt="Profile" class="rounded-circle"/>
+                                <h4>Kevin Anderson</h4>
                                 <div class="social-links mt-2">
-                                    <a href="#" class="twitter"
-                                    ><i class="bi bi-twitter"></i
-                                    ></a>
-                                    <a href="#" class="facebook"
-                                    ><i class="bi bi-facebook"></i
-                                    ></a>
-                                    <a href="#" class="instagram"
-                                    ><i class="bi bi-instagram"></i
-                                    ></a>
-                                    <a href="#" class="linkedin"
-                                    ><i class="bi bi-linkedin"></i
-                                    ></a>
+                                <h5>Project Manager</h5>
                                 </div>
                             </div>
                         </div>
@@ -1004,197 +1201,114 @@
                         <div class="card">
                             <div class="card-body pt-3">
                                 <!-- Bordered Tabs -->
-                                <ul
-                                        class="nav nav-tabs nav-tabs-bordered"
-                                >
+                                <ul class="nav nav-tabs nav-tabs-bordered">
                                     <li class="nav-item">
-                                        <button
-                                                class="nav-link active"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#project-overview"
-                                        >
+                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#project-overview">
                                             Overview
                                         </button>
                                     </li>
 
                                             <li class="nav-item">
-                                                <button
-                                                    class="nav-link"
-                                                    data-bs-toggle="tab"
-                                                    data-bs-target="#project-edit"
-                                                >
-                                                    edit
-                                                </button>
+                                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#project-edit">Edit</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button
-                                                    class="nav-link"
-                                                    data-bs-toggle="tab"
-                                                    data-bs-target="#client-info"
-                                                >
-                                                    client info
+                                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#client-info">
+                                                    Client info
                                                 </button>
                                             </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#amount">
+                                            Amount
+                                        </button>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#review">
+                                            Review
+                                        </button>
+                                    </li>
                                         </ul>
                                         <div class="tab-content pt-2">
                                             <div
                                                 class="tab-pane fade show active profile-overview"
-                                                id="project-overview"
-                                            >
+                                                id="project-overview">
                                                 <h5 class="card-title">
                                                     About background
                                                 </h5>
-                                                <p
-                                                    class="small fst-italic"
-                                                    id="project-background"
-                                                ></p>
+                                                <p class="small fst-italic" id="project-background"></p>
 
-                                        <h5 class="card-title">
-                                            Project Details
-                                        </h5>
+                                                <h5 class="card-title">
+                                                    Project Details
+                                                </h5>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Department name
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-department-name"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-department-name">
                                                 dance club
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Project name
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-name"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-name">
                                                 find nemo
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Internal review
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-internal-review-count"
-                                            >
-                                                25
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                External review
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-external-review-count"
-                                            >
-                                                1
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Duration
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-duration"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-duration">
                                                 3 Months
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Start date
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-start-date"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-start-date">
                                                 25 september 2022
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 End date
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-end-date"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-end-date">
                                                 25 december 2022
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">
                                                 Current phase
                                             </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-current-phase"
-                                            >
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-current-phase">
                                                 Basic design
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <div
-                                                    class="col-lg-3 col-md-4 label col-4"
-                                            >
-                                                Client
-                                            </div>
-                                            <div
-                                                    class="col-lg-9 col-md-8 col-8"
-                                                    id="project-client-name"
-                                            >
+                                            <div class="col-lg-3 col-md-4 label col-4">Client</div>
+                                            <div class="col-lg-9 col-md-8 col-8" id="project-client-name">
                                                 DAT
                                             </div>
                                         </div>
-                                        <div
-                                                class="accordion"
-                                                id="accordionExample"
-                                        >
+                                        <div class="accordion" id="accordionExample">
                                             <div class="accordion-item">
-                                                <h2
-                                                        class="accordion-header"
-                                                        id="headingOne"
-                                                >
-                                                    <button
-                                                            class="accordion-button collapsed"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
+                                                <h2 class="accordion-header" id="headingOne">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                             data-bs-target="#collapseOne"
                                                             aria-expanded="false"
-                                                            aria-controls="collapseOne"
-                                                    >
+                                                            aria-controls="collapseOne">
                                                         System Outline
                                                     </button>
                                                 </h2>
@@ -1202,72 +1316,42 @@
                                                         id="collapseOne"
                                                         class="accordion-collapse collapse"
                                                         aria-labelledby="headingOne"
-                                                        data-bs-parent="#accordionExample"
-                                                >
-                                                    <ul
-                                                            class="list-group accordion-body p-2 rounded-end"
-                                                    >
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Analysis<i
-                                                                class="bi bi-check2-all text-success fs-4"
-                                                        ></i>
+                                                        data-bs-parent="#accordionExample">
+                                                    <ul class="list-group accordion-body p-2 rounded-end">
+                                                        <li class="list-group-item d-flex justify-content-between">
+                                                            Analysis<i class="bi bi-check2-all text-success fs-4"></i>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            System
-                                                            Design<i
-                                                                class="bi bi-check2-all text-success fs-4"
-                                                        ></i>
+                                                        <li class="list-group-item d-flex justify-content-between">
+                                                            System Design<i class="bi bi-check2-all text-success fs-4"></i>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
+                                                        <li class="list-group-item d-flex justify-content-between">
                                                             Source
-                                                            Code<i
-                                                                class="bi bi-check2-all text-success fs-4"
-                                                        ></i>
+                                                            Code<i class="bi bi-check2-all text-success fs-4"></i>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Testing<i
-                                                                class="bi bi-check2-all text-success fs-4"
-                                                        ></i>
+                                                        <li class="list-group-item d-flex justify-content-between">
+                                                            Testing<i class="bi bi-check2-all text-success fs-4"></i>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
+                                                        <li class="list-group-item d-flex justify-content-between">
                                                             Deploy
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
+                                                        <li class="list-group-item d-flex justify-content-between">
                                                             Maintence
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
+                                                        <li class="list-group-item d-flex justify-content-between">
                                                             Document
                                                         </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <div class="accordion-item">
-                                                <h2
-                                                        class="accordion-header"
-                                                        id="headingTwo"
-                                                >
+                                                <h2 class="accordion-header" id="headingTwo">
                                                     <button
                                                             class="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#collapseTwo"
                                                             aria-expanded="false"
-                                                            aria-controls="collapseTwo"
-                                                    >
+                                                            aria-controls="collapseTwo">
                                                         Amount
                                                     </button>
                                                 </h2>
@@ -1275,134 +1359,39 @@
                                                         id="collapseTwo"
                                                         class="accordion-collapse collapse"
                                                         aria-labelledby="headingTwo"
-                                                        data-bs-parent="#accordionExample"
-                                                >
-                                                    <ul
-                                                            class="list-group accordion-body p-2 rounded-end"
-                                                    >
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Basic design
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+                                                        data-bs-parent="#accordionExample">
+                                                    <ul class="list-group accordion-body p-2 rounded-end">
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Basic Design<span class="badge bg-primary rounded-pill" id="">11</span>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Detail
-                                                            design
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Detail Design<span class="badge bg-primary rounded-pill" id="dd">11</span>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Coding
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Coding<span class="badge bg-primary rounded-pill" id="ing">11</span>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Unit testing
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Unit Testing<span class="badge bg-primary rounded-pill" id="ut">11</span>
                                                         </li>
-                                                        <li
-                                                                class="list-group-item d-flex justify-content-between"
-                                                        >
-                                                            Integrated
-                                                            testing
-                                                            <div
-                                                                    class="number"
-                                                            >
-                                                                        <span
-                                                                                class="minus"
-                                                                        >-</span
-                                                                        >
-                                                                <input
-                                                                        type="text"
-                                                                        value="0"
-                                                                />
-                                                                <span
-                                                                        class="plus"
-                                                                >+</span
-                                                                >
-                                                            </div>
+
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            Integrated Testing<span class="badge bg-primary rounded-pill" id="it">11</span>
                                                         </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <div class="accordion-item">
-                                                <h2
-                                                        class="accordion-header"
-                                                        id="headingThree"
-                                                >
+                                                <h2 class="accordion-header" id="headingThree">
                                                     <button
                                                             class="accordion-button collapsed"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#collapseThree"
                                                             aria-expanded="false"
-                                                            aria-controls="collapseThree"
-                                                    >
+                                                            aria-controls="collapseThree">
                                                         Objective
                                                     </button>
                                                 </h2>
@@ -1410,237 +1399,197 @@
                                                         id="collapseThree"
                                                         class="accordion-collapse collapse"
                                                         aria-labelledby="headingThree"
-                                                        data-bs-parent="#accordionExample"
-                                                >
-                                                    <div
-                                                            class="accordion-body position-relative"
-                                                    >
-                                                        <div
-                                                                class="position-absolute bottom-0 end-0 rounded-circle p-1 fs-6 bg-primary text-white"
-                                                        >
-                                                            <i
-                                                                    class="bi bi-pencil"
-                                                            ></i>
+                                                        data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body position-relative">
+                                                        <div class="position-absolute bottom-0 end-0 rounded-circle p-1 fs-6 bg-primary text-white">
+
                                                         </div>
-                                                        <strong
-                                                        >This is the
-                                                            third item's
-                                                            accordion
-                                                            body.</strong
-                                                        >
-                                                        It is hidden by
-                                                        default, until
-                                                        the collapse
-                                                        plugin adds the
-                                                        appropriate
-                                                        classes that we
-                                                        use to style
-                                                        each element.
-                                                        These classes
-                                                        control the
-                                                        overall
-                                                        appearance, as
-                                                        well as the
-                                                        showing and
-                                                        hiding via CSS
-                                                        transitions. You
-                                                        can modify any
-                                                        of this with
-                                                        custom CSS or
-                                                        overriding our
-                                                        default
-                                                        variables. It's
-                                                        also worth
-                                                        noting that just
-                                                        about any HTML
-                                                        can go within
+                                                        <strong>This is the third item's accordion body.</strong>
+                                                        It is hidden by default, until the collapse plugin adds the
+                                                        appropriate classes that we use to style each element.
+                                                        These classes control the overall appearance, as well as the
+                                                        showing and hiding via CSS transitions. You can modify any
+                                                        of this with custom CSS or overriding our default variables. It's
+                                                        also worth noting that just about any HTML can go within
                                                         the
-                                                        <code
-                                                        >.accordion-body</code
-                                                        >, though the
-                                                        transition does
-                                                        limit overflow.
+                                                        <code>.accordion-body</code>, though the transition does limit overflow.
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div
-                                            class="tab-pane fade profile-edit pt-3"
-                                            id="project-edit"
-                                    >
+                                    <div class="tab-pane fade profile-edit pt-3" id="project-edit">
                                         <!-- Profile Edit Form -->
                                         <form>
                                             <div class="row mb-3">
-                                                <label
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >About
-                                                    background</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9 overflow-hidden border border-dark p-0"
-                                                >
-                                                    <div
-                                                            class="quill-editor-bubble"
-                                                    >
-                                                        <p>
-                                                            Hello World!
-                                                        </p>
-                                                        <p>
-                                                            This is
-                                                            Quill
-                                                            <strong
-                                                            >full</strong
-                                                            >
-                                                            editor
-                                                        </p>
-                                                    </div>
+                                                <label  for="background" class="col-md-4 col-lg-3 col-form-label">Background</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                <textarea type="text" class="form-control border-task-description" id="background" name="background"></textarea>
                                                 </div>
-                                            </div>
+                                                </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="project_name"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >Project name</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <input
-                                                            name="project_name"
+                                                <label for="project_name" class="col-md-4 col-lg-3 col-form-label">Project name</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="project_name"
                                                             type="text"
                                                             class="form-control"
                                                             id="project_name"
-                                                            value="find nemo"
-                                                    />
+                                                            value="find nemo"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="start-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >start date</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
-                                                    <input
-                                                            name="start_date"
-                                                            type="date"
-                                                            class="form-control"
-                                                            id="start-date"
-                                                            value="2017-06-01"
-                                                    />
+                                                <label for="start-date" class="col-md-4 col-lg-3 col-form-label">start date</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <input name="start_date" type="date" class="form-control" id="start-date" value="2017-06-01"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="end-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >end date</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9"
-                                                >
+                                                <label for="end-date" class="col-md-4 col-lg-3 col-form-label">end date</label>
+                                                <div class="col-md-8 col-lg-9">
                                                     <input
                                                             name="end_date"
                                                             type="date"
                                                             class="form-control"
-                                                            id="end-date"
-                                                    />
+                                                            id="end-date"/>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
-                                                <label
-                                                        for="end-date"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                >Objective</label
-                                                >
-                                                <div
-                                                        class="col-md-8 col-lg-9 overflow-hidden border border-dark p-0"
-                                                >
-                                                    <div
-                                                            class="quill-editor-bubble"
-                                                    >
-                                                        <p>
-                                                            Hello World!
-                                                        </p>
-                                                        <p>
-                                                            This is
-                                                            Quill
-                                                            <strong
-                                                            >full</strong
-                                                            >
-                                                            editor
-                                                        </p>
-                                                    </div>
+                                                <label  for="objective" class="col-md-4 col-lg-3 col-form-label">Objective</label>
+                                                <div class="col-md-8 col-lg-9">
+                                                    <textarea type="text" class="form-control border-task-description" id="" name="objective"></textarea>
                                                 </div>
                                             </div>
 
                                             <div class="text-center">
-                                                <button
-                                                        type="submit"
-                                                        class="btn btn-primary"
-                                                >
+                                                <button type="submit" class="btn btn-primary">
                                                     Save Changes
                                                 </button>
                                             </div>
                                         </form>
                                         <!-- End Profile Edit Form -->
                                     </div>
-                                    <div
-                                            class="tab-pane fade profile-edit pt-3"
-                                            id="client-info"
-                                    >
+                                    <div class="tab-pane fade profile-edit pt-3" id="client-info">
                                         <div class="row">
-                                            <div
-                                                    class="fs-2 text-center"
-                                            >
+                                            <div class="fs-2 text-center">
                                                 DAT
                                             </div>
-                                            <div
-                                                    class="row row-cols-1 gap-2"
-                                            >
-                                                <div
-                                                        class="d-flex justify-content-start align-items-center gap-2"
-                                                >
-                                                    <div
-                                                            class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
-                                                    >
-                                                        <i
-                                                                class="bi bi-envelope-at"
-                                                        ></i>
+                                            <div class="row row-cols-1 gap-2">
+                                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                                    <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
+                                                        <i class="bi bi-envelope-at"></i>
                                                     </div>
-                                                    <div
-                                                            class="align-self-center"
-                                                    >
+                                                    <div class="align-self-center">
                                                         suckmyfingure@gmail.com
                                                     </div>
                                                 </div>
-                                                <div
-                                                        class="d-flex justify-content-start align-items-center gap-2"
-                                                >
-                                                    <div
-                                                            class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
-                                                    >
-                                                        <i
-                                                                class="bi bi-telephone"
-                                                        ></i>
+                                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                                    <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
+                                                        <i class="bi bi-telephone"></i>
                                                     </div>
-                                                    <div
-                                                            class="align-self-center"
-                                                    >
+                                                    <div class="align-self-center">
                                                         09 77558822
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+
+                                            <div class="tab-pane fade  pt-3" id="amount">
+
+
+
+                                                        <ul class="list-group accordion-body p-2 rounded-end">
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Basic design
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Detail
+                                                                design
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Coding
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Unit testing
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                Integrated
+                                                                testing
+                                                                <div class="number">
+                                                                    <span class="minus">-</span>
+                                                                    <input type="text" value="0"/>
+                                                                    <span class="plus">+</span>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="text-center">
+
+                                                                    <a href="" class="btn btn-primary" style="background-color: #369;">Save Amount</a>
+
+
+                                                        </div>
+
+                                            </div>
+
+
+
+
+                                            <div class="tab-pane fade  pt-3" id="review">
+                                                <div class="row mb-3">
+                                                    <label for="project_name" class="col-md-4 col-lg-3 col-form-label">External Review</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="project_name"
+                                                               type="text"
+                                                               class="form-control"
+                                                               id=""
+                                                               value="find nemo"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-3">
+                                                    <label for="project_name" class="col-md-4 col-lg-3 col-form-label">Internal Review</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="project_name"
+                                                               type="text"
+                                                               class="form-control"
+                                                               id=""
+                                                               value="find nemo"/>
+                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+
+                                                    <a href="" class="btn btn-primary" style="background-color: #369;">Save Review</a>
+
+
+                                                </div>
+
+                                            </div>
                                 </div>
                                 <!-- End Bordered Tabs -->
                             </div>
@@ -1649,28 +1598,26 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="/project" class="btn btn-primary"
-                >manage task</a
-                >
+                <a href="/project" class="btn btn-primary">manage task</a>
             </div>
         </div>
     </div>
 </div>
 <!-- modal for project's details -->
 
-<!-- Scripts -->
+        <!-- Scripts -->
 
-<!-- fontawesome -->
-<script src="/js/fontawesome.js"></script>
+        <!-- fontawesome -->
+        <script src="/js/fontawesome.js"></script>
 
-<!-- jquery -->
-<script src="/js/jquery.3.7.1.min.js"></script>
+        <!-- jquery -->
+        <script src="/js/jquery.3.7.1.min.js"></script>
 
-<!-- datable table -->
-<script src="/js/databales.min.js"></script>
+        <!-- datable table -->
+        <script src="/js/databales.min.js"></script>
 
-<!-- bootstrap -->
-<script src="/js/bootstrap.bundle.min.js"></script>
+        <!-- bootstrap -->
+        <script src="/js/bootstrap.bundle.min.js"></script>
 
         <!-- javascript libraries -->
         <script src="/lib/chart/chart.min.js"></script>
@@ -1683,20 +1630,15 @@
         <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
         <script src="/lib/quill/quill.min.js"></script>
 
-<!-- Template Javascript -->
-<script src="/js/main.js"></script>
-        <script>
-
-
-        </script>
-<script src="/js/forprogresscircleiguess.js"></script>
+        <!-- Template Javascript -->
+        <script src="/js/main.js"></script>
+        <script></script>
+        <script src="/js/forprogresscircleiguess.js"></script>
 
         <!-- sort (department, project), form validation and search bar behavior are all here -->
 
         <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
-
-        
     </body>
 </html>

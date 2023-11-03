@@ -22,4 +22,16 @@ public class ArchitectureServiceImpl implements ArchitectureService {
                .map(ArchitectureMapper :: toArchitectureDto)
                .collect(Collectors.toList());
     }
+    @Override
+    public Architecture save(ArchitectureDto architecture) {
+        // TODO Auto-generated method stub
+        return(architectureRepository.save(ArchitectureMapper.toArchitecture(architecture)));
+    }
+
+    @Override
+    public Architecture findById(long id) {
+        return architectureRepository.findById(id).orElse(null);
+    }
+
+
 }

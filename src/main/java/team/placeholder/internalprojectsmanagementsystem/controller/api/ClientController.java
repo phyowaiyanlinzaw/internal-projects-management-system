@@ -18,7 +18,7 @@ public class ClientController {
     private final ClientServiceImpl clientService;
 
 
-    @GetMapping("list")
+    @GetMapping("lists")
     public ResponseEntity<List<ClientDto>> getAllClients() {
         List<ClientDto> clients = clientService.getAllClient();
         if (clients != null) {
@@ -29,13 +29,9 @@ public class ClientController {
     }
 
     @PostMapping("save")
-    public ResponseEntity<String> save(ClientDto clientDto) {
-        ClientDto savedClient = clientService.save(clientDto);
-        if (savedClient != null) {
-            return ResponseEntity.ok("Client saved successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to save client");
-        }
+    public ResponseEntity<ClientDto> save(@RequestBody ClientDto clientDto) {
+        System.out.println(clientDto);
+        return new ResponseEntity<>(clientService.save(clientDto), HttpStatus.OK);
     }
 
     @GetMapping("count")
@@ -57,6 +53,5 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-
 
 }
