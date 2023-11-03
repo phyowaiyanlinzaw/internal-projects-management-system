@@ -43,8 +43,9 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> tasks;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SystemOutLine> systemOutLines ;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "system_outline_id")
+    private SystemOutLine systemOutLine;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Deliverable> deliverables ;
@@ -56,7 +57,9 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Issue> issues;
 
-    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
+    @ManyToMany(cascade = { CascadeType.PERSIST,
+            CascadeType.MERGE })
+    @JoinTable(name = "project_architecture", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "architecture_id"))
     private Set<Architecture> architectures = new HashSet<>();
 
     @ManyToOne
