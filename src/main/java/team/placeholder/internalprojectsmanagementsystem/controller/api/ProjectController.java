@@ -15,6 +15,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
@@ -33,6 +34,7 @@ public class ProjectController {
     private final ProjectServiceImpl projectService;
     private final UserServiceImpl userService;
     private final ArchitectureServiceImpl architectureService;
+    private final ArchitectureRepository architectureRepository;
 
 
     @PostMapping("save")
@@ -41,7 +43,12 @@ public class ProjectController {
         Set<Architecture> architecture = new HashSet<>();
         
         for(ArchitectureDto architectureDto : project.getArchitectureDto()) {
-            architecture.add(architectureService.save(architectureDto));
+            if(architectureDto.getId() == null) {
+                architecture.add(architectureService.save(architectureDto));
+            } else {
+                System.out.println("arch exist so find it and than store in architecture");
+                architecture.add(architectureRepository.getReferenceById(architectureDto.getId()));
+            }
         }
 
         System.out.println("from front end" + project);
