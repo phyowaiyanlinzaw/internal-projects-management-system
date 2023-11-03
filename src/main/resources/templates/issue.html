@@ -679,15 +679,32 @@
 
 
 
-    // $(document).ready(function () {
-    //     $.ajax({
-    //         url: "/api/issue/update/{id}",
-    //         type: "PUT",
-    //         success: function (data) {
-    //             $("#username").text(data.username);
-    //         },
-    //     });
-    // });
+    function openContactsModal(id) {
+
+        $.ajax({
+            url: "/api/issue/update?id="+ id,
+            success: function(data){
+               console.log(id);
+                var myJSON = JSON.stringify(data);
+
+                //alert(myJSON);
+
+                var tmpData = JSON.parse(myJSON);
+                var formattedJson = JSON.stringify(tmpData, null, ' ');
+
+                //alert(formattedJson);
+
+                $('#myContactid').html('Id is : ' + data.id);
+                $('#myContactfirstname').html('FirstName is : ' + data.firstname);
+                $('#myContactlastname').html('LastName is : ' + data.lastname);
+                $('#myContactphonenumber').html('Phone Number is : ' + data.phonenumber);
+                $('#myContactemail').html('Email-Id is : ' + data.email);
+                $('#myContactaddress').html('Address is : ' + data.address);
+                $('#myContactModal').modal("show");
+            }
+
+        });
+    }
 
 
 </script>

@@ -58,7 +58,7 @@ public class Issue implements Serializable {
     @JoinColumn(name="pic_id")
     private User user_pic;
 
-    @OneToMany(mappedBy = "issue")
+    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IssueNotification> issueNotifications;
 
     @Override

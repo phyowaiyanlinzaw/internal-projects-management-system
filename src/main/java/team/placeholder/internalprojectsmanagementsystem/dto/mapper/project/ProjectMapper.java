@@ -38,7 +38,7 @@ public class ProjectMapper {
         //Deliverable to DeliverableDto
 
 
-        projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
+     //   projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
         // Convert SystemOutLinesDto to SystemOutLines using UserMapper
 
 
@@ -72,7 +72,7 @@ public class ProjectMapper {
         project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
         //Deliverable to DeliverableDto
 
-        project.setSystemOutLine(SystemOutLineMapper.toSystemOutline(projectDto.getSystemOutLineDto()));
+      //  project.setSystemOutLine(SystemOutLineMapper.toSystemOutline(projectDto.getSystemOutLineDto()));
         // Convert SystemOutLinesDto to SystemOutLines using UserMapper
         return project;
 }}

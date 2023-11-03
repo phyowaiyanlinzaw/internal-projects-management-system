@@ -71,8 +71,8 @@ public class IssueServiceImpl implements IssueService {
             issue.setUpdated_date(issueDto.getUpdated_date());
             issue.setSolved_date(issueDto.getSolved_date());
             issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
-//            issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
-//            issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
+           issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
+            issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
             issueRepository.save(issue);
             return IssueMapper.toIssueDto(issue);
         }else {

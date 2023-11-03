@@ -66,8 +66,8 @@ public class IssueController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateIssue(@PathVariable long id, @RequestBody IssueDto issueDto) {
-        issueDto.setId(id);
 
+        issueDto.setId(id);
         IssueDto updatedIssue = issueService.updateIssue(issueDto);
 
         if (updatedIssue != null) {
