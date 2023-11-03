@@ -1,4 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.issue;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,24 +33,17 @@ public class IssueDto implements Serializable {
 
     private Category issue_category;
 
+
+    @JsonIgnoreProperties("issues")
     @JsonProperty("project")
     private ProjectDto projectDto;
+
 
     @JsonProperty("user-uploader")
     private UserDto user_uploader;
 
-    @JsonProperty("user-pic")
+   @JsonProperty("pic_id")
     private UserDto user_pic;
-
-
-
-    public boolean isSolved() {
-        return solved;
-    }
-
-    public void setSolved(boolean solved) {
-        this.solved = solved;
-    }
 
 
 

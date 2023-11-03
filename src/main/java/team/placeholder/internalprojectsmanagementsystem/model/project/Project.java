@@ -1,5 +1,8 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,8 +56,12 @@ public class Project implements Serializable {
     @JoinColumn(name = "amount_id")
     private Amount amount;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnoreProperties({"issues"})
+    @JsonManagedReference
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Issue> issues;
+
+
 
     @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
     private Set<Architecture> architectures = new HashSet<>();
@@ -91,7 +98,4 @@ public class Project implements Serializable {
         return Objects.hash(id);
     }
 
-    public Project orElse(Object o) {
-        return null;
-    }
 }

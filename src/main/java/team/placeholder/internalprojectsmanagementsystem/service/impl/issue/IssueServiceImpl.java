@@ -22,9 +22,16 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public IssueDto save(IssueDto issueDto) {
         Issue issue = IssueMapper.toIssue(issueDto);
-        Issue savedIssue = issueRepository.save(issue);
-        return IssueMapper.toIssueDto(savedIssue);
+
+        try {
+            Issue savedIssue = issueRepository.save(issue);
+            return IssueMapper.toIssueDto(savedIssue);
+        } catch (Exception e) {
+            e.printStackTrace();  // You may want to log the error or throw a custom exception.
+            return null;  // Or handle the error as needed in your application.
+        }
     }
+
 
 
     @Override

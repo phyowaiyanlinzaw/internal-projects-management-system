@@ -1,5 +1,8 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,9 +44,11 @@ public class Issue implements Serializable {
     @Enumerated(EnumType.STRING)
     private Category issue_category;
 
+    @JsonIgnoreProperties({"project"})
     @ManyToOne
-    @JoinColumn(name="project_id")
+    @JoinColumn(name = "project_id")
     private Project project;
+
 
     @ManyToOne
     @JoinColumn(name="uploader_id")

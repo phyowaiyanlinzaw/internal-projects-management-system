@@ -2,6 +2,7 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
@@ -23,16 +24,19 @@ public class IssueController {
         return new ResponseEntity<>(issueDtos, HttpStatus.OK);
     }
 
-    @PostMapping("/save")
+    @PostMapping(value="save",consumes = "application/json")
     public ResponseEntity<String> save(@RequestBody IssueDto dto) {
         try {
             IssueDto savedIssue = issueService.save(dto);
+
             if (savedIssue != null) {
                 return ResponseEntity.ok("Issue added successfully");
             } else {
-                return ResponseEntity.badRequest().body("Failed to save issue. Check your data.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to save the issue. Check your data.");
             }
         } catch (Exception e) {
+            // Log the exception for debugging
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request.");
         }
     }

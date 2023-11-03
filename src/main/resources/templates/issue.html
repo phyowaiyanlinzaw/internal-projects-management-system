@@ -250,7 +250,7 @@
                             <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
                                     style="color:red"> *</span></label>
                             <select class="form-select border-task-description" data-live-search="true" aria-label="Select Clients"  id="user_pic" name="user_pic" >
-                                <option selected disabled>Select Person In Charge</option>
+
                             </select>
                         </div>
 
@@ -333,6 +333,9 @@
 
 <!-- jquery -->
 <script src="/js/jquery.3.7.1.min.js"></script>
+
+
+
 
 <!-- datable table -->
 <script src="/js/databales.min.js"></script>
@@ -473,34 +476,10 @@
 
         document.querySelector("#sort-container").innerHTML += currDiv;
     }
-    // new MultiSelectTag("issue_category"), new MultiSelectTag("state"); // id
+
 </script>
 
-
-<script type="module">
-
-    // import { sendData, getData} from "/js/api-function";
-    //
-    // sendData("/api", "POST", {
-    //     title: title,
-    //         description: description,
-    //         place: place,
-    //         impact: impact,
-    //         root_cause: root_cause,
-    //         direct_cause: direct_cause,
-    //         responsible_party: responsible_party,
-    //         user_pic: user_picValue,
-    //         issue_category: issue_category
-    // }).then(
-    //
-    // )
-    //
-    // async function getIssueData() {
-    //     return await getData("/api/")
-    // }
-    //
-    // let a = await getIssueData();
-
+<script>
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
@@ -540,37 +519,43 @@
         theme: "snow",
     });
 
-       // Assuming 'user_pic' is a <select> element
+
     var user_pic = $('#user_pic');
 
+    // Fetch user data from the server
     $.get('api/user/list', function (data) {
         user_pic.empty();
+        user_pic.append($('<option>', {
+            value: '', // Add an empty option for placeholder
+            text: 'Select a User',
+            data: { picUrl: '' } // Empty URL for placeholder
+        }));
         $.each(data, function (index, pic) {
             user_pic.append($('<option>', {
                 value: pic.id,
                 text: pic.name,
+                data: { picUrl: pic.picUrl }
             }));
         });
     });
 
     $('#addIssue').on('click', function () {
         var title = $('#title').val();
-
-        var description = a.root.innerHTML;
-        console.log(description);
+       // var description = a.root.innerHTML; // Assuming "a" is your Quill instance
         var place = $('#place').val();
         var impact = $('#impact').val();
         var root_cause = $('#root_cause').val();
         var direct_cause = $('#direct_cause').val();
         var responsible_party = $('#responsible_party').val();
-        var user_picValue = user_pic.val();
-        console.log("Selected User Pic:", user_picValue);
+        var user_picOption = user_pic.find(':selected');
+        var user_picValue = user_picOption.val();
+        var user_picUrl = user_picOption.data('picUrl');
         var issue_category = $('#issue_category').val();
 
         // Check if any of the required fields are empty
         if (
             title === "" ||
-            description === "" ||
+           // description === "" ||
             place === "" ||
             impact === "" ||
             root_cause === "" ||
@@ -585,13 +570,13 @@
 
         const requestData = {
             title: title,
-            description: description,
+           // description: description,
             place: place,
             impact: impact,
             root_cause: root_cause,
             direct_cause: direct_cause,
             responsible_party: responsible_party,
-            user_pic: user_picValue,
+            user_pic: user_picUrl,
             issue_category: issue_category
         };
 
@@ -601,29 +586,25 @@
         $(this).prop('disabled', true);
 
         $.ajax({
-            url: '/api/issue/save',
+            url: 'api/issue/save',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(requestData),
+            dataType: 'json',
             success: function (data) {
                 alert("Issue Added Successfully");
-
+                console.log(data);
             },
-
-          error: function (data,xhr) {
-                alert('Error registering employee');
-                $('#addIssue').html('Issue Add').prop('disabled', false);
-
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+                alert('Error registering the issue');
+                $('#addIssue').html('Save Data').prop('disabled', false);
             },
-
             complete: function () {
-                $('#addIssue').html('Add New Issue').prop('disabled', false);
+                $('#addIssue').html('Save Data').prop('disabled', false);
             }
         });
-
-
     });
-
 
 
     // All Issue
@@ -646,7 +627,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <h6 class="card-title">${item.title}</h6>
                                         <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                           ${item.user_pic}
+                                           ${item.pic_id.name}
                                         </p>
                                     </div>
                                     <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
@@ -710,6 +691,7 @@
 
 
 </script>
+
 
 </body>
 </html>

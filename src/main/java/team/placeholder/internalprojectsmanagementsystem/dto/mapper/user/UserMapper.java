@@ -15,13 +15,12 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
         userDto.setRole(user.getRole());
+        //userDto.setProjectManager(user.isProjectManager()
 
-        if(user.getProjectManager() != null) {
-            userDto.setProjectManager(toUserDto(user.getProjectManager()));
+        if (user.getDepartment() != null) {
+            userDto.setDepartmentdto(DepartmentMapper.toDepartmentDto(user.getDepartment()));
         }
 
-        // Convert Department to DepartmentDto
-        userDto.setDepartmentdto(DepartmentMapper.toDepartmentDto(user.getDepartment()));
 
         return userDto;
     }
