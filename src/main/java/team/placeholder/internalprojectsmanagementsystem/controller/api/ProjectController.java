@@ -37,23 +37,23 @@ public class ProjectController {
     private final ArchitectureRepository architectureRepository;
 
 
-    @PostMapping("save")
+    @PostMapping(value = "/save")
     public ResponseEntity<String> save(@RequestBody ProjectDto project){
 
-        Set<Architecture> architecture = new HashSet<>();
-        
-        for(ArchitectureDto architectureDto : project.getArchitectureDto()) {
-            if(architectureDto.getId() == null) {
-                architecture.add(architectureService.save(architectureDto));
-            } else {
-                System.out.println("arch exist so find it and than store in architecture");
-                architecture.add(architectureRepository.getReferenceById(architectureDto.getId()));
-            }
-        }
-//        System.out.println(architecture);
-        Project project2 = ProjectMapper.toProject(project);
-        project2.setArchitectures(architecture);
-        Project savedProject = projectService.save(project2);
+//        Set<Architecture> architecture = new HashSet<>();
+//
+//        for(ArchitectureDto architectureDto : project.getArchitectureDto()) {
+//            if(architectureDto.getId() == null) {
+//                architecture.add(architectureService.save(architectureDto));
+//            } else {
+//                System.out.println("arch exist so find it and than store in architecture");
+//                architecture.add(architectureRepository.getReferenceById(architectureDto.getId()));
+//            }
+//        }
+////        System.out.println(architecture);
+//        Project project2 = ProjectMapper.toProject(project);
+//        project2.setArchitectures(architecture);
+        ProjectDto savedProject = projectService.save(project);
         if (savedProject!=null){
             return ResponseEntity.ok("Project save successfully");
         }else {

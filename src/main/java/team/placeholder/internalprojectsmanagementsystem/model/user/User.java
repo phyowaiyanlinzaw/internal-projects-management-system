@@ -61,7 +61,6 @@ public class User implements Serializable {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @JsonManagedReference
     @ManyToMany(mappedBy = "users",cascade = CascadeType.ALL)
     private Set<Project> projects = new HashSet<>();
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProjectService {
 
-    Project save(Project project);
+    ProjectDto save(ProjectDto projectDto);
 
     List<ProjectDto> getAllProjects();
     ProjectDto getProjectById(long id);

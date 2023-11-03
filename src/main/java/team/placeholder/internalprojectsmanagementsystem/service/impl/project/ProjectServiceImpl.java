@@ -5,14 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.AmountMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.DeliverableMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
@@ -25,13 +24,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
+    private final ArchitectureServiceImpl architectureService;
+    private final ArchitectureRepository architectureRepository;
 
     @Transactional
     @Override
-    public Project save(Project project) {
-        System.out.println("XXXXXXXXXXXXXXXXXX" + projectRepository.save(project));
-        Project savedProject =projectRepository.save(project);
-        return savedProject;
+    public ProjectDto save(ProjectDto projectDto) {
+
+        Set<Architecture> architecture = new HashSet<>();
+//
+        for(ArchitectureDto architectureDto : projectDto.getArchitectureDto()) {
+            if(architectureDto.getId() == null) {
+                architecture.add(architectureService.save(architectureDto));
+            } else {
+                System.out.println("arch exist so find it and than store in architecture");
+                architecture.add(architectureRepository.getReferenceById(architectureDto.getId()));
+            }
+        }
+        Project project2 = ProjectMapper.toProject(projectDto);
+        project2.setArchitectures(architecture);
+        Project savedProject = projectRepository.save(project2);
+        return ProjectMapper.toProjectDto(savedProject);
     }
 
     @Override

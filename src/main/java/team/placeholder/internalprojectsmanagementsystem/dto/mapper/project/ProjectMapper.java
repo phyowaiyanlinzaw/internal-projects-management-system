@@ -38,7 +38,7 @@ public class ProjectMapper {
         //Deliverable to DeliverableDto
 
 
-        projectDto.setSystemOutLineDto(SystemOutLineMapper.tosystemOutLineDtos(project.getSystemOutLines()));
+        projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
         // Convert SystemOutLinesDto to SystemOutLines using UserMapper
 
 
@@ -65,18 +65,14 @@ public class ProjectMapper {
         project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
         // Convert Client to ClientDto
 
-        System.out.println("i have no idea" + projectDto.getArchitectureDto());
-
         project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
         //Convert Architecture to ArchitectureDto
-
+        project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
 
         project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
         //Deliverable to DeliverableDto
-        System.out.println("this should show but why"+ project.getArchitectures());
 
-        project.setSystemOutLines(SystemOutLineMapper.tosystemOutLines(projectDto.getSystemOutLineDto()));
+        project.setSystemOutLine(SystemOutLineMapper.toSystemOutline(projectDto.getSystemOutLineDto()));
         // Convert SystemOutLinesDto to SystemOutLines using UserMapper
-        System.out.println("return project from mapper" + project);
         return project;
 }}

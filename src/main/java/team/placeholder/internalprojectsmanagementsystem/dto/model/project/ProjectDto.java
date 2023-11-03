@@ -34,35 +34,11 @@ public class ProjectDto implements Serializable {
     private AmountDto amountDto;
     private Set<ArchitectureDto>  architectureDto;
     private ReviewDto reviewDto;
-    private List<SystemOutLineDto> systemOutLineDto;
+    private SystemOutLineDto systemOutLineDto;
     private List <DeliverableDto> deliverableDto;
 
 
     private TasksDto tasksDto;
     private IssueDto issueDto;
 
-
-    @Override
-    public String toString() {
-        return "ProjectDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", background='" + background + '\'' +
-                ", duration=" + duration +
-                ", start_date=" + start_date +
-                ", end_date=" + end_date +
-                ", current_phase=" + current_phase +
-                ", objective='" + objective + '\'' +
-                ", clientDto=" + clientDto +
-                ", userDto=" + userDto +
-                ", departmentDto=" + departmentDto +
-                ", amountDto=" + amountDto +
-                ", architectureDto=" + architectureDto +
-                ", reviewDto=" + reviewDto +
-                ", systemOutLineDto=" + systemOutLineDto +
-                ", deliverableDto=" + deliverableDto +
-                ", tasksDto=" + tasksDto +
-                ", issueDto=" + issueDto +
-                '}';
-    }
 }

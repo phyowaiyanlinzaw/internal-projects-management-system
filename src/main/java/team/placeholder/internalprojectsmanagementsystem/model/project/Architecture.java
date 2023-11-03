@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
+import groovy.util.logging.Slf4j;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Architecture {
+public class Architecture implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

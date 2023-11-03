@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Set;
 @Table(name="project")
 @Getter
 @Setter
-public class Project {
+public class Project implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +44,9 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> tasks;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SystemOutLine> systemOutLines ;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "system_outline_id")
+    private SystemOutLine systemOutLine;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Deliverable> deliverables ;
@@ -93,28 +95,4 @@ public class Project {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", background='" + background + '\'' +
-                ", duration=" + duration +
-                ", start_date=" + start_date +
-                ", end_date=" + end_date +
-                ", current_phase=" + current_phase +
-                ", objective='" + objective + '\'' +
-                ", reviews=" + reviews +
-                ", tasks=" + tasks +
-                ", systemOutLines=" + systemOutLines +
-                ", deliverables=" + deliverables +
-                ", amount=" + amount +
-                ", issues=" + issues +
-                ", architectures=" + architectures +
-                ", department=" + department +
-                ", client=" + client +
-                ", projectManager=" + projectManager +
-                ", users=" + users +
-                '}';
-    }
 }

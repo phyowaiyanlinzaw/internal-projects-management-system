@@ -705,9 +705,25 @@
                         end_date: endDate,
                         background: background,
                         architectureDto: result,
-                        systemOutLineDto: systemOutlines,
-                        deliverableDto: deliverable,
+                        systemOutLineDto: {
+                            analysis : true,
+                            sys_design : true,
+                            coding : true
+                        },
+                        current_phase : 'PLANNING',
+                        deliverableDto: null,
                         objective: objective,
+                        taskDto : null,
+                        issueDto : null,
+                        amountDto : {
+                            basic_design: 0,
+                            detail_design: 0,
+                            coding : 0,
+                            unit_testing : 0,
+                            integrated_testing : 0
+                        },
+                        departmentDto : null,
+                        reviewDto : null
                     };
                     log(project);
                     //Perform the AJAX request
