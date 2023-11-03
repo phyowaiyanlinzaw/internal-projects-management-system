@@ -388,15 +388,18 @@
                 });
 
 
-             getData("/api/user/count/all", function (error,data) {
-                 if(error) {
-                     console.log(
-                         error
-                     )
-                 } else {
-                     console.log(data);
-                        $("#spinner").hide();
-                        $("#employeeCount").text(data);
+             //get user counts by api/user/count/all
+             $.ajax({
+                 url: "/api/user/count/all",
+                 type: "GET",
+                 dataType: "json",
+                 success: function (data) {
+                     $("#spinner").hide();
+                     $("#employeeCount").text(data);
+                 },
+                 error: function (error) {
+                     $("#spinner").hide();
+                     console.log(error);
                  }
              });
 
@@ -417,30 +420,34 @@
 
 
              //get client counts by api/department/count with getData()
-                getData("/api/department/count", function (error,data) {
-                    if(error) {
-                        console.log(
-                            error
-                        )
-                    } else {
-                        console.log(data);
-                            $("#spinner").hide();
-                            $("#departmentCount").text(data);
-                    }
-                });
+             $.ajax({
+                 url: "/api/department/count",
+                 type: "GET",
+                 dataType: "json",
+                 success: function (data) {
+                     $("#spinner").hide();
+                     $("#departmentCount").text(data);
+                 },
+                 error: function (error) {
+                     $("#spinner").hide();
+                     console.log(error);
+                 }
+             });
 
                 //get project counts by api/project/count/all with getData()
-                getData("/api/project/count/all", function (error,data) {
-                    if(error) {
-                        console.log(
-                            error
-                        )
-                    } else {
-                        console.log(data);
-                            $("#spinner").hide();
-                            $("#projectCount").text(data);
-                    }
-                });
+             $.ajax({
+                 url: "/api/project/count/all",
+                 type: "GET",
+                 dataType: "json",
+                 success: function (data) {
+                     $("#spinner").hide();
+                     $("#projectCount").text(data);
+                 },
+                 error: function (error) {
+                     $("#spinner").hide();
+                     console.log(error);
+                 }
+             });
 
          });
      </script>
