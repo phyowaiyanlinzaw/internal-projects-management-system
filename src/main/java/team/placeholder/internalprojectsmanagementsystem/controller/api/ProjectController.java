@@ -21,6 +21,11 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.project.Pr
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
+import java.sql.Date;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -95,15 +100,6 @@ public class ProjectController {
     }
 
 
-//    @GetMapping("/count/{id}")
-//    public ResponseEntity<Map<String, Long>> getCount(@PathVariable long id) {
-//        long pcount = projectService.getCountByDepartment(id);
-//        long ecount = userService.getMemberCount(id);
-//        Map<String, Long> counts = new HashMap<>();
-//        counts.put("projectCount : ", pcount);
-//        counts.put("memberCount : ", ecount);
-//        return ResponseEntity.ok(counts);
-//    }
 
     @PutMapping(value = "/update/{id}", consumes ="application/Json")
     public ResponseEntity<String> updatePrject(@PathVariable long id, @RequestBody ProjectDto projectDto){
@@ -140,5 +136,7 @@ public class ProjectController {
     public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId){
         return ResponseEntity.ok(projectService.countAllProjectsByDepartmentId(departmentId));
     }
+
+
 
 }

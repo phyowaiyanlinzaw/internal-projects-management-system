@@ -15,6 +15,9 @@ import team.placeholder.internalprojectsmanagementsystem.repository.project.Arch
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -130,8 +133,32 @@ public class ProjectServiceImpl implements ProjectService {
                 .collect(Collectors.toList());
     }
 
-
-    public Long countAllProjectsByDepartmentId(Long departmentId) {
-        return projectRepository.countAllByDepartmentId(departmentId);
+    @Override
+    public Long countAllProjectsByDepartmentId(long id) {
+        return projectRepository.countAllByDepartmentId(id);
     }
+
+    public static long calculateEndDateMillis(long startDateMillis, int durationInMonths) {
+        Instant startInstant = Instant.ofEpochMilli(startDateMillis);
+        LocalDate startDate = startInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+
+        int yearsToAdd = durationInMonths / 12;
+        int monthsToAdd = durationInMonths % 12;
+
+        LocalDate endDate = startDate.plusYears(yearsToAdd).plusMonths(monthsToAdd);
+
+        // Adjust for end-of-month cases
+        if (startDate.getDayOfMonth() != endDate.getDayOfMonth()) {
+            endDate = endDate.withDayOfMonth(Math.min(startDate.getDayOfMonth(), endDate.lengthOfMonth()));
+        }
+
+        Instant endInstant = endDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        return endInstant.toEpochMilli();
+    }
+
+    public static LocalDate convertMillisToLocalDate(long millis) {
+        Instant instant = Instant.ofEpochMilli(millis);
+        return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
 }
