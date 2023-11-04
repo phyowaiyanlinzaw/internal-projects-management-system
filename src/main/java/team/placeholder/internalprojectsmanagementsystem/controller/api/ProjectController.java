@@ -1,9 +1,8 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
+import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +34,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/project")
 @RequiredArgsConstructor
+@Slf4j
 public class ProjectController {
     private final ProjectServiceImpl projectService;
     private final UserServiceImpl userService;
@@ -44,20 +44,7 @@ public class ProjectController {
 
     @PostMapping(value = "/save")
     public ResponseEntity<String> save(@RequestBody ProjectDto project){
-
-//        Set<Architecture> architecture = new HashSet<>();
-//
-//        for(ArchitectureDto architectureDto : project.getArchitectureDto()) {
-//            if(architectureDto.getId() == null) {
-//                architecture.add(architectureService.save(architectureDto));
-//            } else {
-//                System.out.println("arch exist so find it and than store in architecture");
-//                architecture.add(architectureRepository.getReferenceById(architectureDto.getId()));
-//            }
-//        }
-////        System.out.println(architecture);
-//        Project project2 = ProjectMapper.toProject(project);
-//        project2.setArchitectures(architecture);
+        log.info("Project: {}", project);
         ProjectDto savedProject = projectService.save(project);
         if (savedProject!=null){
             return ResponseEntity.ok("Project save successfully");

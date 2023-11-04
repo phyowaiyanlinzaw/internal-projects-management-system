@@ -177,16 +177,18 @@ $(document).ready(function () {
     const dDSBtn = document.getElementById("drop-down-search-btn");
     const dDSbar = document.getElementById("dropdrown-search-bar");
 
-    if (dDSbar != null) {
-        window.addEventListener("resize", function () {
-            if (window.innerWidth > 768) {
-                // Screen size greater than 768px, hide the element
-                dDSbar.classList.add("d-none", "d-sm-none");
-            }
-        });
-    }
+    // if (dDSbar != null) {
+    //     window.addEventListener("resize", function () {
+    //         if (window.innerWidth > 768) {
+    //             // Screen size greater than 768px, hide the element
+    //             dDSbar.classList.add("d-none", "d-sm-none");
+    //         }
+    //     });
+    // }
 
-    if (dDSBtn != null) {
+    if (dDSBtn) {
+
+        console.log("lee")
         // toggle search bar when click the search button
         dDSBtn.addEventListener("click", function () {
             if (dDSbar.classList.contains("d-none", "d-sm-none")) {
@@ -197,21 +199,23 @@ $(document).ready(function () {
                 dDSbar.classList.add("d-none", "d-sm-none");
             }
         });
+    }
 
-
+    // close search bar when window width < 768
+    if (dDSbar) {
         dDSbar.addEventListener('input', function (e) {
 
             let target = e.target
-
+            
             if (target.getAttribute('type') === 'search') {
 
                 let inputText = target.value.toLowerCase();
                 let allData = sortableContainer.children;
 
                 for (let i = 0; i < allData.length; i++) {
-                    let text = allData[i].querySelector('.card-title').textContent.toLowerCase(); // Use .textContent to get the text
-
-                    if (text.includes(inputText)) {
+                    let proectTitle = allData[i].querySelector('.card-title').textContent.toLowerCase(); // Use .textContent to get the text
+                    let users = allData[i].querySelector('.card-text').textContent.toLowerCase();
+                    if (proectTitle.includes(inputText) || users.includes(inputText)) {
                         allData[i].style.display = 'block';
                     } else {
                         allData[i].style.display = 'none';
@@ -219,14 +223,6 @@ $(document).ready(function () {
                 }
             }
         });
-
-    }
-
-    // close search bar when window width < 768
-    if (dDSbar != null) {
-        if (window.innerWidth < 768) {
-            dDSbar.classList.add("d-none", "d-sm-none");
-        }
     }
 
     // ======================== SEARCH BEHAVIOR END HERE ========================
