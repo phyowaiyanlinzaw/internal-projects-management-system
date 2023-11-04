@@ -44,7 +44,7 @@ public class Issue implements Serializable {
     @Enumerated(EnumType.STRING)
     private Category issue_category;
 
-    @JsonIgnoreProperties({"project"})
+
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;

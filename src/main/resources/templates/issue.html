@@ -65,6 +65,7 @@
 <!--            issue list-->
             <div class="row row-cols-1" id="sort">
 
+
             </div>
 
 
@@ -133,7 +134,7 @@
 
     <div
             class="modal fade"
-            id="issue-details"
+            id="issueDetailModal"
             data-bs-keyboard="false"
             tabindex="-1"
             aria-labelledby="staticBackdropLabel"
@@ -152,55 +153,51 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
+
                 <div class="modal-body">
                     <div class="container-fluid">
-                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2" id="issue_detail">
+                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2" >
+
+                            <div class="form-group" hidden="true">
+                                <label for="issueId" class="col-form-label">ID:</label> <input
+                                    type="text" class="form-control form-control-sm btn-space" id="issueId"
+                                    name="id" />
+                            </div>
+
                             <div class="col">
                                 <h4>corrective action</h4>
-                                <div class="editable text-wrap" id="corrective_action">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                <div class="editable text-wrap" id="corrective_actionValue">
+
                                 </div>
                             </div>
                             <div class="col">
                                 <h4>preventive action</h4>
-                                <div class="editable text-break" id="preventive_action">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+                                <div class="editable text-break" id="preventive_actionValue">
+
                                 </div>
                             </div>
                             <div class="col">
                                 <h4>direct cause</h4>
                                 <div class="editable text-break" id="direct_causeValue">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+
                                 </div>
                             </div>
                             <div class="col">
                                 <h4>root cause</h4>
                                 <div class="editable text-break" id="root_causeValue">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+
                                 </div>
                             </div>
                             <div class="col">
                                 <h4>impact</h4>
                                 <div class="editable text-break" id="impactValue">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+
                                 </div>
                             </div>
                             <div class="col">
                                 <h4>place</h4>
                                 <div class="editable text-break" id="placeValue">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
+
                                 </div>
                             </div>
                         </div>
@@ -364,49 +361,6 @@
 <!--<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>-->
 
 <script>
-
-    const editOpenBtn = document.querySelector('button[data-bs-target="#issue-details"]')
-
-    const issueEditBtn = document.getElementById('issue-edit-btn')
-
-    editOpenBtn.addEventListener('click', function (e) {
-        // TODO :: SHOULD CALL AJAX FUNCTION WHEN CLICK AND CREATE DIV
-        console.log("open issue detail modal")
-        issueEditBtn.innerText = 'edit'
-    })
-
-    issueEditBtn.addEventListener('click', function (e) {
-
-        if (this.innerText === 'edit') {  // Use '===' for comparison
-            const eidtable = Array.from(document.getElementsByClassName('editable'));
-            console.log(eidtable);
-            for (let i = 0; i < eidtable.length; i++) {
-                let d = eidtable[i];
-                let input = document.createElement('textarea');
-                input.value = d.innerText;
-                input.classList.add('form-control');
-                input.classList.add('editable');
-                input.setAttribute('rows', 5);
-                console.log(d.parentNode);
-                d.parentNode.replaceChild(input, d);
-            }
-            this.innerText = 'save';
-        } else if (this.innerText === 'save') {  // Use '===' for comparison
-            const eidtable = Array.from(document.getElementsByClassName('editable'));
-            for (let i = 0; i < eidtable.length; i++) {
-                let d = eidtable[i];
-                let input = document.createElement('div');
-                input.textContent = d.value;  // Use textContent to set text for div
-                input.classList.add('editable', 'text-break');
-                console.log(d.parentNode);
-                d.parentNode.replaceChild(input, d);
-            }
-            this.innerText = 'edit';
-        }
-    });
-
-
-
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.comd
     function getTimeAgo(timestamp) {
@@ -434,47 +388,6 @@
             const months = Math.floor(days / 30);
             return `${months} month${months > 1 ? 's' : ''} ago`;
         }
-    }
-
-    for (let i = 0; i < issueArray.length; i++) {
-        let currentData = issueArray[i];
-        let curDiv = `<div class="p-md-3 p-sm-2 mt-3" id="${currentData.id}">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark">
-                            <div class="col d-flex align-items-center gap-2">
-                                <h4 class="card-title modal-detail-title">Title</h4>
-
-                                <h6 class="card-title">${currentData.title}</h6>
-                                <span class="badge rounded-pill bg-${currentData.status ? success : danger}">${currentData.status ? success : danger}</span>
-                                <button class="btn btn-primary" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                    see more
-                                </button>
-                            </div>
-                            <div class="col issue-time-line d-flex gap-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <p>Posted</p>
-                                    <span>${getTimeAgo(currentData.createdDate)}</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <p>Modified at</p>
-                                    <span>1 minute ago</span>
-                                </div>
-                            </div>
-                            <div class="col issue-time-line d-flex gap-2">
-                            ${currentData.category.forEach(a => {
-                                `<p class="btn custom-color rounded-pill">
-                                    ${a}
-                                </p>`
-                            })}
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            ${currentData.description}
-                        </div>
-                    </div>
-                </div>`
-
-        document.querySelector("#sort-container").innerHTML += currDiv;
     }
 
 </script>
@@ -541,43 +454,50 @@
 
     $('#addIssue').on('click', function () {
         var title = $('#title').val();
-       // var description = a.root.innerHTML; // Assuming "a" is your Quill instance
+        var description = a.root.innerHTML; // Assuming "a" is your Quill instance
         var place = $('#place').val();
         var impact = $('#impact').val();
         var root_cause = $('#root_cause').val();
         var direct_cause = $('#direct_cause').val();
         var responsible_party = $('#responsible_party').val();
-        var user_picOption = user_pic.find(':selected');
-        var user_picValue = user_picOption.val();
-        var user_picUrl = user_picOption.data('picUrl');
+        var selectedUserId = user_pic.val();
         var issue_category = $('#issue_category').val();
 
         // Check if any of the required fields are empty
         if (
             title === "" ||
-           // description === "" ||
+            description === "" ||
             place === "" ||
             impact === "" ||
             root_cause === "" ||
             direct_cause === "" ||
             responsible_party === null ||
-            user_picValue === null ||
+            selectedUserId === null ||
             issue_category === null
         ) {
             alert("Please fill in all the required fields.");
             return;
         }
 
+        console.log(selectedUserId+"selected user id");
         const requestData = {
             title: title,
-           // description: description,
+            description: description,
             place: place,
             impact: impact,
             root_cause: root_cause,
             direct_cause: direct_cause,
+            corrective_action:null,
+            preventive_action:null,
+            solved: false,
+            created_date: new Date(),
+            updated_date: null,
+            solved_data:null,
+            issue_category: issue_category,
+            projectDto:null,
+            pic_id: selectedUserId, // This is where you set the selected user's ID
+            uploader_id: null,
             responsible_party: responsible_party,
-            user_pic: user_picUrl,
-            issue_category: issue_category
         };
 
         console.log(requestData+"request data");
@@ -592,13 +512,13 @@
             data: JSON.stringify(requestData),
             dataType: 'json',
             success: function (data) {
-                alert("Issue Added Successfully");
                 console.log(data);
+                alert("Issue Added Successfully");
+
             },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
-                alert('Error registering the issue');
-                $('#addIssue').html('Save Data').prop('disabled', false);
+            error: function (data) {
+                console.log(data);
+                alert("Error registering project");
             },
             complete: function () {
                 $('#addIssue').html('Save Data').prop('disabled', false);
@@ -607,19 +527,19 @@
     });
 
 
-    // All Issue
-    function loadData() {
-        $.ajax({
-            url: 'api/issue/lists',
-            method: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-                const sortContainer = $('#sort');
+    $(document).ready(function() {
+        function loadData() {
+            $.ajax({
+                url: 'api/issue/lists',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    const sortContainer = $('#sort');
 
-                // Loop through the retrieved data and create content for each item
-                data.forEach(item => {
-                    const issueDiv = `
+                    // Loop through the retrieved data and create content for each item
+                    data.forEach(item => {
+                        const issueDiv = `
                     <div class="p-md-3 p-sm-2 mt-3">
                         <div class="card">
                             <div class="card-header border-bottom text-dark">
@@ -627,7 +547,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <h6 class="card-title">${item.title}</h6>
                                         <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                           ${item.pic_id.name}
+                                           ${item.pic_id}
                                         </p>
                                     </div>
                                     <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
@@ -637,74 +557,145 @@
                                 <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <p>Posted</p>
-                                       <span>${getTimeAgo(item.created_date)}</span>
-
-                                       <p>Modified at</p>
+                                        <span>${getTimeAgo(item.created_date)}</span>
+                                        <p>Modified at</p>
                                         <span>${getTimeAgo(item.updated_date)}</span>
                                     </div>
-
-                                     <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                        See More
-                                    </button>
+                                    <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
+                                    See More
+                                </button>
                                 </div>
-                            <div class="col issue-time-line d-flex gap-2">
-                              <p class="btn custom-color rounded-pill">${item.issue_category}</p>
-                            </div>
-
-
+                                <div class="col issue-time-line d-flex gap-2">
+                                    <p class="btn custom-color rounded-pill">${item.issue_category}</p>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="code-block">
                                     <p>${item.description}</p>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
+                        sortContainer.append(issueDiv);
+                    });
 
-                    sortContainer.append(issueDiv);
-                });
-            },
-            error: function (error) {
-                console.error('Error fetching data:', error);
-                console.error('Error details:', error.responseText); // Log additional error details from the server
-            }
-
-        });
-    }
-    $(document).ready(function() {
+                    $('.see-more-button').click(function() {
+                        var issueId = $(this).data('id');
+                        console.log('Clicked button with data-id:', issueId);
+                        $.ajax({
+                            url: 'api/issue/lists/byId/' + issueId,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                console.log('Data received:', data);
+                                if (data) {
+                                    $('#corrective_actionValue').text(data.corrective_action);
+                                    $('#preventive_actionValue').text(data.preventive_action);
+                                    $('#direct_causeValue').text(data.direct_cause);
+                                    $('#root_causeValue').text(data.root_cause);
+                                    $('#impactValue').text(data.impact);
+                                    $('#placeValue').text(data.place);
+                                    $('#issue-edit-btn').data('issueId', data.id);
+                                    $('#issueDetailModal').modal('show');
+                                } else {
+                                    console.error('No data received for issue ID:', issueId);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('AJAX error:', error);
+                            }
+                        });
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
         loadData();
     });
 
 
 
-    function openContactsModal(id) {
+    const editOpenBtn = document.querySelector('button[data-bs-target="#issue-details"]')
 
-        $.ajax({
-            url: "/api/issue/update?id="+ id,
-            success: function(data){
-               console.log(id);
-                var myJSON = JSON.stringify(data);
+    const issueEditBtn = document.getElementById('issue-edit-btn')
 
-                //alert(myJSON);
+    editOpenBtn.addEventListener('click', function (e) {
+        // TODO :: SHOULD CALL AJAX FUNCTION WHEN CLICK AND CREATE DIV
+        console.log("open issue detail modal")
+        issueEditBtn.innerText = 'edit'
+    })
 
-                var tmpData = JSON.parse(myJSON);
-                var formattedJson = JSON.stringify(tmpData, null, ' ');
+    issueEditBtn.addEventListener('click', function (e) {
 
-                //alert(formattedJson);
-
-                $('#myContactid').html('Id is : ' + data.id);
-                $('#myContactfirstname').html('FirstName is : ' + data.firstname);
-                $('#myContactlastname').html('LastName is : ' + data.lastname);
-                $('#myContactphonenumber').html('Phone Number is : ' + data.phonenumber);
-                $('#myContactemail').html('Email-Id is : ' + data.email);
-                $('#myContactaddress').html('Address is : ' + data.address);
-                $('#myContactModal').modal("show");
+        if (this.innerText === 'edit') {  // Use '===' for comparison
+            const eidtable = Array.from(document.getElementsByClassName('editable'));
+            const issue_id = $('#issue-edit-btn').data('issueId');
+            console.log("issue id", issue_id);
+            console.log(eidtable);
+            for (let i = 0; i < eidtable.length; i++) {
+                let d = eidtable[i];
+                let input = document.createElement('textarea');
+                input.value = d.innerText;
+                input.classList.add('form-control');
+                input.classList.add('editable');
+                input.setAttribute('rows', 5);
+                console.log(d.parentNode);
+                d.parentNode.replaceChild(input, d);
             }
+            this.innerText = 'save';
+        } else if (this.innerText === 'save') {
+            this.innerText = 'edit';
 
-        });
-    }
+            const corrective_action = $('#corrective_actionValue').val();
+            const preventive_action = $('#preventive_actionValue').val();
+            const direct_cause = $('#direct_causeValue').val();
+            const root_cause = $('#root_causeValue').val();
+            const impact = $('#impactValue').val();
+            const place = $('#placeValue').val();
+            const issue_id = $('#issue-edit-btn').data('issueId');
+
+            console.log("issue_id:", issue_id);
+
+
+            const requestData = {
+                corrective_action: corrective_action,
+                preventive_action: preventive_action,
+                direct_cause: direct_cause,
+                root_cause: root_cause,
+                impact: impact,
+                place: place,
+                id: issue_id,
+            };
+
+            $.ajax({
+                url: `/api/issue/update/${issue_id}`, // Update the URL to include the issue ID
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(requestData),
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    console.log("Issue Updated Successfully");
+                    alert("Issue Updated Successfully");
+                },
+
+                error: function (xhr, status, error) {
+                    console.error(xhr);
+                    console.error('Server response:', xhr.responseText);
+                    alert("Error updating issue: " + xhr.responseText);
+                    console.log("Error updating issue");
+                },
+                complete: function () {
+                    $('#issueDetailModal').modal('hide');
+                }
+            });
+        }
+    });
+
+
 
 
 </script>
