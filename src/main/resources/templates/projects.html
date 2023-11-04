@@ -64,31 +64,64 @@
             href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css"
         />
 
-        <!--  select-->
-        <!-- <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"> -->
-
         <!-- Bootstrap Tables -->
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/bootstrap-table.min.css"
         />
-
-        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/css/bootstrap-select.min.css"> -->
-
-        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"> -->
         <!-- Template Stylesheet -->
         <link href="/css/style.css" rel="stylesheet" />
-        <!-- <link href="/css/bootstrap-select2.min.css" rel="stylesheet" /> -->
 
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.css"
         />
-
-        <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
+        <link
+            href="/css/virtual-select/virtual-select.min.css"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <script src="/js/fontawesome.js"></script>
+
+        <!-- jquery -->
+        <script src="/js/jquery.3.7.1.min.js"></script>
+
+        <!-- datable table -->
+        <script src="/js/databales.min.js"></script>
+
+        <!-- bootstrap -->
+        <script src="/js/bootstrap.bundle.min.js"></script>
+
+        <!-- javascript libraries -->
+        <script src="/lib/chart/chart.min.js" defer></script>
+        <script src="/lib/easing/easing.min.js" defer></script>
+        <script src="/lib/waypoints/waypoints.min.js" defer></script>
+        <script src="/lib/owlcarousel/owl.carousel.min.js" defer></script>
+        <script src="/lib/tempusdominus/js/moment.min.js" defer></script>
+        <script
+            src="/lib/tempusdominus/js/moment-timezone.min.js"
+            defer
+        ></script>
+        <script
+            src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"
+            defer
+        ></script>
+        <script src="/lib/quill/quill.min.js" defer></script>
+        <script src="/js/virtual-select/virtual-select.min.js" defer></script>
+
+        <!-- Template Javascript -->
+        <script src="/js/main.js" defer></script>
+        <script src="/js/forprogresscircleiguess.js" defer></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
+            defer
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/js/coreui.bundle.min.js"
+            integrity="sha384-Iqk8EE7ao72xAVBuuQTEwrU5N2IdvpJER5ZzM6LxwcXHqj2WstttaOvopXziv0nU"
+            crossorigin="anonymous"
+            defer
+        ></script>
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
         <script src="/js/currentLoginUser.js" type="module" async></script>
@@ -99,7 +132,7 @@
                 calculateDuration,
             } from "/js/time.js";
 
-            import { sendData, getData } from "/js/api-function.js";
+
 
             import {
                 getArchitecturelist,
@@ -133,9 +166,6 @@
 
             const architectureInput = document.querySelector(
                 'input[name="architectures"]'
-            );
-            const systemOutlinesInput = document.querySelector(
-                'input[name="systemOutlines"]'
             );
             const deliverableInput = document.querySelector(
                 'input[name="deliverable"]'
@@ -248,8 +278,8 @@
                 {
                     id: 2,
                     name: "project name",
-                    start_date: 1696377600000,
-                    end_date: 1701648000000,
+                    start_date: 1700758000000,
+                    end_date: 1703758000000,
                     user: { id: 2, name: "zawlinshein" },
                     background: "project background",
                     currentPhase: "TESTING",
@@ -288,7 +318,7 @@
                         { id: 4, tech_name: "java" },
                         { id: 5, tech_name: "spring boot" },
                     ],
-                }
+                },
             ];
 
             document
@@ -342,408 +372,486 @@
                 theme: "snow",
             });
 
-            const checkboxes = document.querySelectorAll(
-                'input[name="systemOutline"]'
-            );
-            const systemOutlineData = {};
+            import { sendData, getData } from "/js/api-function.js";
 
-            document
-                .querySelector("#validation-form")
-                .addEventListener("submit", function (e) {
-                    e.preventDefault();
-                    checkboxes.forEach((checkbox) => {
-                        systemOutlineData[checkbox.value] = checkbox.checked;
-                    });
-                    console.log(systemOutlineData);
-                    console.log("quill", editor.root.innerHTML);
-                });
+            async function getAllProjects(){
+                return await getData('/api/project/list')
+            }
 
             const motherContainer = document.querySelector("#sort-container");
 
             const fragment = document.createDocumentFragment();
 
-            for (let i = 0; i < proListFromBack.length; i++) {
-                let currentProject = proListFromBack[i];
+            let pList =[];
 
-                const div = document.createElement("div");
-                div.classList.add(
-                    "p-md-3",
-                    "p-sm-2",
-                    "active-card",
-                    "mt-3",
-                    "mt-md-0",
-                    "mt-lg-0",
-                    "mt-xl-0"
-                );
-                div.id = `project-${currentProject.id}`;
+            getAllProjects()
+                .then( data => {
+                    pList=[...data];
 
-                const card = document.createElement("div");
-                card.classList.add("card", "border-success");
 
-                const cardHeader = document.createElement("div");
-                cardHeader.classList.add("card-header");
 
-                const dFlexContainer = document.createElement("div");
-                dFlexContainer.classList.add("d-flex", "flex-column");
+                    for (let i = 0; i < pList.length; i++) {
+                        let currentProject = pList[i];
 
-                const h2 = document.createElement("h2");
-                h2.classList.add(
-                    "card-title",
-                    "text-center",
-                    "text-primary",
-                    "modal-detail-title"
-                );
-                h2.innerText = currentProject.name;
-
-                const dFlexBetween = document.createElement("div");
-                dFlexBetween.classList.add("d-flex", "justify-content-between");
-
-                const dFlexInner = document.createElement("div");
-                dFlexInner.classList.add("d-flex");
-
-                const img = document.createElement("img");
-                img.src = `https://source.unsplash.com/random/200x200?sig=${currentProject.id}`;
-                img.classList.add(
-                    "img-fluid",
-                    "rounded-circle",
-                    "d-none",
-                    "d-md-block",
-                    "d-sm-block"
-                );
-                img.style.width = "40px";
-                img.alt = "Profile Image";
-
-                const h5 = document.createElement("h5");
-                h5.classList.add(
-                    "card-text",
-                    "text-center",
-                    "text-align-center",
-                    "my-auto",
-                    "fst-italic",
-                    "fs-6",
-                    "ms-2"
-                );
-                h5.innerText = currentProject.user.name;
-
-                const a = document.createElement("a");
-                a.href = "#";
-                a.id = currentProject.id;
-                a.classList.add(
-                    "btn",
-                    "btn-white",
-                    "text-secondary",
-                    "link-shadow"
-                );
-                a.setAttribute("data-bs-toggle", "modal");
-                a.setAttribute("data-bs-target", "#project-details");
-                a.innerText = "See More";
-
-                // Create and append the progress-related elements
-                const cardBody = document.createElement("div");
-                cardBody.classList.add(
-                    "card-body",
-                    "position-relative",
-                    "mx-auto"
-                );
-
-                const progressTitle = document.createElement("p");
-                progressTitle.classList.add(
-                    "card-title",
-                    "text-center",
-                    "fs-6",
-                    "mb-1"
-                );
-                progressTitle.innerText = "progress";
-
-                const progressCircle = document.createElement("div");
-                progressCircle.id = `circle-progress-${currentProject.id}`;
-                progressCircle.classList.add(
-                    "circle-progress",
-                    "rounded-circle"
-                );
-                progressCircle.setAttribute("data-min-value", "0");
-                progressCircle.setAttribute("data-max-value", "100");
-                progressCircle.setAttribute(
-                    "data-value",
-                    (
-                        (currentProject.doneTask / currentProject.totalTask) *
-                        100
-                    ).toString()
-                );
-                progressCircle.setAttribute("data-type", "percent");
-
-                dFlexInner.appendChild(img);
-                dFlexInner.appendChild(h5);
-                dFlexBetween.appendChild(dFlexInner);
-                dFlexBetween.appendChild(a);
-                dFlexContainer.appendChild(h2);
-                dFlexContainer.appendChild(dFlexBetween);
-                cardHeader.appendChild(dFlexContainer);
-                card.appendChild(cardHeader);
-
-                cardBody.appendChild(progressTitle);
-                cardBody.appendChild(progressCircle);
-                card.appendChild(cardBody);
-
-                div.appendChild(card);
-                fragment.appendChild(div);
-            }
-
-            motherContainer.appendChild(fragment);
-
-            $(".circle-progress").each(function () {
-                const minValue = $(this).attr("data-min-value");
-                const maxValue = $(this).attr("data-max-value");
-                const value = $(this).attr("data-value");
-                const type = $(this).attr("data-type");
-
-                if (value < 40) {
-                    this.classList.add("circle-progress-secondary");
-                } else if (value < 70) {
-                    this.classList.add("circle-progress-primary");
-                } else if (value > 69) {
-                    this.classList.add("circle-progress-success");
-                }
-
-                if (this.id !== "" && this.id !== null) {
-                    new CircleProgress("#" + this.id, {
-                        min: minValue,
-                        max: maxValue,
-                        value: value,
-                        textFormat: type,
-                    });
-                }
-            });
-
-            const detailMoal = document.querySelector("#project-details");
-
-            motherContainer.addEventListener("click", function (e) {
-                let target = e.target;
-
-                if (target.hasAttribute("data-bs-target")) {
-                    let id = parseInt(target.getAttribute("id"));
-                    let targetData = proListFromBack.find((a) => a.id == id);
-                    let duration = calculateDuration(
-                        targetData.start_date,
-                        targetData.end_date
-                    );
-                    detailMoal.querySelector(".modal-title").innerText =
-                        targetData.name;
-                    detailMoal.querySelector("#project-background").innerText =
-                        targetData.background;
-                    detailMoal.querySelector("#project-name").innerText =
-                        targetData.name;
-                    detailMoal.querySelector(
-                        "#project-department-name"
-                    ).innerHTML = targetData.department.name;
-                    detailMoal.querySelector(
-                        "#project-internal-review-count"
-                    ).innerText = targetData.inReview;
-                    detailMoal.querySelector(
-                        "#project-external-review-count"
-                    ).innerText = targetData.exReview;
-                    detailMoal.querySelector(
-                        "#project-duration"
-                    ).innerText = `${duration}`;
-                    detailMoal.querySelector("#project-start-date").innerText =
-                        formatDateFromMilliseconds(targetData.start_date);
-                    detailMoal.querySelector("#project-end-date").innerText =
-                        formatDateFromMilliseconds(targetData.end_date);
-                    detailMoal.querySelector(
-                        "#project-current-phase"
-                    ).innerText = targetData.currentPhase;
-                    detailMoal.querySelector("#project-client-name").innerText =
-                        targetData.client.name;
-                }
-            });
-
-            let dateFilter = document.querySelector("#month-filter");
-
-            dateFilter.addEventListener("input", function (e) {
-                console.log("lee");
-                let allData =
-                    document.getElementById("sort-container").children;
-                let currentTime = dateFilter.value;
-
-                let targetProject = proListFromBack.find((a) => {
-                    const projectDate = new Date(a.startDate);
-
-                    const projectMonth = projectDate.getMonth();
-
-                    console.log(projectMonth);
-
-                    console.log(MONTH_NAMES[projectMonth]);
-
-                    console.log(currentTime);
-
-                    console.log(MONTH_NAMES[projectMonth] === currentTime);
-
-                    return MONTH_NAMES[projectMonth] === currentTime;
-                });
-
-                console.log(targetProject);
-
-                for (let i = 0; i < allData.length; i++) {
-                    if (
-                        targetProject &&
-                        targetProject.id ===
-                            parseInt(allData[i].getAttribute("id"))
-                    ) {
-                        allData[i].style.display = "block";
-                    } else {
-                        allData[i].style.display = "none";
-                    }
-                }
-            });
-
-            document
-                .querySelector("#reset-btn")
-                .addEventListener("click", function (e) {
-                    let allData =
-                        document.getElementById("sort-container").children;
-
-                    for (let i = 0; i < allData.length; i++) {
-                        allData[i].style.display = "block";
-                    }
-                });
-
-            console.log("error");
-
-            let quillEditors = document.querySelectorAll(
-                ".quill-editor-bubble"
-            );
-
-            // Initialize Quill for each selected element
-            quillEditors.forEach(function (editor) {
-                new Quill(editor, {
-                    modules: {
-                        toolbar: toolbaroptions,
-                    },
-                    theme: "snow",
-                });
-            });
-
-            // function getData() {
-            //     const userInput = quill.root.innerHTML;
-            //     console.log(userInput);
-            // }
-
-            let minusButtons = document.querySelectorAll(".minus");
-            let plusButtons = document.querySelectorAll(".plus");
-
-            minusButtons.forEach(function (minusButton) {
-                minusButton.addEventListener("click", function () {
-                    let input = this.parentElement.querySelector("input");
-                    let count = parseInt(input.value) - 1;
-                    count = count < 0 ? 0 : count;
-                    input.value = count;
-                    console.log(input, count);
-                    //input.dispatchEvent(new Event('change'));
-                    return false;
-                });
-            });
-
-            plusButtons.forEach(function (plusButton) {
-                plusButton.addEventListener("click", function () {
-                    let input = this.parentElement.querySelector("input");
-                    input.value = parseInt(input.value) + 1;
-                    //input.dispatchEvent(new Event('change'));
-                    return false;
-                });
-            });
-
-            let log = console.log;
-            $(document).ready(function () {
-                $("#validation-form").submit(function (event) {
-                    event.preventDefault(); // Prevent the form from submitting the traditional way
-
-                    const projectName = $("#name").val();
-                    const client = JSON.parse($("#client").val());
-                    const startDate = new Date(
-                        $("#start_date").val()
-                    ).getTime();
-                    const endDate = new Date($("#end_date").val()).getTime();
-
-                    const background = $("#background").val();
-                    const architectures = JSON.parse($("#architectures").val());
-                    const systemOutlines = $("#systemOutlines").val();
-                    const deliverable = $("#deliverable").val();
-                    const objective = editor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
-                    let newArc = [];
-
-                    for (let i = 0; i < architectures.length; i++) {
-                        const ar = architectures[i];
-                        newArc.push({ tech_name: ar.value });
-                    }
-
-                    const result = [];
-
-                    newArc.forEach((newObj) => {
-                        const matchingObj = arcccList.find(
-                            (arccObj) => arccObj.tech_name === newObj.tech_name
+                        const div = document.createElement("div");
+                        div.classList.add(
+                            "p-md-3",
+                            "p-sm-2",
+                            "active-card",
+                            "mt-3",
+                            "mt-md-0",
+                            "mt-lg-0",
+                            "mt-xl-0"
                         );
-                        if (!matchingObj) {
-                            result.push(newObj);
+                        div.id = `project-${currentProject.id}`;
+
+                        const card = document.createElement("div");
+                        card.classList.add("card", "border-success");
+
+                        const cardHeader = document.createElement("div");
+                        cardHeader.classList.add("card-header");
+
+                        const dFlexContainer = document.createElement("div");
+                        dFlexContainer.classList.add("d-flex", "flex-column");
+
+                        const h2 = document.createElement("h2");
+                        h2.classList.add(
+                            "card-title",
+                            "text-center",
+                            "text-primary",
+                            "modal-detail-title"
+                        );
+                        h2.innerText = currentProject.name;
+
+                        const dFlexBetween = document.createElement("div");
+                        dFlexBetween.classList.add("d-flex", "justify-content-between");
+
+                        const dFlexInner = document.createElement("div");
+                        dFlexInner.classList.add("d-flex");
+
+                        const img = document.createElement("img");
+                        img.src = `https://source.unsplash.com/random/200x200?sig=${currentProject.id}`;
+                        img.classList.add(
+                            "img-fluid",
+                            "rounded-circle",
+                            "d-none",
+                            "d-md-block",
+                            "d-sm-block"
+                        );
+                        img.style.width = "40px";
+                        img.alt = "Profile Image";
+
+                        const h5 = document.createElement("h5");
+                        h5.classList.add(
+                            "card-text",
+                            "text-center",
+                            "text-align-center",
+                            "my-auto",
+                            "fst-italic",
+                            "fs-6",
+                            "ms-2"
+                        );
+                        if (currentProject.user && currentProject.user.name) {
+                            h5.innerText = currentProject.user.name;
                         } else {
-                            result.push(matchingObj);
+                            h5.innerText = "Unknown User";
+                        }
+
+
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.id = currentProject.id;
+                        a.classList.add(
+                            "btn",
+                            "btn-white",
+                            "text-secondary",
+                            "link-shadow"
+                        );
+                        a.setAttribute("data-bs-toggle", "modal");
+                        a.setAttribute("data-bs-target", "#project-details");
+                        a.innerText = "See More";
+
+                        // Create and append the progress-related elements
+                        const cardBody = document.createElement("div");
+                        cardBody.classList.add(
+                            "card-body",
+                            "position-relative",
+                            "mx-auto"
+                        );
+
+                        const progressTitle = document.createElement("p");
+                        progressTitle.classList.add(
+                            "card-title",
+                            "text-center",
+                            "fs-6",
+                            "mb-1"
+                        );
+                        progressTitle.innerText = "progress";
+
+                        const progressCircle = document.createElement("div");
+                        progressCircle.id = `circle-progress-${currentProject.id}`;
+                        progressCircle.classList.add(
+                            "circle-progress",
+                            "rounded-circle"
+                        );
+                        progressCircle.setAttribute("data-min-value", "0");
+                        progressCircle.setAttribute("data-max-value", "100");
+                        progressCircle.setAttribute(
+                            "data-value",
+                            (
+                                (currentProject.doneTask / currentProject.totalTask) *
+                                100
+                            ).toString()
+                        );
+                        progressCircle.setAttribute("data-type", "percent");
+
+                        dFlexInner.appendChild(img);
+                        dFlexInner.appendChild(h5);
+                        dFlexBetween.appendChild(dFlexInner);
+                        dFlexBetween.appendChild(a);
+                        dFlexContainer.appendChild(h2);
+                        dFlexContainer.appendChild(dFlexBetween);
+                        cardHeader.appendChild(dFlexContainer);
+                        card.appendChild(cardHeader);
+
+                        cardBody.appendChild(progressTitle);
+                        cardBody.appendChild(progressCircle);
+                        card.appendChild(cardBody);
+
+                        div.appendChild(card);
+                        fragment.appendChild(div);
+                    }
+
+                    motherContainer.appendChild(fragment);
+
+                    $(".circle-progress").each(function () {
+                        const minValue = $(this).attr("data-min-value");
+                        const maxValue = $(this).attr("data-max-value");
+                        const value = $(this).attr("data-value");
+                        const type = $(this).attr("data-type");
+
+                        if (value < 40) {
+                            this.classList.add("circle-progress-secondary");
+                        } else if (value < 70) {
+                            this.classList.add("circle-progress-primary");
+                        } else if (value > 69) {
+                            this.classList.add("circle-progress-success");
+                        }
+
+                        if (this.id !== "" && this.id !== null) {
+                            new CircleProgress("#" + this.id, {
+                                min: minValue,
+                                max: maxValue,
+                                value: value,
+                                textFormat: type,
+                            });
                         }
                     });
-                    // You may want to add some form validation here before sending the data
-                    log(objective);
-                    log(architectures);
-                    log(newArc);
-                    const project = {
-                        name: projectName,
-                        clientDto: client,
-                        duration:
-                            (new Date(endDate).getFullYear() -
-                                new Date(startDate).getFullYear()) *
-                                12 +
-                            (new Date(endDate).getMonth() -
-                                new Date(startDate).getMonth()),
-                        start_date: startDate,
-                        end_date: endDate,
-                        background: background,
-                        architectureDto: result,
-                        systemOutLineDto: {
-                            analysis : true,
-                            sys_design : true,
-                            coding : true
-                        },
-                        current_phase : 'PLANNING',
-                        deliverableDto: null,
-                        objective: objective,
-                        taskDto : null,
-                        issueDto : null,
-                        amountDto : {
-                            basic_design: 0,
-                            detail_design: 0,
-                            coding : 0,
-                            unit_testing : 0,
-                            integrated_testing : 0
-                        },
-                        departmentDto : null,
-                        reviewDto : null
-                    };
-                    log(project);
-                    //Perform the AJAX request
-                    $.ajax({
-                        url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
-                        type: "POST",
-                        data: JSON.stringify(project),
-                        contentType: "application/json",
-                        success: function (data) {
-                            alert("Project registered successfully");
-                            // Reset the form if needed
-                            $("#validation-form")[0].reset();
-                        },
-                        error: function (data) {
-                            alert("Error registering project");
-                        },
+
+                    const detailModal = document.querySelector("#project-details");
+
+                    motherContainer.addEventListener("click", function (e) {
+                        let target = e.target;
+
+                        if (target.hasAttribute("data-bs-target")) {
+                            let id = parseInt(target.getAttribute("id"));
+                            let targetData = proListFromBack.find((a) => a.id == id);
+                            let duration = calculateDuration(
+                                targetData.start_date,
+                                targetData.end_date
+                            );
+                            detailMoal.querySelector(".modal-title").innerText =
+                                targetData.name;
+                            detailMoal.querySelector("#project-background").innerText =
+                                targetData.background;
+                            detailMoal.querySelector("#project-name").innerText =
+                                targetData.name;
+                            detailMoal.querySelector(
+                                "#project-department-name"
+                            ).innerHTML = targetData.department.name;
+                            detailMoal.querySelector(
+                                "#project-internal-review-count"
+                            ).value = targetData.inReview;
+                            detailMoal.querySelector(
+                                "#project-external-review-count"
+                            ).value = targetData.exReview;
+                            detailMoal.querySelector(
+                                "#project-duration"
+                            ).innerText = `${duration}`;
+                            detailMoal.querySelector("#project-start-date").innerText =
+                                formatDateFromMilliseconds(targetData.start_date);
+                            detailMoal.querySelector("#project-end-date").innerText =
+                                formatDateFromMilliseconds(targetData.end_date);
+                            detailMoal.querySelector(
+                                "#project-current-phase"
+                            ).innerText = targetData.currentPhase;
+                            detailMoal.querySelector("#project-client-name").innerText =
+                                targetData.client.name;
+                        }
                     });
-                });
-            });
-        
+
+                    const monthFilter = document.querySelector("#month-filter");
+                    const yearFilterSelect = document.getElementById("year-filter");
+
+                    document.querySelectorAll("select[action='filter']").forEach((a) => a.addEventListener("input", function (e) {
+                        const allData =
+                            document.getElementById("sort-container").children;
+                        const currentTime = monthFilter.value;
+                        const yearValue = parseInt(yearFilterSelect.value)
+
+                        let targetProject = proListFromBack.find((a) => {
+                            const projectDate = new Date(a.start_date);
+
+                            const projectMonth = projectDate.getMonth();
+                            const projectYear = projectDate.getFullYear()
+
+                            return projectYear === yearValue && MONTH_NAMES[projectMonth] === currentTime;
+                        });
+
+                        console.log(targetProject);
+
+                        for (let i = 0; i < allData.length; i++) {
+                            if (
+                                targetProject &&
+                                targetProject.id ===
+                                parseInt(allData[i].getAttribute("id").split('-')[1])
+                            ) {
+                                allData[i].style.display = "block";
+                            } else {
+                                allData[i].style.display = "none";
+                            }
+                        }
+                    }))
+
+                    const currentYear = new Date().getFullYear();
+                    let optionsHTML = "";
+
+                    for (let year = 2000; year <= currentYear; year++) {
+                        if (year === currentYear) {
+                            optionsHTML += `<option value="${year}" selected>${year}</option>`;
+                        } else {
+                            optionsHTML += `<option value="${year}">${year}</option>`;
+                        }
+                    }
+
+                    yearFilterSelect.innerHTML = optionsHTML;
+
+                    document
+                        .querySelector("#reset-btn")
+                        .addEventListener("click", function (e) {
+                            let allData =
+                                document.getElementById("sort-container").children;
+
+                            for (let i = 0; i < allData.length; i++) {
+                                allData[i].style.display = "block";
+                            }
+                            monthFilter.value = MONTH_NAMES[0];
+                        });
+
+                    console.log("error");
+
+                    let quillEditors = document.querySelectorAll(
+                        ".quill-editor-bubble"
+                    );
+
+                    // Initialize Quill for each selected element
+                    quillEditors.forEach(function (editor) {
+                        new Quill(editor, {
+                            modules: {
+                                toolbar: toolbaroptions,
+                            },
+                            theme: "snow",
+                        });
+                    });
+
+                    // function getData() {
+                    //     const userInput = quill.root.innerHTML;
+                    //     console.log(userInput);
+                    // }
+
+                    let minusButtons = document.querySelectorAll(".minus");
+                    let plusButtons = document.querySelectorAll(".plus");
+
+                    minusButtons.forEach(function (minusButton) {
+                        minusButton.addEventListener("click", function () {
+                            let input = this.parentElement.querySelector("input");
+                            let count = parseInt(input.value) - 1;
+                            count = count < 0 ? 0 : count;
+                            input.value = count;
+                            console.log(input, count);
+                            //input.dispatchEvent(new Event('change'));
+                            return false;
+                        });
+                    });
+
+                    plusButtons.forEach(function (plusButton) {
+                        plusButton.addEventListener("click", function () {
+                            let input = this.parentElement.querySelector("input");
+                            input.value = parseInt(input.value) + 1;
+                            //input.dispatchEvent(new Event('change'));
+                            return false;
+                        });
+                    });
+
+                    let log = console.log;
+                    $(document).ready(function () {
+                        $("#validation-form").submit(function (event) {
+                            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+                            const projectName = $("#name").val();
+                            const client = JSON.parse($("#client").val());
+                            const startDate = new Date(
+                                $("#start_date").val()
+                            ).getTime();
+                            const endDate = new Date($("#end_date").val()).getTime();
+
+                            const background = $("#background").val();
+                            let architectures = $("#architectures").val();
+                            console.log("architectures list : ", architectures);
+                            const systemOutlines = $("#systemOutlines").val();
+                            const deliverable = $("#deliverable").val();
+                            const objective = editor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                            let newArc = [];
+
+                            if (
+                                projectName === "" ||
+                                client === "" ||
+                                startDate === "" ||
+                                endDate === "" ||
+                                background === "" ||
+                                architectures === "" ||
+                                systemOutlines === "" ||
+                                deliverable === "" ||
+                                objective === "<p><br></p>"
+                            ) {
+                                alert("Please fill all the fields");
+                                return;
+                            }
+                            architectures = JSON.parse(architectures);
+                            for (let i = 0; i < architectures.length; i++) {
+                                const ar = architectures[i];
+                                newArc.push({tech_name: ar.value});
+                            }
+
+                            const result = [];
+
+                            newArc.forEach((newObj) => {
+                                const matchingObj = arcccList.find(
+                                    (arccObj) => arccObj.tech_name === newObj.tech_name
+                                );
+                                if (!matchingObj) {
+                                    result.push(newObj);
+                                } else {
+                                    result.push(matchingObj);
+                                }
+                            });
+                            // You may want to add some form validation here before sending the data
+                            log(objective);
+                            log(architectures);
+                            log(newArc);
+                            const project = {
+                                name: projectName,
+                                clientDto: client,
+                                duration:
+                                    (new Date(endDate).getFullYear() -
+                                        new Date(startDate).getFullYear()) *
+                                    12 +
+                                    (new Date(endDate).getMonth() -
+                                        new Date(startDate).getMonth()),
+                                start_date: startDate,
+                                end_date: endDate,
+                                background: background,
+                                architectureDto: result,
+                                systemOutLineDto: {
+                                    analysis: true,
+                                    sys_design: true,
+                                    coding: true,
+                                },
+                                current_phase: "PLANNING",
+                                deliverableDto: null,
+                                objective: objective,
+                                taskDto: null,
+                                issueDto: null,
+                                amountDto: {
+                                    basic_design: 0,
+                                    detail_design: 0,
+                                    coding: 0,
+                                    unit_testing: 0,
+                                    integrated_testing: 0,
+                                },
+                                departmentDto: null,
+                                reviewDto: null,
+                            };
+                            log(project);
+                            //Perform the AJAX request
+                            $.ajax({
+                                url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
+                                type: "POST",
+                                data: JSON.stringify(project),
+                                contentType: "application/json",
+                                success: function (data) {
+                                    alert("Project registered successfully");
+                                    // Reset the form if needed
+                                    $("#validation-form")[0].reset();
+                                },
+                                error: function (data) {
+                                    alert("Error registering project");
+                                },
+                            });
+                        });
+                    });
+
+                    let myOptions = [
+                        {
+                            label: "Analysis",
+                            value: "analysis",
+                            alias: "analysis",
+                        },
+                        {
+                            label: "System Design",
+                            value: "sys_design",
+                            alias: "system design",
+                        },
+                        {
+                            label: "Coding",
+                            value: "coding",
+                            alias: "coding",
+                        },
+                        {
+                            label: "Testing",
+                            value: "testing",
+                            alias: "testing",
+                        },
+                        {
+                            label: "Deploy",
+                            value: "deploy",
+                            alias: "deploy",
+                        },
+                        {
+                            label: "Maintenance",
+                            value: "maintenance",
+                            alias: "maintenance",
+                        },
+                        {
+                            label: "Document",
+                            value: "document",
+                            alias: "document",
+                        },
+                    ];
+
+                    console.log(
+                        VirtualSelect.init({
+                            ele: "#systemOutlines",
+                            options: myOptions,
+                            multiple: true,
+                            search: true,
+                            searchByStartsWith: false,
+                            popupPosition: null,
+                            maxWidth: "100%",
+                        })
+                    );
+                })
+
             //list project end
         </script>
     </head>
@@ -781,11 +889,11 @@
                 "
             >
                 <div
-                    th:replace="fragments/navigation :: navigation-with-search"
+                    th:replace="fragments/navigation :: navigation-without-search"
                 ></div>
                 <!-- Search Start -->
                 <div
-                    class="container-fluid d-md-block pt-2 ps-s pe-2"
+                    class="container-fluid pt-2 ps-s pe-2"
                     id="dropdrown-search-bar"
                 >
                     <div class="d-flex flex-row justify-content-end gap-2">
@@ -793,7 +901,7 @@
                             reset
                         </button>
                         <div class="d-inline-block">
-                            <select id="month-filter" class="form-control">
+                            <select id="month-filter" class="form-control" action="filter">
                                 <option value="January">January</option>
                                 <option value="February">February</option>
                                 <option value="Match">Match</option>
@@ -808,12 +916,19 @@
                                 <option value="December">December</option>
                             </select>
                         </div>
+                        <div class="d-inline-block">
+                            <select
+                                id="year-filter"
+                                class="form-control"
+                                action="filter"
+                            ></select>
+                        </div>
 
                         <form class="d-inline-block">
                             <input
                                 class="form-control border-0"
                                 type="search"
-                                placeholder="Search"
+                                placeholder="Search project "
                             />
                         </form>
                         <!-- modal toggle button start -->
@@ -1033,14 +1148,7 @@
                                             >System Outlines
                                             <span style="color: red"> *</span>
                                         </label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="systemOutlines"
-                                            name="systemOutlines"
-                                            placeholder="add value"
-                                            value="analysis,sys_design"
-                                        />
+                                        <div id="systemOutlines"></div>
                                     </div>
 
                                     <!--                                deliverable add-->
@@ -1167,473 +1275,773 @@
         </div>
         <!--    modal for add project-->
 
-<!-- modal for project's details -->
-<div class="modal fade" id="project-details" data-bs-keyboard="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">
-                    Department Details
-                </h5>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                ></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xl-4">
-                        <div class="card">
-                            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-                                <img src="https://source.unsplash.com/random/200x200?sig=1" alt="Profile" class="rounded-circle"/>
-                                <h4>Kevin Anderson</h4>
-                                <div class="social-links mt-2">
-                                <h5>Project Manager</h5>
+        <!-- modal for project's details -->
+        <div class="modal fade" id="project-details" data-bs-keyboard="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">
+                            Department Details
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <div class="card">
+                                    <div
+                                        class="card-body profile-card pt-4 d-flex flex-column align-items-center"
+                                    >
+                                        <img
+                                            src="https://source.unsplash.com/random/200x200?sig=1"
+                                            alt="Profile"
+                                            class="rounded-circle"
+                                        />
+                                        <h4>Kevin Anderson</h4>
+                                        <div class="social-links mt-2">
+                                            <h5>Project Manager</h5>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-xl-8">
-                        <div class="card">
-                            <div class="card-body pt-3">
-                                <!-- Bordered Tabs -->
-                                <ul class="nav nav-tabs nav-tabs-bordered">
-                                    <li class="nav-item">
-                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#project-overview">
-                                            Overview
-                                        </button>
-                                    </li>
+                            <div class="col-xl-8">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <!-- Bordered Tabs -->
+                                        <ul
+                                            class="nav nav-tabs nav-tabs-bordered"
+                                        >
+                                            <li class="nav-item">
+                                                <button
+                                                    class="nav-link active"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#project-overview"
+                                                >
+                                                    Overview
+                                                </button>
+                                            </li>
 
                                             <li class="nav-item">
-                                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#project-edit">Edit</button>
+                                                <button
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#project-edit"
+                                                >
+                                                    Edit
+                                                </button>
                                             </li>
                                             <li class="nav-item">
-                                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#client-info">
+                                                <button
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#client-info"
+                                                >
                                                     Client info
                                                 </button>
                                             </li>
 
-                                    <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#amount">
-                                            Amount
-                                        </button>
-                                    </li>
+                                            <li class="nav-item">
+                                                <button
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#amount"
+                                                >
+                                                    Amount
+                                                </button>
+                                            </li>
 
-                                    <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#review">
-                                            Review
-                                        </button>
-                                    </li>
+                                            <li class="nav-item">
+                                                <button
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#review"
+                                                >
+                                                    Review
+                                                </button>
+                                            </li>
                                         </ul>
                                         <div class="tab-content pt-2">
                                             <div
                                                 class="tab-pane fade show active profile-overview"
-                                                id="project-overview">
+                                                id="project-overview"
+                                            >
                                                 <h5 class="card-title">
                                                     About background
                                                 </h5>
-                                                <p class="small fst-italic" id="project-background"></p>
+                                                <p
+                                                    class="small fst-italic"
+                                                    id="project-background"
+                                                ></p>
 
                                                 <h5 class="card-title">
                                                     Project Details
                                                 </h5>
 
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label col-4">
-                                                Department name
-                                            </div>
-                                            <div class="col-lg-9 col-md-8 col-8" id="project-department-name">
-                                                dance club
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label col-4">
-                                                Project name
-                                            </div>
-                                            <div class="col-lg-9 col-md-8 col-8" id="project-name">
-                                                find nemo
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label col-4">
-                                                Duration
-                                            </div>
-                                            <div class="col-lg-9 col-md-8 col-8" id="project-duration">
-                                                3 Months
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label col-4">
-                                                Start date
-                                            </div>
-                                            <div class="col-lg-9 col-md-8 col-8" id="project-start-date">
-                                                25 september 2022
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label col-4">
-                                                End date
-                                            </div>
-                                            <div class="col-lg-9 col-md-8 col-8" id="project-end-date">
-                                                25 december 2022
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label col-4">
-                                                Current phase
-                                            </div>
-                                            <div class="col-lg-9 col-md-8 col-8" id="project-current-phase">
-                                                Basic design
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-4 label col-4">Client</div>
-                                            <div class="col-lg-9 col-md-8 col-8" id="project-client-name">
-                                                DAT
-                                            </div>
-                                        </div>
-                                        <div class="accordion" id="accordionExample">
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingOne">
-                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseOne"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapseOne">
-                                                        System Outline
-                                                    </button>
-                                                </h2>
-                                                <div
-                                                        id="collapseOne"
-                                                        class="accordion-collapse collapse"
-                                                        aria-labelledby="headingOne"
-                                                        data-bs-parent="#accordionExample">
-                                                    <ul class="list-group accordion-body p-2 rounded-end">
-                                                        <li class="list-group-item d-flex justify-content-between">
-                                                            Analysis<i class="bi bi-check2-all text-success fs-4"></i>
-                                                        </li>
-                                                        <li class="list-group-item d-flex justify-content-between">
-                                                            System Design<i class="bi bi-check2-all text-success fs-4"></i>
-                                                        </li>
-                                                        <li class="list-group-item d-flex justify-content-between">
-                                                            Source
-                                                            Code<i class="bi bi-check2-all text-success fs-4"></i>
-                                                        </li>
-                                                        <li class="list-group-item d-flex justify-content-between">
-                                                            Testing<i class="bi bi-check2-all text-success fs-4"></i>
-                                                        </li>
-                                                        <li class="list-group-item d-flex justify-content-between">
-                                                            Deploy
-                                                        </li>
-                                                        <li class="list-group-item d-flex justify-content-between">
-                                                            Maintence
-                                                        </li>
-                                                        <li class="list-group-item d-flex justify-content-between">
-                                                            Document
-                                                        </li>
-                                                    </ul>
+                                                <div class="row">
+                                                    <div
+                                                        class="col-lg-3 col-md-4 label col-4"
+                                                    >
+                                                        Department name
+                                                    </div>
+                                                    <div
+                                                        class="col-lg-9 col-md-8 col-8"
+                                                        id="project-department-name"
+                                                    >
+                                                        dance club
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingTwo">
-                                                    <button
-                                                            class="accordion-button collapsed"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseTwo"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapseTwo">
-                                                        Amount
-                                                    </button>
-                                                </h2>
-                                                <div
-                                                        id="collapseTwo"
-                                                        class="accordion-collapse collapse"
-                                                        aria-labelledby="headingTwo"
-                                                        data-bs-parent="#accordionExample">
-                                                    <ul class="list-group accordion-body p-2 rounded-end">
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Basic Design<span class="badge bg-primary rounded-pill" id="">11</span>
-                                                        </li>
 
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Detail Design<span class="badge bg-primary rounded-pill" id="dd">11</span>
-                                                        </li>
-
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Coding<span class="badge bg-primary rounded-pill" id="ing">11</span>
-                                                        </li>
-
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Unit Testing<span class="badge bg-primary rounded-pill" id="ut">11</span>
-                                                        </li>
-
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Integrated Testing<span class="badge bg-primary rounded-pill" id="it">11</span>
-                                                        </li>
-                                                    </ul>
+                                                <div class="row">
+                                                    <div
+                                                        class="col-lg-3 col-md-4 label col-4"
+                                                    >
+                                                        Project name
+                                                    </div>
+                                                    <div
+                                                        class="col-lg-9 col-md-8 col-8"
+                                                        id="project-name"
+                                                    >
+                                                        find nemo
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingThree">
-                                                    <button
-                                                            class="accordion-button collapsed"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseThree"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapseThree">
-                                                        Objective
-                                                    </button>
-                                                </h2>
-                                                <div
-                                                        id="collapseThree"
-                                                        class="accordion-collapse collapse"
-                                                        aria-labelledby="headingThree"
-                                                        data-bs-parent="#accordionExample">
-                                                    <div class="accordion-body position-relative">
-                                                        <div class="position-absolute bottom-0 end-0 rounded-circle p-1 fs-6 bg-primary text-white">
 
+                                                <div class="row">
+                                                    <div
+                                                        class="col-lg-3 col-md-4 label col-4"
+                                                    >
+                                                        Duration
+                                                    </div>
+                                                    <div
+                                                        class="col-lg-9 col-md-8 col-8"
+                                                        id="project-duration"
+                                                    >
+                                                        3 Months
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div
+                                                        class="col-lg-3 col-md-4 label col-4"
+                                                    >
+                                                        Start date
+                                                    </div>
+                                                    <div
+                                                        class="col-lg-9 col-md-8 col-8"
+                                                        id="project-start-date"
+                                                    >
+                                                        25 september 2022
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div
+                                                        class="col-lg-3 col-md-4 label col-4"
+                                                    >
+                                                        End date
+                                                    </div>
+                                                    <div
+                                                        class="col-lg-9 col-md-8 col-8"
+                                                        id="project-end-date"
+                                                    >
+                                                        25 december 2022
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div
+                                                        class="col-lg-3 col-md-4 label col-4"
+                                                    >
+                                                        Current phase
+                                                    </div>
+                                                    <div
+                                                        class="col-lg-9 col-md-8 col-8"
+                                                        id="project-current-phase"
+                                                    >
+                                                        Basic design
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div
+                                                        class="col-lg-3 col-md-4 label col-4"
+                                                    >
+                                                        Client
+                                                    </div>
+                                                    <div
+                                                        class="col-lg-9 col-md-8 col-8"
+                                                        id="project-client-name"
+                                                    >
+                                                        DAT
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="accordion"
+                                                    id="accordionExample"
+                                                >
+                                                    <div class="accordion-item">
+                                                        <h2
+                                                            class="accordion-header"
+                                                            id="headingOne"
+                                                        >
+                                                            <button
+                                                                class="accordion-button collapsed"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseOne"
+                                                                aria-expanded="false"
+                                                                aria-controls="collapseOne"
+                                                            >
+                                                                System Outline
+                                                            </button>
+                                                        </h2>
+                                                        <div
+                                                            id="collapseOne"
+                                                            class="accordion-collapse collapse"
+                                                            aria-labelledby="headingOne"
+                                                            data-bs-parent="#accordionExample"
+                                                        >
+                                                            <ul
+                                                                class="list-group accordion-body p-2 rounded-end"
+                                                            >
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between"
+                                                                >
+                                                                    Analysis<i
+                                                                        class="bi bi-check2-all text-success fs-4"
+                                                                    ></i>
+                                                                </li>
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between"
+                                                                >
+                                                                    System
+                                                                    Design<i
+                                                                        class="bi bi-check2-all text-success fs-4"
+                                                                    ></i>
+                                                                </li>
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between"
+                                                                >
+                                                                    Source
+                                                                    Code<i
+                                                                        class="bi bi-check2-all text-success fs-4"
+                                                                    ></i>
+                                                                </li>
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between"
+                                                                >
+                                                                    Testing<i
+                                                                        class="bi bi-check2-all text-success fs-4"
+                                                                    ></i>
+                                                                </li>
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between"
+                                                                >
+                                                                    Deploy
+                                                                </li>
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between"
+                                                                >
+                                                                    Maintence
+                                                                </li>
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between"
+                                                                >
+                                                                    Document
+                                                                </li>
+                                                            </ul>
                                                         </div>
-                                                        <strong>This is the third item's accordion body.</strong>
-                                                        It is hidden by default, until the collapse plugin adds the
-                                                        appropriate classes that we use to style each element.
-                                                        These classes control the overall appearance, as well as the
-                                                        showing and hiding via CSS transitions. You can modify any
-                                                        of this with custom CSS or overriding our default variables. It's
-                                                        also worth noting that just about any HTML can go within
-                                                        the
-                                                        <code>.accordion-body</code>, though the transition does limit overflow.
+                                                    </div>
+                                                    <div class="accordion-item">
+                                                        <h2
+                                                            class="accordion-header"
+                                                            id="headingTwo"
+                                                        >
+                                                            <button
+                                                                class="accordion-button collapsed"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseTwo"
+                                                                aria-expanded="false"
+                                                                aria-controls="collapseTwo"
+                                                            >
+                                                                Amount
+                                                            </button>
+                                                        </h2>
+                                                        <div
+                                                            id="collapseTwo"
+                                                            class="accordion-collapse collapse"
+                                                            aria-labelledby="headingTwo"
+                                                            data-bs-parent="#accordionExample"
+                                                        >
+                                                            <ul
+                                                                class="list-group accordion-body p-2 rounded-end"
+                                                            >
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                                                >
+                                                                    Basic
+                                                                    Design<span
+                                                                        class="badge bg-primary rounded-pill"
+                                                                        id=""
+                                                                        >11</span
+                                                                    >
+                                                                </li>
+
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                                                >
+                                                                    Detail
+                                                                    Design<span
+                                                                        class="badge bg-primary rounded-pill"
+                                                                        id="dd"
+                                                                        >11</span
+                                                                    >
+                                                                </li>
+
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                                                >
+                                                                    Coding<span
+                                                                        class="badge bg-primary rounded-pill"
+                                                                        id="ing"
+                                                                        >11</span
+                                                                    >
+                                                                </li>
+
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                                                >
+                                                                    Unit
+                                                                    Testing<span
+                                                                        class="badge bg-primary rounded-pill"
+                                                                        id="ut"
+                                                                        >11</span
+                                                                    >
+                                                                </li>
+
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                                                >
+                                                                    Integrated
+                                                                    Testing<span
+                                                                        class="badge bg-primary rounded-pill"
+                                                                        id="it"
+                                                                        >11</span
+                                                                    >
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="accordion-item">
+                                                        <h2
+                                                            class="accordion-header"
+                                                            id="headingThree"
+                                                        >
+                                                            <button
+                                                                class="accordion-button collapsed"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseThree"
+                                                                aria-expanded="false"
+                                                                aria-controls="collapseThree"
+                                                            >
+                                                                Objective
+                                                            </button>
+                                                        </h2>
+                                                        <div
+                                                            id="collapseThree"
+                                                            class="accordion-collapse collapse"
+                                                            aria-labelledby="headingThree"
+                                                            data-bs-parent="#accordionExample"
+                                                        >
+                                                            <div
+                                                                class="accordion-body position-relative"
+                                                            >
+                                                                <div
+                                                                    class="position-absolute bottom-0 end-0 rounded-circle p-1 fs-6 bg-primary text-white"
+                                                                ></div>
+                                                                <strong
+                                                                    >This is the
+                                                                    third item's
+                                                                    accordion
+                                                                    body.</strong
+                                                                >
+                                                                It is hidden by
+                                                                default, until
+                                                                the collapse
+                                                                plugin adds the
+                                                                appropriate
+                                                                classes that we
+                                                                use to style
+                                                                each element.
+                                                                These classes
+                                                                control the
+                                                                overall
+                                                                appearance, as
+                                                                well as the
+                                                                showing and
+                                                                hiding via CSS
+                                                                transitions. You
+                                                                can modify any
+                                                                of this with
+                                                                custom CSS or
+                                                                overriding our
+                                                                default
+                                                                variables. It's
+                                                                also worth
+                                                                noting that just
+                                                                about any HTML
+                                                                can go within
+                                                                the
+                                                                <code
+                                                                    >.accordion-body</code
+                                                                >, though the
+                                                                transition does
+                                                                limit overflow.
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="tab-pane fade profile-edit pt-3" id="project-edit">
-                                        <!-- Profile Edit Form -->
-                                        <form>
-                                            <div class="row mb-3">
-                                                <label  for="background" class="col-md-4 col-lg-3 col-form-label">Background</label>
-                                                <div class="col-md-8 col-lg-9">
-                                                <textarea type="text" class="form-control border-task-description" id="background" name="background"></textarea>
+                                            <div
+                                                class="tab-pane fade profile-edit pt-3"
+                                                id="project-edit"
+                                            >
+                                                <!-- Profile Edit Form -->
+                                                <form>
+                                                    <div class="row mb-3">
+                                                        <label
+                                                            for="background"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >Background</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <textarea
+                                                                type="text"
+                                                                class="form-control border-task-description"
+                                                                id="background"
+                                                                name="background"
+                                                            ></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mb-3">
+                                                        <label
+                                                            for="project_name"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >Project name</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <input
+                                                                name="project_name"
+                                                                type="text"
+                                                                class="form-control"
+                                                                id="project-name"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mb-3">
+                                                        <label
+                                                            for="start-date"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >start date</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <input
+                                                                name="start_date"
+                                                                type="date"
+                                                                class="form-control"
+                                                                id="start-date"
+                                                                value="2017-06-01"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mb-3">
+                                                        <label
+                                                            for="end-date"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >end date</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <input
+                                                                name="end_date"
+                                                                type="date"
+                                                                class="form-control"
+                                                                id="end-date"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mb-3">
+                                                        <label
+                                                            for="objective"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >Objective</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <textarea
+                                                                type="text"
+                                                                class="form-control border-task-description"
+                                                                id=""
+                                                                name="objective"
+                                                            ></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="text-center">
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-primary"
+                                                        >
+                                                            Save Changes
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                                <!-- End Profile Edit Form -->
+                                            </div>
+                                            <div
+                                                class="tab-pane fade profile-edit pt-3"
+                                                id="client-info"
+                                            >
+                                                <div class="row">
+                                                    <div
+                                                        class="fs-2 text-center"
+                                                    >
+                                                        DAT
+                                                    </div>
+                                                    <div
+                                                        class="row row-cols-1 gap-2"
+                                                    >
+                                                        <div
+                                                            class="d-flex justify-content-start align-items-center gap-2"
+                                                        >
+                                                            <div
+                                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-envelope-at"
+                                                                ></i>
+                                                            </div>
+                                                            <div
+                                                                class="align-self-center"
+                                                            >
+                                                                suckmyfingure@gmail.com
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            class="d-flex justify-content-start align-items-center gap-2"
+                                                        >
+                                                            <div
+                                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-telephone"
+                                                                ></i>
+                                                            </div>
+                                                            <div
+                                                                class="align-self-center"
+                                                            >
+                                                                09 77558822
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
+
+                                            <div
+                                                class="tab-pane fade pt-3"
+                                                id="amount"
+                                            >
+                                                <ul
+                                                    class="list-group accordion-body p-2 rounded-end"
+                                                >
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
+                                                        Basic design
+                                                        <div class="number">
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
+                                                        Detail design
+                                                        <div class="number">
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
+                                                        Coding
+                                                        <div class="number">
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
+                                                        Unit testing
+                                                        <div class="number">
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
+                                                        Integrated testing
+                                                        <div class="number">
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="text-center">
+                                                    <a
+                                                        href=""
+                                                        class="btn btn-primary"
+                                                        style="
+                                                            background-color: #369;
+                                                        "
+                                                        >Save Amount</a
+                                                    >
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="tab-pane fade pt-3"
+                                                id="review"
+                                            >
+                                                <div class="row mb-3">
+                                                    <label
+                                                        for="project_name"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >External Review</label
+                                                    >
+                                                    <div
+                                                        class="col-md-8 col-lg-9"
+                                                    >
+                                                        <input
+                                                            name="project_name"
+                                                            type="number"
+                                                            class="form-control"
+                                                            id="project-external-review-count"
+                                                        />
+                                                    </div>
                                                 </div>
 
-                                            <div class="row mb-3">
-                                                <label for="project_name" class="col-md-4 col-lg-3 col-form-label">Project name</label>
-                                                <div class="col-md-8 col-lg-9">
-                                                    <input name="project_name"
+                                                <div class="row mb-3">
+                                                    <label
+                                                        for="project_name"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >Internal Review</label
+                                                    >
+                                                    <div
+                                                        class="col-md-8 col-lg-9"
+                                                    >
+                                                        <input
+                                                            name="project_name"
                                                             type="text"
                                                             class="form-control"
-                                                            id="project_name"
-                                                            value="find nemo"/>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <label for="start-date" class="col-md-4 col-lg-3 col-form-label">start date</label>
-                                                <div class="col-md-8 col-lg-9">
-                                                    <input name="start_date" type="date" class="form-control" id="start-date" value="2017-06-01"/>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <label for="end-date" class="col-md-4 col-lg-3 col-form-label">end date</label>
-                                                <div class="col-md-8 col-lg-9">
-                                                    <input
-                                                            name="end_date"
-                                                            type="date"
-                                                            class="form-control"
-                                                            id="end-date"/>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <label  for="objective" class="col-md-4 col-lg-3 col-form-label">Objective</label>
-                                                <div class="col-md-8 col-lg-9">
-                                                    <textarea type="text" class="form-control border-task-description" id="" name="objective"></textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary">
-                                                    Save Changes
-                                                </button>
-                                            </div>
-                                        </form>
-                                        <!-- End Profile Edit Form -->
-                                    </div>
-                                    <div class="tab-pane fade profile-edit pt-3" id="client-info">
-                                        <div class="row">
-                                            <div class="fs-2 text-center">
-                                                DAT
-                                            </div>
-                                            <div class="row row-cols-1 gap-2">
-                                                <div class="d-flex justify-content-start align-items-center gap-2">
-                                                    <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
-                                                        <i class="bi bi-envelope-at"></i>
-                                                    </div>
-                                                    <div class="align-self-center">
-                                                        suckmyfingure@gmail.com
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex justify-content-start align-items-center gap-2">
-                                                    <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
-                                                        <i class="bi bi-telephone"></i>
-                                                    </div>
-                                                    <div class="align-self-center">
-                                                        09 77558822
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                            <div class="tab-pane fade  pt-3" id="amount">
-
-
-
-                                                        <ul class="list-group accordion-body p-2 rounded-end">
-                                                            <li class="list-group-item d-flex justify-content-between">
-                                                                Basic design
-                                                                <div class="number">
-                                                                    <span class="minus">-</span>
-                                                                    <input type="text" value="0"/>
-                                                                    <span class="plus">+</span>
-                                                                </div>
-                                                            </li>
-                                                            <li class="list-group-item d-flex justify-content-between">
-                                                                Detail
-                                                                design
-                                                                <div class="number">
-                                                                    <span class="minus">-</span>
-                                                                    <input type="text" value="0"/>
-                                                                    <span class="plus">+</span>
-                                                                </div>
-                                                            </li>
-                                                            <li class="list-group-item d-flex justify-content-between">
-                                                                Coding
-                                                                <div class="number">
-                                                                    <span class="minus">-</span>
-                                                                    <input type="text" value="0"/>
-                                                                    <span class="plus">+</span>
-                                                                </div>
-                                                            </li>
-                                                            <li class="list-group-item d-flex justify-content-between">
-                                                                Unit testing
-                                                                <div class="number">
-                                                                    <span class="minus">-</span>
-                                                                    <input type="text" value="0"/>
-                                                                    <span class="plus">+</span>
-                                                                </div>
-                                                            </li>
-                                                            <li class="list-group-item d-flex justify-content-between">
-                                                                Integrated
-                                                                testing
-                                                                <div class="number">
-                                                                    <span class="minus">-</span>
-                                                                    <input type="text" value="0"/>
-                                                                    <span class="plus">+</span>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="text-center">
-
-                                                                    <a href="" class="btn btn-primary" style="background-color: #369;">Save Amount</a>
-
-
-                                                        </div>
-
-                                            </div>
-
-
-
-
-                                            <div class="tab-pane fade  pt-3" id="review">
-                                                <div class="row mb-3">
-                                                    <label for="project_name" class="col-md-4 col-lg-3 col-form-label">External Review</label>
-                                                    <div class="col-md-8 col-lg-9">
-                                                        <input name="project_name"
-                                                               type="text"
-                                                               class="form-control"
-                                                               id=""
-                                                               value="find nemo"/>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <label for="project_name" class="col-md-4 col-lg-3 col-form-label">Internal Review</label>
-                                                    <div class="col-md-8 col-lg-9">
-                                                        <input name="project_name"
-                                                               type="text"
-                                                               class="form-control"
-                                                               id=""
-                                                               value="find nemo"/>
+                                                            id="project-internal-review-count"
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div class="text-center">
-
-                                                    <a href="" class="btn btn-primary" style="background-color: #369;">Save Review</a>
-
-
+                                                    <a
+                                                        href=""
+                                                        class="btn btn-primary"
+                                                        style="
+                                                            background-color: #369;
+                                                        "
+                                                        >Save Review</a
+                                                    >
                                                 </div>
-
                                             </div>
+                                        </div>
+                                        <!-- End Bordered Tabs -->
+                                    </div>
                                 </div>
-                                <!-- End Bordered Tabs -->
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <a href="/project" class="btn btn-primary"
+                            >manage task</a
+                        >
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <a href="/project" class="btn btn-primary">manage task</a>
-            </div>
         </div>
-    </div>
-</div>
-<!-- modal for project's details -->
+        <!-- modal for project's details -->
 
         <!-- Scripts -->
 
         <!-- fontawesome -->
-        <script src="/js/fontawesome.js"></script>
-
-        <!-- jquery -->
-        <script src="/js/jquery.3.7.1.min.js"></script>
-
-        <!-- datable table -->
-        <script src="/js/databales.min.js"></script>
-
-        <!-- bootstrap -->
-        <script src="/js/bootstrap.bundle.min.js"></script>
-
-        <!-- javascript libraries -->
-        <script src="/lib/chart/chart.min.js"></script>
-        <script src="/lib/easing/easing.min.js"></script>
-        <script src="/lib/waypoints/waypoints.min.js"></script>
-        <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="/lib/tempusdominus/js/moment.min.js"></script>
-        <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-        <script src="/lib/quill/quill.min.js"></script>
-
-        <!-- Template Javascript -->
-        <script src="/js/main.js"></script>
-        <script></script>
-        <script src="/js/forprogresscircleiguess.js"></script>
 
         <!-- sort (department, project), form validation and search bar behavior are all here -->
 

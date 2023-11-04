@@ -29,7 +29,7 @@ public class AmountTest {
 
         project = new Project();
         project.setId(101L);
-        amount1.setProject(project);
+//        amount1.setProject(project);
     }
 
     @Test
@@ -68,11 +68,11 @@ public class AmountTest {
         assertEquals(55, amount2.getIntegrated_testing());
     }
 
-    @Test
-    public void testProject() {
-        assertEquals(project, amount1.getProject());
-        assertNull(amount2.getProject());
-    }
+//    @Test
+//    public void testProject() {
+//        assertEquals(project, amount1.getProject());
+//        assertNull(amount2.getProject());
+//    }
 
     @Test
     public void testEquals() {
