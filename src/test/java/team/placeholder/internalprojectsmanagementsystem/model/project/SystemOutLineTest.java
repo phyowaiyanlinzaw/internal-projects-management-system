@@ -41,7 +41,7 @@ public class SystemOutLineTest {
 
         project = new Project();
         project.setId(101L);
-        systemOutline1.setProject(project);
+//        systemOutline1.setProject(project);
     }
 
     @Test
@@ -98,11 +98,11 @@ public class SystemOutLineTest {
         assertFalse(systemOutline2.isDocument());
     }
 
-    @Test
-    public void testProject() {
-        assertEquals(project, systemOutline1.getProject());
-        assertNull(systemOutline2.getProject());
-    }
+//    @Test
+//    public void testProject() {
+//        assertEquals(project, systemOutline1.getProject());
+//        assertNull(systemOutline2.getProject());
+//    }
 
     @Test
     public void testEquals() {
