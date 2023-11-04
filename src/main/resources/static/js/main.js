@@ -63,11 +63,11 @@
         url: '/api/user/profile',
         type: 'GET',
         success: function (data) {
-            console.log(data);
+            console.log("current user",data);
             $('#navbar-username').text(data.name);
         },
-        error: function (data) {
-            console.log(data);
+        error: function (data,xhr) {
+            console.log("error",data,xhr);
         }
     });
 
