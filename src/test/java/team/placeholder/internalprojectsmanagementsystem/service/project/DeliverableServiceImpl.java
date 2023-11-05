@@ -14,20 +14,9 @@ import team.placeholder.internalprojectsmanagementsystem.repository.project.Deli
 public class DeliverableServiceImpl implements DeliverableService{
 
     private final DeliverableRepository deliverableRepository;
-    @Override
-    public DeliverableDto createDeliverable(DeliverableDto deliverableDto) {
-
-        Deliverable deliverable = new Deliverable();
-        deliverable.setId(deliverableDto.getId());
-        deliverable.setStatus(deliverableDto.isStatus());
-        deliverable.setType(deliverableDto.getType());
-        deliverable = deliverableRepository.save(deliverable);
-        return DeliverableMapper.toDeliverableDto(deliverable);
-
-    }
 
     @Override
-    public DeliverableDto updateDeliverable(DeliverableDto deliverableDto) {
+    public DeliverableDto findByProjectId(Long projectId) {
         return null;
     }
 }

@@ -42,4 +42,6 @@ public interface UserService {
     Long countAllByDepartmentId(Long departmentId);
 
     List<UserDto> getAllUsersByProjectId(Long projectId);
+
+    void changeUsername(UserDto userDto);
 }

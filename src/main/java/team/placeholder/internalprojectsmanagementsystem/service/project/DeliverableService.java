@@ -4,9 +4,6 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Deliv
 
 public interface DeliverableService {
 
-    DeliverableDto createDeliverable(DeliverableDto deliverableDto);
-
-    DeliverableDto updateDeliverable(DeliverableDto deliverableDto);
-
+    DeliverableDto findByProjectId(Long projectId);
 
 }

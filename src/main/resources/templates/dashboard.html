@@ -250,11 +250,13 @@
                     if(actual === null) {
                         return null;
                     }
-                    return Math.round(((actual - targetData[index]) / targetData[index]) * 100);
+
+                    //divide actual by target then multiply by 100 and round to the nearest integer
+                    return Math.round((actual / targetData[index]) * 100);
                 });
 
                 //Dummy data for kpi chart
-             const screenCountsData = [120, 130, 140, 135, 150, 155, 160, 165, 170, 175, 180, 185];
+             const screenCountsData = [90, 130, 140, 135, 150, 155, 160, 165, 170, 175, 180, 185];
              const testCasesData = [100, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160];
              const kStepData = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105];
              const reviewCountsData = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]; // Assuming review counts
@@ -310,7 +312,7 @@
 
              //Create bar chart for p1ctx with percentageDifferenceData
                 const barChart = new Chart(p1ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                         labels: months,
                         datasets: [{
@@ -322,7 +324,15 @@
                             fill: false,
                             tension: 0.1,//line tension
                             categoryPercentage: 0.5,//bar width
-                        }]
+                        },
+                            {
+                                label: 'Target Productivity',
+                                data: Array(months.length).fill(100), // Creates an array of 100s matching the length of the data
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)', // Set a different color for the target line
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderDash: [5, 5], // Dotted line for target productivity
+                            },
+                        ]
                     },
                     options: {
                         responsive: true,
@@ -330,7 +340,7 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                max: 100,
+                                max: 200,
                             }
                         }
                     }
@@ -378,15 +388,18 @@
                 });
 
 
-             getData("/api/user/count/all", function (error,data) {
-                 if(error) {
-                     console.log(
-                         error
-                     )
-                 } else {
-                     console.log(data);
-                        $("#spinner").hide();
-                        $("#employeeCount").text(data);
+             //get user counts by api/user/count/all
+             $.ajax({
+                 url: "/api/user/count/all",
+                 type: "GET",
+                 dataType: "json",
+                 success: function (data) {
+                     $("#spinner").hide();
+                     $("#employeeCount").text(data);
+                 },
+                 error: function (error) {
+                     $("#spinner").hide();
+                     console.log(error);
                  }
              });
 
@@ -407,30 +420,34 @@
 
 
              //get client counts by api/department/count with getData()
-                getData("/api/department/count", function (error,data) {
-                    if(error) {
-                        console.log(
-                            error
-                        )
-                    } else {
-                        console.log(data);
-                            $("#spinner").hide();
-                            $("#departmentCount").text(data);
-                    }
-                });
+             $.ajax({
+                 url: "/api/department/count",
+                 type: "GET",
+                 dataType: "json",
+                 success: function (data) {
+                     $("#spinner").hide();
+                     $("#departmentCount").text(data);
+                 },
+                 error: function (error) {
+                     $("#spinner").hide();
+                     console.log(error);
+                 }
+             });
 
                 //get project counts by api/project/count/all with getData()
-                getData("/api/project/count/all", function (error,data) {
-                    if(error) {
-                        console.log(
-                            error
-                        )
-                    } else {
-                        console.log(data);
-                            $("#spinner").hide();
-                            $("#projectCount").text(data);
-                    }
-                });
+             $.ajax({
+                 url: "/api/project/count/all",
+                 type: "GET",
+                 dataType: "json",
+                 success: function (data) {
+                     $("#spinner").hide();
+                     $("#projectCount").text(data);
+                 },
+                 error: function (error) {
+                     $("#spinner").hide();
+                     console.log(error);
+                 }
+             });
 
          });
      </script>

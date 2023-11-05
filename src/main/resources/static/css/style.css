@@ -781,7 +781,7 @@
 }
 
 /* Task Add */
- .col-form-label {
+/* .col-form-label {
     color: #01041b;
 }
 
@@ -816,7 +816,8 @@
 .border-task-description {
     background-color: #f8f7f7;
     line-height: 28px;
-}
+} */
+
 /**Task End**/
 
 .issue-time-line p {
@@ -1151,6 +1152,13 @@
     width: 100%;
     vertical-align: top;
     pointer-events: none;
+}
+
+.toastui-calendar-milestone , .toastui-calendar-task ,.toastui-calendar-panel-resizer{
+    display: none;
+}
+.toastui-calendar-time{
+    height: 400px!important;
 }
 /*end*/
 

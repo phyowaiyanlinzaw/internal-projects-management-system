@@ -41,11 +41,8 @@
     }, {offset: '80%'});
 
 
-    // Calender
-    $('#calender').datetimepicker({
-        inline: true,
-        format: 'L'
-    });
+    //calendar
+
 
 
     // Testimonials carousel
@@ -57,6 +54,20 @@
         loop: true,
         nav : false
     });
+
+    //ajax call api/user/profile to get current user name to set #username
+    $.ajax({
+        url: '/api/user/profile',
+        type: 'GET',
+        success: function (data) {
+            console.log("current user",data);
+            $('#navbar-username').text(data.name);
+        },
+        error: function (data,xhr) {
+            console.log("error",data,xhr);
+        }
+    });
+
 
 
     // // Worldwide Sales Chart
