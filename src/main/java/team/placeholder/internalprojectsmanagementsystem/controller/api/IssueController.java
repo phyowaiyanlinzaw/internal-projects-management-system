@@ -24,20 +24,23 @@ public class IssueController {
         return new ResponseEntity<>(issueDtos, HttpStatus.OK);
     }
 
-    @PostMapping(value="save",consumes = "application/json")
-    public ResponseEntity<String> save(@RequestBody IssueDto dto) {
+    @PostMapping(value="save")
+    public ResponseEntity<IssueDto> save(@RequestBody IssueDto dto) {
         try {
             IssueDto savedIssue = issueService.save(dto);
 
             if (savedIssue != null) {
-                return ResponseEntity.ok("Issue added successfully");
+
+                System.out.println("Issue insert successfully");
+                return ResponseEntity.ok(savedIssue);
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to save the issue. Check your data.");
+                System.out.println("Failed to insert issue");
+                return ResponseEntity.badRequest().body(null);
             }
         } catch (Exception e) {
             // Log the exception for debugging
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process the request.");
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
@@ -65,17 +68,19 @@ public class IssueController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateIssue(@PathVariable long id, @RequestBody IssueDto issueDto) {
-
+    public ResponseEntity<IssueDto> updateIssue(@PathVariable long id, @RequestBody IssueDto issueDto) {
         issueDto.setId(id);
         IssueDto updatedIssue = issueService.updateIssue(issueDto);
 
         if (updatedIssue != null) {
-            return ResponseEntity.ok("Issue updated successfully");
+            System.out.println("Issue updated successfully");
+            return ResponseEntity.ok(updatedIssue);
         } else {
-            return ResponseEntity.badRequest().body("Failed to update issue");
+            System.out.println("Failed to update issue");
+            return ResponseEntity.badRequest().body(null);
         }
     }
+
 
 
     @DeleteMapping("/delete/{id}")

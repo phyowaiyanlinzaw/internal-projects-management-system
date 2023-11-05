@@ -1153,3 +1153,13 @@
     pointer-events: none;
 }
 /*end*/
+
+/*for icon space*/
+.icon-title i {
+    margin-right: 10px; /* Adjust the value to control the spacing */
+}
+
+/*for margin*/
+.custom-left-margin {
+    margin-left: 40px; /* Adjust the value as needed */
+}

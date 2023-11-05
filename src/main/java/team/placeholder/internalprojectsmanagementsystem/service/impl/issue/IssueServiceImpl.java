@@ -27,7 +27,8 @@ public class IssueServiceImpl implements IssueService {
             Issue savedIssue = issueRepository.save(issue);
             return IssueMapper.toIssueDto(savedIssue);
         } catch (Exception e) {
-            e.printStackTrace();  // You may want to log the error or throw a custom exception.
+            e.printStackTrace();
+            System.out.println("Failed to insert issue");
             return null;  // Or handle the error as needed in your application.
         }
     }
