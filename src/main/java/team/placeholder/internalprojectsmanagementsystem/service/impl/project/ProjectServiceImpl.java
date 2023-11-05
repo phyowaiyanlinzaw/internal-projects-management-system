@@ -78,12 +78,14 @@ public class ProjectServiceImpl implements ProjectService {
         project2.setDepartment(departmentRepository.getReferenceById(projectDto.getDepartmentDto().getId()));
         project2.setArchitectures(architecture);
         project2.setDeliverables(null);
+        project2.getSystemOutLine().setProject(project2);
+        Review newReview = new Review();
+        newReview.setUser(userRepository.getReferenceById(projectDto.getUserDto().getId()));
+        newReview.setProject(project2);
+        project2.setReviews(newReview);
         Project savedProject = projectRepository.save(project2);
+        System.out.println(" system out loine shoud get XXXXXXXXXXXX" + savedProject.getSystemOutLine());
 
-        Review review = new Review();
-        review.setProject(projectRepository.getReferenceById(savedProject.getId()));
-        review.setUser(userRepository.getReferenceById(project2.getProjectManager().getId()));
-        reviewRepo.save(review);
 
         for (Deliverable deliverable1 : deliverable) {
             deliverable1.setProject(savedProject);
@@ -96,6 +98,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectDto> getAllProjects() {
         List<Project> projectList = projectRepository.findAll();
+
+        for(Project project : projectList) {
+            System.out.println(project.getSystemOutLine());
+        }
+
         return projectList.stream()
                 .map(ProjectMapper::toProjectDto)
                 .collect(Collectors.toList());
