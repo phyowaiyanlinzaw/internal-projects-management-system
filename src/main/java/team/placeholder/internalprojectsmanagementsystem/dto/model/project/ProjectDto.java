@@ -35,7 +35,7 @@ public class ProjectDto implements Serializable {
     private Set<ArchitectureDto>  architectureDto;
     private ReviewDto reviewDto;
     private SystemOutLineDto systemOutLineDto;
-    private List <DeliverableDto> deliverableDto;
+    private List<DeliverableDto> deliverableDto;
 
 
     private TasksDto tasksDto;

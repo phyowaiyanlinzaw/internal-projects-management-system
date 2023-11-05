@@ -87,3 +87,14 @@ export function calculateDuration(startDate, endDate) {
         }
     }
 }
+
+export function calculateEndDate(startDateMilliseconds, durationMonths) {
+    // Convert the start date from milliseconds to a JavaScript Date object
+    const startDate = new Date(startDateMilliseconds);
+
+    // Calculate the end date
+    const endDate = new Date(startDate);
+    endDate.setMonth(startDate.getMonth() + durationMonths);
+
+    return endDate;
+}

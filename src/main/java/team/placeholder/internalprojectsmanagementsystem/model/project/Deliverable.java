@@ -19,14 +19,16 @@ public class Deliverable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private boolean status;
 
-    @ManyToMany(mappedBy = "deliverables")
-    private Set<DeliverableType> deliverableTypes;
+    @ManyToOne
+    @JoinColumn(name = "deliverable_type_id")
+    private DeliverableType deliverableTypes;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
     private Project project;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,11 +42,4 @@ public class Deliverable implements Serializable {
         return Objects.hash(id);
     }
 
-
-    public String getType() {
-        return null;
-    }
-
-    public void setType(String type) {
-    }
 }

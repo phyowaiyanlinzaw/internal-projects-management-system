@@ -24,22 +24,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Table(name="user")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 public class User implements Serializable {
 
     @Id
@@ -56,7 +40,6 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;

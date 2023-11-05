@@ -21,7 +21,7 @@ public class Review implements Serializable {
     private int internal_review_count;
     private int external_review_count;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="project_id")
     private Project project;
 

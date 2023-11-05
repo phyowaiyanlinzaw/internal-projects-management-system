@@ -130,6 +130,7 @@
                 formatDateFromMilliseconds,
                 MONTH_NAMES,
                 calculateDuration,
+                calculateEndDate
             } from "/js/time.js";
 
             import { sendData, getData } from "/js/api-function.js";
@@ -139,6 +140,7 @@
             import {
                 getArchitecturelist,
                 getClientList,
+                getDeliverableTypeList,
             } from "/js/getDataForProject.js";
 
             import { getUser } from "/js/currentLoginUser.js";
@@ -166,26 +168,33 @@
                 clientSelect.append(option);
             });
 
-            const architectureInput = document.querySelector(
-                'input[name="architectures"]'
-            );
-            const deliverableInput = document.querySelector(
-                'input[name="deliverable"]'
-            );
-
             function initializeTagify(input, whiteList) {
                 return new Tagify(input, {
                     whitelist: whiteList.map((item) => item.tech_name),
-                    maxTags: 10,
                     dropdown: {
                         consoleLog: true,
-                        maxItems: 30,
                         classname: "tags-look",
                         enabled: 0,
-                        closeOnSelect: true,
+                        closeOnSelect: false,
                     },
                 });
             }
+
+            let deliTypeList = await getDeliverableTypeList();
+
+            getDeliverableTypeList()
+                .then(deliType => {
+                    const deliTypeSelect = document.querySelector("#deliverable");
+                    new Tagify (deliTypeSelect, {
+                        whitelist: deliType.map((item) => item.type),
+                        dropdown: {
+                            consoleLog: true,
+                            classname: "tags-look",
+                            enabled: 0,
+                            closeOnSelect: false,
+                        },
+                    });
+                })
 
             let arcccList = await getArchitecturelist();
 
@@ -199,18 +208,6 @@
                 .catch((error) => {
                     console.log("Error:", error);
                 });
-
-            const startDateInput = document.getElementById("start_date");
-            const endDateInput = document.getElementById("end_date");
-
-            startDateInput.addEventListener("change", function () {
-                const startDate = new Date(startDateInput.value);
-                const minEndDate = new Date(startDate);
-                minEndDate.setMonth(startDate.getMonth() + 1);
-
-                endDateInput.min = minEndDate.toISOString().split("T")[0];
-                endDateInput.disabled = false;
-            });
 
             const toolbaroptions = [
                 // Test-style
@@ -249,7 +246,7 @@
                         id: 1,
                         name: "Dat",
                         phone: "09 77558833",
-                        email: "suckmyfingure@gmail.com",
+                        email: "suckmyfingure@gmail.com"
                     },
                     totalTask: 100,
                     doneTask: 50,
@@ -323,6 +320,7 @@
                 },
             ];
 
+            // SAVE CLIENT
             document
                 .querySelector("#client-form")
                 .addEventListener("submit", function (e) {
@@ -686,21 +684,20 @@
                     const startDate = new Date(
                         $("#start_date").val()
                     ).getTime();
-                    const endDate = new Date($("#end_date").val()).getTime();
+                    const duration = +$("#project-add-duration").val()
 
                     const background = $("#background").val();
                     let architectures = $("#architectures").val();
                     console.log("architectures list : ", architectures);
-                    const systemOutlines = $("#systemOutlines").val();
+                    const systemOutlines = sysSelect.selectedValues;
                     const deliverable = $("#deliverable").val();
                     const objective = editor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
-                    let newArc = [];
 
                     if (
                         projectName === "" ||
                         client === "" ||
-                        startDate === "" ||
-                        endDate === "" ||
+                        startDate === 0 ||
+                        duration === 0 ||
                         background === "" ||
                         architectures === "" ||
                         systemOutlines === "" ||
@@ -711,50 +708,39 @@
                         return;
                     }
                     architectures = JSON.parse(architectures);
-                    for (let i = 0; i < architectures.length; i++) {
-                        const ar = architectures[i];
-                        newArc.push({ tech_name: ar.value });
-                    }
 
-                    const result = [];
+                    const arcList = architectures.map(ar => {
+                        const matchingObj = arcccList.find(arccObj => arccObj.tech_name === ar.value);
+                        return matchingObj ? matchingObj : { tech_name: ar.value };
+                    });
 
-                    newArc.forEach((newObj) => {
-                        const matchingObj = arcccList.find(
-                            (arccObj) => arccObj.tech_name === newObj.tech_name
-                        );
-                        if (!matchingObj) {
-                            result.push(newObj);
-                        } else {
-                            result.push(matchingObj);
-                        }
+                    const oldDeliTypeList = JSON.parse(deliverable);
+
+                    const deliverTypeList = oldDeliTypeList.map(deli => {
+                        const matchingObj = deliTypeList.find(deliObj => deliObj.type === deli.value);
+                        return matchingObj ? matchingObj : { type: deli.value };
                     });
                     // You may want to add some form validation here before sending the data
                     log(objective);
                     log(architectures);
-                    log(newArc);
                     const project = {
                         name: projectName,
                         clientDto: client,
-                        duration:
-                            (new Date(endDate).getFullYear() -
-                                new Date(startDate).getFullYear()) *
-                                12 +
-                            (new Date(endDate).getMonth() -
-                                new Date(startDate).getMonth()),
+                        duration: duration,
                         start_date: startDate,
-                        end_date: endDate,
+                        end_date: calculateEndDate(startDate, duration).getTime(),
                         background: background,
-                        architectureDto: result,
-                        systemOutLineDto: {
-                            analysis: true,
-                            sys_design: true,
-                            coding: true,
-                        },
+                        architectureDto: arcList,
+                        systemOutLineDto: systemOutlines.reduce((acc, cur) => {
+                            acc[cur] = true;
+                            return acc;
+                        }, {}),
                         current_phase: "PLANNING",
-                        deliverableDto: null,
+                        deliverableDto: deliverTypeList
+                            .map(item => ({
+                                deliverableType: { type: item.type }
+                            })),
                         objective: objective,
-                        taskDto: null,
-                        issueDto: null,
                         amountDto: {
                             basic_design: 0,
                             detail_design: 0,
@@ -762,8 +748,12 @@
                             unit_testing: 0,
                             integrated_testing: 0,
                         },
-                        departmentDto: null,
-                        reviewDto: null,
+                        departmentDto: {
+                            id :loginUser.currentUser.department.id
+                        },
+                        userDto : {
+                            id : loginUser.currentUser.id
+                        }
                     };
                     log(project);
                     //Perform the AJAX request
@@ -775,7 +765,7 @@
                         success: function (data) {
                             alert("Project registered successfully");
                             // Reset the form if needed
-                            $("#validation-form")[0].reset();
+                            $("#validation-form").reset();
                         },
                         error: function (data) {
                             alert("Error registering project");
@@ -822,8 +812,8 @@
                 },
             ];
 
-            console.log(
-                VirtualSelect.init({
+
+                let sysSelect = VirtualSelect.init({
                     ele: "#systemOutlines",
                     options: myOptions,
                     multiple: true,
@@ -832,7 +822,6 @@
                     popupPosition: null,
                     maxWidth: "100%",
                 })
-            );
 
             //list project end
         </script>
@@ -1066,19 +1055,18 @@
                                     <!--                                end date add-->
                                     <div class="col-md-6">
                                         <label
-                                            for="end_date"
+                                            for="project-add-duration"
                                             class="col-sm-12 col-form-label"
-                                            name="end_date"
-                                            >End Date<span style="color: red">
+                                            >Enter Duration (Month)<span style="color: red">
                                                 *</span
                                             ></label
                                         >
                                         <input
-                                            type="date"
+                                            type="number"
                                             class="form-control border-task-description"
-                                            id="end_date"
-                                            name="end_date"
-                                            disabled
+                                            id="project-add-duration"
+                                            min="1"
+                                            value="1"
                                         />
                                     </div>
 
@@ -1117,7 +1105,7 @@
                                             class="form-control"
                                             id="architectures"
                                             name="architectures"
-                                            placeholder="add value"
+                                            placeholder="enter to add your own architecture"
                                         />
                                     </div>
 
@@ -1145,13 +1133,11 @@
                                                 *</span
                                             ></label
                                         >
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="deliverable"
-                                            name="deliverable"
-                                            placeholder="add value"
-                                            value="source code,zip"
+                                        <input type="text"
+                                               class="form-control"
+                                               id="deliverable"
+                                               name="enter to add your own deliverable type"
+                                               placeholder="add value"
                                         />
                                     </div>
 
@@ -1570,7 +1556,7 @@
                                                                     Basic
                                                                     Design<span
                                                                         class="badge bg-primary rounded-pill"
-                                                                        id=""
+                                                                        id="basic-design-count"
                                                                         >11</span
                                                                     >
                                                                 </li>
@@ -1710,7 +1696,6 @@
                                                             <textarea
                                                                 type="text"
                                                                 class="form-control border-task-description"
-                                                                id="background"
                                                                 name="background"
                                                             ></textarea>
                                                         </div>
@@ -1727,9 +1712,9 @@
                                                         >
                                                             <input
                                                                 name="project_name"
+                                                                id="project_name"
                                                                 type="text"
                                                                 class="form-control"
-                                                                id="project-name"
                                                             />
                                                         </div>
                                                     </div>
@@ -1755,7 +1740,7 @@
 
                                                     <div class="row mb-3">
                                                         <label
-                                                            for="end-date"
+                                                            for="project-edit-duration"
                                                             class="col-md-4 col-lg-3 col-form-label"
                                                             >end date</label
                                                         >
@@ -1764,9 +1749,9 @@
                                                         >
                                                             <input
                                                                 name="end_date"
-                                                                type="date"
+                                                                type="number"
                                                                 class="form-control"
-                                                                id="end-date"
+                                                                id="project-edit-duration"
                                                             />
                                                         </div>
                                                     </div>

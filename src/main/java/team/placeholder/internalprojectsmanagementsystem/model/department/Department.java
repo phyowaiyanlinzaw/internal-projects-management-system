@@ -24,7 +24,6 @@ public class Department {
     @Column(unique = true)
     private String name;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users;
 

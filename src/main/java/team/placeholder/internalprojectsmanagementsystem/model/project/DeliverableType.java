@@ -19,11 +19,6 @@ public class DeliverableType {
     private Long id;
     private String type;
 
-    @ManyToMany
-    @JoinTable(
-            name = "deli_type_mtm",
-            joinColumns = @JoinColumn(name = "deliverable_type_id"),
-            inverseJoinColumns = @JoinColumn(name = "deliverable_id")
-    )
+    @OneToMany(mappedBy = "deliverableTypes", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Deliverable> deliverables;
 }
