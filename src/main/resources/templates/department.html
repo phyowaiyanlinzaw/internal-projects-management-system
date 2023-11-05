@@ -186,12 +186,13 @@
                         seeMoreButton.addEventListener("click", function (e) {
 
                             getData(`/api/department/byId/${currentDp.id}`).then(data => {
-                                console.log(data)
+                                console.log("Department : " + data);
                                     document.querySelector("#department-id").value = data.id;
                                     document.querySelector("#edit-department-name").value = data.name;
                                 }
                             ).catch(error => console.log(error))
                             getData(`/api/user/count/departmentId/${currentDp.id}`).then(data => {
+                                 console.log("Total Member : " + data);
                                 document.querySelector("#total-member").textContent = data
                             }).catch(error => console.log(error))
 
@@ -202,7 +203,10 @@
                             // First, get the selected department head's information and display it
                             let selected_department_head;
 
+                            console.log("Current Department : " + currentDp.id)
+
                             getData(`/api/user/role/DEPARTMENT_HEAD/departmentId/${currentDp.id}`).then(data => {
+                                console.log("Department Head : " + data);
                                 const departmentHeadElement = document.querySelector("#department-head");
                                 departmentHeadElement.textContent = data.name;
                                 selected_department_head = data;
@@ -215,8 +219,7 @@
                                 // Get the list of department heads
                                 getData(`/api/user/list/role/DEPARTMENT_HEAD`).then(dataList => {
 
-                                    console.log("All Department Head : " + dataList);
-                                    console.log("Selected Department Head : " + selectedData.name);
+                                    console.log("in department_head url + data : " , dataList)
 
                                     const selectElement = document.querySelector("#departmenthead");
 
@@ -298,7 +301,7 @@
 
 
                     $.ajax({
-                        type: "GET", // Use GET method to fetch data
+                        type: "POST",
                         url: `api/user/update/departmentId/${departmentId}`, // Replace with the endpoint URL for department head
                         data: JSON.stringify(departmentHead),
                         contentType:"application/json",
@@ -611,7 +614,6 @@
     });
 
 
-    console.log(firstChart);
     firstChart.config.options.animation.duration = 5000;
 
 
@@ -623,7 +625,7 @@
                 dataType: "json", // Data type to expect in response
                 success: function(data) {
 
-                    console.log(data);
+                    console.log         ("user count : " , data);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     // Handle errors

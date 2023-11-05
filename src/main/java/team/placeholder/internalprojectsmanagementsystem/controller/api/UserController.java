@@ -2,6 +2,8 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -103,6 +105,23 @@ public class UserController {
         }
     }
 
+    @PostMapping("/update/departmentId/{departmentId}")
+    public ResponseEntity<String> updateDepartment(@PathVariable Long departmentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            UserDto user = userService.getUserByEmail(authentication.getName());
+            if (user == null) {
+                return ResponseEntity.badRequest().body("User not found");
+            }
+            user.setDepartmentdto(departmentService.getDepartmentById(departmentId));
+            userService.save(user);
+            return ResponseEntity.ok("Department updated successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PreAuthorize("hasRole('DEPARTMENT_HEAD')")
     @GetMapping("list")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
@@ -146,6 +165,12 @@ public class UserController {
     @GetMapping("count/departmentId/{departmentId}")
     public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId) {
         return ResponseEntity.ok(userService.countAllByDepartmentId(departmentId));
+    }
+
+    @PostMapping("change-username")
+    public ResponseEntity<String> changeUsername(@RequestBody UserDto userDto) {
+        userService.changeUsername(userDto);
+        return ResponseEntity.ok("Username changed successfully");
     }
 
 

@@ -161,7 +161,13 @@
                                         class="tab-pane fade profile-edit pt-3"
                                         id="profile-edit"
                                 >
-                                    <form>
+
+                                    <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                        <strong>Error:</strong> <span id="successText"></span>
+                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                            &times;
+                                        </button>
+                                    </div>
                                         <div class="row mb-3">
                                             <label
                                                     class="col-md-4 col-lg-3 col-form-label"
@@ -202,11 +208,11 @@
                                                     type="submit"
                                                     class="btn btn-primary"
                                                     style="width: 20%"
+                                                    id="change-username-btn"
                                             >
                                                 Edit
                                             </button>
                                         </div>
-                                    </form>
                                 </div>
 
                                 <div
@@ -414,6 +420,55 @@
                 });
             });
 
+            //Change User Name AJAX
+            $("#change-username-btn").on("click",function(e){
+                e.preventDefault();
+                const usernameInput = $("#nameInput").val();
+                const email = $("#emailInput").val();
+
+                if(usernameInput === ""){
+                    showError("Please fill in all fields");
+                    return;
+                }
+
+                // Show the loading spinner on the button
+                $(this).html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+                );
+                $(this).attr("disabled", true);
+
+                $.ajax({
+                    url: "/api/user/change-username",
+                    type: "POST",
+                    data: JSON.stringify({
+                        name: usernameInput,
+                        email: email
+                    }),
+                    contentType:'application/json',
+                    success: function (data) {
+                        console.log(data)
+                        showSuccess("Username changed successfully");
+                        //reenable button
+                        $("#change-username-btn").html("Edit").attr("disabled", false);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        showError(error.responseText);
+                        //reenable button
+                        $("#change-username-btn").html("Edit").attr("disabled", false);
+                    },
+                    complete: function () {
+                        // Clear all password fields
+                        $("#nameInput").val("");
+
+                        // reload page
+                        getUserProfileInfo();
+                    }
+                });
+
+
+            })
+
             function showError(message) {
                 $("#errorText").text(message);
                 $("#errorAlert").show();
@@ -429,8 +484,17 @@
             }
 
             function showSuccess(message) {
-                // You can create a similar function for showing success messages.
-                alert(message); // For simplicity, we're using the alert function here.
+                $("#successText").text(message);
+                $("#successAlert").show();
+
+                setTimeout(function () {
+                    $("#successAlert").hide();
+                }, 10000);
+
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#successAlert").hide();
+                });
             }
 
 

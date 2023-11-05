@@ -254,7 +254,8 @@
                                 alt
                                 style="width: 40px; height: 40px"
                             />
-                            <span class="d-none d-lg-inline-flex" id="username" ></span>
+                            <span class="d-none d-lg-inline-flex" id="navbar-username" ></span
+                            >
                         </a>
                         <div
                             class="dropdown-menu dropdown-menu-end bg-light border-dark rounded-bottom m-0"
@@ -276,18 +277,5 @@
                 </div>
             </nav>
             <!-- Navbar No Search End -->
-    <script>
-        $(document).ready(function () {
-            console.log("navigation");
-            //ajax call api/user/profile to get current user name to set #username
-            $.ajax({
-                url: "/api/user/profile",
-                type: "GET",
-                success: function (data) {
-                    $("#username").text(data.username);
-                },
-            });
-        });
-    </script>
     </body>
 </html>

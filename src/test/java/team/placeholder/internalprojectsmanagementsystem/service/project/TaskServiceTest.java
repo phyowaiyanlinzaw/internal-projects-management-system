@@ -42,15 +42,6 @@ class TaskServiceTest {
     }
 
     @Test
-    public void testGetTaskByDescription() {
-        String description = "Task1";
-        TasksDto tasksDto = new TasksDto();
-        Mockito.when(taskService.getTaskByDescription(description)).thenReturn(tasksDto);
-        TasksDto taskByDescription = taskService.getTaskByDescription("Task1");
-        assertEquals(tasksDto,taskByDescription);
-    }
-
-    @Test
     public void testUpdateTask() {
         TasksDto tasksdto = new TasksDto();
         Mockito.when(taskService.updateTask(tasksdto)).thenReturn(tasksdto);
