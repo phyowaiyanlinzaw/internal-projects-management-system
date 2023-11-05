@@ -133,9 +133,7 @@
                 calculateEndDate
             } from "/js/time.js";
 
-            import { sendData, getData } from "/js/api-function.js";
 
-            getData("/api/project/list").then((data) => console.log(data));
 
             import {
                 getArchitecturelist,
@@ -372,12 +370,28 @@
                 theme: "snow",
             });
 
+
+            import { sendData, getData } from "/js/api-function.js";
+
+            async function getAllProjects() {
+                return await getData('/api/project/list')
+            }
+
+
+
             const motherContainer = document.querySelector("#sort-container");
 
             const fragment = document.createDocumentFragment();
 
-            for (let i = 0; i < proListFromBack.length; i++) {
-                let currentProject = proListFromBack[i];
+
+            let pList =[];
+
+            getAllProjects()
+                .then( data => {
+                    pList=[...data];
+
+            for (let i = 0; i < pList.length; i++) {
+                let currentProject = pList[i];
 
                 const div = document.createElement("div");
                 div.classList.add(
@@ -437,7 +451,12 @@
                     "fs-6",
                     "ms-2"
                 );
-                h5.innerText = currentProject.user.name;
+                if (currentProject.user && currentProject.user.name) {
+                    h5.innerText = currentProject.user.name;
+                } else {
+                    h5.innerText = "Unknown User";
+                }
+
 
                 const a = document.createElement("a");
                 a.href = "#";
@@ -822,6 +841,8 @@
                     popupPosition: null,
                     maxWidth: "100%",
                 })
+            })
+
 
             //list project end
         </script>
