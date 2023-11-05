@@ -384,28 +384,42 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <form class="row g-3" action="" id="todo-form">
-                        <div class="col-lg-6">
+                    <div class="row g-3" id="todo-form">
+                        <div class="col-12">
                             <label
-                                    for="task"
+                                    for="title"
                                     class="col-sm-12 col-form-label"
-                            >Task Name
-                                <span style="color: red">
-                                            *</span
-                                ></label
+                            >Task Title <span
+                                    style="color:red"> *</span></label
                             >
                             <input
                                     type="text"
+                                    class="form-control border-task-title"
+                                    id="title"
+                                    name="title"
+                                    rows="2"
+                            ></input>
+                        </div>
+
+                        <div class="col-12">
+                            <label
+                                    for="description"
+                                    class="col-sm-12 col-form-label"
+                            >Description <span
+                                    style="color:red"> *</span></label
+                            >
+                            <textarea
                                     class="form-control border-task-description"
-                                    name="task"
-                            />
+                                    id="description"
+                                    name="description"
+                                    rows="2"
+                            ></textarea>
                         </div>
 
                         <div class="col-lg-6">
                             <label
                                     for="pm"
                                     class="col-sm-12 col-form-label"
-                                    name="pm"
                             >Assign Members<span style="color: red">
                                             *</span
                             ></label
@@ -417,12 +431,21 @@
                                     value="abatisse2@nih.gov, Justinian Hattersley"
                             />
                         </div>
+                        <div class="col-lg-6">
+                            <label for="group" class="col-sm-12 col-form-label">Group <span
+                                    style="color:red"> *</span></label>
+                            <select class="form-control" aria-label="Select Group" data-live-search="true"
+                                    id="group" name="group">
+                                <option>A - Related With Project Development</option>
+                                <option>B - Training</option>
+                                <option>C - Idling</option>
+                            </select>
+                        </div>
 
                         <div class="col-md-6">
                             <label
                                     for="start_time"
                                     class="col-sm-12 col-form-label"
-                                    name="start_time"
                             >Start Date
                                 <span style="color: red">
                                             *</span
@@ -440,7 +463,6 @@
                             <label
                                     for="end_time"
                                     class="col-sm-12 col-form-label"
-                                    name="end_time"
                             >End Date
                                 <span style="color: red">
                                             *</span
@@ -454,22 +476,9 @@
                             />
                         </div>
 
-                        <div class="col-12">
-                            <label
-                                    for="description"
-                                    class="col-sm-12 col-form-label"
-                                    name="description"
-                            >Description</label
-                            >
-                            <textarea
-                                    class="form-control border-task-description"
-                                    id="description"
-                                    name="description"
-                                    rows="2"
-                            ></textarea>
-                        </div>
 
-                        <div class="text-center">
+
+                        <div class="text-center mt-3">
                             <button
                                     type="submit"
                                     class="btn btn-primary col-2"
@@ -485,7 +494,7 @@
                                 Cancel
                             </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
