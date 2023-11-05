@@ -1153,4 +1153,11 @@
     vertical-align: top;
     pointer-events: none;
 }
+
+.toastui-calendar-milestone , .toastui-calendar-task ,.toastui-calendar-panel-resizer{
+    display: none;
+}
+.toastui-calendar-time{
+    height: 400px!important;
+}
 /*end*/
