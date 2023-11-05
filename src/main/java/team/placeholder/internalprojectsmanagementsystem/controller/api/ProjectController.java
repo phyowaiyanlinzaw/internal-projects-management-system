@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.*;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
+import team.placeholder.internalprojectsmanagementsystem.model.project.DeliverableType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
@@ -39,7 +42,8 @@ public class ProjectController {
     private final ProjectServiceImpl projectService;
     private final UserServiceImpl userService;
     private final ArchitectureServiceImpl architectureService;
-    private final ArchitectureRepository architectureRepository;
+    private final DeliverableTypeServiceImpl deliverableTypeService;
+
 
 
     @PostMapping(value = "/save")
@@ -124,7 +128,10 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.countAllProjectsByDepartmentId(departmentId));
     }
 
-
+    @GetMapping(value = "/deliverableType")
+    public ResponseEntity<Set<DeliverableTypeDto>> getDeliverableType() {
+        return ResponseEntity.ok(deliverableTypeService.getAll());
+    }
 
 
 

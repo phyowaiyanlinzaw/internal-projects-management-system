@@ -31,20 +31,20 @@ public class Project implements Serializable {
     private int duration;
     private long start_date;
     private long end_date;
+
+    @Enumerated(EnumType.STRING)
     private DevelopmentPhase current_phase;
-    @Column(length = 1000)
+
+    @Column(columnDefinition = "TEXT")
     private String objective;
 
-
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Review reviews;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasks> tasks;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "system_outline_id")
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private SystemOutLine systemOutLine;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -16,7 +16,7 @@ public class DeliverableMapper {
         DeliverableDto deliverableDto = new DeliverableDto();
         deliverableDto.setId(deliverable.getId());
         deliverableDto.setStatus(deliverable.isStatus());
-        deliverableDto.setType(deliverable.getType());
+        deliverableDto.setDeliverableType(DeliverableTypeMapper.toDeliverableTypeDto(deliverable.getDeliverableTypes()));
 
         return deliverableDto;
     }
@@ -28,7 +28,7 @@ public class DeliverableMapper {
         Deliverable deliverable = new Deliverable();
         deliverable.setId(deliverableDto.getId());
         deliverable.setStatus(deliverableDto.isStatus());
-        deliverable.setType(deliverableDto.getType());
+        deliverable.setDeliverableTypes(DeliverableTypeMapper.toDeliverableType(deliverableDto.getDeliverableType()));
         return deliverable;
     }
 
@@ -41,7 +41,11 @@ public class DeliverableMapper {
         for (
                 Deliverable deliverable : deliverables
         ) {
-            deliverableDtoList.add(toDeliverableDto(deliverable));
+            DeliverableDto deliverable1 = new DeliverableDto();
+            deliverable1.setId(deliverable.getId());
+            deliverable1.setStatus(deliverable.isStatus());
+            deliverable1.setDeliverableType(DeliverableTypeMapper.toDeliverableTypeDto(deliverable.getDeliverableTypes()));
+            deliverableDtoList.add(deliverable1);
         }
         return deliverableDtoList;
     }

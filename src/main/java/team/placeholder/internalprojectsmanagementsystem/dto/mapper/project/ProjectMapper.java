@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.project;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
@@ -7,6 +8,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMap
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
 
 import java.util.Set;
 
@@ -17,6 +19,7 @@ public class ProjectMapper {
             return null;
         }
         ProjectDto projectDto = new ProjectDto();
+        System.out.println("Systemout" + project.getSystemOutLine());
         projectDto.setId(project.getId());
         projectDto.setName(project.getName());
         projectDto.setBackground(project.getBackground());
@@ -24,25 +27,16 @@ public class ProjectMapper {
         projectDto.setEnd_date(project.getEnd_date());
         projectDto.setObjective(project.getObjective());
         projectDto.setCurrent_phase(project.getCurrent_phase());
+        projectDto.setUserDto(UserMapper.toUserDto(project.getProjectManager()));
         projectDto.setDuration(project.getDuration());
-
+        projectDto.setReviewDto(ReviewMapper.toReviewDto(project.getReviews()));
+        projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
+        projectDto.setDepartmentDto(DepartmentMapper.toDepartmentDto(project.getDepartment()));
         projectDto.setClientDto(ClientMapper.toClientDto(project.getClient()));
-        // Convert Client to ClientDto
-
-
         projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
-        //Convert Architecture to ArchitectureDto
-
-
+        projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
         projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
-        //Deliverable to DeliverableDto
-
-
         projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
-        // Convert SystemOutLinesDto to SystemOutLines using UserMapper
-
-
-
 
         return projectDto;
     }
@@ -58,21 +52,14 @@ public class ProjectMapper {
         project.setEnd_date(projectDto.getEnd_date());
         project.setObjective(projectDto.getObjective());
         project.setCurrent_phase(projectDto.getCurrent_phase());
+        project.setProjectManager(UserMapper.toUser(projectDto.getUserDto()));
         project.setDuration(projectDto.getDuration());
-
         project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
-
+        project.setDepartment(DepartmentMapper.toDepartment(projectDto.getDepartmentDto()));
         project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
-        // Convert Client to ClientDto
-
         project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
-        //Convert Architecture to ArchitectureDto
         project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
-
         project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
-        //Deliverable to DeliverableDto
-
         project.setSystemOutLine(SystemOutLineMapper.toSystemOutline(projectDto.getSystemOutLineDto()));
-        // Convert SystemOutLinesDto to SystemOutLines using UserMapper
         return project;
 }}
