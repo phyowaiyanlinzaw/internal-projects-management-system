@@ -28,22 +28,12 @@ public class ProjectMapper {
 
         projectDto.setClientDto(ClientMapper.toClientDto(project.getClient()));
         // Convert Client to ClientDto
-
-
         projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
         //Convert Architecture to ArchitectureDto
-
-
         projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
         //Deliverable to DeliverableDto
-
-
         projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
         // Convert SystemOutLinesDto to SystemOutLines using UserMapper
-
-
-
-
         return projectDto;
     }
 

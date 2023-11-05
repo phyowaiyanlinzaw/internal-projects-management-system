@@ -418,7 +418,7 @@
 
                         <div class="col-lg-6">
                             <label
-                                    for="pm"
+                                    for="member"
                                     class="col-sm-12 col-form-label"
                             >Assign Members<span style="color: red">
                                             *</span
@@ -426,9 +426,8 @@
                             >
                             <input
                                     type="text"
-                                    name="pm-tags"
-                                    id="pm"
-                                    value="abatisse2@nih.gov, Justinian Hattersley"
+                                    name="member-tags"
+                                    id="member"
                             />
                         </div>
                         <div class="col-lg-6">
@@ -483,6 +482,7 @@
                                     type="submit"
                                     class="btn btn-primary col-2"
                                     data-dismiss="modal"
+                                    id="task-add-btn"
                             >
                                 Add
                             </button>
@@ -570,7 +570,7 @@
 
     <script>
 
-        var inputElm = document.querySelectorAll("input[name=pm-tags]");
+        var inputElm = document.querySelectorAll("input[name=member-tags]");
 
         function tagTemplate(tagData) {
             return `
@@ -646,79 +646,9 @@
                     dropdownItem: suggestionItemTemplate,
                     dropdownHeader: dropdownHeaderTemplate,
                 },
+                //fetch data from api/user/list/{projectId}
                 whitelist: [
-                    {
-                        value: 1,
-                        name: "Justinian Hattersley",
-                        avatar: "https://i.pravatar.cc/80?img=1",
-                        email: "jhattersley0@ucsd.edu",
-                    },
-                    {
-                        value: 2,
-                        name: "Antons Esson",
-                        avatar: "https://i.pravatar.cc/80?img=2",
-                        email: "aesson1@ning.com",
-                    },
-                    {
-                        value: 3,
-                        name: "Ardeen Batisse",
-                        avatar: "https://i.pravatar.cc/80?img=3",
-                        email: "abatisse2@nih.gov",
-                    },
-                    {
-                        value: 4,
-                        name: "Graeme Yellowley",
-                        avatar: "https://i.pravatar.cc/80?img=4",
-                        email: "gyellowley3@behance.net",
-                    },
-                    {
-                        value: 5,
-                        name: "Dido Wilford",
-                        avatar: "https://i.pravatar.cc/80?img=5",
-                        email: "dwilford4@jugem.jp",
-                    },
-                    {
-                        value: 6,
-                        name: "Celesta Orwin",
-                        avatar: "https://i.pravatar.cc/80?img=6",
-                        email: "corwin5@meetup.com",
-                    },
-                    {
-                        value: 7,
-                        name: "Sally Main",
-                        avatar: "https://i.pravatar.cc/80?img=7",
-                        email: "smain6@techcrunch.com",
-                    },
-                    {
-                        value: 8,
-                        name: "Grethel Haysman",
-                        avatar: "https://i.pravatar.cc/80?img=8",
-                        email: "ghaysman7@mashable.com",
-                    },
-                    {
-                        value: 9,
-                        name: "Marvin Mandrake",
-                        avatar: "https://i.pravatar.cc/80?img=9",
-                        email: "mmandrake8@sourceforge.net",
-                    },
-                    {
-                        value: 10,
-                        name: "Corrie Tidey",
-                        avatar: "https://i.pravatar.cc/80?img=10",
-                        email: "ctidey9@youtube.com",
-                    },
-                    {
-                        value: 11,
-                        name: "foo",
-                        avatar: "https://i.pravatar.cc/80?img=11",
-                        email: "foo@bar.com",
-                    },
-                    {
-                        value: 12,
-                        name: "foo",
-                        avatar: "https://i.pravatar.cc/80?img=12",
-                        email: "foo.aaa@foo.com",
-                    },
+
                 ],
                 transformTag: (tagData, originalData) => {
                     var {name, email} = parseFullValue(tagData.name);
@@ -1230,6 +1160,40 @@
                 isReadOnly: true, // schedule is read-only
             },
         ]);
+
+
+        //ADD TASk
+        //call api/tasks/save when click add button and send data as JSON.stringify to api
+        //use jquery ajax
+        $("#task-add-btn").on("click", function () {
+            const data = {
+                title: $("#title").val(),
+                description: $("#description").val(),
+                // Convert to Unix timestamp
+                start_time: new Date($("#start_time").val()).getTime(),
+                end_time: new Date($("#end_time").val()).getTime(),
+                status: $("#projectStatuses").val(),
+                group: $("#group").val(),
+                pm: $("#pm").val(),
+            };
+            console.log(data);
+            $.ajax({
+                url: "/api/task/save",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (response) {
+                    console.log(response);
+                    //if success, reload page
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response);
+                },
+            });
+        });
+
+
 
 
 
