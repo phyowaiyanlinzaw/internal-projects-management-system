@@ -170,8 +170,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> getAllProjectsByUsersId(long id) {
-        return projectRepository.findAllByUsersId(id).stream()
+    public List<ProjectDto> getAllProjectsByProjectManagerId(long id) {
+        return projectRepository.findAllByProjectManagerId(id).stream()
                 .map(ProjectMapper::toProjectDto)
                 .collect(Collectors.toList());
     }

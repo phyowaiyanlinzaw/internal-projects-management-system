@@ -75,7 +75,7 @@ public class ProjectController {
 
     @GetMapping("/list/user/{id}")
     public ResponseEntity<List<ProjectDto>> getAllProjectsByUserId(@PathVariable long id){
-        List<ProjectDto> projects = projectService.getAllProjectsByUsersId(id);
+        List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
@@ -133,6 +133,9 @@ public class ProjectController {
         return ResponseEntity.ok(deliverableTypeService.getAll());
     }
 
-
+    @GetMapping(value = "/list/dp/{id}")
+    public ResponseEntity<List<ProjectDto>> getAllProjectsByDepartmentId(@PathVariable long id){
+        return ResponseEntity.ok(projectService.getAllProjectsByDepartmentId(id));
+    }
 
 }
