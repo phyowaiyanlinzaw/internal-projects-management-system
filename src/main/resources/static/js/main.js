@@ -41,10 +41,45 @@
     }, {offset: '80%'});
 
 
-    // Calender
-    $('#calender').datetimepicker({
-        inline: true,
-        format: 'L'
+    //calendar
+    const Calendar = tui.Calendar;
+
+    const calendar = new Calendar("#calendar", {
+        defaultView: "week",
+        taskView: true,
+        useDetailPopup: true,
+        isReadOnly: true,
+        template: {
+            monthDayname: function (dayname) {
+                return (
+                    "<span class='calendar-week-dayname-name'>" + dayname.label + "</span>"
+                );
+            },
+        },
+
+    });
+
+    $("#previous").on("click", function () {
+        calendar.prev();
+    });
+
+    $("#next").on("click", function () {
+        calendar.next();
+    });
+
+    $("#today").on("click", function () {
+        calendar.today();
+    });
+
+    calendar.setOptions({
+        week: {
+            daynames: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+            startDayOfWeek: 0,
+            workweek:true,
+            //set 12 hour format
+            hourStart: 7,
+            hourEnd: 19,
+        },
     });
 
 
