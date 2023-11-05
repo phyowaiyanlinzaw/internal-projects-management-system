@@ -15,3 +15,11 @@ export async function getClientList() {
         return error
     }
 }
+
+export async function getDeliverableTypeList() {
+    try {
+        return await getData("/api/project/deliverableType")
+    } catch (error) {
+        return error
+    }
+}

@@ -11,5 +11,14 @@ import java.sql.Date;
 public class DeliverableDto {
     private long id;
     private boolean status;
-    private String type;
+    private DeliverableTypeDto deliverableType;
+
+    @Override
+    public String toString() {
+        return "DeliverableDto{" +
+                "id=" + id +
+                ", status=" + status +
+                ", deliverableType=" + deliverableType +
+                '}';
+    }
 }

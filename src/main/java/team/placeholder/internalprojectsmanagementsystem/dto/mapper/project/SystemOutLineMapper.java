@@ -15,13 +15,13 @@ public class SystemOutLineMapper {
         }
         SystemOutLineDto systemOutLineDto = new SystemOutLineDto();
         systemOutLineDto.setId(systemOutLine.getId());
-        systemOutLineDto.setAnalysis(false);
-        systemOutLineDto.setSys_design(false);
-        systemOutLineDto.setCoding(false);
-        systemOutLineDto.setTesting(false);
-        systemOutLineDto.setDeploy(false);
-        systemOutLineDto.setMaintenance(false);
-        systemOutLineDto.setDocument(false);
+        systemOutLineDto.setAnalysis(systemOutLine.isAnalysis());
+        systemOutLineDto.setSys_design(systemOutLine.isSys_design());
+        systemOutLineDto.setCoding(systemOutLine.isCoding());
+        systemOutLineDto.setTesting(systemOutLine.isTesting());
+        systemOutLineDto.setDeploy(systemOutLine.isDeploy());
+        systemOutLineDto.setMaintenance(systemOutLine.isMaintenance());
+        systemOutLineDto.setDocument(systemOutLine.isDocument());
         return systemOutLineDto;
     }
 
