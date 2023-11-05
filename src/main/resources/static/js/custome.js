@@ -7,22 +7,24 @@ $(document).ready(function () {
     let sortIcon = document.querySelector(".sort-btn");
     let sortableContainer = document.getElementById("sort-container");
 
-    function sortCards(btn, order) {
+    function sortCards(order) {
 
         let sortableElement = Array.from(sortableContainer.children);
 
         sortableElement.sort(function (a, b) {
-            console.log('in sort')
+
             var nameA = a.querySelector(".card-title").textContent.toUpperCase();
             var nameB = b.querySelector(".card-title").textContent.toUpperCase();
 
             if (order) {
-                btn.classList.remove("bi-sort-alpha-down");
-                btn.classList.add("bi-sort-alpha-up");
+                console.log('in sort', 'and btn is down')
+                sortIcon.classList.remove("bi-sort-alpha-down");
+                sortIcon.classList.add("bi-sort-alpha-up");
                 return nameA.localeCompare(nameB);
             } else {
-                btn.classList.add("bi-sort-alpha-down");
-                btn.classList.remove("bi-sort-alpha-up");
+                console.log('in sort', 'and btn is up')
+                sortIcon.classList.add("bi-sort-alpha-down");
+                sortIcon.classList.remove("bi-sort-alpha-up");
                 return nameB.localeCompare(nameA);
             }
         });
@@ -34,8 +36,7 @@ $(document).ready(function () {
     if (sortIcon != null) {
         sortIcon.addEventListener("click", function () {
             let isAsc = sortIcon.classList.contains("bi-sort-alpha-down");
-            sortCards(this, isAsc);
-            console.log(isAsc)
+            sortCards(isAsc);
         });
     }
 
