@@ -3,6 +3,7 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 
+import org.codehaus.groovy.transform.sc.transformers.RangeExpressionTransformer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +12,13 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.Proj
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
 import team.placeholder.internalprojectsmanagementsystem.model.project.DeliverableType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
@@ -133,9 +136,26 @@ public class ProjectController {
         return ResponseEntity.ok(deliverableTypeService.getAll());
     }
 
-    @GetMapping(value = "/list/dp/{id}")
-    public ResponseEntity<List<ProjectDto>> getAllProjectsByDepartmentId(@PathVariable long id){
-        return ResponseEntity.ok(projectService.getAllProjectsByDepartmentId(id));
+    @GetMapping(value = "/list/{role}/{id}")
+    public ResponseEntity<List<ProjectDto>> getAllProjectsByRole(@PathVariable String role, @PathVariable long id){
+
+        if (role.equals("PROJECT_MANAGER")) {
+            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id);
+            for(ProjectDto projectDto : projects){
+                projectDto.getUserDto().getProjectList().clear();
+            }
+            return new ResponseEntity<>(projects, HttpStatus.OK);
+        } else if (role.equals("DEPARTMENT_HEAD")) {
+            List<ProjectDto> projects = projectService.getAllProjectsByDepartmentId(id);
+            for(ProjectDto projectDto : projects){
+                projectDto.getUserDto().getProjectList().clear();
+            }
+            return new ResponseEntity<>(projects, HttpStatus.OK);
+        } else if (role.equals("MEMBER")) {
+            return null;
+        } else {
+            return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+        }
     }
 
 }
