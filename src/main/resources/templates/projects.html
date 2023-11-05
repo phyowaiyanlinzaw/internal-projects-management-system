@@ -185,7 +185,7 @@
             getDeliverableTypeList()
                 .then(deliType => {
                     const deliTypeSelect = document.querySelector("#deliverable");
-                    new Tagify (deliTypeSelect, {
+                    const a = new Tagify (deliTypeSelect, {
                         whitelist: deliType.map((item) => item.type),
                         dropdown: {
                             consoleLog: true,
@@ -194,6 +194,18 @@
                             closeOnSelect: false,
                         },
                     });
+                    $("#validation-form").submit(function (event) {
+                        const deli = this.querySelector("#deliverable").value === "" ? [] : JSON.parse(this.querySelector("#deliverable").value);
+                        if (deli.length !== 0) {
+                            const whitelist = a.settings.whitelist;
+                            deli.forEach((item) => {
+                                if (!whitelist.includes(item.value)) {
+                                    whitelist.push(item.value);
+                                }
+                            });
+                        }
+                        console.log(a.settings.whitelist);
+                    })
                 })
 
             let arcccList = await getArchitecturelist();
@@ -203,7 +215,19 @@
                     const inputElement = document.querySelector(
                         'input[name="architectures"]'
                     );
-                    initializeTagify(inputElement, architectureList);
+                    const a = initializeTagify(inputElement, architectureList)
+                    $("#validation-form").submit(function (event) {
+                        const arch = inputElement.value === "" ? [] : JSON.parse(inputElement.value);
+                        if (arch.length !== 0) {
+                            const whitelist = a.settings.whitelist;
+                            arch.forEach((item) => {
+                                if (!whitelist.includes(item.value)) {
+                                    whitelist.push(item.value);
+                                }
+                            });
+                        }
+                        console.log(a.settings.whitelist);
+                    })
                 })
                 .catch((error) => {
                     console.log("Error:", error);
@@ -716,6 +740,7 @@
                         alert("Please fill all the fields");
                         return;
                     }
+
                     architectures = JSON.parse(architectures);
 
                     const arcList = architectures.map(ar => {
@@ -774,7 +799,7 @@
                         success: function (data) {
                             alert("Project registered successfully");
                             // Reset the form if needed
-                            $("#validation-form").reset();
+                            $("#validation-form")[0].reset();
                         },
                         error: function (data) {
                             alert("Error registering project");
