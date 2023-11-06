@@ -7,7 +7,8 @@
 </head>
 <body layout:fragment="content">
 <!-- Spinner Start -->
-<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -29,33 +30,56 @@
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
 
-
         <div class="container-fluid">
             <div id="toolbar"
                  class="ms-3">
-                <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add Employee</a>
+                <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add
+                    Employee</a>
                 <!--open modal to register employee account-->
             </div>
-            <table class="border border-primary" id="table" data-toggle="table" data-toolbar="#toolbar" data-toolbar-align="right" data-search="true" data-header-style="headerStyle" data-url="/api/user/list">
+            <table
+                    class="border border-primary"
+                    id="table"
+                    data-toggle="table"
+                    data-toolbar="#toolbar"
+                    data-toolbar-align="right"
+                    data-search="true"
+                    data-header-style="headerStyle"
+                    data-url="/api/user/list"
+                    data-pagination="true"
+                    data-page-size="10"
+                    data-page-list="[10, 25, 50, 100, all]"
+            >
                 <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5">
                 <tr>
-                    <th data-sortable="true" data-formatter="indexFormatter" data-align="left" data-valign="middle" data-width="100" >No.</th>
-                    <th data-sortable="true" data-field="email" data-align="left" data-valign="middle" data-width="100" >Email</th>
-                    <th data-sortable="true" data-field="name" data-align="left" data-valign="middle" data-width="100" >Name</th>
-                    <th data-sortable="true" data-field="department" data-align="left" data-valign="middle" data-width="100" data-formatter="departmentNameFormatter">Department</th>
-                    <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="100">Role</th>
-                    <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle" data-width="100" data-formatter="projectCountFormatter">Project Count</th>
+                    <th data-sortable="true" data-formatter="indexFormatter" data-align="left" data-valign="middle"
+                        data-width="100">No.
+                    </th>
+                    <th data-sortable="true" data-field="email" data-align="left" data-valign="middle" data-width="100">
+                        Email
+                    </th>
+                    <th data-sortable="true" data-field="name" data-align="left" data-valign="middle" data-width="100">
+                        Name
+                    </th>
+                    <th data-sortable="true" data-field="department" data-align="left" data-valign="middle"
+                        data-width="100" data-formatter="departmentNameFormatter">Department
+                    </th>
+                    <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="100">
+                        Role
+                    </th>
+                    <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle"
+                        data-width="100" data-formatter="projectCountFormatter">Project Count
+                    </th>
                 </tr>
                 </thead>
 
-                <tbody >
+                <tbody>
                 </tbody>
-
 
 
             </table>
         </div>
-<!--        <div th:replace="fragments/footer :: aside"></div>-->
+        <!--        <div th:replace="fragments/footer :: aside"></div>-->
 
         <!-- Register Employee Modal -->
         <div class="modal fade" id="addEmployeeModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -69,15 +93,19 @@
                     <div class="modal-body">
 
                         <!--alert message bootstrap-->
-                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-success" style="display: none">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-success"
+                             style="display: none">
                             <strong>Success!</strong> <span id="success-message"></span>
-                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                            <button type="button" class="btn-close btn-dark" aria-label="close"
+                                    style="background: transparent; position: absolute; top: 0; right: 0;">
                                 &times;
                             </button>
                         </div>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-danger" style="display: none">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-danger"
+                             style="display: none">
                             <strong>Error!</strong> <span id="error-message"></span>
-                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                            <button type="button" class="btn-close btn-dark" aria-label="close"
+                                    style="background: transparent; position: absolute; top: 0; right: 0;">
                                 &times;
                             </button>
                         </div>
@@ -90,12 +118,14 @@
 
 
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"
+                                   required>
                             <label for="floatingInput">Email address</label>
                         </div>
 
                         <div>
-                            <select id="memberSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;" required>
+                            <select id="memberSelect" class="form-select form-select-lg mb-3"
+                                    aria-label=".form-select-lg example" style="font-size: 16px;" required>
                                 <option value="PROJECT_MANAGER" selected>Project Manager</option>
                                 <option value="EMPLOYEE">Member</option>
                                 <option value="FOC">FOC</option>
@@ -104,21 +134,25 @@
                         </div>
 
                         <div>
-                            <select id="departmentSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="font-size: 16px;">
+                            <select id="departmentSelect" class="form-select form-select-lg mb-3"
+                                    aria-label=".form-select-lg example" style="font-size: 16px;">
                             </select>
-                            <select id="projectManagerSelect" class="form-select form-select-lg mb-3"  aria-label=".form-select-lg example" style="font-size: 16px;display: none">
+                            <select id="projectManagerSelect" class="form-select form-select-lg mb-3"
+                                    aria-label=".form-select-lg example" style="font-size: 16px;display: none">
                             </select>
                         </div>
 
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-2" style="background-color: #369;" id="register-employee-btn">Register</button>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-2" style="background-color: #369;"
+                                id="register-employee-btn">Register
+                        </button>
                     </div>  <!-- Modal Body End -->
-                </div>
                 </div>
             </div>
         </div>
-
     </div>
-    <!-- Content End -->
+
+</div>
+<!-- Content End -->
 
 </div>
 
@@ -144,12 +178,12 @@
         return index + 1;
     }
 
-        function departmentNameFormatter(value,row,index){
-            if (value === null) {
-                return '';
-            }
-            return value.name;
+    function departmentNameFormatter(value, row, index) {
+        if (value === null) {
+            return '-';
         }
+        return value.name;
+    }
 
     function projectCountFormatter(value, row, index) {
         // 'value' may be undefined or empty initially
@@ -184,8 +218,7 @@
 
     $(function () {
 
-        $('#table').bootstrapTable({
-        });
+        $('#table').bootstrapTable({});
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
 
@@ -215,7 +248,7 @@
         });
 
 
-        $('#memberSelect').change(function() {
+        $('#memberSelect').change(function () {
             var selectedValue = $(this).val();
             var departmentSelect = $('#departmentSelect');
             var projectManagerSelect = $('#projectManagerSelect');
@@ -226,9 +259,9 @@
                 projectManagerSelect.hide();
 
                 // Make an AJAX request to populate departmentSelect options
-                $.get('/api/department/list', function(data) {
+                $.get('/api/department/list', function (data) {
                     departmentSelect.empty();
-                    $.each(data, function(index, department) {
+                    $.each(data, function (index, department) {
                         departmentSelect.append($('<option>', {
                             value: department.id,
                             text: department.name
@@ -241,9 +274,9 @@
                 departmentSelect.hide();
 
                 // Make an AJAX request to populate projectManagerSelect options
-                $.get('/api/user/list/PROJECT_MANAGER', function(data) {
+                $.get('/api/user/list/PROJECT_MANAGER', function (data) {
                     projectManagerSelect.empty();
-                    $.each(data, function(index, user) {
+                    $.each(data, function (index, user) {
                         projectManagerSelect.append($('<option>', {
                             value: user.id, // Adjust this based on your data
                             text: user.name // Adjust this based on your data
@@ -258,12 +291,12 @@
             $('#error-message').text(message);
             $('#alert-danger').show();
 
-            setTimeout(function() {
+            setTimeout(function () {
                 $('#alert-danger').hide();
             }, 3000);
 
             //close alert box
-            $('.btn-close').click(function() {
+            $('.btn-close').click(function () {
                 $('#alert-danger').hide();
             });
         }
@@ -273,17 +306,17 @@
             $('#success-message').text(message);
             $('#alert-success').show();
 
-            setTimeout(function() {
+            setTimeout(function () {
                 $('#alert-success').hide();
             }, 3000);
 
             //close alert box
-            $('.btn-close').click(function() {
+            $('.btn-close').click(function () {
                 $('#alert-success').hide();
             });
         }
 
-        $('#register-employee-btn').click(function() {
+        $('#register-employee-btn').click(function () {
             var username = $('#floatingText').val();
             var email = $('#floatingInput').val();
             var role = $('#memberSelect').val();
@@ -291,7 +324,7 @@
             var projectManagerId = $('#projectManagerSelect').val();
             console.log(projectManagerId);
 
-            if (username === '' || email === '' || role === '' || departmentId === '' || projectManagerId==='') {
+            if (username === '' || email === '' || role === '' || departmentId === '' || projectManagerId === '') {
                 alert('Please fill all the fields');
                 return;
             }
@@ -308,9 +341,9 @@
                     email: email,
                     role: role,
                     department: {
-                        id:departmentId
+                        id: departmentId
                     },
-                    project_manager : {
+                    project_manager: {
                         id: projectManagerId
                     }
                 }),
@@ -324,20 +357,20 @@
 
 
                 },
-                error: function (data,xhr) {
+                error: function (data, xhr) {
                     alert('Error registering employee');
                     $('#register-employee-btn').html('Register').prop('disabled', false);
                     $('#alert-danger').show();
 
                 },
-                complete : function(){
+                complete: function () {
 
                 }
             });
 
         });
 
-        });
+    });
 
 
 </script>

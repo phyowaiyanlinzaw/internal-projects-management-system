@@ -1,6 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.user;
 
-import org.springframework.security.core.parameters.P;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
@@ -11,7 +10,6 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserMapper {
     public static UserDto toUserDto(User user) {
@@ -42,7 +40,7 @@ public class UserMapper {
             projectDto.setCurrent_phase(project.getCurrent_phase());
             projectDto.setDuration(project.getDuration());
             projectDto.setObjective(project.getObjective());
-            projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
+            projectDto.setSystemOutLineDto(SystemOutlineMapper.toSystemOutLineDto(project.getSystemOutLine()));
             projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
             ClientDto clientDto = new ClientDto();
             clientDto.setId(project.getClient().getId());

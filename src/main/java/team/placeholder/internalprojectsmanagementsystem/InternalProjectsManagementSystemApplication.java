@@ -12,9 +12,4 @@ public class InternalProjectsManagementSystemApplication {
         SpringApplication.run(InternalProjectsManagementSystemApplication.class, args);
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
-
 }

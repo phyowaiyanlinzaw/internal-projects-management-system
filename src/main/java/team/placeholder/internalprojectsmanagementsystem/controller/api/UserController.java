@@ -36,9 +36,9 @@ public class UserController {
         this.fakerService = fakerService;
     }
 
-    @GetMapping("/generate-fake-users")
-    public ResponseEntity<String> generateFakeUsers() {
-        fakerService.generateAndSaveFakeUsers(100);
+    @GetMapping("/generate-fake-users/{count}")
+    public ResponseEntity<String> generateFakeUsers(@PathVariable("count") int count) {
+        fakerService.generateAndSaveFakeUsers(count);
         return ResponseEntity.ok("Fake users generated successfully");
     }
 
