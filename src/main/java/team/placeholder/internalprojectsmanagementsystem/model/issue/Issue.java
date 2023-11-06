@@ -27,6 +27,8 @@ public class Issue implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String place;
     private String impact;

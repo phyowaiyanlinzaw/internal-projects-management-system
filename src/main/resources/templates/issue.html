@@ -311,7 +311,8 @@
 
 </script>
 
-<script>
+<script type="module">
+    import {getTimeElapsed} from "/js/time.js"
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
@@ -444,6 +445,8 @@
                 description: description,
                 place: place,
                 impact: impact,
+                created_date : new Date().getTime(),
+                updated_date : new Date().getTime(),
                 root_cause: root_cause,
                 direct_cause: direct_cause,
                 responsible_party: responsible_party,
@@ -521,9 +524,9 @@
                                 <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <p>Posted</p>
-                                        <span>${getTimeAgo(item.created_date)}</span>
+                                        <span>${new Date(item.created_date)}</span>
                                         <p>Modified at</p>
-                                        <span>${getTimeAgo(item.updated_date)}</span>
+                                        <span>${getTimeElapsed(item.updated_date)}</span>
                                     </div>
                                     <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
                                     See More
@@ -583,13 +586,17 @@
     // for update
     const issueEditBtn = document.getElementById('issue-edit-btn');
 
+    // document.querySelector("issueDetailModal").addEventListener("hide.bs.modal", () => {
+    //     issueEditBtn.innerText = "Edit"
+    // })
+
     issueEditBtn.addEventListener('click', function (e) {
+        console.log("click")
         if (this.innerText === 'Edit') {
             // Switch to edit mode
             const editableFields = document.querySelectorAll('.editable');
             editableFields.forEach((field, index) => {
                 const input = document.createElement('textarea');
-                input.type = 'text';
                 input.value = field.innerText;
                 input.setAttribute('rows', 5);
                 input.classList.add('form-control');
