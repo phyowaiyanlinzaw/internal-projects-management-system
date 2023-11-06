@@ -1186,7 +1186,7 @@
                 // Convert to Unix timestamp
                 plan_start_time: new Date($("#start_time").val()).getTime(),
                 plan_end_time: new Date($("#end_time").val()).getTime(),
-                status: $("#projectStatuses").val(),
+                status: "TODO",
                 group: $("#group").val(),
                 projectId: projectId,
                 members: tagify.value.map((member) => {
