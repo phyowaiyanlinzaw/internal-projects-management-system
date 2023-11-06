@@ -109,7 +109,8 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            DepartmentDto departmentDto = modelmapper.map(user.getDepartment(), DepartmentDto.class);
+            Department department = user.getDepartment();
+            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
             UserDto userDto = modelmapper.map(user, UserDto.class);
             userDto.setDepartmentdto(departmentDto);
             return userDto;
