@@ -28,16 +28,4 @@ public class UserDto {
 
     private List<ProjectDto> projectList;
 
-    @Override
-    public String toString() {
-        return "UserDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                ", departmentdto=" + departmentdto +
-                ", projectManager=" + projectManager +
-                '}';
-    }
 }

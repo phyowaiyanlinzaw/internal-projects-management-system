@@ -23,6 +23,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
@@ -51,6 +52,13 @@ public class ProjectController {
     private final ArchitectureServiceImpl architectureService;
     private final DeliverableTypeServiceImpl deliverableTypeService;
     private final TaskServiceImpl taskService;
+    private final FakerService fakerService;
+
+    @GetMapping("/generate-fake-project/{count}")
+    public ResponseEntity<String> generateFakeProjects(@PathVariable int count) {
+        fakerService.generateAndSaveFakeProjects(count);
+        return ResponseEntity.ok("Projects generated successfully");
+    }
 
 
 

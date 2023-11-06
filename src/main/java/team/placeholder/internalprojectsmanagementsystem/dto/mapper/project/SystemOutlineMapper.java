@@ -4,11 +4,9 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Syste
 import team.placeholder.internalprojectsmanagementsystem.model.project.SystemOutLine;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public class SystemOutLineMapper {
+public class SystemOutlineMapper {
     public static SystemOutLineDto toSystemOutLineDto(SystemOutLine systemOutLine){
         if(systemOutLine == null){
             return null;

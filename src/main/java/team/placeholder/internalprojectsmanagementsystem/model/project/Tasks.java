@@ -4,14 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Group;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TasksGroup;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
-import java.util.List;
 
 @Entity
 @Table(name="tasks")
@@ -32,7 +29,7 @@ public class Tasks implements Serializable {
 
 
     @Enumerated(EnumType.STRING)
-    private Group group;
+    private TasksGroup tasksGroup;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

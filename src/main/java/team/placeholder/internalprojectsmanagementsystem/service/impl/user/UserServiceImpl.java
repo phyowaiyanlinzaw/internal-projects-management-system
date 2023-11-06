@@ -33,10 +33,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
 
-        // use ModelMapper to map the User to UserDto
-        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
+        for (User user : users) {
+            Department department = user.getDepartment();
+            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
 
+            UserDto userDto = modelmapper.map(user, UserDto.class);
+            userDto.setDepartmentdto(departmentDto);
+
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
     }
 
     @Override
@@ -98,11 +107,8 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-
-            DepartmentDto departmentDto = null;
-            if(user.getDepartment() != null) {
-                departmentDto = modelmapper.map(user.getDepartment(), DepartmentDto.class);
-            }
+            Department department = user.getDepartment();
+            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
             UserDto userDto = modelmapper.map(user, UserDto.class);
             userDto.setDepartmentdto(departmentDto);
             return userDto;
