@@ -17,6 +17,7 @@ import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRep
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
 
-        //use ModelMapper to map the User to UserDto
+        // use ModelMapper to map the User to UserDto
         return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
 
     }
@@ -49,15 +50,14 @@ public class UserServiceImpl implements UserService {
             user.setRole(userDto.getRole());
             user.setDepartment(modelmapper.map(userDto.getDepartmentdto(), Department.class));
             userRepository.save(user);
-            //use ModelMapper to map the User to UserDto
-            return  modelmapper.map(user, UserDto.class);
+            // use ModelMapper to map the User to UserDto
+            return modelmapper.map(user, UserDto.class);
 
         } else {
             return null;
 
         }
     }
-
 
     @Override
     public UserDto save(UserDto userDto) {
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
         // Encrypt the password if it is not null
         if (userDto.getPassword() == null) {
             user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
-        }else {
+        } else {
             user.setPassword(userDto.getPassword());
         }
 
@@ -82,7 +82,6 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
         return modelmapper.map(savedUser, UserDto.class);
     }
-
 
     @Override
     public UserDto getUserById(long id) {
@@ -99,7 +98,11 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            DepartmentDto departmentDto = modelmapper.map(user.getDepartment(), DepartmentDto.class);
+
+            DepartmentDto departmentDto = null;
+            if(user.getDepartment() != null) {
+                departmentDto = modelmapper.map(user.getDepartment(), DepartmentDto.class);
+            }
             UserDto userDto = modelmapper.map(user, UserDto.class);
             userDto.setDepartmentdto(departmentDto);
             return userDto;
@@ -108,7 +111,6 @@ public class UserServiceImpl implements UserService {
         }
 
     }
-
 
     @Override
     public void resetPassword(String email) {
@@ -160,9 +162,9 @@ public class UserServiceImpl implements UserService {
     public UserDto findByName(String name) {
         User user = userRepository.findByName(name);
 
-        if (user!=null){
+        if (user != null) {
             return modelmapper.map(user, UserDto.class);
-        }else {
+        } else {
             return null;
         }
 
@@ -186,7 +188,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsersByPMId(Long id) {
         List<User> users = userRepository.findAllByProjectManagerId(id);
-        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
+        if (users != null) {
+            return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
+        }
+        return new ArrayList<UserDto>();
     }
 
     @Override
