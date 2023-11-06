@@ -5,6 +5,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.Task
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.TaskService;
 
@@ -70,5 +71,10 @@ public class TaskServiceImpl implements TaskService {
         return taskList.stream()
                 .map(TasksMapper::toTasksDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long countTaskByProjectIdAndStatus(Long id, TaskStatus x) {
+        return taskRepository.countByProjectIdAndStatus(id, x);
     }
 }

@@ -5,7 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +25,8 @@ public class UserDto {
 
     @JsonProperty("project_manager")
     private UserDto projectManager;
+
+    private List<ProjectDto> projectList;
 
     @Override
     public String toString() {

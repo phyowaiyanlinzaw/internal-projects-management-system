@@ -124,7 +124,7 @@
         ></script>
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
-        <script src="/js/currentLoginUser.js" type="module" async></script>
+<!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
         <script type="module" defer>
             import {
                 formatDateFromMilliseconds,
@@ -183,7 +183,7 @@
             getDeliverableTypeList()
                 .then(deliType => {
                     const deliTypeSelect = document.querySelector("#deliverable");
-                    new Tagify (deliTypeSelect, {
+                    const a = new Tagify (deliTypeSelect, {
                         whitelist: deliType.map((item) => item.type),
                         dropdown: {
                             consoleLog: true,
@@ -192,6 +192,18 @@
                             closeOnSelect: false,
                         },
                     });
+                    $("#validation-form").submit(function (event) {
+                        const deli = this.querySelector("#deliverable").value === "" ? [] : JSON.parse(this.querySelector("#deliverable").value);
+                        if (deli.length !== 0) {
+                            const whitelist = a.settings.whitelist;
+                            deli.forEach((item) => {
+                                if (!whitelist.includes(item.value)) {
+                                    whitelist.push(item.value);
+                                }
+                            });
+                        }
+                        console.log(a.settings.whitelist);
+                    })
                 })
 
             let arcccList = await getArchitecturelist();
@@ -201,7 +213,19 @@
                     const inputElement = document.querySelector(
                         'input[name="architectures"]'
                     );
-                    initializeTagify(inputElement, architectureList);
+                    const a = initializeTagify(inputElement, architectureList)
+                    $("#validation-form").submit(function (event) {
+                        const arch = inputElement.value === "" ? [] : JSON.parse(inputElement.value);
+                        if (arch.length !== 0) {
+                            const whitelist = a.settings.whitelist;
+                            arch.forEach((item) => {
+                                if (!whitelist.includes(item.value)) {
+                                    whitelist.push(item.value);
+                                }
+                            });
+                        }
+                        console.log(a.settings.whitelist);
+                    })
                 })
                 .catch((error) => {
                     console.log("Error:", error);
@@ -360,10 +384,19 @@
                         });
                 });
 
-            const fullQuillEditor =
+            const projectObjectiveEditor =
                 document.querySelector(".quill-editor-full");
 
-            const editor = new Quill(fullQuillEditor, {
+            const editProjectObjectiveEitor = document.querySelector("#edit-project-objective")
+
+            const editObjectiveEditor = new Quill(editProjectObjectiveEitor, {
+                modules : {
+                    toolbar : toolbaroptions,
+                },
+                theme : "snow",
+            })
+
+            const addObjectiveEditor = new Quill(projectObjectiveEditor, {
                 modules: {
                     toolbar: toolbaroptions,
                 },
@@ -710,7 +743,7 @@
                     console.log("architectures list : ", architectures);
                     const systemOutlines = sysSelect.selectedValues;
                     const deliverable = $("#deliverable").val();
-                    const objective = editor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                    const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
 
                     if (
                         projectName === "" ||
@@ -726,6 +759,7 @@
                         alert("Please fill all the fields");
                         return;
                     }
+
                     architectures = JSON.parse(architectures);
 
                     const arcList = architectures.map(ar => {
@@ -784,7 +818,7 @@
                         success: function (data) {
                             alert("Project registered successfully");
                             // Reset the form if needed
-                            $("#validation-form").reset();
+                            $("#validation-form")[0].reset();
                         },
                         error: function (data) {
                             alert("Error registering project");
@@ -1455,20 +1489,6 @@
                                                         Basic design
                                                     </div>
                                                 </div>
-
-                                                <div class="row">
-                                                    <div
-                                                        class="col-lg-3 col-md-4 label col-4"
-                                                    >
-                                                        Client
-                                                    </div>
-                                                    <div
-                                                        class="col-lg-9 col-md-8 col-8"
-                                                        id="project-client-name"
-                                                    >
-                                                        DAT
-                                                    </div>
-                                                </div>
                                                 <div
                                                     class="accordion"
                                                     id="accordionExample"
@@ -1652,9 +1672,6 @@
                                                             <div
                                                                 class="accordion-body position-relative"
                                                             >
-                                                                <div
-                                                                    class="position-absolute bottom-0 end-0 rounded-circle p-1 fs-6 bg-primary text-white"
-                                                                ></div>
                                                                 <strong
                                                                     >This is the
                                                                     third item's
@@ -1763,7 +1780,7 @@
                                                         <label
                                                             for="project-edit-duration"
                                                             class="col-md-4 col-lg-3 col-form-label"
-                                                            >end date</label
+                                                            >Duration</label
                                                         >
                                                         <div
                                                             class="col-md-8 col-lg-9"
@@ -1786,16 +1803,13 @@
                                                         <div
                                                             class="col-md-8 col-lg-9"
                                                         >
-                                                            <textarea
-                                                                type="text"
-                                                                class="form-control border-task-description"
-                                                                id=""
-                                                                name="objective"
-                                                            ></textarea>
+                                                            <div
+                                                                id="edit-project-objective"
+                                                            ></div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="text-center">
+                                                    <div class="text-center mt-5">
                                                         <button
                                                             type="submit"
                                                             class="btn btn-primary"
