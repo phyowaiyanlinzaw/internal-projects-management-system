@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.io.Serializable;
@@ -39,6 +40,9 @@ public class Issue implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Category issue_category;
+
+    @Enumerated(EnumType.STRING)
+    private ResponsibleType responsible_type;
 
     @ManyToOne
     @JoinColumn(name="project_id")
