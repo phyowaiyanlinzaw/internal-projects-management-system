@@ -48,16 +48,10 @@ public class TaskController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<TasksDto> saveTask(@RequestBody TasDto tasDto) {
-        TasksDto taskDto = new TasksDto();
-        taskDto.setDescription(tasDto.getDescription());
-        taskDto.setStatus(tasDto.getStatus());
-        //TODO: Discuss TasDTO
-//        taskDto.setProject(tasDto.getProject());
-//        taskDto.setUser(tasDto.getUser());
-        taskDto.setActual_start_time(tasDto.getActual_start_time());
-        taskDto.setActual_end_time(tasDto.getActual_end_time());
-        return ResponseEntity.ok(taskService.save(taskDto));
+    public ResponseEntity<TasksDto> saveTask(@RequestBody TasksDto tasksDto) {
+
+            return ResponseEntity.ok(taskService.save(tasksDto));
+
     }
 
 }

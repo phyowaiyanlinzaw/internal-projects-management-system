@@ -28,19 +28,4 @@ public class TasDto {
     private long actual_start_time;
     private long actual_end_time;
     private List<UserDto> user;
-
-    @Override
-    public String toString() {
-        return "TasDto{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                ", start_time=" + start_time +
-                ", end_time=" + end_time +
-                ", actual_start_time=" + actual_start_time +
-                ", actual_end_time=" + actual_end_time +
-                ", user=" + user +
-                '}';
-    }
 }
