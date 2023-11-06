@@ -1,6 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.service.project;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 
 import java.util.List;
 
@@ -20,5 +21,6 @@ public interface TaskService {
 
     List<TasksDto> getTasksByUserId(long id);
 
+    Long countTaskByProjectIdAndStatus(Long id, TaskStatus x);
 
 }

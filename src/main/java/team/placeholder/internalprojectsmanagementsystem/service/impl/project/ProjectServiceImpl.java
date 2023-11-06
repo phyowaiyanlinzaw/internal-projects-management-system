@@ -103,9 +103,14 @@ public class ProjectServiceImpl implements ProjectService {
             System.out.println(project.getSystemOutLine());
         }
 
-        return projectList.stream()
-                .map(ProjectMapper::toProjectDto)
-                .collect(Collectors.toList());
+        List<ProjectDto> projectDtos = new ArrayList<>();
+
+        for(Project project : projectList) {
+            project.getProjectManager().getProject().clear();
+            projectDtos.add(ProjectMapper.toProjectDto(project));
+        }
+
+        return projectDtos;
     }
 
     @Override
@@ -186,6 +191,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Long countAllProjectsByDepartmentId(long id) {
         return projectRepository.countAllByDepartmentId(id);
+    }
+
+    @Override
+    public List<ProjectDto> findAllByUserId(long id) {
+        return projectRepository.findAllByUsersId(id).stream()
+                .map(ProjectMapper::toProjectDto)
+                .collect(Collectors.toList());
     }
 
     public static long calculateEndDateMillis(long startDateMillis, int durationInMonths) {

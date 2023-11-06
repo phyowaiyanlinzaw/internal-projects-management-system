@@ -1,10 +1,8 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.user;
 
+import org.springframework.security.core.parameters.P;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.AmountMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.SystemOutLineMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
@@ -45,13 +43,18 @@ public class UserMapper {
             projectDto.setDuration(project.getDuration());
             projectDto.setObjective(project.getObjective());
             projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
-
+            projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
             ClientDto clientDto = new ClientDto();
             clientDto.setId(project.getClient().getId());
             clientDto.setName(project.getClient().getName());
             clientDto.setEmail(project.getClient().getEmail());
             clientDto.setPhone(project.getClient().getPhone());
-
+            UserDto projectManager = new UserDto();
+            projectManager.setId(project.getProjectManager().getId());
+            projectManager.setName(project.getProjectManager().getName());
+            projectManager.setEmail(project.getProjectManager().getEmail());
+            projectManager.setRole(project.getProjectManager().getRole());
+            projectDto.setUserDto(projectManager);
             projectDto.setClientDto(clientDto);
 
             projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));

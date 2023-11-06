@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
@@ -22,5 +23,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Long countAllByDepartmentId(Long departmentId);
 
-    List<Project> findByUsersId(Long id);
+    List<Project> findAllByUsersId(long id);
 }
