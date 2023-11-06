@@ -20,17 +20,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TasksDto save(TasksDto taskDto) {
-        Tasks task = new Tasks();
-        task.setDescription(taskDto.getDescription());
-        task.setStatus(taskDto.getStatus());
-        task.setProject(taskDto.getProject());
-        task.setUser(taskDto.getUser());
-        task.setPlan_start_time(taskDto.getPlan_start_time());
-        task.setPlan_end_time(taskDto.getPlan_end_time());
-        task.setActual_start_time(taskDto.getActual_start_time());
-        task.setActual_end_time(taskDto.getActual_end_time());
-        Tasks savedTask = taskRepository.save(task);
-        return TasksMapper.toTasksDto(savedTask);
+        Tasks task = TasksMapper.toTasks(taskDto);
+        task = taskRepository.save(task);
+        return TasksMapper.toTasksDto(task);
     }
 
     @Override

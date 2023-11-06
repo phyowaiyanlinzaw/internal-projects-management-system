@@ -4,6 +4,7 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="layout/layout"
+        xmlns:th="http://www.thymeleaf.org"
 >
 <head>
 </head>
@@ -65,6 +66,7 @@
                                 aria-selected="false"
                         >
                             Tasks
+                            <p style="display:none;" th:text="${projectId}" id="projectId"></p>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -435,9 +437,9 @@
                                     style="color:red"> *</span></label>
                             <select class="form-control" aria-label="Select Group" data-live-search="true"
                                     id="group" name="group">
-                                <option>A - Related With Project Development</option>
-                                <option>B - Training</option>
-                                <option>C - Idling</option>
+                                <option value="A">A - Related With Project Development</option>
+                                <option value="B">B - Training</option>
+                                <option value="C">C - Idling</option>
                             </select>
                         </div>
 
@@ -628,6 +630,20 @@
     `;
         }
 
+        const projectId = document.getElementById("projectId").textContent;
+
+        var membersList;
+        $.ajax({
+            url: "/api/user/list/projectId/" + projectId,
+            type: "GET",
+            async: false,
+            success: function (data) {
+                membersList = data;
+            },
+        });
+        console.log("MEMBERS LIST" , membersList);
+
+
         for (let i = 0; i < inputElm.length; i++) {
             let a = inputElm[i]
             // initialize Tagify on the above input node reference
@@ -646,14 +662,12 @@
                     dropdownItem: suggestionItemTemplate,
                     dropdownHeader: dropdownHeaderTemplate,
                 },
-                //fetch data from api/user/list/{projectId}
-                whitelist: [
-
-                ],
+                //show data from membersList but exclude role of PROJECT_MANAGER
+                whitelist: membersList.filter((member) => member.role !== "PROJECT_MANAGER"),
                 transformTag: (tagData, originalData) => {
-                    var {name, email} = parseFullValue(tagData.name);
-                    tagData.name = name;
-                    tagData.email = email || tagData.email;
+                    //show name and role in tag
+                    tagData.value = tagData.name + " <" + tagData.email + ">";
+                    return tagData;
                 },
                 validate({name, email}) {
                     // when editing a tag, there will only be the "name" property which contains name + email (see 'transformTag' above)
@@ -1170,11 +1184,14 @@
                 title: $("#title").val(),
                 description: $("#description").val(),
                 // Convert to Unix timestamp
-                start_time: new Date($("#start_time").val()).getTime(),
-                end_time: new Date($("#end_time").val()).getTime(),
+                plan_start_time: new Date($("#start_time").val()).getTime(),
+                plan_end_time: new Date($("#end_time").val()).getTime(),
                 status: $("#projectStatuses").val(),
                 group: $("#group").val(),
-                pm: $("#pm").val(),
+                projectId: projectId,
+                members: tagify.value.map((member) => {
+                    return member.id;
+                }),
             };
             console.log(data);
             $.ajax({
@@ -1184,7 +1201,6 @@
                 contentType: "application/json",
                 success: function (response) {
                     console.log(response);
-                    //if success, reload page
                     location.reload();
                 },
                 error: function (response) {

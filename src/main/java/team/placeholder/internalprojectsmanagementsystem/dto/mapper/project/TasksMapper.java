@@ -8,6 +8,7 @@ public class TasksMapper {
         if(tasks == null){
             return null;
         }
+
         TasksDto tasksDto = new TasksDto();
         tasksDto.setId(tasks.getId());
         tasksDto.setTitle(tasks.getTitle());
@@ -28,7 +29,6 @@ public class TasksMapper {
         }
 
         Tasks tasks = new Tasks();
-        tasks.setId(tasksDto.getId());
         tasks.setTitle(tasksDto.getTitle());
         tasks.setDescription(tasksDto.getDescription());
         tasks.setStatus(tasksDto.getStatus());

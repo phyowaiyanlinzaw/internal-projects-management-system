@@ -14,6 +14,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.security.CustomerUserDetails;
+import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.department.DepartmentService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
@@ -26,12 +27,19 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userService;
-
+    private final FakerService fakerService;
     private final DepartmentServiceImpl departmentService;
 
-    public UserController(UserServiceImpl userService,DepartmentServiceImpl departmentService) {
+    public UserController(UserServiceImpl userService,DepartmentServiceImpl departmentService, FakerService fakerService) {
         this.userService = userService;
         this.departmentService=departmentService;
+        this.fakerService = fakerService;
+    }
+
+    @GetMapping("/generate-fake-users")
+    public ResponseEntity<String> generateFakeUsers() {
+        fakerService.generateAndSaveFakeUsers(100);
+        return ResponseEntity.ok("Fake users generated successfully");
     }
 
     @GetMapping("/profile")
@@ -121,7 +129,6 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('DEPARTMENT_HEAD')")
     @GetMapping("list")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());

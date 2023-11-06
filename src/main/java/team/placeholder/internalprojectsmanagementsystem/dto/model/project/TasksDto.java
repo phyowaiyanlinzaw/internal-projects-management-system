@@ -3,6 +3,7 @@ package team.placeholder.internalprojectsmanagementsystem.dto.model.project;
 import lombok.Getter;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Group;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
@@ -21,6 +22,6 @@ public class TasksDto {
     private long actual_end_time;
     private User user;
     private Project project;
-
+    private Group group;
 
 }

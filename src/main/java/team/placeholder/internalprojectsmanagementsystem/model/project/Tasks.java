@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.Group;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
@@ -28,6 +29,9 @@ public class Tasks implements Serializable {
     private long plan_end_time;
     private long actual_start_time;
     private long actual_end_time;
+
+    @Enumerated(EnumType.STRING)
+    private Group group;
 
     @OneToMany(mappedBy = "tasks")
     private List<TaskNotification> taskNotifications;
