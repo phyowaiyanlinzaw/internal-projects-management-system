@@ -53,12 +53,15 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "projectManager", cascade = CascadeType.ALL)
     private List<Project> project;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL)
     private List<Issue> uploader;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL)
     private List<Issue> pic;
 

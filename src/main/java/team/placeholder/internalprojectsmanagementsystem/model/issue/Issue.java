@@ -48,15 +48,18 @@ public class Issue implements Serializable {
 
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "project_id")
     private Project project;
 
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name="uploader_id")
     private User user_uploader;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name="pic_id")
     private User user_pic;
 

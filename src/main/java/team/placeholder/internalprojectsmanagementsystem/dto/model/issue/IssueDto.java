@@ -38,11 +38,8 @@ public class IssueDto implements Serializable {
     @JsonProperty("project")
     private ProjectDto projectDto;
 
-
-    @JsonProperty("user-uploader")
     private UserDto user_uploader;
 
-   @JsonProperty("pic_id")
     private UserDto user_pic;
 
 

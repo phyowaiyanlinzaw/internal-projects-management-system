@@ -276,8 +276,7 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 
-
-<!--<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>-->
+<script src="/js/currentLoginUser.js" type="module" async></script>
 
 <script>
     // Author: Habib Mhamadi
@@ -312,7 +311,15 @@
 </script>
 
 <script type="module">
-    import {getTimeElapsed} from "/js/time.js"
+
+    import {getUser} from "/js/currentLoginUser.js";
+    import {getTimeElapsed} from "/js/time.js";
+
+
+
+    console.log(await getUser());
+
+
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
@@ -353,7 +360,12 @@
     });
 
 
-    $(document).ready(function () {
+    $(document).ready(async function () {
+        try {
+            const getLoginUser = await getUser();
+            console.log("Get Login User", getLoginUser)
+
+
         // Define data variable to store user data
         let data = [];
 
@@ -365,48 +377,20 @@
             user_pic.append($('<option>', {
                 value: '',
                 text: 'Select a User',
-                data: { picUrl: '' }, // Empty URL for placeholder
+                data: {picUrl: ''}, // Empty URL for placeholder
             }));
             $.each(userData, function (index, pic) {
                 user_pic.append($('<option>', {
                     value: pic.id,
                     text: pic.name,
-                    data: { picUrl: pic.picUrl },
+                    data: {picUrl: pic.picUrl},
                     user: pic,
                 }));
             });
         });
-        //
-        // $("#addIssueValidationForm").validate({
-        //     rules: {
-        //         title: "required",
-        //         issue_category: "required",
-        //         user_pic: "required",
-        //         responsible_party: "required",
-        //         description: "required",
-        //         direct_cause: "required",
-        //         root_cause: "required",
-        //         place: "required",
-        //         impact: "required",
-        //     },
-        //     messages: {
-        //         title: "Please enter your title",
-        //         issue_category: "Please enter your issue category",
-        //         user_pic: "Please enter your Person In Charge",
-        //         responsible_party: "Please enter your responsible party",
-        //         description: "Please enter your description",
-        //         direct_cause: "Please enter your direct cause",
-        //         root_cause: "Please enter your root cause",
-        //         place: "Please enter your place",
-        //         impact: "Please enter your impact",
-        //     },
-        //     errorElement: "div",
-        //     errorPlacement: function(error, element) {
-        //         error.insertAfter(element);
-        //     }
-        // });
 
-        $('#addIssue').on('click', function () {
+
+        $('#addIssue').on('click', async function () {
             const title = $('#title').val();
             const description = a.root.innerHTML;
             const place = $('#place').val();
@@ -416,6 +400,7 @@
             const responsible_party = $('#responsible_party').val();
             const issue_category = $('#issue_category').val();
             const selectedUserId = $('#user_pic').val();
+
 
             if (
                 title === "" ||
@@ -435,23 +420,34 @@
             // Find the selected user by their ID
             const selectedUser = data.find(user => user.id == selectedUserId);
 
+
             if (!selectedUser) {
                 alert('Selected user data not found.');
                 return;
             }
+
+
+            const uploaderId = getLoginUser.currentUser.id;
+
+            console.log("Uploader Id", uploaderId);
+
+
 
             const requestData = {
                 title: title,
                 description: description,
                 place: place,
                 impact: impact,
-                created_date : new Date().getTime(),
-                updated_date : new Date().getTime(),
+                created_date: new Date().getTime(),
+                updated_date: new Date().getTime(),
                 root_cause: root_cause,
                 direct_cause: direct_cause,
                 responsible_party: responsible_party,
                 issue_category: issue_category,
-                pic_id: selectedUser,
+                user_pic: selectedUser,
+                user_uploader: {
+                    id : uploaderId
+                },
             };
 
             console.log('Request Data:', requestData);
@@ -489,6 +485,11 @@
                 },
             });
         });
+
+        } catch (error) {
+            console.error("Error getting the login user:", error);
+            }
+
     });
 
 

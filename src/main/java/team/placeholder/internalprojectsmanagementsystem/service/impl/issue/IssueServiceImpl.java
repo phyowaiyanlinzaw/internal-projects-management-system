@@ -3,11 +3,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue.IssueMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.issue.IssueService;
 
 import java.util.List;
@@ -19,11 +19,15 @@ import java.util.stream.Collectors;
 public class IssueServiceImpl implements IssueService {
 
     private final IssueRepository issueRepository;
+    private final UserRepository userRepository;
     @Override
     public IssueDto save(IssueDto issueDto) {
         Issue issue = IssueMapper.toIssue(issueDto);
 
         try {
+
+            User user = userRepository.getReferenceById(issueDto.getUser_uploader().getId());
+            issue.setUser_uploader(user);
             Issue savedIssue = issueRepository.save(issue);
             return IssueMapper.toIssueDto(savedIssue);
         } catch (Exception e) {
@@ -59,22 +63,16 @@ public class IssueServiceImpl implements IssueService {
         Issue issue = issueRepository.findById(issueDto.getId());
         if(issue != null) {
 
-//            issue.setTitle(issueDto.getTitle());
-//            issue.setDescription(issueDto.getDescription());
             issue.setPlace(issueDto.getPlace());
             issue.setImpact(issueDto.getImpact());
             issue.setRoot_cause(issueDto.getRoot_cause());
             issue.setDirect_cause(issueDto.getDirect_cause());
             issue.setCorrective_action(issueDto.getCorrective_action());
             issue.setPreventive_action(issueDto.getPreventive_action());
-//            issue.setResponsible_party(issueDto.getResponsible_party());
             issue.setSolved(issueDto.isSolved());
             issue.setCreated_date(issueDto.getCreated_date());
             issue.setUpdated_date(issueDto.getUpdated_date());
             issue.setSolved_date(issueDto.getSolved_date());
-//            issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
-//           issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
-//            issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
             issueRepository.save(issue);
             return IssueMapper.toIssueDto(issue);
         }else {
