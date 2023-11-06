@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
-import team.placeholder.internalprojectsmanagementsystem.service.project.TaskService;
+import team.placeholder.internalprojectsmanagementsystem.service.project.TasksService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TaskServiceImpl implements TaskService {
+public class TaskServiceImpl implements TasksService {
 
     private final TaskRepository taskRepository;
 

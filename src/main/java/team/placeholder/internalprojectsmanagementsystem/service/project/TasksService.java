@@ -5,7 +5,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.projecten
 
 import java.util.List;
 
-public interface TaskService {
+public interface TasksService {
 
     TasksDto save(TasksDto taskDto);
 
