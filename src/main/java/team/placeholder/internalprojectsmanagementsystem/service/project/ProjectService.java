@@ -19,12 +19,14 @@ public interface ProjectService {
 
     Long countAllProjects();
 
-    List<ProjectDto> getAllProjectsByUsersId(long id);
+    List<ProjectDto> getAllProjectsByProjectManagerId(long id);
 
     Long countAllProjectsByUsersId(long id);
 
     List<ProjectDto> getAllProjectsByDepartmentId(long id);
     Long countAllProjectsByDepartmentId(long id);
+
+    List<ProjectDto> findAllByUserId(long id);
 
 //    List<ProjectDto> getAllProjectsByClientId(long id);
 //

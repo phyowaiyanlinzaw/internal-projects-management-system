@@ -1,6 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project.projectenums;
 
-public enum Group {
+public enum TasksGroup {
     A,
     B,
     C
