@@ -431,12 +431,9 @@
 
             const fragment = document.createDocumentFragment();
 
-
-            let pList =[];
-
             getAllProjects()
                 .then( data => {
-                    pList=[...data];
+                    let pList=[...data];
 
             for (let i = 0; i < pList.length; i++) {
                 let currentProject = pList[i];
@@ -572,29 +569,7 @@
 
             motherContainer.appendChild(fragment);
 
-            $(".circle-progress").each(function () {
-                const minValue = $(this).attr("data-min-value");
-                const maxValue = $(this).attr("data-max-value");
-                const value = $(this).attr("data-value");
-                const type = $(this).attr("data-type");
-
-                if (value < 40) {
-                    this.classList.add("circle-progress-secondary");
-                } else if (value < 70) {
-                    this.classList.add("circle-progress-primary");
-                } else if (value > 69) {
-                    this.classList.add("circle-progress-success");
-                }
-
-                if (this.id !== "" && this.id !== null) {
-                    new CircleProgress("#" + this.id, {
-                        min: minValue,
-                        max: maxValue,
-                        value: value,
-                        textFormat: type,
-                    });
-                }
-            });
+            
 
             const detailMoal = document.querySelector("#project-details");
 
@@ -741,7 +716,6 @@
                 });
             });
 
-            let log = console.log;
             $(document).ready(function () {
                 $("#validation-form").submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting the traditional way
@@ -789,8 +763,8 @@
                         return matchingObj ? matchingObj : { type: deli.value };
                     });
                     // You may want to add some form validation here before sending the data
-                    log(objective);
-                    log(architectures);
+                    console.log(objective);
+                    console.log(architectures);
                     const project = {
                         name: projectName,
                         clientDto: client,
@@ -823,7 +797,7 @@
                             id : loginUser.currentUser.id
                         }
                     };
-                    log(project);
+                    console.log(project);
                     //Perform the AJAX request
                     $.ajax({
                         url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
@@ -834,6 +808,8 @@
                             alert("Project registered successfully");
                             // Reset the form if needed
                             $("#validation-form")[0].reset();
+                            console.log("this projce has benn saved", data)
+
                         },
                         error: function (data) {
                             alert("Error registering project");
