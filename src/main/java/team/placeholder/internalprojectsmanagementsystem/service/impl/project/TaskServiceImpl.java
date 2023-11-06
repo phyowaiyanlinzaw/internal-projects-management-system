@@ -23,7 +23,6 @@ public class TaskServiceImpl implements TaskService {
         Tasks task = new Tasks();
         task.setDescription(taskDto.getDescription());
         task.setStatus(taskDto.getStatus());
-        task.setProject(taskDto.getProject());
         task.setUser(taskDto.getUser());
         task.setPlan_start_time(taskDto.getPlan_start_time());
         task.setPlan_end_time(taskDto.getPlan_end_time());
@@ -59,10 +58,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TasksDto> getTasksByProjectId(long id) {
-        List<Tasks> taskList = taskRepository.findByProjectId(id);
-        return taskList.stream()
-                .map(TasksMapper::toTasksDto)
-                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -75,6 +71,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Long countTaskByProjectIdAndStatus(Long id, TaskStatus x) {
-        return taskRepository.countByProjectIdAndStatus(id, x);
+        return null;
     }
 }

@@ -9,13 +9,6 @@ import java.util.List;
 
 public interface ClientRepository extends JpaRepository<Client,Long> {
 
-    List<Client> findAll();
     Client findById(long id);
-
-    Client findByName(String name);
-
-    Client findByProjectName(String projectName);
-
-
 
 }

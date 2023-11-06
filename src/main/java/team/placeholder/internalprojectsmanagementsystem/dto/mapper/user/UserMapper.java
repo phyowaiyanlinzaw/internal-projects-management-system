@@ -58,7 +58,6 @@ public class UserMapper {
             projectDto.setClientDto(clientDto);
 
             projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
-            projectDto.setDepartmentDto(DepartmentMapper.toDepartmentDto(project.getDepartment()));
             projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
 
             projectList.add(projectDto);

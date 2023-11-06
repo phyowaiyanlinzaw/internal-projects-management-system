@@ -6,13 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.TaskNotification;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.List;
 
 @Getter
