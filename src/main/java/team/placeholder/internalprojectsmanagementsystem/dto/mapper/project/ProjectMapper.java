@@ -1,16 +1,11 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.project;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
-
-import java.util.Set;
 
 @Component
 public class ProjectMapper {
@@ -31,12 +26,11 @@ public class ProjectMapper {
         projectDto.setDuration(project.getDuration());
         projectDto.setReviewDto(ReviewMapper.toReviewDto(project.getReviews()));
         projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
-        projectDto.setDepartmentDto(DepartmentMapper.toDepartmentDto(project.getDepartment()));
         projectDto.setClientDto(ClientMapper.toClientDto(project.getClient()));
         projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
         projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
         projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
-        projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
+        projectDto.setSystemOutLineDto(SystemOutlineMapper.toSystemOutLineDto(project.getSystemOutLine()));
 
         return projectDto;
     }
@@ -55,11 +49,10 @@ public class ProjectMapper {
         project.setProjectManager(UserMapper.toUser(projectDto.getUserDto()));
         project.setDuration(projectDto.getDuration());
         project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
-        project.setDepartment(DepartmentMapper.toDepartment(projectDto.getDepartmentDto()));
         project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
         project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
         project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
         project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
-        project.setSystemOutLine(SystemOutLineMapper.toSystemOutline(projectDto.getSystemOutLineDto()));
+        project.setSystemOutLine(SystemOutlineMapper.toSystemOutline(projectDto.getSystemOutLineDto()));
         return project;
 }}

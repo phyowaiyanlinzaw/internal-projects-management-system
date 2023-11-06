@@ -18,11 +18,16 @@ import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
 import team.placeholder.internalprojectsmanagementsystem.model.project.DeliverableType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
@@ -46,17 +51,25 @@ public class ProjectController {
     private final UserServiceImpl userService;
     private final ArchitectureServiceImpl architectureService;
     private final DeliverableTypeServiceImpl deliverableTypeService;
+    private final TaskServiceImpl taskService;
+    private final FakerService fakerService;
+
+    @GetMapping("/generate-fake-project/{count}")
+    public ResponseEntity<String> generateFakeProjects(@PathVariable int count) {
+        fakerService.generateAndSaveFakeProjects(count);
+        return ResponseEntity.ok("Projects generated successfully");
+    }
 
 
 
     @PostMapping(value = "/save")
-    public ResponseEntity<String> save(@RequestBody ProjectDto project){
+    public ResponseEntity<ProjectDto> save(@RequestBody ProjectDto project){
         log.info("Project: {}", project);
         ProjectDto savedProject = projectService.save(project);
         if (savedProject!=null){
-            return ResponseEntity.ok("Project save successfully");
+            return new ResponseEntity<>(savedProject, HttpStatus.OK);
         }else {
-        return ResponseEntity.badRequest().body("User save failed");
+        return new ResponseEntity<>(savedProject, HttpStatus.BAD_REQUEST);
     }}
 
     @GetMapping("/list")
@@ -141,21 +154,34 @@ public class ProjectController {
 
         if (role.equals("PROJECT_MANAGER")) {
             List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id);
-            for(ProjectDto projectDto : projects){
-                projectDto.getUserDto().getProjectList().clear();
-            }
-            return new ResponseEntity<>(projects, HttpStatus.OK);
+            return getListResponseEntity(projects);
         } else if (role.equals("DEPARTMENT_HEAD")) {
             List<ProjectDto> projects = projectService.getAllProjectsByDepartmentId(id);
-            for(ProjectDto projectDto : projects){
-                projectDto.getUserDto().getProjectList().clear();
-            }
-            return new ResponseEntity<>(projects, HttpStatus.OK);
+            return getListResponseEntity(projects);
         } else if (role.equals("MEMBER")) {
-            return null;
+            return getListResponseEntity(projectService.findAllByUserId(id));
         } else {
             return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
         }
+    }
+
+    private ResponseEntity<List<ProjectDto>> getListResponseEntity(List<ProjectDto> projects) {
+        for(ProjectDto projectDto : projects){
+            if(projectDto.getUserDto() != null) {
+                if(projectDto.getUserDto().getProjectList() != null) {
+                    projectDto.getUserDto().getProjectList().clear();
+                }
+            }
+            projectDto.setUnfinishedTaskCount(taskService.countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.IN_PROGRESS));
+            projectDto.setCompleteTaskCount(taskService.countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.FINISHED));
+            if(projectDto.getTasksDto() != null) {
+                projectDto.getTasksDto().clear();
+            }
+            if(projectDto.getTasksDto() != null) {
+                projectDto.getIssueDto().clear();
+            }
+        }
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
 }

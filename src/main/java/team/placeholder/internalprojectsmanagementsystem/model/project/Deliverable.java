@@ -26,9 +26,6 @@ public class Deliverable implements Serializable {
     @JoinColumn(name = "deliverable_type_id")
     private DeliverableType deliverableTypes;
 
-    @ManyToOne
-    private Project project;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

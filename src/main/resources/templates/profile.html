@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layout">
+      layout:decorate="layout/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 </head>
@@ -57,10 +57,11 @@
                                 class="card-body profile-card pt-4 d-flex flex-column align-items-center"
                         >
                             <img
-                                    src="https://source.unsplash.com/random/200x200?sig=1"
+                                    src=""
                                     alt="Profile"
                                     class="rounded-circle"
                                     style="height: 100px; width: 100px"
+                                    id="profile-image"
                             />
                             <h4 style="margin-top: 10px" id="name" class="display-4">
                             </h4>
@@ -128,8 +129,9 @@
 
                                         </div>
                                     </div>
-
+                                    <div sec:authorize="hasAnyRole('PROJECT_MANAGER','DEPARTMENT_HEAD','EMPLOYEE','FOC','CONTRACT')">
                                     <div
+
                                             class="row"
                                             style="margin-top: 20px"
                                     >
@@ -142,19 +144,24 @@
 
                                         </div>
                                     </div>
-                                    <div
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
+                                    </div>
+                                    <div sec:authorize="hasAnyRole('PROJECT_MANAGER','DEPARTMENT_HEAD','EMPLOYEE','FOC','CONTRACT')">
                                         <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
-                                            Project Count
-                                        </div>
-                                        <div class="col-lg-9 col col-md-8" id="projectCount">
 
+                                                class="row"
+                                                style="margin-top: 20px"
+                                        >
+                                            <div
+                                                    class="col-lg-3 col col-md-4 label"
+                                            >
+                                                Project Count
+                                            </div>
+                                            <div class="col-lg-9 col col-md-8" id="projectCount">
+
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <div
@@ -511,6 +518,16 @@
             function updateUserInfo(data) {
                 $("#name").html(data.name.toUpperCase())
                 $("#role").html(data.role)
+        //check data.role and set image accordingly
+                if(data.role === "PMO" || data.role === "SDQC"){
+                    $('#profile-image').attr("src","/images/avatars/pmo_avatar.svg");
+                }else if(data.role === "DEPARTMENT_HEAD"){
+                    $('#profile-image').attr("src","/images/avatars/departmenthead_avatar.svg");
+                }else if (data.role === "PROJECT_MANAGER"){
+                    $('#profile-image').attr("src","/images/avatars/pm_avatar.svg");
+                }else{
+                    $('#profile-image').attr("src","/images/avatars/employee_avatar.svg");
+                }
 
                 $(".profile-overview .col-lg-9.col, .profile-overview .col-md-8").each(function () {
                     if ($(this).attr("id") === "email") {

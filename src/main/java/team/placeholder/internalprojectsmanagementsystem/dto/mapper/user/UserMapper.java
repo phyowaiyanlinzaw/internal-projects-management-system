@@ -1,10 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.user;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.AmountMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.SystemOutLineMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
@@ -13,7 +10,6 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserMapper {
     public static UserDto toUserDto(User user) {
@@ -44,18 +40,22 @@ public class UserMapper {
             projectDto.setCurrent_phase(project.getCurrent_phase());
             projectDto.setDuration(project.getDuration());
             projectDto.setObjective(project.getObjective());
-            projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
-
+            projectDto.setSystemOutLineDto(SystemOutlineMapper.toSystemOutLineDto(project.getSystemOutLine()));
+            projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
             ClientDto clientDto = new ClientDto();
             clientDto.setId(project.getClient().getId());
             clientDto.setName(project.getClient().getName());
             clientDto.setEmail(project.getClient().getEmail());
             clientDto.setPhone(project.getClient().getPhone());
-
+            UserDto projectManager = new UserDto();
+            projectManager.setId(project.getProjectManager().getId());
+            projectManager.setName(project.getProjectManager().getName());
+            projectManager.setEmail(project.getProjectManager().getEmail());
+            projectManager.setRole(project.getProjectManager().getRole());
+            projectDto.setUserDto(projectManager);
             projectDto.setClientDto(clientDto);
 
             projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
-            projectDto.setDepartmentDto(DepartmentMapper.toDepartmentDto(project.getDepartment()));
             projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
 
             projectList.add(projectDto);

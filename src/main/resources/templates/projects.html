@@ -124,7 +124,7 @@
         ></script>
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
-        <script src="/js/currentLoginUser.js" type="module" async></script>
+<!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
         <script type="module" defer>
             import {
                 formatDateFromMilliseconds,
@@ -133,7 +133,7 @@
                 calculateEndDate
             } from "/js/time.js";
 
-
+            import { sendData, getData } from "/js/api-function.js";
 
             import {
                 getArchitecturelist,
@@ -352,8 +352,6 @@
                     let email = document.querySelector("#client-email").value;
                     let phone = document.querySelector("#client-phone").value;
 
-                    log(name, email, phone);
-
                     if (name === "" || email === "" || phone === "") {
                         alert("client form empty");
                         return;
@@ -403,11 +401,26 @@
                 theme: "snow",
             });
 
-
-            import { sendData, getData } from "/js/api-function.js";
-
             async function getAllProjects() {
-                return await getData('/api/project/list')
+                switch (loginUser.currentUser.role) {
+                case "PROJECT_MANAGER":
+                    console.log('project manager')
+                    return await getData(`/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`)
+                    break;
+                
+                case "DEPARTMENT_HEAD":
+                    console.log('department head')
+                    return await getData(`/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`)
+                    break;
+                case "EMPLOYEE":
+                case "CONTRACT":
+                case "FOC":
+                    console.log("one of the memeber")
+                    return await getData(`/api/project/list/MEMBER/${loginUser.currentUser.id}`)
+                default:
+                    console.log('pmo or sdqc')
+                    return await getData(`/api/project/list`)
+                }
             }
 
 
@@ -416,12 +429,9 @@
 
             const fragment = document.createDocumentFragment();
 
-
-            let pList =[];
-
             getAllProjects()
                 .then( data => {
-                    pList=[...data];
+                    let pList=[...data];
 
             for (let i = 0; i < pList.length; i++) {
                 let currentProject = pList[i];
@@ -463,7 +473,7 @@
                 dFlexInner.classList.add("d-flex");
 
                 const img = document.createElement("img");
-                img.src = `https://source.unsplash.com/random/200x200?sig=${currentProject.id}`;
+                img.src = `/images/avatars/pm_avatar.svg`;
                 img.classList.add(
                     "img-fluid",
                     "rounded-circle",
@@ -557,29 +567,7 @@
 
             motherContainer.appendChild(fragment);
 
-            $(".circle-progress").each(function () {
-                const minValue = $(this).attr("data-min-value");
-                const maxValue = $(this).attr("data-max-value");
-                const value = $(this).attr("data-value");
-                const type = $(this).attr("data-type");
-
-                if (value < 40) {
-                    this.classList.add("circle-progress-secondary");
-                } else if (value < 70) {
-                    this.classList.add("circle-progress-primary");
-                } else if (value > 69) {
-                    this.classList.add("circle-progress-success");
-                }
-
-                if (this.id !== "" && this.id !== null) {
-                    new CircleProgress("#" + this.id, {
-                        min: minValue,
-                        max: maxValue,
-                        value: value,
-                        textFormat: type,
-                    });
-                }
-            });
+            
 
             const detailMoal = document.querySelector("#project-details");
 
@@ -726,7 +714,6 @@
                 });
             });
 
-            let log = console.log;
             $(document).ready(function () {
                 $("#validation-form").submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting the traditional way
@@ -774,8 +761,8 @@
                         return matchingObj ? matchingObj : { type: deli.value };
                     });
                     // You may want to add some form validation here before sending the data
-                    log(objective);
-                    log(architectures);
+                    console.log(objective);
+                    console.log(architectures);
                     const project = {
                         name: projectName,
                         clientDto: client,
@@ -808,7 +795,7 @@
                             id : loginUser.currentUser.id
                         }
                     };
-                    log(project);
+                    console.log(project);
                     //Perform the AJAX request
                     $.ajax({
                         url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
@@ -819,6 +806,8 @@
                             alert("Project registered successfully");
                             // Reset the form if needed
                             $("#validation-form")[0].reset();
+                            console.log("this projce has benn saved", data)
+
                         },
                         error: function (data) {
                             alert("Error registering project");
@@ -1321,7 +1310,7 @@
                                         class="card-body profile-card pt-4 d-flex flex-column align-items-center"
                                     >
                                         <img
-                                            src="https://source.unsplash.com/random/200x200?sig=1"
+                                            th:src="${images/avatars/pm_avatar.png}"
                                             alt="Profile"
                                             class="rounded-circle"
                                         />

@@ -22,5 +22,4 @@ public interface DepartmentService {
     long getDeprtmentCount();
 
 
-
 }

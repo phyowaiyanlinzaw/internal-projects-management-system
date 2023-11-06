@@ -19,6 +19,4 @@ public class DeliverableType {
     private Long id;
     private String type;
 
-    @OneToMany(mappedBy = "deliverableTypes", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Deliverable> deliverables;
 }

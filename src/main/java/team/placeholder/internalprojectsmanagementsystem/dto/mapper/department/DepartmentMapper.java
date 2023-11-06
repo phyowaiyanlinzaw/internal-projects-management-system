@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.department;
 
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 

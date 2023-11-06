@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
-import team.placeholder.internalprojectsmanagementsystem.model.project.IssueNotification;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.io.Serializable;
@@ -41,6 +41,11 @@ public class Issue implements Serializable {
     @Enumerated(EnumType.STRING)
     private Category issue_category;
 
+    @Enumerated(EnumType.STRING)
+    private ResponsibleType responsible_type;
+
+    private long responsible_id;
+
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
@@ -52,9 +57,6 @@ public class Issue implements Serializable {
     @ManyToOne
     @JoinColumn(name="pic_id")
     private User user_pic;
-
-    @OneToMany(mappedBy = "issue")
-    private List<IssueNotification> issueNotifications;
 
     @Override
     public boolean equals(Object o) {

@@ -2,15 +2,13 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import lombok.RequiredArgsConstructor;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
@@ -39,6 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final DepartmentRepository departmentRepository;
     private final DeliverableRepository deliverableRepository;
     private final ReviewRepo reviewRepo;
+    private final ModelMapper  modelMapper;
 
 
     @Transactional
@@ -48,7 +47,6 @@ public class ProjectServiceImpl implements ProjectService {
         Set<Architecture> architecture = new HashSet<>();
 
         projectDto.getDeliverableDto().forEach(System.out::println);
-//
         for(ArchitectureDto architectureDto : projectDto.getArchitectureDto()) {
             if(architectureDto.getId() == null) {
                 architecture.add(architectureService.save(architectureDto));
@@ -62,37 +60,27 @@ public class ProjectServiceImpl implements ProjectService {
         for (DeliverableDto deliverableDto : projectDto.getDeliverableDto()) {
             if (deliverableDto.getDeliverableType().getId() == 0) {
                 DeliverableType newDeliverableType = deliverableTypeService.save(deliverableDto.getDeliverableType());
-                Deliverable newDeliverable = DeliverableMapper.toDeliverable(deliverableDto);
+
+                //Use ModelMapper for Model Mapping Stuffs
+                Deliverable newDeliverable = modelMapper.map(deliverableDto, Deliverable.class);
                 newDeliverable.setDeliverableTypes(newDeliverableType);
                 deliverable.add(newDeliverable);
             } else {
                 DeliverableType existingDeliverableType = deliverableR.getReferenceById(deliverableDto.getDeliverableType().getId());
-                Deliverable existingDeliverable = DeliverableMapper.toDeliverable(deliverableDto);
+                Deliverable existingDeliverable = modelMapper.map(deliverableDto, Deliverable.class);
                 existingDeliverable.setDeliverableTypes(existingDeliverableType);
                 deliverable.add(existingDeliverable);
             }
         }
 
-        Project project2 = ProjectMapper.toProject(projectDto);
+        Project project2 = modelMapper.map(projectDto, Project.class);
         project2.setProjectManager(userRepository.getReferenceById(projectDto.getUserDto().getId()));
-        project2.setDepartment(departmentRepository.getReferenceById(projectDto.getDepartmentDto().getId()));
         project2.setArchitectures(architecture);
-        project2.setDeliverables(null);
-        project2.getSystemOutLine().setProject(project2);
+        project2.setDeliverables(deliverable);
         Review newReview = new Review();
         newReview.setUser(userRepository.getReferenceById(projectDto.getUserDto().getId()));
-        newReview.setProject(project2);
-        project2.setReviews(newReview);
-        Project savedProject = projectRepository.save(project2);
-        System.out.println(" system out loine shoud get XXXXXXXXXXXX" + savedProject.getSystemOutLine());
-
-
-        for (Deliverable deliverable1 : deliverable) {
-            deliverable1.setProject(savedProject);
-            deliverableRepository.save(deliverable1);
-        }
-
-        return ProjectMapper.toProjectDto(savedProject);
+        projectRepository.save(project2);
+        return modelMapper.map(project2, ProjectDto.class);
     }
 
     @Override
@@ -103,9 +91,16 @@ public class ProjectServiceImpl implements ProjectService {
             System.out.println(project.getSystemOutLine());
         }
 
-        return projectList.stream()
-                .map(ProjectMapper::toProjectDto)
-                .collect(Collectors.toList());
+        List<ProjectDto> projectDtos = new ArrayList<>();
+
+        for(Project project : projectList) {
+            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+            SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
+            projectDto.setSystemOutLineDto(systemOutLineDto);
+            projectDtos.add(projectDto);
+        }
+
+        return projectDtos;
     }
 
     @Override
@@ -156,7 +151,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public long getCountByDepartment(long id) {
 
-        return projectRepository.countByDepartmentId(id);
+        return 0;
     }
 
     @Override
@@ -178,14 +173,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDto> getAllProjectsByDepartmentId(long id) {
-        return projectRepository.findAllByDepartmentId(id).stream()
-                .map(ProjectMapper::toProjectDto)
-                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
     public Long countAllProjectsByDepartmentId(long id) {
-        return projectRepository.countAllByDepartmentId(id);
+        return null;
+    }
+
+    @Override
+    public List<ProjectDto> findAllByUserId(long id) {
+        return projectRepository.findAllByUsersId(id).stream()
+                .map(ProjectMapper::toProjectDto)
+                .collect(Collectors.toList());
     }
 
     public static long calculateEndDateMillis(long startDateMillis, int durationInMonths) {

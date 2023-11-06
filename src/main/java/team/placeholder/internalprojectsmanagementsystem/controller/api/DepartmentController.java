@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 
 import java.util.List;
@@ -20,6 +22,13 @@ import java.util.logging.Logger;
 public class DepartmentController {
 
     private final DepartmentServiceImpl departmentService;
+    private final FakerService fakerService;
+
+    @GetMapping("/generate-fake-departments/{count}")
+    public ResponseEntity<String> generateFakeDepartments(@PathVariable("count") int count) {
+        fakerService.generateAndSaveFakeDepartments(count);
+        return ResponseEntity.ok("Fake departments generated successfully");
+    }
 
     @GetMapping("list")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments() {

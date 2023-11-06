@@ -8,6 +8,7 @@ public class TasksMapper {
         if(tasks == null){
             return null;
         }
+
         TasksDto tasksDto = new TasksDto();
         tasksDto.setId(tasks.getId());
         tasksDto.setTitle(tasks.getTitle());
@@ -18,7 +19,6 @@ public class TasksMapper {
         tasksDto.setActual_start_time(tasks.getActual_start_time());
         tasksDto.setActual_end_time(tasks.getActual_end_time());
         tasksDto.setUser(tasks.getUser());
-        tasksDto.setProject(tasks.getProject());
         return tasksDto;
     }
 
@@ -28,7 +28,6 @@ public class TasksMapper {
         }
 
         Tasks tasks = new Tasks();
-        tasks.setId(tasksDto.getId());
         tasks.setTitle(tasksDto.getTitle());
         tasks.setDescription(tasksDto.getDescription());
         tasks.setStatus(tasksDto.getStatus());
@@ -37,7 +36,6 @@ public class TasksMapper {
         tasks.setActual_start_time(tasksDto.getActual_start_time());
         tasks.setActual_end_time(tasksDto.getActual_end_time());
         tasks.setUser(tasksDto.getUser());
-        tasks.setProject(tasksDto.getProject());
         return tasks;
     }
 }

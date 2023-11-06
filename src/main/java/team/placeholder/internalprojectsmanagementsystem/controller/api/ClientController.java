@@ -1,11 +1,13 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
 
+import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
+import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.ClientServiceImpl;
 
 import java.util.List;
@@ -16,6 +18,13 @@ import java.util.List;
 public class ClientController {
 
     private final ClientServiceImpl clientService;
+    private final FakerService fakerService;
+
+    @GetMapping("generate-fake-client/{count}")
+    public ResponseEntity<String> generateFakeClient(@PathVariable int count) {
+        fakerService.generateAndSaveFakeClients(count);
+        return ResponseEntity.ok("Fake clients generated successfully");
+    }
 
 
     @GetMapping("lists")
