@@ -13,7 +13,7 @@ public interface IssueService {
 
     IssueDto updateIssue(IssueDto issueDto);
 
-   void deleteIssue(long id);
+    void deleteIssue(long id);
 
 
     IssueDto getIssueByTitle(String title);
