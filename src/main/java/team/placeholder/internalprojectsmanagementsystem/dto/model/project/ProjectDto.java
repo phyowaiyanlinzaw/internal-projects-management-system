@@ -29,16 +29,17 @@ public class ProjectDto implements Serializable {
     private DevelopmentPhase current_phase;
     private String objective;
     private ClientDto clientDto;
-    private UserDto userDto;
+    private UserDto userDto; // project manager
     private DepartmentDto departmentDto;
     private AmountDto amountDto;
     private Set<ArchitectureDto>  architectureDto;
     private ReviewDto reviewDto;
     private SystemOutLineDto systemOutLineDto;
     private List<DeliverableDto> deliverableDto;
+    private Long completeTaskCount;
+    private Long unfinishedTaskCount;
 
-
-    private TasksDto tasksDto;
-    private IssueDto issueDto;
+    private List<TasksDto> tasksDto;
+    private List<IssueDto> issueDto;
 
 }

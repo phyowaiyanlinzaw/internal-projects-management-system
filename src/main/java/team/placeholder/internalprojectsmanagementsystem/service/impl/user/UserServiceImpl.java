@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(long id) {
-        User user = userRepository.findById(id).orElseNull();
+        User user = userRepository.findById(id);
         if (user != null) {
             return UserMapper.toUserDto(user);
         } else {
