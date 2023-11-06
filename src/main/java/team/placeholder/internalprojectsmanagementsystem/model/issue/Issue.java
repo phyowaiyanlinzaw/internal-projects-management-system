@@ -44,6 +44,8 @@ public class Issue implements Serializable {
     @Enumerated(EnumType.STRING)
     private ResponsibleType responsible_type;
 
+    private long responsible_id;
+
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
