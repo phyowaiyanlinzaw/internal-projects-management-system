@@ -23,6 +23,7 @@ public class TaskServiceImpl implements TasksService {
 
     @Override
     public TasksDto save(TasksDto taskDto) {
+        taskDto.setStatus(TaskStatus.TODO);
         Tasks task = modelMapper.map(taskDto, Tasks.class);
         task = taskRepository.save(task);
         return modelMapper.map(task, TasksDto.class);
@@ -63,9 +64,12 @@ public class TaskServiceImpl implements TasksService {
     @Override
     public List<TasksDto> getTasksByUserId(long id) {
         List<Tasks> taskList = taskRepository.findByUserId(id);
-        return taskList.stream()
-                .map(TasksMapper::toTasksDto)
-                .collect(Collectors.toList());
+        List<TasksDto> taskDtoList = new ArrayList<>();
+
+        for(Tasks task : taskList) {
+            taskDtoList.add(modelMapper.map(task, TasksDto.class));
+        }
+        return taskDtoList;
     }
 
     @Override
