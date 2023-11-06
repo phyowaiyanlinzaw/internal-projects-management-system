@@ -30,18 +30,12 @@ public class Tasks implements Serializable {
     private long actual_start_time;
     private long actual_end_time;
 
+
     @Enumerated(EnumType.STRING)
     private Group group;
-
-    @OneToMany(mappedBy = "tasks")
-    private List<TaskNotification> taskNotifications;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
 
 }
