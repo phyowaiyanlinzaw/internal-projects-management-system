@@ -26,48 +26,41 @@ public class UserMapper {
         userDto.setRole(user.getRole());
 
         if(user.getProjectManager() != null) {
-            UserDto userDto1 = new UserDto();
-                    userDto1.setId(user.getProjectManager().getId());
-                    userDto1.setName(user.getProjectManager().getName());
-                    userDto1.setEmail(user.getProjectManager().getEmail());
-            userDto.setProjectManager(userDto1);
+            userDto.setProjectManager(toUserDto(user.getProjectManager()));
         }
 
         List<ProjectDto> projectList = new ArrayList<>();
 
-        if(user.getProject() != null) {
-            for (Project project : user.getProject()) {
-                ProjectDto projectDto = new ProjectDto();
+        for (Project project : user.getProject()) {
+            ProjectDto projectDto = new ProjectDto();
 
-                projectDto.setId(project.getId());
-                projectDto.setName(project.getName());
-                projectDto.setStart_date(project.getStart_date());
-                projectDto.setEnd_date(project.getEnd_date());
-                projectDto.setBackground(project.getBackground());
-                projectDto.setCurrent_phase(project.getCurrent_phase());
-                projectDto.setDuration(project.getDuration());
-                projectDto.setObjective(project.getObjective());
-                projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
-                projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
-                ClientDto clientDto = new ClientDto();
-                clientDto.setId(project.getClient().getId());
-                clientDto.setName(project.getClient().getName());
-                clientDto.setEmail(project.getClient().getEmail());
-                clientDto.setPhone(project.getClient().getPhone());
-                UserDto projectManager = new UserDto();
-                projectManager.setId(project.getProjectManager().getId());
-                projectManager.setName(project.getProjectManager().getName());
-                projectManager.setEmail(project.getProjectManager().getEmail());
-                projectManager.setRole(project.getProjectManager().getRole());
-                projectDto.setUserDto(projectManager);
-                projectDto.setClientDto(clientDto);
+            projectDto.setId(project.getId());
+            projectDto.setName(project.getName());
+            projectDto.setStart_date(project.getStart_date());
+            projectDto.setEnd_date(project.getEnd_date());
+            projectDto.setBackground(project.getBackground());
+            projectDto.setCurrent_phase(project.getCurrent_phase());
+            projectDto.setDuration(project.getDuration());
+            projectDto.setObjective(project.getObjective());
+            projectDto.setSystemOutLineDto(SystemOutLineMapper.toSystemOutLineDto(project.getSystemOutLine()));
+            projectDto.setDeliverableDto(DeliverableMapper.toDeliverableDtos(project.getDeliverables()));
+            ClientDto clientDto = new ClientDto();
+            clientDto.setId(project.getClient().getId());
+            clientDto.setName(project.getClient().getName());
+            clientDto.setEmail(project.getClient().getEmail());
+            clientDto.setPhone(project.getClient().getPhone());
+            UserDto projectManager = new UserDto();
+            projectManager.setId(project.getProjectManager().getId());
+            projectManager.setName(project.getProjectManager().getName());
+            projectManager.setEmail(project.getProjectManager().getEmail());
+            projectManager.setRole(project.getProjectManager().getRole());
+            projectDto.setUserDto(projectManager);
+            projectDto.setClientDto(clientDto);
 
-                projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
-                projectDto.setDepartmentDto(DepartmentMapper.toDepartmentDto(project.getDepartment()));
-                projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
+            projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
+            projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
 
-                projectList.add(projectDto);
-            }
+            projectList.add(projectDto);
         }
 
         userDto.setProjectList(projectList);

@@ -51,10 +51,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TasksDto> getTasksByProjectId(long id) {
-        List<Tasks> taskList = taskRepository.findByProjectId(id);
-        return taskList.stream()
-                .map(TasksMapper::toTasksDto)
-                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -67,6 +64,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Long countTaskByProjectIdAndStatus(Long id, TaskStatus x) {
-        return taskRepository.countByProjectIdAndStatus(id, x);
+        return null;
     }
 }

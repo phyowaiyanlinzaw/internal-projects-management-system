@@ -24,10 +24,6 @@ public class SystemOutLine implements Serializable {
     private boolean maintenance;
     private boolean document;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,20 +35,5 @@ public class SystemOutLine implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "SystemOutLine{" +
-                "id=" + id +
-                ", analysis=" + analysis +
-                ", sys_design=" + sys_design +
-                ", coding=" + coding +
-                ", testing=" + testing +
-                ", deploy=" + deploy +
-                ", maintenance=" + maintenance +
-                ", document=" + document +
-                ", project=" + project +
-                '}';
     }
 }

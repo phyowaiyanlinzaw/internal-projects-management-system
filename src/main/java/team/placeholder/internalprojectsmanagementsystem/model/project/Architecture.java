@@ -23,9 +23,6 @@ public class Architecture implements Serializable{
     @Column(unique = true, nullable = false)
     private String tech_name;
 
-    @ManyToMany(mappedBy = "architectures")
-    private Set<Project> projects = new HashSet<>();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

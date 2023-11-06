@@ -22,9 +22,6 @@ public class Client implements Serializable {
     @Column(unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Project> project;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

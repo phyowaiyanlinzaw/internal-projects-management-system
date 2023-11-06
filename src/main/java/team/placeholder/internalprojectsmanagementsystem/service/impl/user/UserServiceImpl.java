@@ -2,14 +2,15 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
@@ -26,13 +27,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
+    private final ModelMapper modelmapper;
 
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(UserMapper::toUserDto)
-                .collect(Collectors.toList());
+
+        //use ModelMapper to map the User to UserDto
+        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
 
     }
 
@@ -45,9 +47,10 @@ public class UserServiceImpl implements UserService {
             user.setEmail(userDto.getEmail());
             user.setPassword(userDto.getPassword());
             user.setRole(userDto.getRole());
-            user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
+            user.setDepartment(modelmapper.map(userDto.getDepartmentdto(), Department.class));
             userRepository.save(user);
-            return UserMapper.toUserDto(user);
+            //use ModelMapper to map the User to UserDto
+            return  modelmapper.map(user, UserDto.class);
 
         } else {
             return null;
@@ -58,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserDto userDto) {
-        User user = UserMapper.toUser(userDto);
+        User user = modelmapper.map(userDto, User.class);
 
         // Set user properties
         user.setName(userDto.getName());
@@ -73,11 +76,11 @@ public class UserServiceImpl implements UserService {
         user.setRole(userDto.getRole());
 
         // Set the department using getDepartmentdto method
-        user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
+        user.setDepartment(modelmapper.map(userDto.getDepartmentdto(), Department.class));
 
         // Save the user and map it back to a UserDto
         User savedUser = userRepository.save(user);
-        return UserMapper.toUserDto(savedUser);
+        return modelmapper.map(savedUser, UserDto.class);
     }
 
 
@@ -85,7 +88,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(long id) {
         User user = userRepository.findById(id);
         if (user != null) {
-            return UserMapper.toUserDto(user);
+            return modelmapper.map(user, UserDto.class);
         } else {
             return null;
         }
@@ -96,7 +99,10 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            return UserMapper.toUserDto(user);
+            DepartmentDto departmentDto = modelmapper.map(user.getDepartment(), DepartmentDto.class);
+            UserDto userDto = modelmapper.map(user, UserDto.class);
+            userDto.setDepartmentdto(departmentDto);
+            return userDto;
         } else {
             return null;
         }
@@ -125,7 +131,7 @@ public class UserServiceImpl implements UserService {
         String password = PasswordGenerator.generatePassword(8);
 
         // Create a new user entity
-        User user = UserMapper.toUser(userDto);
+        User user = modelmapper.map(userDto, User.class);
         user.setName(userDto.getName());
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setRole(userDto.getRole());
@@ -147,7 +153,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Return the UserDto
-        return UserMapper.toUserDto(user);
+        return modelmapper.map(user, UserDto.class);
     }
 
     @Override
@@ -155,7 +161,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByName(name);
 
         if (user!=null){
-            return UserMapper.toUserDto(user);
+            return modelmapper.map(user, UserDto.class);
         }else {
             return null;
         }
@@ -165,9 +171,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllByRole(Role role) {
         List<User> users = userRepository.findAllByRole(role);
-        return users.stream()
-                .map(UserMapper::toUserDto)
-                .collect(Collectors.toList());
+        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
     }
 
     public Long countAllByRole(Role role) {
@@ -182,16 +186,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsersByPMId(Long id) {
         List<User> users = userRepository.findAllByProjectManagerId(id);
-        return users.stream()
-                .map(UserMapper::toUserDto)
-                .collect(Collectors.toList());
+        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public UserDto getUserByDepartmentIdAndRole(Long departmentId, Role role) {
         User user = userRepository.findUserByDepartmentIdAndRole(departmentId, role);
         if (user != null) {
-            return UserMapper.toUserDto(user);
+            return modelmapper.map(user, UserDto.class);
         } else {
             return null;
         }
@@ -205,9 +207,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsersByProjectId(Long projectId) {
         List<User> users = userRepository.findAllByProjectId(projectId);
-        return users.stream()
-                .map(UserMapper::toUserDto)
-                .collect(Collectors.toList());
+        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
     }
 
     @Override

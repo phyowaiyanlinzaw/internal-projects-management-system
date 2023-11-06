@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
@@ -50,24 +51,15 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Tasks> tasks;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Review> reviews;
-
-    @JsonBackReference
     @OneToMany(mappedBy = "projectManager", cascade = CascadeType.ALL)
     private List<Project> project;
-
-    @JsonBackReference
-    @OneToMany(mappedBy = "user_uploader",cascade = CascadeType.ALL)
-    private List<Issue> uploader;
-
-    @JsonBackReference
-    @OneToMany(mappedBy = "user_pic",cascade = CascadeType.ALL)
-    private List<Issue> pic;
 
     @ManyToOne
     @JoinColumn(name = "pm_id", referencedColumnName = "id")
     private User projectManager;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Notification> notifications;
 
     @Override
     public boolean equals(Object o) {
@@ -91,22 +83,4 @@ public class User implements Serializable {
         return null;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                ", department=" + department +
-                ", projects=" + projects +
-                ", tasks=" + tasks +
-                ", reviews=" + reviews +
-                ", project=" + project +
-                ", uploader=" + uploader +
-                ", pic=" + pic +
-                ", projectManager=" + projectManager +
-                '}';
-    }
 }

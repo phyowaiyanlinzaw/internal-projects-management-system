@@ -39,33 +39,26 @@ public class Project implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String objective;
 
-    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
     private Review reviews;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Tasks> tasks;
 
-    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private SystemOutLine systemOutLine;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Deliverable> deliverables ;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Deliverable> deliverables;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "amount_id")
     private Amount amount;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Issue> issues;
-
     @ManyToMany(cascade = { CascadeType.PERSIST,
             CascadeType.MERGE })
     @JoinTable(name = "project_architecture", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "architecture_id"))
     private Set<Architecture> architectures = new HashSet<>();
-
-    @ManyToOne
-    @JoinColumn(name="department_id")
-    private Department department;
 
     @ManyToOne
     @JoinColumn(name="client_id")

@@ -1,15 +1,12 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
-import team.placeholder.internalprojectsmanagementsystem.model.project.IssueNotification;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.io.Serializable;
@@ -27,8 +24,6 @@ public class Issue implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
-
-    @Column(columnDefinition = "TEXT")
     private String description;
     private String place;
     private String impact;
@@ -46,25 +41,22 @@ public class Issue implements Serializable {
     @Enumerated(EnumType.STRING)
     private Category issue_category;
 
+    @Enumerated(EnumType.STRING)
+    private ResponsibleType responsible_type;
+
+    private long responsible_id;
 
     @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name="project_id")
     private Project project;
 
-
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(name="uploader_id")
     private User user_uploader;
 
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(name="pic_id")
     private User user_pic;
-
-    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<IssueNotification> issueNotifications;
 
     @Override
     public boolean equals(Object o) {
