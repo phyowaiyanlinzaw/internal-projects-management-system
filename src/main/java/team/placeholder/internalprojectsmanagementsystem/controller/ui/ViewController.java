@@ -97,6 +97,11 @@ public class ViewController {
     @GetMapping("/employees")
     public String employees() {return "employees";}
 
+    @GetMapping("/issuesss")
+    public String isuesss(){
+        return "issuesss";
+    }
+
 
 
 }
