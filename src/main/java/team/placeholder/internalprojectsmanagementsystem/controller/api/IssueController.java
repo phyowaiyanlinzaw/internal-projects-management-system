@@ -6,9 +6,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.issue.IssueServiceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -54,6 +57,21 @@ public class IssueController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/clients")
+    public ResponseEntity<List<ClientDto>> getClientsForIssues() {
+        List<IssueDto> issues = issueService.getAllIssues(); // Retrieve all issues
+        List<ClientDto> clients = new ArrayList<>();
+
+        for (IssueDto issue : issues) {
+            ProjectDto project = issue.getProjectDto();
+            if (project != null) {
+                clients.add(project.getClientDto());
+            }
+        }
+
+        return ResponseEntity.ok(clients);
     }
 
     @GetMapping("/lists/byTitle/{title}")
