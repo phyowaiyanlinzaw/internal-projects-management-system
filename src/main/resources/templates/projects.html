@@ -133,7 +133,7 @@
                 calculateEndDate
             } from "/js/time.js";
 
-
+            import { sendData, getData } from "/js/api-function.js";
 
             import {
                 getArchitecturelist,
@@ -403,11 +403,26 @@
                 theme: "snow",
             });
 
-
-            import { sendData, getData } from "/js/api-function.js";
-
             async function getAllProjects() {
-                return await getData('/api/project/list')
+                switch (loginUser.currentUser.role) {
+                case "PROJECT_MANAGER":
+                    console.log('project manager')
+                    return await getData(`/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`)
+                    break;
+                
+                case "DEPARTMENT_HEAD":
+                    console.log('department head')
+                    return await getData(`/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`)
+                    break;
+                case "EMPLOYEE":
+                case "CONTRACT":
+                case "FOC":
+                    console.log("one of the memeber")
+                    return await getData(`/api/project/list/MEMBER/${loginUser.currentUser.id}`)
+                default:
+                    console.log('pmo or sdqc')
+                    return await getData(`/api/project/list`)
+                }
             }
 
 
