@@ -473,7 +473,7 @@
                 dFlexInner.classList.add("d-flex");
 
                 const img = document.createElement("img");
-                img.src = `https://source.unsplash.com/random/200x200?sig=${currentProject.id}`;
+                img.src = `/images/avatars/pm_avatar.svg`;
                 img.classList.add(
                     "img-fluid",
                     "rounded-circle",
@@ -1310,7 +1310,7 @@
                                         class="card-body profile-card pt-4 d-flex flex-column align-items-center"
                                     >
                                         <img
-                                            src="https://source.unsplash.com/random/200x200?sig=1"
+                                            th:src="${images/avatars/pm_avatar.png}"
                                             alt="Profile"
                                             class="rounded-circle"
                                         />

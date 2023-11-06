@@ -57,10 +57,11 @@
                                 class="card-body profile-card pt-4 d-flex flex-column align-items-center"
                         >
                             <img
-                                    src="https://source.unsplash.com/random/200x200?sig=1"
+                                    src=""
                                     alt="Profile"
                                     class="rounded-circle"
                                     style="height: 100px; width: 100px"
+                                    id="profile-image"
                             />
                             <h4 style="margin-top: 10px" id="name" class="display-4">
                             </h4>
@@ -517,6 +518,16 @@
             function updateUserInfo(data) {
                 $("#name").html(data.name.toUpperCase())
                 $("#role").html(data.role)
+        //check data.role and set image accordingly
+                if(data.role === "PMO" || data.role === "SDQC"){
+                    $('#profile-image').attr("src","/images/avatars/pmo_avatar.svg");
+                }else if(data.role === "DEPARTMENT_HEAD"){
+                    $('#profile-image').attr("src","/images/avatars/departmenthead_avatar.svg");
+                }else if (data.role === "PROJECT_MANAGER"){
+                    $('#profile-image').attr("src","/images/avatars/pm_avatar.svg");
+                }else{
+                    $('#profile-image').attr("src","/images/avatars/employee_avatar.svg");
+                }
 
                 $(".profile-overview .col-lg-9.col, .profile-overview .col-md-8").each(function () {
                     if ($(this).attr("id") === "email") {

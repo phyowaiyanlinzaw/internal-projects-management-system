@@ -17,6 +17,7 @@ import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRep
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,10 +33,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
 
-        //use ModelMapper to map the User to UserDto
-        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
+        for (User user : users) {
+            Department department = user.getDepartment();
+            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
 
+            UserDto userDto = modelmapper.map(user, UserDto.class);
+            userDto.setDepartmentdto(departmentDto);
+
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
     }
 
     @Override

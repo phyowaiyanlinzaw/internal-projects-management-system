@@ -14,14 +14,14 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.project.De
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/deliverabletype")
+@RequestMapping("/api/deliverable-type")
 @RequiredArgsConstructor
 public class DeliverableTypeController {
 
     private final DeliverableTypeServiceImpl deliverableTypeService;
     private final FakerService fakerService;
 
-    @GetMapping("/generate-fake-deliverabletype/{count}")
+    @GetMapping("/generate-fake-deliverable-type/{count}")
     public ResponseEntity<String> generateFakeDeliverableType(@PathVariable int count) {
         fakerService.generateAndSaveDeliverableTypes(count);
         return ResponseEntity.ok("Fake deliverable types generated successfully");

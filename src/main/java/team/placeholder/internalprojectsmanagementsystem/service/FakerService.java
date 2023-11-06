@@ -62,7 +62,6 @@ public class FakerService {
             //long value for date
             project.setStart_date(faker.number().numberBetween(System.currentTimeMillis() - 31536000000L, System.currentTimeMillis()));
             project.setEnd_date(faker.number().numberBetween(System.currentTimeMillis(), System.currentTimeMillis() + 31536000000L));
-            project.setDepartment(departmentRepository.findAll().get(faker.random().nextInt(departmentRepository.findAll().size())));
             project.setBackground(faker.lorem().paragraph());
             project.setCurrent_phase(DevelopmentPhase.values()[faker.random().nextInt(DevelopmentPhase.values().length)]);
             project.setProjectManager(userRepository.findAllByRole(Role.PROJECT_MANAGER).get(faker.random().nextInt(userRepository.findAll().size())));
@@ -99,6 +98,7 @@ public class FakerService {
             Deliverable deliverable = new Deliverable();
             //boolean
             deliverable.setStatus(faker.bool().bool());
+            deliverable.setDeliverableTypes(deliverableTypeRepo.findAll().get(faker.random().nextInt(deliverableTypeRepo.findAll().size())));
             deliverableRepository.save(deliverable);
         }
     }
@@ -118,7 +118,6 @@ public class FakerService {
             Review review = new Review();
             review.setInternal_review_count(faker.number().numberBetween(1, 10));
             review.setExternal_review_count(faker.number().numberBetween(1, 10));
-            review.setProject(projectRepository.findAll().get(faker.random().nextInt(projectRepository.findAll().size())));
             review.setUser(userRepository.findAll().get(faker.random().nextInt(userRepository.findAll().size())));
             reviewRepository.save(review);
         }
@@ -135,7 +134,6 @@ public class FakerService {
             systemOutLine.setDeploy(faker.bool().bool());
             systemOutLine.setMaintenance(faker.bool().bool());
             systemOutLine.setDocument(faker.bool().bool());
-            systemOutLine.setProject(projectRepository.findAll().get(faker.random().nextInt(projectRepository.findAll().size())));
             systemOutlineRepository.save(systemOutLine);
         }
     }
