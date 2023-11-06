@@ -8,5 +8,4 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import java.util.List;
 
 public interface ArchitectureRepository extends JpaRepository<Architecture, Long> {
-    List<Architecture> findAll();
 }

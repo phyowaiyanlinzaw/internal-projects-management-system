@@ -24,10 +24,6 @@ public class SystemOutLine implements Serializable {
     private boolean maintenance;
     private boolean document;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

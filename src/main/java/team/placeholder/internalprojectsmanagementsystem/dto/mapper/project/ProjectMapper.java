@@ -26,7 +26,6 @@ public class ProjectMapper {
         projectDto.setDuration(project.getDuration());
         projectDto.setReviewDto(ReviewMapper.toReviewDto(project.getReviews()));
         projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
-        projectDto.setDepartmentDto(DepartmentMapper.toDepartmentDto(project.getDepartment()));
         projectDto.setClientDto(ClientMapper.toClientDto(project.getClient()));
         projectDto.setArchitectureDto(ArchitectureMapper.toArchitectureDtos(project.getArchitectures()));
         projectDto.setAmountDto(AmountMapper.toAmountDto(project.getAmount()));
@@ -50,7 +49,6 @@ public class ProjectMapper {
         project.setProjectManager(UserMapper.toUser(projectDto.getUserDto()));
         project.setDuration(projectDto.getDuration());
         project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
-        project.setDepartment(DepartmentMapper.toDepartment(projectDto.getDepartmentDto()));
         project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
         project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
         project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));

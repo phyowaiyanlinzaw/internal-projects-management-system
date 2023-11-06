@@ -11,7 +11,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 @NoArgsConstructor
 @Getter
 @Setter
-public class IssueNotification {
+public class Notification {
 
 
     @Id
@@ -21,10 +21,5 @@ public class IssueNotification {
     private String description;
 
     private long noti_time;
-
-    @ManyToOne
-    @JoinColumn(name = "issue_id")
-    private Issue issue;
-
 
 }

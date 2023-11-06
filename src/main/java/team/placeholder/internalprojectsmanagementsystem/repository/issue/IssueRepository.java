@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface IssueRepository extends JpaRepository<Issue, Long> {
 
-    List<Issue> findAll();
-
     Issue findByTitle(String title);
     Issue findById(long id);
 }

@@ -5,6 +5,4 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Deliverab
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 
 public interface DeliverableRepository extends JpaRepository<Deliverable, Long> {
-    Deliverable findByProjectId(Long projectId);
-
 }

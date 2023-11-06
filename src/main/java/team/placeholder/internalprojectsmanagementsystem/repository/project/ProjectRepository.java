@@ -9,19 +9,12 @@ import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    List<Project> findAll();
     Project findById(long id);
     Project findByName(String name);
-
-    long countByDepartmentId(long id);
 
     long countAllByUsersId(long id);
 
     List<Project> findAllByProjectManagerId(long id);
-
-    List<Project> findAllByDepartmentId(long id);
-
-    Long countAllByDepartmentId(Long departmentId);
 
     List<Project> findAllByUsersId(long id);
 }

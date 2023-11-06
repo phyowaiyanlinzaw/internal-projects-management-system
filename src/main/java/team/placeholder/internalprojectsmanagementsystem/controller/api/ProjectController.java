@@ -63,13 +63,13 @@ public class ProjectController {
 
 
     @PostMapping(value = "/save")
-    public ResponseEntity<String> save(@RequestBody ProjectDto project){
+    public ResponseEntity<ProjectDto> save(@RequestBody ProjectDto project){
         log.info("Project: {}", project);
         ProjectDto savedProject = projectService.save(project);
         if (savedProject!=null){
-            return ResponseEntity.ok("Project save successfully");
+            return new ResponseEntity<>(savedProject, HttpStatus.OK);
         }else {
-        return ResponseEntity.badRequest().body("User save failed");
+        return new ResponseEntity<>(savedProject, HttpStatus.BAD_REQUEST);
     }}
 
     @GetMapping("/list")
