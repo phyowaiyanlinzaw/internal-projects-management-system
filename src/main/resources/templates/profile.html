@@ -38,12 +38,8 @@
                     <h5>Profile</h5>
                     <nav>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="/dashboard">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active">
-                                Profile
-                            </li>
+                            <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active">Profile</li>
                         </ol>
                     </nav>
                 </div>
@@ -53,18 +49,9 @@
             <div class="row row-cols-1">
                 <div class="col mb-2">
                     <div class="card">
-                        <div
-                                class="card-body profile-card pt-4 d-flex flex-column align-items-center"
-                        >
-                            <img
-                                    src=""
-                                    alt="Profile"
-                                    class="rounded-circle"
-                                    style="height: 100px; width: 100px"
-                                    id="profile-image"
-                            />
-                            <h4 style="margin-top: 10px" id="name" class="display-4">
-                            </h4>
+                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                            <img src="" alt="Profile" class="rounded-circle" style="height: 100px; width: 100px" id="profile-image"/>
+                            <h4 style="margin-top: 10px" id="name" class="display-4"></h4>
                             <h5 id="role">Web Designer</h5>
                         </div>
                     </div>
@@ -73,167 +60,91 @@
                     <div class="card">
                         <div class="card-body">
                             <!-- Bordered Tabs -->
+                            <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                <strong>Error : </strong> <span id="errorText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                <strong>Success : </strong> <span id="successText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
                             <ul class="nav nav-tabs nav-tabs-bordered">
                                 <li class="nav-item">
-                                    <button
-                                            class="nav-link active"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#profile-overview"
-                                    >
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" >
                                         Overview
                                     </button>
                                 </li>
 
                                 <li class="nav-item">
-                                    <button
-                                            class="nav-link"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#profile-edit"
-                                    >
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">
                                         Edit Profile
                                     </button>
                                 </li>
 
                                 <li class="nav-item">
-                                    <button
-                                            class="nav-link"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#profile-change-password"
-                                    >
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" >
                                         Change Password
                                     </button>
                                 </li>
                             </ul>
                             <div class="tab-content pt-2">
-                                <div
-                                        class="tab-pane fade show active profile-overview"
-                                        id="profile-overview"
-                                >
-                                    <h5
-                                            class="card-title"
-                                            style="margin-top: 20px"
-                                    >
-                                        Profile Details
-                                    </h5>
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview" >
+                                    <h5 class="card-title" style="margin-top: 20px">Profile Details</h5>
 
-                                    <div
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
-                                        <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
-                                            Email
-                                        </div>
+                                    <div class="row" style="margin-top: 20px">
+                                        <div class="col-lg-3 col col-md-4 label">Email</div>
                                         <div class="col-lg-9 col col-md-8" id="email">
 
                                         </div>
                                     </div>
                                     <div sec:authorize="hasAnyRole('PROJECT_MANAGER','DEPARTMENT_HEAD','EMPLOYEE','FOC','CONTRACT')">
-                                    <div
-
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
-                                        <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
-                                            Department
-                                        </div>
-                                        <div class="col-lg-9 col col-md-8" id="department">
-
-                                        </div>
+                                    <div class="row" style="margin-top: 20px">
+                                        <div class="col-lg-3 col col-md-4 label">Department</div>
+                                        <div class="col-lg-9 col col-md-8" id="department"></div>
                                     </div>
                                     </div>
                                     <div sec:authorize="hasAnyRole('PROJECT_MANAGER','DEPARTMENT_HEAD','EMPLOYEE','FOC','CONTRACT')">
-                                        <div
-
-                                                class="row"
-                                                style="margin-top: 20px"
-                                        >
-                                            <div
-                                                    class="col-lg-3 col col-md-4 label"
-                                            >
-                                                Project Count
-                                            </div>
-                                            <div class="col-lg-9 col col-md-8" id="projectCount">
-
-                                            </div>
+                                        <div class="row" style="margin-top: 20px">
+                                            <div class="col-lg-3 col col-md-4 label"> Project Count</div>
+                                            <div class="col-lg-9 col col-md-8" id="projectCount"></div>
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <div
-                                        class="tab-pane fade profile-edit pt-3"
-                                        id="profile-edit"
-                                >
+                                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
-                                    <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
-                                        <strong>Error:</strong> <span id="successText"></span>
-                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
-                                            &times;
-                                        </button>
-                                    </div>
+
+
                                         <div class="row mb-3">
-                                            <label
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Name</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="name"
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="nameInput"
-                                                />
+                                            <label class="col-md-4 col-lg-3 col-form-label">Name</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="name" type="text" class="form-control" id="nameInput" />
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Email</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="email"
-                                                        type="email"
-                                                        class="form-control"
-                                                        id="emailInput"
-                                                        disabled
-                                                />
+                                            <label class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="email" type="email" class="form-control" id="emailInput" disabled />
                                             </div>
                                         </div>
 
                                         <div class="text-center">
-                                            <button
-                                                    type="submit"
-                                                    class="btn btn-primary"
-                                                    style="width: 20%"
-                                                    id="change-username-btn"
-                                            >
+                                            <button type="submit" class="btn btn-primary" style="width: 20%" id="change-username-btn">
                                                 Edit
                                             </button>
                                         </div>
                                 </div>
 
-                                <div
-                                        class="tab-pane fade pt-3"
-                                        id="profile-change-password"
-                                >
+                                <div class="tab-pane fade pt-3" id="profile-change-password">
                                     <!-- Change Password Form -->
 
-                                    <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
-                                        <strong>Error:</strong> <span id="errorText"></span>
-                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
-                                            &times;
-                                        </button>
-                                    </div>
+
 
 
 
@@ -317,12 +228,8 @@
 
 <!-- javascript libraries -->
 <script src="/lib/chart/chart.min.js"></script>
-<script src="/lib/easing/easing.min.js"></script>
-<script src="/lib/waypoints/waypoints.min.js"></script>
-<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="/lib/tempusdominus/js/moment.min.js"></script>
-<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/lib/easing/easing.min
+ominus-bootstrap-4.min.js"></script>
 <script src="/lib/quill/quill.min.js"></script>
 
 <!-- Template Javascript -->
