@@ -174,13 +174,6 @@
                             </select>
                         </div>
 
-                        <div class="col-lg-6">
-                            <label for="client" class="col-sm-12 col-form-label" name="client">Client <span
-                                    style="color:red"> *</span></label>
-                            <select class="form-select border-task-description" data-live-search="true" aria-label="Select Clients"  id="client" name="client" >
-
-                            </select>
-                        </div>
 
                         <div class="col-lg-6">
                             <label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_party">Responsible Party <span
@@ -373,52 +366,33 @@
             console.log("Get Login User", getLoginUser)
 
 
-        // Define data variable to store user data
-        // let data = [];
-        //
-        //  $.get('api/user/list', function (userData) {
-        //                     data = userData; // Set the data array with the retrieved user data
-        //
-        //                     const user_pic = $('#user_pic');
-        //                     user_pic.empty();
-        //                     user_pic.append($('<option>', {
-        //                         value: '',
-        //                         text: 'Select a User',
-        //                         data: {picUrl: ''}, // Empty URL for placeholder
-        //                     }));
-        //                     $.each(userData, function (index, pic) {
-        //                         user_pic.append($('<option>', {
-        //                             value: pic.id,
-        //                             text: pic.name,
-        //                             data: {picUrl:pic.picUrl},
-        //             user: pic,
-        //         }));
-        //     });
-        // });
+        let data = [];
 
-         let project = [];
-            $.get('api/issue/clients', function (projectData) {
-                project = projectData; // Set the data array with the retrieved user data
+         $.get('api/project/userLists', function (userData) {
+                            data = userData; // Set the data array with the retrieved user data
 
-                const client = $('#client');
-                client.empty();
-                client.append($('<option>', {
-                    value: '',
-                    text: 'Select Client',
-                    // data: {picUrl: ''}, // Empty URL for placeholder
+                            const user_pic = $('#user_pic');
+                            user_pic.empty();
+                            user_pic.append($('<option>', {
+                                value: '',
+                                text: 'Select a Member',
+                                data: {picUrl: ''},
+                            }));
+                            $.each(userData, function (index, pic) {
+                                user_pic.append($('<option>', {
+                                    value: pic.id,
+                                    text: pic.name,
+                                    data: {picUrl:pic.picUrl},
+                    user: pic,
                 }));
-                $.each(projectData, function (index, client) {
-                    client.append($('<option>', {
-                        value:  client.id,
-                        text: client.name,
-                        data: {picUrl:client.picUrl},
-                        user: client,
-                    }));
-                });
             });
+        });
 
 
-        $('#addIssue').on('click', async function () {
+
+
+
+            $('#addIssue').on('click', async function () {
             const title = $('#title').val();
             const description = a.root.innerHTML;
             const place = $('#place').val();
@@ -428,7 +402,6 @@
             const responsible_party = $('#responsible_party').val();
             const issue_category = $('#issue_category').val();
             const selectedUserId = $('#user_pic').val();
-            const client = $('#client').val();
 
 
             if (
@@ -439,24 +412,22 @@
                 root_cause === "" ||
                 direct_cause === "" ||
                 responsible_party === "" ||
-                issue_category === "" ||
-                selectedUserId === ""||
-                client === ""
+                issue_category === ""||
+                selectedUserId === ""
+              //  client === ""
             ) {
                 alert('Please fill in all the required fields.');
                 return;
             }
 
-            // Find the selected user by their ID
-            // const selectedUser = data.find(user => user.id == selectedUserId);
-            //
-            //
-            // if (!selectedUser) {
-            //     alert('Selected user data not found.');
-            //     return;
-            // }
 
-            const clientUser = project.find(client => client.id == client);
+            const selectedUser = data.find(user => user.id == selectedUserId);
+
+
+            if (!selectedUser) {
+                alert('Selected user data not found.');
+                return;
+            }
 
 
             const uploaderId = getLoginUser.currentUser.id;
@@ -480,7 +451,7 @@
                 user_uploader: {
                     id : uploaderId
                 },
-                client: clientUser,
+             //   client: clientUser,
             };
 
             console.log('Request Data:', requestData);

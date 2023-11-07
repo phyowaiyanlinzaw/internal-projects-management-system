@@ -26,6 +26,7 @@ public class IssueDto implements Serializable {
     private String corrective_action;
     private String preventive_action;
     private int responsible_party;
+    private long responsible_id;
     private boolean solved;
     private long created_date;
     private long updated_date;
@@ -34,8 +35,7 @@ public class IssueDto implements Serializable {
     private Category issue_category;
 
 
-    @JsonIgnoreProperties("issues")
-    @JsonProperty("project")
+//    @JsonProperty("project")
     private ProjectDto projectDto;
 
     private UserDto user_uploader;

@@ -1,7 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.service.project;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 
 import java.util.List;
 
@@ -27,6 +27,8 @@ public interface ProjectService {
     Long countAllProjectsByDepartmentId(long id);
 
     List<ProjectDto> findAllByUserId(long id);
+
+
 
 //    List<ProjectDto> getAllProjectsByClientId(long id);
 //

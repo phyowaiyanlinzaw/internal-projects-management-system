@@ -9,11 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
 import java.time.Instant;
@@ -97,6 +98,8 @@ public class ProjectServiceImpl implements ProjectService {
             ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
             SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
             projectDto.setSystemOutLineDto(systemOutLineDto);
+            ClientDto clientDto = modelMapper.map(project.getClient(), ClientDto.class);
+            projectDto.setClientDto(clientDto);
             projectDtos.add(projectDto);
         }
 
@@ -188,6 +191,9 @@ public class ProjectServiceImpl implements ProjectService {
                 .collect(Collectors.toList());
     }
 
+
+
+
     public static long calculateEndDateMillis(long startDateMillis, int durationInMonths) {
         Instant startInstant = Instant.ofEpochMilli(startDateMillis);
         LocalDate startDate = startInstant.atZone(ZoneId.systemDefault()).toLocalDate();
@@ -209,6 +215,25 @@ public class ProjectServiceImpl implements ProjectService {
     public static LocalDate convertMillisToLocalDate(long millis) {
         Instant instant = Instant.ofEpochMilli(millis);
         return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public List<ClientDto> getAllClientsFromProjects() {
+        List<Project> projectsWithClients = projectRepository.findAllByClientIsNotNull();
+        List<ClientDto> clientDtos =  projectsWithClients.stream()
+                .map(project -> modelMapper.map(project.getClient(), ClientDto.class))
+                .collect(Collectors.toList());
+        return clientDtos;
+
+    }
+
+
+
+    public List<UserDto> getAllPM() {
+        List<Project> projectsWithPm = projectRepository.findAllByProjectManagerIsNotNull();
+        List<UserDto> userDtos = projectsWithPm.stream()
+                .map(project -> modelMapper.map(project.getProjectManager(), UserDto.class))
+                .collect(Collectors.toList());
+        return userDtos;
     }
 
 }

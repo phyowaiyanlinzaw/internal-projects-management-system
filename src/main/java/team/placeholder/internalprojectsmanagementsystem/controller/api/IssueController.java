@@ -29,6 +29,7 @@ public class IssueController {
 
     @PostMapping(value="save")
     public ResponseEntity<IssueDto> save(@RequestBody IssueDto dto) {
+        System.out.println("Issue save called"+dto);
         try {
             IssueDto savedIssue = issueService.save(dto);
 
@@ -41,7 +42,6 @@ public class IssueController {
                 return ResponseEntity.badRequest().body(null);
             }
         } catch (Exception e) {
-            // Log the exception for debugging
             e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
@@ -106,6 +106,8 @@ public class IssueController {
          issueService.deleteIssue(issueDto.getId());
         return ResponseEntity.ok("Issue deleted successfully");
     }
+
+
 
 
 
