@@ -74,6 +74,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         Project project2 = modelMapper.map(projectDto, Project.class);
+        project2.setDepartment(departmentRepository.getReferenceById(projectDto.getDepartmentDto().getId()));
         project2.setProjectManager(userRepository.getReferenceById(projectDto.getUserDto().getId()));
         project2.setArchitectures(architecture);
         project2.setDeliverables(deliverable);
