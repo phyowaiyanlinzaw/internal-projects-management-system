@@ -133,7 +133,6 @@
                                         style="height: 10px"
                                 ></div>
                             </div>
-                            <!-- todo end -->
                             <!-- doing start -->
                             <div class="lane">
                                 <h3
@@ -198,9 +197,10 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content task-content">
                 <div class="modal-header">
-                    <h2 class="card-title" style="text-align: center">
-                        Task Details
+                    <h2 class="card-title display-6" style="text-align: center;" id="taskTitle">
                     </h2>
+                    <span class='ms-3 rounded-2 p-2 text-white' id="status"></span>
+
                     <button
                             type="button"
                             class="btn-close"
@@ -209,34 +209,9 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <form class="row g-5" action="">
-                        <div class="col-lg-6">
-                            <span><i class="fa fa-tasks"></i></span>
-                            <label
-                                    class="editable-label"
-                                    for="taskTitle"
-                                    onclick="editTitle()"
-                            >
-                                Task Title</label
-                            >
-                            <input
-                                    id="taskTitle"
-                                    name="task"
-                                    type="text"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
-                                        "
-                                    onblur="updateTitle(this)"
-                                    disabled
-                            />
-                        </div>
+                    <div class="row row-cols-2">
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                                     <span
                                     ><i
                                             class="fa-solid fa-bars-staggered"
@@ -253,56 +228,32 @@
                                     id="description-editor"
                                     class="form-control editable-input"
                                     name="description"
-                                    row
+                                    rows="4"
                                     disabled
                             ></textarea>
                         </div>
-
+                        
                         <div class="col-lg-6">
-                                    <span>
-                                        <i class="fa-solid fa-users"></i>
-                                    </span>
-                            <span
-                                    class="badge rounded-pill bg-info"
-                                    id="assigned-member"
-                            ></span>
-                        </div>
-
-                        <div class="col-lg-6">
-                                    <span>
-                                        <i
-                                                class="fa-solid fa-circle-chevron-down"
-                                        ></i>
-                                        Status
-                                    </span>
-                            <span class='badge rounded-pill  bg-primary' id="status"></span>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <i class="fa-regular fa-calendar"></i>
+                            <i class="fa-solid fa-thumbtack"></i>
                             <label
                                     id="duration"
                                     class="editable-label"
-                                    onclick="editTitle()"
                             >
-                                Duration</label
+                                Type of Task</label
                             >
-                            <input
-                                    type="text"
-                                    id="tduration"
-                                    name="task"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
+                            <div class="mt-2">
+                                <span class="bg-secondary text-white border-0 p-2 rounded-1" id="task-group"></span>
+                            </div>
 
-                                        "
-                                    onblur="updateTitle(this)"
-                                    disabled
-                            />
+                        </div>
+
+                        <div class="col-lg-6">
+                            <i class="fa-solid fa-users"></i>
+                            <label
+                                    class="editable-label"
+                            >
+                                Assigned Member </label
+                            >
                         </div>
 
                         <div class="col-lg-6">
@@ -319,8 +270,8 @@
                             >
                             <input
                                     type="date"
-                                    id="task-detail-start_time"
-                                    name="start_time"
+                                    id="task-detail-start-date"
+                                    name="start_date"
                                     class="form-control border-task editable-input"
                                     dir="auto"
                                     data-autosize="true"
@@ -333,12 +284,34 @@
                             />
                         </div>
 
-
-
-
-
-
-                    </form>
+                        <div class="col-lg-6">
+                                    <span
+                                    ><i
+                                            class="fa-solid fa-calendar-days"
+                                    ></i
+                                    ></span>
+                            <label
+                                    class="editable-label"
+                                    onclick="editTitle()"
+                            >
+                                Due Date</label
+                            >
+                            <input
+                                    type="date"
+                                    id="task-detail-due-date"
+                                    name="due-date"
+                                    class="form-control border-task editable-input"
+                                    dir="auto"
+                                    data-autosize="true"
+                                    style="
+                                            overflow: hidden;
+                                            overflow-wrap: break-word;
+                                            height: 37px;
+                                        "
+                                    onblur="updateTitle(this)"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -374,7 +347,6 @@
                                     class="form-control border-task-title"
                                     id="title"
                                     name="title"
-                                    rows="2"
                             ></input>
                         </div>
 
@@ -556,13 +528,13 @@
                 membersList = data;
             },
         });
-        console.log("MEMBERS LIST" , membersList);
+        console.log("MEMBERS LIST", membersList);
 
         var memberInputTag = document.querySelector('input[name=member-tags]'),
             tagify = new Tagify(memberInputTag, {
                 enforceWhitelist: true,
-                mode : "select",
-                whitelist:  membersList.map((member) => {
+                mode: "select",
+                whitelist: membersList.map((member) => {
                     return member.name + " | " + member.role;
                 }),
                 blacklist: ['foo', 'bar'],
@@ -574,13 +546,13 @@
         tagify.on('add', onAddTag)
         tagify.DOM.input.addEventListener('focus', onSelectFocus)
 
-        function onAddTag(e){
+        function onAddTag(e) {
 
             console.log(e.detail);
 
         }
 
-        function onSelectFocus(e){
+        function onSelectFocus(e) {
             console.log(e)
         }
 
@@ -727,29 +699,32 @@
                 currentTaskData = taskList[parseInt(taskDiv.getAttribute('index'))]
                 console.log('click task so should change the current task data', currentTaskData)
                 //change input value from that taskdata
-                document.getElementById('taskTitle').value = currentTaskData.title
+                document.getElementById('taskTitle').innerText = currentTaskData.title
                 document.getElementById('description-editor').value = currentTaskData.description
                 // document.getElementById('tduration').value = currentTaskData.duration
                 // document.getElementById('task-detail-start_time').value = currentTaskData.start_time
 
                 // change status span text according to the status and also change badge color
                 if (currentTaskData.status === 'TODO') {
-                    document.getElementById('status').innerText = 'TODO'
-                    document.getElementById('status').classList.remove('bg-info', 'bg-success')
+                    document.getElementById('status').innerText = "TODO"
                     document.getElementById('status').classList.add('bg-primary')
                 } else if (currentTaskData.status === 'IN_PROGRESS') {
-                    document.getElementById('status').innerText = 'IN_PROGRESS'
-                    document.getElementById('status').classList.remove('bg-primary', 'bg-success')
+                    document.getElementById('status').innerText = "IN PROGRESS"
                     document.getElementById('status').classList.add('bg-warning')
-                } else if (currentTaskData.status === 'FINISHED') {
-                    document.getElementById('status').innerText = 'FINISHED'
-                    document.getElementById('status').classList.remove('bg-primary', 'bg-info')
+                } else {
+                    document.getElementById('status').innerText = "FINISHED"
                     document.getElementById('status').classList.add('bg-success')
                 }
 
                 // change the assigned member span value
                 document.getElementById('assigned-member').innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
-
+                if (currentTaskData.tasksGroup === 'A') {
+                    document.getElementById('task-group').innerText = "Group B - Training"
+                } else if (currentTaskData.group === 'B') {
+                    document.getElementById('task-group').innerText = "Group B - Training"
+                } else {
+                    document.getElementById('task-group').innerText = "Group C - Idling"
+                }
             });
 
             taskDiv.addEventListener("dragend", () => {
