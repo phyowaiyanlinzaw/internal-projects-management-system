@@ -172,7 +172,7 @@ public class ProjectController {
                     projectDto.getUserDto().getProjectList().clear();
                 }
             }
-            projectDto.setUnfinishedTaskCount(taskService.countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.IN_PROGRESS));
+            projectDto.setTotalTaskCount(taskService.countByProjectId(projectDto.getId()));
             projectDto.setCompleteTaskCount(taskService.countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.FINISHED));
             if(projectDto.getTasksDto() != null) {
                 projectDto.getTasksDto().clear();

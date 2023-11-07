@@ -59,15 +59,14 @@ public class UserServiceImpl implements UserService {
             user.setRole(userDto.getRole());
             user.setDepartment(modelmapper.map(userDto.getDepartmentdto(), Department.class));
             userRepository.save(user);
-            //use ModelMapper to map the User to UserDto
-            return  modelmapper.map(user, UserDto.class);
+            // use ModelMapper to map the User to UserDto
+            return modelmapper.map(user, UserDto.class);
 
         } else {
             return null;
 
         }
     }
-
 
     @Override
     public UserDto save(UserDto userDto) {
@@ -79,7 +78,7 @@ public class UserServiceImpl implements UserService {
         // Encrypt the password if it is not null
         if (userDto.getPassword() == null) {
             user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
-        }else {
+        } else {
             user.setPassword(userDto.getPassword());
         }
 
@@ -92,7 +91,6 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
         return modelmapper.map(savedUser, UserDto.class);
     }
-
 
     @Override
     public UserDto getUserById(long id) {
@@ -119,7 +117,6 @@ public class UserServiceImpl implements UserService {
         }
 
     }
-
 
     @Override
     public void resetPassword(String email) {
@@ -171,9 +168,9 @@ public class UserServiceImpl implements UserService {
     public UserDto findByName(String name) {
         User user = userRepository.findByName(name);
 
-        if (user!=null){
+        if (user != null) {
             return modelmapper.map(user, UserDto.class);
-        }else {
+        } else {
             return null;
         }
 
@@ -197,7 +194,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsersByPMId(Long id) {
         List<User> users = userRepository.findAllByProjectManagerId(id);
-        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
+        if (users != null) {
+            return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
+        }
+        return new ArrayList<UserDto>();
     }
 
     @Override
