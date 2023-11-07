@@ -355,8 +355,10 @@
 <script src="/js/custome.js"></script>
 
 <script type="module">
+    $(document).ready(function () {
+        confirmLogout();
+    });
 
-    import {getTimeElapsed} from '/js/time.js';
 
     const issue1 = {
         id: 1,

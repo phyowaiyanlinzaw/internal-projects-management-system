@@ -81,6 +81,10 @@
             rel="stylesheet"
         />
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+        <link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
         <script src="/js/fontawesome.js"></script>
 
         <!-- jquery -->
@@ -88,10 +92,10 @@
 
         <!-- datable table -->
         <script src="/js/databales.min.js"></script>
+        <script src="/js/logout-modal.js"></script>
 
         <!-- bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
-
         <!-- javascript libraries -->
         <script src="/lib/chart/chart.min.js" defer></script>
         <script src="/lib/easing/easing.min.js" defer></script>
@@ -126,6 +130,10 @@
         <script src="/js/getDataForProject.js" type="module" async></script>
 <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
         <script type="module" defer>
+            $(document).ready(function () {
+                setupLogoutConfirmation();
+            });
+
             import {
                 formatDateFromMilliseconds,
                 MONTH_NAMES,

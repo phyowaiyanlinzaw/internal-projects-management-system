@@ -93,7 +93,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/logout-modal.js"></script>
     <script type="module" defer>
+
+
 
 
         //department list ________________________________________________
@@ -417,18 +420,7 @@
                     <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
-                                <strong>Error : </strong> <span id="errorText"></span>
-                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
-                                    &times;
-                                </button>
-                            </div>
-                            <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
-                                <strong>Success : </strong> <span id="successText"></span>
-                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
-                                    &times;
-                                </button>
-                            </div>
+
                             <div class="card">
                                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                                     <!--icon-->
@@ -478,7 +470,18 @@
                                     <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
 
-
+                                        <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                            <strong>Error : </strong> <span id="errorText"></span>
+                                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                            <strong>Success : </strong> <span id="successText"></span>
+                                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                                &times;
+                                            </button>
+                                        </div>
                                             <div>
                                                 <input type="hidden" id="department-id" name="department-id">
                                             </div>
@@ -542,12 +545,15 @@
 <script src="/lib/quill/quill.min.js"></script>
 
 <!-- Template Javascript -->
-<script src="/js/main.js"></script>
+<script src="/js/main.js">
 <script src="/js/forprogresscircleiguess.js"></script>
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 <script type="module">
+    $(document).ready(function () {
+        confirmLogout();
+    });
 
     const ctx = document.getElementById("department-projects-chart");
 
