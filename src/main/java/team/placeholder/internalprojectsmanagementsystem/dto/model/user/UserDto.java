@@ -16,7 +16,8 @@ import java.util.Set;
 @Setter
 public class UserDto {
     private long id;
-    private String name,email;
+    private String name;
+    private String email;
     @JsonIgnore
     String password;
     private Role role;

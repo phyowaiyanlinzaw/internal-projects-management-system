@@ -5,12 +5,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.department.DepartmentService;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -18,14 +22,14 @@ import java.util.stream.Collectors;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
-    private final ModelMapper modelmapper;
+    private final ModelMapper modelMapper;
 
     @Override
     public DepartmentDto save(DepartmentDto departmentDto) {
-        Department department = modelmapper.map(departmentDto, Department.class);
+        Department department = DepartmentMapper.toDepartment(departmentDto);
         department.setName(departmentDto.getName());
        Department savedDepartment = departmentRepository.save(department);
-        return modelmapper.map(savedDepartment, DepartmentDto.class);
+        return DepartmentMapper.toDepartmentDto(savedDepartment);
 
     }
 
@@ -34,7 +38,18 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<DepartmentDto> getAllDepartments() {
         List<Department> departments = departmentRepository.findAll();
-        return departments.stream().map(department -> modelmapper.map(department, DepartmentDto.class)).collect(Collectors.toList());
+
+        List<DepartmentDto> departmentDtos = new ArrayList<>();
+
+        for(Department department : departments) {
+            DepartmentDto departmentDto = modelMapper.map(department, DepartmentDto.class);
+            for(UserDto user : departmentDto.getUsers()) {
+                user.getProjectList().clear();
+            }
+            departmentDtos.add(departmentDto);
+        }
+
+        return departmentDtos;
     }
 
 
@@ -42,7 +57,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDto getDepartmentById(long id) {
         Department department = departmentRepository.findById(id);
         if(department != null) {
-            return modelmapper  .map(department, DepartmentDto.class);
+            return DepartmentMapper.toDepartmentDto(department);
         }else{
             return null;
         }
@@ -54,7 +69,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
         if(department != null) {
-            return modelmapper.map(department, DepartmentDto.class);
+            return DepartmentMapper.toDepartmentDto(department);
         }else{
             return null;
         }
@@ -67,7 +82,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(department != null) {
             department.setName(departmentDto.getName());
             departmentRepository.save(department);
-            return modelmapper.map(department, DepartmentDto.class);
+            return DepartmentMapper.toDepartmentDto(department);
         }else{
             return null;
         }

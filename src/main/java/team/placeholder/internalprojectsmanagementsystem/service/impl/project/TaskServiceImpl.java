@@ -90,6 +90,12 @@ public class TaskServiceImpl implements TasksService {
 
     @Override
     public Long countTaskByProjectIdAndStatus(Long id, TaskStatus x) {
-        return null;
+        return taskRepository.countByProjectIdAndStatus(id, x);
     }
+
+    @Override
+    public Long countByProjectId(long id) {
+        return taskRepository.countByProjectId(id);
+    }
+
 }

@@ -37,7 +37,8 @@ public class ProjectDto implements Serializable {
     private SystemOutLineDto systemOutLineDto;
     private List<DeliverableDto> deliverableDto;
     private Long completeTaskCount;
-    private Long unfinishedTaskCount;
+    private Long totalTaskCount;
+    private List<UserDto> userDtos;
 
     private List<TasksDto> tasksDto;
     private List<IssueDto> issueDto;
