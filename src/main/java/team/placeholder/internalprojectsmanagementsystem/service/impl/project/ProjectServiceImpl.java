@@ -107,7 +107,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto getProjectById(long id) {
         Project project = projectRepository.findById(id);
         if (project != null) {
-            return ProjectMapper.toProjectDto(project);
+            return modelMapper.map(project, ProjectDto.class);
         } else {
             return null;
         }
@@ -118,7 +118,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findByName(name);
         System.out.println(project);
         if (project != null) {
-            return ProjectMapper.toProjectDto(project);
+            return modelMapper.map(project, ProjectDto.class);
         } else {
             return null;
         }
@@ -141,7 +141,7 @@ public class ProjectServiceImpl implements ProjectService {
             project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
             project.setObjective(projectDto.getObjective());
             projectRepository.save(project);
-            return ProjectMapper.toProjectDto(project);
+            return modelMapper.map(project, ProjectDto.class);
         } else {
             return null;
         }
@@ -166,9 +166,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDto> getAllProjectsByProjectManagerId(long id) {
-        return projectRepository.findAllByProjectManagerId(id).stream()
-                .map(ProjectMapper::toProjectDto)
-                .collect(Collectors.toList());
+        return projectRepository.findAllByProjectManagerId(id).stream().map(project -> modelMapper.map(project, ProjectDto.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -183,9 +181,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDto> findAllByUserId(long id) {
-        return projectRepository.findAllByUsersId(id).stream()
-                .map(ProjectMapper::toProjectDto)
-                .collect(Collectors.toList());
+        return projectRepository.findAllByUsersId(id).stream().map(project -> modelMapper.map(project, ProjectDto.class)).collect(Collectors.toList());
     }
 
     public static long calculateEndDateMillis(long startDateMillis, int durationInMonths) {

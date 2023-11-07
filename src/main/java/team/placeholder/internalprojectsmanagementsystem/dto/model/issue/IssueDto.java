@@ -33,14 +33,5 @@ public class IssueDto {
 
 
 
-    public boolean isSolved() {
-        return solved;
-    }
-
-    public void setSolved(boolean solved) {
-        this.solved = solved;
-    }
-
-
 
 }

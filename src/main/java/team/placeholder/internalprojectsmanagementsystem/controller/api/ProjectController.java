@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
@@ -168,9 +167,9 @@ public class ProjectController {
     private ResponseEntity<List<ProjectDto>> getListResponseEntity(List<ProjectDto> projects) {
         for(ProjectDto projectDto : projects){
             if(projectDto.getUserDto() != null) {
-                if(projectDto.getUserDto().getProjectList() != null) {
-                    projectDto.getUserDto().getProjectList().clear();
-                }
+//                if(projectDto.getUserDto().getProjectList() != null) {
+//                    projectDto.getUserDto().getProjectList().clear();
+//                }
             }
             projectDto.setUnfinishedTaskCount(taskService.countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.IN_PROGRESS));
             projectDto.setCompleteTaskCount(taskService.countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.FINISHED));

@@ -1,10 +1,8 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.issue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue.IssueMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
@@ -19,13 +17,14 @@ import java.util.stream.Collectors;
 public class IssueServiceImpl implements IssueService {
 
     private final IssueRepository issueRepository;
+    private final ModelMapper modelmapper;
     @Override
     public IssueDto save(IssueDto issueDto) {
-        Issue issue = IssueMapper.toIssue(issueDto);
+        Issue issue = modelmapper.map(issueDto, Issue.class);
 
         try {
             Issue savedIssue = issueRepository.save(issue);
-            return IssueMapper.toIssueDto(savedIssue);
+            return modelmapper.map(savedIssue, IssueDto.class);
         } catch (Exception e) {
             e.printStackTrace();  // You may want to log the error or throw a custom exception.
             return null;  // Or handle the error as needed in your application.
@@ -37,16 +36,14 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public List<IssueDto> getAllIssues() {
         List<Issue> issues = issueRepository.findAll();
-        return issues.stream()
-                .map(IssueMapper::toIssueDto)
-                .collect(Collectors.toList());
+        return issues.stream().map(issue -> modelmapper.map(issue, IssueDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public IssueDto getIssueById(long id) {
         Issue issue = issueRepository.findById(id);
         if(issue != null) {
-            return IssueMapper.toIssueDto(issue);
+            return modelmapper.map(issue, IssueDto.class);
         }else {
             return null;
         }
@@ -70,11 +67,10 @@ public class IssueServiceImpl implements IssueService {
             issue.setCreated_date(issueDto.getCreated_date());
             issue.setUpdated_date(issueDto.getUpdated_date());
             issue.setSolved_date(issueDto.getSolved_date());
-            issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
-            issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
-            issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
+            issue.setUser_pic(modelmapper.map(issueDto.getUser_pic(), team.placeholder.internalprojectsmanagementsystem.model.user.User.class));
+            issue.setUser_uploader(modelmapper.map(issueDto.getUser_uploader(), team.placeholder.internalprojectsmanagementsystem.model.user.User.class));
             issueRepository.save(issue);
-            return IssueMapper.toIssueDto(issue);
+            return modelmapper.map(issue, IssueDto.class);
         }else {
             return null;
         }
@@ -95,7 +91,7 @@ public class IssueServiceImpl implements IssueService {
     public IssueDto getIssueByTitle(String title) {
         Issue issue = issueRepository.findByTitle(title);
         if(issue != null) {
-            return IssueMapper.toIssueDto(issue);
+            return modelmapper.map(issue, IssueDto.class);
         }else {
             return null;
         }

@@ -41,7 +41,7 @@ public class Project implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Review reviews;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Tasks> tasks;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

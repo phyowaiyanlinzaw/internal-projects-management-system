@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
@@ -141,7 +140,7 @@ public class UserController {
 
     @GetMapping("list/departmentId/{departmentId}")
     public ResponseEntity<List<UserDto>> getAllUsersByDepartmentId(@PathVariable Long departmentId) {
-        return ResponseEntity.ok(userService.getAllUsersByProjectId(departmentId));
+        return null;
     }
 
     @GetMapping("list/projectManagerId/{projectManagerId}")
@@ -151,7 +150,7 @@ public class UserController {
 
     @GetMapping("list/projectId/{projectId}")
     public ResponseEntity<List<UserDto>> getAllUsersByProjectId(@PathVariable Long projectId) {
-        return ResponseEntity.ok(userService.getAllUsersByProjectId(projectId));
+        return ResponseEntity.ok(userService.getEmployeeByProjectId(projectId));
     }
 
     @GetMapping("count/role/{role}")

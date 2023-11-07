@@ -2,12 +2,17 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.TasksMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.TasksService;
 
 import java.util.ArrayList;
@@ -19,13 +24,24 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl implements TasksService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public TasksDto save(TasksDto taskDto) {
+
         taskDto.setStatus(TaskStatus.TODO);
+
+        User user = userRepository.findById(taskDto.getUserDto().getId());
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        taskDto.setUserDto(userDto);
+
+        Project project = projectRepository.findById(taskDto.getProjectDto().getId());
         Tasks task = modelMapper.map(taskDto, Tasks.class);
+        task.setProject(project);
         task = taskRepository.save(task);
+
         return modelMapper.map(task, TasksDto.class);
     }
 
@@ -42,7 +58,7 @@ public class TaskServiceImpl implements TasksService {
 
     @Override
     public TasksDto getTaskById(long id) {
-        Tasks task = taskRepository.findById(id).orElse(null);
+        Tasks task = taskRepository.findById(id);
         return  modelMapper.map(task, TasksDto.class);
     }
 

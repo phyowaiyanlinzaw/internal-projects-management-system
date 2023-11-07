@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
+import jakarta.mail.search.SearchTerm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -9,8 +10,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
@@ -19,6 +22,7 @@ import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -216,9 +220,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsersByProjectId(Long projectId) {
+    public List<UserDto> getProjectManagersByProjectId(Long projectId) {
         List<User> users = userRepository.findAllByProjectId(projectId);
-        return users.stream().map(user -> modelmapper.map(user, UserDto.class)).collect(Collectors.toList());
+
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User user : users) {
+            //print out user project with lambda
+            for (Project project : user.getProjects()) {
+                log.info("USER PROJECT : {}",project.getName());
+            }
+            Department department = user.getDepartment();
+            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
+            Set<Project> projects = user.getProjects();
+            Set<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).collect(Collectors.toSet());
+            UserDto userDto = modelmapper.map(user, UserDto.class);
+            userDto.setDepartmentdto(departmentDto);
+            userDto.setProjectsByUsers(projectDtos);
+            userDtos.add(userDto);
+        }
+        return userDtos;
+    }
+
+    @Override
+    public List<UserDto> getEmployeeByProjectId(Long projectId) {
+        List<User> users = userRepository.findAllByProjectsId(projectId);
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User user : users) {
+            //print out user project with lambda
+            for (Project project : user.getProjects()) {
+                log.info("USER PROJECT : {}",project.getName());
+            }
+            Department department = user.getDepartment();
+            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
+            Set<Project> projects = user.getProjects();
+            Set<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).collect(Collectors.toSet());
+            UserDto userDto = modelmapper.map(user, UserDto.class);
+            userDto.setDepartmentdto(departmentDto);
+            userDto.setProjectsByUsers(projectDtos);
+            userDtos.add(userDto);
+        }
+        return userDtos;
     }
 
     @Override

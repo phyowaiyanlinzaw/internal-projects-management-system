@@ -19,6 +19,7 @@ public class Tasks implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Enumerated(EnumType.STRING)
     private TaskStatus status;
     private String description;
     private String title;
@@ -27,6 +28,9 @@ public class Tasks implements Serializable {
     private long actual_start_time;
     private long actual_end_time;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     @Enumerated(EnumType.STRING)
     private TasksGroup tasksGroup;

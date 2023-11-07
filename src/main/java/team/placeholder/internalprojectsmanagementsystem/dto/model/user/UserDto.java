@@ -10,6 +10,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,6 +27,8 @@ public class UserDto {
     @JsonProperty("project_manager")
     private UserDto projectManager;
 
-    private List<ProjectDto> projectList;
+    private List<ProjectDto> projectsByProjectManager;
+
+    private Set<ProjectDto> projectsByUsers;
 
 }
