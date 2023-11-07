@@ -210,17 +210,17 @@
                 </div>
                 <div class="modal-body">
                     <form class="row g-5" action="">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <span><i class="fa fa-tasks"></i></span>
                             <label
                                     class="editable-label"
-                                    name="task"
+                                    for="taskTitle"
                                     onclick="editTitle()"
                             >
-                                Testing Write</label
+                                Task Title</label
                             >
                             <input
-                                    id="task"
+                                    id="taskTitle"
                                     name="task"
                                     type="text"
                                     class="form-control border-task editable-input"
@@ -229,14 +229,35 @@
                                     style="
                                             overflow: hidden;
                                             overflow-wrap: break-word;
-                                            height: 36.8px;
-                                            display: none;
+                                            height: 37px;
                                         "
                                     onblur="updateTitle(this)"
+                                    disabled
                             />
                         </div>
 
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
+                                    <span
+                                    ><i
+                                            class="fa-solid fa-bars-staggered"
+                                    ></i
+                                    ></span>
+                            <label
+                                    id="description-label"
+                                    class="editable-label"
+                                    onclick="toggleEditor()"
+                            >
+                                Description</label
+                            >
+                            <textarea
+                                    id="description-editor"
+                                    class="form-control editable-input"
+                                    name="description"
+                                    rows="5"
+                            ></textarea>
+                        </div>
+
+                        <div class="col-lg-6">
                                     <span class="text-align-center">
                                         <i class="fa-solid fa-users"></i>
                                     </span>
@@ -248,41 +269,10 @@
                         </div>
 
                         <div class="col-lg-6">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-calendar-days"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="editable-label"
-                                    name="start_time"
-                                    onclick="editTitle()"
-                            >
-                                Start Date</label
-                            >
-                            <input
-                                    type="date"
-                                    id="task-detail-start_time"
-                                    name="start_time"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 36.8px;
-                                            display: none;
-                                        "
-                                    onblur="updateTitle(this)"
-                            />
-                        </div>
-
-                        <div class="col-lg-6">
                             <i class="fa-regular fa-calendar"></i>
                             <label
                                     id="duration"
                                     class="editable-label"
-                                    name="duration"
                                     onclick="editTitle()"
                             >
                                 Duration</label
@@ -297,12 +287,43 @@
                                     style="
                                             overflow: hidden;
                                             overflow-wrap: break-word;
-                                            height: 36.8px;
-                                            display: none;
+                                            height: 37px;
+
+                                        "
+                                    onblur="updateTitle(this)"
+                                    disabled
+                            />
+                        </div>
+
+                        <div class="col-lg-6">
+                                    <span
+                                    ><i
+                                            class="fa-solid fa-calendar-days"
+                                    ></i
+                                    ></span>
+                            <label
+                                    class="editable-label"
+                                    onclick="editTitle()"
+                            >
+                                Start Date</label
+                            >
+                            <input
+                                    type="date"
+                                    id="task-detail-start_time"
+                                    name="start_time"
+                                    class="form-control border-task editable-input"
+                                    dir="auto"
+                                    data-autosize="true"
+                                    style="
+                                            overflow: hidden;
+                                            overflow-wrap: break-word;
+                                            height: 37px;
                                         "
                                     onblur="updateTitle(this)"
                             />
                         </div>
+
+
 
                         <div class="col-lg-6">
                                     <span>
@@ -338,28 +359,7 @@
                             </select>
                         </div>
 
-                        <div class="col-lg-12">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-bars-staggered"
-                                    ></i
-                                    ></span>
-                            <label
-                                    id="description-label"
-                                    class="editable-label"
-                                    name="description"
-                                    onclick="toggleEditor()"
-                            >
-                                Description</label
-                            >
-                            <textarea
-                                    id="description-editor"
-                                    class="form-control editable-input"
-                                    name="description"
-                                    rows="5"
-                                    style="display: none"
-                            ></textarea>
-                        </div>
+
                     </form>
                 </div>
             </div>
@@ -633,19 +633,14 @@
             const label = this;
             const input = label.nextElementSibling;
 
-            label.style.display = "none";
-            input.style.display = "block";
-            input.value = label.textContent;
+            //remove disabled attribute to enable editing
+            input.removeAttribute("disabled");
             input.focus();
         }
 
         function updateTitle(inputField) {
-            const input = inputField;
-            const label = input.previousElementSibling;
-
-            label.textContent = input.value;
-            label.style.display = "inline";
-            input.style.display = "none";
+            //add disabled attribute to disable editing
+            inputField.setAttribute("disabled", true);
         }
 
         function toggleEditor() {
@@ -758,10 +753,7 @@
             taskDiv.addEventListener("click", (e) => {
                 console.log('click task so should change the current task data', currentTaskData)
                 currentTaskData = taskList[parseInt(taskDiv.getAttribute('index'))]
-                modal.querySelector(".modal-title").innerText = currentTaskData.title;
-                modal.querySelector("#task").innerText = currentTaskData.title;
-                modal.querySelector("#description-label").innerText = currentTaskData.description;
-                modal.querySelector("#description-editor").innerText = currentTaskData.description;
+
 
             });
 
