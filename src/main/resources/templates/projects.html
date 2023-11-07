@@ -444,8 +444,7 @@
 
             const fragment = document.createDocumentFragment();
 
-            getAllProjects().then((data) => {
-                let pList = [...data];
+            let pList = await getAllProjects();
 
                 for (let i = 0; i < pList.length; i++) {
                     let currentProject = pList[i];
@@ -752,6 +751,33 @@
                     });
                 });
 
+            let employeeList = loginUser.employees;
+
+            console.log(employeeList);
+
+            let empTagifyList = [];
+
+            if(employeeList) {
+                const showEmpList = employeeList.map((item) => {
+                    console.log(item)
+                    return {
+                        label: item.name,
+                        value: item.id,
+                        alias: item.role.toLowerCase(),
+                    };
+                });
+                empTagifyList = VirtualSelect.init({
+                    ele: "#employee-list",
+                    options: showEmpList,
+                    multiple: true,
+                    search : true,
+                    searchByStartsWith: true,
+                    popupPosition: null,
+                    maxWidth: "100%"
+                })
+                console.log(empTagifyList)
+            }
+
                 $(document).ready(function () {
                     $("#validation-form").submit(function (event) {
                         event.preventDefault(); // Prevent the form from submitting the traditional way
@@ -765,6 +791,7 @@
 
                         const background = $("#background").val();
                         let architectures = $("#architectures").val();
+                        const empList = empTagifyList.selectedValues;
                         console.log("architectures list : ", architectures);
                         const systemOutlines = sysSelect.selectedValues;
                         const deliverable = $("#deliverable").val();
@@ -811,6 +838,7 @@
                         // You may want to add some form validation here before sending the data
                         console.log(objective);
                         console.log(architectures);
+                        console.log(empList)
                         const project = {
                             name: projectName,
                             clientDto: client,
@@ -847,6 +875,7 @@
                             userDto: {
                                 id: loginUser.currentUser.id,
                             },
+                            userDtos: empList.map(str => ({ id: parseInt(str) }))
                         };
                         console.log(project);
                         //Perform the AJAX request
@@ -916,32 +945,8 @@
                     maxWidth: "100%",
                 });
 
-                let employeeList = loginUser.employees;
 
-                console.log(employeeList);
 
-                if(employeeList) {
-                    const showEmpList = employeeList.map((item) => {
-                        console.log(item)
-                        return {
-                            label: item.name,
-                            value: JSON.stringify(item.id),
-                            alias: item.role.toLowerCase(),
-                        };
-                    });
-                    let empTagifyList = VirtualSelect.init({
-                        ele: "#employee-list",
-                        options: showEmpList,
-                        multiple: true,
-                        search : true,
-                        searchByStartsWith: true,
-                        popupPosition: null,
-                        maxWidth: "100%"
-                    })
-                    console.log(empTagifyList)
-                }
-
-            });
 
             //list project end
         </script>
@@ -1138,6 +1143,7 @@
                                             class="form-control border-task-description"
                                             id="name"
                                             name="name"
+                                            required
                                         />
                                     </div>
 
@@ -1173,6 +1179,7 @@
                                             class="form-control border-task-description"
                                             id="start_date"
                                             name="start_date"
+                                            required
                                         />
                                     </div>
 
@@ -1193,6 +1200,7 @@
                                             id="project-add-duration"
                                             min="1"
                                             value="1"
+                                            required
                                         />
                                     </div>
 
@@ -1211,6 +1219,7 @@
                                             class="form-control border-task-description"
                                             id="background"
                                             name="background"
+                                            required
                                         ></textarea>
                                     </div>
 
@@ -1232,6 +1241,7 @@
                                             id="architectures"
                                             name="architectures"
                                             placeholder="enter to add your own architecture"
+                                            required
                                         />
                                     </div>
 
@@ -1276,6 +1286,7 @@
                                             id="deliverable"
                                             name="enter to add your own deliverable type"
                                             placeholder="add value"
+                                            required
                                         />
                                     </div>
 
@@ -1328,6 +1339,7 @@
                                             class="form-control border-task-description"
                                             id="client-name"
                                             name="name"
+                                            required
                                         />
                                     </div>
 
@@ -1344,6 +1356,7 @@
                                             class="form-control border-task-description"
                                             id="client-email"
                                             name="email"
+                                            required
                                         />
                                     </div>
 
@@ -1360,6 +1373,7 @@
                                             class="form-control border-task-description"
                                             id="client-phone"
                                             name="phone"
+                                            parttern="[0-9]{10}"
                                         />
                                     </div>
 

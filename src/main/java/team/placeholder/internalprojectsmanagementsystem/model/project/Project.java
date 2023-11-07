@@ -50,6 +50,8 @@ public class Project implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Deliverable> deliverables;
 
+    private String status;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "amount_id")
     private Amount amount;

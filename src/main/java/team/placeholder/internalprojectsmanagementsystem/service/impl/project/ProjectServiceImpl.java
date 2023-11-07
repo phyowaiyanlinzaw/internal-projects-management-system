@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
@@ -73,11 +75,18 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
 
+        Set<User> users = new HashSet<>();
+
+        for(UserDto user : projectDto.getUserDtos()) {
+            users.add(userRepository.getReferenceById(user.getId()));
+        }
+
         Project project2 = modelMapper.map(projectDto, Project.class);
         project2.setDepartment(departmentRepository.getReferenceById(projectDto.getDepartmentDto().getId()));
         project2.setProjectManager(userRepository.getReferenceById(projectDto.getUserDto().getId()));
         project2.setArchitectures(architecture);
         project2.setDeliverables(deliverable);
+        project2.setUsers(users);
         Review newReview = new Review();
         newReview.setUser(userRepository.getReferenceById(projectDto.getUserDto().getId()));
         projectRepository.save(project2);
