@@ -253,19 +253,29 @@
                                     id="description-editor"
                                     class="form-control editable-input"
                                     name="description"
-                                    rows="5"
+                                    row
+                                    disabled
                             ></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                                    <span class="text-align-center">
+                                    <span>
                                         <i class="fa-solid fa-users"></i>
                                     </span>
-                            <input
-                                    type="text"
-                                    name="pm-tags"
-                                    value="abatisse2@nih.gov, Justinian Hattersley"
-                            />
+                            <span
+                                    class="badge rounded-pill bg-info"
+                                    id="assigned-member"
+                            ></span>
+                        </div>
+
+                        <div class="col-lg-6">
+                                    <span>
+                                        <i
+                                                class="fa-solid fa-circle-chevron-down"
+                                        ></i>
+                                        Status
+                                    </span>
+                            <span class='badge rounded-pill  bg-primary' id="status"></span>
                         </div>
 
                         <div class="col-lg-6">
@@ -325,39 +335,7 @@
 
 
 
-                        <div class="col-lg-6">
-                                    <span>
-                                        <i
-                                                class="fa-solid fa-circle-chevron-down"
-                                        ></i>
-                                        Status
-                                    </span>
-                            <select
-                                    id="projectStatuses"
-                                    name="projectStatuses"
-                                    class="selectpicker"
-                            >
-                                <option
-                                        data-content="<span class='badge rounded-pill  bg-primary'>STARTED</span>"
-                                        value="STARTED"
-                                        selected
-                                >
-                                    STARTED
-                                </option>
-                                <option
-                                        data-content="<span class='badge rounded-pill  bg-warning'>IN_PROGRESS</span>"
-                                        value="IN_PROGRESS"
-                                >
-                                    IN_PROGRESS
-                                </option>
-                                <option
-                                        data-content="<span class='badge rounded-pill  bg-success'>FINISHED</span>"
-                                        value="FINISHED"
-                                >
-                                    FINISHED
-                                </option>
-                            </select>
-                        </div>
+
 
 
                     </form>
@@ -745,9 +723,32 @@
             });
 
             taskDiv.addEventListener("click", (e) => {
-                console.log('click task so should change the current task data', currentTaskData)
-                currentTaskData = taskList[parseInt(taskDiv.getAttribute('index'))]
 
+                currentTaskData = taskList[parseInt(taskDiv.getAttribute('index'))]
+                console.log('click task so should change the current task data', currentTaskData)
+                //change input value from that taskdata
+                document.getElementById('taskTitle').value = currentTaskData.title
+                document.getElementById('description-editor').value = currentTaskData.description
+                // document.getElementById('tduration').value = currentTaskData.duration
+                // document.getElementById('task-detail-start_time').value = currentTaskData.start_time
+
+                // change status span text according to the status and also change badge color
+                if (currentTaskData.status === 'TODO') {
+                    document.getElementById('status').innerText = 'TODO'
+                    document.getElementById('status').classList.remove('bg-info', 'bg-success')
+                    document.getElementById('status').classList.add('bg-primary')
+                } else if (currentTaskData.status === 'IN_PROGRESS') {
+                    document.getElementById('status').innerText = 'IN_PROGRESS'
+                    document.getElementById('status').classList.remove('bg-primary', 'bg-success')
+                    document.getElementById('status').classList.add('bg-warning')
+                } else if (currentTaskData.status === 'FINISHED') {
+                    document.getElementById('status').innerText = 'FINISHED'
+                    document.getElementById('status').classList.remove('bg-primary', 'bg-info')
+                    document.getElementById('status').classList.add('bg-success')
+                }
+
+                // change the assigned member span value
+                document.getElementById('assigned-member').innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
 
             });
 
