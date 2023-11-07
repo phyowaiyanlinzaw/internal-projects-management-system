@@ -49,9 +49,13 @@ public class TaskServiceImpl implements TasksService {
     public List<TasksDto> getAllTasks() {
         List<Tasks> taskList = taskRepository.findAll();
         List<TasksDto> taskDtoList = new ArrayList<>();
-        for(Tasks task : taskList) {
-            taskDtoList.add(modelMapper.map(task, TasksDto.class));
 
+        for(Tasks task : taskList) {
+            User user = task.getUser();
+            UserDto userDto = modelMapper.map(user, UserDto.class);
+            TasksDto taskDto = modelMapper.map(task, TasksDto.class);
+            taskDto.setUserDto(userDto);
+            taskDtoList.add(taskDto);
         }
         return taskDtoList;
     }
