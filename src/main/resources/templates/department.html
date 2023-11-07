@@ -89,6 +89,9 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" defer>
 
@@ -241,78 +244,70 @@
                         fragment.appendChild(outerDiv)
                     }
                 motherContainer.appendChild(fragment);
-            })
-            .catch(error => {
-                // Handle errors, if any
-                console.error('Error:', error);
-            });
+            }).catch(error => {console.error('Error:', error);})
 
+        document.getElementById("edit-department").addEventListener("click", function () {
+            var departmentId = document.getElementById("department-id").value;
+            var departmentName = document.getElementById("edit-department-name").value;
 
-        $("#edit-department").click(function(e) {
-            // Prevent the default form submission
-            // Gather data from the form
-            var departmentId = $("#department-id").val();
-            var departmentName = $("#edit-department-name").val();
-
-            if(departmentName === ""){
+            if (departmentName === "") {
                 showError("Department Name Cannot Be Blank...");
                 return;
             }
 
-            for (var i = 0; i < dpList.length; i++) {
-                if (dpList[i].name === departmentName) {
-                    if(dpList[i].id.toString() === departmentId.toString()){
+            Swal.fire({
+                title: "Are you sure you want to edit?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-                    }else{
-                        console.log("ID List : " + dpList[i].id)
-                        console.log("Id : " , departmentId)
-                        showError("Department Name Already Exit...");
-                        return;
+                    console.log("Id : " + departmentId)
+                    console.log("name : ", departmentName);
+
+
+                    for (var i = 0; i < dpList.length; i++) {
+                        if (dpList[i].name === departmentName) {
+                            if (dpList[i].id.toString() === departmentId.toString()) {
+                            } else {
+                                showError("Department Name Already Exists...");
+                                return;
+                            }
+                        }
                     }
+
+                    var data = {
+                        id: departmentId,
+                        name: departmentName,
+                    };
+
+                    $.ajax({
+                        type: "PUT", // Use PUT method to update data
+                        url: `api/department/lists/update/${departmentId}`, // Replace with your server-side endpoint URL
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        success: function (response) {
+                            // Handle the success response from the server, e.g., display a success message
+                            $(`#DH-id-${response.id}`).text(response.name);
+                            $('#staticBackdropLabel').text(response.name);
+                            showSuccess("Update Successfully...");
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Ajax request failed: " + textStatus, errorThrown);
+                        }
+                    });
                 }
-            }
-
-            // Create an object to represent the data to be sent to the server
-            var data = {
-                id : departmentId,
-                name: departmentName,
-            };
-
-
-
-            // Send an AJAX request to update the department
-            $.ajax({
-                type: "PUT", // Use PUT method to update data
-                url: `api/department/lists/update/${departmentId}`, // Replace with your server-side endpoint URL
-                data: JSON.stringify(data),
-                contentType:"application/json",
-                success: function(response) {
-                    // Handle the success response from the server, e.g., display a success message
-
-                    $(`#DH-id-${response.id}`).text(response.name);
-                    $('#staticBackdropLabel').text(response.name);
-                    showSuccess("Update Successfully...")
-
-                },error: function(jqXHR, textStatus, errorThrown) {
-                    // Handle the error here
-                    console.log("Ajax request failed: " + textStatus, errorThrown);
-                    // You can also display an error message to the user if needed.
-                }
-
-
             });
         });
-
-
 
         fragment.childNodes.forEach(node => {
             console.log('fragment child',node);
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Your JavaScript code here
-            // Including the code that appends elements to the DOM
-
         });
 
         function showError(message) {
@@ -423,13 +418,13 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
-                                <strong>Error:</strong> <span id="errorText"></span>
+                                <strong>Error : </strong> <span id="errorText"></span>
                                 <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
                                     &times;
                                 </button>
                             </div>
                             <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
-                                <strong>Error:</strong> <span id="successText"></span>
+                                <strong>Success : </strong> <span id="successText"></span>
                                 <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
                                     &times;
                                 </button>
@@ -455,7 +450,7 @@
                                     </li>
 
                                     <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" >
                                             Edit
                                         </button>
                                     </li>
@@ -497,9 +492,27 @@
 
                                             <br/>
 
-                                            <button  style="background-color: #369;" type="submit" class="btn btn-primary py-2 w-100 mb-3"
+                                            <button  style="background-color: #369;" class="btn btn-primary py-2 w-100 mb-3"
                                                     id="edit-department">Edit
                                             </button>
+
+<!--                                        &lt;!&ndash; confrim box for edit &ndash;&gt;-->
+<!--                                        <div class="modal fade" id="confirm-box" data-bs-keyboard="false" data-bs-backdrop="static">-->
+<!--                                            <div class="modal-dialog modal-dialog-centered modal-sm">-->
+<!--                                                <div class="modal-content">-->
+<!--                                                    <div class="modal-header">-->
+<!--                                                        <span>Are you sure you want to edit ?</span>-->
+<!--                                                        <button class="btn btn-danger col me-1">-->
+<!--                                                            YES-->
+<!--                                                        </button>-->
+<!--                                                        <button class="btn btn-primary col" data-bs-dismiss="modal" aria-label="Close">-->
+<!--                                                            NO-->
+<!--                                                        </button>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash; confirm box for edit &ndash;&gt;-->
 
                                     </div>
                                 </div>
@@ -512,6 +525,8 @@
         </div>
     </div>
     <!-- modal for department's details -->
+
+
 
     <!-- Back to Top -->
 </div>
@@ -641,27 +656,25 @@
     firstChart.config.options.animation.duration = 5000;
 
 
-    $(document).ready(function() {
-        $("#load-data").click(function() {
-            $.ajax({
-                url: "api/user/count", // URL to the API endpoint
-                type: "GET", // HTTP method (GET, POST, etc.)
-                dataType: "json", // Data type to expect in response
-                success: function(data) {
+    // $(document).ready(function() {
+    //     $("#load-data").click(function() {
+    //         $.ajax({
+    //             url: "api/user/count", // URL to the API endpoint
+    //             type: "GET", // HTTP method (GET, POST, etc.)
+    //             dataType: "json", // Data type to expect in response
+    //             success: function(data) {
+    //
+    //                 console.log         ("user count : " , data);
+    //             },
+    //             error: function(jqXHR, textStatus, errorThrown) {
+    //                 // Handle errors
+    //                 console.log("Error: " + textStatus, errorThrown);
+    //             }
+    //         });
+    //     });
+    // })
 
-                    console.log         ("user count : " , data);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    // Handle errors
-                    console.log("Error: " + textStatus, errorThrown);
-                }
-            });
-        });
-    });
 
-    $(document).ready(function() {
-
-    });
 
 
 
