@@ -107,9 +107,14 @@
 
 
 
-        let dpList = [];
+        let dpList = await getAllDepartments();
 
-        // Call the function when needed
+        console.log(dpList)
+
+        // Call the function when
+
+
+
         getAllDepartments()
             .then(data => {
                 dpList = [...data];
@@ -199,8 +204,6 @@
                                 document.querySelector("#total-project").textContent = data
                             }).catch(error => console.log(error))
 
-                            // First, get the selected department head's information and display it
-                            let selected_department_head;
 
                             console.log("Current Department : " + currentDp.id)
 
@@ -208,38 +211,10 @@
                                 console.log("Department Head : " + data);
                                 const departmentHeadElement = document.querySelector("#department-head");
                                 departmentHeadElement.textContent = data.name;
-                                selected_department_head = data;
-                                console.log("DH for the current dp", data)
-                                // Call the function to populate the select box using the selected_department_head
-                                populateSelectBox(selected_department_head);
+                                console.log("DH for the current dp", data);
                             }).catch(error => console.log(error))
 
-                            function populateSelectBox(selectedData) {
-                                // Get the list of department heads
-                                getData(`/api/user/list/role/DEPARTMENT_HEAD`).then(dataList => {
 
-                                    console.log("in department_head url + data : " , dataList)
-
-                                    const selectElement = document.querySelector("#departmenthead");
-
-                                    // Clear existing options
-                                    selectElement.innerHTML = '';
-
-                                    // Iterate over the data and add new options
-                                    dataList.forEach(departmentHead => {
-                                        const option = document.createElement("option");
-                                        option.value = departmentHead.id; // Set the value as needed
-                                        option.text = departmentHead.name; // Set the text as needed
-                                        selectElement.appendChild(option);
-
-                                        // Pre-select the department head that matches the selected department head
-                                        if (selectedData.id === departmentHead.id) {
-                                            option.selected = true;
-                                        }
-                                    });
-                                }).catch(error => console.log(error))
-
-                            }
 
 
                         });
@@ -278,8 +253,24 @@
             // Gather data from the form
             var departmentId = $("#department-id").val();
             var departmentName = $("#edit-department-name").val();
-            var departmentHead = $("#departmenthead").val();
-            console.log("Department Head : " + departmentHead)
+
+            if(departmentName === ""){
+                showError("Department Name Cannot Be Blank...");
+                return;
+            }
+
+            for (var i = 0; i < dpList.length; i++) {
+                if (dpList[i].name === departmentName) {
+                    if(dpList[i].id.toString() === departmentId.toString()){
+
+                    }else{
+                        console.log("ID List : " + dpList[i].id)
+                        console.log("Id : " , departmentId)
+                        showError("Department Name Already Exit...");
+                        return;
+                    }
+                }
+            }
 
             // Create an object to represent the data to be sent to the server
             var data = {
@@ -298,19 +289,16 @@
                 success: function(response) {
                     // Handle the success response from the server, e.g., display a success message
 
+                    $(`#DH-id-${response.id}`).text(response.name);
+                    $('#staticBackdropLabel').text(response.name);
+                    showSuccess("Update Successfully...")
 
-                    $.ajax({
-                        type: "POST",
-                        url: `api/user/update/departmentId/${departmentId}`, // Replace with the endpoint URL for department head
-                        data: JSON.stringify(departmentHead),
-                        contentType:"application/json",
-                        success: function(response) {
-                            $(`#DH-id-${response.id}`).text(response.name)
-                            $('#staticBackdropLabel').text(response.name)
-                        },
-                    });
+                },error: function(jqXHR, textStatus, errorThrown) {
+                    // Handle the error here
+                    console.log("Ajax request failed: " + textStatus, errorThrown);
+                    // You can also display an error message to the user if needed.
+                }
 
-                },
 
             });
         });
@@ -326,6 +314,34 @@
             // Including the code that appends elements to the DOM
 
         });
+
+        function showError(message) {
+            $("#errorText").text(message);
+            $("#errorAlert").show();
+
+            setTimeout(function () {
+                $("#errorAlert").hide();
+            }, 1000);
+
+            //close alert box
+            $(".btn-close").on("click", function () {
+                $("#errorAlert").hide();
+            });
+        }
+
+        function showSuccess(message) {
+            $("#successText").text(message);
+            $("#successAlert").show();
+
+            setTimeout(function () {
+                $("#successAlert").hide();
+            }, 1000);
+
+            //close alert box
+            $(".btn-close").on("click", function () {
+                $("#successAlert").hide();
+            });
+        }
 
 
 
@@ -406,6 +422,18 @@
                     <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
                     <div class="container-fluid">
                         <div class="row">
+                            <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                <strong>Error:</strong> <span id="errorText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                <strong>Error:</strong> <span id="successText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
                             <div class="card">
                                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                                     <!--icon-->
@@ -454,6 +482,8 @@
 
                                     <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
+
+
                                             <div>
                                                 <input type="hidden" id="department-id" name="department-id">
                                             </div>
@@ -464,12 +494,7 @@
                                                        placeholder="Department Name" id="edit-department-name"/>
                                             </div>
                                             <br/>
-                                            <div>
-                                                <label for="department-head">Choose Deparment Head:</label><br/><br/>
-                                                <select name="departmenthead" id="departmenthead" class="form-control">
 
-                                                </select>
-                                            </div>
                                             <br/>
 
                                             <button  style="background-color: #369;" type="submit" class="btn btn-primary py-2 w-100 mb-3"

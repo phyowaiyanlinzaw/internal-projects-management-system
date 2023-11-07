@@ -50,7 +50,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto getDepartmentByName(String name) {
-        Department department = departmentRepository.findByName(name).orElse(null);
+        Department department = departmentRepository.findByName(name);
+
+
         if(department != null) {
             return DepartmentMapper.toDepartmentDto(department);
         }else{
@@ -83,6 +85,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public long getDeprtmentCount() {
+
         return departmentRepository.count();
     }
 

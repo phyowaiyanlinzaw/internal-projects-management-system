@@ -47,7 +47,6 @@ public class ProjectServiceImpl implements ProjectService {
         Set<Architecture> architecture = new HashSet<>();
 
         projectDto.getDeliverableDto().forEach(System.out::println);
-//
         for(ArchitectureDto architectureDto : projectDto.getArchitectureDto()) {
             if(architectureDto.getId() == null) {
                 architecture.add(architectureService.save(architectureDto));

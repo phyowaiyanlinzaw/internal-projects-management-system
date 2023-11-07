@@ -30,6 +30,7 @@ public class ArchitectureServiceImpl implements ArchitectureService {
 
     @Override
     public Architecture findById(long id) {
+
         return architectureRepository.findById(id).orElse(null);
     }
 
