@@ -114,7 +114,8 @@ public class ProjectServiceImpl implements ProjectService {
             projectDto.setSystemOutLineDto(systemOutLineDto);
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
             projectDto.setUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
-            projectDto.getUserDto().getProjectList().clear();
+            projectDto.getUserDto().getProjectsByUsers().clear();
+            projectDto.getUserDto().getProjectsByProjectManager().clear();
             log.info("project manager name should be shown here " + project.getProjectManager().getName());
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.getDepartmentDto().getUsers().clear();

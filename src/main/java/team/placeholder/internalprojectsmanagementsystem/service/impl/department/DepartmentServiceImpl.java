@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
@@ -26,10 +25,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto save(DepartmentDto departmentDto) {
-        Department department = DepartmentMapper.toDepartment(departmentDto);
+        Department department = modelMapper.map(departmentDto, Department.class);
         department.setName(departmentDto.getName());
        Department savedDepartment = departmentRepository.save(department);
-        return DepartmentMapper.toDepartmentDto(savedDepartment);
+        return modelMapper.map(savedDepartment, DepartmentDto.class);
 
     }
 
@@ -44,7 +43,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         for(Department department : departments) {
             DepartmentDto departmentDto = modelMapper.map(department, DepartmentDto.class);
             for(UserDto user : departmentDto.getUsers()) {
-                user.getProjectList().clear();
+                user.getProjectsByUsers().clear();
+                user.getProjectsByProjectManager().clear();
             }
             departmentDtos.add(departmentDto);
         }
@@ -57,7 +57,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDto getDepartmentById(long id) {
         Department department = departmentRepository.findById(id);
         if(department != null) {
-            return DepartmentMapper.toDepartmentDto(department);
+            return modelMapper.map(department, DepartmentDto.class);
         }else{
             return null;
         }
@@ -69,7 +69,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
         if(department != null) {
-            return DepartmentMapper.toDepartmentDto(department);
+            return modelMapper.map(department, DepartmentDto.class);
         }else{
             return null;
         }
@@ -82,7 +82,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(department != null) {
             department.setName(departmentDto.getName());
             departmentRepository.save(department);
-            return DepartmentMapper.toDepartmentDto(department);
+            return modelMapper.map(department, DepartmentDto.class);
         }else{
             return null;
         }
