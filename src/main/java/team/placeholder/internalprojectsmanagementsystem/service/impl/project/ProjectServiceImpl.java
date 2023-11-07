@@ -2,15 +2,19 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
@@ -29,6 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final ArchitectureServiceImpl architectureService;
@@ -40,7 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final DeliverableRepository deliverableRepository;
     private final ReviewRepo reviewRepo;
     private final ModelMapper  modelMapper;
-
+    private final TaskRepository taskRepository;
 
     @Transactional
     @Override
@@ -107,6 +112,17 @@ public class ProjectServiceImpl implements ProjectService {
             ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
             SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
             projectDto.setSystemOutLineDto(systemOutLineDto);
+            projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+            projectDto.setUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
+            projectDto.getUserDto().getProjectList().clear();
+            log.info("project manager name should be shown here " + project.getProjectManager().getName());
+            projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
+            projectDto.getDepartmentDto().getUsers().clear();
+            projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
+            projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
+            projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+            projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
+            projectDto.setDeliverableDto(project.getDeliverables().stream().map(deliverable -> modelMapper.map(deliverable, DeliverableDto.class)).collect(Collectors.toList()));
             projectDtos.add(projectDto);
         }
 
@@ -176,14 +192,90 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDto> getAllProjectsByProjectManagerId(long id) {
-        return projectRepository.findAllByProjectManagerId(id).stream()
-                .map(ProjectMapper::toProjectDto)
-                .collect(Collectors.toList());
+
+        List<Project> projectList = projectRepository.findAllByProjectManagerId(id);
+
+        List<ProjectDto> projectDtoList = new ArrayList<>();
+
+        for(Project project : projectList) {
+
+            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+
+            projectDto.setUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
+
+            List<DeliverableDto> deliverableList = new ArrayList<>();
+
+            for(Deliverable deliverable : project.getDeliverables()) {
+                DeliverableDto deliverableDto = modelMapper.map(deliverable, DeliverableDto.class);
+                deliverableDto.setDeliverableType(modelMapper.map(deliverable.getDeliverableTypes(), DeliverableTypeDto.class));
+                deliverableList.add(deliverableDto);
+            }
+
+            projectDto.setDeliverableDto(deliverableList);
+            if(project.getUsers() != null) {
+                List<UserDto> userDtos = new ArrayList<>();
+                for(User user : project.getUsers()) {
+                    user.getProjects().clear();
+                    userDtos.add(modelMapper.map(user, UserDto.class));
+                }
+                projectDto.setUserDtos(userDtos);
+            }
+
+            projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+            projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+            projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
+            projectDto.setSystemOutLineDto(modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class));
+
+            projectDtoList.add(projectDto);
+
+        }
+
+
+        return projectDtoList;
     }
 
     @Override
     public List<ProjectDto> getAllProjectsByDepartmentId(long id) {
-        return null;
+
+        List<Project> projectList = projectRepository.findAllByProjectManagerId(id);
+
+        List<ProjectDto> projectDtoList = new ArrayList<>();
+
+        for(Project project : projectList) {
+
+            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+
+            projectDto.setUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
+
+            List<DeliverableDto> deliverableList = new ArrayList<>();
+
+            for(Deliverable deliverable : project.getDeliverables()) {
+                DeliverableDto deliverableDto = modelMapper.map(deliverable, DeliverableDto.class);
+                deliverableDto.setDeliverableType(modelMapper.map(deliverable.getDeliverableTypes(), DeliverableTypeDto.class));
+                deliverableList.add(deliverableDto);
+            }
+
+            projectDto.setDeliverableDto(deliverableList);
+            if(project.getUsers() != null) {
+                List<UserDto> userDtos = new ArrayList<>();
+                for(User user : project.getUsers()) {
+                    user.getProjects().clear();
+                    userDtos.add(modelMapper.map(user, UserDto.class));
+                }
+                projectDto.setUserDtos(userDtos);
+            }
+
+            projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+            projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+            projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
+            projectDto.setSystemOutLineDto(modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class));
+
+            projectDtoList.add(projectDto);
+
+        }
+
+
+        return projectDtoList;
     }
 
     @Override
@@ -196,6 +288,11 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findAllByUsersId(id).stream()
                 .map(ProjectMapper::toProjectDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public long countTaskById(long id) {
+        return 0;
     }
 
     public static long calculateEndDateMillis(long startDateMillis, int durationInMonths) {

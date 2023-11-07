@@ -510,11 +510,8 @@
                         "fs-6",
                         "ms-2"
                     );
-                    if (currentProject.user && currentProject.user.name) {
-                        h5.innerText = currentProject.user.name;
-                    } else {
-                        h5.innerText = "Unknown User";
-                    }
+
+                    h5.innerText = currentProject.userDto.name;
 
                     const a = document.createElement("a");
                     a.href = "#";
@@ -555,12 +552,12 @@
                     progressCircle.setAttribute("data-min-value", "0");
                     progressCircle.setAttribute("data-max-value", "100");
                     progressCircle.setAttribute(
-                        "data-value",
+                        "data-value", currentProject.totalTask == 0 ?
                         (
-                            (currentProject.doneTask /
-                                currentProject.totalTask) *
+                            (currentProject.completeTaskCount /
+                                currentProject.totalTaskCount) *
                             100
-                        ).toString()
+                        ).toString() : 0
                     );
                     progressCircle.setAttribute("data-type", "percent");
 
@@ -945,7 +942,29 @@
                     maxWidth: "100%",
                 });
 
+            $(".circle-progress").each(function () {
+                const minValue = $(this).attr("data-min-value");
+                const maxValue = $(this).attr("data-max-value");
+                const value = $(this).attr("data-value");
+                const type = $(this).attr("data-type");
 
+                if (value < 40) {
+                    this.classList.add("circle-progress-secondary");
+                } else if (value < 70) {
+                    this.classList.add("circle-progress-primary");
+                } else if (value > 69) {
+                    this.classList.add("circle-progress-success");
+                }
+
+                if (this.id !== "" && this.id !== null) {
+                    new CircleProgress("#" + this.id, {
+                        min: minValue,
+                        max: maxValue,
+                        value: value,
+                        textFormat: type,
+                    });
+                }
+            });
 
 
             //list project end

@@ -3,12 +3,17 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.departmen
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.department.DepartmentService;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +22,7 @@ import java.util.List;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public DepartmentDto save(DepartmentDto departmentDto) {
@@ -32,9 +38,18 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<DepartmentDto> getAllDepartments() {
         List<Department> departments = departmentRepository.findAll();
-        return departments.stream()
-                .map(DepartmentMapper::toDepartmentDto)
-                .collect(java.util.stream.Collectors.toList());
+
+        List<DepartmentDto> departmentDtos = new ArrayList<>();
+
+        for(Department department : departments) {
+            DepartmentDto departmentDto = modelMapper.map(department, DepartmentDto.class);
+            for(UserDto user : departmentDto.getUsers()) {
+                user.getProjectList().clear();
+            }
+            departmentDtos.add(departmentDto);
+        }
+
+        return departmentDtos;
     }
 
 

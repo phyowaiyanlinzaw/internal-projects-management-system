@@ -27,6 +27,8 @@ public class Tasks implements Serializable {
     private long actual_start_time;
     private long actual_end_time;
 
+    @ManyToOne
+    private Project project;
 
     @Enumerated(EnumType.STRING)
     private TasksGroup tasksGroup;
