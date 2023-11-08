@@ -8,6 +8,7 @@ import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 
 import java.io.Serializable;
@@ -33,9 +34,7 @@ public class IssueDto implements Serializable {
     private long solved_date;
 
     private Category issue_category;
-
-
-//    @JsonProperty("project")
+    private ResponsibleType responsible_type;
     private ProjectDto projectDto;
 
     private UserDto user_uploader;

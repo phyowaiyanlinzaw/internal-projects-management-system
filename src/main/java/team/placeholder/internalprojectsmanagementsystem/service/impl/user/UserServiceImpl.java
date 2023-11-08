@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateProfile(UserDto userDto) {
-        User user = userRepository.findById(userDto.getId()).orElseNull();
+        User user = userRepository.findById(userDto.getId());
 
         if (user != null) {
             user.setName(userDto.getName());

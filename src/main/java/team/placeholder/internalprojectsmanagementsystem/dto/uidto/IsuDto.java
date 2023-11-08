@@ -2,10 +2,7 @@ package team.placeholder.internalprojectsmanagementsystem.dto.uidto;
 
 import lombok.Getter;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
-import java.sql.Date;
 
 
 @Getter
@@ -20,17 +17,16 @@ public class IsuDto {
     private String direct_cause;
     private String corrective_action;
     private String preventive_action;
-    private int clientId;
+    private long responsible_party;
     private boolean solved;
-    private Date created_date;
-    private Date updated_date;
-
-    private Project project;
-    private User user;
-
-    private long projectId;
-    private long userId;
-    private long pmId;
+    private long created_date;
+    private long updated_date;
+    private long solved_date;
+    private String issue_category;
+    private String responsible_type;
+    private long project_id;
+    private long user_uploader;
+    private long user_pic;
 
 
 

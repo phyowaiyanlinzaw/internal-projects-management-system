@@ -6,17 +6,18 @@ import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue.IssueMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.issue.IssueService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
@@ -25,57 +26,71 @@ public class IssueServiceImpl implements IssueService {
 
     private final IssueRepository issueRepository;
     private final UserRepository userRepository;
-
+    private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
 
     @Override
-    public IssueDto save(IssueDto issueDto) {
+    public Issue save(IsuDto issueDto) {
         Issue issue = modelMapper.map(issueDto, Issue.class);
-        issue.setTitle(issueDto.getTitle());
-        issue.setDescription(issueDto.getDescription());
-        issue.setPlace(issueDto.getPlace());
-        issue.setImpact(issueDto.getImpact());
-        issue.setRoot_cause(issueDto.getRoot_cause());
-        issue.setDirect_cause(issueDto.getDirect_cause());
-        issue.setCorrective_action(issueDto.getCorrective_action());
-        issue.setPreventive_action(issueDto.getPreventive_action());
+
         issue.setResponsible_party(issueDto.getResponsible_party());
         issue.setCreated_date(issueDto.getCreated_date());
         issue.setUpdated_date(issueDto.getUpdated_date());
         issue.setSolved_date(issueDto.getSolved_date());
         issue.setSolved(issueDto.isSolved());
-        issue.setResponsible_id(issueDto.getResponsible_id());
-        issue.setIssue_category(issueDto.getIssue_category());
-        issue.setUser_uploader(modelMapper.map(issueDto.getUser_uploader(), User.class));
-        issue.setUser_pic(modelMapper.map(issueDto.getUser_pic(), User.class));
-       issue.setProject(modelMapper.map(issueDto.getProjectDto(), Project.class));
-        Issue savedIssue = issueRepository.save(issue);
-        return modelMapper.map(savedIssue, IssueDto.class);
-
-    }
-
-
-
-    @Override
-    public List<IssueDto> getAllIssues() {
-
-        List<Issue> issueList = issueRepository.findAll();
-
-        for(Issue issue : issueList) {
-            System.out.println(issue.getId());
+        if (issueDto.getResponsible_type() != null) {
+            try {
+                issue.setResponsible_type(ResponsibleType.valueOf(issueDto.getResponsible_type()));
+            } catch (IllegalArgumentException e) {
+                issue.setResponsible_type(null);
+            }
+        } else {
+            issue.setResponsible_type(null);
+            if (issueDto.getIssue_category() != null) {
+                try {
+                    issue.setIssue_category(Category.valueOf(issueDto.getIssue_category()));
+                } catch (IllegalArgumentException e) {
+                    issue.setIssue_category(null);
+                }
+            } else {
+                issue.setIssue_category(null);
+            }
         }
 
-        List<IssueDto> issueDtos = new ArrayList<>();
+            issue.setUser_uploader(userRepository.findById(issueDto.getUser_uploader()));
+            issue.setUser_pic(userRepository.findById(issueDto.getUser_pic()));
+            issue.setProject(projectRepository.findById(issueDto.getProject_id()));
 
-        for(Issue issue : issueList ) {
-            IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
-            UserDto userDto = modelMapper.map(issue.getUser_pic(), UserDto.class);
-            issueDto.setUser_pic(userDto);
-            issueDtos.add(issueDto);
+            Issue savedIssue = issueRepository.save(issue);
+            return savedIssue;
+    }
+
+    @Override
+    public List<IsuDto> getAllIssues() {
+        List<Issue> issueList = issueRepository.findAll();
+        List<IsuDto> issueDtos = new ArrayList<>();
+
+        for (Issue issue : issueList) {
+            if (issue != null) {
+                IsuDto issueDto = modelMapper.map(issue, IsuDto.class);
+                if (issue.getUser_pic() != null) {
+                    UserDto userDto = modelMapper.map(issue.getUser_pic(), UserDto.class);
+                    issueDto.setUser_pic(userDto.getId());
+                }
+
+                if(issue.getUser_uploader() != null) {
+                    UserDto userDto = modelMapper.map(issue.getUser_uploader(), UserDto.class);
+                    issueDto.setUser_uploader(userDto.getId());
+                }
+                issueDtos.add(issueDto);
+            }
         }
 
         return issueDtos;
     }
+
+
+
 
     @Override
     public IssueDto getIssueById(long id) {

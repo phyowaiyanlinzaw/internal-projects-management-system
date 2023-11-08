@@ -178,13 +178,17 @@
                         <div class="col-lg-6">
                             <label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_party">Responsible Party <span
                                     style="color:red"> *</span></label>
-                            <select class="form-select border-task-description" aria-label="Select Clients"  id="responsible_party" name="responsible_party" >
-                                <option selected disabled>Select Responsible Party</option>
-                                <option value="1">Phyo Wai Yan Lin Zaw</option>
-                                <option value="2">Zaw Lin Shein</option>
-                                <option value="3">Ei Ei Phyo</option>
-                                <option value="4">Hnin Aye Lwin</option>
-                                <option value="5">Thant Htet Ko</option>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="responsible_type" name="responsible_type" value="CLIENT">
+                                <label class="form-check-label" for="responsible_type">Client</label>
+
+                                <input class="form-check-input" type="checkbox" id="responsible_type" name="responsible_type" value="EMPLOYEE">
+                                <label class="form-check-label" for="responsible_type">Employee</label>
+                            </div>
+
+
+                            <select class="form-select border-task-description" aria-label="Select Responsible Party"  id="responsible_party" name="responsible_party" >
+
                             </select>
                         </div>
 
@@ -378,16 +382,54 @@
                                 text: 'Select a Member',
                                 data: {picUrl: ''},
                             }));
-                            $.each(userData, function (index, pic) {
-                                user_pic.append($('<option>', {
-                                    value: pic.id,
-                                    text: pic.name,
-                                    data: {picUrl:pic.picUrl},
-                    user: pic,
-                }));
-            });
+                     $.each(userData, function (index, user) {
+                         if (user.role === 'PROJECT_MANAGER') {
+                             user_pic.append($('<option>', {
+                                 value: user.id,
+                                 text: user.name,
+                                 data: { picUrl: user.picUrl },
+                                 user: user,
+                             }));
+                         }
+                     });
+
         });
 
+
+            // Fetch client data
+            let clientData = [];
+            $.get('api/project/list/clients', function (clients) {
+                clientData = clients;
+
+                // Fetch user data
+                let userData = [];
+                $.get('api/project/userLists', function (users) {
+                    userData = users;
+
+                    const responsiblePartySelect = $('#responsible_party');
+                    responsiblePartySelect.empty();
+
+                    responsiblePartySelect.append($('<option>', {
+                        value: '',
+                        text: 'Select Responsible Party',
+                    }));
+
+                    // Add client options
+                    $.each(clientData, function (index, client) {
+                        responsiblePartySelect.append($('<option>', {
+                            value: `client_${client.id}`,
+                            text: `Client: ${client.name}`,
+                        }));
+                    });
+
+                    $.each(userData, function (index, user) {
+                        responsiblePartySelect.append($('<option>', {
+                            value: `user_${user.id}`,
+                            text: `User: ${user.name}`,
+                        }));
+                    });
+                });
+            });
 
 
 
@@ -400,7 +442,10 @@
             const root_cause = $('#root_cause').val();
             const direct_cause = $('#direct_cause').val();
             const responsible_party = $('#responsible_party').val();
-            const issue_category = $('#issue_category').val();
+            const issue_category = $('#issue_category').val()
+                const responsible_type_client = $('#responsible_type_client').val();
+                const responsible_type_employee = $('#responsible_type_employee').val();
+
             const selectedUserId = $('#user_pic').val();
 
 
@@ -414,7 +459,7 @@
                 responsible_party === "" ||
                 issue_category === ""||
                 selectedUserId === ""
-              //  client === ""
+
             ) {
                 alert('Please fill in all the required fields.');
                 return;
@@ -423,6 +468,8 @@
 
             const selectedUser = data.find(user => user.id == selectedUserId);
 
+            const selectedResponsibleParty = data.find(user => user.id == responsible_party);
+
 
             if (!selectedUser) {
                 alert('Selected user data not found.');
@@ -430,7 +477,7 @@
             }
 
 
-            const uploaderId = getLoginUser.currentUser.id;
+            const uploaderId = getLoginUser.currentUser;
 
             console.log("Uploader Id", uploaderId);
 
@@ -445,12 +492,13 @@
                 updated_date: new Date().getTime(),
                 root_cause: root_cause,
                 direct_cause: direct_cause,
-                responsible_party: responsible_party,
+                responsible_party: selectedResponsibleParty,
                 issue_category: issue_category,
                 user_pic: selectedUser,
                 user_uploader: {
                     id : uploaderId
                 },
+                responsible_type: responsible_type_client,
              //   client: clientUser,
             };
 
@@ -501,7 +549,7 @@
     $(document).ready(function() {
         function loadData() {
             $.ajax({
-                url: 'api/issue/lists',
+                url: 'api/issue/list',
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -518,7 +566,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <h6 class="card-title">${item.title}</h6>
                                         <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                         ${item.pic_id?.name}
+                                         ${item.pic_id.name}
 
                                         </p>
                                     </div>

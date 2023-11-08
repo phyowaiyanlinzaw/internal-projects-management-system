@@ -3,27 +3,16 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 
-import org.codehaus.groovy.transform.sc.transformers.RangeExpressionTransformer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
-import team.placeholder.internalprojectsmanagementsystem.model.project.DeliverableType;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
-import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
@@ -31,17 +20,8 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.project.Pr
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.ClientServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
-import java.sql.Date;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -200,6 +180,12 @@ public class ProjectController {
         List<UserDto> userDtos = projectService.getAllPM();
         return new ResponseEntity<>(userDtos, HttpStatus.OK);
     }
+
+//    @GetMapping("/clientsAndusers")
+//    public ResponseEntity<List<ProjectDto>> getAllClientsAndUsers(){
+//        List<ProjectDto> projectDtos = projectService.getAllClientsAndUser();
+//        return new ResponseEntity<>(projectDtos, HttpStatus.OK);
+//    }
 
 
 
