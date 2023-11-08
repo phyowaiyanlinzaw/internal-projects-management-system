@@ -1,13 +1,11 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.project;
 
 import org.springframework.stereotype.Component;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 
-@Component
 public class ProjectMapper {
     public static ProjectDto toProjectDto(Project project) {
         if (project == null) {
