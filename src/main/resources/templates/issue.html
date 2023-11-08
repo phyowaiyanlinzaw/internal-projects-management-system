@@ -377,6 +377,7 @@
 
 
 
+
         $.get(`api/project/list/ID/1/IN_PROGRESS`, function (userData) {
             data = userData; // Set the data array with the retrieved user data
 
@@ -407,7 +408,7 @@
         $.get('api/project/list/ID/1/IN_PROGRESS', function (clients) {
             clientData = clients;
 
-            console.log(clientData)
+            console.log("Client Data"+clientData)
 
             const responsiblePartySelect = $('#responsible_party');
             responsiblePartySelect.empty();
@@ -507,7 +508,6 @@
                 user_pic: selectedUser.id,
                 user_uploader: uploaderId.id,
                 responsible_type: responsible_type,
-                // project_id : dataForIssue.id,
             };
 
             console.log('Request Data:', requestData);
@@ -559,7 +559,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
+                    console.log("Data"+data);
                     const sortContainer = $('#sort');
 
                     // Loop through the retrieved data and create content for each item
@@ -572,7 +572,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <h6 class="card-title">${item.title}</h6>
                                         <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                         ${item.pic_id.name}
+                                         ${item.user_pic.name}
 
                                         </p>
                                     </div>
