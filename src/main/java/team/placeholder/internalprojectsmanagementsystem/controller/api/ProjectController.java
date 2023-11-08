@@ -144,7 +144,7 @@ public class ProjectController {
         log.info("current login user role " + role);
 
         if (role.equals("PROJECT_MANAGER")) {
-            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id);
+            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know 
             return getListResponseEntity(projects);
         } else if (role.equals("DEPARTMENT_HEAD")) {
             long departmentId = userService.getUserById(id).getDepartmentdto().getId();
@@ -156,6 +156,31 @@ public class ProjectController {
         } else {
             return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/list/sort/by/department")
+    public ResponseEntity<Map<Long, List<Long>>> sortProjectByDepId() {
+
+        List<ProjectDto> projectList = projectService.getAllProjects();
+
+        Map<Long, List<Long>> departmentProejctMap = new HashMap<>();
+
+        for(ProjectDto proejct: projectList) {
+            Long departmentId = proejct.getDepartmentDto().getId();
+            Long projectId = proejct.getId();
+
+            if(departmentProejctMap.containsKey(departmentId)) {
+                departmentProejctMap.get(departmentId).add(projectId);
+            } else {
+                List<Long> projectIds = new ArrayList<>();
+                projectIds.add(projectId);
+                departmentProejctMap.put(departmentId, projectIds);
+            }
+
+        }
+
+        return new ResponseEntity<>(departmentProejctMap, HttpStatus.OK);
+
     }
 
     @GetMapping("/list/ID/{id}/status/IN_PROGRESS")
