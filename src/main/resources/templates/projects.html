@@ -731,6 +731,18 @@
                 console.log(empTagifyList)
             }
 
+            document.querySelector("#start_date").addEventListener("change", function () {
+
+                const projectDruation = document.querySelector("#project-add-duration").value;
+
+                const projectEndDate = document.querySelector("#project-end-date");
+
+                const endDate = calculateEndDate(new Date(this.value).getTime(), projectDruation);
+
+                projectEndDate.value = endDate;
+
+            });
+
                 $(document).ready(function () {
                     $("#validation-form").submit(function (event) {
                         event.preventDefault(); // Prevent the form from submitting the traditional way
@@ -1205,6 +1217,25 @@
                                         ></textarea>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <label
+                                                for="project-add-duration"
+                                                class="col-sm-12 col-form-label"
+                                        >End date (Month)<span
+                                                style="color: red"
+                                        >
+                                                *</span
+                                        ></label
+                                        >
+                                        <input
+                                                type="date"
+                                                class="form-control border-task-description"
+                                                id="project-add-end-date"
+                                                min="1"
+                                                value="1"
+                                                required
+                                        />
+                                    </div>
                                     <!--                                architectures add-->
                                     <div class="col-lg-6">
                                         <label
