@@ -12,7 +12,6 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.Proj
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
@@ -29,7 +28,6 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.project.Ar
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.user.ClientServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
@@ -55,8 +53,6 @@ public class ProjectController {
     private final DeliverableTypeServiceImpl deliverableTypeService;
     private final TaskServiceImpl taskService;
     private final FakerService fakerService;
-
-    private final ClientServiceImpl clientService;
 
     @GetMapping("/generate-fake-project/{count}")
     public ResponseEntity<String> generateFakeProjects(@PathVariable int count) {
@@ -187,26 +183,5 @@ public class ProjectController {
         }
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
-
-    @GetMapping("/list/clients")
-    public ResponseEntity<List<ClientDto>> getAllClientsFromProjects() {
-        List<ClientDto> clients = projectService.getAllClientsFromProjects();
-        return new ResponseEntity<>(clients, HttpStatus.OK);
-    }
-
-
-    @GetMapping("/userLists")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> userDtos = projectService.getAllPM();
-        return new ResponseEntity<>(userDtos, HttpStatus.OK);
-    }
-
-//    @GetMapping("/clientsAndusers")
-//    public ResponseEntity<List<ProjectDto>> getAllClientsAndUsers(){
-//        List<ProjectDto> projectDtos = projectService.getAllClientsAndUser();
-//        return new ResponseEntity<>(projectDtos, HttpStatus.OK);
-//    }
-
-
 
 }
