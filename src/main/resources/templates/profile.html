@@ -309,13 +309,18 @@ ominus-bootstrap-4.min.js"></script>
                         // If the user confirmed, proceed with the AJAX request
                         $('#loading-overlay').removeClass('d-none');
 
+                        console.log("Old Password : " , currentPassword);
+                        console.log("New Password : ", newPassword);
+
                         $.ajax({
                             url: "/api/user/change-password",
-                            type: "POST",
+                            type: "PUT",
                             data: {
                                 oldPassword: currentPassword,
                                 newPassword: newPassword
                             },
+
+
                             success: function (data) {
                                 // Hide the full-page loading overlay on success
                                 $('#loading-overlay').addClass('d-none');
