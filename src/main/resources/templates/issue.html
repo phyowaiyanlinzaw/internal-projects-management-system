@@ -245,7 +245,7 @@
 
 
 <!--    for select drop-drown-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>-->
 
 <!-- fontawesome -->
 <script src="/js/fontawesome.js"></script>
@@ -315,7 +315,7 @@
 
     import {getUser} from "/js/currentLoginUser.js";
     import {getTimeElapsed} from "/js/time.js";
-
+    import {getData} from "/js/api-function.js";
 
 
     console.log(await getUser());
@@ -352,7 +352,17 @@
     ];
 
     // If you want to initialize Quill for a specific element, you can do it like this:
+    let getLoginUser = await getUser();
 
+    console.log("current login user " , getLoginUser)
+
+    let data = [];
+
+    // const currentUser = await getUser();
+
+    const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
+
+    console.log(dataForIssue.id);
 
 
     $(document).ready(async function () {
@@ -365,18 +375,7 @@
             theme: "snow",
         });
 
-        let getLoginUser;
-        try {
-            getLoginUser = await getUser();
-            console.log("Get Login User", getLoginUser)
-        } catch (error) {
-            console.log("Error getting the login user:", error);
-        }
 
-
-        let data = [];
-
-            // const currentUser = await getUser();
 
          $.get(`api/project/list/ID/1/IN_PROGRESS`, function (userData) {
                             data = userData; // Set the data array with the retrieved user data
@@ -505,7 +504,7 @@
                 user_pic: selectedUser.id,
                 user_uploader: uploaderId.id,
                 responsible_type: responsible_type,
-
+                 // project_id : dataForIssue.id,
             };
 
             console.log('Request Data:', requestData);

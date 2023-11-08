@@ -27,7 +27,6 @@ public class IssueDto implements Serializable {
     private String corrective_action;
     private String preventive_action;
     private long responsible_party;
-    private long responsible_id;
     private boolean solved;
     private long created_date;
     private long updated_date;
