@@ -1,5 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
+import ch.qos.logback.classic.Logger;
+import groovy.util.logging.Slf4j;
 import lombok.AllArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -21,10 +23,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/currentuser")
 @AllArgsConstructor
+@Slf4j
 public class LoginUser {
 
     UserServiceImpl userService;
-
     @GetMapping
     public ResponseEntity<Map<String, Object>> loginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -32,7 +34,6 @@ public class LoginUser {
 
         Map<String, Object> response = new HashMap<>();
         response.put("currentUser", userDto);
-
         System.out.println(userDto.getRole());
 
         if(userDto.getRole() == Role.PROJECT_MANAGER) {

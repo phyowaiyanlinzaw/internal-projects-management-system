@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,6 +71,7 @@ public class Project implements Serializable {
     private Department department;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name="pm_id")
     private User projectManager;
 

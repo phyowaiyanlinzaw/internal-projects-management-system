@@ -33,27 +33,14 @@
     });
 
 
-    // Progress Bar
-    $('.pg-bar').waypoint(function () {
-        $('.progress .progress-bar').each(function () {
-            $(this).css("width", $(this).attr("aria-valuenow") + '%');
-        });
-    }, {offset: '80%'});
+
 
 
     //calendar
 
 
 
-    // Testimonials carousel
-    $(".testimonial-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1000,
-        items: 1,
-        dots: true,
-        loop: true,
-        nav : false
-    });
+
 
     //ajax call api/user/profile to get current user name to set #username
     $.ajax({
@@ -72,10 +59,28 @@
                 $('.avatar-nav').attr("src","/images/avatars/employee_avatar.svg");
             }
             $('#navbar-username').text(data.name);
+            $('#navbar-username-without-search').text(data.name);
         },
         error: function (data,xhr) {
             console.log("error",data,xhr);
         }
+    });
+
+    // Progress Bar
+    $('.pg-bar').waypoint(function () {
+        $('.progress .progress-bar').each(function () {
+            $(this).css("width", $(this).attr("aria-valuenow") + '%');
+        });
+    }, {offset: '80%'});
+
+    // Testimonials carousel
+    $(".testimonial-carousel").owlCarousel({
+        autoplay: true,
+        smartSpeed: 1000,
+        items: 1,
+        dots: true,
+        loop: true,
+        nav : false
     });
 
     
