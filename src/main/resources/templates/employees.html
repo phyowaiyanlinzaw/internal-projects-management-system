@@ -47,7 +47,7 @@
                     data-header-style="headerStyle"
                     data-url="/api/user/list"
                     data-pagination="true"
-                    data-page-size="5"
+                    data-page-size="10"
                     data-page-list="[5, 10, 25, 50, 100, all]"
             >
                 <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5">
@@ -278,7 +278,7 @@
                 departmentSelect.hide();
 
                 // Make an AJAX request to populate projectManagerSelect options
-                $.get('/api/user/list/PROJECT_MANAGER', function (data) {
+                $.get('/api/user/list/role/PROJECT_MANAGER', function (data) {
                     projectManagerSelect.empty();
                     $.each(data, function (index, user) {
                         projectManagerSelect.append($('<option>', {
