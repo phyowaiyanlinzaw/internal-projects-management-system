@@ -446,6 +446,20 @@
 
             let pList = await getAllProjects();
 
+            let departmentProjectId;
+            
+            if(loginUser.currentUser.role == 'PMO' || loginUser.currentUser.role == 'SDQC') {
+             
+                departmentProjectId = await getData("/api/project/list/for/pmoandsdqc");
+            
+            }
+
+            if(departmentProjectId) {
+                console.log("proejct id mapped by department id" , departmentProjectId);
+            }
+
+                console.log(pList)
+
                 for (let i = 0; i < pList.length; i++) {
                     let currentProject = pList[i];
 
@@ -793,7 +807,7 @@
                         const systemOutlines = sysSelect.selectedValues;
                         const deliverable = $("#deliverable").val();
                         const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
-
+                        console.log(projectName, client, startDate, duration, background, architectures, empList, systemOutlines, deliverable, objective)
                         if (
                             projectName === "" ||
                             client === "" ||
@@ -886,9 +900,11 @@
                                 // Reset the form if needed
                                 $("#validation-form")[0].reset();
                                 console.log("this projce has benn saved", data);
+                                event.currentTarget.submit();
                             },
                             error: function (data) {
                                 alert("Error registering project");
+                                event.currentTarget.submit();
                             },
                         });
                     });

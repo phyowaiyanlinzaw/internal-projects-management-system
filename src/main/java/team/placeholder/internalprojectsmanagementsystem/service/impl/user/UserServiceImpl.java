@@ -96,7 +96,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(long id) {
         User user = userRepository.findById(id);
         if (user != null) {
-            return modelmapper.map(user, UserDto.class);
+            UserDto userDto = modelmapper.map(user, UserDto.class);
+            userDto.setDepartmentdto(modelmapper.map(user.getDepartment(), DepartmentDto.class));
+            return userDto;
         } else {
             return null;
         }
