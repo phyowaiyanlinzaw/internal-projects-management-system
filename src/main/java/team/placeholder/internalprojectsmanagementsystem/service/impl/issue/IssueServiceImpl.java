@@ -38,42 +38,16 @@ public class IssueServiceImpl implements IssueService {
         IssueDto issueDto = new IssueDto();
 
 
-            Issue savedIssue = issueRepository.save(issue);
-            issueDto = modelMapper.map(savedIssue, IssueDto.class);
+        Issue savedIssue = issueRepository.save(issue);
+        issueDto = modelMapper.map(savedIssue, IssueDto.class);
 
-            issueDto.setUser_uploader(modelMapper.map(savedIssue.getUser_uploader(), UserDto.class));
-            issueDto.setUser_pic(modelMapper.map(savedIssue.getUser_pic(), UserDto.class));
-            issueDto.setProjectDto(modelMapper.map(savedIssue.getProject(), ProjectDto.class));
+        issueDto.setUser_uploader(modelMapper.map(savedIssue.getUser_uploader(), UserDto.class));
+        issueDto.setUser_pic(modelMapper.map(savedIssue.getUser_pic(), UserDto.class));
+        issueDto.setProjectDto(modelMapper.map(savedIssue.getProject(), ProjectDto.class));
 
-            return issueDto;
+        return issueDto;
     }
 
-
-
-
-//    @Override
-//    public List<IsuDto> getAllIssues() {
-//        List<Issue> issueList = issueRepository.findAll();
-//        List<IsuDto> issueDtos = new ArrayList<>();
-//
-//        for (Issue issue : issueList) {
-//            if (issue != null) {
-//                IsuDto issueDto = modelMapper.map(issue, IsuDto.class);
-//                if (issue.getUser_pic() != null) {
-//                    UserDto userDto = modelMapper.map(issue.getUser_pic(), UserDto.class);
-//                    issueDto.setUser_pic(userDto.getId());
-//                }
-//
-//                if(issue.getUser_uploader() != null) {
-//                    UserDto userDto = modelMapper.map(issue.getUser_uploader(), UserDto.class);
-//                    issueDto.setUser_uploader(userDto.getId());
-//                }
-//                issueDtos.add(issueDto);
-//            }
-//        }
-//
-//        return issueDtos;
-//    }
 
     @Override
     public List<IssueDto> getAllIssues() {
@@ -82,13 +56,40 @@ public class IssueServiceImpl implements IssueService {
 
         for (Issue issue : issueList) {
             if (issue != null) {
-                IssueDto issueDto = IssueMapper.toIssueDto(issue);
+                IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+                if (issue.getUser_pic() != null) {
+                    UserDto userPic = modelMapper.map(issue.getUser_pic(), UserDto.class);
+                    issueDto.setUser_pic(userPic);
+                }
+
+                if (issue.getUser_uploader() != null) {
+                    UserDto userUploader = modelMapper.map(issue.getUser_uploader(), UserDto.class);
+                    issueDto.setUser_uploader(userUploader);
+                }
                 issueDtos.add(issueDto);
+
             }
         }
 
         return issueDtos;
     }
+
+
+
+//    @Override
+//    public List<IssueDto> getAllIssues() {
+//        List<Issue> issueList = issueRepository.findAll();
+//        List<IssueDto> issueDtos = new ArrayList<>();
+//
+//        for (Issue issue : issueList) {
+//            if (issue != null) {
+//                IssueDto issueDto = IssueMapper.toIssueDto(issue);
+//                issueDtos.add(issueDto);
+//            }
+//        }
+//
+//        return issueDtos;
+//    }
 
 
 
