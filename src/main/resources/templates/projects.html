@@ -594,6 +594,10 @@
                             (a) => a.id == id
                         );
 
+                        document.querySelector("#project-detail-background").innerText = targetData.background;
+
+                        document.querySelector("#project-detail-name").innerText = targetData.name;
+
                         document.querySelector("#show-project-objective").innerHTML = targetData.objective;
 
                         console.log(targetData)
@@ -1927,6 +1931,7 @@
                                                                 type="text"
                                                                 class="form-control border-task-description"
                                                                 name="background"
+                                                                id="project-detail-background"
                                                             ></textarea>
                                                         </div>
                                                     </div>
@@ -1945,6 +1950,7 @@
                                                                 id="project_name"
                                                                 type="text"
                                                                 class="form-control"
+                                                                id="project-detail-name"
                                                             />
                                                         </div>
                                                     </div>
