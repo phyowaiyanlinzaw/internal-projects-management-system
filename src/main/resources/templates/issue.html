@@ -29,13 +29,15 @@
         <div th:replace="fragments/navigation :: navigation-with-search"></div>
 
         <div class="container-fluid">
-            <div class="container-fluid d-md-block pt-2 ps-s pe-2"
-                    id="dropdrown-search-bar">
-                <div class="d-flex flex-row justify-content-between position-relative">
-                    <form class="d-md-flex">
-                        <input class="form-control border-0" type="search" placeholder="Search" />
-                    </form>
-                    <div class="position-absolute end-0 d-flex gap-3">
+            <div class="container-fluid d-md-block pt-2 ps-s pe-2" id="dropdrown-search-bar">
+
+
+                    <div class="d-flex flex-row justify-content-end gap-2">
+
+                        <form class="d-inline-block">
+                            <input class="form-control border-0" type="search" placeholder="Search" />
+                        </form>
+
                         <!-- modal toggle button start -->
                         <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
                             <i class="bi bi-plus-lg"></i>
@@ -44,21 +46,12 @@
 
                         <!-- sortting button -->
                         <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+
                     </div>
 
-                    <!-- Modal -->
-                </div>
 
-                <div
-                    id="grid"
-                    class="item-content animate__animated animate__fadeIn active"
-                    data-toggle-extra="tab-content"
-                >
-                    <div
-                        class="row"
-                        id="sort-container"
-                        style="margin: 10px"
-                    >
+                <div id="grid" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
+                    <div class="row" id="sort-container" style="margin: 10px" >
                         <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
 
                         <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
