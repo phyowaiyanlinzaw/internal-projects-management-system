@@ -158,6 +158,31 @@ public class ProjectController {
         }
     }
 
+    @GetMapping("/list/sort/by/department")
+    public ResponseEntity<Map<Long, List<Long>>> sortProjectByDepId() {
+
+        List<ProjectDto> projectList = projectService.getAllProjects();
+
+        Map<Long, List<Long>> departmentProejctMap = new HashMap<>();
+
+        for(ProjectDto proejct: projectList) {
+            Long departmentId = proejct.getDepartmentDto().getId();
+            Long projectId = proejct.getId();
+
+            if(departmentProejctMap.containsKey(departmentId)) {
+                departmentProejctMap.get(departmentId).add(projectId);
+            } else {
+                List<Long> projectIds = new ArrayList<>();
+                projectIds.add(projectId);
+                departmentProejctMap.put(departmentId, projectIds);
+            }
+
+        }
+
+        return new ResponseEntity<>(departmentProejctMap, HttpStatus.OK);
+
+    }
+
     @GetMapping("/list/ID/{id}/status/IN_PROGRESS")
     public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status){
         List<ProjectDto> project = projectService.findAllByUserId(id);
