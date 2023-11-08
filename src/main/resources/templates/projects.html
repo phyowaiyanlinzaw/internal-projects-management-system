@@ -596,9 +596,15 @@
 
                         document.querySelector("#project-detail-background").innerText = targetData.background;
 
-                        document.querySelector("#project-detail-name").innerText = targetData.name;
+                        document.querySelector("#project-detail-name").value = targetData.name;
 
                         document.querySelector("#show-project-objective").innerHTML = targetData.objective;
+
+                        document.querySelector("#project-edit-duration").value = targetData.duration;
+
+                        console.log(targetData.objective)
+
+                        editObjectiveEditor.clipboard.dangerouslyPasteHTML(0, targetData.objective)
 
                         console.log(targetData)
 
@@ -1050,7 +1056,7 @@
             </div>
             <!-- Spinner End -->
 
-            <div th:replace="fragments/sidebar :: sidebar"></div>
+            <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
             <!-- Content Start -->
             <div
@@ -1066,7 +1072,7 @@
                 "
             >
                 <div
-                    th:replace="fragments/navigation :: navigation-without-search"
+                    th:replace="~{fragments/navigation :: navigation-without-search}"
                 ></div>
                 <!-- Search Start -->
                 <div
@@ -1938,7 +1944,7 @@
 
                                                     <div class="row mb-3">
                                                         <label
-                                                            for="project_name"
+                                                            for="project-detail-name"
                                                             class="col-md-4 col-lg-3 col-form-label"
                                                             >Project name</label
                                                         >
@@ -1947,7 +1953,6 @@
                                                         >
                                                             <input
                                                                 name="project_name"
-                                                                id="project_name"
                                                                 type="text"
                                                                 class="form-control"
                                                                 id="project-detail-name"
@@ -1988,6 +1993,7 @@
                                                                 type="number"
                                                                 class="form-control"
                                                                 id="project-edit-duration"
+                                                                oninput="validity.valid||(value='1');"
                                                             />
                                                         </div>
                                                     </div>
