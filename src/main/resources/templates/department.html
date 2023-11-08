@@ -259,7 +259,7 @@
             }
 
             Swal.fire({
-                title: "Are you sure you want to edit?",
+                title: "Are you sure want to edit?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -418,10 +418,10 @@
 
                 <div class="modal-body">
                     <!-- TODO :: SHOW DEPARTMENT'S DETAILS -->
-                    <div class="container-fluid">
-                        <div class="row">
+                    <div class="container-fluid ">
+                        <div class="row justify-content-center">
 
-                            <div class="card">
+                            <div class="card col-10">
                                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                                     <!--icon-->
                                     <div class="profile-card-icon">
@@ -432,7 +432,8 @@
 
                                 </div>
                             </div>
-                            <div class="pt-3">
+
+                            <div class="col-10 pt-3">
                                 <!-- Bordered Tabs -->
                                 <ul class="nav nav-tabs nav-tabs-bordered">
                                     <li class="nav-item">
@@ -449,18 +450,25 @@
                                 </ul>
                                 <div class="tab-content pt-3">
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
+
                                         <div class="row row-cols-lg-1 row-cols-sm-1 row-cols-md-1 row-cols-xl-2">
+
                                             <ul class="list-group col" style="padding: 0;">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                                                <li class="list-group-item d-flex justify-content-between align-items-center w-100">
                                                     Total Project<span class="badge bg-primary rounded-pill" id="total-project"></span>
                                                 </li>
+
                                                 <br/>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                                                <li class="list-group-item d-flex justify-content-between align-items-center w-100">
                                                     Total Member<span class="badge bg-primary rounded-pill" id="total-member"></span>
                                                 </li>
+
                                             </ul>
-                                            <div class="col">
-                                                <canvas style="max-width: 960px; padding: 0; min-width: 300px"
+
+                                            <div class="col align-self-center">
+                                                <canvas style="max-width: 960px; padding: 0; min-width: 200px"
                                                         id="department-projects-chart" height="200"></canvas>
                                             </div>
 
