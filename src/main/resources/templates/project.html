@@ -5,7 +5,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="layout/layout"
         xmlns:th="http://www.thymeleaf.org"
->
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 </head>
 
@@ -210,8 +210,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row row-cols-2">
-
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
                                     <span
                                     ><i
                                             class="fa-solid fa-bars-staggered"
@@ -220,7 +219,6 @@
                             <label
                                     id="description-label"
                                     class="editable-label"
-                                    onclick="toggleEditor()"
                             >
                                 Description</label
                             >
@@ -232,8 +230,8 @@
                                     disabled
                             ></textarea>
                         </div>
-                        
-                        <div class="col-lg-6">
+
+                        <div class="col-lg-6 mb-4">
                             <i class="fa-solid fa-thumbtack"></i>
                             <label
                                     id="duration"
@@ -247,16 +245,26 @@
 
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 mb-4">
                             <i class="fa-solid fa-users"></i>
                             <label
-                                    class="editable-label"
+                                    for="assigned-member-tagify"
                             >
                                 Assigned Member </label
                             >
+                            <input
+                                    id="assigned-member-tagify"
+                                    class="editable-input"
+                                    name="member-tags"
+                                    sec:authorize="hasRole('PROJECT_MANAGER')"
+                            />
+                            <div class="mt-2" sec:authorize="hasAnyRole('FOC','EMPLOYEE','CONTRACT')">
+                                <span class="bg-secondary text-white border-0 p-2 rounded-1"
+                                      id="assigned-member-span"></span>
+                            </div>
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 mb-4">
                                     <span
                                     ><i
                                             class="fa-solid fa-calendar-days"
@@ -264,7 +272,6 @@
                                     ></span>
                             <label
                                     class="editable-label"
-                                    onclick="editTitle()"
                             >
                                 Start Date</label
                             >
@@ -280,11 +287,11 @@
                                             overflow-wrap: break-word;
                                             height: 37px;
                                         "
-                                    onblur="updateTitle(this)"
+                                    disabled
                             />
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 mb-4">
                                     <span
                                     ><i
                                             class="fa-solid fa-calendar-days"
@@ -292,7 +299,6 @@
                                     ></span>
                             <label
                                     class="editable-label"
-                                    onclick="editTitle()"
                             >
                                 Due Date</label
                             >
@@ -308,9 +314,29 @@
                                             overflow-wrap: break-word;
                                             height: 37px;
                                         "
-                                    onblur="updateTitle(this)"
+                                    disabled
                             />
                         </div>
+                    </div>
+
+                    <!--                    edit button and cancel button -->
+                    <div class="text-center mt-3">
+                        <button
+                                type="submit"
+                                class="btn btn-primary col-2"
+                                data-dismiss="#task-details"
+                                id="task-edit-btn"
+                        >
+                            Edit
+                        </button>
+                        <button
+                                type="reset"
+                                class="btn btn-secondary mr-3"
+                                data-bs-dismiss="modal"
+                                id="task-cancel-btn"
+                        >
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -367,7 +393,7 @@
 
                         <div class="col-lg-6">
                             <label
-                                    for="member"
+                                    for="select-member"
                                     class="col-sm-12 col-form-label"
                             >Assign Members<span style="color: red">
                                             *</span
@@ -376,7 +402,7 @@
                             <input
                                     type="text"
                                     name="member-tags"
-                                    id="member"
+                                    id="select-member"
                                     placeholder="Select An Employee"
                             />
                         </div>
@@ -519,7 +545,7 @@
         const projectId = document.getElementById("projectId").innerText;
 
         // Function to fetch the members' list from the backend API
-        var membersList;
+        let membersList = [];
         $.ajax({
             url: "/api/user/list/projectId/" + projectId,
             type: "GET",
@@ -530,7 +556,7 @@
         });
         console.log("MEMBERS LIST", membersList);
 
-        var memberInputTag = document.querySelector('input[name=member-tags]'),
+        var memberInputTag = document.querySelector('input[id=select-member]'),
             tagify = new Tagify(memberInputTag, {
                 enforceWhitelist: true,
                 mode: "select",
@@ -539,8 +565,6 @@
                 }),
                 blacklist: ['foo', 'bar'],
             })
-
-        // tagify.settings.templates =
 
         // bind events
         tagify.on('add', onAddTag)
@@ -557,47 +581,38 @@
         }
 
         // Get all elements with the common class name
-        const editableLabels =
-            document.querySelectorAll(".editable-label");
         const editableInputs =
             document.querySelectorAll(".editable-input");
+        const editBtn = document.getElementById("task-edit-btn");
+        const cancelBtn = document.getElementById("task-cancel-btn");
 
-        // Add event listeners for each element
-        editableLabels.forEach((label) => {
-            label.addEventListener("click", editTitle);
-        });
+        let isEditing = false;
 
-        editableInputs.forEach((input) => {
-            input.addEventListener("blur", function () {
-                updateTitle(this);
-            });
-        });
+        editBtn.addEventListener("click", function () {
+            if (!isEditing) {
+                editBtn.innerText = "Save";
 
-        function editTitle() {
-            const label = this;
-            const input = label.nextElementSibling;
+                editableInputs.forEach((input) => {
+                    input.removeAttribute("disabled");
+                });
 
-            //remove disabled attribute to enable editing
-            input.removeAttribute("disabled");
-            input.focus();
-        }
-
-        function updateTitle(inputField) {
-            //add disabled attribute to disable editing
-            inputField.setAttribute("disabled", true);
-        }
-
-        function toggleEditor() {
-            var editor = document.getElementById("description-editor");
-            if (
-                editor.style.display === "none" ||
-                editor.style.display === ""
-            ) {
-                editor.style.display = "block";
-            } else {
-                editor.style.display = "none";
+                isEditing = true;
             }
-        }
+
+        });
+
+        cancelBtn.addEventListener("click", function (event) {
+            if (isEditing) {
+                editBtn.innerText = "Edit";
+                // don't let the button close modal
+                event.preventDefault();
+                editableInputs.forEach((input) => {
+                    input.setAttribute("disabled", "");
+                });
+                isEditing = false;
+            }
+
+        });
 
         const todoLane = document.getElementById("TODO");
         const inProgress = document.getElementById("IN_PROGRESS");
@@ -710,20 +725,56 @@
                     document.getElementById('status').classList.add('bg-primary')
                 } else if (currentTaskData.status === 'IN_PROGRESS') {
                     document.getElementById('status').innerText = "IN PROGRESS"
-                    document.getElementById('status').classList.add('bg-warning')
+                    document.getElementById('status').classList.add('bg-info')
                 } else {
                     document.getElementById('status').innerText = "FINISHED"
                     document.getElementById('status').classList.add('bg-success')
                 }
 
-                // change the assigned member span value
-                document.getElementById('assigned-member').innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
                 if (currentTaskData.tasksGroup === 'A') {
-                    document.getElementById('task-group').innerText = "Group B - Training"
-                } else if (currentTaskData.group === 'B') {
+                    document.getElementById('task-group').innerText = "Group A - Related With Project Development"
+                } else if (currentTaskData.tasksGroup === 'B') {
                     document.getElementById('task-group').innerText = "Group B - Training"
                 } else {
                     document.getElementById('task-group').innerText = "Group C - Idling"
+                }
+
+                // Convert timestamp to Date objects
+                const startDate = new Date(currentTaskData.plan_start_time);
+                const endDate = new Date(currentTaskData.plan_end_time);
+
+// Get the date strings in 'yyyy-mm-dd' format
+                const startDateString = startDate.toISOString().split('T')[0];
+                const endDateString = endDate.toISOString().split('T')[0];
+
+                console.log("START DATE STRING", startDateString)
+                console.log("END DATE STRING", endDateString)
+
+// Set the values in the input fields
+                document.getElementById('task-detail-start-date').value = startDateString;
+                document.getElementById('task-detail-due-date').value = endDateString;
+
+                //preselect the tagify
+                const assignedMemberTagify = document.getElementById('assigned-member-tagify'),
+                    tagify = new Tagify(assignedMemberTagify, {
+                        enforceWhitelist: true,
+                        mode: "select",
+                        whitelist: membersList.map((member) => {
+                            return member.name + " | " + member.role;
+                        }),
+                        blacklist: ['foo', 'bar'],
+                    })
+
+                tagify.addTags(currentTaskData.userDto.name + " | " + currentTaskData.userDto.role)
+                console.log("CURRENT TASK DATA", currentTaskData)
+
+                const assignedMemberSpan = document.getElementById('assigned-member-span')
+                //to check if that element exists
+                if (assignedMemberSpan) {
+                    // Check if the user has any of the specified roles
+                    if (assignedMemberSpan.getAttribute('sec:authorize') === 'hasAnyRole(\'FOC\',\'EMPLOYEE\',\'CONTRACT\')') {
+                        assignedMemberSpan.innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
+                    }
                 }
             });
 
