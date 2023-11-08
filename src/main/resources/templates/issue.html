@@ -279,7 +279,10 @@
 
 <script src="/js/currentLoginUser.js" type="module" async></script>
 
-<script>
+<script type="module">
+    $(document).ready(function () {
+        confirmLogout();
+    });
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.comd
     function getTimeAgo(timestamp) {
@@ -308,10 +311,6 @@
             return `${months} month${months > 1 ? 's' : ''} ago`;
         }
     }
-
-</script>
-
-<script type="module">
 
     import {getUser} from "/js/currentLoginUser.js";
     import {getTimeElapsed} from "/js/time.js";
