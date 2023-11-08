@@ -141,6 +141,14 @@ public class ProjectServiceImpl implements ProjectService {
             projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
             projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+
+            List<UserDto> userDtos = new ArrayList<>();
+            for(User user : project.getUsers()) {
+                user.getProjects().clear();
+                userDtos.add(modelMapper.map(user, UserDto.class));
+            }
+            projectDto.setUserDtos(userDtos);
+
             projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
             projectDto.setDeliverableDto(project.getDeliverables().stream().map(deliverable -> modelMapper.map(deliverable, DeliverableDto.class)).collect(Collectors.toList()));
             projectDtos.add(projectDto);

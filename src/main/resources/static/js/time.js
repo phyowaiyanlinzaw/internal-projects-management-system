@@ -60,6 +60,8 @@ export function formatDateFromMilliseconds(milliseconds) {
     const month = MONTH_NAMES[date.getMonth()];
     const year = date.getFullYear();
 
+    console.log(year)
+
     const formattedDate = `${day} ${month} ${year}`;
     return formattedDate;
 }
@@ -88,13 +90,28 @@ export function calculateDuration(startDate, endDate) {
     }
 }
 
-export function calculateEndDate(startDateMilliseconds, durationMonths) {
-    // Convert the start date from milliseconds to a JavaScript Date object
-    const startDate = new Date(startDateMilliseconds);
+export function calculateEndDate(startDate, months) {
+    const date = new Date(startDate);
 
-    // Calculate the end date
-    const endDate = new Date(startDate);
-    endDate.setMonth(startDate.getMonth() + durationMonths);
+    console.log(date)
 
-    return endDate;
+    // Calculate the year and month to be set
+    console.log(parseInt(date.getMonth()) + parseInt(months))
+    console.log(date.getMonth() + parseInt(months) / 12)
+
+    let targetYear = date.getFullYear() + Math.floor((date.getMonth() + parseInt(months)) / 12);
+
+    console.log(targetYear)
+
+    let targetMonth = (date.getMonth() + parseInt(months)) % 12 + 1; // Add 1 here
+
+    console.log(targetMonth)
+
+    // Set the date to the desired month and year
+    date.setMonth(targetMonth - 1); // Subtract 1 here
+    date.setFullYear(targetYear);
+
+    console.log(date);
+
+    return date;
 }
