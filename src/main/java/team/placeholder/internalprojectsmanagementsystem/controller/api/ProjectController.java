@@ -144,7 +144,7 @@ public class ProjectController {
         log.info("current login user role " + role);
 
         if (role.equals("PROJECT_MANAGER")) {
-            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know 
+            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know
             return getListResponseEntity(projects);
         } else if (role.equals("DEPARTMENT_HEAD")) {
             long departmentId = userService.getUserById(id).getDepartmentdto().getId();
@@ -183,14 +183,13 @@ public class ProjectController {
 
     }
 
-    @GetMapping("/list/ID/{id}/status/IN_PROGRESS")
+    @GetMapping("/list/ID/{id}/{status}")
     public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status){
         List<ProjectDto> project = projectService.findAllByUserId(id);
 
+        Map<String, Object> projectMap = new HashMap<>();
         for(ProjectDto projectDto : project){
-            if(projectDto.getStatus().equals(status)){
-
-                Map<String, Object> projectMap = new HashMap<>();
+            if((status).equalsIgnoreCase(projectDto.getStatus())){
 
                 ClientDto clientDto = projectDto.getClientDto();
                 List<UserDto> userDtos = projectDto.getUserDtos();
@@ -198,11 +197,10 @@ public class ProjectController {
                 projectMap.put("client", clientDto);
                 projectMap.put("userList", userDtos);
 
-                return new ResponseEntity<>(projectMap, HttpStatus.OK);
             }
         }
 
-        return ResponseEntity.notFound().build();
+        return new ResponseEntity<>(projectMap, HttpStatus.OK);
     }
 
     @GetMapping("/list/for/pmoandsdqc")

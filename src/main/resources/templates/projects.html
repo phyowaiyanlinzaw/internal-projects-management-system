@@ -389,6 +389,66 @@
                     document.getElementById("department-filter").appendChild(option);
                 });
 
+            function updateSpanValues(amountDto) {
+                // Define a mapping between keys in amountDto and the corresponding span element IDs
+                const keyToSpanId = {
+                    basic_design: "basic-design-count",
+                    detail_design: "dd",
+                    coding: "ing",
+                    unit_testing: "ut",
+                    integrated_testing: "it"
+                };
+
+                // Iterate through amountDto and update the span elements accordingly
+                for (const key in amountDto) {
+                    if (amountDto.hasOwnProperty(key)) {
+                        const value = amountDto[key];
+                        const spanId = keyToSpanId[key];
+
+                        if (spanId) {
+                            const spanElement = document.getElementById(spanId);
+                            if (spanElement) {
+                                spanElement.innerText = value;
+                            }
+                        }
+                    }
+                }
+            }
+
+            function updateListItems(a) {
+                const list = document.querySelector(".list-group");
+                const items = list.querySelectorAll(".list-group-item");
+
+                // Define a mapping between keys in systemOutLineDto and the corresponding list item index
+                const keyToIndex = {
+                    analysis: 0,
+                    sys_design: 1,
+                    coding: 2,
+                    testing: 3,
+                    deploy: 4,
+                    maintenance: 5,
+                    document: 6
+                };
+
+                // Iterate through systemOutLineDto and update the list items accordingly
+                for (const key in a) {
+                    if (a.hasOwnProperty(key)) {
+                        const value = a[key];
+                        const index = keyToIndex[key];
+
+                        if (index !== undefined && items[index]) {
+                            if (value) {
+                                // Add the <i> element with the checkmark
+                                items[index].innerHTML = `${key}<i class="bi bi-check2-all text-success fs-4"></i>`;
+                            } else {
+                                // Remove the <i> element
+                                items[index].innerHTML = key;
+                            }
+                        }
+                    }
+                }
+            }
+
                 for (let i = 0; i < pList.length; i++) {
                     let currentProject = pList[i];
 
@@ -533,6 +593,15 @@
                         let targetData = pList.find(
                             (a) => a.id == id
                         );
+
+                        document.querySelector("#show-project-objective").innerHTML = targetData.objective;
+
+                        console.log(targetData)
+
+                        updateListItems(targetData.systemOutLineDto);
+
+                        updateSpanValues(targetData.amountDto);
+
                         let duration = calculateDuration(
                             targetData.start_date,
                             targetData.end_date
@@ -731,19 +800,37 @@
                 console.log(empTagifyList)
             }
 
-            document.querySelector("#start_date").addEventListener("change", function () {
-
-                const projectDruation = document.querySelector("#project-add-duration").value;
-
-                const projectEndDate = document.querySelector("#project-end-date");
-
-                const endDate = calculateEndDate(new Date(this.value).getTime(), projectDruation);
-
-                projectEndDate.value = endDate;
-
-            });
-
                 $(document).ready(function () {
+
+                    document.querySelector("#start_date").addEventListener("change", function () {
+
+                        const projectDruation = document.querySelector("#project-add-duration").value;
+
+                        const projectEndDate = document.querySelector("#project-add-end-date");
+
+                        const endDate = calculateEndDate(new Date(this.value).getTime(), projectDruation);
+
+                        projectEndDate.value = formatDateFromMilliseconds(endDate.getTime());
+
+                    });
+
+                    document.querySelector("#project-add-duration").addEventListener("input", function () {
+
+                        const projectStartDate = document.querySelector("#start_date").value;
+
+                        if (projectStartDate !== "") {
+                            const projectEndDate = document.querySelector("#project-add-end-date");
+
+                            // Calculate the end date only when there's a valid start date
+                            const endDate = calculateEndDate(new Date(projectStartDate).getTime(), this.value);
+
+                            // Check if endDate is not NaN
+                            if (!isNaN(endDate)) {
+                                projectEndDate.value = formatDateFromMilliseconds(endDate);
+                            }
+                        }
+                    });
+
                     $("#validation-form").submit(function (event) {
                         event.preventDefault(); // Prevent the form from submitting the traditional way
 
@@ -1195,6 +1282,7 @@
                                             min="1"
                                             value="1"
                                             required
+                                            oninput="validity.valid||(value='1');"
                                         />
                                     </div>
 
@@ -1221,20 +1309,13 @@
                                         <label
                                                 for="project-add-duration"
                                                 class="col-sm-12 col-form-label"
-                                        >End date (Month)<span
+                                        >End date<span
                                                 style="color: red"
                                         >
                                                 *</span
                                         ></label
                                         >
-                                        <input
-                                                type="date"
-                                                class="form-control border-task-description"
-                                                id="project-add-end-date"
-                                                min="1"
-                                                value="1"
-                                                required
-                                        />
+                                        <input type="text" disabled id="project-add-end-date" class="form-control">
                                     </div>
                                     <!--                                architectures add-->
                                     <div class="col-lg-6">
@@ -1781,6 +1862,7 @@
                                                         >
                                                             <div
                                                                 class="accordion-body position-relative"
+                                                                id="show-project-objective"
                                                             >
                                                                 <strong
                                                                     >This is the
