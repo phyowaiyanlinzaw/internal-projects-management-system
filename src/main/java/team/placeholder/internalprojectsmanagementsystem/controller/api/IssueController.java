@@ -10,6 +10,8 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Proje
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
@@ -36,13 +38,16 @@ public class IssueController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<IsuDto> saveIssue(@RequestBody IsuDto dto) {
+    public ResponseEntity<IssueDto> saveIssue(@RequestBody IsuDto dto) {
         Issue issue = modelMapper.map(dto, Issue.class);
 
-        issue.setUser_uploader(modelMapper.map(dto.getUser_uploader(), User.class));
-        issue.setUser_pic(modelMapper.map(dto.getUser_pic(), User.class));
+        issue.setIssue_category(Category.valueOf(dto.getIssue_category()));
+        issue.setResponsible_type(ResponsibleType.valueOf(dto.getResponsible_type()));
+        issue.setUser_uploader(modelMapper.map(userRepository.getReferenceById(dto.getUser_uploader()), User.class));
+        issue.setUser_pic(modelMapper.map(userRepository.getReferenceById(dto.getUser_pic()), User.class));
+        issue.setProject(modelMapper.map(projectRepository.getReferenceById(dto.getProject_id()), Project.class));
 
-        IsuDto savedIssueDto = issueService.save(modelMapper.map(issue, IsuDto.class));
+        IssueDto savedIssueDto = issueService.save(issue);
 
         if (savedIssueDto != null) {
             // If the save operation was successful, return the saved IssueDto

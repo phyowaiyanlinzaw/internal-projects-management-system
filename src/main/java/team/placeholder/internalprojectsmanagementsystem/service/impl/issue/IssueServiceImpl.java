@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue.IssueMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
@@ -33,55 +34,18 @@ public class IssueServiceImpl implements IssueService {
     private final ModelMapper modelMapper;
 
     @Override
-    public IsuDto save(IsuDto issueDto) {
-        Issue issue = new Issue();
-        issue.setTitle(issueDto.getTitle());
-        issue.setDescription(issueDto.getDescription());
-        issue.setPlace(issueDto.getPlace());
-        issue.setImpact(issueDto.getImpact());
-        issue.setRoot_cause(issueDto.getRoot_cause());
-        issue.setDirect_cause(issueDto.getDirect_cause());
-        issue.setCorrective_action(issueDto.getCorrective_action());
-        issue.setPreventive_action(issueDto.getPreventive_action());
-        issue.setResponsible_party(issueDto.getResponsible_party());
-        issue.setCreated_date(issueDto.getCreated_date());
-        issue.setUpdated_date(issueDto.getUpdated_date());
-        issue.setSolved_date(issueDto.getSolved_date());
-        issue.setSolved(issueDto.isSolved());
-        if (issueDto.getResponsible_type() != null) {
-            try {
-                issue.setResponsible_type(ResponsibleType.valueOf(issueDto.getResponsible_type()));
-            } catch (IllegalArgumentException e) {
-                issue.setResponsible_type(null);
-            }
-        } else {
-            issue.setResponsible_type(null);
-            if (issueDto.getIssue_category() != null) {
-                try {
-                    issue.setIssue_category(Category.valueOf(issueDto.getIssue_category()));
-                } catch (IllegalArgumentException e) {
-                    issue.setIssue_category(null);
-                }
-            } else {
-                issue.setIssue_category(null);
-            }
-        }
+    public IssueDto save(Issue issue) {
+        IssueDto issueDto = new IssueDto();
 
-        User userUploader = userRepository.findById(issueDto.getUser_uploader());
-        if (userUploader != null) {
-            issue.setUser_uploader(new User());
-            issue.getUser_uploader().setId(userUploader.getId());
- }
-
-        User userPic = userRepository.findById(issueDto.getUser_pic());
-        if (userPic != null) {
-            issue.setUser_pic(new User());
-            issue.getUser_pic().setId(userPic.getId());
-        }
-            issue.setProject(projectRepository.findById(issueDto.getProject_id()));
 
             Issue savedIssue = issueRepository.save(issue);
-            return modelMapper.map(savedIssue, IsuDto.class);
+            issueDto = modelMapper.map(savedIssue, IssueDto.class);
+
+            issueDto.setUser_uploader(modelMapper.map(savedIssue.getUser_uploader(), UserDto.class));
+            issueDto.setUser_pic(modelMapper.map(savedIssue.getUser_pic(), UserDto.class));
+            issueDto.setProjectDto(modelMapper.map(savedIssue.getProject(), ProjectDto.class));
+
+            return issueDto;
     }
 
 

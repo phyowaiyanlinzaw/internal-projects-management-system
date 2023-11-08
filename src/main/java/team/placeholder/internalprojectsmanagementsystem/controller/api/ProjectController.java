@@ -195,9 +195,13 @@ public class ProjectController {
     public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status){
         List<ProjectDto> project = projectService.findAllByUserId(id);
 
+        Long currentProjectId = null;
+
         Map<String, Object> projectMap = new HashMap<>();
         for(ProjectDto projectDto : project){
             if((status).equalsIgnoreCase(projectDto.getStatus())){
+
+                currentProjectId = projectDto.getId();
 
                 ClientDto clientDto = projectDto.getClientDto();
                 List<UserDto> userDtos = projectDto.getUserDtos();
@@ -207,6 +211,8 @@ public class ProjectController {
 
             }
         }
+
+        projectMap.put("projectId", currentProjectId);
 
         return new ResponseEntity<>(projectMap, HttpStatus.OK);
     }
