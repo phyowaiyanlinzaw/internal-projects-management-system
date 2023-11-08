@@ -10,13 +10,14 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Proje
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.issue.IssueServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,48 +27,34 @@ public class IssueController {
     private final IssueServiceImpl issueService;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
 
     @GetMapping("list")
-    public ResponseEntity<List<IsuDto>> getAllIssues() {
-        List<IsuDto> issueDtos = issueService.getAllIssues();
+    public ResponseEntity<List<IssueDto>> getAllIssues() {
+        List<IssueDto> issueDtos = issueService.getAllIssues();
         return new ResponseEntity<>(issueDtos, HttpStatus.OK);
     }
 
-
-//    @PostMapping("/save")
-//    public ResponseEntity<Issue> saveIssue(@RequestBody IsuDto dto) {
-//        // Convert pic_id, pm_id, and uploader_id to User entities
-//        User pic = userRepository.findById(dto.getPic_id()).orElse(null);
-//        User pm = userRepository.findById(dto.getResponsible_party()).orElse(null);
-//        User uploader = userRepository.findById(dto.getUploader_id()).orElse(null);
-//
-//        if (pic == null || pm == null || uploader == null) {
-//            return ResponseEntity.badRequest().body(null);
-//        }
-//        Issue issue = modelMapper.map(dto, Issue.class);
-//        issue.setUser_pic(pic);
-//        issue.setUser_uploader(uploader);
-//        issue.setResponsible_party(pm.getId());
-//        Issue savedIssue = issueService.save(dto);
-//
-//        if (savedIssue != null) {
-//            return ResponseEntity.ok(savedIssue);
-//        } else {
-//            return ResponseEntity.badRequest().body(null);
-//        }
-//    }
-
-
     @PostMapping("/save")
-    public ResponseEntity<Issue> saveIssue(@RequestBody IsuDto dto) {
-        Issue savedIssue = issueService.save(dto);
+    public ResponseEntity<IsuDto> saveIssue(@RequestBody IsuDto dto) {
+        Issue issue = modelMapper.map(dto, Issue.class);
 
-        if (savedIssue != null) {
-            return ResponseEntity.ok(savedIssue);
+        issue.setUser_uploader(modelMapper.map(dto.getUser_uploader(), User.class));
+        issue.setUser_pic(modelMapper.map(dto.getUser_pic(), User.class));
+
+        IsuDto savedIssueDto = issueService.save(modelMapper.map(issue, IsuDto.class));
+
+        if (savedIssueDto != null) {
+            // If the save operation was successful, return the saved IssueDto
+            return ResponseEntity.ok(savedIssueDto);
         } else {
+            // Handle the case when the issue could not be saved
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+
+
 
     @GetMapping("/lists/byId/{id}")
     public ResponseEntity<IssueDto> getIssueById(@PathVariable long id) {
@@ -80,20 +67,20 @@ public class IssueController {
         }
     }
 
-//    @GetMapping("/clients")
-//    public ResponseEntity<List<ClientDto>> getClientsForIssues() {
-//        List<IsuDto> issues = issueService.getAllIssues(); // Retrieve all issues
-//        List<ClientDto> clients = new ArrayList<>();
-//
-//        for (IssueDto issue : issues) {
-//            ProjectDto project = issue.getProjectDto();
-//            if (project != null) {
-//                clients.add(project.getClientDto());
-//            }
-//        }
-//
-//        return ResponseEntity.ok(clients);
-//    }
+    @GetMapping("/clients")
+    public ResponseEntity<List<ClientDto>> getClientsForIssues() {
+        List<IssueDto> issues = issueService.getAllIssues(); // Retrieve all issues
+        List<ClientDto> clients = new ArrayList<>();
+
+        for (IssueDto issue : issues) {
+            ProjectDto project = issue.getProjectDto();
+            if (project != null) {
+                clients.add(project.getClientDto());
+            }
+        }
+
+        return ResponseEntity.ok(clients);
+    }
 
     @GetMapping("/lists/byTitle/{title}")
     public ResponseEntity<IssueDto> getIssueByTitle(@PathVariable String title) {

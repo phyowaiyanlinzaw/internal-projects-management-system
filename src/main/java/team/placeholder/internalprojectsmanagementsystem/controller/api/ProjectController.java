@@ -191,7 +191,7 @@ public class ProjectController {
 
     }
 
-    @GetMapping("/list/ID/{id}/status/IN_PROGRESS")
+    @GetMapping("/list/ID/{id}/{status}")
     public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status){
         List<ProjectDto> project = projectService.findAllByUserId(id);
 

@@ -7,9 +7,12 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue.IssueM
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
@@ -30,9 +33,16 @@ public class IssueServiceImpl implements IssueService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Issue save(IsuDto issueDto) {
-        Issue issue = modelMapper.map(issueDto, Issue.class);
-
+    public IsuDto save(IsuDto issueDto) {
+        Issue issue = new Issue();
+        issue.setTitle(issueDto.getTitle());
+        issue.setDescription(issueDto.getDescription());
+        issue.setPlace(issueDto.getPlace());
+        issue.setImpact(issueDto.getImpact());
+        issue.setRoot_cause(issueDto.getRoot_cause());
+        issue.setDirect_cause(issueDto.getDirect_cause());
+        issue.setCorrective_action(issueDto.getCorrective_action());
+        issue.setPreventive_action(issueDto.getPreventive_action());
         issue.setResponsible_party(issueDto.getResponsible_party());
         issue.setCreated_date(issueDto.getCreated_date());
         issue.setUpdated_date(issueDto.getUpdated_date());
@@ -57,31 +67,58 @@ public class IssueServiceImpl implements IssueService {
             }
         }
 
-            issue.setUser_uploader(userRepository.findById(issueDto.getUser_uploader()));
-            issue.setUser_pic(userRepository.findById(issueDto.getUser_pic()));
+        User userUploader = userRepository.findById(issueDto.getUser_uploader());
+        if (userUploader != null) {
+            issue.setUser_uploader(new User());
+            issue.getUser_uploader().setId(userUploader.getId());
+ }
+
+        User userPic = userRepository.findById(issueDto.getUser_pic());
+        if (userPic != null) {
+            issue.setUser_pic(new User());
+            issue.getUser_pic().setId(userPic.getId());
+        }
             issue.setProject(projectRepository.findById(issueDto.getProject_id()));
 
             Issue savedIssue = issueRepository.save(issue);
-            return savedIssue;
+            return modelMapper.map(savedIssue, IsuDto.class);
     }
 
+
+
+
+//    @Override
+//    public List<IsuDto> getAllIssues() {
+//        List<Issue> issueList = issueRepository.findAll();
+//        List<IsuDto> issueDtos = new ArrayList<>();
+//
+//        for (Issue issue : issueList) {
+//            if (issue != null) {
+//                IsuDto issueDto = modelMapper.map(issue, IsuDto.class);
+//                if (issue.getUser_pic() != null) {
+//                    UserDto userDto = modelMapper.map(issue.getUser_pic(), UserDto.class);
+//                    issueDto.setUser_pic(userDto.getId());
+//                }
+//
+//                if(issue.getUser_uploader() != null) {
+//                    UserDto userDto = modelMapper.map(issue.getUser_uploader(), UserDto.class);
+//                    issueDto.setUser_uploader(userDto.getId());
+//                }
+//                issueDtos.add(issueDto);
+//            }
+//        }
+//
+//        return issueDtos;
+//    }
+
     @Override
-    public List<IsuDto> getAllIssues() {
+    public List<IssueDto> getAllIssues() {
         List<Issue> issueList = issueRepository.findAll();
-        List<IsuDto> issueDtos = new ArrayList<>();
+        List<IssueDto> issueDtos = new ArrayList<>();
 
         for (Issue issue : issueList) {
             if (issue != null) {
-                IsuDto issueDto = modelMapper.map(issue, IsuDto.class);
-                if (issue.getUser_pic() != null) {
-                    UserDto userDto = modelMapper.map(issue.getUser_pic(), UserDto.class);
-                    issueDto.setUser_pic(userDto.getId());
-                }
-
-                if(issue.getUser_uploader() != null) {
-                    UserDto userDto = modelMapper.map(issue.getUser_uploader(), UserDto.class);
-                    issueDto.setUser_uploader(userDto.getId());
-                }
+                IssueDto issueDto = IssueMapper.toIssueDto(issue);
                 issueDtos.add(issueDto);
             }
         }
