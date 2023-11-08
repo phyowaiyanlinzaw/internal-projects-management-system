@@ -267,96 +267,7 @@
                 ["link"],
             ];
 
-            const proListFromBack = [
-                {
-                    id: 1,
-                    name: "project name",
-                    start_date: 1696377600000,
-                    end_date: 1701648000000,
-                    user: { id: 2, name: "zawlinshein" },
-                    background: "project background",
-                    currentPhase: "TESTING",
-                    department: { id: 1, name: "department name" },
-                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
-                    inReview: 25,
-                    exReview: 2,
-                    client: {
-                        id: 1,
-                        name: "Dat",
-                        phone: "09 77558833",
-                        email: "suckmyfingure@gmail.com",
-                    },
-                    totalTask: 100,
-                    doneTask: 50,
-                    amount: {
-                        basicDesign: 0,
-                        detailDesign: 0,
-                        coding: 0,
-                        unitTesting: 0,
-                        integratedTesting: 0,
-                    },
-                    systemOutline: {
-                        analysis: true,
-                        sys_design: true,
-                        coding: false,
-                        testing: false,
-                        deploy: true,
-                        maintenance: true,
-                        document: true,
-                    },
-                    architecutre: [
-                        { id: 1, tech_name: "html" },
-                        { id: 2, tech_name: "mysql" },
-                        { id: 3, tech_name: "js" },
-                        { id: 4, tech_name: "java" },
-                        { id: 5, tech_name: "spring boot" },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: "project name",
-                    start_date: 1700758000000,
-                    end_date: 1703758000000,
-                    user: { id: 2, name: "zawlinshein" },
-                    background: "project background",
-                    currentPhase: "TESTING",
-                    department: { id: 1, name: "department name" },
-                    objective: `<p>Hello World!</p><p>This is Quill <strong>full</strong>editor</p>`,
-                    inReview: 25,
-                    exReview: 2,
-                    client: {
-                        id: 1,
-                        name: "Dat",
-                        phone: "09 77558833",
-                        email: "suckmyfingure@gmail.com",
-                    },
-                    totalTask: 100,
-                    doneTask: 50,
-                    amount: {
-                        basicDesign: 0,
-                        detailDesign: 0,
-                        coding: 0,
-                        unitTesting: 0,
-                        integratedTesting: 0,
-                    },
-                    systemOutline: {
-                        analysis: true,
-                        sys_design: true,
-                        coding: false,
-                        testing: false,
-                        deploy: true,
-                        maintenance: true,
-                        document: true,
-                    },
-                    architecutre: [
-                        { id: 1, tech_name: "html" },
-                        { id: 2, tech_name: "mysql" },
-                        { id: 3, tech_name: "js" },
-                        { id: 4, tech_name: "java" },
-                        { id: 5, tech_name: "spring boot" },
-                    ],
-                },
-            ];
+
 
             // SAVE CLIENT
             document
@@ -468,6 +379,15 @@
             }
 
                 console.log(pList)
+
+                const dPList = await getData("/api/department/list");
+
+                dPList.forEach((item) => {
+                    const option = document.createElement("option");
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    document.getElementById("department-filter").appendChild(option);
+                });
 
                 for (let i = 0; i < pList.length; i++) {
                     let currentProject = pList[i];
@@ -610,7 +530,7 @@
 
                     if (target.hasAttribute("data-bs-target")) {
                         let id = parseInt(target.getAttribute("id"));
-                        let targetData = proListFromBack.find(
+                        let targetData = pList.find(
                             (a) => a.id == id
                         );
                         let duration = calculateDuration(
@@ -626,7 +546,7 @@
                             targetData.name;
                         detailMoal.querySelector(
                             "#project-department-name"
-                        ).innerHTML = targetData.department.name;
+                        ).innerHTML = targetData.departmentDto.name;
                         detailMoal.querySelector(
                             "#project-internal-review-count"
                         ).value = targetData.inReview;
@@ -648,60 +568,73 @@
                         );
                         detailMoal.querySelector(
                             "#project-current-phase"
-                        ).innerText = targetData.currentPhase;
+                        ).innerText = targetData.current_phase;
                         detailMoal.querySelector(
-                            "#project-client-name"
-                        ).innerText = targetData.client.name;
+                            "#client-email-address"
+                        ).innerHTML = targetData.clientDto.email;
+                        detailMoal.querySelector(
+                            "#client-phone-contect"
+                        ).innerHTML = targetData.clientDto.phone;
+                        detailMoal.querySelector("#my-dear-customer-name")
+                            .innerHTML = targetData.clientDto.name;
                     }
                 });
+
+                const sortProjectByDepartment = await getData("/api/project/list/sort/by/department");
+
+                document.getElementById("department-filter").addEventListener("change", function () {
+                    const allDiv = motherContainer.children;
+                    const selectedDepartmentId = this.value;
+
+                    for(let i = 0;i < allDiv.length; i++) {
+
+                        if(sortProjectByDepartment[selectedDepartmentId].includes(parseInt(allDiv[i].id.split("-")[1]))) {
+                            allDiv[i].style.display = "block";
+                        } else {
+                            allDiv[i].style.display = "none";
+                        }
+
+                    }
+
+                })
 
                 const monthFilter = document.querySelector("#month-filter");
                 const yearFilterSelect = document.getElementById("year-filter");
 
-                document
-                    .querySelectorAll("select[action='filter']")
-                    .forEach((a) =>
-                        a.addEventListener("input", function (e) {
-                            const allData =
-                                document.getElementById(
-                                    "sort-container"
-                                ).children;
-                            const currentTime = monthFilter.value;
-                            const yearValue = parseInt(yearFilterSelect.value);
+            document
+                .querySelectorAll("select[action='filter']")
+                .forEach((a) =>
+                    a.addEventListener("input", function (e) {
+                        const allData = document.getElementById("sort-container").children;
+                        const currentTime = monthFilter.value;
+                        const yearValue = parseInt(yearFilterSelect.value);
 
-                            let targetProject = proListFromBack.find((a) => {
-                                const projectDate = new Date(a.start_date);
+                        const matchingProjects = pList.filter((a) => {
+                            const projectDate = new Date(a.start_date);
+                            const projectMonth = projectDate.getMonth();
+                            const projectYear = projectDate.getFullYear();
+                            return (
+                                projectYear === yearValue &&
+                                MONTH_NAMES[projectMonth] === currentTime
+                            );
+                        });
 
-                                const projectMonth = projectDate.getMonth();
-                                const projectYear = projectDate.getFullYear();
+                        for (let i = 0; i < allData.length; i++) {
+                            const divId = parseInt(
+                                allData[i].getAttribute("id").split("-")[1]
+                            );
 
-                                return (
-                                    projectYear === yearValue &&
-                                    MONTH_NAMES[projectMonth] === currentTime
-                                );
-                            });
-
-                            console.log(targetProject);
-
-                            for (let i = 0; i < allData.length; i++) {
-                                if (
-                                    targetProject &&
-                                    targetProject.id ===
-                                        parseInt(
-                                            allData[i]
-                                                .getAttribute("id")
-                                                .split("-")[1]
-                                        )
-                                ) {
-                                    allData[i].style.display = "block";
-                                } else {
-                                    allData[i].style.display = "none";
-                                }
+                            if (matchingProjects.some(project => project.id === divId)) {
+                                allData[i].style.display = "block";
+                            } else {
+                                allData[i].style.display = "none";
                             }
-                        })
-                    );
+                        }
+                    })
+                );
 
-                const currentYear = new Date().getFullYear();
+
+            const currentYear = new Date().getFullYear();
                 let optionsHTML = "";
 
                 for (let year = 2000; year <= currentYear; year++) {
@@ -797,6 +730,18 @@
                 })
                 console.log(empTagifyList)
             }
+
+            document.querySelector("#start_date").addEventListener("change", function () {
+
+                const projectDruation = document.querySelector("#project-add-duration").value;
+
+                const projectEndDate = document.querySelector("#project-end-date");
+
+                const endDate = calculateEndDate(new Date(this.value).getTime(), projectDruation);
+
+                projectEndDate.value = endDate;
+
+            });
 
                 $(document).ready(function () {
                     $("#validation-form").submit(function (event) {
@@ -1060,6 +1005,12 @@
                                 <option value="November">November</option>
                                 <option value="December">December</option>
                             </select>
+
+                        </div>
+                        <div class="d-inline-block">
+                            <select id="department-filter" class="form-control">
+
+                            </select>
                         </div>
                         <div class="d-inline-block">
                             <select
@@ -1266,6 +1217,25 @@
                                         ></textarea>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <label
+                                                for="project-add-duration"
+                                                class="col-sm-12 col-form-label"
+                                        >End date (Month)<span
+                                                style="color: red"
+                                        >
+                                                *</span
+                                        ></label
+                                        >
+                                        <input
+                                                type="date"
+                                                class="form-control border-task-description"
+                                                id="project-add-end-date"
+                                                min="1"
+                                                value="1"
+                                                required
+                                        />
+                                    </div>
                                     <!--                                architectures add-->
                                     <div class="col-lg-6">
                                         <label
@@ -1969,6 +1939,7 @@
                                                 <div class="row">
                                                     <div
                                                         class="fs-2 text-center"
+                                                        id="my-dear-customer-name"
                                                     >
                                                         DAT
                                                     </div>
@@ -1987,6 +1958,7 @@
                                                             </div>
                                                             <div
                                                                 class="align-self-center"
+                                                                id="client-email-address"
                                                             >
                                                                 suckmyfingure@gmail.com
                                                             </div>
@@ -2003,6 +1975,7 @@
                                                             </div>
                                                             <div
                                                                 class="align-self-center"
+                                                                id="client-phone-contect"
                                                             >
                                                                 09 77558822
                                                             </div>

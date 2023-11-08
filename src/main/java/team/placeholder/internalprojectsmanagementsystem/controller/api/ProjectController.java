@@ -12,11 +12,8 @@ import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.Proj
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NewProDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PrjDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
-import team.placeholder.internalprojectsmanagementsystem.model.project.DeliverableType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -53,6 +50,7 @@ public class ProjectController {
     private final DeliverableTypeServiceImpl deliverableTypeService;
     private final TaskServiceImpl taskService;
     private final FakerService fakerService;
+    private final ProjectRepository projectRepository;
 
     @GetMapping("/generate-fake-project/{count}")
     public ResponseEntity<String> generateFakeProjects(@PathVariable int count) {
@@ -150,13 +148,19 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/list/{role}/{id}")
-    public ResponseEntity<List<ProjectDto>> getAllProjectsByRole(@PathVariable String role, @PathVariable long id){
+    public ResponseEntity<List<ProjectDto>> getAllProjectsByRole(@PathVariable String role, @PathVariable Long id){
+
+        //store the project list from the 
+
+        log.info("current login user role " + role);
 
         if (role.equals("PROJECT_MANAGER")) {
-            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id);
+            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know
             return getListResponseEntity(projects);
         } else if (role.equals("DEPARTMENT_HEAD")) {
-            List<ProjectDto> projects = projectService.getAllProjectsByDepartmentId(id);
+            long departmentId = userService.getUserById(id).getDepartmentdto().getId();
+            log.info(" department is here : {}", userService.getUserById(id).getDepartmentdto());
+            List<ProjectDto> projects = projectService.getAllProjectsByDepartmentId(departmentId);
             return getListResponseEntity(projects);
         } else if (role.equals("MEMBER")) {
             return getListResponseEntity(projectService.findAllByUserId(id));
@@ -165,14 +169,85 @@ public class ProjectController {
         }
     }
 
+    @GetMapping("/list/sort/by/department")
+    public ResponseEntity<Map<Long, List<Long>>> sortProjectByDepId() {
+
+        List<ProjectDto> projectList = projectService.getAllProjects();
+
+        Map<Long, List<Long>> departmentProejctMap = new HashMap<>();
+
+        for(ProjectDto proejct: projectList) {
+            Long departmentId = proejct.getDepartmentDto().getId();
+            Long projectId = proejct.getId();
+
+            if(departmentProejctMap.containsKey(departmentId)) {
+                departmentProejctMap.get(departmentId).add(projectId);
+            } else {
+                List<Long> projectIds = new ArrayList<>();
+                projectIds.add(projectId);
+                departmentProejctMap.put(departmentId, projectIds);
+            }
+
+        }
+
+        return new ResponseEntity<>(departmentProejctMap, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/list/ID/{id}/status/IN_PROGRESS")
+    public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status){
+        List<ProjectDto> project = projectService.findAllByUserId(id);
+
+        for(ProjectDto projectDto : project){
+            if(projectDto.getStatus().equals(status)){
+
+                Map<String, Object> projectMap = new HashMap<>();
+
+                ClientDto clientDto = projectDto.getClientDto();
+                List<UserDto> userDtos = projectDto.getUserDtos();
+
+                projectMap.put("client", clientDto);
+                projectMap.put("userList", userDtos);
+
+                return new ResponseEntity<>(projectMap, HttpStatus.OK);
+            }
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/list/for/pmoandsdqc")
+    public ResponseEntity<Map<Long,List<Long>>> getProjectWithDpId() {
+
+        List<Project> projectList = projectRepository.findAll();
+
+        Map<Long, List<Long>> departmentProejctMap = new HashMap<>();
+
+        for(Project proejct: projectList) {
+            Long departmentId = proejct.getDepartment().getId();
+            Long projectId = proejct.getId();
+
+            if(departmentProejctMap.containsKey(departmentId)) {
+                departmentProejctMap.get(departmentId).add(projectId);
+            } else {
+                List<Long> projectIds = new ArrayList<>();
+                projectIds.add(projectId);
+                departmentProejctMap.put(departmentId, projectIds);
+            }
+
+        }
+
+        return new ResponseEntity<>(departmentProejctMap, HttpStatus.OK);
+    }
+
     private ResponseEntity<List<ProjectDto>> getListResponseEntity(List<ProjectDto> projects) {
         for(ProjectDto projectDto : projects){
             if(projectDto.getUserDto() != null) {
-                if(projectDto.getUserDto().getProjectList() != null) {
-                    projectDto.getUserDto().getProjectList().clear();
-                }
+//                if(projectDto.getUserDto().getProjectList() != null) {
+//                    projectDto.getUserDto().getProjectList().clear();
+//                }
             }
-            projectDto.setUnfinishedTaskCount(taskService.countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.IN_PROGRESS));
+            projectDto.setTotalTaskCount(taskService.countByProjectId(projectDto.getId()));
             projectDto.setCompleteTaskCount(taskService.countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.FINISHED));
             if(projectDto.getTasksDto() != null) {
                 projectDto.getTasksDto().clear();
