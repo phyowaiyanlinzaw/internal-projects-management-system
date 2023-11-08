@@ -36,4 +36,8 @@ public interface ProjectService {
 //
 //    List<ProjectDto> getAllProjectsByStatus(String status);
 
+    long countTaskById(long id);
+
+    ProjectDto getProjectByUsersIdAndStatus(long users, String status);
+
 }

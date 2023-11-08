@@ -38,12 +38,8 @@
                     <h5>Profile</h5>
                     <nav>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="/dashboard">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active">
-                                Profile
-                            </li>
+                            <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active">Profile</li>
                         </ol>
                     </nav>
                 </div>
@@ -53,18 +49,9 @@
             <div class="row row-cols-1">
                 <div class="col mb-2">
                     <div class="card">
-                        <div
-                                class="card-body profile-card pt-4 d-flex flex-column align-items-center"
-                        >
-                            <img
-                                    src=""
-                                    alt="Profile"
-                                    class="rounded-circle"
-                                    style="height: 100px; width: 100px"
-                                    id="profile-image"
-                            />
-                            <h4 style="margin-top: 10px" id="name" class="display-4">
-                            </h4>
+                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                            <img src="" alt="Profile" class="rounded-circle" style="height: 100px; width: 100px" id="profile-image"/>
+                            <h4 style="margin-top: 10px" id="name" class="display-4"></h4>
                             <h5 id="role">Web Designer</h5>
                         </div>
                     </div>
@@ -73,163 +60,96 @@
                     <div class="card">
                         <div class="card-body">
                             <!-- Bordered Tabs -->
+
                             <ul class="nav nav-tabs nav-tabs-bordered">
                                 <li class="nav-item">
-                                    <button
-                                            class="nav-link active"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#profile-overview"
-                                    >
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" >
                                         Overview
                                     </button>
                                 </li>
 
                                 <li class="nav-item">
-                                    <button
-                                            class="nav-link"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#profile-edit"
-                                    >
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">
                                         Edit Profile
                                     </button>
                                 </li>
 
                                 <li class="nav-item">
-                                    <button
-                                            class="nav-link"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#profile-change-password"
-                                    >
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" >
                                         Change Password
                                     </button>
                                 </li>
                             </ul>
                             <div class="tab-content pt-2">
-                                <div
-                                        class="tab-pane fade show active profile-overview"
-                                        id="profile-overview"
-                                >
-                                    <h5
-                                            class="card-title"
-                                            style="margin-top: 20px"
-                                    >
-                                        Profile Details
-                                    </h5>
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview" >
+                                    <h5 class="card-title" style="margin-top: 20px">Profile Details</h5>
 
-                                    <div
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
-                                        <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
-                                            Email
-                                        </div>
+                                    <div class="row" style="margin-top: 20px">
+                                        <div class="col-lg-3 col col-md-4 label">Email</div>
                                         <div class="col-lg-9 col col-md-8" id="email">
 
                                         </div>
                                     </div>
                                     <div sec:authorize="hasAnyRole('PROJECT_MANAGER','DEPARTMENT_HEAD','EMPLOYEE','FOC','CONTRACT')">
-                                    <div
-
-                                            class="row"
-                                            style="margin-top: 20px"
-                                    >
-                                        <div
-                                                class="col-lg-3 col col-md-4 label"
-                                        >
-                                            Department
-                                        </div>
-                                        <div class="col-lg-9 col col-md-8" id="department">
-
-                                        </div>
+                                    <div class="row" style="margin-top: 20px">
+                                        <div class="col-lg-3 col col-md-4 label">Department</div>
+                                        <div class="col-lg-9 col col-md-8" id="department"></div>
                                     </div>
                                     </div>
                                     <div sec:authorize="hasAnyRole('PROJECT_MANAGER','DEPARTMENT_HEAD','EMPLOYEE','FOC','CONTRACT')">
-                                        <div
-
-                                                class="row"
-                                                style="margin-top: 20px"
-                                        >
-                                            <div
-                                                    class="col-lg-3 col col-md-4 label"
-                                            >
-                                                Project Count
-                                            </div>
-                                            <div class="col-lg-9 col col-md-8" id="projectCount">
-
-                                            </div>
+                                        <div class="row" style="margin-top: 20px">
+                                            <div class="col-lg-3 col col-md-4 label"> Project Count</div>
+                                            <div class="col-lg-9 col col-md-8" id="projectCount"></div>
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <div
-                                        class="tab-pane fade profile-edit pt-3"
-                                        id="profile-edit"
-                                >
+                                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
-                                    <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
-                                        <strong>Error:</strong> <span id="successText"></span>
+                                    <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                        <strong>Error : </strong> <span id="errorText"></span>
                                         <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
                                             &times;
                                         </button>
                                     </div>
+                                    <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                        <strong>Success : </strong> <span id="successText"></span>
+                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                            &times;
+                                        </button>
+                                    </div>
+
                                         <div class="row mb-3">
-                                            <label
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Name</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="name"
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="nameInput"
-                                                />
+                                            <label class="col-md-4 col-lg-3 col-form-label">Name</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="name" type="text" class="form-control" id="nameInput" />
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
-                                            <label
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Email</label
-                                            >
-                                            <div
-                                                    class="col-md-8 col-lg-9"
-                                            >
-                                                <input
-                                                        name="email"
-                                                        type="email"
-                                                        class="form-control"
-                                                        id="emailInput"
-                                                        disabled
-                                                />
+                                            <label class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="email" type="email" class="form-control" id="emailInput" disabled />
                                             </div>
                                         </div>
 
                                         <div class="text-center">
-                                            <button
-                                                    type="submit"
-                                                    class="btn btn-primary"
-                                                    style="width: 20%"
-                                                    id="change-username-btn"
-                                            >
-                                                Edit
-                                            </button>
-                                        </div>
+                                            <button class="btn btn-primary" style="width: 20%" id="change-username-btn">Edit</button>
+                                            </div>
                                 </div>
 
-                                <div
-                                        class="tab-pane fade pt-3"
-                                        id="profile-change-password"
-                                >
+                                <div class="tab-pane fade pt-3" id="profile-change-password">
                                     <!-- Change Password Form -->
 
-                                    <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
-                                        <strong>Error:</strong> <span id="errorText"></span>
+                                    <div class="alert alert-danger alert-dismissible" id="error-Alert" style="display: none;">
+                                        <strong>Error : </strong> <span id="error-Text"></span>
+                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                            &times;
+                                        </button>
+                                    </div>
+                                    <div class="alert alert-success alert-dismissible" id="success-Alert" style="display: none;">
+                                        <strong>Success : </strong> <span id="success-Text"></span>
                                         <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
                                             &times;
                                         </button>
@@ -317,21 +237,25 @@
 
 <!-- javascript libraries -->
 <script src="/lib/chart/chart.min.js"></script>
-<script src="/lib/easing/easing.min.js"></script>
-<script src="/lib/waypoints/waypoints.min.js"></script>
-<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="/lib/tempusdominus/js/moment.min.js"></script>
-<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/lib/easing/easing.min
+ominus-bootstrap-4.min.js"></script>
 <script src="/lib/quill/quill.min.js"></script>
 
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
 <script src="/js/forprogresscircleiguess.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
+
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 <script>
+    $(document).ready(function () {
+        setupLogoutConfirmation();
+    });
+
     $(document).ready(
 
         function () {
@@ -363,112 +287,132 @@
                 const confirmNewPassword = $("#confirmNewPassword").val();
 
                 if (currentPassword === "" || newPassword === "" || confirmNewPassword === "") {
-                    showError("Please fill in all fields");
+                    showerror("Please fill in all fields");
                     return;
                 }
 
                 if (newPassword !== confirmNewPassword) {
-                    showError("New password and confirm new password do not match");
+                    showerror("New password and confirm new password do not match");
                     return;
                 }
 
-                // Show the full-page loading overlay
-                $('#loading-overlay').removeClass('d-none');
+                // Show a confirmation dialog using Swal
+                Swal.fire({
+                    title: "Are you sure you want to change your password?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If the user confirmed, proceed with the AJAX request
+                        $('#loading-overlay').removeClass('d-none');
 
-                $.ajax({
-                    url: "/api/user/change-password",
-                    type: "POST",
-                    data: {
-                        oldPassword: currentPassword,
-                        newPassword: newPassword
-                    },
-                    success: function (data) {
-                        // Hide the full-page loading overlay on success
-                        $('#loading-overlay').addClass('d-none');
+                        $.ajax({
+                            url: "/api/user/change-password",
+                            type: "POST",
+                            data: {
+                                oldPassword: currentPassword,
+                                newPassword: newPassword
+                            },
+                            success: function (data) {
+                                // Hide the full-page loading overlay on success
+                                $('#loading-overlay').addClass('d-none');
 
-                        showSuccess("Password changed successfully");
-                    },
-                    error: function (error) {
-                        console.log(error);
-                        // Hide the full-page loading overlay on error
-                        $('#loading-overlay').addClass('d-none');
+                                showsuccess("Password changed successfully");
+                            },
+                            error: function (error) {
+                                console.log(error);
+                                // Hide the full-page loading overlay on error
+                                $('#loading-overlay').addClass('d-none');
 
-                        showError(error.responseText);
+                                showerror(error.responseText);
+                            },
+                            complete: function () {
+                                // Hide the full-page loading overlay on complete
+                                $('#loading-overlay').addClass('d-none');
 
-                    },
-                    complete: function () {
-                        // Hide the full-page loading overlay on complete
-                        $('#loading-overlay').addClass('d-none');
+                                // Clear all password fields
+                                $("#currentPassword").val("");
+                                $("#newPassword").val("");
+                                $("#confirmNewPassword").val("");
 
-                        // Clear all password fields
-                        $("#currentPassword").val("");
-                        $("#newPassword").val("");
-                        $("#confirmNewPassword").val("");
+                                // Reset all password icons
+                                $(".passwordIcon").removeClass("fa-eye-slash");
+                                $(".passwordIcon").addClass("fa-eye");
 
-                        // Reset all password icons
-                        $(".passwordIcon").removeClass("fa-eye-slash");
-                        $(".passwordIcon").addClass("fa-eye");
+                                // Reset all password input types
+                                $("[data-type='text']").attr("type", "password");
+                                $("[data-type='text']").attr("data-type", "password");
 
-                        // Reset all password input types
-                        $("[data-type='text']").attr("type", "password");
-                        $("[data-type='text']").attr("data-type", "password");
-
-                        // reload page
-                        getUserProfileInfo();
-
-
+                                // Reload page or perform other actions
+                                getUserProfileInfo();
+                            }
+                        });
                     }
                 });
             });
 
+
+
+
             //Change User Name AJAX
-            $("#change-username-btn").on("click",function(e){
+            $("#change-username-btn").on("click", function (e) {
                 e.preventDefault();
                 const usernameInput = $("#nameInput").val();
                 const email = $("#emailInput").val();
 
-                if(usernameInput === ""){
+                if (usernameInput === "") {
                     showError("Please fill in all fields");
                     return;
                 }
 
-                // Show the loading spinner on the button
-                $(this).html(
-                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-                );
-                $(this).attr("disabled", true);
+                // Show a confirmation dialog using Swal
+                Swal.fire({
+                    title: "Are you sure you want to edit?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes"
+                }).then((result) => {
+                    if (result.isConfirmed) {
 
-                $.ajax({
-                    url: "/api/user/change-username",
-                    type: "POST",
-                    data: JSON.stringify({
-                        name: usernameInput,
-                        email: email
-                    }),
-                    contentType:'application/json',
-                    success: function (data) {
-                        console.log(data)
-                        showSuccess("Username changed successfully");
-                        //reenable button
-                        $("#change-username-btn").html("Edit").attr("disabled", false);
-                    },
-                    error: function (error) {
-                        console.log(error);
-                        showError(error.responseText);
-                        //reenable button
-                        $("#change-username-btn").html("Edit").attr("disabled", false);
-                    },
-                    complete: function () {
-                        // Clear all password fields
-                        $("#nameInput").val("");
 
-                        // reload page
-                        getUserProfileInfo();
+                        $.ajax({
+                            url: "/api/user/change-username",
+                            type: "POST",
+                            data: JSON.stringify({
+                                name: usernameInput,
+                                email: email
+                            }),
+                            contentType: 'application/json',
+                            success: function (data) {
+                                console.log(data);
+                                showSuccess("Username changed successfully");
+                                // Re-enable button
+                                $("#change-username-btn").html("Edit").attr("disabled", false);
+                            },
+                            error: function (error) {
+                                console.log(error);
+                                showError(error.responseText);
+                                // Re-enable button
+                                $("#change-username-btn").html("Edit").attr("disabled", false);
+                            },
+                            complete: function () {
+                                // Clear all input fields
+                                $("#nameInput").val("");
+                                $("#emailInput").val(""); // Clear email field too if needed
+
+                                // Reload page or perform other actions
+                                getUserProfileInfo();
+                            }
+                        });
                     }
                 });
+            });
 
-
-            })
 
             function showError(message) {
                 $("#errorText").text(message);
@@ -476,7 +420,7 @@
 
                 setTimeout(function () {
                     $("#errorAlert").hide();
-                }, 10000);
+                }, 1000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
@@ -490,11 +434,39 @@
 
                 setTimeout(function () {
                     $("#successAlert").hide();
-                }, 10000);
+                }, 1000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
                     $("#successAlert").hide();
+                });
+            }
+
+            function showerror(message) {
+                $("#error-Text").text(message);
+                $("#error-Alert").show();
+
+                setTimeout(function () {
+                    $("#error-Alert").hide();
+                }, 1000);
+
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#error-Alert").hide();
+                });
+            }
+
+            function showsuccess(message) {
+                $("#success-Text").text(message);
+                $("#success-Alert").show();
+
+                setTimeout(function () {
+                    $("#success-Alert").hide();
+                }, 1000);
+
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#success-Alert").hide();
                 });
             }
 
@@ -563,7 +535,10 @@
 
             getUserProfileInfo()
         }
+
     )
+
+
 </script>
 </body>
 

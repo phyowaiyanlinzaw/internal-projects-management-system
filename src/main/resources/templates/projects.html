@@ -81,6 +81,10 @@
             rel="stylesheet"
         />
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+        <link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
         <script src="/js/fontawesome.js"></script>
 
         <!-- jquery -->
@@ -88,10 +92,10 @@
 
         <!-- datable table -->
         <script src="/js/databales.min.js"></script>
+        <script src="/js/logout-modal.js"></script>
 
         <!-- bootstrap -->
         <script src="/js/bootstrap.bundle.min.js"></script>
-
         <!-- javascript libraries -->
         <script src="/lib/chart/chart.min.js" defer></script>
         <script src="/lib/easing/easing.min.js" defer></script>
@@ -126,11 +130,15 @@
         <script src="/js/getDataForProject.js" type="module" async></script>
 <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
         <script type="module" defer>
+            $(document).ready(function () {
+                setupLogoutConfirmation();
+            });
+
             import {
                 formatDateFromMilliseconds,
                 MONTH_NAMES,
                 calculateDuration,
-                calculateEndDate
+                calculateEndDate,
             } from "/js/time.js";
 
             import { sendData, getData } from "/js/api-function.js";
@@ -180,31 +188,36 @@
 
             let deliTypeList = await getDeliverableTypeList();
 
-            getDeliverableTypeList()
-                .then(deliType => {
-                    const deliTypeSelect = document.querySelector("#deliverable");
-                    const a = new Tagify (deliTypeSelect, {
-                        whitelist: deliType.map((item) => item.type),
-                        dropdown: {
-                            consoleLog: true,
-                            classname: "tags-look",
-                            enabled: 0,
-                            closeOnSelect: false,
-                        },
-                    });
-                    $("#validation-form").submit(function (event) {
-                        const deli = this.querySelector("#deliverable").value === "" ? [] : JSON.parse(this.querySelector("#deliverable").value);
-                        if (deli.length !== 0) {
-                            const whitelist = a.settings.whitelist;
-                            deli.forEach((item) => {
-                                if (!whitelist.includes(item.value)) {
-                                    whitelist.push(item.value);
-                                }
-                            });
-                        }
-                        console.log(a.settings.whitelist);
-                    })
-                })
+            getDeliverableTypeList().then((deliType) => {
+                const deliTypeSelect = document.querySelector("#deliverable");
+                console.log(deliType)
+                const a = new Tagify(deliTypeSelect, {
+                    whitelist: deliType.map((item) => item.type),
+                    dropdown: {
+                        consoleLog: true,
+                        classname: "tags-look",
+                        enabled: 0,
+                        closeOnSelect: false,
+                    },
+                });
+                $("#validation-form").submit(function (event) {
+                    const deli =
+                        this.querySelector("#deliverable").value === ""
+                            ? []
+                            : JSON.parse(
+                                  this.querySelector("#deliverable").value
+                              );
+                    if (deli.length !== 0) {
+                        const whitelist = a.settings.whitelist;
+                        deli.forEach((item) => {
+                            if (!whitelist.includes(item.value)) {
+                                whitelist.push(item.value);
+                            }
+                        });
+                    }
+                    console.log(a.settings.whitelist);
+                });
+            });
 
             let arcccList = await getArchitecturelist();
 
@@ -213,9 +226,12 @@
                     const inputElement = document.querySelector(
                         'input[name="architectures"]'
                     );
-                    const a = initializeTagify(inputElement, architectureList)
+                    const a = initializeTagify(inputElement, architectureList);
                     $("#validation-form").submit(function (event) {
-                        const arch = inputElement.value === "" ? [] : JSON.parse(inputElement.value);
+                        const arch =
+                            inputElement.value === ""
+                                ? []
+                                : JSON.parse(inputElement.value);
                         if (arch.length !== 0) {
                             const whitelist = a.settings.whitelist;
                             arch.forEach((item) => {
@@ -225,7 +241,7 @@
                             });
                         }
                         console.log(a.settings.whitelist);
-                    })
+                    });
                 })
                 .catch((error) => {
                     console.log("Error:", error);
@@ -268,7 +284,7 @@
                         id: 1,
                         name: "Dat",
                         phone: "09 77558833",
-                        email: "suckmyfingure@gmail.com"
+                        email: "suckmyfingure@gmail.com",
                     },
                     totalTask: 100,
                     doneTask: 50,
@@ -385,14 +401,16 @@
             const projectObjectiveEditor =
                 document.querySelector(".quill-editor-full");
 
-            const editProjectObjectiveEitor = document.querySelector("#edit-project-objective")
+            const editProjectObjectiveEitor = document.querySelector(
+                "#edit-project-objective"
+            );
 
             const editObjectiveEditor = new Quill(editProjectObjectiveEitor, {
-                modules : {
-                    toolbar : toolbaroptions,
+                modules: {
+                    toolbar: toolbaroptions,
                 },
-                theme : "snow",
-            })
+                theme: "snow",
+            });
 
             const addObjectiveEditor = new Quill(projectObjectiveEditor, {
                 modules: {
@@ -403,23 +421,29 @@
 
             async function getAllProjects() {
                 switch (loginUser.currentUser.role) {
-                case "PROJECT_MANAGER":
-                    console.log('project manager')
-                    return await getData(`/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`)
-                    break;
-                
-                case "DEPARTMENT_HEAD":
-                    console.log('department head')
-                    return await getData(`/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`)
-                    break;
-                case "EMPLOYEE":
-                case "CONTRACT":
-                case "FOC":
-                    console.log("one of the memeber")
-                    return await getData(`/api/project/list/MEMBER/${loginUser.currentUser.id}`)
-                default:
-                    console.log('pmo or sdqc')
-                    return await getData(`/api/project/list`)
+                    case "PROJECT_MANAGER":
+                        console.log("project manager");
+                        return await getData(
+                            `/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`
+                        );
+                        break;
+
+                    case "DEPARTMENT_HEAD":
+                        console.log("department head");
+                        return await getData(
+                            `/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`
+                        );
+                        break;
+                    case "EMPLOYEE":
+                    case "CONTRACT":
+                    case "FOC":
+                        console.log("one of the memeber");
+                        return await getData(
+                            `/api/project/list/MEMBER/${loginUser.currentUser.id}`
+                        );
+                    default:
+                        console.log("pmo or sdqc");
+                        return await getData(`/api/project/list`);
                 }
             }
 
@@ -429,48 +453,63 @@
 
             const fragment = document.createDocumentFragment();
 
-            getAllProjects()
-                .then( data => {
-                    let pList=[...data];
+            let pList = await getAllProjects();
 
-            for (let i = 0; i < pList.length; i++) {
-                let currentProject = pList[i];
+            let departmentProjectId;
+            
+            if(loginUser.currentUser.role == 'PMO' || loginUser.currentUser.role == 'SDQC') {
+             
+                departmentProjectId = await getData("/api/project/list/for/pmoandsdqc");
+            
+            }
 
-                const div = document.createElement("div");
-                div.classList.add(
-                    "p-md-3",
-                    "p-sm-2",
-                    "active-card",
-                    "mt-3",
-                    "mt-md-0",
-                    "mt-lg-0",
-                    "mt-xl-0"
-                );
-                div.id = `project-${currentProject.id}`;
+            if(departmentProjectId) {
+                console.log("proejct id mapped by department id" , departmentProjectId);
+            }
 
-                const card = document.createElement("div");
-                card.classList.add("card", "border-success");
+                console.log(pList)
 
-                const cardHeader = document.createElement("div");
-                cardHeader.classList.add("card-header");
+                for (let i = 0; i < pList.length; i++) {
+                    let currentProject = pList[i];
 
-                const dFlexContainer = document.createElement("div");
-                dFlexContainer.classList.add("d-flex", "flex-column");
+                    const div = document.createElement("div");
+                    div.classList.add(
+                        "p-md-3",
+                        "p-sm-2",
+                        "active-card",
+                        "mt-3",
+                        "mt-md-0",
+                        "mt-lg-0",
+                        "mt-xl-0"
+                    );
+                    div.id = `project-${currentProject.id}`;
 
-                const h2 = document.createElement("h2");
-                h2.classList.add(
-                    "card-title",
-                    "text-center",
-                    "text-primary",
-                    "modal-detail-title"
-                );
-                h2.innerText = currentProject.name;
+                    const card = document.createElement("div");
+                    card.classList.add("card", "border-success");
 
-                const dFlexBetween = document.createElement("div");
-                dFlexBetween.classList.add("d-flex", "justify-content-between");
+                    const cardHeader = document.createElement("div");
+                    cardHeader.classList.add("card-header");
 
-                const dFlexInner = document.createElement("div");
-                dFlexInner.classList.add("d-flex");
+                    const dFlexContainer = document.createElement("div");
+                    dFlexContainer.classList.add("d-flex", "flex-column");
+
+                    const h2 = document.createElement("h2");
+                    h2.classList.add(
+                        "card-title",
+                        "text-center",
+                        "text-primary",
+                        "modal-detail-title"
+                    );
+                    h2.innerText = currentProject.name;
+
+                    const dFlexBetween = document.createElement("div");
+                    dFlexBetween.classList.add(
+                        "d-flex",
+                        "justify-content-between"
+                    );
+
+                    const dFlexInner = document.createElement("div");
+                    dFlexInner.classList.add("d-flex");
 
                 const img = document.createElement("img");
                 img.src = `/images/avatars/pm_avatar.svg`;
@@ -484,375 +523,439 @@
                 img.style.width = "40px";
                 img.alt = "Profile Image";
 
-                const h5 = document.createElement("h5");
-                h5.classList.add(
-                    "card-text",
-                    "text-center",
-                    "text-align-center",
-                    "my-auto",
-                    "fst-italic",
-                    "fs-6",
-                    "ms-2"
-                );
-                if (currentProject.user && currentProject.user.name) {
-                    h5.innerText = currentProject.user.name;
-                } else {
-                    h5.innerText = "Unknown User";
-                }
-
-
-                const a = document.createElement("a");
-                a.href = "#";
-                a.id = currentProject.id;
-                a.classList.add(
-                    "btn",
-                    "btn-white",
-                    "text-secondary",
-                    "link-shadow"
-                );
-                a.setAttribute("data-bs-toggle", "modal");
-                a.setAttribute("data-bs-target", "#project-details");
-                a.innerText = "See More";
-
-                // Create and append the progress-related elements
-                const cardBody = document.createElement("div");
-                cardBody.classList.add(
-                    "card-body",
-                    "position-relative",
-                    "mx-auto"
-                );
-
-                const progressTitle = document.createElement("p");
-                progressTitle.classList.add(
-                    "card-title",
-                    "text-center",
-                    "fs-6",
-                    "mb-1"
-                );
-                progressTitle.innerText = "progress";
-
-                const progressCircle = document.createElement("div");
-                progressCircle.id = `circle-progress-${currentProject.id}`;
-                progressCircle.classList.add(
-                    "circle-progress",
-                    "rounded-circle"
-                );
-                progressCircle.setAttribute("data-min-value", "0");
-                progressCircle.setAttribute("data-max-value", "100");
-                progressCircle.setAttribute(
-                    "data-value",
-                    (
-                        (currentProject.doneTask / currentProject.totalTask) *
-                        100
-                    ).toString()
-                );
-                progressCircle.setAttribute("data-type", "percent");
-
-                dFlexInner.appendChild(img);
-                dFlexInner.appendChild(h5);
-                dFlexBetween.appendChild(dFlexInner);
-                dFlexBetween.appendChild(a);
-                dFlexContainer.appendChild(h2);
-                dFlexContainer.appendChild(dFlexBetween);
-                cardHeader.appendChild(dFlexContainer);
-                card.appendChild(cardHeader);
-
-                cardBody.appendChild(progressTitle);
-                cardBody.appendChild(progressCircle);
-                card.appendChild(cardBody);
-
-                div.appendChild(card);
-                fragment.appendChild(div);
-            }
-
-            motherContainer.appendChild(fragment);
-
-            
-
-            const detailMoal = document.querySelector("#project-details");
-
-            motherContainer.addEventListener("click", function (e) {
-                let target = e.target;
-
-                if (target.hasAttribute("data-bs-target")) {
-                    let id = parseInt(target.getAttribute("id"));
-                    let targetData = proListFromBack.find((a) => a.id == id);
-                    let duration = calculateDuration(
-                        targetData.start_date,
-                        targetData.end_date
+                    const h5 = document.createElement("h5");
+                    h5.classList.add(
+                        "card-text",
+                        "text-center",
+                        "text-align-center",
+                        "my-auto",
+                        "fst-italic",
+                        "fs-6",
+                        "ms-2"
                     );
-                    detailMoal.querySelector(".modal-title").innerText =
-                        targetData.name;
-                    detailMoal.querySelector("#project-background").innerText =
-                        targetData.background;
-                    detailMoal.querySelector("#project-name").innerText =
-                        targetData.name;
-                    detailMoal.querySelector(
-                        "#project-department-name"
-                    ).innerHTML = targetData.department.name;
-                    detailMoal.querySelector(
-                        "#project-internal-review-count"
-                    ).value = targetData.inReview;
-                    detailMoal.querySelector(
-                        "#project-external-review-count"
-                    ).value = targetData.exReview;
-                    detailMoal.querySelector(
-                        "#project-duration"
-                    ).innerText = `${duration}`;
-                    detailMoal.querySelector("#project-start-date").innerText =
-                        formatDateFromMilliseconds(targetData.start_date);
-                    detailMoal.querySelector("#project-end-date").innerText =
-                        formatDateFromMilliseconds(targetData.end_date);
-                    detailMoal.querySelector(
-                        "#project-current-phase"
-                    ).innerText = targetData.currentPhase;
-                    detailMoal.querySelector("#project-client-name").innerText =
-                        targetData.client.name;
+
+                    h5.innerText = currentProject.userDto.name;
+
+                    const a = document.createElement("a");
+                    a.href = "#";
+                    a.id = currentProject.id;
+                    a.classList.add(
+                        "btn",
+                        "btn-white",
+                        "text-secondary",
+                        "link-shadow"
+                    );
+                    a.setAttribute("data-bs-toggle", "modal");
+                    a.setAttribute("data-bs-target", "#project-details");
+                    a.innerText = "See More";
+
+                    // Create and append the progress-related elements
+                    const cardBody = document.createElement("div");
+                    cardBody.classList.add(
+                        "card-body",
+                        "position-relative",
+                        "mx-auto"
+                    );
+
+                    const progressTitle = document.createElement("p");
+                    progressTitle.classList.add(
+                        "card-title",
+                        "text-center",
+                        "fs-6",
+                        "mb-1"
+                    );
+                    progressTitle.innerText = "progress";
+
+                    const progressCircle = document.createElement("div");
+                    progressCircle.id = `circle-progress-${currentProject.id}`;
+                    progressCircle.classList.add(
+                        "circle-progress",
+                        "rounded-circle"
+                    );
+                    progressCircle.setAttribute("data-min-value", "0");
+                    progressCircle.setAttribute("data-max-value", "100");
+                    progressCircle.setAttribute(
+                        "data-value", currentProject.totalTask == 0 ?
+                        (
+                            (currentProject.completeTaskCount /
+                                currentProject.totalTaskCount) *
+                            100
+                        ).toString() : 0
+                    );
+                    progressCircle.setAttribute("data-type", "percent");
+
+                    dFlexInner.appendChild(img);
+                    dFlexInner.appendChild(h5);
+                    dFlexBetween.appendChild(dFlexInner);
+                    dFlexBetween.appendChild(a);
+                    dFlexContainer.appendChild(h2);
+                    dFlexContainer.appendChild(dFlexBetween);
+                    cardHeader.appendChild(dFlexContainer);
+                    card.appendChild(cardHeader);
+
+                    cardBody.appendChild(progressTitle);
+                    cardBody.appendChild(progressCircle);
+                    card.appendChild(cardBody);
+
+                    div.appendChild(card);
+                    fragment.appendChild(div);
                 }
-            });
 
-            const monthFilter = document.querySelector("#month-filter");
-            const yearFilterSelect = document.getElementById("year-filter");
+                motherContainer.appendChild(fragment);
 
-            document.querySelectorAll("select[action='filter']").forEach((a) => a.addEventListener("input", function (e) {
-                const allData =
-                    document.getElementById("sort-container").children;
-                const currentTime = monthFilter.value;
-                const yearValue = parseInt(yearFilterSelect.value)
+                const detailMoal = document.querySelector("#project-details");
 
-                let targetProject = proListFromBack.find((a) => {
-                    const projectDate = new Date(a.start_date);
+                motherContainer.addEventListener("click", function (e) {
+                    let target = e.target;
 
-                    const projectMonth = projectDate.getMonth();
-                    const projectYear = projectDate.getFullYear()
-
-                    return projectYear === yearValue && MONTH_NAMES[projectMonth] === currentTime;
+                    if (target.hasAttribute("data-bs-target")) {
+                        let id = parseInt(target.getAttribute("id"));
+                        let targetData = proListFromBack.find(
+                            (a) => a.id == id
+                        );
+                        let duration = calculateDuration(
+                            targetData.start_date,
+                            targetData.end_date
+                        );
+                        detailMoal.querySelector(".modal-title").innerText =
+                            targetData.name;
+                        detailMoal.querySelector(
+                            "#project-background"
+                        ).innerText = targetData.background;
+                        detailMoal.querySelector("#project-name").innerText =
+                            targetData.name;
+                        detailMoal.querySelector(
+                            "#project-department-name"
+                        ).innerHTML = targetData.department.name;
+                        detailMoal.querySelector(
+                            "#project-internal-review-count"
+                        ).value = targetData.inReview;
+                        detailMoal.querySelector(
+                            "#project-external-review-count"
+                        ).value = targetData.exReview;
+                        detailMoal.querySelector(
+                            "#project-duration"
+                        ).innerText = `${duration}`;
+                        detailMoal.querySelector(
+                            "#project-start-date"
+                        ).innerText = formatDateFromMilliseconds(
+                            targetData.start_date
+                        );
+                        detailMoal.querySelector(
+                            "#project-end-date"
+                        ).innerText = formatDateFromMilliseconds(
+                            targetData.end_date
+                        );
+                        detailMoal.querySelector(
+                            "#project-current-phase"
+                        ).innerText = targetData.currentPhase;
+                        detailMoal.querySelector(
+                            "#project-client-name"
+                        ).innerText = targetData.client.name;
+                    }
                 });
 
-                console.log(targetProject);
+                const monthFilter = document.querySelector("#month-filter");
+                const yearFilterSelect = document.getElementById("year-filter");
 
-                for (let i = 0; i < allData.length; i++) {
-                    if (
-                        targetProject &&
-                        targetProject.id ===
-                            parseInt(allData[i].getAttribute("id").split('-')[1])
-                    ) {
-                        allData[i].style.display = "block";
+                document
+                    .querySelectorAll("select[action='filter']")
+                    .forEach((a) =>
+                        a.addEventListener("input", function (e) {
+                            const allData =
+                                document.getElementById(
+                                    "sort-container"
+                                ).children;
+                            const currentTime = monthFilter.value;
+                            const yearValue = parseInt(yearFilterSelect.value);
+
+                            let targetProject = proListFromBack.find((a) => {
+                                const projectDate = new Date(a.start_date);
+
+                                const projectMonth = projectDate.getMonth();
+                                const projectYear = projectDate.getFullYear();
+
+                                return (
+                                    projectYear === yearValue &&
+                                    MONTH_NAMES[projectMonth] === currentTime
+                                );
+                            });
+
+                            console.log(targetProject);
+
+                            for (let i = 0; i < allData.length; i++) {
+                                if (
+                                    targetProject &&
+                                    targetProject.id ===
+                                        parseInt(
+                                            allData[i]
+                                                .getAttribute("id")
+                                                .split("-")[1]
+                                        )
+                                ) {
+                                    allData[i].style.display = "block";
+                                } else {
+                                    allData[i].style.display = "none";
+                                }
+                            }
+                        })
+                    );
+
+                const currentYear = new Date().getFullYear();
+                let optionsHTML = "";
+
+                for (let year = 2000; year <= currentYear; year++) {
+                    if (year === currentYear) {
+                        optionsHTML += `<option value="${year}" selected>${year}</option>`;
                     } else {
-                        allData[i].style.display = "none";
+                        optionsHTML += `<option value="${year}">${year}</option>`;
                     }
                 }
-            }))
 
-            const currentYear = new Date().getFullYear();
-            let optionsHTML = "";
+                yearFilterSelect.innerHTML = optionsHTML;
 
-            for (let year = 2000; year <= currentYear; year++) {
-                if (year === currentYear) {
-                    optionsHTML += `<option value="${year}" selected>${year}</option>`;
-                } else {
-                    optionsHTML += `<option value="${year}">${year}</option>`;
-                }
+                document
+                    .querySelector("#reset-btn")
+                    .addEventListener("click", function (e) {
+                        let allData =
+                            document.getElementById("sort-container").children;
+
+                        for (let i = 0; i < allData.length; i++) {
+                            allData[i].style.display = "block";
+                        }
+                        monthFilter.value = MONTH_NAMES[0];
+                    });
+
+                console.log("error");
+
+                let quillEditors = document.querySelectorAll(
+                    ".quill-editor-bubble"
+                );
+
+                // Initialize Quill for each selected element
+                quillEditors.forEach(function (editor) {
+                    new Quill(editor, {
+                        modules: {
+                            toolbar: toolbaroptions,
+                        },
+                        theme: "snow",
+                    });
+                });
+
+                // function getData() {
+                //     const userInput = quill.root.innerHTML;
+                //     console.log(userInput);
+                // }
+
+                let minusButtons = document.querySelectorAll(".minus");
+                let plusButtons = document.querySelectorAll(".plus");
+
+                minusButtons.forEach(function (minusButton) {
+                    minusButton.addEventListener("click", function () {
+                        let input = this.parentElement.querySelector("input");
+                        let count = parseInt(input.value) - 1;
+                        count = count < 0 ? 0 : count;
+                        input.value = count;
+                        console.log(input, count);
+                        //input.dispatchEvent(new Event('change'));
+                        return false;
+                    });
+                });
+
+                plusButtons.forEach(function (plusButton) {
+                    plusButton.addEventListener("click", function () {
+                        let input = this.parentElement.querySelector("input");
+                        input.value = parseInt(input.value) + 1;
+                        //input.dispatchEvent(new Event('change'));
+                        return false;
+                    });
+                });
+
+            let employeeList = loginUser.employees;
+
+            console.log(employeeList);
+
+            let empTagifyList = [];
+
+            if(employeeList) {
+                const showEmpList = employeeList.map((item) => {
+                    console.log(item)
+                    return {
+                        label: item.name,
+                        value: item.id,
+                        alias: item.role.toLowerCase(),
+                    };
+                });
+                empTagifyList = VirtualSelect.init({
+                    ele: "#employee-list",
+                    options: showEmpList,
+                    multiple: true,
+                    search : true,
+                    searchByStartsWith: true,
+                    popupPosition: null,
+                    maxWidth: "100%"
+                })
+                console.log(empTagifyList)
             }
 
-            yearFilterSelect.innerHTML = optionsHTML;
+                $(document).ready(function () {
+                    $("#validation-form").submit(function (event) {
+                        event.preventDefault(); // Prevent the form from submitting the traditional way
 
-            document
-                .querySelector("#reset-btn")
-                .addEventListener("click", function (e) {
-                    let allData =
-                        document.getElementById("sort-container").children;
+                        const projectName = $("#name").val();
+                        const client = JSON.parse($("#client").val());
+                        const startDate = new Date(
+                            $("#start_date").val()
+                        ).getTime();
+                        const duration = +$("#project-add-duration").val();
 
-                    for (let i = 0; i < allData.length; i++) {
-                        allData[i].style.display = "block";
-                    }
-                    monthFilter.value = MONTH_NAMES[0];
-                });
-
-            console.log("error");
-
-            let quillEditors = document.querySelectorAll(
-                ".quill-editor-bubble"
-            );
-
-            // Initialize Quill for each selected element
-            quillEditors.forEach(function (editor) {
-                new Quill(editor, {
-                    modules: {
-                        toolbar: toolbaroptions,
-                    },
-                    theme: "snow",
-                });
-            });
-
-            // function getData() {
-            //     const userInput = quill.root.innerHTML;
-            //     console.log(userInput);
-            // }
-
-            let minusButtons = document.querySelectorAll(".minus");
-            let plusButtons = document.querySelectorAll(".plus");
-
-            minusButtons.forEach(function (minusButton) {
-                minusButton.addEventListener("click", function () {
-                    let input = this.parentElement.querySelector("input");
-                    let count = parseInt(input.value) - 1;
-                    count = count < 0 ? 0 : count;
-                    input.value = count;
-                    console.log(input, count);
-                    //input.dispatchEvent(new Event('change'));
-                    return false;
-                });
-            });
-
-            plusButtons.forEach(function (plusButton) {
-                plusButton.addEventListener("click", function () {
-                    let input = this.parentElement.querySelector("input");
-                    input.value = parseInt(input.value) + 1;
-                    //input.dispatchEvent(new Event('change'));
-                    return false;
-                });
-            });
-
-            $(document).ready(function () {
-                $("#validation-form").submit(function (event) {
-                    event.preventDefault(); // Prevent the form from submitting the traditional way
-
-                    const projectName = $("#name").val();
-                    const client = JSON.parse($("#client").val());
-                    const startDate = new Date(
-                        $("#start_date").val()
-                    ).getTime();
-                    const duration = +$("#project-add-duration").val()
-
-                    const background = $("#background").val();
-                    let architectures = $("#architectures").val();
-                    console.log("architectures list : ", architectures);
-                    const systemOutlines = sysSelect.selectedValues;
-                    const deliverable = $("#deliverable").val();
-                    const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
-
-                    if (
-                        projectName === "" ||
-                        client === "" ||
-                        startDate === 0 ||
-                        duration === 0 ||
-                        background === "" ||
-                        architectures === "" ||
-                        systemOutlines === "" ||
-                        deliverable === "" ||
-                        objective === "<p><br></p>"
-                    ) {
-                        alert("Please fill all the fields");
-                        return;
-                    }
-
-                    architectures = JSON.parse(architectures);
-
-                    const arcList = architectures.map(ar => {
-                        const matchingObj = arcccList.find(arccObj => arccObj.tech_name === ar.value);
-                        return matchingObj ? matchingObj : { tech_name: ar.value };
-                    });
-
-                    const oldDeliTypeList = JSON.parse(deliverable);
-
-                    const deliverTypeList = oldDeliTypeList.map(deli => {
-                        const matchingObj = deliTypeList.find(deliObj => deliObj.type === deli.value);
-                        return matchingObj ? matchingObj : { type: deli.value };
-                    });
-                    // You may want to add some form validation here before sending the data
-                    console.log(objective);
-                    console.log(architectures);
-                    const project = {
-                        name: projectName,
-                        clientDto: client,
-                        duration: duration,
-                        start_date: startDate,
-                        end_date: calculateEndDate(startDate, duration).getTime(),
-                        background: background,
-                        architectureDto: arcList,
-                        systemOutLineDto: systemOutlines.reduce((acc, cur) => {
-                            acc[cur] = true;
-                            return acc;
-                        }, {}),
-                        current_phase: "PLANNING",
-                        deliverableDto: deliverTypeList
-                            .map(item => ({
-                                deliverableType: { type: item.type }
-                            })),
-                        objective: objective,
-                        amountDto: {
-                            basic_design: 0,
-                            detail_design: 0,
-                            coding: 0,
-                            unit_testing: 0,
-                            integrated_testing: 0,
-                        },
-                        departmentDto: {
-                            id :loginUser.currentUser.department.id
-                        },
-                        userDto : {
-                            id : loginUser.currentUser.id
+                        const background = $("#background").val();
+                        let architectures = $("#architectures").val();
+                        const empList = empTagifyList.selectedValues;
+                        console.log("architectures list : ", architectures);
+                        const systemOutlines = sysSelect.selectedValues;
+                        const deliverable = $("#deliverable").val();
+                        const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                        console.log(projectName, client, startDate, duration, background, architectures, empList, systemOutlines, deliverable, objective)
+                        if (
+                            projectName === "" ||
+                            client === "" ||
+                            startDate === 0 ||
+                            duration === 0 ||
+                            background === "" ||
+                            architectures === "" ||
+                            systemOutlines === "" ||
+                            deliverable === "" ||
+                            objective === "<p><br></p>"
+                        ) {
+                            alert("Please fill all the fields");
+                            return;
                         }
-                    };
-                    console.log(project);
-                    //Perform the AJAX request
-                    $.ajax({
-                        url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
-                        type: "POST",
-                        data: JSON.stringify(project),
-                        contentType: "application/json",
-                        success: function (data) {
-                            alert("Project registered successfully");
-                            // Reset the form if needed
-                            $("#validation-form")[0].reset();
-                            console.log("this projce has benn saved", data)
 
-                        },
-                        error: function (data) {
-                            alert("Error registering project");
-                        },
+                        architectures = JSON.parse(architectures);
+
+                        const arcList = architectures.map((ar) => {
+                            const matchingObj = arcccList.find(
+                                (arccObj) => arccObj.tech_name === ar.value
+                            );
+                            console.log(matchingObj);
+                            return matchingObj
+                                ? matchingObj
+                                : { tech_name: ar.value };
+                        });
+
+                        const oldDeliTypeList = JSON.parse(deliverable);
+
+                        const deliverTypeList = oldDeliTypeList.map((deli) => {
+                            const matchingObj = deliTypeList.find(
+                                (deliObj) => deliObj.type === deli.value
+                            );
+                            console.log(matchingObj);
+                            return matchingObj
+                                ? matchingObj
+                                : { type: deli.value };
+                        });
+                        // You may want to add some form validation here before sending the data
+                        console.log(objective);
+                        console.log(architectures);
+                        console.log(empList)
+                        const project = {
+                            name: projectName,
+                            clientDto: client,
+                            duration: duration,
+                            start_date: startDate,
+                            end_date: calculateEndDate(
+                                startDate,
+                                duration
+                            ).getTime(),
+                            background: background,
+                            architectureDto: arcList,
+                            systemOutLineDto: systemOutlines.reduce(
+                                (acc, cur) => {
+                                    acc[cur] = true;
+                                    return acc;
+                                },
+                                {}
+                            ),
+                            current_phase: "PLANNING",
+                            deliverableDto: deliverTypeList.map((item) => ({
+                                deliverableType: { type: item.type },
+                            })),
+                            objective: objective,
+                            amountDto: {
+                                basic_design: 0,
+                                detail_design: 0,
+                                coding: 0,
+                                unit_testing: 0,
+                                integrated_testing: 0,
+                            },
+                            departmentDto: {
+                                id: loginUser.currentUser.department.id,
+                            },
+                            userDto: {
+                                id: loginUser.currentUser.id,
+                            },
+                            userDtos: empList.map(str => ({ id: parseInt(str) }))
+                        };
+                        console.log(project);
+                        //Perform the AJAX request
+                        $.ajax({
+                            url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
+                            type: "POST",
+                            data: JSON.stringify(project),
+                            contentType: "application/json",
+                            success: function (data) {
+                                alert("Project registered successfully");
+                                // Reset the form if needed
+                                $("#validation-form")[0].reset();
+                                console.log("this projce has benn saved", data);
+                                event.currentTarget.submit();
+                            },
+                            error: function (data) {
+                                alert("Error registering project");
+                                event.currentTarget.submit();
+                            },
+                        });
                     });
                 });
-            });
 
-            let myOptions = [
-                {
-                    label: "Analysis",
-                    value: "analysis",
-                    alias: "analysis",
-                },
-                {
-                    label: "System Design",
-                    value: "sys_design",
-                    alias: "system design",
-                },
-                {
-                    label: "Coding",
-                    value: "coding",
-                    alias: "coding",
-                },
-                {
-                    label: "Testing",
-                    value: "testing",
-                    alias: "testing",
-                },
-                {
-                    label: "Deploy",
-                    value: "deploy",
-                    alias: "deploy",
-                },
-                {
-                    label: "Maintenance",
-                    value: "maintenance",
-                    alias: "maintenance",
-                },
-                {
-                    label: "Document",
-                    value: "document",
-                    alias: "document",
-                },
-            ];
+                let myOptions = [
+                    {
+                        label: "Analysis",
+                        value: "analysis",
+                        alias: "analysis",
+                    },
+                    {
+                        label: "System Design",
+                        value: "sys_design",
+                        alias: "system design",
+                    },
+                    {
+                        label: "Coding",
+                        value: "coding",
+                        alias: "coding",
+                    },
+                    {
+                        label: "Testing",
+                        value: "testing",
+                        alias: "testing",
+                    },
+                    {
+                        label: "Deploy",
+                        value: "deploy",
+                        alias: "deploy",
+                    },
+                    {
+                        label: "Maintenance",
+                        value: "maintenance",
+                        alias: "maintenance",
+                    },
+                    {
+                        label: "Document",
+                        value: "document",
+                        alias: "document",
+                    },
+                ];
 
 
                 let sysSelect = VirtualSelect.init({
@@ -863,8 +966,31 @@
                     searchByStartsWith: false,
                     popupPosition: null,
                     maxWidth: "100%",
-                })
-            })
+                });
+
+            $(".circle-progress").each(function () {
+                const minValue = $(this).attr("data-min-value");
+                const maxValue = $(this).attr("data-max-value");
+                const value = $(this).attr("data-value");
+                const type = $(this).attr("data-type");
+
+                if (value < 40) {
+                    this.classList.add("circle-progress-secondary");
+                } else if (value < 70) {
+                    this.classList.add("circle-progress-primary");
+                } else if (value > 69) {
+                    this.classList.add("circle-progress-success");
+                }
+
+                if (this.id !== "" && this.id !== null) {
+                    new CircleProgress("#" + this.id, {
+                        min: minValue,
+                        max: maxValue,
+                        value: value,
+                        textFormat: type,
+                    });
+                }
+            });
 
 
             //list project end
@@ -916,7 +1042,11 @@
                             reset
                         </button>
                         <div class="d-inline-block">
-                            <select id="month-filter" class="form-control" action="filter">
+                            <select
+                                id="month-filter"
+                                class="form-control"
+                                action="filter"
+                            >
                                 <option value="January">January</option>
                                 <option value="February">February</option>
                                 <option value="Match">Match</option>
@@ -1101,7 +1231,9 @@
                                         <label
                                             for="project-add-duration"
                                             class="col-sm-12 col-form-label"
-                                            >Enter Duration (Month)<span style="color: red">
+                                            >Enter Duration (Month)<span
+                                                style="color: red"
+                                            >
                                                 *</span
                                             ></label
                                         >
@@ -1111,6 +1243,7 @@
                                             id="project-add-duration"
                                             min="1"
                                             value="1"
+                                            required
                                         />
                                     </div>
 
@@ -1129,6 +1262,7 @@
                                             class="form-control border-task-description"
                                             id="background"
                                             name="background"
+                                            required
                                         ></textarea>
                                     </div>
 
@@ -1150,6 +1284,7 @@
                                             id="architectures"
                                             name="architectures"
                                             placeholder="enter to add your own architecture"
+                                            required
                                         />
                                     </div>
 
@@ -1165,6 +1300,17 @@
                                         <div id="systemOutlines"></div>
                                     </div>
 
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="employee-list"
+                                            class="col-sm-12 col-form-label"
+                                            name="systemOutlines"
+                                            >Choose employee
+                                            <span style="color: red"> *</span>
+                                        </label>
+                                        <div id="employee-list"></div>
+                                    </div>
+
                                     <!--                                deliverable add-->
                                     <div class="col-lg-6">
                                         <label
@@ -1177,11 +1323,13 @@
                                                 *</span
                                             ></label
                                         >
-                                        <input type="text"
-                                               class="form-control"
-                                               id="deliverable"
-                                               name="enter to add your own deliverable type"
-                                               placeholder="add value"
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="deliverable"
+                                            name="enter to add your own deliverable type"
+                                            placeholder="add value"
+                                            required
                                         />
                                     </div>
 
@@ -1234,6 +1382,7 @@
                                             class="form-control border-task-description"
                                             id="client-name"
                                             name="name"
+                                            required
                                         />
                                     </div>
 
@@ -1250,6 +1399,7 @@
                                             class="form-control border-task-description"
                                             id="client-email"
                                             name="email"
+                                            required
                                         />
                                     </div>
 
@@ -1266,6 +1416,7 @@
                                             class="form-control border-task-description"
                                             id="client-phone"
                                             name="phone"
+                                            parttern="[0-9]{10}"
                                         />
                                     </div>
 
@@ -1310,7 +1461,7 @@
                                         class="card-body profile-card pt-4 d-flex flex-column align-items-center"
                                     >
                                         <img
-                                            src="images/avatars/pm_avatar.png"
+                                            src="/images/avatars/pm_avatar.png"
                                             alt="Profile"
                                             class="rounded-circle"
                                         />
@@ -1798,7 +1949,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="text-center mt-5">
+                                                    <div
+                                                        class="text-center mt-5"
+                                                    >
                                                         <button
                                                             type="submit"
                                                             class="btn btn-primary"

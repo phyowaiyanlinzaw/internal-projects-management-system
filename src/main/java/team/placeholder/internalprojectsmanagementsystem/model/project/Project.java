@@ -42,7 +42,7 @@ public class Project implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Review reviews;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Tasks> tasks;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -50,6 +50,8 @@ public class Project implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Deliverable> deliverables;
+
+    private String status;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "amount_id")
@@ -63,6 +65,10 @@ public class Project implements Serializable {
     @ManyToOne
     @JoinColumn(name="client_id")
     private Client client;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="department_id")
+    private Department department;
 
     @ManyToOne
     @JsonManagedReference

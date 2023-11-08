@@ -177,15 +177,15 @@ public class FakerService {
             User user = new User();
             user.setName(faker.name().fullName());
             user.setEmail(faker.internet().emailAddress());
-            user.setPassword(new BCryptPasswordEncoder().encode("Abc!@123"));
+            user.setPassword(new BCryptPasswordEncoder().encode("123123123"));
             user.setRole(Role.values()[faker.random().nextInt(Role.values().length)]);
+//            user.setProject();
             //except user role for PMO,SDQC , set department for other roles
             if (!user.getRole().equals(Role.PMO) && !user.getRole().equals(Role.SDQC)) {
                 user.setDepartment(departmentRepository.findAll().get(faker.random().nextInt(departmentRepository.findAll().size())));
             }else {
                 user.setDepartment(null);
             }
-
 
             if (!user.getRole().equals(Role.PMO) && !user.getRole().equals(Role.SDQC) && !user.getRole().equals(Role.PROJECT_MANAGER)) {
                 List<User> projectManagers = userRepository.findAllByRole(Role.PROJECT_MANAGER);

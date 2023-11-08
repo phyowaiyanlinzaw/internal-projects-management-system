@@ -49,11 +49,7 @@
         <div class="container-fluid mt-2">
             <!-- nav for task and gantt chart start -->
             <nav>
-                <ul
-                        class="nav nav-tabs rounded-top"
-                        id="myTab"
-                        role="tablist"
-                >
+                <ul class="nav nav-tabs rounded-top" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button
                                 class="nav-link active border-primary border border-bottom-0"
@@ -107,12 +103,9 @@
                 >
                     <div class="board">
                         <!-- add task form start -->
-                        <!-- TODO :: REDESIGN ADD TASK FORM -->
                         <!-- add task form end -->
 
                         <div class="lanes" id="sort-container">
-                            <!-- TODO :: SHOW TASK'S DETAILS WHEN CLICK ON TASK -->
-                            <!-- todo start -->
                             <div class="lane">
                                 <h3
                                         class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center"
@@ -213,17 +206,17 @@
                 </div>
                 <div class="modal-body">
                     <form class="row g-5" action="">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <span><i class="fa fa-tasks"></i></span>
                             <label
                                     class="editable-label"
-                                    name="task"
+                                    for="taskTitle"
                                     onclick="editTitle()"
                             >
-                                Testing Write</label
+                                Task Title</label
                             >
                             <input
-                                    id="task"
+                                    id="taskTitle"
                                     name="task"
                                     type="text"
                                     class="form-control border-task editable-input"
@@ -232,52 +225,53 @@
                                     style="
                                             overflow: hidden;
                                             overflow-wrap: break-word;
-                                            height: 36.8px;
-                                            display: none;
+                                            height: 37px;
                                         "
                                     onblur="updateTitle(this)"
-                            />
-                        </div>
-
-                        <div class="col-lg-12">
-                                    <span class="text-align-center">
-                                        <i class="fa-solid fa-users"></i>
-                                    </span>
-                            <input
-                                    type="text"
-                                    name="pm-tags"
-                                    value="abatisse2@nih.gov, Justinian Hattersley"
+                                    disabled
                             />
                         </div>
 
                         <div class="col-lg-6">
                                     <span
                                     ><i
-                                            class="fa-solid fa-calendar-days"
+                                            class="fa-solid fa-bars-staggered"
                                     ></i
                                     ></span>
                             <label
+                                    id="description-label"
                                     class="editable-label"
-                                    name="start_time"
-                                    onclick="editTitle()"
+                                    onclick="toggleEditor()"
                             >
-                                Start Date</label
+                                Description</label
                             >
-                            <input
-                                    type="date"
-                                    id="task-detail-start_time"
-                                    name="start_time"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 36.8px;
-                                            display: none;
-                                        "
-                                    onblur="updateTitle(this)"
-                            />
+                            <textarea
+                                    id="description-editor"
+                                    class="form-control editable-input"
+                                    name="description"
+                                    row
+                                    disabled
+                            ></textarea>
+                        </div>
+
+                        <div class="col-lg-6">
+                                    <span>
+                                        <i class="fa-solid fa-users"></i>
+                                    </span>
+                            <span
+                                    class="badge rounded-pill bg-info"
+                                    id="assigned-member"
+                            ></span>
+                        </div>
+
+                        <div class="col-lg-6">
+                                    <span>
+                                        <i
+                                                class="fa-solid fa-circle-chevron-down"
+                                        ></i>
+                                        Status
+                                    </span>
+                            <span class='badge rounded-pill  bg-primary' id="status"></span>
                         </div>
 
                         <div class="col-lg-6">
@@ -285,7 +279,6 @@
                             <label
                                     id="duration"
                                     class="editable-label"
-                                    name="duration"
                                     onclick="editTitle()"
                             >
                                 Duration</label
@@ -300,69 +293,47 @@
                                     style="
                                             overflow: hidden;
                                             overflow-wrap: break-word;
-                                            height: 36.8px;
-                                            display: none;
+                                            height: 37px;
+
+                                        "
+                                    onblur="updateTitle(this)"
+                                    disabled
+                            />
+                        </div>
+
+                        <div class="col-lg-6">
+                                    <span
+                                    ><i
+                                            class="fa-solid fa-calendar-days"
+                                    ></i
+                                    ></span>
+                            <label
+                                    class="editable-label"
+                                    onclick="editTitle()"
+                            >
+                                Start Date</label
+                            >
+                            <input
+                                    type="date"
+                                    id="task-detail-start_time"
+                                    name="start_time"
+                                    class="form-control border-task editable-input"
+                                    dir="auto"
+                                    data-autosize="true"
+                                    style="
+                                            overflow: hidden;
+                                            overflow-wrap: break-word;
+                                            height: 37px;
                                         "
                                     onblur="updateTitle(this)"
                             />
                         </div>
 
-                        <div class="col-lg-6">
-                                    <span>
-                                        <i
-                                                class="fa-solid fa-circle-chevron-down"
-                                        ></i>
-                                        Status
-                                    </span>
-                            <select
-                                    id="projectStatuses"
-                                    name="projectStatuses"
-                                    class="selectpicker"
-                            >
-                                <option
-                                        data-content="<span class='badge rounded-pill  bg-primary'>STARTED</span>"
-                                        value="STARTED"
-                                        selected
-                                >
-                                    STARTED
-                                </option>
-                                <option
-                                        data-content="<span class='badge rounded-pill  bg-warning'>IN_PROGRESS</span>"
-                                        value="IN_PROGRESS"
-                                >
-                                    IN_PROGRESS
-                                </option>
-                                <option
-                                        data-content="<span class='badge rounded-pill  bg-success'>FINISHED</span>"
-                                        value="FINISHED"
-                                >
-                                    FINISHED
-                                </option>
-                            </select>
-                        </div>
 
-                        <div class="col-lg-12">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-bars-staggered"
-                                    ></i
-                                    ></span>
-                            <label
-                                    id="description-label"
-                                    class="editable-label"
-                                    name="description"
-                                    onclick="toggleEditor()"
-                            >
-                                Description</label
-                            >
-                            <textarea
-                                    id="description-editor"
-                                    class="form-control editable-input"
-                                    name="description"
-                                    rows="5"
-                                    style="display: none"
-                            ></textarea>
-                        </div>
+
+
+
+
                     </form>
                 </div>
             </div>
@@ -430,6 +401,7 @@
                                     type="text"
                                     name="member-tags"
                                     id="member"
+                                    placeholder="Select An Employee"
                             />
                         </div>
                         <div class="col-lg-6">
@@ -478,7 +450,6 @@
                         </div>
 
 
-
                         <div class="text-center mt-3">
                             <button
                                     type="submit"
@@ -515,13 +486,7 @@
                 <div class="modal-header">
                     <span>Are you sure you want to delete ?</span>
                     <button class="btn btn-danger col me-1">YES</button>
-                    <button
-                            class="btn btn-primary col"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    >
-                        NO
-                    </button>
+                    <button class="btn btn-primary col" data-bs-dismiss="modal" aria-label="Close">NO</button>
                 </div>
             </div>
         </div>
@@ -570,68 +535,14 @@
     <!--    for assign member-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
 
-    <script>
+    <script type="module">
+        import {getData, sendData} from "/js/api-function.js";
+        import {getTaskList} from '/js/callDataForTask.js';
 
-        var inputElm = document.querySelectorAll("input[name=member-tags]");
+        // Get the project ID from the hidden element
+        const projectId = document.getElementById("projectId").innerText;
 
-        function tagTemplate(tagData) {
-            return `
-        <tag title="${tagData.email}"
-                contenteditable='false'
-                spellcheck='false'
-                tabIndex="-1"
-                class="tagify__tag ${tagData.class ? tagData.class : ""}"
-                ${this.getAttributes(tagData)}>
-            <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
-            <div>
-                <div class='tagify__tag__avatar-wrap'>
-                    <img onerror="this.style.visibility='hidden'" src="${
-                tagData.avatar
-            }">
-                </div>
-                <span class='tagify__tag-text'>${tagData.name}</span>
-            </div>
-        </tag>
-    `;
-        }
-
-        function suggestionItemTemplate(tagData) {
-            return `
-        <div ${this.getAttributes(tagData)}
-            class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
-            tabindex="0"
-            role="option">
-            ${
-                tagData.avatar
-                    ? `
-            <div class='tagify__dropdown__item__avatar-wrap'>
-                <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
-            </div>`
-                    : ""
-            }
-            <strong>${tagData.name}</strong>
-            <span>${tagData.email}</span>
-        </div>
-    `;
-        }
-
-        function dropdownHeaderTemplate(suggestions) {
-            return `
-        <div class="${this.settings.classNames.dropdownItem} ${
-                this.settings.classNames.dropdownItem
-            }__addAll">
-            <strong>${
-                this.value.length
-                    ? `Add remaning ${suggestions.length}`
-                    : "Add All"
-            }</strong>
-            <span>${suggestions.length} members</span>
-        </div>
-    `;
-        }
-
-        const projectId = document.getElementById("projectId").textContent;
-
+        // Function to fetch the members' list from the backend API
         var membersList;
         $.ajax({
             url: "/api/user/list/projectId/" + projectId,
@@ -643,85 +554,31 @@
         });
         console.log("MEMBERS LIST" , membersList);
 
+        var memberInputTag = document.querySelector('input[name=member-tags]'),
+            tagify = new Tagify(memberInputTag, {
+                enforceWhitelist: true,
+                mode : "select",
+                whitelist:  membersList.map((member) => {
+                    return member.name + " | " + member.role;
+                }),
+                blacklist: ['foo', 'bar'],
+            })
 
-        for (let i = 0; i < inputElm.length; i++) {
-            let a = inputElm[i]
-            // initialize Tagify on the above input node reference
-            var tagify = new Tagify(a, {
-                tagTextProp: "name", // very important since a custom template is used with this property as text
-                // enforceWhitelist: true,
-                skipInvalid: true, // do not remporarily add invalid tags
-                dropdown: {
-                    closeOnSelect: false,
-                    enabled: 0,
-                    classname: "users-list",
-                    searchKeys: ["name", "email"], // very important to set by which keys to search for suggesttions when typing
-                },
-                templates: {
-                    tag: tagTemplate,
-                    dropdownItem: suggestionItemTemplate,
-                    dropdownHeader: dropdownHeaderTemplate,
-                },
-                //show data from membersList but exclude role of PROJECT_MANAGER
-                whitelist: membersList.filter((member) => member.role !== "PROJECT_MANAGER"),
-                transformTag: (tagData, originalData) => {
-                    //show name and role in tag
-                    tagData.value = tagData.name + " <" + tagData.email + ">";
-                    return tagData;
-                },
-                validate({name, email}) {
-                    // when editing a tag, there will only be the "name" property which contains name + email (see 'transformTag' above)
-                    if (!email && name) {
-                        var parsed = parseFullValue(name);
-                        name = parsed.name;
-                        email = parsed.email;
-                    }
+        // tagify.settings.templates =
 
-                    if (!name) return "Missing name";
-                    if (!validateEmail(email)) return "Invalid email";
+        // bind events
+        tagify.on('add', onAddTag)
+        tagify.DOM.input.addEventListener('focus', onSelectFocus)
 
-                    return true;
-                },
-            });
+        function onAddTag(e){
+
+            console.log(e.detail);
+
         }
 
-        // attach events listeners
-        tagify
-            .on("dropdown:select", onSelectSuggestion) // allows selecting all the suggested (whitelist) items
-            .on("edit:start", onEditStart); // show custom text in the tag while in edit-mode
-
-        function onSelectSuggestion(e) {
-            // custom class from "dropdownHeaderTemplate"
-            if (
-                e.detail.elm.classList.contains(
-                    `${tagify.settings.classNames.dropdownItem}__addAll`
-                )
-            )
-                tagify.dropdown.selectAll();
+        function onSelectFocus(e){
+            console.log(e)
         }
-
-        function onEditStart({detail: {tag, data}}) {
-            tagify.setTagTextNode(tag, `${data.name} <${data.email}>`);
-        }
-
-        // https://stackoverflow.com/a/9204568/104380
-        function validateEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
-
-        function parseFullValue(value) {
-            // https://stackoverflow.com/a/11592042/104380
-            var parts = value.split(/<(.*?)>/g),
-                name = parts[0].trim(),
-                email = parts[1]?.replace(/<(.*?)>/g, "").trim();
-
-            return {name, email};
-        }
-    </script>
-
-    <script type="module">
-        import {getData, sendData} from "/js/api-function.js";
-        import {getTaskList} from '/js/callDataForTask.js';
 
         // Get all elements with the common class name
         const editableLabels =
@@ -744,19 +601,14 @@
             const label = this;
             const input = label.nextElementSibling;
 
-            label.style.display = "none";
-            input.style.display = "block";
-            input.value = label.textContent;
+            //remove disabled attribute to enable editing
+            input.removeAttribute("disabled");
             input.focus();
         }
 
         function updateTitle(inputField) {
-            const input = inputField;
-            const label = input.previousElementSibling;
-
-            label.textContent = input.value;
-            label.style.display = "inline";
-            input.style.display = "none";
+            //add disabled attribute to disable editing
+            inputField.setAttribute("disabled", true);
         }
 
         function toggleEditor() {
@@ -790,7 +642,6 @@
                 "border-2",
                 "border"
             );
-            console.log(task.status);
             switch (task.status) {
                 case "TODO":
                     taskDiv.classList.add("border-primary");
@@ -829,8 +680,7 @@
 
             const img = document.createElement("img");
             img.src =
-                "https://source.unsplash.com/random/200x200?sig=" +
-                task.id; // Assuming you want to change the image based on task.id
+                "/images/avatars/employee_avatar.svg"; // Assuming you want to change the image based on task.id
             img.classList.add("img-fluid", "rounded-circle");
             img.alt = "";
             img.style.width = "30px";
@@ -845,7 +695,6 @@
 
         let taskList = await getTaskList()
 
-        console.log(taskList[0]);
         for (let i = 0; i < taskList.length; i++) {
             const task = taskList[i];
 
@@ -864,14 +713,39 @@
             taskDiv.addEventListener("dragstart", (e) => {
                 taskDiv.classList.add("is-dragging");
                 currentZone = taskDiv.parentElement;
-                console.log("deagging");
+                console.log("dragging");
                 currentTask = taskDiv;
                 console.log("CURRENT TASK ", currentTask)
             });
 
             taskDiv.addEventListener("click", (e) => {
+
                 currentTaskData = taskList[parseInt(taskDiv.getAttribute('index'))]
                 console.log('click task so should change the current task data', currentTaskData)
+                //change input value from that taskdata
+                document.getElementById('taskTitle').value = currentTaskData.title
+                document.getElementById('description-editor').value = currentTaskData.description
+                // document.getElementById('tduration').value = currentTaskData.duration
+                // document.getElementById('task-detail-start_time').value = currentTaskData.start_time
+
+                // change status span text according to the status and also change badge color
+                if (currentTaskData.status === 'TODO') {
+                    document.getElementById('status').innerText = 'TODO'
+                    document.getElementById('status').classList.remove('bg-info', 'bg-success')
+                    document.getElementById('status').classList.add('bg-primary')
+                } else if (currentTaskData.status === 'IN_PROGRESS') {
+                    document.getElementById('status').innerText = 'IN_PROGRESS'
+                    document.getElementById('status').classList.remove('bg-primary', 'bg-success')
+                    document.getElementById('status').classList.add('bg-warning')
+                } else if (currentTaskData.status === 'FINISHED') {
+                    document.getElementById('status').innerText = 'FINISHED'
+                    document.getElementById('status').classList.remove('bg-primary', 'bg-info')
+                    document.getElementById('status').classList.add('bg-success')
+                }
+
+                // change the assigned member span value
+                document.getElementById('assigned-member').innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
+
             });
 
             taskDiv.addEventListener("dragend", () => {
@@ -948,14 +822,14 @@
                     ${value}
                 </div>
                 <div class="col d-flex justify-content-between align-items-center">
-                    <img src="https://source.unsplash.com/random/200x200?sig=1" class="img-fluid rounded-circle" alt="" style="width: 30px;">
+                    <img src="/images/avatars/employee_avatar.svg" class="img-fluid rounded-circle" alt="" style="width: 30px;">
                 </div>
             `;
 
             newTask.addEventListener("dragstart", (e) => {
                 newTask.classList.add("is-dragging");
                 currentTask = newTask;
-                console.log("deagging");
+                console.log("dragging");
             });
 
             newTask.addEventListener("click", (e) => {
@@ -1144,7 +1018,7 @@
             week: {
                 daynames: ["Mon", "Tue", "Wed", "Thu", "Fri"],
                 startDayOfWeek: 0,
-                workweek:true,
+                workweek: true,
                 //set 12 hour format
                 hourStart: 7,
                 hourEnd: 19,
@@ -1180,18 +1054,26 @@
         //call api/tasks/save when click add button and send data as JSON.stringify to api
         //use jquery ajax
         $("#task-add-btn").on("click", function () {
+            // Get the member id for the added tag , don't return array , only id please
+            const tagData = tagify.value.map((tag) => {
+                const member = membersList.find((member) => {
+                    return member.name + " | " + member.role === tag.value;
+                });
+                return member.id;
+            });
             const data = {
                 title: $("#title").val(),
                 description: $("#description").val(),
                 // Convert to Unix timestamp
                 plan_start_time: new Date($("#start_time").val()).getTime(),
                 plan_end_time: new Date($("#end_time").val()).getTime(),
-                status: "TODO",
-                group: $("#group").val(),
-                projectId: projectId,
-                members: tagify.value.map((member) => {
-                    return member.id;
-                }),
+                tasksGroup: $("#group").val(),
+                projectDto: {
+                    id: parseInt(projectId)
+                },
+                userDto: {
+                    id: tagData[0]
+                }
             };
             console.log(data);
             $.ajax({
@@ -1208,10 +1090,6 @@
                 },
             });
         });
-
-
-
-
 
 
     </script>

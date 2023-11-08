@@ -212,6 +212,10 @@
          import { sendData, getData} from "/js/api-function.js";
 
          $(document).ready(function () {
+             setupLogoutConfirmation();
+         });
+
+         $(document).ready(function () {
              $("#spinner").hide();
 
              // Make an AJAX request to fetch the project list
@@ -450,6 +454,7 @@
              });
 
          });
+
      </script>
 </body>
 

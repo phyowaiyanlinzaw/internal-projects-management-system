@@ -23,4 +23,6 @@ public interface TasksService {
 
     Long countTaskByProjectIdAndStatus(Long id, TaskStatus x);
 
+    Long countByProjectId(long id);
+
 }

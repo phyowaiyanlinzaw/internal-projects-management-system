@@ -1,6 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.user;
 
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.department.DepartmentMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
@@ -61,10 +60,8 @@ public class UserMapper {
             projectList.add(projectDto);
         }
 
-        userDto.setProjectList(projectList);
 
         // Convert Department to DepartmentDto
-        userDto.setDepartmentdto(DepartmentMapper.toDepartmentDto(user.getDepartment()));
 
         return userDto;
     }
@@ -80,13 +77,7 @@ public class UserMapper {
         user.setPassword(userDto.getPassword());
         user.setRole(userDto.getRole());
 
-        // Convert DepartmentDto to Department using DepartmentMapper
-        if (userDto.getDepartmentdto() != null) {
-            user.setDepartment(DepartmentMapper.toDepartment(userDto.getDepartmentdto()));
-        } else {
-            user.setDepartment(null); // or handle this case as needed
-        }
-
+        // Convert DepartmentDto to Department using DepartmentMappe
         return user;
     }
 
