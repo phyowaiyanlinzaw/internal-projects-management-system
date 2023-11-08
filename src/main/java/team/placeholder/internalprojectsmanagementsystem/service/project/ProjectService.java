@@ -1,7 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.service.project;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 
 import java.util.List;
 
@@ -28,6 +28,8 @@ public interface ProjectService {
 
     List<ProjectDto> findAllByUserId(long id);
 
+
+
 //    List<ProjectDto> getAllProjectsByClientId(long id);
 //
 //    List<ProjectDto> getAllProjectsByProjectManagerId(long id);
@@ -37,5 +39,7 @@ public interface ProjectService {
     long countTaskById(long id);
 
     ProjectDto getProjectByUsersIdAndStatus(long users, String status);
+
+
 
 }

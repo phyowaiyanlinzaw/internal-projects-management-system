@@ -22,15 +22,18 @@ public class IsuDto {
     private String preventive_action;
     private int clientId;
     private boolean solved;
-    private Date created_date;
-    private Date updated_date;
+    private long created_date;
+    private long updated_date;
+    private long solved_date;
+    private String responsible_type;
+    private String issue_category;
+    private long user_uploader;
+    private long user_pic;
+    private long responsible_party;
+    private long project_id;
 
-    private Project project;
-    private User user;
 
-    private long projectId;
-    private long userId;
-    private long pmId;
+
 
 
 

@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
       lang="en">
+<head>
+    <style>
+
+        .ql-toolbar {
+            color: white;
+        }
+        .ql-editor {
+
+        }
+    </style>
+</head>
 
 <body layout:fragment="content">
 
@@ -29,15 +40,13 @@
         <div th:replace="fragments/navigation :: navigation-with-search"></div>
 
         <div class="container-fluid">
-            <div class="container-fluid d-md-block pt-2 ps-s pe-2" id="dropdrown-search-bar">
-
-
-                    <div class="d-flex flex-row justify-content-end gap-2">
-
-                        <form class="d-inline-block">
-                            <input class="form-control border-0" type="search" placeholder="Search" />
-                        </form>
-
+            <div class="container-fluid d-md-block pt-2 ps-s pe-2"
+                 id="dropdrown-search-bar">
+                <div class="d-flex flex-row justify-content-between position-relative">
+                    <form class="d-md-flex">
+                        <input class="form-control border-0" type="search" placeholder="Search" />
+                    </form>
+                    <div class="position-absolute end-0 d-flex gap-3">
                         <!-- modal toggle button start -->
                         <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
                             <i class="bi bi-plus-lg"></i>
@@ -46,153 +55,73 @@
 
                         <!-- sortting button -->
                         <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
-
                     </div>
 
-
-                <div id="grid" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
-                    <div class="row" id="sort-container" style="margin: 10px" >
-                        <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
-
-                        <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
-                    </div>
+                    <!-- Modal -->
                 </div>
-
             </div>
 
 
+            <!--  Issue list-->
+            <div class="row row-cols-1" id="sort">
+                <!--                issue list will be here-->
 
+            </div>
+            <!--  Issue list end-->
 
-
-            <!-- <div class="row row-cols-1" id="sort">
-                <div class="p-md-3 p-sm-2 mt-3">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark">
-                            <div class=" justify-content-between align-items-center gap-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>
-                                </div>
-                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <p>Posted</p><span>3 days ago</span>
-                                        <p>Modified at</p><span>1 minute ago</span>
-                                    </div>
-                                </div>
-                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="code-block" style="color: darkred;">
-                                            <span>Java</span>
-                                            <span>Error</span>
-                                        </div>
-                                        <div class="code-block" style="color: #369;">
-                                            <span>this code does not work help me please</span>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                        See More
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex align-items-center gap-2">
-                                <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                    Hnin Aye Lwin
-                                </p>
-                                <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
-                                    Ei Ei Phyo
-                                </p>
-                                <span class="card-title badge rounded-pill bg-success">Success</span>
-                            </div>
-                            <div class="code-block">
-                                <pre>private final CustomUserDetailsService userDetailsService;
-  &#64;Bean
-  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
-      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;
-      authProvider.setUserDetailsService&#40;userDetailsService&#41;;
-      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
-      return authProvider;
-  &#125;</pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </div>
-        
     </div>
     <!-- Content End -->
-    <div
-            class="modal fade"
-            id="issue-details"
-            data-bs-keyboard="false"
-            tabindex="-1"
-            aria-labelledby="staticBackdropLabel"
-            aria-hidden="true"
-    >
+
+    <!--    issue detail modal start-->
+    <div class="modal fade" id="issueDetailModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div>
-                        Issue Details
-                    </div>
+                    <h4>Issue Details</h4>
                     <div class="d-flex justify-content-center align-items-center gap-3">
-                        <div class="btn btn-primary" id="issue-edit-btn">
-                            edit
-                        </div>
+                        <div class="btn btn-primary" id="issue-edit-btn">Edit</div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
-                            <div class="col">
-                                <h4>corrective action</h4>
-                                <div class="editable text-wrap">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
-                                </div>
+                            <div class="col mb-3">
+                                <h5 class="icon-title"><i class="fas fa-wrench text-primary"></i> Corrective Action</h5>
+                                <span class="editable text-wrap custom-left-margin" id="corrective_actionValue">
+                                    <input type="text" class="form-control form-control-sm btn-space" id="corrective_actionInput" name="corrective_action" />
+                                </span>
                             </div>
-                            <div class="col">
-                                <h4>preventive action</h4>
-                                <div class="editable text-break">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
-                                </div>
+                            <div class="col mb-3">
+                                <h5 class="icon-title"><i class="fas fa-shield-alt text-primary"></i>Preventive Action</h5>
+                                <span class="editable text-break custom-left-margin" id="preventive_actionValue">
+                                    <input type="text" class="form-control form-control-sm btn-space" id="preventive_actionInput" name="preventive_action" />
+                                </span>
                             </div>
-                            <div class="col">
-                                <h4>direct cause</h4>
-                                <div class="editable text-break">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
-                                </div>
+                            <div class="col mb-3">
+                                <h5 class="icon-title"><i class="fas fa-arrow-right text-primary"></i> Direct Cause</h5>
+                                <span class="editable text-break custom-left-margin" id="direct_causeValue">
+                                    <input type="text" class="form-control form-control-sm btn-space" id="direct_causeInput" name="direct_cause" />
+                                </span>
                             </div>
-                            <div class="col">
-                                <h4>root cause</h4>
-                                <div class="editable text-break">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
-                                </div>
+                            <div class="col mb-3">
+                                <h5 class="icon-title"><i class="fas fa-code-branch text-primary"></i>Root Cause</h5>
+                                <span class="editable text-break custom-left-margin" id="root_causeValue">
+                                    <input type="text" class="form-control form-control-sm btn-space" id="root_causeInput" name="root_cause" />
+                                </span>
                             </div>
-                            <div class="col">
-                                <h4>impact</h4>
-                                <div class="editable text-break">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
-                                </div>
+                            <div class="col mb-3">
+                                <h5 class="icon-title"> <i class="fas fa-exclamation-circle text-primary"></i> Impact</h5>
+                                <span class="editable text-break custom-left-margin" id="impactValue">
+                                    <input type="text" class="form-control form-control-sm btn-space" id="impactInput" name="impact" />
+                                </span>
                             </div>
-                            <div class="col">
-                                <h4>place</h4>
-                                <div class="editable text-break">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus accusamus
-                                    a excepturi consectetur eveniet dolorem ut similique error eius. Sit ipsum
-                                    voluptatibus fugiat velit dolorum voluptatum, unde eum nesciunt.
-                                </div>
+                            <div class="col mb-3">
+                                <h5 class="icon-title"><i class="fas fa-map-marker text-primary"></i>Place</h5>
+                                <span class="editable text-break custom-left-margin" id="placeValue">
+                                    <input type="text" class="form-control form-control-sm btn-space" id="placeInput" name="place" />
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -200,7 +129,6 @@
             </div>
         </div>
     </div>
-
     <!-- add issue modal start -->
     <div class="modal fade bd-example-modal-lg" id="add-issue" data-bs-keyboard="true">
         <div class="modal-dialog modal-lg">
@@ -214,95 +142,97 @@
                     <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
 
                     <!-- issue modal start -->
-                    <form class="row g-3 ">
+                    <div class="row g-3 "  id="addIssueValidationForm">
                         <div class="col-lg-6">
-                            <label for="title" class="col-sm-12 col-form-label" name="name">Issue Title<span
+                            <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
                                     style="color:#e86666"> *</span></label>
-                            <input type="text" class="form-control " id="title" name="title" placeholder="Title">
+                            <input type="text" class="form-control border-task-description" id="title" name="title" placeholder="Title">
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="categories" class="col-sm-12 col-form-label" name="name">Issue Category<span
+                            <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
                                     style="color:red"> *</span></label>
-                            <select class="four-control border-task" name="countries" id="categories" multiple>
-                                <option value="1">Afghanistan</option>
-                                <option value="2">Australia</option>
-                                <option value="3">Germany</option>
-                                <option value="4">Canada</option>
-                                <option value="5">Russia</option>
-                                <option value="6">America</option>
-                                <option value="7">Spain</option>
-                                <option value="8">Turkey</option>
+                            <select class="form-select border-task-description" name="issue_category" id="issue_category" >
+                                <option selected disabled hidden>Select Issue Category</option>
+                                <option value="ERROR">Error</option>
+                                <option value="BUG">Bug</option>
+                                <option value="COMMUNICATION">Communication</option>
+                                <option value="TECHNICAL">Technical</option>
+                                <option value="BUDGET">Budget</option>
+                                <option value="DESIGN">Design</option>
+                                <option value="TESTING">Testing</option>
+                                <option value="OTHER">Other</option>
                             </select>
                         </div>
 
+
                         <div class="col-lg-6">
-                            <label for="person_in_charge" class="col-sm-12 col-form-label" name="client">Person In Charge <span
+                            <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control" aria-label="Select Clients" data-live-search="true"
-                                    id="person_in_charge" name="client">
-                                <option>PIC</option>
-                                <option>Phyo Wai Yan Lin Zaw</option>
-                                <option>Zaw Lin Shein</option>
-                                <option>Ei Ei Phyo</option>
-                                <option>Hnin Aye Lwin</option>
-                                <option>Thant Htet Ko</option>
+                            <select class="form-select border-task-description" data-live-search="true" aria-label="Select PIC"  id="user_pic" name="user_pic" >
+
                             </select>
                         </div>
 
+
                         <div class="col-lg-6">
-                            <label for="responsible_party" class="col-sm-12 col-form-label" name="client">Responsible Party <span
+                            <label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_party">Responsible Party <span
                                     style="color:red"> *</span></label>
-                            <select class="form-control" aria-label="Select Clients" data-live-search="true"
-                                    id="responsible_party" name="client">
-                                <option>RP</option>
-                                <option>Phyo Wai Yan Lin Zaw</option>
-                                <option>Zaw Lin Shein</option>
-                                <option>Ei Ei Phyo</option>
-                                <option>Hnin Aye Lwin</option>
-                                <option>Thant Htet Ko</option>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="responsible_type" name="responsible_type" value="CLIENT">
+                                <label class="form-check-label" for="responsible_type">Client</label>
+                            </div>
+
+
+                            <select class="form-select border-task-description" aria-label="Select Responsible Party"  id="responsible_party" name="responsible_party" >
+
                             </select>
                         </div>
 
                         <div class="col-lg-12" style="margin-bottom: 80px;">
-                            <label for="editor" class="col-sm-12 col-form-label" name="name">Description<span
+                            <label for="description" class="col-sm-12 col-form-label" name="name">Description<span
                                     style="color:#e86666"> *</span></label>
-                            <div class="quill-editor-bubble form-control" id="editor"></div>
+                            <div class="quill-editor-bubble form-control" id="description" name="description"></div>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="directcause" class="col-sm-12 col-form-label" name="name">Direct Cause<span
+                            <label for="direct_cause" class="col-sm-12 col-form-label" name="direct_cause">Direct Cause<span
                                     style="color:#e86666"> *</span></label>
 
-                            <textarea class="form-control" id="directcause"></textarea>
+                            <textarea class="form-control border-task-description" id="direct_cause" name="direct_cause"></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="rootcause" class="col-sm-12 col-form-label" name="name">Root Cause<span
+                            <label for="root_cause" class="col-sm-12 col-form-label" name="root_cause">Root Cause<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="rootcause"></textarea>
+                            <textarea class="form-control border-task-description" id="root_cause"></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="impact" class="col-sm-12 col-form-label" name="name">Direct Cause<span
+                            <label for="place" class="col-sm-12 col-form-label" name="place">Place<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="impact"></textarea>
+                            <textarea class="form-control border-task-description" id="place" name="place"></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                            <label for="place" class="col-sm-12 col-form-label" name="name">Impact<span
+                            <label for="impact" class="col-sm-12 col-form-label" name="impact">Impact<span
                                     style="color:#e86666"> *</span></label>
-                            <textarea class="form-control" id="place"></textarea>
+                            <textarea class="form-control border-task-description" id="impact" name="impact"></textarea>
                         </div>
 
                         <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <button type="submit" class="btn btn-primary" data-bs-target="#">Add New Issue</button>
+                            <button type="button" id="addIssue" class="btn btn-primary" >Save Data</button>
                         </div>
 
-                    </form>
+                    </div>
                     <!-- issue modal end -->
+
                 </div>
+
+
+
             </div>
+
         </div>
     </div>
     <!-- add issue modal end -->
@@ -313,16 +243,16 @@
     ></a>
 </div>
 
-<!--    for select drop-drown-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+<!--    for select drop-drown-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>-->
 
 <!-- fontawesome -->
 <script src="/js/fontawesome.js"></script>
 
 <!-- jquery -->
 <script src="/js/jquery.3.7.1.min.js"></script>
+
 
 <!-- datable table -->
 <script src="/js/databales.min.js"></script>
@@ -347,72 +277,11 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 
-<script type="module">
-    $(document).ready(function () {
-        confirmLogout();
-    });
+<script src="/js/currentLoginUser.js" type="module" async></script>
 
-
-    const issue1 = {
-        id: 1,
-        title: "head",
-        uploader: { id: 1, name: "thant" },
-        status: true, // complete or not
-        createdDate: 1702000000000,
-        modified: 3,
-        category: ["error", "bug"],
-        description: `<div class="code-block">
-                                <p>"this code does not work"</p>
-                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
-                            </div>`,
-        corractive: "bla",
-        preventive: "bla",
-        direct: "bla",
-        root: "bla",
-        impact: "bla",
-        place: "bla"
-    };
-    const issue2 = {
-        id: 2,
-        title: "body",
-        uploader: { id: 2, name: "zaw" },
-        status: false, // complete or not
-        createdDate: 1712000000000,
-        modified: 2,
-        category: ["error", "bug"],
-        description: `<div class="code-block">
-                                <p>"this is alitte work"</p>
-                                <pre class="ql-syntax" spellcheck="false">fjfjfdf{}@#!@#!@</pre>
-                            </div>`,
-        corractive: "bla",
-        preventive: "bla",
-        direct: "bla",
-        root: "bla",
-        impact: "bla",
-        place: "bla"
-    };
-    const issue3 = {
-        id: 3,
-        title: "foot",
-        uploader: { id: 3, name: "phyoe" },
-        status: true, // complete or not
-        createdDate: 1322000000000,
-        modified: 0,
-        category: ["error", "bug"],
-        description: `<div class="code-block">
-                                <p>"this code work"</p>
-                                <pre class="ql-syntax" spellcheck="false">aercawercawecrawe{}@#!@#!@</pre>
-                            </div>`,
-        corractive: "bla",
-        preventive: "bla",
-        direct: "bla",
-        root: "bla",
-        impact: "bla",
-        place: "bla"
-    };
-
-    const issueArray = [issue1, issue2, issue3];
-
+<script>
+    // Author: Habib Mhamadi
+    // Email: habibmhamadi@gmail.comd
     function getTimeAgo(timestamp) {
         const date = new Date(timestamp);
         const currentDate = new Date();
@@ -440,105 +309,16 @@
         }
     }
 
-    for (let i = 0; i < issueArray.length; i++) {
-        let currentData = issueArray[i];
-        let curDiv = `<div class="row row-cols-1" id="sort">
-                <div class="p-md-3 p-sm-2 mt-3">
-                    <div class="card">
-                        <div class="card-header border-bottom text-dark">
-                            <div class=" justify-content-between align-items-center gap-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <h6 class="card-title">ABCDEFGHIJKLMNOPQRSTUVWXYZ</h6>
-                                </div>
-                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <p>Posted</p><span>3 days ago</span>
-                                        <p>Modified at</p><span>1 minute ago</span>
-                                    </div>
-                                </div>
-                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="code-block" style="color: darkred;">
-                                            <span>Java</span>
-                                            <span>Error</span>
-                                        </div>
-                                        <div class="code-block" style="color: #369;">
-                                            <span>this code does not work help me please</span>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" data-bs-target="#issue-details" data-bs-toggle="modal">
-                                        See More
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex align-items-center gap-2">
-                                <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                    Hnin Aye Lwin
-                                </p>
-                                <p class="card-title badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning border border-warning rounded-pill">
-                                    Ei Ei Phyo
-                                </p>
-                                <span class="card-title badge rounded-pill bg-success">Success</span>
-                            </div>
-                            <div class="code-block">
-                                <pre>private final CustomUserDetailsService userDetailsService;
-  &#64;Bean
-  public AuthenticationProvider authenticationProvider&#40;&#41; &#123;
-      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider&#40;&#41;;;
-      authProvider.setUserDetailsService&#40;userDetailsService&#41;;
-      authProvider.setPasswordEncoder&#40;passwordEncoder&#40;&#41;&#41;;
-      return authProvider;
-  &#125;</pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>`
+</script>
 
-        document.querySelector("#sort-container").innerHTML += curDiv;
-    }
+<script type="module">
 
-    const editOpenBtn = document.querySelector('button[data-bs-target="#issue-details"]')
+    import {getUser} from "/js/currentLoginUser.js";
+    import {getTimeElapsed} from "/js/time.js";
+    import {getData} from "/js/api-function.js";
 
-    const issueEditBtn = document.getElementById('issue-edit-btn')
 
-    editOpenBtn.addEventListener('click', function (e) {
-        // TODO :: SHOULD CALL AJAX FUNCTION WHEN CLICK AND CREATE DIV 
-        console.log("open issue detail modal")
-        issueEditBtn.innerText = 'edit'
-    })
-
-    issueEditBtn.addEventListener('click', function (e) {
-
-        if (this.innerText === 'edit') {  // Use '===' for comparison
-            const eidtable = Array.from(document.getElementsByClassName('editable'));
-            console.log(eidtable);
-            for (let i = 0; i < eidtable.length; i++) {
-                let d = eidtable[i];
-                let input = document.createElement('textarea');
-                input.value = d.innerText;
-                input.classList.add('form-control');
-                input.classList.add('editable');
-                input.setAttribute('rows', 5);
-                console.log(d.parentNode);
-                d.parentNode.replaceChild(input, d);
-            }
-            this.innerText = 'save';
-        } else if (this.innerText === 'save') {  // Use '===' for comparison
-            const eidtable = Array.from(document.getElementsByClassName('editable'));
-            for (let i = 0; i < eidtable.length; i++) {
-                let d = eidtable[i];
-                let input = document.createElement('div');
-                input.textContent = d.value;  // Use textContent to set text for div
-                input.classList.add('editable', 'text-break');
-                console.log(d.parentNode);
-                d.parentNode.replaceChild(input, d);
-            }
-            this.innerText = 'edit';
-        }
-    });
+    console.log(await getUser());
 
 
     let quillEditors = document.querySelectorAll(
@@ -571,30 +351,413 @@
         ["code-block", "blockquote"],
     ];
 
-    // Initialize Quill for each selected element
-    quillEditors.forEach(function (editor) {
-        new Quill(editor, {
+    // If you want to initialize Quill for a specific element, you can do it like this:
+    let getLoginUser = await getUser();
+
+    console.log("current login user " , getLoginUser)
+
+    let data = [];
+
+    // const currentUser = await getUser();
+
+    const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
+
+    console.log(dataForIssue.id);
+
+
+    $(document).ready(async function () {
+
+        let specificQuillEditor = document.querySelector("#description"); // Change the selector as needed
+        const a = new Quill(specificQuillEditor, {
             modules: {
                 toolbar: toolbaroptions,
             },
             theme: "snow",
         });
+
+
+
+
+        $.get(`api/project/list/ID/1/IN_PROGRESS`, function (userData) {
+            data = userData; // Set the data array with the retrieved user data
+
+            const user_pic = $('#user_pic');
+            user_pic.empty();
+            user_pic.append($('<option>', {
+                value: '',
+                text: 'Select a Member',
+                data: {picUrl: ''},
+
+
+            }));
+            if (userData.userList) {
+                userData.userList.forEach(user => {
+                    user_pic.append($('<option>', {
+                        value: user.id,
+                        text: user.name,
+                        data: { picUrl: user.picUrl },
+                        user: user,
+                    }));
+                });
+            }
+        });
+
+
+        let clientData = [];
+
+        $.get('api/project/list/ID/1/IN_PROGRESS', function (clients) {
+            clientData = clients;
+
+            console.log(clientData)
+
+            const responsiblePartySelect = $('#responsible_party');
+            responsiblePartySelect.empty();
+
+            responsiblePartySelect.append($('<option>', {
+                text: 'Select Responsible Party',
+            }));
+
+            $.each(clientData.userList, function (index, client) {
+                console.log(client)
+                responsiblePartySelect.append($('<option>', {
+                    value: `client_${client.id}`,
+                    text: `Client: ${client.name}`,
+                }));
+
+                if (client.userList) {
+                    // Loop through the users within the client
+                    client.userList.forEach(user => {
+                        responsiblePartySelect.append($('<option>', {
+                            value: `user_${user.id}`,
+                            text: `User: ${user.name}`,
+                            data: { picUrl: user.picUrl },
+                            user: user,
+                        }));
+                    });
+                }
+            });
+        });
+
+
+
+
+        $('#addIssue').on('click', async function () {
+            const title = $('#title').val();
+            const description = a.root.innerHTML;
+            const place = $('#place').val();
+            const impact = $('#impact').val();
+            const root_cause = $('#root_cause').val();
+            const direct_cause = $('#direct_cause').val();
+            const responsible_party = $('#responsible_party').val();
+            const issue_category = $('#issue_category').val();
+            const responsible_type = $('#responsible_type').val();
+
+            const selectedUserId = $('#user_pic').val();
+
+
+
+            if (
+                title === "" ||
+                description === "" ||
+                place === "" ||
+                impact === "" ||
+                root_cause === "" ||
+                direct_cause === "" ||
+                responsible_party === "" ||
+                issue_category === ""||
+                selectedUserId === ""
+
+            ) {
+                alert('Please fill in all the required fields.');
+                return;
+            }
+
+
+            const selectedUser = data.userList.find(user => user.id == selectedUserId)
+            console.log("Selected User", selectedUserId);
+
+            const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party);
+
+
+            console.log("Responsible Party", selectedResponsibleParty);
+
+
+            if (!selectedUser) {
+                alert('Selected user data not found.');
+                return;
+            }
+
+
+            const uploaderId = getLoginUser.currentUser;
+
+            console.log("Uploader Id", uploaderId);
+
+
+
+            const requestData = {
+                title: title,
+                description: description,
+                place: place,
+                impact: impact,
+                created_date: new Date().getTime(),
+                updated_date: new Date().getTime(),
+                root_cause: root_cause,
+                direct_cause: direct_cause,
+                responsible_party: selectedResponsibleParty,
+                issue_category: issue_category,
+                user_pic: selectedUser.id,
+                user_uploader: uploaderId.id,
+                responsible_type: responsible_type,
+            };
+
+            console.log('Request Data:', requestData);
+
+            $.ajax({
+                url: 'api/issue/save',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(requestData),
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    alert('Issue Created Successfully');
+                },
+                error: function (xhr, status, error) {
+                    console.log('Status:', status);
+                    console.log('Error:', error);
+                    console.log('Server response:', xhr.responseText);
+
+                    if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                        // Handle JSON response
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            console.log('JSON Response:', response);
+                        } catch (e) {
+                            console.log('JSON parsing error:', e);
+                        }
+                    } else {
+                        // Handle non-JSON response
+                        console.log('Non-JSON Response:', xhr.responseText);
+                    }
+
+                    alert('Error creating issue: ' + xhr.responseText);
+                    console.log('Error creating issue');
+                },
+            });
+        });
+
+
+
     });
 
-    let fullQuillEditor = document.querySelector(".quill-editor-full");
 
-    new Quill(fullQuillEditor, {
-        modules: {
-            toolbar: toolbaroptions,
-        },
-        theme: "snow",
+
+    $(document).ready(function() {
+        function loadData() {
+            $.ajax({
+                url: 'api/issue/list',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    const sortContainer = $('#sort');
+
+                    // Loop through the retrieved data and create content for each item
+                    data.forEach(item => {
+                        const issueDiv = `
+                    <div class="p-md-3 p-sm-2 mt-3">
+                        <div class="card">
+                            <div class="card-header border-bottom text-dark">
+                                <div class="d-flex justify-content-between align-items-center gap-2" id="getAllIssue">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="card-title">${item.title}</h6>
+                                        <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                         ${item.pic_id.name}
+
+                                        </p>
+                                    </div>
+                                    <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
+                                        ${item.status === 'true' ? 'Solved' : 'Unsolved'}
+                                    </span>
+                                </div>
+                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <p>Posted</p>
+                                        <span>${new Date(item.created_date)}</span>
+                                        <p>Modified at</p>
+                                        <span>${getTimeElapsed(item.updated_date)}</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
+                                    See More
+                                </button>
+                                </div>
+                                <div class="col issue-time-line d-flex gap-2">
+                                    <p class="btn custom-color rounded-pill">${item.issue_category}</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="code-block">
+                                    <p>${item.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                        sortContainer.append(issueDiv);
+                    });
+
+                    $('.see-more-button').click(function() {
+                        var issueId = $(this).data('id');
+                        console.log('Clicked button with data-id:', issueId);
+                        $.ajax({
+                            url: 'api/issue/lists/byId/' + issueId,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                console.log('Data received:', data);
+                                if (data) {
+                                    $('#corrective_actionValue').text(data.corrective_action);
+                                    $('#preventive_actionValue').text(data.preventive_action);
+                                    $('#direct_causeValue').text(data.direct_cause);
+                                    $('#root_causeValue').text(data.root_cause);
+                                    $('#impactValue').text(data.impact);
+                                    $('#placeValue').text(data.place);
+                                    $('#issue-edit-btn').data('issueId', data.id);
+                                    $('#issueDetailModal').modal('show');
+                                } else {
+                                    console.log('No data received for issue ID:', issueId);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.log('AJAX error:', error);
+                            }
+                        });
+                    });
+                },
+                error: function (error) {
+                    console.log('Error fetching data:', error);
+                }
+            });
+        }
+        loadData();
     });
 
-    // Author: Habib Mhamadi
-    // Email: habibmhamadi@gmail.com
+    // for update
+    const issueEditBtn = document.getElementById('issue-edit-btn');
 
-    new MultiSelectTag("categories"), new MultiSelectTag("state"); // id
+    // document.querySelector("issueDetailModal").addEventListener("hide.bs.modal", () => {
+    //     issueEditBtn.innerText = "Edit"
+    // })
+
+    issueEditBtn.addEventListener('click', function (e) {
+        console.log("click")
+        if (this.innerText === 'Edit') {
+            // Switch to edit mode
+            const editableFields = document.querySelectorAll('.editable');
+            editableFields.forEach((field, index) => {
+                const input = document.createElement('textarea');
+                input.value = field.innerText;
+                input.setAttribute('rows', 5);
+                input.classList.add('form-control');
+                input.classList.add('editable');
+
+                // Set a unique ID for each new input element based on the index
+                input.id = `newInput_${index}`;
+
+                field.innerHTML = '';
+                field.appendChild(input);
+            });
+
+            this.innerText = 'Save';
+        } else if (this.innerText === 'Save') {
+            // Switch back to view mode
+            const issue_id = $('#issue-edit-btn').data('issueId');
+            console.log('Issue ID:', issue_id);
+            const corrective_action = document.getElementById('newInput_0').value;
+            const preventive_action = document.getElementById('newInput_1').value;
+            const direct_cause = document.getElementById('newInput_2').value;
+            const root_cause = document.getElementById('newInput_3').value;
+            const impact = document.getElementById('newInput_4').value;
+            const place = document.getElementById('newInput_5').value;
+            // const issue_category = document.getElementById('issue_category').value;
+            // const user_pic = document.getElementById('user_pic').value;
+            // const responsible_party = document.getElementById('responsible_party').value;
+            // const description = document.getElementById('description').value;
+            // const title = document.getElementById('title').value;
+
+
+
+            // Collect the updated values from input fields
+            const updatedDetails = {
+
+                corrective_action: corrective_action,
+                preventive_action: preventive_action,
+                direct_cause: direct_cause,
+                root_cause: root_cause,
+                impact: impact,
+                place: place,
+                // issue_category: issue_category,
+                // user_pic: user_pic,
+                // responsible_party: responsible_party,
+                // description: description,
+                // title: title,
+
+
+            };
+
+            console.log("UpdateDetails", updatedDetails);
+
+            $.ajax({
+                url: `/api/issue/update/${issue_id}`, // Update the URL to include the issue ID
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(updatedDetails),
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    console.log("Issue Updated Successfully");
+                    alert("Issue Updated Successfully");
+                },
+                error: function (xhr, status, error) {
+                    console.log('Status:', status);
+                    console.log('Error:', error);
+                    console.log('Server response:', xhr.responseText);
+
+                    if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                        // Handle JSON response
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            console.log('JSON Response:', response);
+                        } catch (e) {
+                            console.log('JSON parsing error:', e);
+                        }
+                    } else {
+                        // Handle non-JSON response
+                        console.log('Non-JSON Response:', xhr.responseText);
+                    }
+
+                    alert("Error updating issue: " + xhr.responseText);
+                    console.log("Error updating issue");
+                },
+
+
+                complete: function () {
+                    // Optionally, close the modal or perform other actions upon completion
+                    $('#issueDetailModal').modal('hide');
+                }
+            });
+
+            this.innerText = 'Edit';
+        }
+    });
+
+
+
 
 </script>
+
+
+
+
 </body>
 </html>

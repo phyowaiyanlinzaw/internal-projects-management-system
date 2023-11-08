@@ -3,10 +3,12 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 
+import org.codehaus.groovy.transform.sc.transformers.RangeExpressionTransformer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
@@ -14,19 +16,25 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDt
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.sql.Date;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/project")
@@ -187,9 +195,13 @@ public class ProjectController {
     public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status){
         List<ProjectDto> project = projectService.findAllByUserId(id);
 
+        Long currentProjectId = null;
+
         Map<String, Object> projectMap = new HashMap<>();
         for(ProjectDto projectDto : project){
             if((status).equalsIgnoreCase(projectDto.getStatus())){
+
+                currentProjectId = projectDto.getId();
 
                 ClientDto clientDto = projectDto.getClientDto();
                 List<UserDto> userDtos = projectDto.getUserDtos();
@@ -199,6 +211,8 @@ public class ProjectController {
 
             }
         }
+
+        projectMap.put("projectId", currentProjectId);
 
         return new ResponseEntity<>(projectMap, HttpStatus.OK);
     }

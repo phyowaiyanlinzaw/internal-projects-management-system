@@ -161,7 +161,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto getProjectById(long id) {
         Project project = projectRepository.findById(id);
         if (project != null) {
-            return modelMapper.map(project, ProjectDto.class);
+            return ProjectMapper.toProjectDto(project);
         } else {
             return null;
         }
@@ -394,5 +394,30 @@ public class ProjectServiceImpl implements ProjectService {
         Instant instant = Instant.ofEpochMilli(millis);
         return instant.atZone(ZoneId.systemDefault()).toLocalDate();
     }
+
+    public List<ClientDto> getAllClientsFromProjects() {
+        List<Project> projectsWithClients = projectRepository.findAllByClientIsNotNull();
+        List<ClientDto> clientDtos =  projectsWithClients.stream()
+                .map(project -> modelMapper.map(project.getClient(), ClientDto.class))
+                .collect(Collectors.toList());
+        return clientDtos;
+
+    }
+
+
+
+    public List<UserDto> getAllPM() {
+        List<Project> projectsWithPm = projectRepository.findAllByProjectManagerIsNotNull();
+        List<UserDto> userDtos = projectsWithPm.stream()
+                .map(project -> modelMapper.map(project.getProjectManager(), UserDto.class))
+                .collect(Collectors.toList());
+        return userDtos;
+    }
+
+
+
+
+
+
 
 }
