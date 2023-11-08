@@ -144,7 +144,7 @@ public class ProjectController {
         log.info("current login user role " + role);
 
         if (role.equals("PROJECT_MANAGER")) {
-            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id);
+            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know 
             return getListResponseEntity(projects);
         } else if (role.equals("DEPARTMENT_HEAD")) {
             long departmentId = userService.getUserById(id).getDepartmentdto().getId();
