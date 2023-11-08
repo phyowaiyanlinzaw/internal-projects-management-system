@@ -25,7 +25,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Table(name="user")
-public class User implements Serializable {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,12 +75,7 @@ public class User implements Serializable {
     }
 
 
-    public User orElseNull() {
+    public User orElse(Object o) {
         return null;
     }
-
-    public User orElseThrow(Object o) {
-        return null;
-    }
-
 }

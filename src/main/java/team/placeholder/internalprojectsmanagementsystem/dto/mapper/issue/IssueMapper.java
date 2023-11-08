@@ -1,16 +1,18 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ProjectMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.UserMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 
 public class IssueMapper {
-    public static IssueDto toIssueDto (Issue issue){
-        if(issue == null ){
+    public static IssueDto toIssueDto(Issue issue) {
+        if (issue == null) {
             return null;
         }
+
         IssueDto issueDto = new IssueDto();
         issueDto.setId(issue.getId());
         issueDto.setTitle(issue.getTitle());
@@ -21,15 +23,18 @@ public class IssueMapper {
         issueDto.setDirect_cause(issue.getDirect_cause());
         issueDto.setCorrective_action(issue.getCorrective_action());
         issueDto.setPreventive_action(issue.getPreventive_action());
-        issueDto.setResponsible_party(issue.getResponsible_party());
-        issueDto.setSolved(false);
+       // issueDto.setResponsible_party(issue.getResponsible_party());
+        issueDto.setSolved(issue.isSolved());
         issueDto.setCreated_date(issue.getCreated_date());
         issueDto.setUpdated_date(issue.getUpdated_date());
-        issueDto.setSolved(issue.isSolved());
+        issueDto.setSolved_date(issue.getSolved_date());
         issueDto.setIssue_category(issue.getIssue_category());
-        issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
+        issueDto.setProjectDto(ProjectMapper.toProjectDto(issue.getProject()));
+        issueDto.setUser_pic(UserMapper.toUserDto(issue.getUser_pic()));
+        issueDto.setUser_uploader(UserMapper.toUserDto(issue.getUser_uploader()));
         return issueDto;
     }
+
 
     public static Issue toIssue(IssueDto issueDto) {
         if (issueDto == null) {
@@ -50,8 +55,11 @@ public class IssueMapper {
         issue.setSolved(issueDto.isSolved());
         issue.setCreated_date(issueDto.getCreated_date());
         issue.setUpdated_date(issueDto.getUpdated_date());
+        issue.setSolved_date(issueDto.getSolved_date());
         issue.setIssue_category(issueDto.getIssue_category());
         issue.setProject(ProjectMapper.toProject(issueDto.getProjectDto()));
+        issue.setUser_pic(UserMapper.toUser(issueDto.getUser_pic()));
+        issue.setUser_uploader(UserMapper.toUser(issueDto.getUser_uploader()));
         return issue;
     }
 

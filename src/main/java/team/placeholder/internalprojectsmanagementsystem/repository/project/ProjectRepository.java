@@ -18,6 +18,18 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     List<Project> findAllByUsersId(long id);
 
+    List<Project> findAllByClientIsNotNull();
+
+    List<Project> findAllByProjectManagerIsNotNull();
+
+
+
+
+
+
+
+
+
     List<Project> findByDepartmentId(long id);
 
     Project findByUsersId(long id);
