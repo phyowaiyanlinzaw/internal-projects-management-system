@@ -1161,5 +1161,7 @@
 }
 .fc-col-header-cell-cushion,.fc-daygrid-day-number{
     text-decoration: none;
+    color: black;
+
 }
 /*end*/

@@ -12,11 +12,7 @@ public interface TasksService {
 
     List<TasksDto> getAllTasks();
 
-    TasksDto getTaskById(long id);
-
-    TasksDto updateTask(TasksDto taskDto);
-
-    void deleteTask(long id);
+    TasksDto updateTaskStatus(TasksDto tasksDto);
 
     List<TasksDto> getTasksByProjectId(long id);
 

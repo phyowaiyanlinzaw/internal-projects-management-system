@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TasksService {
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
         task.setPlan_start_time(taskRequestDto.getPlan_start_time());
         task.setPlan_end_time(taskRequestDto.getPlan_end_time());
-        task.setStatus(TaskStatus.valueOf(taskRequestDto.getStatus()));
+        task.setStatus(TaskStatus.TODO);
         User user = userRepository.findById(taskRequestDto.getUserId());
         Project project = projectRepository.findById(taskRequestDto.getProjectId());
         task.setUser(user);
@@ -63,24 +63,28 @@ public class TaskServiceImpl implements TasksService {
     }
 
     @Override
-    public TasksDto getTaskById(long id) {
-        Tasks task = taskRepository.findById(id);
-        return  modelMapper.map(task, TasksDto.class);
+    public TasksDto updateTaskStatus(TasksDto taskDto) {
+        Tasks task = taskRepository.findById(taskDto.getId()).orElse(null);
+        return modelMapper.map(task, TasksDto.class);
     }
 
-    @Override
-    public TasksDto updateTask(TasksDto taskDto) {
-        return null;
-    }
-
-    @Override
-    public void deleteTask(long id) {
-
-    }
 
     @Override
     public List<TasksDto> getTasksByProjectId(long id) {
-        return null;
+        List<Tasks> taskList = taskRepository.findByProjectId(id);
+        List<TasksDto> taskDtoList = new ArrayList<>();
+
+        for(Tasks task : taskList) {
+            User user = task.getUser();
+            Project project = task.getProject();
+            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+            UserDto userDto = modelMapper.map(user, UserDto.class);
+            TasksDto taskDto = modelMapper.map(task, TasksDto.class);
+            taskDto.setUserDto(userDto);
+            taskDto.setProjectDto(projectDto);
+            taskDtoList.add(taskDto);
+        }
+        return taskDtoList;
     }
 
     @Override
