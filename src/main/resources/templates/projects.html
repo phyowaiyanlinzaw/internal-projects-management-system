@@ -1176,17 +1176,18 @@
                         url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
                         type: "POST",
                         data: JSON.stringify(project),
-                        contentType: "application/json",
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
                         success: function (data) {
                             alert("Project registered successfully");
                             // Reset the form if needed
                             $("#validation-form")[0].reset();
                             console.log("this projce has benn saved", data);
-                            event.currentTarget.submit();
+                            // event.currentTarget.submit();
                         },
                         error: function (data) {
                             alert("Error registering project");
-                            event.currentTarget.submit();
+                            // event.currentTarget.submit();
                         },
                     });
                 });
