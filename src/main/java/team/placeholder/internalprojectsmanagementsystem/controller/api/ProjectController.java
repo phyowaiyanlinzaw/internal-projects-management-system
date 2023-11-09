@@ -3,30 +3,39 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 
+import org.codehaus.groovy.transform.sc.transformers.RangeExpressionTransformer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Amount;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.sql.Date;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/project")
@@ -95,18 +104,41 @@ public class ProjectController {
 
 
 
-    @PutMapping(value = "/update/{id}", consumes ="application/Json")
-    public ResponseEntity<String> updatePrject(@PathVariable long id, @RequestBody ProjectDto projectDto){
-        ProjectDto updateProject = projectService.updateProject(projectDto);
-        if (updateProject!=null){
-            return ResponseEntity.ok("Issue Updated success");
+    @PutMapping(value = "/update", consumes ="application/Json")
+    public ResponseEntity<ProjectDto> updatePrject(@RequestBody ProjectDto projectDto){
 
+        log.info("Project : {}", projectDto);
+        log.info(String.valueOf(projectDto.getId()));
+        log.info(String.valueOf(projectDto.getDuration()));
+        log.info(String.valueOf(projectDto.getStart_date()));
+        log.info(String.valueOf(projectDto.getEnd_date()));
+        log.info(String.valueOf(projectDto.getCurrent_phase()));
+        log.info(String.valueOf(projectDto.getObjective()));
 
+         ProjectDto updateProject = projectService.updateProject(projectDto);
 
-        }else {
-            return ResponseEntity.badRequest().body("Failed Updated");
-        }
+         return ResponseEntity.ok(updateProject);
     }
+
+    @PutMapping("/update/amount/{id}")
+    public ResponseEntity<ProjectDto> updateAmountById(@PathVariable long id, @RequestBody AmountDto amountDto) {
+        Project project = projectRepository.getReferenceById(id);
+
+        Amount amount = project.getAmount();
+
+        amount.setBasic_design(amountDto.getBasic_design());
+        amount.setCoding(amountDto.getCoding());
+        amount.setDetail_design(amountDto.getDetail_design());
+        amount.setUnit_testing(amountDto.getUnit_testing());
+        amount.setIntegrated_testing(amountDto.getIntegrated_testing());
+
+        project.setAmount(amount);
+
+        projectRepository.save(project);
+
+        return ResponseEntity.ok(projectService.getProjectById(id));
+    }
+
 
     @GetMapping(value = "/architecturelist")
     public ResponseEntity <List <ArchitectureDto>> getAllArchitecture(){
@@ -144,7 +176,7 @@ public class ProjectController {
         log.info("current login user role " + role);
 
         if (role.equals("PROJECT_MANAGER")) {
-            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id);
+            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know
             return getListResponseEntity(projects);
         } else if (role.equals("DEPARTMENT_HEAD")) {
             long departmentId = userService.getUserById(id).getDepartmentdto().getId();
@@ -158,14 +190,42 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("/list/ID/{id}/status/IN_PROGRESS")
+    @GetMapping("/list/sort/by/department")
+    public ResponseEntity<Map<Long, List<Long>>> sortProjectByDepId() {
+
+        List<ProjectDto> projectList = projectService.getAllProjects();
+
+        Map<Long, List<Long>> departmentProejctMap = new HashMap<>();
+
+        for(ProjectDto proejct: projectList) {
+            Long departmentId = proejct.getDepartmentDto().getId();
+            Long projectId = proejct.getId();
+
+            if(departmentProejctMap.containsKey(departmentId)) {
+                departmentProejctMap.get(departmentId).add(projectId);
+            } else {
+                List<Long> projectIds = new ArrayList<>();
+                projectIds.add(projectId);
+                departmentProejctMap.put(departmentId, projectIds);
+            }
+
+        }
+
+        return new ResponseEntity<>(departmentProejctMap, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/list/ID/{id}/{status}")
     public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status){
         List<ProjectDto> project = projectService.findAllByUserId(id);
 
-        for(ProjectDto projectDto : project){
-            if(projectDto.getStatus().equals(status)){
+        Long currentProjectId = null;
 
-                Map<String, Object> projectMap = new HashMap<>();
+        Map<String, Object> projectMap = new HashMap<>();
+        for(ProjectDto projectDto : project){
+            if((status).equalsIgnoreCase(projectDto.getStatus())){
+
+                currentProjectId = projectDto.getId();
 
                 ClientDto clientDto = projectDto.getClientDto();
                 List<UserDto> userDtos = projectDto.getUserDtos();
@@ -173,11 +233,12 @@ public class ProjectController {
                 projectMap.put("client", clientDto);
                 projectMap.put("userList", userDtos);
 
-                return new ResponseEntity<>(projectMap, HttpStatus.OK);
             }
         }
 
-        return ResponseEntity.notFound().build();
+        projectMap.put("projectId", currentProjectId);
+
+        return new ResponseEntity<>(projectMap, HttpStatus.OK);
     }
 
     @GetMapping("/list/for/pmoandsdqc")

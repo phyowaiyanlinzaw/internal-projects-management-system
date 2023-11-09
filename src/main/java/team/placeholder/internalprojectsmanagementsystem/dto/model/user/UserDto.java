@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -25,11 +26,15 @@ public class UserDto {
     @JsonProperty("department")
     private DepartmentDto departmentdto;
 
-    @JsonProperty("project_manager")
+    @JsonIgnore
+//    @JsonBackReference
+//    @JsonProperty("project_manager")
     private UserDto projectManager;
 
     private List<ProjectDto> projectsByProjectManager;
 
     private Set<ProjectDto> projectsByUsers;
+
+
 
 }

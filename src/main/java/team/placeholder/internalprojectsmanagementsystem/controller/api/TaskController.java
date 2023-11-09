@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 
 import java.util.List;

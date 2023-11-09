@@ -2,13 +2,18 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.user.ClientService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,6 +23,8 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+
+    private final ModelMapper modelMapper;
     @Override
     public ClientDto save(ClientDto clientDto) {
         Client client = new Client();
@@ -30,10 +37,20 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientDto> getAllClient() {
-        List<Client> clients = clientRepository.findAll();
-        return clients.stream()
-                .map(ClientMapper::toClientDto)
-                .collect(java.util.stream.Collectors.toList());
+        List<Client> clientList = clientRepository.findAll();
+
+        for(Client client : clientList) {
+            System.out.println(client.getId());
+        }
+
+        List<ClientDto> clientDtos = new ArrayList<>();
+
+        for(Client client : clientList ) {
+            ClientDto clientDto = modelMapper.map(client, ClientDto.class);
+            clientDtos.add(clientDto);
+
+        }
+        return clientDtos;
 
     }
 
