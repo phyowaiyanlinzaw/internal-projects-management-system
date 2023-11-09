@@ -143,6 +143,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(registerEmployeeDto.getPassword());
         user.setRole(Role.valueOf(registerEmployeeDto.getRole()));
 
+
         if (registerEmployeeDto.getRole().equals(Role.PROJECT_MANAGER.toString())){
             Department department = departmentRepository.findById(registerEmployeeDto.getDepartmentId());
             user.setDepartment(department);
@@ -150,6 +151,7 @@ public class UserServiceImpl implements UserService {
         else{
             User projectManager = userRepository.findById(registerEmployeeDto.getProjectManagerId());
             user.setProjectManager(projectManager);
+            user.setDepartment(projectManager.getDepartment());
         }
         // Save the user
         try {

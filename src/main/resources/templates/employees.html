@@ -258,9 +258,13 @@
             var projectManagerSelect = $('#projectManagerSelect');
 
             if (selectedValue === 'PROJECT_MANAGER') {
-                // Show departmentSelect and hide projectManagerSelect by display css property
+                // Show departmentSelect
                 departmentSelect.show();
+
+                // Hide projectManagerSelect and clear selected value
+                projectManagerSelect.val('').trigger('change');
                 projectManagerSelect.hide();
+
 
                 // Make an AJAX request to populate departmentSelect options
                 $.get('/api/department/list', function (data) {
@@ -275,10 +279,13 @@
             } else {
                 // Show projectManagerSelect and hide departmentSelect
                 projectManagerSelect.show();
+
+                // Hide departmentSelect and clear selected value
+                departmentSelect.val('').trigger('change');
                 departmentSelect.hide();
 
                 // Make an AJAX request to populate projectManagerSelect options
-                $.get('/api/user/list/PROJECT_MANAGER', function (data) {
+                $.get('/api/user/list/role/PROJECT_MANAGER', function (data) {
                     projectManagerSelect.empty();
                     $.each(data, function (index, user) {
                         projectManagerSelect.append($('<option>', {
@@ -327,12 +334,14 @@
             var role = $('#memberSelect').val();
             var departmentId = $('#departmentSelect').val();
             var projectManagerId = $('#projectManagerSelect').val();
-            console.log(projectManagerId);
 
             if (username === '' || email === '' || role === '' || departmentId === '' || projectManagerId === '') {
                 showError("Please fill all the fields...")
                 return;
             }
+
+            console.log("department id : ",departmentId)
+            console.log("pm id : ",projectManagerId)
 
             // Show a confirmation dialog using Swal
             Swal.fire({
@@ -355,12 +364,8 @@
                             name: username,
                             email: email,
                             role: role,
-                            department: {
-                                id: departmentId
-                            },
-                            project_manager: {
-                                id: projectManagerId
-                            }
+                            departmentId: departmentId,
+                            projectManagerId: projectManagerId
                         }),
                         contentType: 'application/json',
                         success: function (data) {
