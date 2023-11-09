@@ -1,20 +1,16 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.user;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 
-@Getter
-@Setter
+@Data
 public class ClientDto implements Serializable {
     private long id;
     private String name,email,phone;
-    @Override
-    public String toString() {
-        return "ClientDto [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + "]";
-    }
 
     
 }

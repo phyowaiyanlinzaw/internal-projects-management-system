@@ -39,8 +39,9 @@ public class ClientController {
 
     @PostMapping("save")
     public ResponseEntity<ClientDto> save(@RequestBody ClientDto clientDto) {
-        System.out.println(clientDto);
+//        log.info("\n\n\n"+ clientDto);
         return new ResponseEntity<>(clientService.save(clientDto), HttpStatus.OK);
+//        return null;
     }
 
     @GetMapping("count")
