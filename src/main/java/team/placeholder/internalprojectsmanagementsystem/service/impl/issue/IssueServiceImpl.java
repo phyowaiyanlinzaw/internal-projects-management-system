@@ -51,44 +51,31 @@ public class IssueServiceImpl implements IssueService {
 
 
 
-//    @Override
-//    public List<IsuDto> getAllIssues() {
-//        List<Issue> issueList = issueRepository.findAll();
-//        List<IsuDto> issueDtos = new ArrayList<>();
-//
-//        for (Issue issue : issueList) {
-//            if (issue != null) {
-//                IsuDto issueDto = modelMapper.map(issue, IsuDto.class);
-//                if (issue.getUser_pic() != null) {
-//                    UserDto userDto = modelMapper.map(issue.getUser_pic(), UserDto.class);
-//                    issueDto.setUser_pic(userDto.getId());
-//                }
-//
-//                if(issue.getUser_uploader() != null) {
-//                    UserDto userDto = modelMapper.map(issue.getUser_uploader(), UserDto.class);
-//                    issueDto.setUser_uploader(userDto.getId());
-//                }
-//                issueDtos.add(issueDto);
-//            }
-//        }
-//
-//        return issueDtos;
-//    }
-
-    @Override
+@Override
     public List<IssueDto> getAllIssues() {
         List<Issue> issueList = issueRepository.findAll();
         List<IssueDto> issueDtos = new ArrayList<>();
 
         for (Issue issue : issueList) {
             if (issue != null) {
-                IssueDto issueDto = IssueMapper.toIssueDto(issue);
+                IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+                if (issue.getUser_pic() != null) {
+                    UserDto userPic = modelMapper.map(issue.getUser_pic(), UserDto.class);
+                    issueDto.setUser_pic(userPic);
+                }
+
+                if (issue.getUser_uploader() != null) {
+                    UserDto userUploader = modelMapper.map(issue.getUser_uploader(), UserDto.class);
+                    issueDto.setUser_uploader(userUploader);
+                }
                 issueDtos.add(issueDto);
+
             }
         }
 
         return issueDtos;
     }
+
 
 
 
@@ -108,7 +95,6 @@ public class IssueServiceImpl implements IssueService {
     public IssueDto updateIssue(IssueDto issueDto) {
         Issue issue = issueRepository.findById(issueDto.getId());
         if(issue != null) {
-
             issue.setPlace(issueDto.getPlace());
             issue.setImpact(issueDto.getImpact());
             issue.setRoot_cause(issueDto.getRoot_cause());

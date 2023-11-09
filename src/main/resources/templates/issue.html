@@ -25,7 +25,7 @@
 <!-- Spinner End -->
 
 <div th:replace="fragments/sidebar :: sidebar"></div>
-<div class="container-fluid position-relative d-flex p-0">
+<div class="container-fluid position-relative bg-white d-flex p-0">
 
     <!-- Content Start -->
     <div class="content" style="
@@ -36,40 +36,37 @@
                         #e5e5f7 0.6000000000000001px
                     );
                     background-size: 12px 12px;">
-
+        <!--navigation start -->
         <div th:replace="fragments/navigation :: navigation-with-search"></div>
-
-        <div class="container-fluid">
-            <div class="container-fluid d-md-block pt-2 ps-s pe-2"
-                 id="dropdrown-search-bar">
+        <!--navigation end -->
+        <!-- search start -->
+            <div class="container-fluid d-md-block pt-2 ps-s pe-2" id="dropdrown-search-bar">
                 <div class="d-flex flex-row justify-content-between position-relative">
-                    <form class="d-md-flex">
-                        <input class="form-control border-0" type="search" placeholder="Search" />
-                    </form>
                     <div class="position-absolute end-0 d-flex gap-3">
+                        <form class="d-md-flex">
+                            <input class="form-control border-0" type="search" placeholder="Search" />
+                        </form>
                         <!-- modal toggle button start -->
                         <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                         <!-- modal toggle button end -->
-
                         <!-- sortting button -->
                         <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
                     </div>
-
                     <!-- Modal -->
                 </div>
             </div>
-
+        <!-- search end -->
 
             <!--  Issue list-->
-            <div class="row row-cols-1" id="sort">
-                <!--                issue list will be here-->
-
+        <div id="grid" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
+            <div class="row" id="sort-container" style="margin: 10px">
             </div>
+        </div>
             <!--  Issue list end-->
 
-        </div>
+
     </div>
     <!-- Content End -->
 
@@ -87,6 +84,20 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
+
+                            <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                <strong>Error : </strong> <span id="errorText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                <strong>Success : </strong> <span id="successText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
+
                             <div class="col mb-3">
                                 <h5 class="icon-title"><i class="fas fa-wrench text-primary"></i> Corrective Action</h5>
                                 <span class="editable text-wrap custom-left-margin" id="corrective_actionValue">
@@ -238,9 +249,7 @@
     <!-- add issue modal end -->
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
-    ><i class="bi bi-arrow-up"></i
-    ></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
 
 
@@ -283,6 +292,100 @@
     $(document).ready(function () {
         confirmLogout();
     });
+
+    $(document).ready(function() {
+        function loadData() {
+            $.ajax({
+                url: 'api/issue/list',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log("Data"+data);
+                    console.log("Solved :" , data.solved)
+                    console.log("Update Date :" , data.updated_date)
+                    console.log("Title :" , data.title)
+
+                    const sortContainer = $('#sort-container');
+
+
+                    // Loop through the retrieved data and create content for each item
+                    data.forEach(item => {
+                        const issueDiv = `
+                    <div class="p-md-3 p-sm-2 mt-3">
+                        <div class="card">
+                            <div class="card-header border-bottom text-dark">
+                                <div class="d-flex justify-content-between align-items-center gap-2" id="getAllIssue">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="card-title">${item.title}</h6>
+                                        <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                         ${item.user_pic.name}
+
+                                        </p>
+                                    </div>
+                                    <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
+                                        ${item.status === 'true' ? 'Solved' : 'Unsolved'}
+                                    </span>
+                                </div>
+                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <p>Posted</p>
+                                        <span>${new Date(item.created_date)}</span>
+                                        <p>Modified at</p>
+                                        <span>${getTimeElapsed(item.updated_date)}</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
+                                    See More
+                                </button>
+                                </div>
+                                <div class="col issue-time-line d-flex gap-2">
+                                    <p class="btn custom-color rounded-pill">${item.issue_category}</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="code-block">
+                                    <p>${item.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                        sortContainer.append(issueDiv);
+                    });
+
+                    $('.see-more-button').click(function() {
+                        var issueId = $(this).data('id');
+                        console.log('Clicked button with data-id:', issueId);
+                        $.ajax({
+                            url: 'api/issue/lists/byId/' + issueId,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                console.log('Data received:', data);
+                                if (data) {
+                                    $('#corrective_actionValue').text(data.corrective_action);
+                                    $('#preventive_actionValue').text(data.preventive_action);
+                                    $('#direct_causeValue').text(data.direct_cause);
+                                    $('#root_causeValue').text(data.root_cause);
+                                    $('#impactValue').text(data.impact);
+                                    $('#placeValue').text(data.place);
+                                    $('#issue-edit-btn').data('issueId', data.id);
+                                    $('#issueDetailModal').modal('show');
+                                } else {
+                                    console.log('No data received for issue ID:', issueId);
+                                }
+                            },error: function(xhr, status, error) {
+                                console.log('AJAX error:', error);
+                            }
+                        });
+                    });
+                },error: function (error) {
+                    console.log('Error fetching data:', error);
+                }
+            });
+        }
+        loadData();
+    });
+
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.comd
     function getTimeAgo(timestamp) {
@@ -507,6 +610,7 @@
                 user_pic: selectedUser.id,
                 user_uploader: uploaderId.id,
                 responsible_type: responsible_type,
+
             };
 
             console.log('Request Data:', requestData);
@@ -520,8 +624,7 @@
                 success: function (data) {
                     console.log(data);
                     alert('Issue Created Successfully');
-                },
-                error: function (xhr, status, error) {
+                },error: function (xhr, status, error) {
                     console.log('Status:', status);
                     console.log('Error:', error);
                     console.log('Server response:', xhr.responseText);
@@ -551,95 +654,7 @@
 
 
 
-    $(document).ready(function() {
-        function loadData() {
-            $.ajax({
-                url: 'api/issue/list',
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    const sortContainer = $('#sort');
 
-                    // Loop through the retrieved data and create content for each item
-                    data.forEach(item => {
-                        const issueDiv = `
-                    <div class="p-md-3 p-sm-2 mt-3">
-                        <div class="card">
-                            <div class="card-header border-bottom text-dark">
-                                <div class="d-flex justify-content-between align-items-center gap-2" id="getAllIssue">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <h6 class="card-title">${item.title}</h6>
-                                        <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                         ${item.pic_id.name}
-
-                                        </p>
-                                    </div>
-                                    <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
-                                        ${item.status === 'true' ? 'Solved' : 'Unsolved'}
-                                    </span>
-                                </div>
-                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <p>Posted</p>
-                                        <span>${new Date(item.created_date)}</span>
-                                        <p>Modified at</p>
-                                        <span>${getTimeElapsed(item.updated_date)}</span>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
-                                    See More
-                                </button>
-                                </div>
-                                <div class="col issue-time-line d-flex gap-2">
-                                    <p class="btn custom-color rounded-pill">${item.issue_category}</p>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="code-block">
-                                    <p>${item.description}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                        sortContainer.append(issueDiv);
-                    });
-
-                    $('.see-more-button').click(function() {
-                        var issueId = $(this).data('id');
-                        console.log('Clicked button with data-id:', issueId);
-                        $.ajax({
-                            url: 'api/issue/lists/byId/' + issueId,
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function(data) {
-                                console.log('Data received:', data);
-                                if (data) {
-                                    $('#corrective_actionValue').text(data.corrective_action);
-                                    $('#preventive_actionValue').text(data.preventive_action);
-                                    $('#direct_causeValue').text(data.direct_cause);
-                                    $('#root_causeValue').text(data.root_cause);
-                                    $('#impactValue').text(data.impact);
-                                    $('#placeValue').text(data.place);
-                                    $('#issue-edit-btn').data('issueId', data.id);
-                                    $('#issueDetailModal').modal('show');
-                                } else {
-                                    console.log('No data received for issue ID:', issueId);
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.log('AJAX error:', error);
-                            }
-                        });
-                    });
-                },
-                error: function (error) {
-                    console.log('Error fetching data:', error);
-                }
-            });
-        }
-        loadData();
-    });
 
     // for update
     const issueEditBtn = document.getElementById('issue-edit-btn');
@@ -669,7 +684,7 @@
 
             this.innerText = 'Save';
         } else if (this.innerText === 'Save') {
-            // Switch back to view mode
+
             const issue_id = $('#issue-edit-btn').data('issueId');
             console.log('Issue ID:', issue_id);
             const corrective_action = document.getElementById('newInput_0').value;
@@ -684,6 +699,17 @@
             // const description = document.getElementById('description').value;
             // const title = document.getElementById('title').value;
 
+            Swal.fire({
+                title: "Are you sure!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+            // Switch back to view mode
+
 
 
             // Collect the updated values from input fields
@@ -695,16 +721,12 @@
                 root_cause: root_cause,
                 impact: impact,
                 place: place,
-                // issue_category: issue_category,
-                // user_pic: user_pic,
-                // responsible_party: responsible_party,
-                // description: description,
-                // title: title,
+                updated_date: new Date().getTime(),
+                solved: 1,
 
 
             };
-
-            console.log("UpdateDetails", updatedDetails);
+            console.log("UpdateDetails_title :", updatedDetails.title);
 
             $.ajax({
                 url: `/api/issue/update/${issue_id}`, // Update the URL to include the issue ID
@@ -714,10 +736,8 @@
                 dataType: 'json',
                 success: function (data) {
                     console.log(data);
-                    console.log("Issue Updated Successfully");
-                    alert("Issue Updated Successfully");
-                },
-                error: function (xhr, status, error) {
+                    showSuccess("Issue Updated Successfully...")
+                },error: function (xhr, status, error) {
                     console.log('Status:', status);
                     console.log('Error:', error);
                     console.log('Server response:', xhr.responseText);
@@ -734,8 +754,7 @@
                         // Handle non-JSON response
                         console.log('Non-JSON Response:', xhr.responseText);
                     }
-
-                    alert("Error updating issue: " + xhr.responseText);
+                    showError("Error updating issue : " + xhr.responseText)
                     console.log("Error updating issue");
                 },
 
@@ -749,7 +768,35 @@
             this.innerText = 'Edit';
         }
     });
+        }
+    });
+    function showError(message) {
+        $("#errorText").text(message);
+        $("#errorAlert").show();
 
+        setTimeout(function () {
+            $("#errorAlert").hide();
+        }, 1000);
+
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#errorAlert").hide();
+        });
+    }
+
+    function showSuccess(message) {
+        $("#successText").text(message);
+        $("#successAlert").show();
+
+        setTimeout(function () {
+            $("#successAlert").hide();
+        }, 1000);
+
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#successAlert").hide();
+        });
+    }
 
 
 
