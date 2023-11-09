@@ -1,13 +1,14 @@
 package team.placeholder.internalprojectsmanagementsystem.service.project;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 
 import java.util.List;
 
 public interface TasksService {
 
-    TasksDto save(TasksDto taskDto);
+    TasksDto save(TaskRequestDto taskRequestDto);
 
     List<TasksDto> getAllTasks();
 
