@@ -67,7 +67,6 @@ public class UserController {
         if (user == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
-        System.out.println(user.getName());
         user.setPassword(newPassword);
         userService.save(user);
         return ResponseEntity.ok("Password reset successfully");
@@ -87,22 +86,17 @@ public class UserController {
     @PostMapping("change-password")
     public ResponseEntity<String> changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication != null) {
-            UserDto user = userService.getUserByEmail(authentication.getName());
+            UserDto user = userService.changePassword(authentication.getName(), oldPassword, newPassword);
             if (user == null) {
                 return ResponseEntity.badRequest().body("User not found");
             }
-            //check if old password is correct
-            if (!new BCryptPasswordEncoder().matches(oldPassword, user.getPassword())) {
-                return ResponseEntity.badRequest().body("Old password is incorrect");
-            }
-            //set new password
-            user.setPassword(newPassword);
-            userService.save(user);
-            return ResponseEntity.ok("Password changed successfully");
         } else {
             return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.ok("Password changed successfully");
     }
 
     @PostMapping("/update/departmentId/{departmentId}")

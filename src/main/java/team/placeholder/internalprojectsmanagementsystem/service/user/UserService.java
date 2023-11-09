@@ -13,7 +13,9 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Ro
 
 @Service
 public interface UserService {
+
     UserDto save(UserDto userDto);
+    UserDto changePassword(String email, String oldPassword, String newPassword);
 
     UserDto getUserById(long id);
 

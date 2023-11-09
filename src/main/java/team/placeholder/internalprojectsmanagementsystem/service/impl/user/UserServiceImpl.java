@@ -78,13 +78,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto save(UserDto userDto) {
         User user = modelmapper.map(userDto, User.class);
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setRole(userDto.getRole());
-        user.setDepartment(modelmapper.map(userDto.getDepartmentdto(), Department.class));
         userRepository.save(user);
         return modelmapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public UserDto changePassword(String email, String oldPassword, String newPassword) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            if (new BCryptPasswordEncoder().matches(oldPassword, user.getPassword())) {
+                user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+                userRepository.save(user);
+                return modelmapper.map(user, UserDto.class);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     @Override
