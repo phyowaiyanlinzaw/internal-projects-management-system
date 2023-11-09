@@ -6,6 +6,7 @@ export function sendData(url, method, data) {
         },
 
         body: JSON.stringify(data),
+        dataType: "json",
     })
         .then(response => {
             if(!response.ok) {

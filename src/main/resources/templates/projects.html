@@ -308,8 +308,15 @@
                         phone: phone,
                     };
 
-                    sendData("/api/client/save", "POST", clientDto)
-                        .then((response) => {
+                    console.log(clientDto)
+
+                    $.ajax({
+                      method: "POST",
+                        url: "/api/client/save",
+                        data : JSON.stringify(clientDto),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
                             console.log(response);
                             const option = document.createElement("option");
                             option.value = JSON.stringify(response);
@@ -318,13 +325,11 @@
                             document.querySelector("#client-name").value = "";
                             document.querySelector("#client-email").value = "";
                             document.querySelector("#client-phone").value = "";
-                        })
-                        .catch((error) => {
-                            console.error(
-                                "Error in Url : /api/cleient/save ",
-                                error
-                            );
-                        });
+                        },
+                        error: function (error) {
+                            console.error("Error in Url : /api/cleient/save ", error);
+                        },
+                    })
                 });
 
             const projectObjectiveEditor =
