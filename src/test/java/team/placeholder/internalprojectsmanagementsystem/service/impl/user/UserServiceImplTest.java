@@ -4,7 +4,6 @@ import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,12 +17,8 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
-import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role.PMO;
-import static team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role.SDQC;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +40,30 @@ class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    // Existing test cases...
+
+    @Test
+    public void testFindByNameWhenUserExistsThenReturnUserDto() {
+        User user = new User();
+        user.setName("John");
+        user.setEmail("john@gmail.com");
+        user.setPassword("123456");
+        user.setDepartment(new Department());
+        user.setRole(SDQC);
+        user.setId(1L);
+        when(userRepository.findByName("John")).thenReturn(user);
+        UserDto userDto = userService.findByName("John");
+        assertNotNull(userDto);
+        assertEquals("John", userDto.getName());
+    }
+
+    @Test
+    public void testFindByNameWhenUserDoesNotExistThenReturnNull() {
+        when(userRepository.findByName("John")).thenReturn(null);
+        UserDto userDto = userService.findByName("John");
+        assertNull(userDto);
     }
 
     @Test
@@ -72,7 +91,6 @@ class UserServiceImplTest {
         assertEquals(2, users.size());
         verify(userRepository, times(1)).findAll();
     }
-
 
     @Test
     public void testSaveUser() {
@@ -138,15 +156,39 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testResetPassword(){
+    public void testResetPassword() {
         String password = "12345678";
-        assertEquals(password.length(),PasswordGenerator.generatePassword(8).length());
+        assertEquals(password.length(), PasswordGenerator.generatePassword(8).length());
     }
 
+    @Test
+    public void testRegisterUser() {
+        UserDto userDto = new UserDto();
+        userDto.setName("John");
+        userDto.setEmail("john@gmail.com");
+        userDto.setRole(SDQC);
+        userDto.setDepartmentdto(new DepartmentDto());
+        when(userRepository.save(any(User.class))).thenReturn(new User());
+        UserDto savedUserDto = userService.registerUser(userDto);
+        assertNotNull(savedUserDto);
+        verify(userRepository, times(1)).save(any(User.class));
+    }
 
-
-
-
-
-
+    @Test
+    public void testChangeUsername() {
+        User user = new User();
+        user.setName("John");
+        user.setEmail("john@gmail.com");
+        user.setPassword("123456");
+        user.setDepartment(new Department());
+        user.setRole(SDQC);
+        user.setId(1L);
+        when(userRepository.findByEmail("john@gmail.com")).thenReturn(user);
+        UserDto userDto = new UserDto();
+        userDto.setName("Jane");
+        userDto.setEmail("john@gmail.com");
+        userService.changeUsername(userDto);
+        assertEquals("Jane", user.getName());
+        verify(userRepository, times(1)).save(user);
+    }
 }
