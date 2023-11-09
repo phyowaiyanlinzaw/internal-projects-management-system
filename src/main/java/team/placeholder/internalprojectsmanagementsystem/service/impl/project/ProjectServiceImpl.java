@@ -161,7 +161,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto getProjectById(long id) {
         Project project = projectRepository.findById(id);
         if (project != null) {
-            return ProjectMapper.toProjectDto(project);
+            return modelMapper.map(project, ProjectDto.class);
         } else {
             return null;
         }

@@ -12,7 +12,7 @@ public interface TasksService {
 
     List<TasksDto> getAllTasks();
 
-    TasksDto updateTaskStatus(TasksDto tasksDto);
+    TasksDto updateTaskStatus(long taskId,String status,long startTime,long endTime);
 
     List<TasksDto> getTasksByProjectId(long id);
 

@@ -512,15 +512,6 @@
 <!--    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>-->
     <script src="/lib/quill/quill.min.js"></script>
 
-    <!-- toast ui calendar -->
-<!--    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.js"></script>-->
-<!--    <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.js"></script>-->
-<!--    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>-->
-<!--    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>-->
-<!--    <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>-->
-
-
-
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
     <script src="/js/forprogresscircleiguess.js"></script>
@@ -799,17 +790,25 @@
                     console.log(currentTaskData.status, currentZone.getAttribute("id"))
                     if (currentTaskData.status !== currentZone.getAttribute("id")) {
                         currentTaskData.status = currentZone.getAttribute("id")
+
                         if (currentTaskData.status === 'IN_PROGRESS') {
                             currentTaskData.actual_start_time = new Date().getTime()
                         }
+
                         if (currentTaskData.status === 'FINISHED') {
                             currentTaskData.actual_end_time = new Date().getTime()
                         }
-                        console.log("CURRENT TASK DATA", currentTaskData)
+
+
                         sendData(
                             "/api/task/update/status",
                             "POST",
-                            currentTaskData,
+                            {
+                                id : currentTaskData.id,
+                                status: currentTaskData.status,
+                                actual_start_time: currentTaskData.actual_start_time,
+                                actual_end_time: currentTaskData.actual_end_time
+                            },
                             (error, response) => {
                                 if (error) {
                                     console.error("Error for URL /api/task/update", error);

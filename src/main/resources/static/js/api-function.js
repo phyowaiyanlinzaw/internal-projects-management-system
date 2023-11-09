@@ -1,11 +1,12 @@
 export function sendData(url, method, data) {
+    console.log(data)
     return fetch(url, {
         method: method,
         headers: {
             'Content_Type': 'application/json',
         },
 
-        body: JSON.stringify(data),
+     body: JSON.stringify(data),
     })
         .then(response => {
             if(!response.ok) {

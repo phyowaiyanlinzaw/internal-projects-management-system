@@ -63,11 +63,19 @@ public class TaskServiceImpl implements TasksService {
     }
 
     @Override
-    public TasksDto updateTaskStatus(TasksDto taskDto) {
-        Tasks task = taskRepository.findById(taskDto.getId()).orElse(null);
+    public TasksDto updateTaskStatus(long taskId,String status,long startTime,long endTime) {
+        Tasks task = taskRepository.findById(taskId).orElse(null);
+        if (task == null) {
+            return null;
+        }
+        task.setStatus(TaskStatus.valueOf(status));
+        if (task.getStatus()==TaskStatus.FINISHED) {
+            task.setActual_end_time(endTime);
+        }
+        task.setActual_start_time(startTime);
+        taskRepository.save(task);
         return modelMapper.map(task, TasksDto.class);
     }
-
 
     @Override
     public List<TasksDto> getTasksByProjectId(long id) {
