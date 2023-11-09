@@ -640,6 +640,8 @@
                         "#project-detail-background"
                     ).innerText = targetData.background;
 
+                    document.querySelector("#architectures-list-in-edit").textContent = ''
+
                     targetData.architectureDto.forEach(a => {
 
                         const div = document.createElement("div");
