@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Status;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.util.Objects;
@@ -38,6 +39,9 @@ public class Issue{
     private long created_date;
     private long updated_date;
     private long solved_date;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 
     @Enumerated(EnumType.STRING)
