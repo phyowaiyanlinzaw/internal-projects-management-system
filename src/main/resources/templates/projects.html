@@ -157,6 +157,20 @@
 
             import { getUser } from "/js/currentLoginUser.js";
 
+            const languageList = {
+                "c#": "/images/languages/c#.png",
+                "c++": "/images/languages/c++.png",
+                "html": "/images/languages/html.png",
+                "java": "/images/languages/java.png",
+                "js": "/images/languages/js.png",
+                "php": "/images/languages/php.png",
+                "python": "/images/languages/python.png",
+                "ruby": "/images/languages/ruby.png",
+                "SQL": "/images/languages/SQL.png",
+                "css" : "/images/languages/css.png",
+                "typescript": "/images/languages/typescript.png"
+            }
+
             console.log(await getUser());
 
             const loginUser = await getUser();
@@ -294,8 +308,15 @@
                         phone: phone,
                     };
 
-                    sendData("/api/client/save", "POST", clientDto)
-                        .then((response) => {
+                    console.log(clientDto)
+
+                    $.ajax({
+                      method: "POST",
+                        url: "/api/client/save",
+                        data : JSON.stringify(clientDto),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
                             console.log(response);
                             const option = document.createElement("option");
                             option.value = JSON.stringify(response);
@@ -304,13 +325,11 @@
                             document.querySelector("#client-name").value = "";
                             document.querySelector("#client-email").value = "";
                             document.querySelector("#client-phone").value = "";
-                        })
-                        .catch((error) => {
-                            console.error(
-                                "Error in Url : /api/cleient/save ",
-                                error
-                            );
-                        });
+                        },
+                        error: function (error) {
+                            console.error("Error in Url : /api/cleient/save ", error);
+                        },
+                    })
                 });
 
             const projectObjectiveEditor =
@@ -597,15 +616,15 @@
             const detailMoal = document.querySelector("#project-details");
 
             function formmatDateFromMillisecondForEdit(milliseconds) {
-                var date = new Date(milliseconds);
+                const date = new Date(milliseconds);
 
                 // Get the year, month, and day from the Date object
-                var year = date.getFullYear();
-                var month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
-                var day = String(date.getDate()).padStart(2, '0');
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
+                const day = String(date.getDate()).padStart(2, '0');
 
                 // Create the formatted date string
-                var formattedDate = year + '-' + month + '-' + day;
+                const formattedDate = year + '-' + month + '-' + day;
 
                 return formattedDate;
             }
@@ -620,6 +639,35 @@
                     document.querySelector(
                         "#project-detail-background"
                     ).innerText = targetData.background;
+
+                    document.querySelector("#architectures-list-in-edit").textContent = ''
+
+                    targetData.architectureDto.forEach(a => {
+
+                        const div = document.createElement("div");
+
+                        div.classList.add("d-flex", "gap-2", "align-items-center", "justify-content-center");
+
+                        const image = document.createElement("img");
+
+                        image.style.width = "40px"
+
+                        if (languageList[a.tech_name]) {
+                            image.setAttribute("src", languageList[a.tech_name]);
+                        } else {
+                            // Handle the case where the language is not found in the map
+                            image.setAttribute("src", "/images/languages/default.png");
+                        }
+
+                        div.appendChild(image);
+
+                        const p = document.createElement("p");
+                        p.textContent = a.tech_name;
+                        p.classList.add("fs-6", "fw-bold")
+                        div.appendChild(p);
+
+                        document.querySelector("#architectures-list-in-edit").appendChild(div);
+                    })
 
                     document.querySelector("#project-detail-name").value =
                         targetData.name;
@@ -2107,7 +2155,7 @@
                                                     <input type="number" hidden id="current-edditing-projetc-id">
                                                     <div class="row mb-3">
                                                         <label
-                                                            for="edit-proejct-phase"
+                                                            for="edit-project-phase"
                                                             class="col-md-4 col-lg-3 col-form-label"
                                                             >Current
                                                             Phase</label
@@ -2496,6 +2544,16 @@
                                                         "
                                                         >Save Review</a
                                                     >
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                    class="tab-pane fade pt-3"
+                                                    id="edit-architecture"
+                                            >
+
+                                                <div id="architectures-list-in-edit" class="d-flex gap-2">
+
                                                 </div>
                                             </div>
                                         </div>

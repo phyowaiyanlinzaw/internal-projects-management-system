@@ -124,7 +124,6 @@ public class IssueController {
     public ResponseEntity<IssueDto> updateIssue(@PathVariable long id, @RequestBody IssueDto issueDto) {
         issueDto.setId(id);
         IssueDto updatedIssue = issueService.updateIssue(issueDto);
-
         if (updatedIssue != null) {
             System.out.println("Issue updated successfully");
             return ResponseEntity.ok(updatedIssue);
