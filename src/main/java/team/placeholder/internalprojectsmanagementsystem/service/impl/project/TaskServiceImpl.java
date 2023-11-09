@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TasksGroup;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
@@ -29,19 +31,19 @@ public class TaskServiceImpl implements TasksService {
     private final ModelMapper modelMapper;
 
     @Override
-    public TasksDto save(TasksDto taskDto) {
-
-        taskDto.setStatus(TaskStatus.TODO);
-
-        User user = userRepository.findById(taskDto.getUserDto().getId());
-        UserDto userDto = modelMapper.map(user, UserDto.class);
-        taskDto.setUserDto(userDto);
-
-        Project project = projectRepository.findById(taskDto.getProjectDto().getId());
-        Tasks task = modelMapper.map(taskDto, Tasks.class);
+    public TasksDto save(TaskRequestDto taskRequestDto) {
+        Tasks task = new Tasks();
+        task.setTitle(taskRequestDto.getTitle());
+        task.setDescription(taskRequestDto.getDescription());
+        task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
+        task.setPlan_start_time(taskRequestDto.getPlan_start_time());
+        task.setPlan_end_time(taskRequestDto.getPlan_end_time());
+        task.setStatus(TaskStatus.TODO);
+        User user = userRepository.findById(taskRequestDto.getUserId());
+        Project project = projectRepository.findById(taskRequestDto.getProjectId());
+        task.setUser(user);
         task.setProject(project);
-        task = taskRepository.save(task);
-
+        taskRepository.save(task);
         return modelMapper.map(task, TasksDto.class);
     }
 
@@ -61,24 +63,28 @@ public class TaskServiceImpl implements TasksService {
     }
 
     @Override
-    public TasksDto getTaskById(long id) {
-        Tasks task = taskRepository.findById(id);
-        return  modelMapper.map(task, TasksDto.class);
+    public TasksDto updateTaskStatus(TasksDto taskDto) {
+        Tasks task = taskRepository.findById(taskDto.getId()).orElse(null);
+        return modelMapper.map(task, TasksDto.class);
     }
 
-    @Override
-    public TasksDto updateTask(TasksDto taskDto) {
-        return null;
-    }
-
-    @Override
-    public void deleteTask(long id) {
-
-    }
 
     @Override
     public List<TasksDto> getTasksByProjectId(long id) {
-        return null;
+        List<Tasks> taskList = taskRepository.findByProjectId(id);
+        List<TasksDto> taskDtoList = new ArrayList<>();
+
+        for(Tasks task : taskList) {
+            User user = task.getUser();
+            Project project = task.getProject();
+            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+            UserDto userDto = modelMapper.map(user, UserDto.class);
+            TasksDto taskDto = modelMapper.map(task, TasksDto.class);
+            taskDto.setUserDto(userDto);
+            taskDto.setProjectDto(projectDto);
+            taskDtoList.add(taskDto);
+        }
+        return taskDtoList;
     }
 
     @Override

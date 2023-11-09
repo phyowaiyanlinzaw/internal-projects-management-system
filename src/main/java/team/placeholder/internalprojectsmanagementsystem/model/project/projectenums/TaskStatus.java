@@ -2,7 +2,4 @@ package team.placeholder.internalprojectsmanagementsystem.model.project.projecte
 
 public enum TaskStatus {
     TODO , IN_PROGRESS, FINISHED;
-    String getStatus_Name(){
-        return this.name();
-    }
 }
