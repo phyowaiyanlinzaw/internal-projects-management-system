@@ -1,13 +1,17 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
@@ -24,6 +28,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/issue/")
+@Slf4j
 public class IssueController {
 
     private final IssueServiceImpl issueService;
@@ -39,21 +44,38 @@ public class IssueController {
 
     @PostMapping("/save")
     public ResponseEntity<IssueDto> saveIssue(@RequestBody IsuDto dto) {
+        // Map the DTO to an Issue entity using ModelMapper
         Issue issue = modelMapper.map(dto, Issue.class);
 
-        issue.setIssue_category(Category.valueOf(dto.getIssue_category()));
-        issue.setResponsible_type(ResponsibleType.valueOf(dto.getResponsible_type()));
-        issue.setUser_uploader(modelMapper.map(userRepository.getReferenceById(dto.getUser_uploader()), User.class));
-        issue.setUser_pic(modelMapper.map(userRepository.getReferenceById(dto.getUser_pic()), User.class));
-        issue.setProject(modelMapper.map(projectRepository.getReferenceById(dto.getProject_id()), Project.class));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        User user = userRepository.findByEmail(authentication.getName());
+
+        User projectManager = userRepository.findById(user.getProjectManager().getId());
+
+        log.info("new issue : {}", dto.getUser_pic());
+
+        // Check and set the issue category and responsible type
+        if (dto.getIssue_category() != null) {
+            issue.setIssue_category(Category.valueOf(dto.getIssue_category()));
+        }
+        if (dto.getResponsible_type() != null) {
+            issue.setResponsible_type(dto.getResponsible_type());
+        }
+
+        // Map the user and project references using ModelMapper
+        Project project = projectRepository.getReferenceById(dto.getProject_id());
+
+        issue.setUser_uploader(user);
+        issue.setUser_pic(projectManager);
+        issue.setProject(project);
+
+        // Save the Issue entity
         IssueDto savedIssueDto = issueService.save(issue);
 
         if (savedIssueDto != null) {
-            // If the save operation was successful, return the saved IssueDto
             return ResponseEntity.ok(savedIssueDto);
         } else {
-            // Handle the case when the issue could not be saved
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -72,20 +94,20 @@ public class IssueController {
         }
     }
 
-    @GetMapping("/clients")
-    public ResponseEntity<List<ClientDto>> getClientsForIssues() {
-        List<IssueDto> issues = issueService.getAllIssues(); // Retrieve all issues
-        List<ClientDto> clients = new ArrayList<>();
-
-        for (IssueDto issue : issues) {
-            ProjectDto project = issue.getProjectDto();
-            if (project != null) {
-                clients.add(project.getClientDto());
-            }
-        }
-
-        return ResponseEntity.ok(clients);
-    }
+//    @GetMapping("/clients")
+//    public ResponseEntity<List<ClientDto>> getClientsForIssues() {
+//        List<IssueDto> issues = issueService.getAllIssues(); // Retrieve all issues
+//        List<ClientDto> clients = new ArrayList<>();
+//
+//        for (IssueDto issue : issues) {
+//            ProjectDto project = issue.getProjectDto();
+//            if (project != null) {
+//                clients.add(project.getClientDto());
+//            }
+//        }
+//
+//        return ResponseEntity.ok(clients);
+//    }
 
     @GetMapping("/lists/byTitle/{title}")
     public ResponseEntity<IssueDto> getIssueByTitle(@PathVariable String title) {

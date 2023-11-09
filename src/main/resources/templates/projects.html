@@ -82,9 +82,15 @@
         />
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
 
-        <link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
+        <link
+            href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"
+            rel="stylesheet"
+        />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
+        <link
+            href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
+            rel="stylesheet"
+        />
         <script src="/js/fontawesome.js"></script>
 
         <!-- jquery -->
@@ -128,7 +134,7 @@
         ></script>
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
-<!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
+        <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
         <script type="module" defer>
             $(document).ready(function () {
                 setupLogoutConfirmation();
@@ -150,6 +156,20 @@
             } from "/js/getDataForProject.js";
 
             import { getUser } from "/js/currentLoginUser.js";
+
+            const languageList = {
+                "c#": "/images/languages/c#.png",
+                "c++": "/images/languages/c++.png",
+                "html": "/images/languages/html.png",
+                "java": "/images/languages/java.png",
+                "js": "/images/languages/js.png",
+                "php": "/images/languages/php.png",
+                "python": "/images/languages/python.png",
+                "ruby": "/images/languages/ruby.png",
+                "SQL": "/images/languages/SQL.png",
+                "css" : "/images/languages/css.png",
+                "typescript": "/images/languages/typescript.png"
+            }
 
             console.log(await getUser());
 
@@ -190,7 +210,7 @@
 
             getDeliverableTypeList().then((deliType) => {
                 const deliTypeSelect = document.querySelector("#deliverable");
-                console.log(deliType)
+                console.log(deliType);
                 const a = new Tagify(deliTypeSelect, {
                     whitelist: deliType.map((item) => item.type),
                     dropdown: {
@@ -267,8 +287,6 @@
                 ["link"],
             ];
 
-
-
             // SAVE CLIENT
             document
                 .querySelector("#client-form")
@@ -290,8 +308,15 @@
                         phone: phone,
                     };
 
-                    sendData("/api/client/save", "POST", clientDto)
-                        .then((response) => {
+                    console.log(clientDto)
+
+                    $.ajax({
+                      method: "POST",
+                        url: "/api/client/save",
+                        data : JSON.stringify(clientDto),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
                             console.log(response);
                             const option = document.createElement("option");
                             option.value = JSON.stringify(response);
@@ -300,13 +325,11 @@
                             document.querySelector("#client-name").value = "";
                             document.querySelector("#client-email").value = "";
                             document.querySelector("#client-phone").value = "";
-                        })
-                        .catch((error) => {
-                            console.error(
-                                "Error in Url : /api/cleient/save ",
-                                error
-                            );
-                        });
+                        },
+                        error: function (error) {
+                            console.error("Error in Url : /api/cleient/save ", error);
+                        },
+                    })
                 });
 
             const projectObjectiveEditor =
@@ -358,8 +381,6 @@
                 }
             }
 
-
-
             const motherContainer = document.querySelector("#sort-container");
 
             const fragment = document.createDocumentFragment();
@@ -367,27 +388,35 @@
             let pList = await getAllProjects();
 
             let departmentProjectId;
-            
-            if(loginUser.currentUser.role == 'PMO' || loginUser.currentUser.role == 'SDQC') {
-             
-                departmentProjectId = await getData("/api/project/list/for/pmoandsdqc");
-            
+
+            if (
+                loginUser.currentUser.role == "PMO" ||
+                loginUser.currentUser.role == "SDQC"
+            ) {
+                departmentProjectId = await getData(
+                    "/api/project/list/for/pmoandsdqc"
+                );
             }
 
-            if(departmentProjectId) {
-                console.log("proejct id mapped by department id" , departmentProjectId);
+            if (departmentProjectId) {
+                console.log(
+                    "proejct id mapped by department id",
+                    departmentProjectId
+                );
             }
 
-                console.log(pList)
+            console.log(pList);
 
-                const dPList = await getData("/api/department/list");
+            const dPList = await getData("/api/department/list");
 
-                dPList.forEach((item) => {
-                    const option = document.createElement("option");
-                    option.value = item.id;
-                    option.textContent = item.name;
-                    document.getElementById("department-filter").appendChild(option);
-                });
+            dPList.forEach((item) => {
+                const option = document.createElement("option");
+                option.value = item.id;
+                option.textContent = item.name;
+                document
+                    .getElementById("department-filter")
+                    .appendChild(option);
+            });
 
             function updateSpanValues(amountDto) {
                 // Define a mapping between keys in amountDto and the corresponding span element IDs
@@ -396,7 +425,7 @@
                     detail_design: "dd",
                     coding: "ing",
                     unit_testing: "ut",
-                    integrated_testing: "it"
+                    integrated_testing: "it",
                 };
 
                 // Iterate through amountDto and update the span elements accordingly
@@ -427,7 +456,7 @@
                     testing: 3,
                     deploy: 4,
                     maintenance: 5,
-                    document: 6
+                    document: 6,
                 };
 
                 // Iterate through systemOutLineDto and update the list items accordingly
@@ -439,7 +468,9 @@
                         if (index !== undefined && items[index]) {
                             if (value) {
                                 // Add the <i> element with the checkmark
-                                items[index].innerHTML = `${key}<i class="bi bi-check2-all text-success fs-4"></i>`;
+                                items[
+                                    index
+                                ].innerHTML = `${key}<i class="bi bi-check2-all text-success fs-4"></i>`;
                             } else {
                                 // Remove the <i> element
                                 items[index].innerHTML = key;
@@ -449,47 +480,44 @@
                 }
             }
 
-                for (let i = 0; i < pList.length; i++) {
-                    let currentProject = pList[i];
+            for (let i = 0; i < pList.length; i++) {
+                let currentProject = pList[i];
 
-                    const div = document.createElement("div");
-                    div.classList.add(
-                        "p-md-3",
-                        "p-sm-2",
-                        "active-card",
-                        "mt-3",
-                        "mt-md-0",
-                        "mt-lg-0",
-                        "mt-xl-0"
-                    );
-                    div.id = `project-${currentProject.id}`;
+                const div = document.createElement("div");
+                div.classList.add(
+                    "p-md-3",
+                    "p-sm-2",
+                    "active-card",
+                    "mt-3",
+                    "mt-md-0",
+                    "mt-lg-0",
+                    "mt-xl-0"
+                );
+                div.id = `project-${currentProject.id}`;
 
-                    const card = document.createElement("div");
-                    card.classList.add("card", "border-success");
+                const card = document.createElement("div");
+                card.classList.add("card", "border-success");
 
-                    const cardHeader = document.createElement("div");
-                    cardHeader.classList.add("card-header");
+                const cardHeader = document.createElement("div");
+                cardHeader.classList.add("card-header");
 
-                    const dFlexContainer = document.createElement("div");
-                    dFlexContainer.classList.add("d-flex", "flex-column");
+                const dFlexContainer = document.createElement("div");
+                dFlexContainer.classList.add("d-flex", "flex-column");
 
-                    const h2 = document.createElement("h2");
-                    h2.classList.add(
-                        "card-title",
-                        "text-center",
-                        "text-primary",
-                        "modal-detail-title"
-                    );
-                    h2.innerText = currentProject.name;
+                const h2 = document.createElement("h2");
+                h2.classList.add(
+                    "card-title",
+                    "text-center",
+                    "text-primary",
+                    "modal-detail-title"
+                );
+                h2.innerText = currentProject.name;
 
-                    const dFlexBetween = document.createElement("div");
-                    dFlexBetween.classList.add(
-                        "d-flex",
-                        "justify-content-between"
-                    );
+                const dFlexBetween = document.createElement("div");
+                dFlexBetween.classList.add("d-flex", "justify-content-between");
 
-                    const dFlexInner = document.createElement("div");
-                    dFlexInner.classList.add("d-flex");
+                const dFlexInner = document.createElement("div");
+                dFlexInner.classList.add("d-flex");
 
                 const img = document.createElement("img");
                 img.src = `/images/avatars/pm_avatar.svg`;
@@ -503,275 +531,424 @@
                 img.style.width = "40px";
                 img.alt = "Profile Image";
 
-                    const h5 = document.createElement("h5");
-                    h5.classList.add(
-                        "card-text",
-                        "text-center",
-                        "text-align-center",
-                        "my-auto",
-                        "fst-italic",
-                        "fs-6",
-                        "ms-2"
+                const h5 = document.createElement("h5");
+                h5.classList.add(
+                    "card-text",
+                    "text-center",
+                    "text-align-center",
+                    "my-auto",
+                    "fst-italic",
+                    "fs-6",
+                    "ms-2"
+                );
+
+                h5.innerText = currentProject.userDto.name;
+
+                const a = document.createElement("a");
+                a.href = "#";
+                a.id = currentProject.id;
+                a.classList.add(
+                    "btn",
+                    "btn-white",
+                    "text-secondary",
+                    "link-shadow"
+                );
+                a.setAttribute("data-bs-toggle", "modal");
+                a.setAttribute("data-bs-target", "#project-details");
+                a.innerText = "See More";
+
+                // Create and append the progress-related elements
+                const cardBody = document.createElement("div");
+                cardBody.classList.add(
+                    "card-body",
+                    "position-relative",
+                    "mx-auto"
+                );
+
+                const progressTitle = document.createElement("p");
+                progressTitle.classList.add(
+                    "card-title",
+                    "text-center",
+                    "fs-6",
+                    "mb-1"
+                );
+                progressTitle.innerText = "progress";
+
+                const progressCircle = document.createElement("div");
+                progressCircle.id = `circle-progress-${currentProject.id}`;
+                progressCircle.classList.add(
+                    "circle-progress",
+                    "rounded-circle"
+                );
+                progressCircle.setAttribute("data-min-value", "0");
+                progressCircle.setAttribute("data-max-value", "100");
+                progressCircle.setAttribute(
+                    "data-value",
+                    currentProject.totalTask == 0
+                        ? (
+                              (currentProject.completeTaskCount /
+                                  currentProject.totalTaskCount) *
+                              100
+                          ).toString()
+                        : 0
+                );
+                progressCircle.setAttribute("data-type", "percent");
+
+                dFlexInner.appendChild(img);
+                dFlexInner.appendChild(h5);
+                dFlexBetween.appendChild(dFlexInner);
+                dFlexBetween.appendChild(a);
+                dFlexContainer.appendChild(h2);
+                dFlexContainer.appendChild(dFlexBetween);
+                cardHeader.appendChild(dFlexContainer);
+                card.appendChild(cardHeader);
+
+                cardBody.appendChild(progressTitle);
+                cardBody.appendChild(progressCircle);
+                card.appendChild(cardBody);
+
+                div.appendChild(card);
+                fragment.appendChild(div);
+            }
+
+            motherContainer.appendChild(fragment);
+
+            const detailMoal = document.querySelector("#project-details");
+
+            function formmatDateFromMillisecondForEdit(milliseconds) {
+                const date = new Date(milliseconds);
+
+                // Get the year, month, and day from the Date object
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
+                const day = String(date.getDate()).padStart(2, '0');
+
+                // Create the formatted date string
+                const formattedDate = year + '-' + month + '-' + day;
+
+                return formattedDate;
+            }
+
+            motherContainer.addEventListener("click", function (e) {
+                let target = e.target;
+
+                if (target.hasAttribute("data-bs-target")) {
+                    let id = parseInt(target.getAttribute("id"));
+                    let targetData = pList.find((a) => a.id == id);
+
+                    document.querySelector(
+                        "#project-detail-background"
+                    ).innerText = targetData.background;
+
+                    document.querySelector("#architectures-list-in-edit").textContent = ''
+
+                    targetData.architectureDto.forEach(a => {
+
+                        const div = document.createElement("div");
+
+                        div.classList.add("d-flex", "gap-2", "align-items-center", "justify-content-center");
+
+                        const image = document.createElement("img");
+
+                        image.style.width = "40px"
+
+                        if (languageList[a.tech_name]) {
+                            image.setAttribute("src", languageList[a.tech_name]);
+                        } else {
+                            // Handle the case where the language is not found in the map
+                            image.setAttribute("src", "/images/languages/default.png");
+                        }
+
+                        div.appendChild(image);
+
+                        const p = document.createElement("p");
+                        p.textContent = a.tech_name;
+                        p.classList.add("fs-6", "fw-bold")
+                        div.appendChild(p);
+
+                        document.querySelector("#architectures-list-in-edit").appendChild(div);
+                    })
+
+                    document.querySelector("#project-detail-name").value =
+                        targetData.name;
+
+                    const objectiveQuill = new Quill(
+                        "#show-project-objective",
+                        {
+                            modules: {
+                                toolbar: false,
+                            },
+                            theme: "snow",
+                        }
                     );
 
-                    h5.innerText = currentProject.userDto.name;
+                    document.querySelector("#navigate-task").href = `/project/${targetData.id}`
 
-                    const a = document.createElement("a");
-                    a.href = "#";
-                    a.id = currentProject.id;
-                    a.classList.add(
-                        "btn",
-                        "btn-white",
-                        "text-secondary",
-                        "link-shadow"
-                    );
-                    a.setAttribute("data-bs-toggle", "modal");
-                    a.setAttribute("data-bs-target", "#project-details");
-                    a.innerText = "See More";
+                    document.querySelector("#current-edditing-projetc-id").value = targetData.id;
 
-                    // Create and append the progress-related elements
-                    const cardBody = document.createElement("div");
-                    cardBody.classList.add(
-                        "card-body",
-                        "position-relative",
-                        "mx-auto"
+                    console.log(document.querySelector("#current-edditing-projetc-id").value)
+
+                    objectiveQuill.enable(false);
+
+                    objectiveQuill.clipboard.dangerouslyPasteHTML(
+                        0,
+                        targetData.objective
                     );
 
-                    const progressTitle = document.createElement("p");
-                    progressTitle.classList.add(
-                        "card-title",
-                        "text-center",
-                        "fs-6",
-                        "mb-1"
+                    document.querySelector("#project-edit-duration").value =
+                        targetData.duration;
+
+                    document.querySelector("#start-date").value =
+                        formmatDateFromMillisecondForEdit(targetData.start_date);
+
+                    document.querySelector("#end-date-in-edit").value =
+                        formatDateFromMilliseconds(targetData.end_date);
+
+                    const phaseOptionList = document.querySelectorAll("#edit-project-phase option")
+
+                    console.log(phaseOptionList)
+
+                    phaseOptionList.forEach(a => {
+                        if (a.value === targetData.current_phase) {
+                            a.selected = true
+                        }
+                    })
+
+                    editObjectiveEditor.clipboard.dangerouslyPasteHTML(
+                        0,
+                        targetData.objective
                     );
-                    progressTitle.innerText = "progress";
 
-                    const progressCircle = document.createElement("div");
-                    progressCircle.id = `circle-progress-${currentProject.id}`;
-                    progressCircle.classList.add(
-                        "circle-progress",
-                        "rounded-circle"
+                    console.log(targetData);
+
+                    updateListItems(targetData.systemOutLineDto);
+
+                    updateSpanValues(targetData.amountDto);
+
+                    let duration = calculateDuration(
+                        targetData.start_date,
+                        targetData.end_date
                     );
-                    progressCircle.setAttribute("data-min-value", "0");
-                    progressCircle.setAttribute("data-max-value", "100");
-                    progressCircle.setAttribute(
-                        "data-value", currentProject.totalTask == 0 ?
-                        (
-                            (currentProject.completeTaskCount /
-                                currentProject.totalTaskCount) *
-                            100
-                        ).toString() : 0
-                    );
-                    progressCircle.setAttribute("data-type", "percent");
+                    detailMoal.querySelector("#basic-design-count").innerText = targetData.amountDto.basic_design;
+                    detailMoal.querySelector("#detail-design-count").innerText = targetData.amountDto.detail_design;
+                    detailMoal.querySelector("#coding-count").innerText = targetData.amountDto.coding;
+                    detailMoal.querySelector("#unit-testing-count").innerText = targetData.amountDto.unit_testing;
+                    detailMoal.querySelector("#integrated-testing-count").innerText = targetData.amountDto.integrated_testing;
 
-                    dFlexInner.appendChild(img);
-                    dFlexInner.appendChild(h5);
-                    dFlexBetween.appendChild(dFlexInner);
-                    dFlexBetween.appendChild(a);
-                    dFlexContainer.appendChild(h2);
-                    dFlexContainer.appendChild(dFlexBetween);
-                    cardHeader.appendChild(dFlexContainer);
-                    card.appendChild(cardHeader);
+                    detailMoal.querySelector("#edit-basic-design-count").value = targetData.amountDto.basic_design;
+                    detailMoal.querySelector("#edit-detail-design-count").value = targetData.amountDto.detail_design;
+                    detailMoal.querySelector("#edit-coding-count").value = targetData.amountDto.coding;
+                    detailMoal.querySelector("#edit-unit-testing-count").value = targetData.amountDto.unit_testing;
+                    detailMoal.querySelector("#edit-integrated-testing-count").value = targetData.amountDto.integrated_testing;
 
-                    cardBody.appendChild(progressTitle);
-                    cardBody.appendChild(progressCircle);
-                    card.appendChild(cardBody);
+                    detailMoal.querySelector(".modal-title").innerText =
+                        targetData.name;
+                    detailMoal.querySelector("#project-background").innerText =
+                        targetData.background;
+                    detailMoal.querySelector("#project-name").innerText =
+                        targetData.name;
+                    detailMoal.querySelector(
+                        "#project-department-name"
+                    ).innerHTML = targetData.departmentDto.name;
+                    detailMoal.querySelector(
+                        "#project-internal-review-count"
+                    ).value = targetData.inReview;
+                    detailMoal.querySelector(
+                        "#project-external-review-count"
+                    ).value = targetData.exReview;
+                    detailMoal.querySelector(
+                        "#project-duration"
+                    ).innerText = `${duration}`;
+                    detailMoal.querySelector("#project-start-date").innerText =
+                        formatDateFromMilliseconds(targetData.start_date);
+                    detailMoal.querySelector("#project-end-date").innerText =
+                        formatDateFromMilliseconds(targetData.end_date);
+                    detailMoal.querySelector(
+                        "#project-current-phase"
+                    ).innerText = targetData.current_phase;
+                    detailMoal.querySelector(
+                        "#client-email-address"
+                    ).innerHTML = targetData.clientDto.email;
+                    detailMoal.querySelector(
+                        "#client-phone-contect"
+                    ).innerHTML = targetData.clientDto.phone;
+                    detailMoal.querySelector(
+                        "#my-dear-customer-name"
+                    ).innerHTML = targetData.clientDto.name;
+                }
+            });
 
-                    div.appendChild(card);
-                    fragment.appendChild(div);
+            document.querySelector("#project-detail-edit-form").addEventListener("submit", function (e) {
+                e.preventDefault()
+
+                const project = {
+                    id: parseInt(document.querySelector("#current-edditing-projetc-id").value),
+                    name: document.querySelector("#project-detail-name").value,
+                    duration: parseInt(document.querySelector("#project-edit-duration").value),
+                    start_date: new Date(document.querySelector("#start-date").value).getTime(),
+                    background: document.querySelector("#project-detail-background").value,
+                    end_date: new Date(document.querySelector("#end-date-in-edit").value).getTime(),
+                    current_phase: document.querySelector("#edit-project-phase").value,
+                    objective: editObjectiveEditor.root.innerHTML
                 }
 
-                motherContainer.appendChild(fragment);
+                console.log(project)
 
-                const detailMoal = document.querySelector("#project-details");
+                sendData("/api/project/update", "PUT", project)
+                    .then((response) => {
+                        console.log(response)
+                    })
+                    .then((message) => {
+                        console.log(message);
+                        alert("Project updated successfully");
+                        location.reload();
+                        e.currentTarget.submit();
+                    })
+            })
 
-                motherContainer.addEventListener("click", function (e) {
-                    let target = e.target;
+            document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
 
-                    if (target.hasAttribute("data-bs-target")) {
-                        let id = parseInt(target.getAttribute("id"));
-                        let targetData = pList.find(
-                            (a) => a.id == id
-                        );
+                const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
 
-                        document.querySelector("#show-project-objective").innerHTML = targetData.objective;
+                const amountDto = {
+                    basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
+                    detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
+                    coding: parseInt(document.querySelector("#edit-coding-count").value),
+                    unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
+                    integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
+                }
 
-                        console.log(targetData)
+                sendData(`/api/project/update/amount/${projectId}`, "PUT", amountDto)
+                    .then((response) => {
+                        console.log(response)
+                    })
+                    .then((message) => {
+                        console.log(message);
+                        alert("Project updated successfully");
+                        location.reload();
+                        e.currentTarget.submit();
+                    })
+            })
 
-                        updateListItems(targetData.systemOutLineDto);
+            const sortProjectByDepartment = await getData(
+                "/api/project/list/sort/by/department"
+            );
 
-                        updateSpanValues(targetData.amountDto);
-
-                        let duration = calculateDuration(
-                            targetData.start_date,
-                            targetData.end_date
-                        );
-                        detailMoal.querySelector(".modal-title").innerText =
-                            targetData.name;
-                        detailMoal.querySelector(
-                            "#project-background"
-                        ).innerText = targetData.background;
-                        detailMoal.querySelector("#project-name").innerText =
-                            targetData.name;
-                        detailMoal.querySelector(
-                            "#project-department-name"
-                        ).innerHTML = targetData.departmentDto.name;
-                        detailMoal.querySelector(
-                            "#project-internal-review-count"
-                        ).value = targetData.inReview;
-                        detailMoal.querySelector(
-                            "#project-external-review-count"
-                        ).value = targetData.exReview;
-                        detailMoal.querySelector(
-                            "#project-duration"
-                        ).innerText = `${duration}`;
-                        detailMoal.querySelector(
-                            "#project-start-date"
-                        ).innerText = formatDateFromMilliseconds(
-                            targetData.start_date
-                        );
-                        detailMoal.querySelector(
-                            "#project-end-date"
-                        ).innerText = formatDateFromMilliseconds(
-                            targetData.end_date
-                        );
-                        detailMoal.querySelector(
-                            "#project-current-phase"
-                        ).innerText = targetData.current_phase;
-                        detailMoal.querySelector(
-                            "#client-email-address"
-                        ).innerHTML = targetData.clientDto.email;
-                        detailMoal.querySelector(
-                            "#client-phone-contect"
-                        ).innerHTML = targetData.clientDto.phone;
-                        detailMoal.querySelector("#my-dear-customer-name")
-                            .innerHTML = targetData.clientDto.name;
-                    }
-                });
-
-                const sortProjectByDepartment = await getData("/api/project/list/sort/by/department");
-
-                document.getElementById("department-filter").addEventListener("change", function () {
+            document
+                .getElementById("department-filter")
+                .addEventListener("change", function () {
                     const allDiv = motherContainer.children;
                     const selectedDepartmentId = this.value;
 
-                    for(let i = 0;i < allDiv.length; i++) {
-
-                        if(sortProjectByDepartment[selectedDepartmentId].includes(parseInt(allDiv[i].id.split("-")[1]))) {
+                    for (let i = 0; i < allDiv.length; i++) {
+                        if (
+                            sortProjectByDepartment[
+                                selectedDepartmentId
+                            ].includes(parseInt(allDiv[i].id.split("-")[1]))
+                        ) {
                             allDiv[i].style.display = "block";
                         } else {
                             allDiv[i].style.display = "none";
                         }
-
                     }
+                });
 
-                })
+            const monthFilter = document.querySelector("#month-filter");
+            const yearFilterSelect = document.getElementById("year-filter");
 
-                const monthFilter = document.querySelector("#month-filter");
-                const yearFilterSelect = document.getElementById("year-filter");
+            document.querySelectorAll("select[action='filter']").forEach((a) =>
+                a.addEventListener("input", function (e) {
+                    const allData =
+                        document.getElementById("sort-container").children;
+                    const currentTime = monthFilter.value;
+                    const yearValue = parseInt(yearFilterSelect.value);
 
-            document
-                .querySelectorAll("select[action='filter']")
-                .forEach((a) =>
-                    a.addEventListener("input", function (e) {
-                        const allData = document.getElementById("sort-container").children;
-                        const currentTime = monthFilter.value;
-                        const yearValue = parseInt(yearFilterSelect.value);
+                    const matchingProjects = pList.filter((a) => {
+                        const projectDate = new Date(a.start_date);
+                        const projectMonth = projectDate.getMonth();
+                        const projectYear = projectDate.getFullYear();
+                        return (
+                            projectYear === yearValue &&
+                            MONTH_NAMES[projectMonth] === currentTime
+                        );
+                    });
 
-                        const matchingProjects = pList.filter((a) => {
-                            const projectDate = new Date(a.start_date);
-                            const projectMonth = projectDate.getMonth();
-                            const projectYear = projectDate.getFullYear();
-                            return (
-                                projectYear === yearValue &&
-                                MONTH_NAMES[projectMonth] === currentTime
-                            );
-                        });
+                    for (let i = 0; i < allData.length; i++) {
+                        const divId = parseInt(
+                            allData[i].getAttribute("id").split("-")[1]
+                        );
 
-                        for (let i = 0; i < allData.length; i++) {
-                            const divId = parseInt(
-                                allData[i].getAttribute("id").split("-")[1]
-                            );
-
-                            if (matchingProjects.some(project => project.id === divId)) {
-                                allData[i].style.display = "block";
-                            } else {
-                                allData[i].style.display = "none";
-                            }
+                        if (
+                            matchingProjects.some(
+                                (project) => project.id === divId
+                            )
+                        ) {
+                            allData[i].style.display = "block";
+                        } else {
+                            allData[i].style.display = "none";
                         }
-                    })
-                );
-
+                    }
+                })
+            );
 
             const currentYear = new Date().getFullYear();
-                let optionsHTML = "";
 
-                for (let year = 2000; year <= currentYear; year++) {
-                    if (year === currentYear) {
-                        optionsHTML += `<option value="${year}" selected>${year}</option>`;
-                    } else {
-                        optionsHTML += `<option value="${year}">${year}</option>`;
+            document
+                .querySelector("#reset-btn")
+                .addEventListener("click", function (e) {
+                    let allData =
+                        document.getElementById("sort-container").children;
+
+                    for (let i = 0; i < allData.length; i++) {
+                        allData[i].style.display = "block";
                     }
-                }
-
-                yearFilterSelect.innerHTML = optionsHTML;
-
-                document
-                    .querySelector("#reset-btn")
-                    .addEventListener("click", function (e) {
-                        let allData =
-                            document.getElementById("sort-container").children;
-
-                        for (let i = 0; i < allData.length; i++) {
-                            allData[i].style.display = "block";
-                        }
-                        monthFilter.value = MONTH_NAMES[0];
-                    });
-
-                console.log("error");
-
-                let quillEditors = document.querySelectorAll(
-                    ".quill-editor-bubble"
-                );
-
-                // Initialize Quill for each selected element
-                quillEditors.forEach(function (editor) {
-                    new Quill(editor, {
-                        modules: {
-                            toolbar: toolbaroptions,
-                        },
-                        theme: "snow",
-                    });
+                    monthFilter.value = MONTH_NAMES[0];
                 });
 
-                // function getData() {
-                //     const userInput = quill.root.innerHTML;
-                //     console.log(userInput);
-                // }
+            console.log("error");
 
-                let minusButtons = document.querySelectorAll(".minus");
-                let plusButtons = document.querySelectorAll(".plus");
+            let quillEditors = document.querySelectorAll(
+                ".quill-editor-bubble"
+            );
 
-                minusButtons.forEach(function (minusButton) {
-                    minusButton.addEventListener("click", function () {
-                        let input = this.parentElement.querySelector("input");
-                        let count = parseInt(input.value) - 1;
-                        count = count < 0 ? 0 : count;
-                        input.value = count;
-                        console.log(input, count);
-                        //input.dispatchEvent(new Event('change'));
-                        return false;
-                    });
+            // Initialize Quill for each selected element
+            quillEditors.forEach(function (editor) {
+                new Quill(editor, {
+                    modules: {
+                        toolbar: toolbaroptions,
+                    },
+                    theme: "snow",
                 });
+            });
 
-                plusButtons.forEach(function (plusButton) {
-                    plusButton.addEventListener("click", function () {
-                        let input = this.parentElement.querySelector("input");
-                        input.value = parseInt(input.value) + 1;
-                        //input.dispatchEvent(new Event('change'));
-                        return false;
-                    });
+            // function getData() {
+            //     const userInput = quill.root.innerHTML;
+            //     console.log(userInput);
+            // }
+
+            let minusButtons = document.querySelectorAll(".minus");
+            let plusButtons = document.querySelectorAll(".plus");
+
+            minusButtons.forEach(function (minusButton) {
+                minusButton.addEventListener("click", function () {
+                    let input = this.parentElement.querySelector("input");
+                    let count = parseInt(input.value) - 1;
+                    count = count < 0 ? 0 : count;
+                    input.value = count;
+                    console.log(input, count);
+                    //input.dispatchEvent(new Event('change'));
+                    return false;
                 });
+            });
+
+            plusButtons.forEach(function (plusButton) {
+                plusButton.addEventListener("click", function () {
+                    let input = this.parentElement.querySelector("input");
+                    input.value = parseInt(input.value) + 1;
+                    //input.dispatchEvent(new Event('change'));
+                    return false;
+                });
+            });
 
             let employeeList = loginUser.employees;
 
@@ -779,9 +956,9 @@
 
             let empTagifyList = [];
 
-            if(employeeList) {
+            if (employeeList) {
                 const showEmpList = employeeList.map((item) => {
-                    console.log(item)
+                    console.log(item);
                     return {
                         label: item.name,
                         value: item.id,
@@ -792,213 +969,276 @@
                     ele: "#employee-list",
                     options: showEmpList,
                     multiple: true,
-                    search : true,
+                    search: true,
                     searchByStartsWith: true,
                     popupPosition: null,
-                    maxWidth: "100%"
-                })
-                console.log(empTagifyList)
+                    maxWidth: "100%",
+                });
+                console.log(empTagifyList);
             }
 
-                $(document).ready(function () {
+            $(document).ready(function () {
+                document
+                    .querySelector("#start_date")
+                    .addEventListener("change", function () {
+                        const projectDruation = document.querySelector(
+                            "#project-add-duration"
+                        ).value;
 
-                    document.querySelector("#start_date").addEventListener("change", function () {
+                        const projectEndDate = document.querySelector(
+                            "#project-add-end-date"
+                        );
 
-                        const projectDruation = document.querySelector("#project-add-duration").value;
+                        const endDate = calculateEndDate(
+                            new Date(this.value).getTime(),
+                            projectDruation
+                        );
 
-                        const projectEndDate = document.querySelector("#project-add-end-date");
-
-                        const endDate = calculateEndDate(new Date(this.value).getTime(), projectDruation);
-
-                        projectEndDate.value = formatDateFromMilliseconds(endDate.getTime());
-
+                        projectEndDate.value = formatDateFromMilliseconds(
+                            endDate.getTime()
+                        );
                     });
 
-                    document.querySelector("#project-add-duration").addEventListener("input", function () {
+                document.querySelector("#start-date").addEventListener("change", function () {
+                        const projectDruation = document.querySelector(
+                            "#project-edit-duration"
+                        ).value;
 
-                        const projectStartDate = document.querySelector("#start_date").value;
+                        const projectEndDate = document.querySelector(
+                            "#end-date-in-edit"
+                        );
+
+                        const endDate = calculateEndDate(
+                            new Date(this.value).getTime(),
+                            projectDruation
+                        );
+
+                        projectEndDate.value = formatDateFromMilliseconds(
+                            endDate.getTime()
+                        );
+                    });
+
+                document
+                    .querySelector("#project-add-duration")
+                    .addEventListener("input", function () {
+                        const projectStartDate =
+                            document.querySelector("#start_date").value;
 
                         if (projectStartDate !== "") {
-                            const projectEndDate = document.querySelector("#project-add-end-date");
+                            const projectEndDate = document.querySelector(
+                                "#project-add-end-date"
+                            );
 
                             // Calculate the end date only when there's a valid start date
-                            const endDate = calculateEndDate(new Date(projectStartDate).getTime(), this.value);
+                            const endDate = calculateEndDate(
+                                new Date(projectStartDate).getTime(),
+                                this.value
+                            );
 
                             // Check if endDate is not NaN
                             if (!isNaN(endDate)) {
-                                projectEndDate.value = formatDateFromMilliseconds(endDate);
+                                projectEndDate.value =
+                                    formatDateFromMilliseconds(endDate);
                             }
                         }
                     });
 
-                    $("#validation-form").submit(function (event) {
-                        event.preventDefault(); // Prevent the form from submitting the traditional way
+                document.querySelector("#project-edit-duration").addEventListener("input", function () {
+                        const projectStartDate =
+                            document.querySelector("#start-date").value;
 
-                        const projectName = $("#name").val();
-                        const client = JSON.parse($("#client").val());
-                        const startDate = new Date(
-                            $("#start_date").val()
-                        ).getTime();
-                        const duration = +$("#project-add-duration").val();
+                        if (projectStartDate !== "") {
+                            const projectEndDate = document.querySelector(
+                                "#end-date-in-edit"
+                            );
 
-                        const background = $("#background").val();
-                        let architectures = $("#architectures").val();
-                        const empList = empTagifyList.selectedValues;
-                        console.log("architectures list : ", architectures);
-                        const systemOutlines = sysSelect.selectedValues;
-                        const deliverable = $("#deliverable").val();
-                        const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
-                        console.log(projectName, client, startDate, duration, background, architectures, empList, systemOutlines, deliverable, objective)
-                        if (
-                            projectName === "" ||
-                            client === "" ||
-                            startDate === 0 ||
-                            duration === 0 ||
-                            background === "" ||
-                            architectures === "" ||
-                            systemOutlines === "" ||
-                            deliverable === "" ||
-                            objective === "<p><br></p>"
-                        ) {
-                            alert("Please fill all the fields");
-                            return;
+                            // Calculate the end date only when there's a valid start date
+                            const endDate = calculateEndDate(
+                                new Date(projectStartDate).getTime(),
+                                this.value
+                            );
+
+                            // Check if endDate is not NaN
+                            if (!isNaN(endDate)) {
+                                projectEndDate.value =
+                                    formatDateFromMilliseconds(endDate);
+                            }
                         }
+                    });
 
-                        architectures = JSON.parse(architectures);
+                $("#validation-form").submit(function (event) {
+                    event.preventDefault(); // Prevent the form from submitting the traditional way
 
-                        const arcList = architectures.map((ar) => {
-                            const matchingObj = arcccList.find(
-                                (arccObj) => arccObj.tech_name === ar.value
-                            );
-                            console.log(matchingObj);
-                            return matchingObj
-                                ? matchingObj
-                                : { tech_name: ar.value };
-                        });
+                    const projectName = $("#name").val();
+                    const client = JSON.parse($("#client").val());
+                    const startDate = new Date(
+                        $("#start_date").val()
+                    ).getTime();
+                    const duration = +$("#project-add-duration").val();
 
-                        const oldDeliTypeList = JSON.parse(deliverable);
+                    const background = $("#background").val();
+                    let architectures = $("#architectures").val();
+                    const empList = empTagifyList.selectedValues;
+                    console.log("architectures list : ", architectures);
+                    const systemOutlines = sysSelect.selectedValues;
+                    const deliverable = $("#deliverable").val();
+                    const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                    console.log(
+                        projectName,
+                        client,
+                        startDate,
+                        duration,
+                        background,
+                        architectures,
+                        empList,
+                        systemOutlines,
+                        deliverable,
+                        objective
+                    );
+                    if (
+                        projectName === "" ||
+                        client === "" ||
+                        startDate === 0 ||
+                        duration === 0 ||
+                        background === "" ||
+                        architectures === "" ||
+                        systemOutlines === "" ||
+                        deliverable === "" ||
+                        objective === "<p><br></p>"
+                    ) {
+                        alert("Please fill all the fields");
+                        return;
+                    }
 
-                        const deliverTypeList = oldDeliTypeList.map((deli) => {
-                            const matchingObj = deliTypeList.find(
-                                (deliObj) => deliObj.type === deli.value
-                            );
-                            console.log(matchingObj);
-                            return matchingObj
-                                ? matchingObj
-                                : { type: deli.value };
-                        });
-                        // You may want to add some form validation here before sending the data
-                        console.log(objective);
-                        console.log(architectures);
-                        console.log(empList)
-                        const project = {
-                            name: projectName,
-                            clientDto: client,
-                            duration: duration,
-                            start_date: startDate,
-                            end_date: calculateEndDate(
-                                startDate,
-                                duration
-                            ).getTime(),
-                            background: background,
-                            architectureDto: arcList,
-                            systemOutLineDto: systemOutlines.reduce(
-                                (acc, cur) => {
-                                    acc[cur] = true;
-                                    return acc;
-                                },
-                                {}
-                            ),
-                            current_phase: "PLANNING",
-                            deliverableDto: deliverTypeList.map((item) => ({
-                                deliverableType: { type: item.type },
-                            })),
-                            objective: objective,
-                            amountDto: {
-                                basic_design: 0,
-                                detail_design: 0,
-                                coding: 0,
-                                unit_testing: 0,
-                                integrated_testing: 0,
-                            },
-                            departmentDto: {
-                                id: loginUser.currentUser.department.id,
-                            },
-                            userDto: {
-                                id: loginUser.currentUser.id,
-                            },
-                            userDtos: empList.map(str => ({ id: parseInt(str) }))
-                        };
-                        console.log(project);
-                        //Perform the AJAX request
-                        $.ajax({
-                            url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
-                            type: "POST",
-                            data: JSON.stringify(project),
-                            contentType: "application/json",
-                            success: function (data) {
-                                alert("Project registered successfully");
-                                // Reset the form if needed
-                                $("#validation-form")[0].reset();
-                                console.log("this projce has benn saved", data);
-                                event.currentTarget.submit();
-                            },
-                            error: function (data) {
-                                alert("Error registering project");
-                                event.currentTarget.submit();
-                            },
-                        });
+                    architectures = JSON.parse(architectures);
+
+                    const arcList = architectures.map((ar) => {
+                        const matchingObj = arcccList.find(
+                            (arccObj) => arccObj.tech_name === ar.value
+                        );
+                        console.log(matchingObj);
+                        return matchingObj
+                            ? matchingObj
+                            : { tech_name: ar.value };
+                    });
+
+                    const oldDeliTypeList = JSON.parse(deliverable);
+
+                    const deliverTypeList = oldDeliTypeList.map((deli) => {
+                        const matchingObj = deliTypeList.find(
+                            (deliObj) => deliObj.type === deli.value
+                        );
+                        console.log(matchingObj);
+                        return matchingObj ? matchingObj : { type: deli.value };
+                    });
+                    // You may want to add some form validation here before sending the data
+                    console.log(objective);
+                    console.log(architectures);
+                    console.log(empList);
+                    const project = {
+                        name: projectName,
+                        clientDto: client,
+                        duration: duration,
+                        start_date: startDate,
+                        end_date: calculateEndDate(
+                            startDate,
+                            duration
+                        ).getTime(),
+                        background: background,
+                        architectureDto: arcList,
+                        systemOutLineDto: systemOutlines.reduce((acc, cur) => {
+                            acc[cur] = true;
+                            return acc;
+                        }, {}),
+                        current_phase: "PLANNING",
+                        deliverableDto: deliverTypeList.map((item) => ({
+                            deliverableType: { type: item.type },
+                        })),
+                        objective: objective,
+                        amountDto: {
+                            basic_design: 0,
+                            detail_design: 0,
+                            coding: 0,
+                            unit_testing: 0,
+                            integrated_testing: 0,
+                        },
+                        departmentDto: {
+                            id: loginUser.currentUser.department.id,
+                        },
+                        userDto: {
+                            id: loginUser.currentUser.id,
+                        },
+                        userDtos: empList.map((str) => ({ id: parseInt(str) })),
+                    };
+                    console.log(project);
+                    //Perform the AJAX request
+                    $.ajax({
+                        url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
+                        type: "POST",
+                        data: JSON.stringify(project),
+                        contentType: "application/json",
+                        success: function (data) {
+                            alert("Project registered successfully");
+                            // Reset the form if needed
+                            $("#validation-form")[0].reset();
+                            console.log("this projce has benn saved", data);
+                            event.currentTarget.submit();
+                        },
+                        error: function (data) {
+                            alert("Error registering project");
+                            event.currentTarget.submit();
+                        },
                     });
                 });
+            });
 
-                let myOptions = [
-                    {
-                        label: "Analysis",
-                        value: "analysis",
-                        alias: "analysis",
-                    },
-                    {
-                        label: "System Design",
-                        value: "sys_design",
-                        alias: "system design",
-                    },
-                    {
-                        label: "Coding",
-                        value: "coding",
-                        alias: "coding",
-                    },
-                    {
-                        label: "Testing",
-                        value: "testing",
-                        alias: "testing",
-                    },
-                    {
-                        label: "Deploy",
-                        value: "deploy",
-                        alias: "deploy",
-                    },
-                    {
-                        label: "Maintenance",
-                        value: "maintenance",
-                        alias: "maintenance",
-                    },
-                    {
-                        label: "Document",
-                        value: "document",
-                        alias: "document",
-                    },
-                ];
+            let myOptions = [
+                {
+                    label: "Analysis",
+                    value: "analysis",
+                    alias: "analysis",
+                },
+                {
+                    label: "System Design",
+                    value: "sys_design",
+                    alias: "system design",
+                },
+                {
+                    label: "Coding",
+                    value: "coding",
+                    alias: "coding",
+                },
+                {
+                    label: "Testing",
+                    value: "testing",
+                    alias: "testing",
+                },
+                {
+                    label: "Deploy",
+                    value: "deploy",
+                    alias: "deploy",
+                },
+                {
+                    label: "Maintenance",
+                    value: "maintenance",
+                    alias: "maintenance",
+                },
+                {
+                    label: "Document",
+                    value: "document",
+                    alias: "document",
+                },
+            ];
 
-
-                let sysSelect = VirtualSelect.init({
-                    ele: "#systemOutlines",
-                    options: myOptions,
-                    multiple: true,
-                    search: true,
-                    searchByStartsWith: false,
-                    popupPosition: null,
-                    maxWidth: "100%",
-                });
+            let sysSelect = VirtualSelect.init({
+                ele: "#systemOutlines",
+                options: myOptions,
+                multiple: true,
+                search: true,
+                searchByStartsWith: false,
+                popupPosition: null,
+                maxWidth: "100%",
+            });
 
             $(".circle-progress").each(function () {
                 const minValue = $(this).attr("data-min-value");
@@ -1024,7 +1264,6 @@
                 }
             });
 
-
             //list project end
         </script>
     </head>
@@ -1046,7 +1285,7 @@
             </div>
             <!-- Spinner End -->
 
-            <div th:replace="fragments/sidebar :: sidebar"></div>
+            <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
             <!-- Content Start -->
             <div
@@ -1062,7 +1301,7 @@
                 "
             >
                 <div
-                    th:replace="fragments/navigation :: navigation-without-search"
+                    th:replace="~{fragments/navigation :: navigation-without-search}"
                 ></div>
                 <!-- Search Start -->
                 <div
@@ -1092,19 +1331,33 @@
                                 <option value="November">November</option>
                                 <option value="December">December</option>
                             </select>
-
                         </div>
                         <div class="d-inline-block">
-                            <select id="department-filter" class="form-control">
-
-                            </select>
+                            <select
+                                id="department-filter"
+                                class="form-control"
+                            ></select>
                         </div>
                         <div class="d-inline-block">
                             <select
                                 id="year-filter"
                                 class="form-control"
                                 action="filter"
-                            ></select>
+                            >
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023" selected>2023</option>
+                            </select>
                         </div>
 
                         <form class="d-inline-block">
@@ -1282,7 +1535,23 @@
                                             min="1"
                                             value="1"
                                             required
-                                            oninput="validity.valid||(value='1');"
+                                            oninput="validity.valid||(value='');"
+                                        />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label
+                                            for="project-add-duration"
+                                            class="col-sm-12 col-form-label"
+                                            >End date<span style="color: red">
+                                                *</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            disabled
+                                            id="project-add-end-date"
+                                            class="form-control"
                                         />
                                     </div>
 
@@ -1305,18 +1574,6 @@
                                         ></textarea>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <label
-                                                for="project-add-duration"
-                                                class="col-sm-12 col-form-label"
-                                        >End date<span
-                                                style="color: red"
-                                        >
-                                                *</span
-                                        ></label
-                                        >
-                                        <input type="text" disabled id="project-add-end-date" class="form-control">
-                                    </div>
                                     <!--                                architectures add-->
                                     <div class="col-lg-6">
                                         <label
@@ -1512,7 +1769,7 @@
                                         class="card-body profile-card pt-4 d-flex flex-column align-items-center"
                                     >
                                         <img
-                                            src="/images/avatars/pm_avatar.png"
+                                            src="/images/avatars/pm_avatar.svg"
                                             alt="Profile"
                                             class="rounded-circle"
                                         />
@@ -1567,6 +1824,26 @@
                                                     data-bs-target="#amount"
                                                 >
                                                     Amount
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <button
+                                                        class="nav-link"
+                                                        data-bs-toggle="tab"
+                                                        data-bs-target="#edit-deliverable"
+                                                >
+                                                    deliverable
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <button
+                                                        class="nav-link"
+                                                        data-bs-toggle="tab"
+                                                        data-bs-target="#edit-architecture"
+                                                >
+                                                    architecture
                                                 </button>
                                             </li>
 
@@ -1789,7 +2066,7 @@
                                                                     Design<span
                                                                         class="badge bg-primary rounded-pill"
                                                                         id="basic-design-count"
-                                                                        >11</span
+                                                                        ></span
                                                                     >
                                                                 </li>
 
@@ -1799,8 +2076,8 @@
                                                                     Detail
                                                                     Design<span
                                                                         class="badge bg-primary rounded-pill"
-                                                                        id="dd"
-                                                                        >11</span
+                                                                        id="detail-design-count"
+                                                                        ></span
                                                                     >
                                                                 </li>
 
@@ -1809,8 +2086,8 @@
                                                                 >
                                                                     Coding<span
                                                                         class="badge bg-primary rounded-pill"
-                                                                        id="ing"
-                                                                        >11</span
+                                                                        id="coding-count"
+                                                                        ></span
                                                                     >
                                                                 </li>
 
@@ -1820,8 +2097,8 @@
                                                                     Unit
                                                                     Testing<span
                                                                         class="badge bg-primary rounded-pill"
-                                                                        id="ut"
-                                                                        >11</span
+                                                                        id="unit-testing-count"
+                                                                        ></span
                                                                     >
                                                                 </li>
 
@@ -1831,8 +2108,8 @@
                                                                     Integrated
                                                                     Testing<span
                                                                         class="badge bg-primary rounded-pill"
-                                                                        id="it"
-                                                                        >11</span
+                                                                        id="integrated-testing-count"
+                                                                        ></span
                                                                     >
                                                                 </li>
                                                             </ul>
@@ -1863,46 +2140,7 @@
                                                             <div
                                                                 class="accordion-body position-relative"
                                                                 id="show-project-objective"
-                                                            >
-                                                                <strong
-                                                                    >This is the
-                                                                    third item's
-                                                                    accordion
-                                                                    body.</strong
-                                                                >
-                                                                It is hidden by
-                                                                default, until
-                                                                the collapse
-                                                                plugin adds the
-                                                                appropriate
-                                                                classes that we
-                                                                use to style
-                                                                each element.
-                                                                These classes
-                                                                control the
-                                                                overall
-                                                                appearance, as
-                                                                well as the
-                                                                showing and
-                                                                hiding via CSS
-                                                                transitions. You
-                                                                can modify any
-                                                                of this with
-                                                                custom CSS or
-                                                                overriding our
-                                                                default
-                                                                variables. It's
-                                                                also worth
-                                                                noting that just
-                                                                about any HTML
-                                                                can go within
-                                                                the
-                                                                <code
-                                                                    >.accordion-body</code
-                                                                >, though the
-                                                                transition does
-                                                                limit overflow.
-                                                            </div>
+                                                            ></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1913,7 +2151,63 @@
                                                 id="project-edit"
                                             >
                                                 <!-- Profile Edit Form -->
-                                                <form>
+                                                <form id="project-detail-edit-form">
+                                                    <input type="number" hidden id="current-edditing-projetc-id">
+                                                    <div class="row mb-3">
+                                                        <label
+                                                            for="edit-project-phase"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >Current
+                                                            Phase</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            
+                                                                <select
+                                                                    type="text"
+                                                                    class="form-control border-task-description"
+                                                                    name=""
+                                                                    id="edit-project-phase"
+                                                                >
+                                                                <option
+                                                                    value="PLANNING"
+                                                                >
+                                                                    Planning
+                                                                </option>
+                                                                <option
+                                                                value="DESIGN"
+                                                                >
+                                                                    Design
+                                                                </option>
+                                                                <option
+                                                                    value="CODING"
+                                                                >
+                                                                    Coding
+                                                                </option>
+                                                                <option
+                                                                value="TESTING"
+                                                                >
+                                                                    Testing
+                                                                </option>
+                                                                <option
+                                                                    value="REVIEW"
+                                                                >
+                                                                    Review
+                                                                </option>
+                                                                <option
+                                                                    value="DEPLOYMENT"
+                                                                >
+                                                                    Deployment
+                                                                </option>
+                                                                <option
+                                                                    value="MAINTENANCE"
+                                                                >
+                                                                    Maintenance
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                     <div class="row mb-3">
                                                         <label
                                                             for="background"
@@ -1927,13 +2221,15 @@
                                                                 type="text"
                                                                 class="form-control border-task-description"
                                                                 name="background"
+                                                                id="project-detail-background"
+                                                                required
                                                             ></textarea>
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
                                                         <label
-                                                            for="project_name"
+                                                            for="project-detail-name"
                                                             class="col-md-4 col-lg-3 col-form-label"
                                                             >Project name</label
                                                         >
@@ -1942,9 +2238,10 @@
                                                         >
                                                             <input
                                                                 name="project_name"
-                                                                id="project_name"
                                                                 type="text"
                                                                 class="form-control"
+                                                                id="project-detail-name"
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -1963,7 +2260,7 @@
                                                                 type="date"
                                                                 class="form-control"
                                                                 id="start-date"
-                                                                value="2017-06-01"
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -1980,8 +2277,31 @@
                                                             <input
                                                                 name="end_date"
                                                                 type="number"
+                                                                min="1"
+                                                                value="1"
+                                                                required
                                                                 class="form-control"
                                                                 id="project-edit-duration"
+                                                                oninput="validity.valid||(value='');"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mb-3">
+                                                        <label
+                                                            for="end-date-in-edit"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >end date</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <input
+                                                                name="start_date"
+                                                                type="text"
+                                                                class="form-control"
+                                                                id="end-date-in-edit"
+                                                                disabled
                                                             />
                                                         </div>
                                                     </div>
@@ -2084,6 +2404,7 @@
                                                             <input
                                                                 type="text"
                                                                 value="0"
+                                                                id="edit-basic-design-count"
                                                             />
                                                             <span class="plus"
                                                                 >+</span
@@ -2101,6 +2422,7 @@
                                                             <input
                                                                 type="text"
                                                                 value="0"
+                                                                id="edit-detail-design-count"
                                                             />
                                                             <span class="plus"
                                                                 >+</span
@@ -2118,6 +2440,7 @@
                                                             <input
                                                                 type="text"
                                                                 value="0"
+                                                                id="edit-coding-count"
                                                             />
                                                             <span class="plus"
                                                                 >+</span
@@ -2135,6 +2458,7 @@
                                                             <input
                                                                 type="text"
                                                                 value="0"
+                                                                id="edit-unit-testing-count"
                                                             />
                                                             <span class="plus"
                                                                 >+</span
@@ -2152,6 +2476,7 @@
                                                             <input
                                                                 type="text"
                                                                 value="0"
+                                                                id="edit-integrated-testing-count"
                                                             />
                                                             <span class="plus"
                                                                 >+</span
@@ -2160,13 +2485,13 @@
                                                     </li>
                                                 </ul>
                                                 <div class="text-center">
-                                                    <a
-                                                        href=""
+                                                    <button
                                                         class="btn btn-primary"
                                                         style="
                                                             background-color: #369;
                                                         "
-                                                        >Save Amount</a
+                                                        id="update-amount-btn"
+                                                        >Save Amount</button
                                                     >
                                                 </div>
                                             </div>
@@ -2177,7 +2502,7 @@
                                             >
                                                 <div class="row mb-3">
                                                     <label
-                                                        for="project_name"
+                                                        for="project-external-review-count"
                                                         class="col-md-4 col-lg-3 col-form-label"
                                                         >External Review</label
                                                     >
@@ -2195,7 +2520,7 @@
 
                                                 <div class="row mb-3">
                                                     <label
-                                                        for="project_name"
+                                                        for="project-internal-review-count"
                                                         class="col-md-4 col-lg-3 col-form-label"
                                                         >Internal Review</label
                                                     >
@@ -2221,6 +2546,16 @@
                                                     >
                                                 </div>
                                             </div>
+
+                                            <div
+                                                    class="tab-pane fade pt-3"
+                                                    id="edit-architecture"
+                                            >
+
+                                                <div id="architectures-list-in-edit" class="d-flex gap-2">
+
+                                                </div>
+                                            </div>
                                         </div>
                                         <!-- End Bordered Tabs -->
                                     </div>
@@ -2229,7 +2564,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="/project" class="btn btn-primary"
+                        <a href="/project" class="btn btn-primary" id="navigate-task"
                             >manage task</a
                         >
                     </div>

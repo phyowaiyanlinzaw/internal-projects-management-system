@@ -27,8 +27,8 @@ public class Department {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users;
 
-    @OneToMany
-    private List<Project> projects;
+//    @OneToManyn
+//    private List<Project> projects;
 
 
     @Override

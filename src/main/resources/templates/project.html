@@ -5,11 +5,12 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="layout/layout"
         xmlns:th="http://www.thymeleaf.org"
->
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 </head>
 
 <body layout:fragment="content">
+
 <script type="module" src="/js/callDataForTask.js" async></script>
 
 <!-- Spinner Start -->
@@ -129,7 +130,6 @@
                                         style="height: 10px"
                                 ></div>
                             </div>
-                            <!-- todo end -->
                             <!-- doing start -->
                             <div class="lane">
                                 <h3
@@ -170,17 +170,12 @@
                 </div>
                 <!-- calendar start -->
                 <div
-                        class="tab-pane fade mt-5"
+                        class="tab-pane fade mt-3"
                         id="gantt-chart"
                         role="tabpanel"
                         aria-labelledby="gantt-chart-tab"
                 >
-                    <div class="toolbar mb-4">
-                        <button id="previous" class="btn btn-success">Previous</button>
-                        <button id="today" class="btn btn-primary">Today</button>
-                        <button id="next" class="btn btn-success">Next</button>
-                    </div>
-                    <div id="calendar" class="border border-dark"></div>
+                    <div id="calendar"></div>
                 </div>
 
                 <!-- calendar end -->
@@ -194,9 +189,10 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content task-content">
                 <div class="modal-header">
-                    <h2 class="card-title" style="text-align: center">
-                        Task Details
+                    <h2 class="card-title display-6" style="text-align: center;" id="taskTitle">
                     </h2>
+                    <span class='ms-3 rounded-2 p-2 text-white' id="status"></span>
+
                     <button
                             type="button"
                             class="btn-close"
@@ -205,34 +201,8 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <form class="row g-5" action="">
-                        <div class="col-lg-6">
-                            <span><i class="fa fa-tasks"></i></span>
-                            <label
-                                    class="editable-label"
-                                    for="taskTitle"
-                                    onclick="editTitle()"
-                            >
-                                Task Title</label
-                            >
-                            <input
-                                    id="taskTitle"
-                                    name="task"
-                                    type="text"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
-                                        "
-                                    onblur="updateTitle(this)"
-                                    disabled
-                            />
-                        </div>
-
-                        <div class="col-lg-6">
+                    <div class="row row-cols-2">
+                        <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
                                     <span
                                     ><i
                                             class="fa-solid fa-bars-staggered"
@@ -241,7 +211,6 @@
                             <label
                                     id="description-label"
                                     class="editable-label"
-                                    onclick="toggleEditor()"
                             >
                                 Description</label
                             >
@@ -249,59 +218,45 @@
                                     id="description-editor"
                                     class="form-control editable-input"
                                     name="description"
-                                    row
+                                    rows="4"
                                     disabled
                             ></textarea>
                         </div>
 
-                        <div class="col-lg-6">
-                                    <span>
-                                        <i class="fa-solid fa-users"></i>
-                                    </span>
-                            <span
-                                    class="badge rounded-pill bg-info"
-                                    id="assigned-member"
-                            ></span>
-                        </div>
-
-                        <div class="col-lg-6">
-                                    <span>
-                                        <i
-                                                class="fa-solid fa-circle-chevron-down"
-                                        ></i>
-                                        Status
-                                    </span>
-                            <span class='badge rounded-pill  bg-primary' id="status"></span>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <i class="fa-regular fa-calendar"></i>
+                        <div class="col-lg-6 mb-4">
+                            <i class="fa-solid fa-thumbtack"></i>
                             <label
                                     id="duration"
                                     class="editable-label"
-                                    onclick="editTitle()"
                             >
-                                Duration</label
+                                Type of Task</label
                             >
-                            <input
-                                    type="text"
-                                    id="tduration"
-                                    name="task"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
+                            <div class="mt-2">
+                                <span class="bg-secondary text-white border-0 p-2 rounded-1" id="task-group"></span>
+                            </div>
 
-                                        "
-                                    onblur="updateTitle(this)"
-                                    disabled
-                            />
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 mb-4">
+                            <i class="fa-solid fa-users"></i>
+                            <label
+                                    for="assigned-member-tagify"
+                            >
+                                Assigned Member </label
+                            >
+                            <input
+                                    id="assigned-member-tagify"
+                                    class="editable-input"
+                                    name="member-tags"
+                                    sec:authorize="hasRole('PROJECT_MANAGER')"
+                            />
+                            <div class="mt-2" sec:authorize="hasAnyRole('FOC','EMPLOYEE','CONTRACT','PMO','DEPARTMENT_HEAD','SDQC')">
+                                <span class="bg-dark text-white border-0 p-2 rounded-1"
+                                      id="assigned-member-span"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 mb-4">
                                     <span
                                     ><i
                                             class="fa-solid fa-calendar-days"
@@ -309,14 +264,13 @@
                                     ></span>
                             <label
                                     class="editable-label"
-                                    onclick="editTitle()"
                             >
                                 Start Date</label
                             >
                             <input
                                     type="date"
-                                    id="task-detail-start_time"
-                                    name="start_time"
+                                    id="task-detail-start-date"
+                                    name="start_date"
                                     class="form-control border-task editable-input"
                                     dir="auto"
                                     data-autosize="true"
@@ -325,16 +279,57 @@
                                             overflow-wrap: break-word;
                                             height: 37px;
                                         "
-                                    onblur="updateTitle(this)"
+                                    disabled
                             />
                         </div>
 
+                        <div class="col-lg-6 mb-4">
+                                    <span
+                                    ><i
+                                            class="fa-solid fa-calendar-days"
+                                    ></i
+                                    ></span>
+                            <label
+                                    class="editable-label"
+                            >
+                                Due Date</label
+                            >
+                            <input
+                                    type="date"
+                                    id="task-detail-due-date"
+                                    name="due-date"
+                                    class="form-control border-task editable-input"
+                                    dir="auto"
+                                    data-autosize="true"
+                                    style="
+                                            overflow: hidden;
+                                            overflow-wrap: break-word;
+                                            height: 37px;
+                                        "
+                                    disabled
+                            />
+                        </div>
+                    </div>
 
-
-
-
-
-                    </form>
+                    <!--                    edit button and cancel button -->
+                    <div class="text-center mt-3">
+                        <button
+                                type="submit"
+                                class="btn btn-primary col-2"
+                                data-dismiss="#task-details"
+                                id="task-edit-btn"
+                        >
+                            Edit
+                        </button>
+                        <button
+                                type="reset"
+                                class="btn btn-secondary mr-3"
+                                data-bs-dismiss="modal"
+                                id="task-cancel-btn"
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -370,7 +365,6 @@
                                     class="form-control border-task-title"
                                     id="title"
                                     name="title"
-                                    rows="2"
                             ></input>
                         </div>
 
@@ -391,7 +385,7 @@
 
                         <div class="col-lg-6">
                             <label
-                                    for="member"
+                                    for="select-member"
                                     class="col-sm-12 col-form-label"
                             >Assign Members<span style="color: red">
                                             *</span
@@ -400,7 +394,7 @@
                             <input
                                     type="text"
                                     name="member-tags"
-                                    id="member"
+                                    id="select-member"
                                     placeholder="Select An Employee"
                             />
                         </div>
@@ -510,20 +504,22 @@
 
     <!-- javascript libraries -->
     <script src="/lib/chart/chart.min.js"></script>
-    <script src="/lib/easing/easing.min.js"></script>
-    <script src="/lib/waypoints/waypoints.min.js"></script>
-    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="/lib/tempusdominus/js/moment.min.js"></script>
-    <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<!--    <script src="/lib/easing/easing.min.js"></script>-->
+<!--    <script src="/lib/waypoints/waypoints.min.js"></script>-->
+<!--    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>-->
+<!--    <script src="/lib/tempusdominus/js/moment.min.js"></script>-->
+<!--    <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>-->
+<!--    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>-->
     <script src="/lib/quill/quill.min.js"></script>
 
     <!-- toast ui calendar -->
-    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.js"></script>
-    <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.js"></script>
-    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
-    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
-    <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
+<!--    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.js"></script>-->
+<!--    <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.js"></script>-->
+<!--    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>-->
+<!--    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>-->
+<!--    <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>-->
+
+
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
@@ -537,13 +533,12 @@
 
     <script type="module">
         import {getData, sendData} from "/js/api-function.js";
-        import {getTaskList} from '/js/callDataForTask.js';
 
         // Get the project ID from the hidden element
         const projectId = document.getElementById("projectId").innerText;
 
         // Function to fetch the members' list from the backend API
-        var membersList;
+        let membersList = [];
         $.ajax({
             url: "/api/user/list/projectId/" + projectId,
             type: "GET",
@@ -552,76 +547,65 @@
                 membersList = data;
             },
         });
-        console.log("MEMBERS LIST" , membersList);
+        console.log("MEMBERS LIST", membersList);
 
-        var memberInputTag = document.querySelector('input[name=member-tags]'),
+        var memberInputTag = document.querySelector('input[id=select-member]'),
             tagify = new Tagify(memberInputTag, {
                 enforceWhitelist: true,
-                mode : "select",
-                whitelist:  membersList.map((member) => {
+                mode: "select",
+                whitelist: membersList.map((member) => {
                     return member.name + " | " + member.role;
                 }),
                 blacklist: ['foo', 'bar'],
             })
 
-        // tagify.settings.templates =
-
         // bind events
         tagify.on('add', onAddTag)
         tagify.DOM.input.addEventListener('focus', onSelectFocus)
 
-        function onAddTag(e){
+        function onAddTag(e) {
 
             console.log(e.detail);
 
         }
 
-        function onSelectFocus(e){
+        function onSelectFocus(e) {
             console.log(e)
         }
 
         // Get all elements with the common class name
-        const editableLabels =
-            document.querySelectorAll(".editable-label");
         const editableInputs =
             document.querySelectorAll(".editable-input");
+        const editBtn = document.getElementById("task-edit-btn");
+        const cancelBtn = document.getElementById("task-cancel-btn");
 
-        // Add event listeners for each element
-        editableLabels.forEach((label) => {
-            label.addEventListener("click", editTitle);
-        });
+        let isEditing = false;
 
-        editableInputs.forEach((input) => {
-            input.addEventListener("blur", function () {
-                updateTitle(this);
-            });
-        });
+        editBtn.addEventListener("click", function () {
+            if (!isEditing) {
+                editBtn.innerText = "Save";
 
-        function editTitle() {
-            const label = this;
-            const input = label.nextElementSibling;
+                editableInputs.forEach((input) => {
+                    input.removeAttribute("disabled");
+                });
 
-            //remove disabled attribute to enable editing
-            input.removeAttribute("disabled");
-            input.focus();
-        }
-
-        function updateTitle(inputField) {
-            //add disabled attribute to disable editing
-            inputField.setAttribute("disabled", true);
-        }
-
-        function toggleEditor() {
-            var editor = document.getElementById("description-editor");
-            if (
-                editor.style.display === "none" ||
-                editor.style.display === ""
-            ) {
-                editor.style.display = "block";
-            } else {
-                editor.style.display = "none";
+                isEditing = true;
             }
-        }
+
+        });
+
+        cancelBtn.addEventListener("click", function (event) {
+            if (isEditing) {
+                editBtn.innerText = "Edit";
+                // don't let the button close modal
+                event.preventDefault();
+                editableInputs.forEach((input) => {
+                    input.setAttribute("disabled", "");
+                });
+                isEditing = false;
+            }
+
+        });
 
         const todoLane = document.getElementById("TODO");
         const inProgress = document.getElementById("IN_PROGRESS");
@@ -693,7 +677,17 @@
             return taskDiv;
         }
 
-        let taskList = await getTaskList()
+        let taskList = [];
+
+        // Fetch the tasks from the backend API
+        $.ajax({
+            url: "/api/task/list/project/" + projectId,
+            type: "GET",
+            async: false,
+            success: function (data) {
+                taskList = data;
+            },
+        });
 
         for (let i = 0; i < taskList.length; i++) {
             const task = taskList[i];
@@ -723,29 +717,72 @@
                 currentTaskData = taskList[parseInt(taskDiv.getAttribute('index'))]
                 console.log('click task so should change the current task data', currentTaskData)
                 //change input value from that taskdata
-                document.getElementById('taskTitle').value = currentTaskData.title
+                document.getElementById('taskTitle').innerText = currentTaskData.title
                 document.getElementById('description-editor').value = currentTaskData.description
                 // document.getElementById('tduration').value = currentTaskData.duration
                 // document.getElementById('task-detail-start_time').value = currentTaskData.start_time
 
                 // change status span text according to the status and also change badge color
                 if (currentTaskData.status === 'TODO') {
-                    document.getElementById('status').innerText = 'TODO'
-                    document.getElementById('status').classList.remove('bg-info', 'bg-success')
+                    document.getElementById('status').innerText = "TODO"
                     document.getElementById('status').classList.add('bg-primary')
                 } else if (currentTaskData.status === 'IN_PROGRESS') {
-                    document.getElementById('status').innerText = 'IN_PROGRESS'
-                    document.getElementById('status').classList.remove('bg-primary', 'bg-success')
-                    document.getElementById('status').classList.add('bg-warning')
-                } else if (currentTaskData.status === 'FINISHED') {
-                    document.getElementById('status').innerText = 'FINISHED'
-                    document.getElementById('status').classList.remove('bg-primary', 'bg-info')
+                    document.getElementById('status').innerText = "IN PROGRESS"
+                    document.getElementById('status').classList.add('bg-info')
+                } else {
+                    document.getElementById('status').innerText = "FINISHED"
                     document.getElementById('status').classList.add('bg-success')
                 }
 
-                // change the assigned member span value
-                document.getElementById('assigned-member').innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
+                if (currentTaskData.tasksGroup === 'A') {
+                    document.getElementById('task-group').innerText = "Group A - Related With Project Development"
+                } else if (currentTaskData.tasksGroup === 'B') {
+                    document.getElementById('task-group').innerText = "Group B - Training"
+                } else {
+                    document.getElementById('task-group').innerText = "Group C - Idling"
+                }
 
+                // Convert timestamp to Date objects
+                const startDate = new Date(currentTaskData.plan_start_time);
+                const endDate = new Date(currentTaskData.plan_end_time);
+
+// Get the date strings in 'yyyy-mm-dd' format
+                const startDateString = startDate.toISOString().split('T')[0];
+                const endDateString = endDate.toISOString().split('T')[0];
+
+                console.log("START DATE STRING", startDateString)
+                console.log("END DATE STRING", endDateString)
+
+// Set the values in the input fields
+                document.getElementById('task-detail-start-date').value = startDateString;
+                document.getElementById('task-detail-due-date').value = endDateString;
+
+                //preselect the tagify if that element exists
+                const assignedMemberTagifyElement = document.getElementById('assigned-member-tagify');
+                if (assignedMemberTagifyElement) {
+                    const assignedMemberTagify = document.getElementById('assigned-member-tagify'),
+                        tagify = new Tagify(assignedMemberTagify, {
+                            enforceWhitelist: true,
+                            mode: "select",
+                            whitelist: membersList.map((member) => {
+                                return member.name + " | " + member.role;
+                            }),
+                            blacklist: ['foo', 'bar'],
+                        })
+
+                    tagify.addTags(currentTaskData.userDto.name + " | " + currentTaskData.userDto.role)
+                }
+                console.log("CURRENT TASK DATA", currentTaskData)
+
+                const assignedMemberSpan = document.getElementById('assigned-member-span')
+                //to check if that element exists
+                if (assignedMemberSpan) {
+                    // Check if the user has any of the specified roles
+                    if (currentTaskData.userDto.role === 'FOC' || currentTaskData.userDto.role === 'EMPLOYEE' || currentTaskData.userDto.role === 'CONTRACT' || currentTaskData.userDto.role === 'PMO' || currentTaskData.userDto.role === 'DEPARTMENT_HEAD' || currentTaskData.userDto.role === 'SDQC') {
+                        console.log("the user has one of the specified roles")
+                        assignedMemberSpan.innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
+                    }
+                }
             });
 
             taskDiv.addEventListener("dragend", () => {
@@ -761,8 +798,16 @@
                     console.log("the task indeed drop on the one of the three zone")
                     console.log(currentTaskData.status, currentZone.getAttribute("id"))
                     if (currentTaskData.status !== currentZone.getAttribute("id")) {
+                        currentTaskData.status = currentZone.getAttribute("id")
+                        if (currentTaskData.status === 'IN_PROGRESS') {
+                            currentTaskData.actual_start_time = new Date().getTime()
+                        }
+                        if (currentTaskData.status === 'FINISHED') {
+                            currentTaskData.actual_end_time = new Date().getTime()
+                        }
+                        console.log("CURRENT TASK DATA", currentTaskData)
                         sendData(
-                            "/api/task/update",
+                            "/api/task/update/status",
                             "POST",
                             currentTaskData,
                             (error, response) => {
@@ -978,76 +1023,50 @@
             return closestTask;
         };
 
-        // ========================== Calendar View ===========================
-        const Calendar = tui.Calendar;
+        console.log("TASK LIST", taskList)
 
-        const calendar = new Calendar("#calendar", {
-            defaultView: "week",
-            taskView: true,
-            useDetailPopup: true,
-            isReadOnly: true,
-            template: {
-                monthDayname: function (dayname) {
-                    return (
-                        "<span class='calendar-week-dayname-name'>" + dayname.label + "</span>"
-                    );
-                },
-                timegridCurrentTime: function () {
-                    return "<span class='calendar-icon ic-time'></span> Current Time";
-                },
-                timegridNowIndicatorLabel: function (time) {
-                    return time.hour + ":" + time.minutes;
-                },
+        //calendar view
+        const calendarEl = document.getElementById("calendar");
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+            initialDate: new Date(),
+            weekends: false,
+            headerToolbar: {
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,timeGridWeek",
             },
-
+            // loop through the taskList and add events to the calendar
+            events : taskList.map((task) => {
+                return {
+                    title: task.title,
+                    start: new Date(task.plan_start_time),
+                    end: new Date(task.plan_end_time),
+                    color: task.status === "TODO" ? "#007bff" : task.status === "IN_PROGRESS" ? "#6c757d" : "#28a745",
+                    textColor: "white",
+                    allDay: true,
+                }
+            })
         });
 
-        $("#previous").on("click", function () {
-            calendar.prev();
-        });
+        calendar.render();
 
-        $("#next").on("click", function () {
-            calendar.next();
-        });
+        //dynamically add bg-white class to this element .fc-view-harness
+        const fcViewHarness = document.querySelector(".fc-view-harness");
+        fcViewHarness.classList.add("bg-white");
+        fcViewHarness.style.height = "600px";
 
-        $("#today").on("click", function () {
-            calendar.today();
-        });
+        //dynamically change width of  .fc-col-header
+        const fcColHeader = document.querySelector(".fc-col-header");
+        fcColHeader.style.width = "1000px";
 
-        calendar.setOptions({
-            week: {
-                daynames: ["Mon", "Tue", "Wed", "Thu", "Fri"],
-                startDayOfWeek: 0,
-                workweek: true,
-                //set 12 hour format
-                hourStart: 7,
-                hourEnd: 19,
-            },
-        });
-        console.log(calendar.getOptions().template)
+        const fcDayGridBody = document.querySelector(".fc-daygrid-body");
+        fcDayGridBody.style.width = "1000px";
 
-        calendar.createEvents([
-            {
-                id: "1",
-                calendarId: "1",
-                title: "my schedule",
-                category: "time",
-                dueDateClass: "",
-                start: "2023-11-06T10:30:00+06:30",
-                end: "2023-11-06T14:30:00+06:30",
-                isReadOnly: true, // schedule is read-only
-            },
-            {
-                id: "2",
-                calendarId: "1",
-                title: "second schedule",
-                category: "time",
-                dueDateClass: "",
-                start: "2023-11-06T09:30:00+06:30",
-                end: "2023-11-07T17:30:00+06:30",
-                isReadOnly: true, // schedule is read-only
-            },
-        ]);
+        const fcScrollgridSyncTable = document.querySelector(".fc-scrollgrid-sync-table");
+        fcScrollgridSyncTable.style.width = "1000px";
+        fcScrollgridSyncTable.style.height = "600px";
 
 
         //ADD TASk
@@ -1068,12 +1087,11 @@
                 plan_start_time: new Date($("#start_time").val()).getTime(),
                 plan_end_time: new Date($("#end_time").val()).getTime(),
                 tasksGroup: $("#group").val(),
-                projectDto: {
-                    id: parseInt(projectId)
-                },
-                userDto: {
-                    id: tagData[0]
-                }
+                projectId:
+                    parseInt(projectId)
+                ,
+                userId: tagData[0]
+
             };
             console.log(data);
             $.ajax({

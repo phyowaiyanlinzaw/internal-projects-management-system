@@ -93,6 +93,8 @@ public class ProjectServiceImpl implements ProjectService {
         project2.setDeliverables(deliverable);
         project2.setUsers(users);
         Review newReview = new Review();
+        newReview.setUser(userRepository.getReferenceById(projectDto.getUserDto().getId()));
+        project2.setReviews(newReview);
         project2.setStatus("In_Progress");
         newReview.setUser(userRepository.getReferenceById(projectDto.getUserDto().getId()));
         projectRepository.save(project2);
@@ -122,40 +124,50 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectDto> getAllProjects() {
         List<Project> projectList = projectRepository.findAll();
 
-        for(Project project : projectList) {
+        for (Project project : projectList) {
             System.out.println(project.getSystemOutLine());
         }
 
         List<ProjectDto> projectDtos = new ArrayList<>();
 
-        for(Project project : projectList) {
-            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
-            SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
-            projectDto.setSystemOutLineDto(systemOutLineDto);
-            projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
-            projectDto.setUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
+        for (Project project : projectList) {
+            if (project != null) {
+                ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+                SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
+                projectDto.setSystemOutLineDto(systemOutLineDto);
+                projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+                projectDto.setUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
 
-            log.info("project manager name should be shown here " + project.getProjectManager().getName());
-            projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
-            projectDto.getDepartmentDto().getUsers().clear();
-            projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
-            projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
-            projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+                log.info("project manager name should be shown here " + project.getProjectManager().getName());
+                projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
+                log.info("adjf;ladjf;lf", projectDto.getDepartmentDto());
 
-            List<UserDto> userDtos = new ArrayList<>();
-            for(User user : project.getUsers()) {
-                user.getProjects().clear();
-                userDtos.add(modelMapper.map(user, UserDto.class));
+                projectDto.getDepartmentDto().getUsers().clear();
+                projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
+                projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
+                projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+
+                List<UserDto> userDtos = new ArrayList<>();
+                for (User user : project.getUsers()) {
+                    user.getProjects().clear();
+                    userDtos.add(modelMapper.map(user, UserDto.class));
+                }
+                projectDto.setUserDtos(userDtos);
+
+                projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
+                projectDto.setDeliverableDto(project.getDeliverables().stream().map(deliverable -> modelMapper.map(deliverable, DeliverableDto.class)).collect(Collectors.toList()));
+                projectDtos.add(projectDto);
+            } else {
+                // Log that a null project was encountered
+                log.error("Encountered a null project in the list.");
+                // Handle the case where the project object is null
+                // You can log an error or take appropriate action.
             }
-            projectDto.setUserDtos(userDtos);
-
-            projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
-            projectDto.setDeliverableDto(project.getDeliverables().stream().map(deliverable -> modelMapper.map(deliverable, DeliverableDto.class)).collect(Collectors.toList()));
-            projectDtos.add(projectDto);
         }
 
-        return projectDtos;
-    }
+            return projectDtos;
+        }
+
 
     @Override
     public ProjectDto getProjectById(long id) {
@@ -182,24 +194,17 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto updateProject(ProjectDto projectDto) {
         Project project = projectRepository.findById(projectDto.getId());
 
-        if (project != null) {
-            project.setName(projectDto.getName());
-            project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
-            project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
-            project.setStart_date(projectDto.getStart_date());
-            project.setEnd_date(projectDto.getEnd_date());
-            project.setBackground(projectDto.getBackground());
-            project.setCurrent_phase(projectDto.getCurrent_phase());
-            project.setDuration(projectDto.getDuration());
-            project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
-            project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
-            project.setObjective(projectDto.getObjective());
-            projectRepository.save(project);
-            return modelMapper.map(project, ProjectDto.class);
-        } else {
-            return null;
-        }
+        project.setName(projectDto.getName());
+        project.setBackground(projectDto.getBackground());
+        project.setDuration(projectDto.getDuration());
+        project.setStart_date(projectDto.getStart_date());
+        project.setEnd_date(projectDto.getEnd_date());
+        project.setCurrent_phase(projectDto.getCurrent_phase());
+        project.setObjective(projectDto.getObjective());
 
+        projectRepository.save(project);
+
+        return modelMapper.map(project, ProjectDto.class);
     }
 
     @Override
@@ -248,6 +253,7 @@ public class ProjectServiceImpl implements ProjectService {
                 }
                 projectDto.setUserDtos(userDtos);
             }
+
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
