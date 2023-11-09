@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.security.CustomerUserDetails;
@@ -73,19 +74,11 @@ public class UserController {
     }
 
     @PostMapping("register-employee")
-    public ResponseEntity<String> registerEmployee(@RequestBody UserDto data) {
-        System.out.println("project manager id" + data.getProjectManager().getId());
-        try {
-            if (!data.getRole().equals(Role.PROJECT_MANAGER)){
-                data.setProjectManager(userService.getUserById(data.getProjectManager().getId()));
-                data.setDepartmentdto(departmentService.getDepartmentById(data.getDepartmentdto().getId()));
-            }
-            else{
-                data.setDepartmentdto(departmentService.getDepartmentById(data.getDepartmentdto().getId()));
-            }
-            userService.registerUser(data);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    public ResponseEntity<String> registerEmployee(@RequestBody RegisterEmployeeDto data) {
+
+        UserDto user = userService.registerUser(data);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
         }
 
         return ResponseEntity.ok("Employee registered successfully");

@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final DepartmentRepository departmentRepository;
     private final JavaMailSender mailSender;
     private final ModelMapper modelmapper;
 
@@ -75,25 +78,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto save(UserDto userDto) {
         User user = modelmapper.map(userDto, User.class);
-
-        // Set user properties
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        // Encrypt the password if it is not null
-        if (userDto.getPassword() == null) {
-            user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
-        } else {
-            user.setPassword(userDto.getPassword());
-        }
-
+        user.setPassword(userDto.getPassword());
         user.setRole(userDto.getRole());
-
-        // Set the department using getDepartmentdto method
         user.setDepartment(modelmapper.map(userDto.getDepartmentdto(), Department.class));
-
-        // Save the user and map it back to a UserDto
-        User savedUser = userRepository.save(user);
-        return modelmapper.map(savedUser, UserDto.class);
+        userRepository.save(user);
+        return modelmapper.map(user, UserDto.class);
     }
 
     @Override
@@ -127,43 +118,44 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resetPassword(String email) {
         String newPassword = PasswordGenerator.generatePassword(8);
-        sendEmail(email, "New Password", newPassword);
+        sendEmail(email, "OTP Verification", "Your OTP Code is : " + newPassword);
     }
 
     @Override
-    public void sendEmail(String to, String subject, String password) {
+    public void sendEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
-        message.setText("Your Temporary Password is: " + password);
+        message.setText(text);
         mailSender.send(message);
     }
 
     @Override
-    public UserDto registerUser(UserDto userDto) {
-        // Generate a random password
+    public UserDto registerUser(RegisterEmployeeDto registerEmployeeDto) {
+
         String password = PasswordGenerator.generatePassword(8);
 
-        // Create a new user entity
-        User user = modelmapper.map(userDto, User.class);
-        user.setName(userDto.getName());
-        user.setPassword(new BCryptPasswordEncoder().encode(password));
-        user.setRole(userDto.getRole());
+        registerEmployeeDto.setPassword(new BCryptPasswordEncoder().encode(password))  ;
+        // Create a new user
+        User user = new User();
+        user.setName(registerEmployeeDto.getName());
+        user.setEmail(registerEmployeeDto.getEmail());
+        user.setPassword(registerEmployeeDto.getPassword());
+        user.setRole(Role.valueOf(registerEmployeeDto.getRole()));
 
-        // Attempt to save the user to the repository
+        if (registerEmployeeDto.getRole().equals(Role.PROJECT_MANAGER.toString())){
+            Department department = departmentRepository.findById(registerEmployeeDto.getDepartmentId());
+            user.setDepartment(department);
+        }
+        else{
+            User projectManager = userRepository.findById(registerEmployeeDto.getProjectManagerId());
+            user.setProjectManager(projectManager);
+        }
+        // Save the user
         try {
             userRepository.save(user);
-        } catch (DataIntegrityViolationException ex) {
-            // Handle data integrity violation (e.g., duplicate email or username)
-            // You can return an error response or handle it as appropriate
-            throw ex;
-        }
-
-        try {
-            // Send a new password to the user's email
-            sendEmail(userDto.getEmail(), "New Password", password);
-        } catch (Exception e) {
-            // Handle email sending error (log, report, or take appropriate action)
+        } catch (DataIntegrityViolationException e) {
+            return null;
         }
 
         // Return the UserDto
