@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         for(Department department : departments) {
             DepartmentDto departmentDto = modelMapper.map(department, DepartmentDto.class);
             for(UserDto user : departmentDto.getUsers()) {
-                //only clear when not null
+
                 if(user.getProjectsByUsers() != null)
                     user.getProjectsByUsers().clear();
                 if(user.getProjectsByProjectManager() != null)

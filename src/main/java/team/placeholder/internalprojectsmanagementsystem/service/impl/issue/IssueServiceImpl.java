@@ -33,22 +33,6 @@ public class IssueServiceImpl implements IssueService {
     private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
 
-//    @Override
-//    public IssueDto save(Issue issue) {
-//        IssueDto issueDto = new IssueDto();
-//
-//
-//        Issue savedIssue = issueRepository.save(issue);
-//        issueDto = modelMapper.map(savedIssue, IssueDto.class);
-//
-//        issueDto.setUser_uploader(modelMapper.map(savedIssue.getUser_uploader(), UserDto.class));
-//        issueDto.setUser_pic(modelMapper.map(savedIssue.getUser_pic(), UserDto.class));
-//        issueDto.setProjectDto(modelMapper.map(savedIssue.getProject(), ProjectDto.class));
-//
-//        return issueDto;
-//    }
-
-
     @Override
     public IssueDto save(Issue issue) {
         Issue savedIssue = issueRepository.save(issue);
