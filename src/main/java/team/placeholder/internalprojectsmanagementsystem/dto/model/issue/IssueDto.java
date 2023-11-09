@@ -10,6 +10,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.io.Serializable;
 
@@ -32,8 +33,8 @@ public class IssueDto implements Serializable {
     private long updated_date;
     private long solved_date;
 
-    private Category issue_category;
-    private ResponsibleType responsible_type;
+    private String issue_category;
+    private String responsible_type;
     private ProjectDto projectDto;
 
     private UserDto user_uploader;

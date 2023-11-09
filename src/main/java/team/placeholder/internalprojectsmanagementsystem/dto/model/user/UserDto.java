@@ -26,13 +26,15 @@ public class UserDto {
     @JsonProperty("department")
     private DepartmentDto departmentdto;
 
-
-    @JsonBackReference
-    @JsonProperty("project_manager")
+    @JsonIgnore
+//    @JsonBackReference
+//    @JsonProperty("project_manager")
     private UserDto projectManager;
 
     private List<ProjectDto> projectsByProjectManager;
 
     private Set<ProjectDto> projectsByUsers;
+
+
 
 }
