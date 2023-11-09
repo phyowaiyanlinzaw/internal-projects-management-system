@@ -19,9 +19,4 @@ public class DeliverableServiceImpl implements DeliverableService{
     public DeliverableDto findByProjectId(Long projectId) {
         return null;
     }
-
-    @Override
-    public DeliverableDto save(DeliverableDto deliverableDto) {
-        return null;
-    }
 }
