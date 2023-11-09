@@ -93,6 +93,8 @@ public class ProjectServiceImpl implements ProjectService {
         project2.setDeliverables(deliverable);
         project2.setUsers(users);
         Review newReview = new Review();
+        newReview.setUser(userRepository.getReferenceById(projectDto.getUserDto().getId()));
+        project2.setReviews(newReview);
         project2.setStatus("In_Progress");
         newReview.setUser(userRepository.getReferenceById(projectDto.getUserDto().getId()));
         projectRepository.save(project2);
@@ -241,6 +243,7 @@ public class ProjectServiceImpl implements ProjectService {
                 }
                 projectDto.setUserDtos(userDtos);
             }
+
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));

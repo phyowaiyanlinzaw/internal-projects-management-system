@@ -175,18 +175,24 @@ public class ProjectController {
 
         log.info("current login user role " + role);
 
-        if (role.equals("PROJECT_MANAGER")) {
-            List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know
-            return getListResponseEntity(projects);
-        } else if (role.equals("DEPARTMENT_HEAD")) {
-            long departmentId = userService.getUserById(id).getDepartmentdto().getId();
-            log.info(" department is here : {}", userService.getUserById(id).getDepartmentdto());
-            List<ProjectDto> projects = projectService.getAllProjectsByDepartmentId(departmentId);
-            return getListResponseEntity(projects);
-        } else if (role.equals("MEMBER")) {
-            return getListResponseEntity(projectService.findAllByUserId(id));
-        } else {
-            return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+        switch (role) {
+            case "PROJECT_MANAGER" -> {
+                List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know
+
+                return getListResponseEntity(projects);
+            }
+            case "DEPARTMENT_HEAD" -> {
+                long departmentId = userService.getUserById(id).getDepartmentdto().getId();
+                log.info(" department is here : {}", userService.getUserById(id).getDepartmentdto());
+                List<ProjectDto> projects = projectService.getAllProjectsByDepartmentId(departmentId);
+                return getListResponseEntity(projects);
+            }
+            case "MEMBER" -> {
+                return getListResponseEntity(projectService.findAllByUserId(id));
+            }
+            default -> {
+                return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+            }
         }
     }
 

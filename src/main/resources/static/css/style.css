@@ -1171,3 +1171,10 @@
 .custom-left-margin {
     margin-left: 40px; /* Adjust the value as needed */
 }
+
+.architecture-image {
+
+    width: 40px;
+    height: 40px;
+
+}
