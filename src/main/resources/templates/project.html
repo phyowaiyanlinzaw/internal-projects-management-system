@@ -10,6 +10,7 @@
 </head>
 
 <body layout:fragment="content">
+
 <script type="module" src="/js/callDataForTask.js" async></script>
 
 <!-- Spinner Start -->
@@ -169,17 +170,12 @@
                 </div>
                 <!-- calendar start -->
                 <div
-                        class="tab-pane fade mt-5"
+                        class="tab-pane fade mt-3"
                         id="gantt-chart"
                         role="tabpanel"
                         aria-labelledby="gantt-chart-tab"
                 >
-                    <div class="toolbar mb-4">
-                        <button id="previous" class="btn btn-success">Previous</button>
-                        <button id="today" class="btn btn-primary">Today</button>
-                        <button id="next" class="btn btn-success">Next</button>
-                    </div>
-                    <div id="calendar" class="border border-dark"></div>
+                    <div id="calendar"></div>
                 </div>
 
                 <!-- calendar end -->
@@ -523,6 +519,8 @@
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
     <script src="https://uicdn.toast.com/calendar/latest/toastui-calendar.min.js"></script>
 
+
+
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
     <script src="/js/forprogresscircleiguess.js"></script>
@@ -532,6 +530,27 @@
 
     <!--    for assign member-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
+
+    <script>
+        // ========================== Calendar View ===========================
+        const calendarEl = document.getElementById("calendar");
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+            initialDate: new Date(),
+            headerToolbar: {
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,timeGridWeek",
+            },
+        });
+
+        calendar.render();
+
+        //dynamically add bg-white class to this element .fc-view-harness
+        const fcViewHarness = document.querySelector(".fc-view-harness");
+        fcViewHarness.classList.add("bg-white");
+    </script>
 
     <script type="module">
         import {getData, sendData} from "/js/api-function.js";
@@ -1004,76 +1023,6 @@
             return closestTask;
         };
 
-        // ========================== Calendar View ===========================
-        const Calendar = tui.Calendar;
-
-        const calendar = new Calendar("#calendar", {
-            defaultView: "week",
-            taskView: true,
-            useDetailPopup: true,
-            isReadOnly: true,
-            template: {
-                monthDayname: function (dayname) {
-                    return (
-                        "<span class='calendar-week-dayname-name'>" + dayname.label + "</span>"
-                    );
-                },
-                timegridCurrentTime: function () {
-                    return "<span class='calendar-icon ic-time'></span> Current Time";
-                },
-                timegridNowIndicatorLabel: function (time) {
-                    return time.hour + ":" + time.minutes;
-                },
-            },
-
-        });
-
-        $("#previous").on("click", function () {
-            calendar.prev();
-        });
-
-        $("#next").on("click", function () {
-            calendar.next();
-        });
-
-        $("#today").on("click", function () {
-            calendar.today();
-        });
-
-        calendar.setOptions({
-            week: {
-                daynames: ["Mon", "Tue", "Wed", "Thu", "Fri"],
-                startDayOfWeek: 0,
-                workweek: true,
-                //set 12 hour format
-                hourStart: 7,
-                hourEnd: 19,
-            },
-        });
-        console.log(calendar.getOptions().template)
-
-        calendar.createEvents([
-            {
-                id: "1",
-                calendarId: "1",
-                title: "my schedule",
-                category: "time",
-                dueDateClass: "",
-                start: "2023-11-06T10:30:00+06:30",
-                end: "2023-11-06T14:30:00+06:30",
-                isReadOnly: true, // schedule is read-only
-            },
-            {
-                id: "2",
-                calendarId: "1",
-                title: "second schedule",
-                category: "time",
-                dueDateClass: "",
-                start: "2023-11-06T09:30:00+06:30",
-                end: "2023-11-07T17:30:00+06:30",
-                isReadOnly: true, // schedule is read-only
-            },
-        ]);
 
 
         //ADD TASk

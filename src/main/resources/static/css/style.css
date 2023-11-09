@@ -1154,10 +1154,12 @@
     pointer-events: none;
 }
 
-.toastui-calendar-milestone , .toastui-calendar-task ,.toastui-calendar-panel-resizer{
-    display: none;
+#calendar {
+    max-width: 1000px;
+    max-height: 600px;
+    margin: 0 auto;
 }
-.toastui-calendar-time{
-    height: 400px!important;
+.fc-col-header-cell-cushion,.fc-daygrid-day-number{
+    text-decoration: none;
 }
 /*end*/
