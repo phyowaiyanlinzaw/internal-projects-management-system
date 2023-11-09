@@ -182,24 +182,17 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto updateProject(ProjectDto projectDto) {
         Project project = projectRepository.findById(projectDto.getId());
 
-        if (project != null) {
-            project.setName(projectDto.getName());
-            project.setClient(ClientMapper.toClient(projectDto.getClientDto()));
-            project.setAmount(AmountMapper.toAmount(projectDto.getAmountDto()));
-            project.setStart_date(projectDto.getStart_date());
-            project.setEnd_date(projectDto.getEnd_date());
-            project.setBackground(projectDto.getBackground());
-            project.setCurrent_phase(projectDto.getCurrent_phase());
-            project.setDuration(projectDto.getDuration());
-            project.setArchitectures(ArchitectureMapper.toArchitectures(projectDto.getArchitectureDto()));
-            project.setDeliverables(DeliverableMapper.toDeliverables(projectDto.getDeliverableDto()));
-            project.setObjective(projectDto.getObjective());
-            projectRepository.save(project);
-            return modelMapper.map(project, ProjectDto.class);
-        } else {
-            return null;
-        }
+        project.setName(projectDto.getName());
+        project.setBackground(projectDto.getBackground());
+        project.setDuration(projectDto.getDuration());
+        project.setStart_date(projectDto.getStart_date());
+        project.setEnd_date(projectDto.getEnd_date());
+        project.setCurrent_phase(projectDto.getCurrent_phase());
+        project.setObjective(projectDto.getObjective());
 
+        projectRepository.save(project);
+
+        return modelMapper.map(project, ProjectDto.class);
     }
 
     @Override

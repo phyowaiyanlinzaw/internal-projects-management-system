@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Amount;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
@@ -95,18 +97,41 @@ public class ProjectController {
 
 
 
-    @PutMapping(value = "/update/{id}", consumes ="application/Json")
-    public ResponseEntity<String> updatePrject(@PathVariable long id, @RequestBody ProjectDto projectDto){
-        ProjectDto updateProject = projectService.updateProject(projectDto);
-        if (updateProject!=null){
-            return ResponseEntity.ok("Issue Updated success");
+    @PutMapping(value = "/update", consumes ="application/Json")
+    public ResponseEntity<ProjectDto> updatePrject(@RequestBody ProjectDto projectDto){
 
+        log.info("Project : {}", projectDto);
+        log.info(String.valueOf(projectDto.getId()));
+        log.info(String.valueOf(projectDto.getDuration()));
+        log.info(String.valueOf(projectDto.getStart_date()));
+        log.info(String.valueOf(projectDto.getEnd_date()));
+        log.info(String.valueOf(projectDto.getCurrent_phase()));
+        log.info(String.valueOf(projectDto.getObjective()));
 
+         ProjectDto updateProject = projectService.updateProject(projectDto);
 
-        }else {
-            return ResponseEntity.badRequest().body("Failed Updated");
-        }
+         return ResponseEntity.ok(updateProject);
     }
+
+    @PutMapping("/update/amount/{id}")
+    public ResponseEntity<ProjectDto> updateAmountById(@PathVariable long id, @RequestBody AmountDto amountDto) {
+        Project project = projectRepository.getReferenceById(id);
+
+        Amount amount = project.getAmount();
+
+        amount.setBasic_design(amountDto.getBasic_design());
+        amount.setCoding(amountDto.getCoding());
+        amount.setDetail_design(amountDto.getDetail_design());
+        amount.setUnit_testing(amountDto.getUnit_testing());
+        amount.setIntegrated_testing(amountDto.getIntegrated_testing());
+
+        project.setAmount(amount);
+
+        projectRepository.save(project);
+
+        return ResponseEntity.ok(projectService.getProjectById(id));
+    }
+
 
     @GetMapping(value = "/architecturelist")
     public ResponseEntity <List <ArchitectureDto>> getAllArchitecture(){
