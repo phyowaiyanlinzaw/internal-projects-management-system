@@ -1,6 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.project;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ProjectDto implements Serializable {
     private long id;
     private String name;
