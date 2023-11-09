@@ -48,7 +48,7 @@
                     </form>
                     <div class="position-absolute end-0 d-flex gap-3">
                         <!-- modal toggle button start -->
-                        <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
+                        <button type="button" class="btn btn-light align-self-start d-none" data-bs-toggle="modal" data-bs-target="#add-issue">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                         <!-- modal toggle button end -->
@@ -354,6 +354,11 @@
 
     let data = [];
 
+    const currentLoginUserRole = getLoginUser.currentUser.role;
+
+    if(currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
+        document.getElementById("add-issue").classList.remove("d-none");
+    }
     // const currentUser = await getUser();
 
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
