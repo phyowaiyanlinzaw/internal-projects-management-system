@@ -153,7 +153,7 @@
                             <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
                                     style="color:red"> *</span></label>
                             <select class="form-select border-task-description" name="issue_category" id="issue_category" >
-                                <option selected disabled hidden>Select Issue Category</option>
+                                <option selected>Select Issue Category</option>
                                 <option value="ERROR">Error</option>
                                 <option value="BUG">Bug</option>
                                 <option value="COMMUNICATION">Communication</option>
@@ -176,17 +176,14 @@
 
 
                         <div class="col-lg-6">
-                            <label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_party">Responsible Party <span
-                                    style="color:red"> *</span></label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="responsible_type" name="responsible_type" value="CLIENT">
-                                <label class="form-check-label" for="responsible_type">Client</label>
+                            <div class="form-check-inline">
+                            <span><label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_type">Responsible Party <span
+                                    style="color:red"> *</span>  <input class="form-check-input " type="checkbox" id="responsible_type" name="client_checkbox" value="CLIENT" style="margin-left:130px;"> <label class="form-check-label" >Client</label></label>
+                             </span>
                             </div>
 
+                            <select class="form-select border-task-description" aria-label="Select Responsible Party" id="responsible_party" name="responsible_party"></select>
 
-                            <select class="form-select border-task-description" aria-label="Select Responsible Party"  id="responsible_party" name="responsible_party" >
-
-                            </select>
                         </div>
 
                         <div class="col-lg-12" style="margin-bottom: 80px;">
@@ -362,8 +359,6 @@
 
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
 
-    console.log(dataForIssue.id);
-
 
     $(document).ready(async function () {
 
@@ -378,7 +373,7 @@
 
 
 
-        $.get(`api/project/list/ID/1/IN_PROGRESS`, function (userData) {
+        $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
             data = userData; // Set the data array with the retrieved user data
 
             const user_pic = $('#user_pic');
@@ -405,11 +400,19 @@
 
         let clientData = [];
 
-        $.get('api/project/list/ID/1/IN_PROGRESS', function (clients) {
-            clientData = clients;
 
-            console.log("Client Data"+clientData)
+        function populateClientName() {
+            const responsiblePartySelect = $('#responsible_party');
+            responsiblePartySelect.empty();
 
+            responsiblePartySelect.append($('<option>', {
+                value: `client_${clientData.client.id}`,
+                text: `${clientData.client.name}`,
+            }));
+        }
+
+// Function to populate the responsible party select box with user names
+        function populateUserNames() {
             const responsiblePartySelect = $('#responsible_party');
             responsiblePartySelect.empty();
 
@@ -417,29 +420,46 @@
                 text: 'Select Responsible Party',
             }));
 
-            $.each(clientData.userList, function (index, client) {
-                console.log(client)
-                responsiblePartySelect.append($('<option>', {
-                    value: `client_${client.id}`,
-                    text: `Client: ${client.name}`,
-                }));
+            if (clientData.userList) {
+                clientData.userList.forEach(user => {
+                    responsiblePartySelect.append($('<option>', {
+                        value: `user_${user.id}`,
+                        text: `${user.name}`,
+                        data: { picUrl: user.picUrl },
+                        user: user,
+                    }));
+                });
+            }
+        }
 
-                if (client.userList) {
-                    // Loop through the users within the client
-                    client.userList.forEach(user => {
-                        responsiblePartySelect.append($('<option>', {
-                            value: `user_${user.id}`,
-                            text: `User: ${user.name}`,
-                            data: { picUrl: user.picUrl },
-                            user: user,
-                        }));
-                    });
-                }
-            });
+// Fetch client data and populate the select box initially
+        $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
+            clientData = data;
+            console.log("Client Data: " + JSON.stringify(clientData));
+
+            // Check the "Client" checkbox initially
+            $('#responsible_type').prop('checked', true);
+
+            // Populate the select box with the client's name
+            populateClientName();
         });
 
+        let actual_responsible_type = 'CLIENT';
 
+// Event handler for the "Client" checkbox
+        $('#responsible_type').on('change', function () {
+            const isChecked = $(this).is(':checked');
 
+            if (isChecked) {
+                // If the "Client" checkbox is checked, show only the client's name
+                populateClientName();
+                actual_responsible_type = 'CLIENT'
+            } else {
+                // If the "Client" checkbox is not checked, show user names
+                populateUserNames();
+                actual_responsible_type = 'EMPLOYEE'
+            }
+        });
 
         $('#addIssue').on('click', async function () {
             const title = $('#title').val();
@@ -450,7 +470,7 @@
             const direct_cause = $('#direct_cause').val();
             const responsible_party = $('#responsible_party').val();
             const issue_category = $('#issue_category').val();
-            const responsible_type = $('#responsible_type').val();
+            const responsible_type = actual_responsible_type
 
             const selectedUserId = $('#user_pic').val();
 
@@ -465,7 +485,9 @@
                 direct_cause === "" ||
                 responsible_party === "" ||
                 issue_category === ""||
-                selectedUserId === ""
+                selectedUserId === ""||
+                responsible_type === ""
+
 
             ) {
                 alert('Please fill in all the required fields.');
@@ -476,11 +498,7 @@
             const selectedUser = data.userList.find(user => user.id == selectedUserId)
             console.log("Selected User", selectedUserId);
 
-            const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party);
-
-
-            console.log("Responsible Party", selectedResponsibleParty);
-
+            const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party.split("_")[1]);
 
             if (!selectedUser) {
                 alert('Selected user data not found.');
@@ -492,8 +510,6 @@
 
             console.log("Uploader Id", uploaderId);
 
-
-
             const requestData = {
                 title: title,
                 description: description,
@@ -503,11 +519,10 @@
                 updated_date: new Date().getTime(),
                 root_cause: root_cause,
                 direct_cause: direct_cause,
-                responsible_party: selectedResponsibleParty,
+                responsible_party: selectedResponsibleParty.id,
                 issue_category: issue_category,
-                user_pic: selectedUser.id,
-                user_uploader: uploaderId.id,
                 responsible_type: responsible_type,
+                project_id: dataForIssue.projectId,
             };
 
             console.log('Request Data:', requestData);

@@ -3,7 +3,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.issue.IssueMapper;
+
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
@@ -33,17 +33,34 @@ public class IssueServiceImpl implements IssueService {
     private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
 
+//    @Override
+//    public IssueDto save(Issue issue) {
+//        IssueDto issueDto = new IssueDto();
+//
+//
+//        Issue savedIssue = issueRepository.save(issue);
+//        issueDto = modelMapper.map(savedIssue, IssueDto.class);
+//
+//        issueDto.setUser_uploader(modelMapper.map(savedIssue.getUser_uploader(), UserDto.class));
+//        issueDto.setUser_pic(modelMapper.map(savedIssue.getUser_pic(), UserDto.class));
+//        issueDto.setProjectDto(modelMapper.map(savedIssue.getProject(), ProjectDto.class));
+//
+//        return issueDto;
+//    }
+
+
     @Override
     public IssueDto save(Issue issue) {
-        IssueDto issueDto = new IssueDto();
-
-
         Issue savedIssue = issueRepository.save(issue);
-        issueDto = modelMapper.map(savedIssue, IssueDto.class);
+        IssueDto issueDto = modelMapper.map(savedIssue, IssueDto.class);
 
-        issueDto.setUser_uploader(modelMapper.map(savedIssue.getUser_uploader(), UserDto.class));
-        issueDto.setUser_pic(modelMapper.map(savedIssue.getUser_pic(), UserDto.class));
-        issueDto.setProjectDto(modelMapper.map(savedIssue.getProject(), ProjectDto.class));
+        UserDto userUploaderDto = modelMapper.map(savedIssue.getUser_uploader(), UserDto.class);
+        UserDto userPicDto = modelMapper.map(savedIssue.getUser_pic(), UserDto.class);
+        ProjectDto projectDto = modelMapper.map(savedIssue.getProject(), ProjectDto.class);
+
+        issueDto.setUser_uploader(userUploaderDto);
+        issueDto.setUser_pic(userPicDto);
+        issueDto.setProjectDto(projectDto);
 
         return issueDto;
     }
@@ -74,6 +91,15 @@ public class IssueServiceImpl implements IssueService {
         return issueDtos;
     }
 
+    @Override
+    public IssueDto getIssueById(long id) {
+        return null;
+    }
+
+    @Override
+    public IssueDto updateIssue(IssueDto issueDto) {
+        return null;
+    }
 
 
 //    @Override
@@ -94,38 +120,38 @@ public class IssueServiceImpl implements IssueService {
 
 
 
-    @Override
-    public IssueDto getIssueById(long id) {
-        Issue issue = issueRepository.findById(id);
-        if(issue != null) {
-            return IssueMapper.toIssueDto(issue);
-        }else {
-            return null;
-        }
-    }
+//    @Override
+//    public IssueDto getIssueById(long id) {
+//        Issue issue = issueRepository.findById(id);
+//        if(issue != null) {
+//            return IssueMapper.toIssueDto(issue);
+//        }else {
+//            return null;
+//        }
+//    }
 
 
-    @Override
-    public IssueDto updateIssue(IssueDto issueDto) {
-        Issue issue = issueRepository.findById(issueDto.getId());
-        if(issue != null) {
-
-            issue.setPlace(issueDto.getPlace());
-            issue.setImpact(issueDto.getImpact());
-            issue.setRoot_cause(issueDto.getRoot_cause());
-            issue.setDirect_cause(issueDto.getDirect_cause());
-            issue.setCorrective_action(issueDto.getCorrective_action());
-            issue.setPreventive_action(issueDto.getPreventive_action());
-            issue.setSolved(issueDto.isSolved());
-            issue.setCreated_date(issueDto.getCreated_date());
-            issue.setUpdated_date(issueDto.getUpdated_date());
-            issue.setSolved_date(issueDto.getSolved_date());
-            issueRepository.save(issue);
-            return IssueMapper.toIssueDto(issue);
-        }else {
-            return null;
-        }
-    }
+//    @Override
+//    public IssueDto updateIssue(IssueDto issueDto) {
+//        Issue issue = issueRepository.findById(issueDto.getId());
+//        if(issue != null) {
+//
+//            issue.setPlace(issueDto.getPlace());
+//            issue.setImpact(issueDto.getImpact());
+//            issue.setRoot_cause(issueDto.getRoot_cause());
+//            issue.setDirect_cause(issueDto.getDirect_cause());
+//            issue.setCorrective_action(issueDto.getCorrective_action());
+//            issue.setPreventive_action(issueDto.getPreventive_action());
+//            issue.setSolved(issueDto.isSolved());
+//            issue.setCreated_date(issueDto.getCreated_date());
+//            issue.setUpdated_date(issueDto.getUpdated_date());
+//            issue.setSolved_date(issueDto.getSolved_date());
+//            issueRepository.save(issue);
+//            return IssueMapper.toIssueDto(issue);
+//        }else {
+//            return null;
+//        }
+//    }
 
     @Override
     public void deleteIssue(long id) {
@@ -140,13 +166,18 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public IssueDto getIssueByTitle(String title) {
-        Issue issue = issueRepository.findByTitle(title);
-        if(issue != null) {
-            return IssueMapper.toIssueDto(issue);
-        }else {
-            return null;
-        }
+        return null;
     }
+
+//    @Override
+//    public IssueDto getIssueByTitle(String title) {
+//        Issue issue = issueRepository.findByTitle(title);
+//        if(issue != null) {
+//            return IssueMapper.toIssueDto(issue);
+//        }else {
+//            return null;
+//        }
+//    }
 
 
 }

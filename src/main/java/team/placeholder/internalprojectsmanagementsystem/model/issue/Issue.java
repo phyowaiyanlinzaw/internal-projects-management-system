@@ -1,6 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,8 @@ public class Issue{
     private String direct_cause;
     private String corrective_action;
     private String preventive_action;
+
+    @JsonProperty("responsible_party")
     private long responsible_party;
     private boolean solved;
     private long created_date;
