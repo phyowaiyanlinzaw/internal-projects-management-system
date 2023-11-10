@@ -80,7 +80,7 @@
                 <div class="modal-header">
                     <h4>Issue Details</h4>
                     <div class="d-flex justify-content-center align-items-center gap-3">
-                        <div class="btn btn-primary" id="issue-edit-btn">Edit</div>
+                        <div class="btn btn-primary" id="issue-edit-btn" data-issueId="" >Edit</div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
@@ -308,19 +308,13 @@
             return `${months} month${months > 1 ? 's' : ''} ago`;
         }
     }
-
     import {getUser} from "/js/currentLoginUser.js";
     import {getTimeElapsed} from "/js/time.js";
     import {getData} from "/js/api-function.js";
-
-
     console.log(await getUser());
-
-
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
-
     let toolbaroptions = [
         // Test-style
         ["bold", "italic", "underline"],
@@ -346,21 +340,13 @@
         // Adding code snippet or blockquote
         ["code-block", "blockquote"],
     ];
-
     // If you want to initialize Quill for a specific element, you can do it like this:
     let getLoginUser = await getUser();
-
     console.log("current login user " , getLoginUser)
-
     let data = [];
-
     // const currentUser = await getUser();
-
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
-
     console.log("dataForIssue", dataForIssue);
-
-
     $(document).ready(async function () {
 
         let specificQuillEditor = document.querySelector("#description"); // Change the selector as needed
@@ -371,20 +357,14 @@
             theme: "snow",
         });
 
-
-
-
         $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
             data = userData; // Set the data array with the retrieved user data
-
             const user_pic = $('#user_pic');
             user_pic.empty();
             user_pic.append($('<option>', {
                 value: '',
                 text: 'Select a Member',
                 data: {picUrl: ''},
-
-
             }));
             if (userData.userList) {
                 userData.userList.forEach(user => {
@@ -397,15 +377,12 @@
                 });
             }
         });
-
-
         let clientData = [];
 
 
         function populateClientName() {
             const responsiblePartySelect = $('#responsible_party');
             responsiblePartySelect.empty();
-
             responsiblePartySelect.append($('<option>', {
                 value: `client_${clientData.client.id}`,
                 text: `${clientData.client.name}`,
@@ -437,13 +414,10 @@
         $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
             clientData = data;
             console.log("Client Data: " + JSON.stringify(clientData));
-
             // Check the "Client" checkbox initially
             $('#responsible_type').prop('checked', true);
-
             populateClientName();
         });
-
         let actual_responsible_type = 'CLIENT';
 
 // Event handler for the "Client" checkbox
@@ -472,11 +446,7 @@
             const issue_category = $('#issue_category').val();
             const responsible_type = actual_responsible_type;
             const selectedUserId = $('#user_pic').val();
-
-
-
-
-
+            const issueId = $('#issue-edit-btn').data('issueId');
             if (
                 title === "" ||
                 description === "" ||
@@ -488,8 +458,6 @@
                 issue_category === ""||
                 selectedUserId === ""||
                 responsible_type === ""
-
-
             ) {
                 alert('Please fill in all the required fields.');
                 return;
@@ -563,8 +531,7 @@
 
     });
 
-
-
+    let currentIssueId;
     $(document).ready(function() {
         function loadData() {
             $.ajax({
@@ -616,7 +583,6 @@
                         </div>
                     `;
                         sortContainer.append(issueDiv);
-
                     });
 
                     $('.see-more-button').click(function () {
@@ -639,6 +605,8 @@
                                     $('#placeValue').text(data.place);
                                     $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
                                     $('#issueDetailModal').modal('show');
+                                    currentIssueId = issueId;
+                                    console.log("Id Issue :",currentIssueId)
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
                                 }
@@ -653,22 +621,11 @@
                     console.log('Error fetching data:', error);
                 }
             });
-
         }
-
-
-
         loadData();
     });
-
-
     // for update
     const issueEditBtn = document.getElementById('issue-edit-btn');
-
-    // document.querySelector("issueDetailModal").addEventListener("hide.bs.modal", () => {
-    //     issueEditBtn.innerText = "Edit"
-    // })
-
     issueEditBtn.addEventListener('click', function (e) {
         console.log("click")
         if (this.innerText === 'Edit') {
@@ -680,34 +637,23 @@
                 input.setAttribute('rows', 5);
                 input.classList.add('form-control');
                 input.classList.add('editable');
-
                 input.id = `newInput_${index}`;
-
                 field.innerHTML = '';
                 field.appendChild(input);
             });
-
             this.innerText = 'Save';
         } else if (this.innerText === 'Save') {
             // Switch back to view mode
-            const id = document.getElementById("issue-edit-btn").value;
-
-            const issueId = $(this).data('id');
+            const issueId =currentIssueId;
             console.log('Issue ID:', issueId);
-            console.log("Issue IDD :",id);
             const corrective_action = document.getElementById('newInput_0').value;
             const preventive_action = document.getElementById('newInput_1').value;
             const direct_cause = document.getElementById('newInput_2').value;
             const root_cause = document.getElementById('newInput_3').value;
             const impact = document.getElementById('newInput_4').value;
             const place = document.getElementById('newInput_5').value;
-
-
-
-
             // Collect the updated values from input fields
             const updatedDetails = {
-
                 corrective_action: corrective_action,
                 preventive_action: preventive_action,
                 direct_cause: direct_cause,
@@ -715,6 +661,7 @@
                 impact: impact,
                 place: place,
                 updated_date: new Date().getTime(),
+                solved: true,
 
             };
 
@@ -748,29 +695,17 @@
                         // Handle non-JSON response
                         console.log('Non-JSON Response:', xhr.responseText);
                     }
-
                     alert("Error updating issue: " + xhr.responseText);
                     console.log("Error updating issue");
                 },
-
-
                 complete: function () {
                     // Optionally, close the modal or perform other actions upon completion
                     $('#issueDetailModal').modal('hide');
                 }
             });
-
             this.innerText = 'Edit';
         }
     });
-
-
-
-
 </script>
-
-
-
-
 </body>
 </html>
