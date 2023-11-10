@@ -80,7 +80,7 @@
                 <div class="modal-header">
                     <h4>Issue Details</h4>
                     <div class="d-flex justify-content-center align-items-center gap-3">
-                        <div class="btn btn-primary" id="issue-edit-btn">Edit</div>
+                        <div class="btn btn-primary" id="issue-edit-btn" >Edit</div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
@@ -620,6 +620,7 @@
                         sortContainer.append(issueDiv);
                     });
 
+
                     $('.see-more-button').click(function () {
                         const issueId = $(this).data('id');
                         console.log('Clicked button with data-iD:', issueId);
@@ -637,8 +638,9 @@
                                     $('#root_causeValue').text(data.root_cause);
                                     $('#impactValue').text(data.impact);
                                     $('#placeValue').text(data.place);
-                                    $('#issue-edit-btn').data('issueId');
+                                    $('#issue-edit-btn').data('issueId', data.id);
                                     $('#issueDetailModal').modal('show');
+                                    console.log("IDDDD : ", data.id)
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
                                 }
@@ -659,102 +661,194 @@
 
     // for update
     const issueEditBtn = document.getElementById('issue-edit-btn');
-
     // document.querySelector("issueDetailModal").addEventListener("hide.bs.modal", () => {
     //     issueEditBtn.innerText = "Edit"
     // })
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     issueEditBtn.addEventListener('click', function (e) {
+    //         console.log("click")
+    //
+    //         if (this.innerText === 'Edit') {
+    //             // Switch to edit mode
+    //             const editableFields = document.querySelectorAll('.editable');
+    //             editableFields.forEach((field, index) => {
+    //                 const input = document.createElement('textarea');
+    //                 input.value = field.innerText;
+    //                 input.setAttribute('rows', 5);
+    //                 input.classList.add('form-control');
+    //                 input.classList.add('editable');
+    //
+    //                 input.id = `newInput_${index}`;
+    //
+    //                 field.innerHTML = '';
+    //                 field.appendChild(input);
+    //             });
+    //
+    //             this.innerText = 'Save';
+    //         } else if (this.innerText === 'Save') {
+    //             // Switch back to view mode
+    //
+    //             const issue_id = $('#issue-edit-btn').data('issueId');
+    //             console.log('Issue ID:', issue_id);
+    //             const corrective_action = document.getElementById('newInput_0').value;
+    //             const preventive_action = document.getElementById('newInput_1').value;
+    //             const direct_cause = document.getElementById('newInput_2').value;
+    //             const root_cause = document.getElementById('newInput_3').value;
+    //             const impact = document.getElementById('newInput_4').value;
+    //             const place = document.getElementById('newInput_5').value;
+    //
+    //
+    //             // Collect the updated values from input fields
+    //             const updatedDetails = {
+    //
+    //                 corrective_action: corrective_action,
+    //                 preventive_action: preventive_action,
+    //                 direct_cause: direct_cause,
+    //                 root_cause: root_cause,
+    //                 impact: impact,
+    //                 place: place,
+    //                 updated_date: new Date().getTime(),
+    //
+    //             };
+    //
+    //             console.log("UpdateDetails", updatedDetails);
+    //
+    //             $.ajax({
+    //                 url: `/api/issue/update/${issue_id}`, // Update the URL to include the issue ID
+    //                 type: 'PUT',
+    //                 contentType: 'application/json',
+    //                 data: JSON.stringify(updatedDetails),
+    //                 dataType: 'json',
+    //                 success: function (data) {
+    //                     console.log(data);
+    //                     console.log("Issue Updated Successfully");
+    //                     alert("Issue Updated Successfully");
+    //                 },
+    //                 error: function (xhr, status, error) {
+    //                     console.log('Status:', status);
+    //                     console.log('Error:', error);
+    //                     console.log('Server response:', xhr.responseText);
+    //
+    //                     if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+    //                         // Handle JSON response
+    //                         try {
+    //                             const response = JSON.parse(xhr.responseText);
+    //                             console.log('JSON Response:', response);
+    //                         } catch (e) {
+    //                             console.log('JSON parsing error:', e);
+    //                         }
+    //                     } else {
+    //                         // Handle non-JSON response
+    //                         console.log('Non-JSON Response:', xhr.responseText);
+    //                     }
+    //
+    //                     alert("Error updating issue: " + xhr.responseText);
+    //                     console.log("Error updating issue");
+    //                 },
+    //
+    //
+    //                 complete: function () {
+    //                     // Optionally, close the modal or perform other actions upon completion
+    //                     $('#issueDetailModal').modal('hide');
+    //                 }
+    //             });
+    //
+    //             this.innerText = 'Edit';
+    //         }
+    //     });
+    //
+    // });
 
-    issueEditBtn.addEventListener('click', function (e) {
-        console.log("click")
-        if (this.innerText === 'Edit') {
-            // Switch to edit mode
-            const editableFields = document.querySelectorAll('.editable');
-            editableFields.forEach((field, index) => {
-                const input = document.createElement('textarea');
-                input.value = field.innerText;
-                input.setAttribute('rows', 5);
-                input.classList.add('form-control');
-                input.classList.add('editable');
-
-                input.id = `newInput_${index}`;
-
-                field.innerHTML = '';
-                field.appendChild(input);
-            });
-
-            this.innerText = 'Save';
-        } else if (this.innerText === 'Save') {
-            // Switch back to view mode
-            const issue_id = $('#issue-edit-btn').data('issueId');
-            console.log('Issue ID:', issue_id);
-            const corrective_action = document.getElementById('newInput_0').value;
-            const preventive_action = document.getElementById('newInput_1').value;
-            const direct_cause = document.getElementById('newInput_2').value;
-            const root_cause = document.getElementById('newInput_3').value;
-            const impact = document.getElementById('newInput_4').value;
-            const place = document.getElementById('newInput_5').value;
+    $(document).ready(function () {
+        $('#issue-edit-btn').on('click', function (e) {
+            // Retrieve data-issueid attribute value
 
 
+            if (this.innerText === 'Edit') {
+                // Switch to edit mode
+                const editableFields = document.querySelectorAll('.editable');
+                editableFields.forEach((field, index) => {
+                    const input = document.createElement('textarea');
+                    input.value = field.innerText;
+                    input.setAttribute('rows', 5);
+                    input.classList.add('form-control');
+                    input.classList.add('editable');
+
+                    input.id = `newInput_${index}`;
+
+                    field.innerHTML = '';
+                    field.appendChild(input);
+                });
+
+                this.innerText = 'Save';
+            } else if (this.innerText === 'Save') {
+                // Switch back to view mode
 
 
-            // Collect the updated values from input fields
-            const updatedDetails = {
+                const issue_id = $('#issue-edit-btn').data('issueId');
+                console.log('Issue ID:', issue_id);
+                const corrective_action = document.getElementById('newInput_0').value;
+                const preventive_action = document.getElementById('newInput_1').value;
+                const direct_cause = document.getElementById('newInput_2').value;
+                const root_cause = document.getElementById('newInput_3').value;
+                const impact = document.getElementById('newInput_4').value;
+                const place = document.getElementById('newInput_5').value;
 
-                corrective_action: corrective_action,
-                preventive_action: preventive_action,
-                direct_cause: direct_cause,
-                root_cause: root_cause,
-                impact: impact,
-                place: place,
-                updated_date: new Date().getTime(),
+                // Collect the updated values from input fields
+                const updatedDetails = {
+                    corrective_action: corrective_action,
+                    preventive_action: preventive_action,
+                    direct_cause: direct_cause,
+                    root_cause: root_cause,
+                    impact: impact,
+                    place: place,
+                    updated_date: new Date().getTime(),
+                };
 
-            };
+                console.log("UpdateDetails", updatedDetails);
 
-            console.log("UpdateDetails", updatedDetails);
+                $.ajax({
+                    url: `/api/issue/update/${issue_id}`, // Update the URL to include the issue ID
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updatedDetails),
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        console.log("Issue Updated Successfully");
+                        alert("Issue Updated Successfully");
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Status:', status);
+                        console.log('Error:', error);
 
-            $.ajax({
-                url: `/api/issue/update/${issue_id}`, // Update the URL to include the issue ID
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(updatedDetails),
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    console.log("Issue Updated Successfully");
-                    alert("Issue Updated Successfully");
-                },
-                error: function (xhr, status, error) {
-                    console.log('Status:', status);
-                    console.log('Error:', error);
-                    console.log('Server response:', xhr.responseText);
-
-                    if (xhr.getResponseHeader('Content-Type') === 'application/json') {
-                        // Handle JSON response
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            console.log('JSON Response:', response);
-                        } catch (e) {
-                            console.log('JSON parsing error:', e);
+                        if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                            // Handle JSON response
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                console.log('JSON Response:', response);
+                            } catch (e) {
+                                console.log('JSON parsing error:', e);
+                            }
+                        } else {
+                            // Handle non-JSON response
+                            console.log('Non-JSON Response:', xhr.responseText);
                         }
-                    } else {
-                        // Handle non-JSON response
-                        console.log('Non-JSON Response:', xhr.responseText);
+
+                        alert("Error updating issue: " + xhr.responseText);
+                        console.log("Error updating issue");
+                    },
+                    complete: function () {
+                        // Optionally, close the modal or perform other actions upon completion
+                        $('#issueDetailModal').modal('hide');
                     }
+                });
 
-                    alert("Error updating issue: " + xhr.responseText);
-                    console.log("Error updating issue");
-                },
-
-
-                complete: function () {
-                    // Optionally, close the modal or perform other actions upon completion
-                    $('#issueDetailModal').modal('hide');
-                }
-            });
-
-            this.innerText = 'Edit';
-        }
+                this.innerText = 'Edit';
+            }
+        });
     });
+
 
 
 
