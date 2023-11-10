@@ -444,7 +444,6 @@
             // Check the "Client" checkbox initially
             $('#responsible_type').prop('checked', true);
 
-            // Populate the select box with the client's name
             populateClientName();
         });
 
@@ -527,6 +526,7 @@
                 issue_category: issue_category,
                 responsible_type: responsible_type,
                 project_id: dataForIssue.projectId,
+                status: "PENDING",
             };
 
             console.log('Request Data:', requestData);
@@ -578,7 +578,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    console.log("Data"+data);
+                    console.log("Data" + data);
                     const sortContainer = $('#sort');
 
                     // Loop through the retrieved data and create content for each item
@@ -625,11 +625,12 @@
                         sortContainer.append(issueDiv);
                     });
 
-                    $('.see-more-button').click(function() {
-                        var issueId = $(this).data('id');
-                        console.log('Clicked button with data-id:', issueId);
+                    $('.see-more-button').click(function () {
+                        const issueId = $(this).data('id');
+                        console.log('Clicked button with data-iD:', issueId);
+
                         $.ajax({
-                            url: 'api/issue/lists/byId/' + issueId,
+                            url: 'api/issue/list/byId/' + issueId,
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
@@ -641,7 +642,7 @@
                                     $('#root_causeValue').text(data.root_cause);
                                     $('#impactValue').text(data.impact);
                                     $('#placeValue').text(data.place);
-                                    $('#issue-edit-btn').data('issueId', data.id);
+                                    $('#issue-edit-btn').data('issueId');
                                     $('#issueDetailModal').modal('show');
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
@@ -680,7 +681,6 @@
                 input.classList.add('form-control');
                 input.classList.add('editable');
 
-                // Set a unique ID for each new input element based on the index
                 input.id = `newInput_${index}`;
 
                 field.innerHTML = '';
@@ -698,11 +698,7 @@
             const root_cause = document.getElementById('newInput_3').value;
             const impact = document.getElementById('newInput_4').value;
             const place = document.getElementById('newInput_5').value;
-            // const issue_category = document.getElementById('issue_category').value;
-            // const user_pic = document.getElementById('user_pic').value;
-            // const responsible_party = document.getElementById('responsible_party').value;
-            // const description = document.getElementById('description').value;
-            // const title = document.getElementById('title').value;
+
 
 
 
@@ -715,12 +711,7 @@
                 root_cause: root_cause,
                 impact: impact,
                 place: place,
-                // issue_category: issue_category,
-                // user_pic: user_pic,
-                // responsible_party: responsible_party,
-                // description: description,
-                // title: title,
-
+                updated_date: new Date().getTime(),
 
             };
 

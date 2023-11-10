@@ -1,6 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.service.issue;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 
@@ -19,4 +20,7 @@ public interface IssueService {
 
 
     IssueDto getIssueByTitle(String title);
+
+    IssueDto getIssueListsByIdAndStatus(long issues, String status);
+
 }

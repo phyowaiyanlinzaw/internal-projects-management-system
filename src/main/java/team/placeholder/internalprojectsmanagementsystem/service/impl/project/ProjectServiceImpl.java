@@ -345,7 +345,9 @@ public class ProjectServiceImpl implements ProjectService {
                 List<UserDto> userDtos = new ArrayList<>();
                 for(User user : project.getUsers()) {
                     user.getProjects().clear();
-                    user.getProjectManager().getProject().clear();
+                    if (user.getProjectManager() != null) {
+                        user.getProjectManager().getProject().clear();
+                    }
                     userDtos.add(modelMapper.map(user, UserDto.class));
                 }
                 projectDto.setUserDtos(userDtos);
