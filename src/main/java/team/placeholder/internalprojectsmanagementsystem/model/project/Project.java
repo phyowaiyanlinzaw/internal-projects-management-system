@@ -71,7 +71,6 @@ public class Project implements Serializable {
     private Department department;
 
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(name="pm_id")
     private User projectManager;
 
