@@ -32,6 +32,7 @@ public class IssueDto implements Serializable {
     private long created_date;
     private long updated_date;
     private long solved_date;
+    private String status;
 
     private String issue_category;
     private String responsible_type;

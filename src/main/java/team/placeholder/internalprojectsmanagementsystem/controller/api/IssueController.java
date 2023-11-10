@@ -22,8 +22,7 @@ import team.placeholder.internalprojectsmanagementsystem.repository.project.Proj
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.issue.IssueServiceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,7 +50,17 @@ public class IssueController {
 
         User user = userRepository.findByEmail(authentication.getName());
 
-        User projectManager = userRepository.findById(user.getProjectManager().getId());
+
+        User projectManager = null;
+
+        if (user.getProjectManager() != null) {
+            projectManager = userRepository.findById(user.getProjectManager().getId());
+        } else {
+            // Handle the case where projectManager is null, maybe log an error or take appropriate action
+            // For now, let's just log a message
+            log.error("Project manager is null for user with ID: {}", user.getId());
+        }
+
 
         log.info("new issue : {}", dto.getUser_pic());
 
@@ -83,7 +92,7 @@ public class IssueController {
 
 
 
-    @GetMapping("/lists/byId/{id}")
+    @GetMapping("/list/byId/{id}")
     public ResponseEntity<IssueDto> getIssueById(@PathVariable long id) {
         IssueDto issue = issueService.getIssueById(id);
 
@@ -133,7 +142,32 @@ public class IssueController {
         }
     }
 
+    @GetMapping("/list/ID/{id}/{status}")
+    public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status) {
+        List<IssueDto> issueList = (List<IssueDto>) issueService.getIssueListsByIdAndStatus(id, status);
 
+        if (issueList == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Long currentIssueId = null;
+
+        // Using Java streams for a more concise and functional approach
+        Optional<IssueDto> matchingIssue = issueList.stream()
+                .filter(issueDto -> issueDto != null && status.equalsIgnoreCase(issueDto.getStatus()))
+                .findFirst();
+
+        if (matchingIssue.isPresent()) {
+            currentIssueId = matchingIssue.get().getId();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Map<String, Object> projectMap = new HashMap<>();
+        projectMap.put("projectId", currentIssueId);
+
+        return new ResponseEntity<>(projectMap, HttpStatus.OK);
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteIssue(@RequestBody IssueDto issueDto) {
