@@ -5,19 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.issue.IssueServiceImpl;
@@ -43,52 +34,16 @@ public class IssueController {
 
     @PostMapping("/save")
     public ResponseEntity<IssueDto> saveIssue(@RequestBody IsuDto dto) {
-        // Map the DTO to an Issue entity using ModelMapper
-        Issue issue = modelMapper.map(dto, Issue.class);
+        log.info(dto.getStatus());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        dto.setStatus(String.valueOf(IssueStatus.PENDING));
 
-        User user = userRepository.findByEmail(authentication.getName());
+        System.out.println("Status"+dto.getStatus());
 
+        IssueDto issueDto = issueService.save(dto);
+        return new ResponseEntity<>(issueDto, HttpStatus.OK);
 
-        User projectManager = null;
-
-        if (user.getProjectManager() != null) {
-            projectManager = userRepository.findById(user.getProjectManager().getId());
-        } else {
-            // Handle the case where projectManager is null, maybe log an error or take appropriate action
-            // For now, let's just log a message
-            log.error("Project manager is null for user with ID: {}", user.getId());
-        }
-
-
-        log.info("new issue : {}", dto.getUser_pic());
-
-        // Check and set the issue category and responsible type
-        if (dto.getIssue_category() != null) {
-            issue.setIssue_category(Category.valueOf(dto.getIssue_category()));
-        }
-        if (dto.getResponsible_type() != null) {
-            issue.setResponsible_type(dto.getResponsible_type());
-        }
-
-        // Map the user and project references using ModelMapper
-        Project project = projectRepository.getReferenceById(dto.getProject_id());
-
-        issue.setUser_uploader(user);
-        issue.setUser_pic(projectManager);
-        issue.setProject(project);
-
-        // Save the Issue entity
-        IssueDto savedIssueDto = issueService.save(issue);
-
-        if (savedIssueDto != null) {
-            return ResponseEntity.ok(savedIssueDto);
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
     }
-
 
 
 
@@ -103,20 +58,6 @@ public class IssueController {
         }
     }
 
-//    @GetMapping("/clients")
-//    public ResponseEntity<List<ClientDto>> getClientsForIssues() {
-//        List<IssueDto> issues = issueService.getAllIssues(); // Retrieve all issues
-//        List<ClientDto> clients = new ArrayList<>();
-//
-//        for (IssueDto issue : issues) {
-//            ProjectDto project = issue.getProjectDto();
-//            if (project != null) {
-//                clients.add(project.getClientDto());
-//            }
-//        }
-//
-//        return ResponseEntity.ok(clients);
-//    }
 
     @GetMapping("/lists/byTitle/{title}")
     public ResponseEntity<IssueDto> getIssueByTitle(@PathVariable String title) {
