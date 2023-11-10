@@ -1,12 +1,15 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pusher.rest.Pusher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NotiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
-import team.placeholder.internalprojectsmanagementsystem.repository.NotiRepo.NotiRepo;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.NotificationRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.noti.NotificationService;
 
@@ -19,29 +22,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
-    private final NotiRepo notiRepo;
+    private final NotificationRepository notiRepo;
+    private final ModelMapper modelMapper;
     private final UserRepository userRepository;
 
     @Override
-    public void save(NotiDto notiDto) {
+    public void save(String description, long userId) {
 
         log.info("In Notification save method");
-        log.info("This noti is going to save : {}", notiDto);
+        log.info("This user will get noti : {}", (Object) userId);
         try {
 
             log.info("In try statement");
 
             Notification notification = new Notification();
 
-            long userId = notiDto.getUserId();
+            notification.setDescription(description);
+            notification.setNoti_time(System.currentTimeMillis());
+            notification.setUser(userRepository.getReferenceById(userId));
 
-            notification.setDescription(notiDto.getDescription());
-            notification.setNoti_time(notiDto.getNotiTime());
-            notification.setUser(userRepository.getReferenceById(notiDto.getUserId()));
+            Notification notification1 = notiRepo.save(notification);
 
-            notiRepo.save(notification);
+            NotiDto notiDto = modelMapper.map(notification, NotiDto.class);
 
-            sendNotification(notiDto);
+            sendNotification(notiDto, userId);
 
         } catch (Exception e) {
             log.error("Error while sending notification: {}", e.getMessage());
@@ -53,22 +57,25 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotification(NotiDto notiDto)
+    public void sendNotification(NotiDto notiDto, long userId)
     {
         log.info("In sendNotification method and setting necessary variables");
-        String appId = "1529588";
-        String key = "cd7cdc2857a652669f6c";
-        String secret = "685bfa38bf47ea7cf2e5";
+        String appId = "1629453";
+        String key = "3c0b3426bd0875be392f";
+        String secret = "53343242223c164f3904";
         String cluster = "ap1";
 
         try (Pusher pusher = new Pusher(appId, key, secret)) {
+
+            ObjectMapper mapper = new ObjectMapper();
+            String notiJson = mapper.writeValueAsString(notiDto);
 
             log.info("In try statement");
 
             pusher.setCluster("ap1");
             pusher.setEncrypted(true);
 
-            pusher.trigger("private-" + notiDto.getUserId(), "noti-event", "{\"notification\":\""+ notiDto +"\"}");
+            pusher.trigger("my-channel-" + userId, "noti-event", "{\"notification\":" + notiJson + "}");
 
             log.info("Pusher is triggered");
 
@@ -82,8 +89,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<Notification> getAllNotification() {
-        return null;
+    public List<NotiDto> getAllNotificationByUserId(long id) {
+
+        List<Notification> notificationList = notiRepo.findAllByUserId(id);
+
+        return notificationList.stream().map(notification -> modelMapper.map(notification, NotiDto.class)).toList();
     }
 
     @Override

@@ -530,9 +530,10 @@
 
     <!--    for assign member-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
-
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <script type="module">
         import {getData, sendData} from "/js/api-function.js";
+        import {getTimeElapsed} from "/js/time.js";
 
         // Get the project ID from the hidden element
         const projectId = document.getElementById("projectId").innerText;
@@ -1109,8 +1110,8 @@
             });
         });
 
-
     </script>
+    <script src="/js/notification.js" type="module"></script>
 </div>
 </body>
 </html>
