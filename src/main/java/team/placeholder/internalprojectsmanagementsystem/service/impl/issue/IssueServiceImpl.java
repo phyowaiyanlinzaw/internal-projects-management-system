@@ -5,16 +5,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
@@ -35,36 +31,36 @@ public class IssueServiceImpl implements IssueService {
     private final ModelMapper modelMapper;
 
     @Override
-    public IssueDto save(Issue issue) {
-        Issue savedIssue = issueRepository.save(issue);
-        IssueDto issueDto = modelMapper.map(savedIssue, IssueDto.class);
-
-//        UserDto userUploaderDto = modelMapper.map(savedIssue.getUser_uploader(), UserDto.class);
-//        UserDto userPicDto = modelMapper.map(savedIssue.getUser_pic(), UserDto.class);
-//        ProjectDto projectDto = modelMapper.map(savedIssue.getProject(), ProjectDto.class);
-
-        if (savedIssue.getUser_uploader() != null) {
-            UserDto userUploaderDto = modelMapper.map(savedIssue.getUser_uploader(), UserDto.class);
-            issueDto.setUser_uploader(userUploaderDto);
+    public IssueDto save(IsuDto isuDto) {
+        Issue issue = new Issue();
+        issue.setTitle(isuDto.getTitle());
+        issue.setDescription(isuDto.getDescription());
+        issue.setPlace(isuDto.getPlace());
+        issue.setImpact(isuDto.getImpact());
+        issue.setRoot_cause(isuDto.getRoot_cause());
+        issue.setDirect_cause(isuDto.getDirect_cause());
+        issue.setCorrective_action(isuDto.getCorrective_action());
+        issue.setPreventive_action(isuDto.getPreventive_action());
+        issue.setSolved(isuDto.isSolved());
+        issue.setCreated_date(isuDto.getCreated_date());
+        issue.setUpdated_date(isuDto.getUpdated_date());
+        issue.setSolved_date(isuDto.getSolved_date());
+        if (isuDto.getIssue_category() != null) {
+            issue.setIssue_category(Category.valueOf(isuDto.getIssue_category()));
         }
-
-        if (savedIssue.getUser_pic() != null) {
-            UserDto userPicDto = modelMapper.map(savedIssue.getUser_pic(), UserDto.class);
-            issueDto.setUser_pic(userPicDto);
+        if (isuDto.getResponsible_type() != null) {
+            issue.setResponsible_type(ResponsibleType.valueOf(isuDto.getResponsible_type()));
         }
+        issue.setUser_uploader(userRepository.findById(isuDto.getUser_uploader()));
+        issue.setUser_pic(userRepository.findById(isuDto.getUser_pic()));
+        issue.setResponsible_party(isuDto.getResponsible_party());
+        issue.setProject(projectRepository.findById(isuDto.getProject_id()));
 
-        if (savedIssue.getProject() != null) {
-            ProjectDto projectDto = modelMapper.map(savedIssue.getProject(), ProjectDto.class);
-            issueDto.setProjectDto(projectDto);
-        }
+        issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
 
-        return issueDto;
+        Issue issue1 = issueRepository.save(issue);
+        return modelMapper.map(issue1, IssueDto.class);
 
-//        issueDto.setUser_uploader(userUploaderDto);
-//        issueDto.setUser_pic(userPicDto);
-//        issueDto.setProjectDto(projectDto);
-//
-//        return issueDto;
     }
 
 

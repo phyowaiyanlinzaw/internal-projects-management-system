@@ -12,7 +12,6 @@ import java.sql.Date;
 @Getter
 @Setter
 public class IsuDto {
-    private long id;
     private String title;
     private String description;
     private String place;
@@ -21,12 +20,11 @@ public class IsuDto {
     private String direct_cause;
     private String corrective_action;
     private String preventive_action;
-    private int clientId;
     private boolean solved;
     private long created_date;
     private long updated_date;
     private long solved_date;
-    private ResponsibleType responsible_type;
+    private String responsible_type;
     private String issue_category;
     private String status;
     private long user_uploader;
