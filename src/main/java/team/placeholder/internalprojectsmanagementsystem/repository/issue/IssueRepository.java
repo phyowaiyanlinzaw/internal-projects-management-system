@@ -9,4 +9,6 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
 
     Issue findByTitle(String title);
     Issue findById(long id);
+
+    List<Issue> findByStatus(String status);
 }
