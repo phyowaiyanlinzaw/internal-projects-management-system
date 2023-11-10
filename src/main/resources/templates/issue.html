@@ -690,8 +690,11 @@
             this.innerText = 'Save';
         } else if (this.innerText === 'Save') {
             // Switch back to view mode
+            const id = document.getElementById("issue-edit-btn").value;
+
             const issueId = $(this).data('id');
             console.log('Issue ID:', issueId);
+            console.log("Issue IDD :",id);
             const corrective_action = document.getElementById('newInput_0').value;
             const preventive_action = document.getElementById('newInput_1').value;
             const direct_cause = document.getElementById('newInput_2').value;
