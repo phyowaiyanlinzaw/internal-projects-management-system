@@ -1,6 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Status;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import java.util.Objects;
@@ -41,7 +40,7 @@ public class Issue{
     private long solved_date;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private IssueStatus issueStatus;
 
 
     @Enumerated(EnumType.STRING)
