@@ -1,10 +1,12 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.TasksService;
 
 import java.util.ArrayList;
@@ -23,15 +26,18 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TaskServiceImpl implements TasksService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
+    private final NotificationServiceImpl notificationService;
 
     @Override
     public TasksDto save(TaskRequestDto taskRequestDto) {
+        log.info("In task save method");
         Tasks task = new Tasks();
         task.setTitle(taskRequestDto.getTitle());
         task.setDescription(taskRequestDto.getDescription());
@@ -39,11 +45,24 @@ public class TaskServiceImpl implements TasksService {
         task.setPlan_start_time(taskRequestDto.getPlan_start_time());
         task.setPlan_end_time(taskRequestDto.getPlan_end_time());
         task.setStatus(TaskStatus.TODO);
-        User user = userRepository.findById(taskRequestDto.getUserId()).orElse(null);
+        User user = userRepository.findById(taskRequestDto.getUserId());
         Project project = projectRepository.findById(taskRequestDto.getProjectId());
         task.setUser(user);
         task.setProject(project);
-        taskRepository.save(task);
+        try {
+            log.info("Trying to save task");
+            taskRepository.save(task);
+
+            Notification notification = new Notification();
+
+            notificationService.save("You have been assigned to a new task", user.getId());
+        } catch (Exception e) {
+            log.error("Error while sending notification: {}", e.getMessage());
+            log.error("Stack Trace: ", e);
+            log.error("Cause: {}", e.getCause());
+            log.error("Filled Stack Trace: ", e.fillInStackTrace());
+        }
+
         return modelMapper.map(task, TasksDto.class);
     }
 

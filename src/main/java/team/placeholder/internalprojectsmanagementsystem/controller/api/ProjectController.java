@@ -60,7 +60,7 @@ public class ProjectController {
 
     @PostMapping(value = "/save")
     public ResponseEntity<ProjectDto> save(@RequestBody ProjectDto project){
-        log.info("Project: {}", project);
+        log.info("Project: {}", (Object) project);
         ProjectDto savedProject = projectService.save(project);
         if (savedProject!=null){
             return new ResponseEntity<>(savedProject, HttpStatus.OK);
