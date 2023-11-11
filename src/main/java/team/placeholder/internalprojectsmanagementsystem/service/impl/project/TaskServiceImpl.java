@@ -69,10 +69,14 @@ public class TaskServiceImpl implements TasksService {
             return null;
         }
         task.setStatus(TaskStatus.valueOf(status));
-        if (task.getStatus()==TaskStatus.FINISHED) {
+        //set only start time if status is in progress
+        if(status.equals("IN_PROGRESS")) {
+            task.setActual_start_time(startTime);
+        }
+        //set only end time if status is done
+        if(status.equals("FINISHED")) {
             task.setActual_end_time(endTime);
         }
-        task.setActual_start_time(startTime);
         taskRepository.save(task);
         return modelMapper.map(task, TasksDto.class);
     }

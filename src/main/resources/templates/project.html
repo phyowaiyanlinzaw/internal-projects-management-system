@@ -135,7 +135,7 @@
                                 <h3
                                         class="heading bg-info text-white rounded-top p-2"
                                 >
-                                    DOING
+                                    IN PROGRESS
                                 </h3>
                                 <div
                                         class="swim-lane p-3"
@@ -153,7 +153,7 @@
                                 <h3
                                         class="heading bg-success text-white rounded-top p-2"
                                 >
-                                    DONE
+                                    FINISHED
                                 </h3>
                                 <div
                                         class="swim-lane p-3"
@@ -250,7 +250,8 @@
                                     name="member-tags"
                                     sec:authorize="hasRole('PROJECT_MANAGER')"
                             />
-                            <div class="mt-2" sec:authorize="hasAnyRole('FOC','EMPLOYEE','CONTRACT','PMO','DEPARTMENT_HEAD','SDQC')">
+                            <div class="mt-2"
+                                 sec:authorize="hasAnyRole('FOC','EMPLOYEE','CONTRACT','PMO','DEPARTMENT_HEAD','SDQC')">
                                 <span class="bg-dark text-white border-0 p-2 rounded-1"
                                       id="assigned-member-span"></span>
                             </div>
@@ -454,7 +455,6 @@
                                 Add
                             </button>
                             <button
-                                    type="reset"
                                     class="btn btn-secondary mr-3"
                                     data-dismiss="modal"
                             >
@@ -504,12 +504,12 @@
 
     <!-- javascript libraries -->
     <script src="/lib/chart/chart.min.js"></script>
-<!--    <script src="/lib/easing/easing.min.js"></script>-->
-<!--    <script src="/lib/waypoints/waypoints.min.js"></script>-->
-<!--    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>-->
-<!--    <script src="/lib/tempusdominus/js/moment.min.js"></script>-->
-<!--    <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>-->
-<!--    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>-->
+    <!--    <script src="/lib/easing/easing.min.js"></script>-->
+    <!--    <script src="/lib/waypoints/waypoints.min.js"></script>-->
+    <!--    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>-->
+    <!--    <script src="/lib/tempusdominus/js/moment.min.js"></script>-->
+    <!--    <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>-->
+    <!--    <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>-->
     <script src="/lib/quill/quill.min.js"></script>
 
     <!-- Template Javascript -->
@@ -615,7 +615,8 @@
                 "row",
                 "rounded-2",
                 "border-2",
-                "border"
+                "border",
+                "bg-white"
             );
             switch (task.status) {
                 case "TODO":
@@ -799,29 +800,46 @@
                             currentTaskData.actual_end_time = new Date().getTime()
                         }
 
-
-                        sendData(
-                            "/api/task/update/status",
-                            "POST",
-                            {
-                                id : currentTaskData.id,
+                        // sendData(
+                        //     "/api/task/update/status",
+                        //     "POST",
+                        //     {
+                        //         id : currentTaskData.id,
+                        //         status: currentTaskData.status,
+                        //         actual_start_time: currentTaskData.actual_start_time,
+                        //         actual_end_time: currentTaskData.actual_end_time
+                        //     },
+                        //     (error, response) => {
+                        //         if (error) {
+                        //             console.error("Error for URL /api/task/update", error);
+                        //         } else {
+                        //             console.log(
+                        //                 "Response for URL /api/task/update",
+                        //                 response
+                        //             );
+                        //
+                        //         }
+                        //         currentTaskData.status = currentZone.getAttribute("id")//reset the status to the original status
+                        //     }
+                        // )
+                        $.ajax({
+                            url: '/api/task/update/status',
+                            method: 'POST',
+                            data: {
+                                id: currentTaskData.id,
                                 status: currentTaskData.status,
                                 actual_start_time: currentTaskData.actual_start_time,
-                                actual_end_time: currentTaskData.actual_end_time
+                                actual_end_time: currentTaskData.actual_end_time,
                             },
-                            (error, response) => {
-                                if (error) {
-                                    console.error("Error for URL /api/task/update", error);
-                                } else {
-                                    console.log(
-                                        "Response for URL /api/task/update",
-                                        response
-                                    );
-
-                                }
-                                currentTaskData.status = currentZone.getAttribute("id")
-                            }
-                        )
+                        })
+                            .then(response => {
+                                console.log('Response for URL /api/task/update', response);
+                                // Reset the status to the original status.
+                                currentTaskData.status = currentZone.getAttribute('id');
+                            })
+                            .catch(error => {
+                                console.error('Error for URL /api/task/update', error);
+                            });
                     }
                 }
 
@@ -973,12 +991,12 @@
                     case "TODO":
                         curTask.classList.add("border-primary");
                         curTask.classList.remove(
-                            "border-dark",
+                            "border-info",
                             "border-success"
                         );
                         break;
                     case "IN_PROGRESS":
-                        curTask.classList.add("border-dark");
+                        curTask.classList.add("border-info");
                         curTask.classList.remove(
                             "border-primary",
                             "border-success"
@@ -988,7 +1006,7 @@
                         curTask.classList.add("border-success");
                         curTask.classList.remove(
                             "border-primary",
-                            "border-dark"
+                            "border-info"
                         );
                         break;
                 }
@@ -1024,48 +1042,7 @@
 
         console.log("TASK LIST", taskList)
 
-        //calendar view
-        const calendarEl = document.getElementById("calendar");
 
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: "dayGridMonth",
-            initialDate: new Date(),
-            weekends: false,
-            headerToolbar: {
-                left: "prev,next today",
-                center: "title",
-                right: "dayGridMonth,timeGridWeek",
-            },
-            // loop through the taskList and add events to the calendar
-            events : taskList.map((task) => {
-                return {
-                    title: task.title,
-                    start: new Date(task.plan_start_time),
-                    end: new Date(task.plan_end_time),
-                    color: task.status === "TODO" ? "#007bff" : task.status === "IN_PROGRESS" ? "#6c757d" : "#28a745",
-                    textColor: "white",
-                    allDay: true,
-                }
-            })
-        });
-
-        calendar.render();
-
-        //dynamically add bg-white class to this element .fc-view-harness
-        const fcViewHarness = document.querySelector(".fc-view-harness");
-        fcViewHarness.classList.add("bg-white");
-        fcViewHarness.style.height = "600px";
-
-        //dynamically change width of  .fc-col-header
-        const fcColHeader = document.querySelector(".fc-col-header");
-        fcColHeader.style.width = "1000px";
-
-        const fcDayGridBody = document.querySelector(".fc-daygrid-body");
-        fcDayGridBody.style.width = "1000px";
-
-        const fcScrollgridSyncTable = document.querySelector(".fc-scrollgrid-sync-table");
-        fcScrollgridSyncTable.style.width = "1000px";
-        fcScrollgridSyncTable.style.height = "600px";
 
 
         //ADD TASk
@@ -1107,6 +1084,131 @@
                 },
             });
         });
+
+
+            $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
+                // Check if the calendar is already initialized
+                    //calendar view
+                    const calendarEl = document.getElementById("calendar");
+
+                    const calendar = new FullCalendar.Calendar(calendarEl, {
+                        initialView: "dayGridMonth",
+                        initialDate: new Date(),
+                        timeZone: "Asis/Yangon",
+                        weekends : false,
+                        headerToolbar: {
+                            left: "prev,next today",
+                            center: "title",
+                            right: "dayGridMonth,timeGridWeek",
+                        },
+                        // loop through the taskList and add events to the calendar
+                        events: taskList.map((task) => {
+                                return {
+                                    title: task.title,
+                                    start: new Date(task.plan_start_time),
+                                    end: new Date(task.plan_end_time + 86400000),
+                                    color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#f74444",
+                                    textColor: "white",
+                                    allDay: true,
+
+                                }
+                            },
+                        ),
+                        eventClick: function (info) {
+                            const eventTitle = info.event.title;
+                            const eventStatus = taskList.find((task) => {
+                                return task.title === eventTitle;
+                            }).status;
+                            const eventDescription = taskList.find((task) => {
+                                return task.title === eventTitle;
+                            }).description;
+
+                            let taskGroup = taskList.find((task) => {
+                                return task.title === eventTitle;
+                            }).tasksGroup;
+
+                            if (taskGroup === 'A') {
+                                taskGroup = "Group A - Related With Project Development"
+                            } else if (taskGroup === 'B') {
+                                taskGroup = "Group B - Training"
+                            } else {
+                                taskGroup = "Group C - Idling"
+                            }
+
+                            //get plan_end_time and convert to date and do some math to show remaining days
+                            const planEndTime = taskList.find((task) => {
+                                return task.title === eventTitle;
+                            }).plan_end_time;
+                            //only show date and month
+                            const planEndTimeDate = new Date(planEndTime).toLocaleDateString('en-US', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric'
+                            });
+
+                            // Create a modal element
+                            const modal = document.createElement('div');
+                            modal.classList.add('modal');
+
+                            modal.innerHTML = `
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">${eventTitle} <span class="badge bg-primary">${eventStatus}</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Description :</strong> ${eventDescription}</p>
+                    <p><strong>Task Group :</strong> ${taskGroup}</p>
+                    <p><strong>Due Date :</strong> ${planEndTimeDate}</p>
+                    <!-- Add more information as needed -->
+                </div>
+            </div>
+        </div>
+    `;
+
+                            // Append the modal to the body
+                            document.body.appendChild(modal);
+
+                            // Show the modal using Bootstrap modal
+                            $(modal).modal('show');
+
+                            // Remove the modal from the DOM when it's closed
+                            $(modal).on('hidden.bs.modal', function () {
+                                $(this).remove();
+                            });
+
+                        },
+                    });
+
+                    calendar.render();
+
+                    // // Auto-click the first button once the DOM is ready
+                    // $('.fc-next-button').click();
+                    //
+                    // // Wait for 2 seconds (adjust the time as needed) and then click the second button
+                    // setTimeout(function () {
+                    //     $('.fc-prev-button').click();
+                    // }, 500); // 2000 milliseconds = 2 seconds
+
+                    //dynamically add bg-white class to this element .fc-view-harness
+                    const fcViewHarness = document.querySelector(".fc-view-harness");
+                    fcViewHarness.classList.add("bg-white");
+                    fcViewHarness.style.height = "600px";
+
+                    //dynamically change width of  .fc-col-header
+                    const fcColHeader = document.querySelector(".fc-col-header");
+                    fcColHeader.style.width = "1200px";
+
+                    const fcDayGridBody = document.querySelector(".fc-daygrid-body");
+                    fcDayGridBody.style.width = "1200px";
+
+                    const fcScrollgridSyncTable = document.querySelector(".fc-scrollgrid-sync-table");
+                    fcScrollgridSyncTable.style.width = "1200px";
+                    fcScrollgridSyncTable.style.height = "600px";
+
+
+            })
 
 
     </script>

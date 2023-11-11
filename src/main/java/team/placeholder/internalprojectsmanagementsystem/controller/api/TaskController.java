@@ -49,10 +49,13 @@ public class TaskController {
 
     @PostMapping("/update/status")
     public ResponseEntity<TasksDto> updateTaskStatus(
-            @RequestBody Object data ) {
-            log.info("Request Stuffs : {}",data);
-//            return ResponseEntity.ok(taskService.updateTaskStatus(id,status,actual_end_time,actual_start_time));
-            return null;
+            @RequestParam("id") long id,
+            @RequestParam("status") String status,
+            @RequestParam("actual_start_time") long actual_start_time,
+            @RequestParam("actual_end_time") long actual_end_time
+            ) {
+        log.info("id: "+id+" status: "+status+" actual_start_time: "+actual_start_time+" actual_end_time: "+actual_end_time);
+            return ResponseEntity.ok(taskService.updateTaskStatus(id,status,actual_start_time,actual_end_time));
     }
 
 }
