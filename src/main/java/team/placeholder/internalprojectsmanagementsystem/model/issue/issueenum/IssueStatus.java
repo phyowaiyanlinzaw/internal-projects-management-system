@@ -1,5 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum;
 
-public enum Status {
+public enum IssueStatus {
     PENDING,APPROVE,DECLINE,DUPLICATE;
 }
