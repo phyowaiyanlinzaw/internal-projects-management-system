@@ -28,13 +28,7 @@ public interface ProjectService {
 
     List<ProjectDto> findAllByUserId(long id);
 
-
-
-//    List<ProjectDto> getAllProjectsByClientId(long id);
-//
-//    List<ProjectDto> getAllProjectsByProjectManagerId(long id);
-//
-//    List<ProjectDto> getAllProjectsByStatus(String status);
+    List<ProjectDto> getAllProjectsByDepartmentName(String name);
 
     long countTaskById(long id);
 

@@ -85,12 +85,23 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <p class="lead">Monthly Man-Month</p>
 
-                                <div class="dropdown">
-                                    <a class="dropdown-toggle text-decoration-none" type="button" id="projectDropDown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Projects List
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="projectDropDown">
-                                    </ul>
+                                <div class="d-flex gap-2">
+
+                                    <div class="dropdown ">
+                                        <a class="dropdown-toggle text-decoration-none" type="button" id="departmentDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Select Department
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="departmentDropDown">
+                                        </ul>
+                                    </div>
+
+                                    <div class="dropdown ">
+                                        <a class="dropdown-toggle text-decoration-none" type="button" id="projectDropDown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Select Project
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="projectDropDown">
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
@@ -218,30 +229,65 @@
          $(document).ready(function () {
              $("#spinner").hide();
 
-             // Make an AJAX request to fetch the project list
-             $.ajax({
-                 url: '/api/project/list', // Replace with your API endpoint
-                 method: 'GET',
-                 success: function(data) {
-                     console.log("PROJECTS LIST", data);
-                     const projectDropdown = $('#projectDropDown'); // Corrected the ID here
-                     const dropdownMenu = projectDropdown.next('.dropdown-menu');
-                     dropdownMenu.empty(); // Clear the dropdown menu
+             // Make an AJAX request to fetch the department list
+                $.ajax({
+                    url: '/api/department/list', // Replace with your API endpoint
+                    method: 'GET',
+                    success: function(data) {
+                        console.log("DEPARTMENT LIST", data);
+                        const departmentDropdown = $('#departmentDropDown'); // Corrected the ID here
+                        const dropdownMenu = departmentDropdown.next('.dropdown-menu');
+                        dropdownMenu.empty(); // Clear the dropdown menu
 
-                     $.each(data, function (index, project) {
-                         dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${project.id}">${project.name}</a></li>`);
-                     });
+                        $.each(data, function (index, department) {
+                            dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${department.name}">${department.name}</a></li>`);
+                        });
 
-                     // Handle click event on the dynamic items
-                     dropdownMenu.on('click', '.dropdown-item', function() {
-                         const selectedValue = $(this).data('value');
-                         alert(`Selected project: ${selectedValue}`);
-                     });
-                 },
-                 error: function() {
-                     console.error('Failed to fetch project list.');
-                 }
-             });
+                        // Handle click event on the dynamic items
+                        dropdownMenu.on('click', '.dropdown-item', function() {
+                            const selectedValue = $(this).data('value');
+                            //change the text of the dropdown button
+                            departmentDropdown.text(selectedValue);
+                            // call the api to get the project list for the selected department
+                            getProjectList(selectedValue);
+                        });
+                    },
+                    error: function() {
+                        console.error('Failed to fetch department list.');
+                    }
+                });
+
+             // Make an AJAX request to fetch the project list with the name of the department with api/project/list/department-name/{departmentName}
+                function getProjectList(departmentName) {
+                    $.ajax({
+                        url: `/api/project/list/department-name/${departmentName}`, // Replace with your API endpoint
+                        method: 'GET',
+                        success: function(data) {
+                            console.log("PROJECT LIST", data);
+                            const projectDropdown = $('#projectDropDown'); // Corrected the ID here
+                            const dropdownMenu = projectDropdown.next('.dropdown-menu');
+                            dropdownMenu.empty(); // Clear the dropdown menu
+
+                            $.each(data, function (index, project) {
+                                dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${project.name}">${project.name}</a></li>`);
+                            });
+
+                            // Handle click event on the dynamic items
+                            dropdownMenu.on('click', '.dropdown-item', function() {
+                                const selectedValue = $(this).data('value');
+                                //change the text of the dropdown button
+                                projectDropdown.text(selectedValue);
+                            });
+
+
+                        },
+                        error: function() {
+                            console.error('Failed to fetch project list.');
+                        }
+                    });
+                }
+
+
 
 
              // Dummy data
