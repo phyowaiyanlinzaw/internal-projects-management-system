@@ -275,7 +275,7 @@
 
                     $.ajax({
                         type: "PUT", // Use PUT method to update data
-                        url: `api/department/lists/update/${departmentId}`, // Replace with your server-side endpoint URL
+                        url: `api/department/update/${departmentId}`, // Replace with your server-side endpoint URL
                         data: JSON.stringify(data),
                         contentType: "application/json",
                         success: function (response) {

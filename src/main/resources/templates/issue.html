@@ -80,7 +80,7 @@
                 <div class="modal-header">
                     <h4>Issue Details</h4>
                     <div class="d-flex justify-content-center align-items-center gap-3">
-                        <div class="btn btn-primary" id="issue-edit-btn">Edit</div>
+                        <div class="btn btn-primary" id="issue-edit-btn" data-issueId="" >Edit</div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
@@ -90,37 +90,37 @@
                             <div class="col mb-3">
                                 <h5 class="icon-title"><i class="fas fa-wrench text-primary"></i> Corrective Action</h5>
                                 <span class="editable text-wrap custom-left-margin" id="corrective_actionValue">
-                                    <input type="text" class="form-control form-control-sm btn-space" id="corrective_actionInput" name="corrective_action" />
+<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="corrective_actionInput" name="corrective_action" />-->
                                 </span>
                             </div>
                             <div class="col mb-3">
                                 <h5 class="icon-title"><i class="fas fa-shield-alt text-primary"></i>Preventive Action</h5>
                                 <span class="editable text-break custom-left-margin" id="preventive_actionValue">
-                                    <input type="text" class="form-control form-control-sm btn-space" id="preventive_actionInput" name="preventive_action" />
+<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="preventive_actionInput" name="preventive_action" />-->
                                 </span>
                             </div>
                             <div class="col mb-3">
                                 <h5 class="icon-title"><i class="fas fa-arrow-right text-primary"></i> Direct Cause</h5>
                                 <span class="editable text-break custom-left-margin" id="direct_causeValue">
-                                    <input type="text" class="form-control form-control-sm btn-space" id="direct_causeInput" name="direct_cause" />
+<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="direct_causeInput" name="direct_cause" />-->
                                 </span>
                             </div>
                             <div class="col mb-3">
                                 <h5 class="icon-title"><i class="fas fa-code-branch text-primary"></i>Root Cause</h5>
                                 <span class="editable text-break custom-left-margin" id="root_causeValue">
-                                    <input type="text" class="form-control form-control-sm btn-space" id="root_causeInput" name="root_cause" />
+<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="root_causeInput" name="root_cause" />-->
                                 </span>
                             </div>
                             <div class="col mb-3">
                                 <h5 class="icon-title"> <i class="fas fa-exclamation-circle text-primary"></i> Impact</h5>
                                 <span class="editable text-break custom-left-margin" id="impactValue">
-                                    <input type="text" class="form-control form-control-sm btn-space" id="impactInput" name="impact" />
+<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="impactInput" name="impact" />-->
                                 </span>
                             </div>
                             <div class="col mb-3">
                                 <h5 class="icon-title"><i class="fas fa-map-marker text-primary"></i>Place</h5>
                                 <span class="editable text-break custom-left-margin" id="placeValue">
-                                    <input type="text" class="form-control form-control-sm btn-space" id="placeInput" name="place" />
+<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="placeInput" name="place" />-->
                                 </span>
                             </div>
                         </div>
@@ -308,19 +308,13 @@
             return `${months} month${months > 1 ? 's' : ''} ago`;
         }
     }
-
     import {getUser} from "/js/currentLoginUser.js";
     import {getTimeElapsed} from "/js/time.js";
     import {getData} from "/js/api-function.js";
-
-
     console.log(await getUser());
-
-
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
-
     let toolbaroptions = [
         // Test-style
         ["bold", "italic", "underline"],
@@ -346,19 +340,13 @@
         // Adding code snippet or blockquote
         ["code-block", "blockquote"],
     ];
-
     // If you want to initialize Quill for a specific element, you can do it like this:
     let getLoginUser = await getUser();
-
     console.log("current login user " , getLoginUser)
-
     let data = [];
-
     // const currentUser = await getUser();
-
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
-
-
+    console.log("dataForIssue", dataForIssue);
     $(document).ready(async function () {
 
         let specificQuillEditor = document.querySelector("#description"); // Change the selector as needed
@@ -369,20 +357,14 @@
             theme: "snow",
         });
 
-
-
-
         $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
             data = userData; // Set the data array with the retrieved user data
-
             const user_pic = $('#user_pic');
             user_pic.empty();
             user_pic.append($('<option>', {
                 value: '',
                 text: 'Select a Member',
                 data: {picUrl: ''},
-
-
             }));
             if (userData.userList) {
                 userData.userList.forEach(user => {
@@ -395,15 +377,12 @@
                 });
             }
         });
-
-
         let clientData = [];
 
 
         function populateClientName() {
             const responsiblePartySelect = $('#responsible_party');
             responsiblePartySelect.empty();
-
             responsiblePartySelect.append($('<option>', {
                 value: `client_${clientData.client.id}`,
                 text: `${clientData.client.name}`,
@@ -435,13 +414,10 @@
         $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
             clientData = data;
             console.log("Client Data: " + JSON.stringify(clientData));
-
             // Check the "Client" checkbox initially
             $('#responsible_type').prop('checked', true);
-
             populateClientName();
         });
-
         let actual_responsible_type = 'CLIENT';
 
 // Event handler for the "Client" checkbox
@@ -468,12 +444,9 @@
             const direct_cause = $('#direct_cause').val();
             const responsible_party = $('#responsible_party').val();
             const issue_category = $('#issue_category').val();
-            const responsible_type = actual_responsible_type
-
+            const responsible_type = actual_responsible_type;
             const selectedUserId = $('#user_pic').val();
-
-
-
+            const issueId = $('#issue-edit-btn').data('issueId');
             if (
                 title === "" ||
                 description === "" ||
@@ -485,26 +458,17 @@
                 issue_category === ""||
                 selectedUserId === ""||
                 responsible_type === ""
-
-
             ) {
                 alert('Please fill in all the required fields.');
                 return;
             }
 
 
-            const selectedUser = data.userList.find(user => user.id == selectedUserId)
-            console.log("Selected User", selectedUserId);
-
             const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party.split("_")[1]);
 
-            if (!selectedUser) {
-                alert('Selected user data not found.');
-                return;
-            }
 
 
-            const uploaderId = getLoginUser.currentUser;
+            const uploaderId = getLoginUser.currentUser.id;
 
             console.log("Uploader Id", uploaderId);
 
@@ -521,7 +485,10 @@
                 issue_category: issue_category,
                 responsible_type: responsible_type,
                 project_id: dataForIssue.projectId,
-                status: "PENDING",
+                user_uploader:uploaderId,
+                user_pic:selectedUserId,
+
+
             };
 
             console.log('Request Data:', requestData);
@@ -564,8 +531,7 @@
 
     });
 
-
-
+    let currentIssueId;
     $(document).ready(function() {
         function loadData() {
             $.ajax({
@@ -579,56 +545,56 @@
                     // Loop through the retrieved data and create content for each item
                     data.forEach(item => {
                         const issueDiv = `
-                    <div class="p-md-3 p-sm-2 mt-3">
-                        <div class="card">
-                            <div class="card-header border-bottom text-dark">
-                                <div class="d-flex justify-content-between align-items-center gap-2" id="getAllIssue">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <h6 class="card-title">${item.title}</h6>
-                                        <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                         ${item.user_pic.name}
-
-                                        </p>
+                        <div class="p-md-3 p-sm-2 mt-3">
+                            <div class="card">
+                                <div class="card-header border-bottom text-dark">
+                                    <div class="d-flex justify-content-between align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <h6 class="card-title">${item.title}</h6>
+                                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                                ${item.user_pic.name}
+                                            </p>
+                                        </div>
+                                        <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
+                                            ${item.status === 'true' ? 'Solved' : 'Unsolved'}
+                                        </span>
                                     </div>
-                                    <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
-                                        ${item.status === 'true' ? 'Solved' : 'Unsolved'}
-                                    </span>
-                                </div>
-                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <p>Posted</p>
-                                        <span>${new Date(item.created_date)}</span>
-                                        <p>Modified at</p>
-                                        <span>${getTimeElapsed(item.updated_date)}</span>
+                                    <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <p>Posted</p>
+                                            <span>${new Date(item.created_date)}</span>
+                                            <p>Modified at</p>
+                                            <span>${getTimeElapsed(item.updated_date)}</span>
+                                        </div>
+                                        <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
+                                            See More
+                                        </button>
                                     </div>
-                                    <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
-                                    See More
-                                </button>
+                                    <div class="col issue-time-line d-flex gap-2">
+                                        <p class="btn custom-color rounded-pill">${item.issue_category}</p>
+                                    </div>
                                 </div>
-                                <div class="col issue-time-line d-flex gap-2">
-                                    <p class="btn custom-color rounded-pill">${item.issue_category}</p>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="code-block">
-                                    <p>${item.description}</p>
+                                <div class="card-body">
+                                    <div class="code-block">
+                                        <p>${item.description}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
                         sortContainer.append(issueDiv);
                     });
 
                     $('.see-more-button').click(function () {
-                        const issueId = $(this).data('id');
+                        // Get the issue ID directly from the button's data-id attribute
+                        const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
                         console.log('Clicked button with data-iD:', issueId);
 
                         $.ajax({
                             url: 'api/issue/list/byId/' + issueId,
                             type: 'GET',
                             dataType: 'json',
-                            success: function(data) {
+                            success: function (data) {
                                 console.log('Data received:', data);
                                 if (data) {
                                     $('#corrective_actionValue').text(data.corrective_action);
@@ -637,13 +603,15 @@
                                     $('#root_causeValue').text(data.root_cause);
                                     $('#impactValue').text(data.impact);
                                     $('#placeValue').text(data.place);
-                                    $('#issue-edit-btn').data('issueId');
+                                    $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
                                     $('#issueDetailModal').modal('show');
+                                    currentIssueId = issueId;
+                                    console.log("Id Issue :",currentIssueId)
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function (xhr, status, error) {
                                 console.log('AJAX error:', error);
                             }
                         });
@@ -656,14 +624,8 @@
         }
         loadData();
     });
-
     // for update
     const issueEditBtn = document.getElementById('issue-edit-btn');
-
-    // document.querySelector("issueDetailModal").addEventListener("hide.bs.modal", () => {
-    //     issueEditBtn.innerText = "Edit"
-    // })
-
     issueEditBtn.addEventListener('click', function (e) {
         console.log("click")
         if (this.innerText === 'Edit') {
@@ -675,31 +637,23 @@
                 input.setAttribute('rows', 5);
                 input.classList.add('form-control');
                 input.classList.add('editable');
-
                 input.id = `newInput_${index}`;
-
                 field.innerHTML = '';
                 field.appendChild(input);
             });
-
             this.innerText = 'Save';
         } else if (this.innerText === 'Save') {
             // Switch back to view mode
-            const issue_id = $('#issue-edit-btn').data('issueId');
-            console.log('Issue ID:', issue_id);
+            const issueId =currentIssueId;
+            console.log('Issue ID:', issueId);
             const corrective_action = document.getElementById('newInput_0').value;
             const preventive_action = document.getElementById('newInput_1').value;
             const direct_cause = document.getElementById('newInput_2').value;
             const root_cause = document.getElementById('newInput_3').value;
             const impact = document.getElementById('newInput_4').value;
             const place = document.getElementById('newInput_5').value;
-
-
-
-
             // Collect the updated values from input fields
             const updatedDetails = {
-
                 corrective_action: corrective_action,
                 preventive_action: preventive_action,
                 direct_cause: direct_cause,
@@ -707,13 +661,14 @@
                 impact: impact,
                 place: place,
                 updated_date: new Date().getTime(),
+                solved: true,
 
             };
 
             console.log("UpdateDetails", updatedDetails);
 
             $.ajax({
-                url: `/api/issue/update/${issue_id}`, // Update the URL to include the issue ID
+                url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(updatedDetails),
@@ -740,29 +695,17 @@
                         // Handle non-JSON response
                         console.log('Non-JSON Response:', xhr.responseText);
                     }
-
                     alert("Error updating issue: " + xhr.responseText);
                     console.log("Error updating issue");
                 },
-
-
                 complete: function () {
                     // Optionally, close the modal or perform other actions upon completion
                     $('#issueDetailModal').modal('hide');
                 }
             });
-
             this.innerText = 'Edit';
         }
     });
-
-
-
-
 </script>
-
-
-
-
 </body>
 </html>
