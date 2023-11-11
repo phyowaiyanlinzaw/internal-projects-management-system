@@ -4,7 +4,6 @@ import {getTimeElapsed} from "/js/time.js";
 // function for creating anchor element
 const createA = ({id, description, time}) => {
     const anchor = document.createElement("a");
-    anchor.href = id;
     anchor.className = "dropdown-item";
 
     const heading = document.createElement("h6");
@@ -32,7 +31,8 @@ if(notiList.length === 0) {
 
     document.querySelector("#notification-light").classList.remove("d-none");
 
-    notiList.forEach(noti => {
+    for (let i = notiList.length - 1; i >= 0; i--) {
+        const noti = notiList[i];
 
         const anchor = createA({
             id: noti.id,
@@ -46,7 +46,8 @@ if(notiList.length === 0) {
         const notificationContainer = document.querySelector("#notification-container");
         notificationContainer.appendChild(anchor);
         notificationContainer.appendChild(hr);
-    })
+    }
+
 }
 
 const pusher = new Pusher('3c0b3426bd0875be392f', {
@@ -86,3 +87,7 @@ channel.bind('noti-event', function(response) {
     notificationContainer.appendChild(anchor);
     notificationContainer.appendChild(hr);
 });
+
+document.querySelector("#notification-dropdown").addEventListener("shown.bs.dropdown", () => {
+    document.querySelector("#notification-light").classList.add("d-none");
+})
