@@ -37,7 +37,7 @@ public class DepartmentController {
         return ResponseEntity.ok("Fake departments generated successfully");
     }
 
-    @PostMapping("list")
+    @GetMapping("list")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
        List<DepartmentDto> departmentDtos = departmentService.getAllDepartments();
         return ResponseEntity.ok(departmentDtos);
