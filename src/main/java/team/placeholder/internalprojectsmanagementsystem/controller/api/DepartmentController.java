@@ -37,33 +37,10 @@ public class DepartmentController {
         return ResponseEntity.ok("Fake departments generated successfully");
     }
 
-    @PostMapping("list")
+    @GetMapping("list")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
        List<DepartmentDto> departmentDtos = departmentService.getAllDepartments();
         return ResponseEntity.ok(departmentDtos);
-    }
-    @PostMapping("/departments")
-    public Page<Department> getAllDepartment(@RequestBody PageRequestDto dto) {
-
-        List<Department> departmentList = repository.findAll();
-
-        // 1. PageListHolder
-        PagedListHolder<Department> pagedListHolder = new PagedListHolder<Department>(departmentList);
-        pagedListHolder.setPage(dto.getPageNo());
-        pagedListHolder.setPageSize(dto.getPageSize());
-
-        // 2. PropertyComparator
-        List<Department> pageSlice = pagedListHolder.getPageList();
-        boolean ascending = dto.getSort().isAscending();
-
-        PropertyComparator.sort(pageSlice, new MutableSortDefinition(dto.getSortById(),true,true));
-
-
-        // 3. PageImpl
-        Page<Department> departments = new PageImpl<>(pageSlice, new PageRequestDto().getPageable(dto),departmentList.size());
-        Pageable pageable = new PageRequestDto().getPageable(dto);
-        Page<Department> departmentDtoPage = repository.findAll(pageable);
-        return departments;
     }
 
     @PostMapping("save")
