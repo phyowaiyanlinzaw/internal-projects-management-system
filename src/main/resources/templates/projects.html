@@ -91,6 +91,24 @@
             href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
             rel="stylesheet"
         />
+
+        <style>
+            #deliverable-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            #deliverable-table th, #deliverable-table td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+
+            #deliverable-table th {
+                background-color: #f2f2f2;
+            }
+        </style>
         <script src="/js/fontawesome.js"></script>
 
         <!-- jquery -->
@@ -1178,12 +1196,14 @@
                         data: JSON.stringify(project),
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
-                        success: function (data) {
+                        success: async function (data) {
                             alert("Project registered successfully");
                             // Reset the form if needed
                             $("#validation-form")[0].reset();
                             console.log("this projce has benn saved", data);
                             // event.currentTarget.submit();
+                            await getAllProjects();
+
                         },
                         error: function (data) {
                             alert("Error registering project");
@@ -1267,6 +1287,40 @@
 
             //list project end
         </script>
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                loadData();
+
+                function loadData() {
+                    $.ajax({
+                        type: "GET",
+                        url: "/api/deliverable-type/list", // Replace with the actual URL of your Spring Boot endpoint
+                        success: function (data) {
+                            updateTable(data);
+                        },
+                        error: function (error) {
+                            console.log("Error fetching data: " + error);
+                        }
+                    });
+                }
+
+                function updateTable(data) {
+                    var table = $("#deliverable-table");
+
+                    // Clear existing rows
+                    table.find("tr:gt(0)").remove();
+
+                    // Add new rows based on the received data
+                    $.each(data, function (index, item) {
+                        var row = $("<tr><td>" + item.id + "</td><td>" + item.type+ "</td></tr>");
+                        table.append(row);
+                    });
+                }
+            });
+        </script>
+
     </head>
 
     <body>
@@ -1832,7 +1886,7 @@
                                                 <button
                                                         class="nav-link"
                                                         data-bs-toggle="tab"
-                                                        data-bs-target="#edit-deliverable"
+                                                        data-bs-target="#deliverable-list"
                                                 >
                                                     deliverable
                                                 </button>
@@ -2557,9 +2611,14 @@
 
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- End Bordered Tabs -->
-                                    </div>
+                                            <div class="tab-pane fade pt-3" id="deliverable-list">
+                                                <table id="deliverable-table">
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>Architecture Name</th>
+                                                    </tr>
+                                                </table>
+                                            </div>
                                 </div>
                             </div>
                         </div>
