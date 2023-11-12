@@ -1,6 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -61,5 +62,19 @@ public class ManMonthCalculator {
     public static long calculateManHours(long startTime,long endTime){
         long difference = endTime - startTime;
         return TimeUnit.MILLISECONDS.toHours(difference);
+    }
+
+    public static long getEndOfMonth(Calendar calendar) {
+        // Set the calendar to the last day of the month
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+        // Set the time to the end of the day
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+
+        // Return the time in milliseconds
+        return calendar.getTimeInMillis();
     }
 }

@@ -102,6 +102,18 @@
                                         <ul class="dropdown-menu" aria-labelledby="projectDropDown">
                                         </ul>
                                     </div>
+
+                                    <div class="">
+                                        <input type="month" class="form-control border-primary border-1 rounded-2 text-primary" id="startMonthYear" name="startMonthYear" placeholder="Date">
+                                    </div>
+
+                                    <div>
+                                        <span> to </span>
+                                    </div>
+
+                                    <div class="">
+                                        <input type="month" class="form-control border-primary border-1 rounded-2 text-primary" id="endMonthYear" name="endMonthYear" placeholder="Date">
+                                    </div>
                                 </div>
                             </div>
 
@@ -287,7 +299,20 @@
                     });
                 }
 
-
+                function fetchChartData(projectId,startMonthYear,endMonthYear){
+                    // Make an AJAX request to fetch the chart data with api/dashboard/project/{projectId}/start/{startMonthYear}/end/{endMonthYear}
+                    $.ajax({
+                        url: `/api/dashboard/project/${projectId}/start/${startMonthYear}/end/${endMonthYear}`, // Replace with your API endpoint
+                        method: 'GET',
+                        success: function(data) {
+                            console.log("CHART DATA", data);
+                            //TODO :: SHOW THE CHART
+                        },
+                        error: function() {
+                            console.error('Failed to fetch chart data.');
+                        }
+                    });
+                }
 
 
              // Dummy data
@@ -329,10 +354,10 @@
              const lineChart = new Chart(mmctx, {
                  type: 'bar',
                  data: {
-                     labels: months,
+                     labels: months, // 12 months with just 3 initial letters
                      datasets: [{
                          label: 'Actual',
-                         data: actualData,
+                         data: actualData,// actual manhours from api
                          backgroundColor: '#444cf7',
                          borderColor: '#444cf7',
                          borderWidth: 1,
@@ -340,7 +365,7 @@
                          tension: 0.1
                      }, {
                          label: 'Target',
-                         data: targetData,
+                         data: targetData, // plan manhours from api
                          backgroundColor: '#e5e5f7',
                          borderColor: '#e5e5f7',
                          borderWidth: 1,
