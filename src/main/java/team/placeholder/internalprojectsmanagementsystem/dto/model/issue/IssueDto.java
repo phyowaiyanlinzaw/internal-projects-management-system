@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.logging.log4j.spi.ObjectThreadContextMap;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
@@ -27,7 +28,7 @@ public class IssueDto implements Serializable {
     private String direct_cause;
     private String corrective_action;
     private String preventive_action;
-    private long responsible_party;
+    private Object responsible_party;
     private boolean solved;
     private long created_date;
     private long updated_date;

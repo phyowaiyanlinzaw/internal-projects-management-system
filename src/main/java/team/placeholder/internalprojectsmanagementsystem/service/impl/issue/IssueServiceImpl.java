@@ -5,15 +5,20 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.user.ClientServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.issue.IssueService;
 
 import java.util.ArrayList;
@@ -29,6 +34,7 @@ public class IssueServiceImpl implements IssueService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
+    private final ClientRepository clientRepository;
 
     @Override
     public IssueDto save(IsuDto isuDto) {
@@ -81,8 +87,17 @@ public class IssueServiceImpl implements IssueService {
                     UserDto userUploader = modelMapper.map(issue.getUser_uploader(), UserDto.class);
                     issueDto.setUser_uploader(userUploader);
                 }
-                issueDtos.add(issueDto);
 
+                ProjectDto projectDto = new ProjectDto();
+
+                projectDto.setId(issue.getProject().getId());
+                projectDto.setName(issue.getProject().getName());
+
+                issueDto.setProjectDto(projectDto);
+
+                if(!issue.getIssueStatus().equals(IssueStatus.PENDING)) {
+                    issueDtos.add(issueDto);
+                }
             }
         }
 
@@ -140,6 +155,39 @@ public class IssueServiceImpl implements IssueService {
 
         return modelMapper.map(issue, IssueDto.class);
 
+    }
+
+    @Override
+    public List<IssueDto> getPendingIssueList() {
+
+        List<Issue> pendingIssue = issueRepository.findAllByIssueStatus(IssueStatus.PENDING);
+
+        List<IssueDto> issueDtos = new ArrayList<>();
+
+        for(Issue issue : pendingIssue) {
+
+            IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+
+            if(issue.getResponsible_type().equals(ResponsibleType.CLIENT)) {
+                issueDto.setResponsible_party(clientRepository.findById(issue.getResponsible_party()));
+            } else if(issue.getResponsible_type().equals(ResponsibleType.EMPLOYEE)) {
+                User user = userRepository.findById(issue.getResponsible_party());
+                issueDto.setResponsible_party(modelMapper.map(user, UserDto.class));
+            }
+
+            issueDto.setUser_uploader(modelMapper.map(issue.getUser_uploader(), UserDto.class));
+
+            ProjectDto projectDto = new ProjectDto();
+
+            projectDto.setId(issue.getProject().getId());
+            projectDto.setName(issue.getProject().getName());
+
+            issueDto.setProjectDto(projectDto);
+
+            issueDtos.add(issueDto);
+
+        }
+        return issueDtos;
     }
 
 

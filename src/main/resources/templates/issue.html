@@ -61,14 +61,43 @@
                 </div>
             </div>
 
+            <ul class="nav nav-tabs nav-tabs-bordered mt-2 d-none" id="issue-link">
+                <li class="nav-item">
+                    <button
+                        class="nav-link active"
+                        data-bs-toggle="tab"
+                        data-bs-target="#sort-container"
+                    >
+                        Issue List
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button
+                        class="nav-link position-relative"
+                        data-bs-toggle="tab"
+                        data-bs-target="#new-issue-list"
+                    >
+                    <span
+                        class="position-absolute top-0 end-0 translate-middle bg-danger border border-light rounded-circle"
+                        id="notification-light"
+                        style="padding: 7px;">
+                    </span>
+                        New Issue
+                    </button>
+                </li>
+            </ul>
 
-            <!--  Issue list-->
-            <div class="row row-cols-1" id="sort">
-                <!--                issue list will be here-->
+            <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active row row-cols-1" id="sort-container">
+
+                </div>
+
+                <div class="tab-pane fade row row-cols-1" id="new-issue-list">
+
+                </div>
 
             </div>
-            <!--  Issue list end-->
-
         </div>
     </div>
     <!-- Content End -->
@@ -349,6 +378,11 @@
     if(currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
         document.getElementById("add-issue").classList.remove("d-none");
     }
+
+    if(currentLoginUserRole === 'PROJECT_MANAGER') {
+        document.querySelector("#issue-link").classList.remove("d-none")
+    }
+
     // const currentUser = await getUser();
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
     console.log("dataForIssue", dataForIssue);
@@ -536,8 +570,49 @@
 
     });
 
+    const createIssue = (item) => {
+        return `<div class="p-md-3 p-sm-2">
+            <div class="card">
+                <div class="card-header border-bottom text-dark">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <h6 class="card-title card-text">${item.title}</h6>
+                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                ${item.user_pic.name}
+                            </p>
+                        </div>
+                        <span
+                            class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
+                                            ${item.status === 'true' ? 'Solved' : 'Unsolved'}
+                                        </span>
+                    </div>
+                    <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <p>Posted</p>
+                            <span>${new Date(item.created_date)}</span>
+                            <p>Modified at</p>
+                            <span>${getTimeElapsed(item.updated_date)}</span>
+                        </div>
+                        <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}"
+                                data-bs-target="#issueDetailModal" data-bs-toggle="modal">
+                            See More
+                        </button>
+                    </div>
+                    <div class="col issue-time-line d-flex gap-2">
+                        <p class="btn custom-color rounded-pill">${item.issue_category}</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="code-block">
+                        <p>${item.description}</p>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    }
+
     let currentIssueId;
-    $(document).ready(function() {
+    $(document).ready(async function () {
         function loadData() {
             $.ajax({
                 url: 'api/issue/list',
@@ -545,52 +620,15 @@
                 dataType: 'json',
                 success: function (data) {
                     console.log("Data" + data);
-                    const sortContainer = $('#sort');
+                    const sortContainer = $('#sort-container');
 
                     // Loop through the retrieved data and create content for each item
                     data.forEach(item => {
-                        const issueDiv = `
-                        <div class="p-md-3 p-sm-2 mt-3">
-                            <div class="card">
-                                <div class="card-header border-bottom text-dark">
-                                    <div class="d-flex justify-content-between align-items-center gap-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="card-title">${item.title}</h6>
-                                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                                ${item.user_pic.name}
-                                            </p>
-                                        </div>
-                                        <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
-                                            ${item.status === 'true' ? 'Solved' : 'Unsolved'}
-                                        </span>
-                                    </div>
-                                    <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <p>Posted</p>
-                                            <span>${new Date(item.created_date)}</span>
-                                            <p>Modified at</p>
-                                            <span>${getTimeElapsed(item.updated_date)}</span>
-                                        </div>
-                                        <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
-                                            See More
-                                        </button>
-                                    </div>
-                                    <div class="col issue-time-line d-flex gap-2">
-                                        <p class="btn custom-color rounded-pill">${item.issue_category}</p>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="code-block">
-                                        <p>${item.description}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                        const issueDiv = createIssue(item);
                         sortContainer.append(issueDiv);
                     });
 
-                    $('.see-more-button').click(function () {
+                    $('.see-more-button').on('click', function () {
                         // Get the issue ID directly from the button's data-id attribute
                         const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
                         console.log('Clicked button with data-iD:', issueId);
@@ -611,7 +649,7 @@
                                     $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
                                     $('#issueDetailModal').modal('show');
                                     currentIssueId = issueId;
-                                    console.log("Id Issue :",currentIssueId)
+                                    console.log("Id Issue :", currentIssueId)
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
                                 }
@@ -627,7 +665,19 @@
                 }
             });
         }
+
         loadData();
+
+        const pendingIssueList = await getData("/api/issue/list/pending");
+
+
+
+        for(let i = 0; i < pendingIssueList.length; i++) {
+
+            const currentIssue = pendingIssueList[i];
+
+            document.getElementById("new-issue-list").innerHTML += createIssue(currentIssue);
+        }
     });
     // for update
     const issueEditBtn = document.getElementById('issue-edit-btn');

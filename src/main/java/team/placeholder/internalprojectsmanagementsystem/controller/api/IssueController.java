@@ -116,7 +116,13 @@ public class IssueController {
         return ResponseEntity.ok("Issue deleted successfully");
     }
 
+    @GetMapping("/list/pending")
+    public ResponseEntity<List<IssueDto>> getIssueByPending() {
 
+        List<IssueDto> issueDtos = issueService.getPendingIssueList();
+
+        return ResponseEntity.ok(issueDtos);
+    }
 
 
 
