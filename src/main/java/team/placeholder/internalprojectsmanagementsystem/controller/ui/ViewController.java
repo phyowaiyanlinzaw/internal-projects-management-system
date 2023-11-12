@@ -3,6 +3,7 @@ package team.placeholder.internalprojectsmanagementsystem.controller.ui;
 import javax.swing.text.View;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -97,6 +98,7 @@ public class ViewController {
     }
 
     @GetMapping("/department")
+    @PreAuthorize("hasAuthority('PROJECT_MANAGER')")
     public String department() { return "department"; }
 
     @GetMapping("/reset-password")
@@ -105,6 +107,7 @@ public class ViewController {
     @GetMapping("/issue")
     public String issue() {return "issue";}
 
+    @PreAuthorize("hasAuthority('PMO')")
     @GetMapping("/employees")
     public String employees() {return "employees";}
 
