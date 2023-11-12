@@ -64,6 +64,8 @@
                         >
                             Tasks
                             <p style="display:none;" th:text="${projectId}" id="projectId"></p>
+                            <p style="display:none;" th:text="${project.getStart_date()}" id="projectStartDate"></p>
+                            <p style="display:none;" th:text="${project.getEnd_date()}" id="projectEndDate"></p>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -528,6 +530,39 @@
 
         // Get the project ID from the hidden element
         const projectId = document.getElementById("projectId").innerText;
+
+        const projectStartDateElement = document.getElementById("projectStartDate");
+        const projectEndDateElement = document.getElementById("projectEndDate");
+
+        if (projectStartDateElement && projectEndDateElement) {
+            console.log("in first if")
+            const projectStartDateTimestamp = parseInt(projectStartDateElement.innerText.trim());
+            const projectEndDateTimestamp = parseInt(projectEndDateElement.innerText.trim());
+
+            if (!isNaN(projectStartDateTimestamp) && !isNaN(projectEndDateTimestamp)) {
+                console.log("in second if")
+                const start_date = new Date(projectStartDateTimestamp);
+                const end_date = new Date(projectEndDateTimestamp);
+
+                const formattedStartDate = start_date.toISOString().split('T')[0];
+                const formattedEndDate = end_date.toISOString().split('T')[0];
+
+                console.log(formattedStartDate , formattedEndDate)
+
+                // Set the minDate and maxDate options for the datepicker
+                $('#start_time').min = formattedStartDate
+                $('#start_time').max =  formattedEndDate
+
+                $('#end_time').min = formattedStartDate
+                $('#end_time').max = formattedEndDate
+
+            } else {
+                console.error("Invalid timestamp values from the elements.");
+            }
+        } else {
+            console.error("Could not find elements with specified IDs.");
+        }
+
 
         // Function to fetch the members' list from the backend API
         let membersList = [];

@@ -2,6 +2,7 @@ package team.placeholder.internalprojectsmanagementsystem.controller.ui;
 
 import javax.swing.text.View;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,21 +15,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 
 @Controller
+@RequiredArgsConstructor
 public class ViewController {
 
-    UserServiceImpl userServiceImpl;
+    private final UserServiceImpl userServiceImpl;
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    TaskServiceImpl taskServiceImpl;
+    private final TaskServiceImpl taskServiceImpl;
 
-    public ViewController(UserServiceImpl userServiceImpl, TaskServiceImpl taskServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
-        this.taskServiceImpl = taskServiceImpl;
-    }
+    private final ProjectServiceImpl projectServiceImpl;
 
     @GetMapping("/accessDenied")
     public String accessDenied(){
@@ -81,6 +81,7 @@ public class ViewController {
     public String task(@PathVariable("projectId") Long projectId, Model model){
         model.addAttribute("tasks", taskServiceImpl.getTasksByProjectId(projectId));
         model.addAttribute("projectId", projectId);
+        model.addAttribute("project" , projectServiceImpl.getProjectById(projectId));
         return "project";
     }
 
