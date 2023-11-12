@@ -14,11 +14,13 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Proje
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.project.AvailableUser;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final DepartmentRepository departmentRepository;
     private final JavaMailSender mailSender;
     private final ModelMapper modelmapper;
+    private final AESImpl aes;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -158,17 +161,27 @@ public class UserServiceImpl implements UserService {
         if (registerEmployeeDto.getRole().equals(Role.PROJECT_MANAGER.toString())){
             Department department = departmentRepository.findById(registerEmployeeDto.getDepartmentId());
             user.setDepartment(department);
-        }
-        else{
+        } else{
             User projectManager = userRepository.findById(registerEmployeeDto.getProjectManagerId());
             user.setProjectManager(projectManager);
             user.setDepartment(projectManager.getDepartment());
         }
         // Save the user
+        User savedUser;
         try {
-            userRepository.save(user);
+            savedUser = userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             return null;
+        }
+
+        if(registerEmployeeDto.getRole().equals(Role.EMPLOYEE.toString()) ||
+                registerEmployeeDto.getRole().equals(Role.FOC.toString()) ||
+                registerEmployeeDto.getRole().equals(Role.CONTRACT.toString())
+        ){
+            AvailableUser availableUser = new AvailableUser();
+            availableUser.setUser(savedUser);
+            availableUser.setAvaliable(true);
+            aes.save(availableUser);
         }
 
         // Return the UserDto

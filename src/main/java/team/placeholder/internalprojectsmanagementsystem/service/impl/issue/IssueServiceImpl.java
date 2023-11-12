@@ -38,19 +38,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public IssueDto save(IsuDto isuDto) {
-        Issue issue = new Issue();
-        issue.setTitle(isuDto.getTitle());
-        issue.setDescription(isuDto.getDescription());
-        issue.setPlace(isuDto.getPlace());
-        issue.setImpact(isuDto.getImpact());
-        issue.setRoot_cause(isuDto.getRoot_cause());
-        issue.setDirect_cause(isuDto.getDirect_cause());
-        issue.setCorrective_action(isuDto.getCorrective_action());
-        issue.setPreventive_action(isuDto.getPreventive_action());
-        issue.setSolved(isuDto.isSolved());
-        issue.setCreated_date(isuDto.getCreated_date());
-        issue.setUpdated_date(isuDto.getUpdated_date());
-        issue.setSolved_date(isuDto.getSolved_date());
+        Issue issue = modelMapper.map(isuDto, Issue.class);
         if (isuDto.getIssue_category() != null) {
             issue.setIssue_category(Category.valueOf(isuDto.getIssue_category()));
         }
