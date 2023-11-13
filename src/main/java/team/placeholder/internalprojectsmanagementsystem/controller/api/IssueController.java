@@ -118,6 +118,12 @@ public class IssueController {
         }
     }
 
+    @GetMapping("/list/category/{category}")
+    public ResponseEntity<List<IssueDto>> getFilteredCategory(@PathVariable(name = "category") String category) {
+        List<IssueDto> filteredDetails = issueService.getIssuesByCategory(category);
+        return ResponseEntity.ok(filteredDetails);
+    }
+
     @GetMapping("/pages")
     public Page<IssueDto> issues(Pageable pageable){
         return issueService.pages(pageable);

@@ -46,7 +46,7 @@ public class Issue{
 
 
     @Enumerated(EnumType.STRING)
-    private Category issue_category;
+    private Category issueCategory;
 
     @Enumerated(EnumType.STRING)
     private ResponsibleType responsible_type;

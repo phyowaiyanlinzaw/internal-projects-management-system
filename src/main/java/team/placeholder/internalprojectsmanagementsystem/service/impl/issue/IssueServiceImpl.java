@@ -48,8 +48,8 @@ public class IssueServiceImpl implements IssueService {
         issue.setCreated_date(isuDto.getCreated_date());
         issue.setUpdated_date(isuDto.getUpdated_date());
         issue.setSolved_date(isuDto.getSolved_date());
-        if (isuDto.getIssue_category() != null) {
-            issue.setIssue_category(Category.valueOf(isuDto.getIssue_category()));
+        if (isuDto.getIssueCategory() != null) {
+            issue.setIssueCategory(Category.valueOf(isuDto.getIssueCategory()));
         }
         if (isuDto.getResponsible_type() != null) {
             issue.setResponsible_type(ResponsibleType.valueOf(isuDto.getResponsible_type()));
@@ -167,6 +167,16 @@ public class IssueServiceImpl implements IssueService {
         Page<Issue> issues = issueRepository.findAll(pageable);
 
         return issues.map(issue -> modelMapper.map(issue, IssueDto.class));
+    }
+
+    public List<IssueDto> getIssuesByCategory(String category) {
+        Category issueCategory = Category.valueOf(category.toUpperCase());
+        List<Issue> filteredIssues = issueRepository.findByIssueCategory(issueCategory);
+
+        // Assuming you have a ModelMapper bean configured
+        return filteredIssues.stream()
+                .map(issue -> modelMapper.map(issue, IssueDto.class))
+                .collect(Collectors.toList());
     }
 }
 
