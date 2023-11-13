@@ -3,17 +3,23 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.beans.support.PropertyComparator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PageRequestDto;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +29,7 @@ public class DepartmentController {
 
     private final DepartmentServiceImpl departmentService;
     private final FakerService fakerService;
+    private final DepartmentRepository repository;
 
     @GetMapping("/generate-fake-departments/{count}")
     public ResponseEntity<String> generateFakeDepartments(@PathVariable("count") int count) {
@@ -32,8 +39,8 @@ public class DepartmentController {
 
     @GetMapping("list")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
-        List<DepartmentDto> departmentDtos = departmentService.getAllDepartments();
-        return new ResponseEntity<>(departmentDtos, HttpStatus.OK);
+       List<DepartmentDto> departmentDtos = departmentService.getAllDepartments();
+        return ResponseEntity.ok(departmentDtos);
     }
 
     @PostMapping("save")
@@ -69,7 +76,7 @@ public class DepartmentController {
     }
 
 
-    @PutMapping("/lists/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<DepartmentDto> updateDepartment(@PathVariable("id") long id, @RequestBody DepartmentDto departmentDto) {
 
         departmentDto.setId(id);

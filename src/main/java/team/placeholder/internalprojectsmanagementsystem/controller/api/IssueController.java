@@ -30,7 +30,7 @@ public class IssueController {
     private final ProjectRepository projectRepository;
     private final ModelMapper modelmapper;
 
-    @GetMapping("list")
+    @GetMapping("/list")
     public ResponseEntity<List<IssueDto>> getAllIssues() {
         List<IssueDto> issueDtos = issueService.getAllIssues();
         return new ResponseEntity<>(issueDtos, HttpStatus.OK);

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 @Entity
 @Table(name="issue_notification")
@@ -21,5 +22,8 @@ public class Notification {
     private String description;
 
     private long noti_time;
+
+    @ManyToOne
+    private User user;
 
 }

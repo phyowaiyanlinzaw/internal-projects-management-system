@@ -73,7 +73,7 @@
                             <input class="form-control border-0" type="search" placeholder="Search" />
                         </form>
                         <!-- modal toggle button start -->
-                        <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
+                        <button type="button" class="btn btn-light align-self-start d-none" data-bs-toggle="modal" data-bs-target="#add-issue">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                         <!-- modal toggle button end -->
@@ -405,19 +405,13 @@
             return `${months} month${months > 1 ? 's' : ''} ago`;
         }
     }
-
     import {getUser} from "/js/currentLoginUser.js";
     import {getTimeElapsed} from "/js/time.js";
     import {getData} from "/js/api-function.js";
-
-
     console.log(await getUser());
-
-
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
-
     let toolbaroptions = [
         // Test-style
         ["bold", "italic", "underline"],
@@ -443,21 +437,18 @@
         // Adding code snippet or blockquote
         ["code-block", "blockquote"],
     ];
-
     // If you want to initialize Quill for a specific element, you can do it like this:
     let getLoginUser = await getUser();
-
     console.log("current login user " , getLoginUser)
-
     let data = [];
+    const currentLoginUserRole = getLoginUser.currentUser.role;
 
+    if(currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
+        document.getElementById("add-issue").classList.remove("d-none");
+    }
     // const currentUser = await getUser();
-
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
-
     console.log("dataForIssue", dataForIssue);
-
-
     $(document).ready(async function () {
 
         let specificQuillEditor = document.querySelector("#description"); // Change the selector as needed
@@ -468,20 +459,14 @@
             theme: "snow",
         });
 
-
-
-
         $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
             data = userData; // Set the data array with the retrieved user data
-
             const user_pic = $('#user_pic');
             user_pic.empty();
             user_pic.append($('<option>', {
                 value: '',
                 text: 'Select a Member',
                 data: {picUrl: ''},
-
-
             }));
             if (userData.userList) {
                 userData.userList.forEach(user => {
@@ -494,15 +479,12 @@
                 });
             }
         });
-
-
         let clientData = [];
 
 
         function populateClientName() {
             const responsiblePartySelect = $('#responsible_party');
             responsiblePartySelect.empty();
-
             responsiblePartySelect.append($('<option>', {
                 value: `client_${clientData.client.id}`,
                 text: `${clientData.client.name}`,
@@ -534,13 +516,10 @@
         $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
             clientData = data;
             console.log("Client Data: " + JSON.stringify(clientData));
-
             // Check the "Client" checkbox initially
             $('#responsible_type').prop('checked', true);
-
             populateClientName();
         });
-
         let actual_responsible_type = 'CLIENT';
 
 // Event handler for the "Client" checkbox
@@ -569,11 +548,7 @@
             const issue_category = $('#issue_category').val();
             const responsible_type = actual_responsible_type;
             const selectedUserId = $('#user_pic').val();
-
-
-
-
-
+            const issueId = $('#issue-edit-btn').data('issueId');
             if (
                 title === "" ||
                 description === "" ||
@@ -585,8 +560,6 @@
                 issue_category === ""||
                 selectedUserId === ""||
                 responsible_type === ""
-
-
             ) {
                 alert('Please fill in all the required fields.');
                 return;
@@ -660,8 +633,7 @@
 
     });
 
-
-
+    let currentIssueId;
     $(document).ready(function() {
         function loadData() {
             $.ajax({
@@ -703,7 +675,9 @@
                                     }
 
                                     $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+
                                     $('#issueEditModal').modal('show');
+
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
                                 }
@@ -759,11 +733,7 @@
                     console.log('Error fetching data:', error);
                 }
             });
-
         }
-
-
-
         loadData();
 
         // Function to create HTML content for each issue
@@ -836,7 +806,6 @@
                         // Handle non-JSON response
                         console.log('Non-JSON Response:', xhr.responseText);
                     }
-
                     alert("Error updating issue: " + xhr.responseText);
                     console.log("Error updating issue");
                 },
@@ -1009,10 +978,7 @@
 
 
 
+
 </script>
-
-
-
-
 </body>
 </html>

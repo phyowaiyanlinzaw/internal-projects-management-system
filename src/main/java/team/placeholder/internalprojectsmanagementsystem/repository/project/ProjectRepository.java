@@ -22,16 +22,12 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     List<Project> findAllByProjectManagerIsNotNull();
 
-
-
-
-
-
-
-
-
     List<Project> findByDepartmentId(long id);
 
+    List<Project> findByDepartmentName(String name);
+
     Project findByUsersId(long id);
+
+
 
 }

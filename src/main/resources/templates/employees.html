@@ -38,19 +38,19 @@
                 <!--open modal to register employee account-->
             </div>
             <table
-                    class="border border-primary"
+                    class="border border-primary bg-white text-secondary"
                     id="table"
                     data-toggle="table"
                     data-toolbar="#toolbar"
                     data-toolbar-align="right"
                     data-search="true"
                     data-header-style="headerStyle"
-                    data-url="/api/user/list"
+                    data-url="/api/user/employee/list"
                     data-pagination="true"
                     data-page-size="10"
                     data-page-list="[5, 10, 25, 50, 100, all]"
             >
-                <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5">
+                <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5 border-white">
                 <tr>
                     <th data-sortable="true" data-formatter="indexFormatter" data-align="left" data-valign="middle"
                         data-width="100">No.
@@ -58,17 +58,17 @@
                     <th data-sortable="true" data-field="email" data-align="left" data-valign="middle" data-width="100">
                         Email
                     </th>
-                    <th data-sortable="true" data-field="name" data-align="left" data-valign="middle" data-width="100">
+                    <th data-sortable="true" data-field="name" data-align="left" data-valign="middle" data-width="200">
                         Name
                     </th>
                     <th data-sortable="true" data-field="department" data-align="left" data-valign="middle"
-                        data-width="100" data-formatter="departmentNameFormatter">Department
+                        data-width="200" data-formatter="departmentNameFormatter">Department
                     </th>
-                    <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="100">
+                    <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="70">
                         Role
                     </th>
                     <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle"
-                        data-width="100" data-formatter="projectCountFormatter">Project Count
+                        data-width="30" data-formatter="projectCountFormatter">Project Count
                     </th>
                 </tr>
                 </thead>

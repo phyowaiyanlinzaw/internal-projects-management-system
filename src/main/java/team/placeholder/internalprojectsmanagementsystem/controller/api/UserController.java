@@ -117,7 +117,13 @@ public class UserController {
 
     @GetMapping("list")
     public ResponseEntity<List<UserDto>> getAllUsers() {
+
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("employee/list")
+    public ResponseEntity<List<UserDto>> getAllEmployeesExceptPMOAndSDQC() {
+        return ResponseEntity.ok(userService.getAllEmployeesExceptPMOAndSDQC());
     }
 
     @GetMapping("list/role/{role}")
