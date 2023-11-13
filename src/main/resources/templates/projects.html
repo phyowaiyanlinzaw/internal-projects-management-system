@@ -1159,6 +1159,7 @@
                     console.log(objective);
                     console.log(architectures);
                     console.log(empList);
+                    console.log(deliverTypeList)
                     const project = {
                         name: projectName,
                         clientDto: client,
@@ -1175,9 +1176,7 @@
                             return acc;
                         }, {}),
                         current_phase: "PLANNING",
-                        deliverableDto: deliverTypeList.map((item) => ({
-                            deliverableType: { type: item.type },
-                        })),
+                        deliverableDto: deliverTypeList,
                         objective: objective,
                         amountDto: {
                             basic_design: 0,
@@ -1196,26 +1195,26 @@
                     };
                     console.log(project);
                     //Perform the AJAX request
-                    $.ajax({
-                        url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
-                        type: "POST",
-                        data: JSON.stringify(project),
-                        dataType: "json",
-                        contentType: "application/json; charset=utf-8",
-                        success: async function (data) {
-                            alert("Project registered successfully");
-                            // Reset the form if needed
-                            $("#validation-form")[0].reset();
-                            console.log("this projce has benn saved", data);
-                            // event.currentTarget.submit();
-                            await getAllProjects();
-
-                        },
-                        error: function (data) {
-                            alert("Error registering project");
-                            // event.currentTarget.submit();
-                        },
-                    });
+                    // $.ajax({
+                    //     url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
+                    //     type: "POST",
+                    //     data: JSON.stringify(project),
+                    //     dataType: "json",
+                    //     contentType: "application/json; charset=utf-8",
+                    //     success: async function (data) {
+                    //         alert("Project registered successfully");
+                    //         // Reset the form if needed
+                    //         $("#validation-form")[0].reset();
+                    //         console.log("this projce has benn saved", data);
+                    //         // event.currentTarget.submit();
+                    //         await getAllProjects();
+                    //
+                    //     },
+                    //     error: function (data) {
+                    //         alert("Error registering project");
+                    //         // event.currentTarget.submit();
+                    //     },
+                    // });
                 });
             });
 

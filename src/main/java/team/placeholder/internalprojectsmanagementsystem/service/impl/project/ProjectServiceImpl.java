@@ -62,9 +62,10 @@ public class ProjectServiceImpl implements ProjectService {
         List<Deliverable> deliverable = new ArrayList<>();
 
         for (DeliverableDto deliverableDto : projectDto.getDeliverableDto()) {
-            if (deliverableDto.getDeliverableType().getId() == 0) {
+            log.info("deliveralbe type id : " + deliverableDto.getDeliverableType().getId());
+            if (deliverableDto.getDeliverableType().getId() == null) {
                 DeliverableType newDeliverableType = deliverableTypeService.save(deliverableDto.getDeliverableType());
-
+                System.out.print(newDeliverableType);
                 //Use ModelMapper for Model Mapping Stuffs
                 Deliverable newDeliverable = modelMapper.map(deliverableDto, Deliverable.class);
                 newDeliverable.setDeliverableTypes(newDeliverableType);

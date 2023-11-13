@@ -107,7 +107,7 @@ public class ViewController {
     @GetMapping("/issue")
     public String issue() {return "issue";}
 
-    @PreAuthorize("hasAuthority('PMO')")
+//    @PreAuthorize("hasAuthority('PMO')")
     @GetMapping("/employees")
     public String employees() {return "employees";}
 
