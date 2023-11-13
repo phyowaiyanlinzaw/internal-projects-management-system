@@ -103,16 +103,8 @@
                                         </ul>
                                     </div>
 
-                                    <div class="">
-                                        <input type="month" class="form-control border-primary border-1 rounded-2 text-primary" id="startMonthYear" name="startMonthYear" placeholder="Date">
-                                    </div>
-
                                     <div>
-                                        <span> to </span>
-                                    </div>
-
-                                    <div class="">
-                                        <input type="month" class="form-control border-primary border-1 rounded-2 text-primary" id="endMonthYear" name="endMonthYear" placeholder="Date">
+                                            <a style="text-decoration: none" class="text-white bg-primary p-2 rounded-pill" id="mm-reset-btn"> Reset </a>
                                     </div>
                                 </div>
                             </div>
@@ -241,6 +233,50 @@
          $(document).ready(function () {
              $("#spinner").hide();
 
+             // Get the mm chart canvas
+             const mmctx = document.getElementById("man-month-chart").getContext('2d');
+
+             // Dummy data
+             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct","Nov","Dec"];
+
+
+             const initialDta = {
+                 label:months,
+                 datasets : [{
+                     label: 'Actual',
+                     data: [], // actual manhours from api
+                     backgroundColor: '#444cf7',
+                     borderColor: '#444cf7',
+                     borderWidth: 1,
+                     fill: false,
+                     tension: 0.1
+                 }, {
+                     label: 'Target',
+                     data: [], // plan manhours from api
+                     backgroundColor: '#e5e5f7',
+                     borderColor: '#e5e5f7',
+                     borderWidth: 1,
+                     fill: false,
+                     tension: 0.1
+                 }],
+             }
+
+             // Create the line chart for mm
+             const lineChart = new Chart(mmctx, {
+                 type: 'bar',
+                 data: initialDta,
+                 options: {
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     scales: {
+                         y: {
+                             beginAtZero: true,
+                             max: 100,
+                         }
+                     }
+                 }
+             });
+
              // Make an AJAX request to fetch the department list
                 $.ajax({
                     url: '/api/department/list', // Replace with your API endpoint
@@ -269,6 +305,7 @@
                     }
                 });
 
+
              // Make an AJAX request to fetch the project list with the name of the department with api/project/list/department-name/{departmentName}
                 function getProjectList(departmentName) {
                     $.ajax({
@@ -281,14 +318,15 @@
                             dropdownMenu.empty(); // Clear the dropdown menu
 
                             $.each(data, function (index, project) {
-                                dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${project.name}">${project.name}</a></li>`);
+                                dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${project.id}">${project.name}</a></li>`);
                             });
 
                             // Handle click event on the dynamic items
                             dropdownMenu.on('click', '.dropdown-item', function() {
                                 const selectedValue = $(this).data('value');
-                                //change the text of the dropdown button
-                                projectDropdown.text(selectedValue);
+                                //change the text of project name to the dropdown button
+                                projectDropdown.text($(this).text());
+                                updateChart(selectedValue)
                             });
 
 
@@ -299,38 +337,103 @@
                     });
                 }
 
-                function fetchChartData(projectId,startMonthYear,endMonthYear){
-                    // Make an AJAX request to fetch the chart data with api/dashboard/project/{projectId}/start/{startMonthYear}/end/{endMonthYear}
-                    $.ajax({
-                        url: `/api/dashboard/project/${projectId}/start/${startMonthYear}/end/${endMonthYear}`, // Replace with your API endpoint
-                        method: 'GET',
-                        success: function(data) {
-                            console.log("CHART DATA", data);
-                            //TODO :: SHOW THE CHART
-                        },
-                        error: function() {
-                            console.error('Failed to fetch chart data.');
-                        }
-                    });
-                }
+             // Function to update the chart
+             function updateChart(selectedValue) {
+                 // Make a jQuery AJAX call for Dataset 1
+                 $.ajax({
+                     url: `api/dashboard/actual-man-month/project/${selectedValue}`,
+                     method: 'GET',
+                     dataType: 'json',
+                     success: function(data1) {
+                         console.log(data1)
+
+                         // Update chart data for Dataset 1
+                         lineChart.data.datasets[0].data = data1.map((data) => data.actualManMonthHours);
+
+                         lineChart.data.labels = data1.map((data) => data.monthName);
+
+                         // Update the chart
+                         lineChart.update();
+                     },
+                     error: function(error1) {
+                         console.error('Error fetching data for Dataset 1:', error1);
+                     }
+                 });
+
+                 // Make a jQuery AJAX call for Dataset 2
+                 $.ajax({
+                     url: "api/dashboard/plan-man-month/project/" + selectedValue, // Replace with your API endpoint
+                     method: 'GET',
+                     dataType: 'json',
+                     success: function(data2) {
+                         // Update chart data for Dataset 2
+                         lineChart.data.datasets[1].data = data2.map((data) => data.planManMonthHours);
+
+                         // Retain existing labels if they are not changing
+                         if (lineChart.data.labels.length === months.length) {
+                             lineChart.data.labels = months;
+                         }
+
+                         // Update the chart
+                         lineChart.update();
+                     },
+                     error: function(error2) {
+                         console.error('Error fetching data for Dataset 2:', error2);
+                     }
+                 });
+             }
+
+             $('#mm-reset-btn').on ('click', function () {
+                 $('#departmentDropDown').text('Select Department');
+                    $('#projectDropDown').text('Select Project');
+                 lineChart.data.datasets[0].data = [];
+                 lineChart.data.datasets[1].data = [];
+                 lineChart.data.labels = months;
+                 lineChart.update();
+             });
+
+             //Get Productivity Chart Canvas
+             const p1ctx = document.getElementById("productivity-1-chart").getContext('2d');
+
+             //Create bar chart for p1ctx with percentageDifferenceData
+             //    const barChart = new Chart(p1ctx, {
+             //        type: 'line',
+             //        data: {
+             //            labels: months,
+             //            datasets: [{
+             //                label: 'Percentage Difference',
+             //                data: percentageDifferenceData,
+             //                backgroundColor: '#444cf7',
+             //                borderColor: '#444cf7',
+             //                borderWidth: 1,//border width
+             //                fill: false,
+             //                tension: 0.1,//line tension
+             //                categoryPercentage: 0.5,//bar width
+             //            },
+             //                {
+             //                    label: 'Target Productivity',
+             //                    data: Array(months.length).fill(100), // Creates an array of 100s matching the length of the data
+             //                    backgroundColor: 'rgba(255, 99, 132, 0.2)', // Set a different color for the target line
+             //                    borderColor: 'rgba(255, 99, 132, 1)',
+             //                    borderDash: [5, 5], // Dotted line for target productivity
+             //                },
+             //            ]
+             //        },
+             //        options: {
+             //            responsive: true,
+             //            maintainAspectRatio: false,
+             //            scales: {
+             //                y: {
+             //                    beginAtZero: true,
+             //                    max: 200,
+             //                }
+             //            }
+             //        }
+             //    });
 
 
-             // Dummy data
-             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct","Nov","Dec"];
-             const actualData = [null,null,null,80, 70, 90, 850, 480];
-             const targetData = [null,null,null,80, 85, 90, 780, 1000];
 
-             // Calculate percentage difference between actualData and targetData
-                const percentageDifferenceData = actualData.map((actual, index) => {
-                    if(actual === null) {
-                        return null;
-                    }
-
-                    //divide actual by target then multiply by 100 and round to the nearest integer
-                    return Math.round((actual / targetData[index]) * 100);
-                });
-
-                //Dummy data for kpi chart
+             //Dummy data for kpi chart
              const screenCountsData = [90, 130, 140, 135, 150, 155, 160, 165, 170, 175, 180, 185];
              const testCasesData = [100, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160];
              const kStepData = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105];
@@ -341,85 +444,12 @@
              const testToReviewRatios = testCasesData.map((testCaseCount, index) => (testCaseCount / reviewCountsData[index]).toFixed(2));
              const kStepToReviewRatios = kStepData.map((kStepCount, index) => (kStepCount / reviewCountsData[index]).toFixed(2));
 
-             // Get the mm chart canvas
-             const mmctx = document.getElementById("man-month-chart").getContext('2d');
 
-             //Get Productivity Chart Canvas
-                const p1ctx = document.getElementById("productivity-1-chart").getContext('2d');
 
-                //Get KPI chart Canvas
-                const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
 
-             // Create the line chart for mm
-             const lineChart = new Chart(mmctx, {
-                 type: 'bar',
-                 data: {
-                     labels: months, // 12 months with just 3 initial letters
-                     datasets: [{
-                         label: 'Actual',
-                         data: actualData,// actual manhours from api
-                         backgroundColor: '#444cf7',
-                         borderColor: '#444cf7',
-                         borderWidth: 1,
-                         fill: false,
-                         tension: 0.1
-                     }, {
-                         label: 'Target',
-                         data: targetData, // plan manhours from api
-                         backgroundColor: '#e5e5f7',
-                         borderColor: '#e5e5f7',
-                         borderWidth: 1,
-                         fill: false,
-                         tension: 0.1
-                     }]
-                 },
-                 options: {
-                     responsive: true,
-                     maintainAspectRatio: false,
-                     scales: {
-                         y: {
-                             beginAtZero: true,
-                             max: 100,
-                         }
-                     }
-                 }
-             });
 
-             //Create bar chart for p1ctx with percentageDifferenceData
-                const barChart = new Chart(p1ctx, {
-                    type: 'line',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: 'Percentage Difference',
-                            data: percentageDifferenceData,
-                            backgroundColor: '#444cf7',
-                            borderColor: '#444cf7',
-                            borderWidth: 1,//border width
-                            fill: false,
-                            tension: 0.1,//line tension
-                            categoryPercentage: 0.5,//bar width
-                        },
-                            {
-                                label: 'Target Productivity',
-                                data: Array(months.length).fill(100), // Creates an array of 100s matching the length of the data
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)', // Set a different color for the target line
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderDash: [5, 5], // Dotted line for target productivity
-                            },
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 200,
-                            }
-                        }
-                    }
-                });
+             //Get KPI chart Canvas
+             const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
 
                 //Create bar chart for p2ctx with screenToReviewRatios
                 const barChart2 = new Chart(p2ctx, {

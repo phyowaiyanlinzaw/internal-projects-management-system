@@ -98,7 +98,7 @@ public class ViewController {
     }
 
     @GetMapping("/department")
-    @PreAuthorize("hasAuthority('PROJECT_MANAGER')")
+    @PreAuthorize("hasAuthority('PMO')")
     public String department() { return "department"; }
 
     @GetMapping("/reset-password")
