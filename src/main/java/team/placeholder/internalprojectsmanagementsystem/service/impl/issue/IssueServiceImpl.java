@@ -2,6 +2,8 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.issue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
@@ -18,6 +20,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.issue.IssueServ
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -101,10 +104,6 @@ public class IssueServiceImpl implements IssueService {
 
         if (issue != null) {
             // Add null checks before updating properties
-            issue.setPlace(issueDto.getPlace());
-            issue.setImpact(issueDto.getImpact());
-            issue.setRoot_cause(issueDto.getRoot_cause());
-            issue.setDirect_cause(issueDto.getDirect_cause());
             issue.setCorrective_action(issueDto.getCorrective_action());
             issue.setPreventive_action(issueDto.getPreventive_action());
             issue.setSolved(issueDto.isSolved());
@@ -135,15 +134,42 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueDto getIssueListsByIdAndStatus(long issues, String status) {
-        Issue issue =issueRepository.findById(issues);
-
-        return modelMapper.map(issue, IssueDto.class);
-
+    public List<IssueDto> getIssuesByUserId(long userId) {
+        return null;
     }
 
 
+    public List<IssueDto> getIssuesByStatus(String status) {
+        IssueStatus issueStatus = IssueStatus.valueOf(status.toUpperCase());
+        List<Issue> filteredIssues = issueRepository.findByIssueStatus(issueStatus);
+
+        // Assuming you have a ModelMapper bean configured
+        return filteredIssues.stream()
+                .map(issue -> modelMapper.map(issue, IssueDto.class))
+                .collect(Collectors.toList());
+    }
+
+
+    public List<IssueDto> getIssuesBySolvedStatus(boolean b) {
+        List<Issue> filteredIssues = issueRepository.findAll();
+        List<IssueDto> issueDtos = new ArrayList<>();
+
+        for (Issue issue : filteredIssues) {
+            if (issue.isSolved() == b) {
+                IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+                issueDtos.add(issueDto);
+            }
+        }
+        return issueDtos;
+    }
+
+    public Page<IssueDto> pages(Pageable pageable){
+        Page<Issue> issues = issueRepository.findAll(pageable);
+
+        return issues.map(issue -> modelMapper.map(issue, IssueDto.class));
+    }
 }
+
 
 
 

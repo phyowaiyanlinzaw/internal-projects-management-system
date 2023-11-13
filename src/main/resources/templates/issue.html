@@ -10,6 +10,10 @@
         .ql-editor {
 
         }
+
+        [aria-expanded="true"] .fa-chevron-down {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 
@@ -40,13 +44,34 @@
         <div th:replace="fragments/navigation :: navigation-with-search"></div>
 
         <div class="container-fluid">
+
+
             <div class="container-fluid d-md-block pt-2 ps-s pe-2"
                  id="dropdrown-search-bar">
                 <div class="d-flex flex-row justify-content-between position-relative">
-                    <form class="d-md-flex">
-                        <input class="form-control border-0" type="search" placeholder="Search" />
-                    </form>
+
+                    <div class="d-inline-block d-flex mb-3">
+                        <select id="status-filter" class="form-control">
+                            <option value="" selected disabled>Status</option>
+                            <option value="PENDING">PENDING</option>
+                            <option value="APPROVE">APPROVE</option>
+                            <option value="DECLINE">DECLINE</option>
+                            <option value="DUPLICATE">DUPLICATE</option>
+                        </select>
+
+                        <select id="solved-filter" class="form-control">
+                            <option value="" selected disabled>Choose</option>
+                            <option value="1">Solved</option>
+                            <option value="0">Unsolved</option>
+                        </select>
+                    </div>
+
+
                     <div class="position-absolute end-0 d-flex gap-3">
+
+                        <form class="d-md-flex">
+                            <input class="form-control border-0" type="search" placeholder="Search" />
+                        </form>
                         <!-- modal toggle button start -->
                         <button type="button" class="btn btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
                             <i class="bi bi-plus-lg"></i>
@@ -74,13 +99,14 @@
     <!-- Content End -->
 
     <!--    issue detail modal start-->
-    <div class="modal fade" id="issueDetailModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="issueEditModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4>Issue Details</h4>
                     <div class="d-flex justify-content-center align-items-center gap-3">
-                        <div class="btn btn-primary" id="issue-edit-btn">Edit</div>
+                        <div class="btn btn-primary" id="issue-edit-btn">Mark as Resolve <i class="fa-solid fa-check"></i></div>
+                        <div class="btn btn-success" id="solve-btn">Solve <i class="fa-solid fa-check-double"></i></div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
@@ -88,151 +114,222 @@
                     <div class="container-fluid">
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
                             <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-wrench text-primary"></i> Corrective Action</h5>
-                                <span class="editable text-wrap custom-left-margin" id="corrective_actionValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="corrective_actionInput" name="corrective_action" />-->
-                                </span>
+                                <input type="hidden" id="solved" />
+                                <h5 class="icon-title"><i class="fas fa-wrench text-dark"></i> Corrective Action</h5>
+                                <textarea id="corrective_actionInput" class="form-control form-control-sm btn-space" name="corrective_action" rows="5"></textarea>
+
                             </div>
                             <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-shield-alt text-primary"></i>Preventive Action</h5>
-                                <span class="editable text-break custom-left-margin" id="preventive_actionValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="preventive_actionInput" name="preventive_action" />-->
-                                </span>
+                                <h5 class="icon-title"><i class="fas fa-shield-alt text-dark"></i>Preventive Action</h5>
+                                <textarea id="preventive_actionInput" class="form-control form-control-sm btn-space" name="preventive_action" rows="5"></textarea>
+
                             </div>
-                            <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-arrow-right text-primary"></i> Direct Cause</h5>
-                                <span class="editable text-break custom-left-margin" id="direct_causeValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="direct_causeInput" name="direct_cause" />-->
-                                </span>
-                            </div>
-                            <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-code-branch text-primary"></i>Root Cause</h5>
-                                <span class="editable text-break custom-left-margin" id="root_causeValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="root_causeInput" name="root_cause" />-->
-                                </span>
-                            </div>
-                            <div class="col mb-3">
-                                <h5 class="icon-title"> <i class="fas fa-exclamation-circle text-primary"></i> Impact</h5>
-                                <span class="editable text-break custom-left-margin" id="impactValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="impactInput" name="impact" />-->
-                                </span>
-                            </div>
-                            <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-map-marker text-primary"></i>Place</h5>
-                                <span class="editable text-break custom-left-margin" id="placeValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="placeInput" name="place" />-->
-                                </span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- add issue modal start -->
-    <div class="modal fade bd-example-modal-lg" id="add-issue" data-bs-keyboard="true">
-        <div class="modal-dialog modal-lg">
+</div>
+<!-- add issue modal start -->
+<div class="modal fade bd-example-modal-lg" id="add-issue" data-bs-keyboard="true">
+    <div class="modal-dialog modal-lg">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5">Create New Issue</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Create New Issue</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
 
-                    <!-- issue modal start -->
-                    <div class="row g-3 "  id="addIssueValidationForm">
-                        <div class="col-lg-6">
-                            <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
-                                    style="color:#e86666"> *</span></label>
-                            <input type="text" class="form-control border-task-description" id="title" name="title" placeholder="Title">
-                        </div>
+                <!-- issue modal start -->
+                <div class="row g-3 "  id="addIssueValidationForm">
+                    <div class="col-lg-6">
+                        <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
+                                style="color:#e86666"> *</span></label>
+                        <input type="text" class="form-control border-task-description" id="title" name="title" placeholder="Title">
+                    </div>
 
-                        <div class="col-lg-6">
-                            <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
-                                    style="color:red"> *</span></label>
-                            <select class="form-select border-task-description" name="issue_category" id="issue_category" >
-                                <option selected>Select Issue Category</option>
-                                <option value="ERROR">Error</option>
-                                <option value="BUG">Bug</option>
-                                <option value="COMMUNICATION">Communication</option>
-                                <option value="TECHNICAL">Technical</option>
-                                <option value="BUDGET">Budget</option>
-                                <option value="DESIGN">Design</option>
-                                <option value="TESTING">Testing</option>
-                                <option value="OTHER">Other</option>
-                            </select>
-                        </div>
-
-
-                        <div class="col-lg-6">
-                            <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
-                                    style="color:red"> *</span></label>
-                            <select class="form-select border-task-description" data-live-search="true" aria-label="Select PIC"  id="user_pic" name="user_pic" >
-
-                            </select>
-                        </div>
+                    <div class="col-lg-6">
+                        <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
+                                style="color:red"> *</span></label>
+                        <select class="form-select border-task-description" name="issue_category" id="issue_category" >
+                            <option selected>Select Issue Category</option>
+                            <option value="ERROR">Error</option>
+                            <option value="BUG">Bug</option>
+                            <option value="COMMUNICATION">Communication</option>
+                            <option value="TECHNICAL">Technical</option>
+                            <option value="BUDGET">Budget</option>
+                            <option value="DESIGN">Design</option>
+                            <option value="TESTING">Testing</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
 
 
-                        <div class="col-lg-6">
-                            <div class="form-check-inline">
+                    <div class="col-lg-6">
+                        <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
+                                style="color:red"> *</span></label>
+                        <select class="form-select border-task-description" data-live-search="true" aria-label="Select PIC"  id="user_pic" name="user_pic" >
+
+                        </select>
+                    </div>
+
+
+                    <div class="col-lg-6">
+                        <div class="form-check-inline">
                             <span><label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_type">Responsible Party <span
                                     style="color:red"> *</span>  <input class="form-check-input " type="checkbox" id="responsible_type" name="client_checkbox" value="CLIENT" style="margin-left:130px;"> <label class="form-check-label" >Client</label></label>
                              </span>
-                            </div>
-
-                            <select class="form-select border-task-description" aria-label="Select Responsible Party" id="responsible_party" name="responsible_party"></select>
-
                         </div>
 
-                        <div class="col-lg-12" style="margin-bottom: 80px;">
-                            <label for="description" class="col-sm-12 col-form-label" name="name">Description<span
-                                    style="color:#e86666"> *</span></label>
-                            <div class="quill-editor-bubble form-control" id="description" name="description"></div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="direct_cause" class="col-sm-12 col-form-label" name="direct_cause">Direct Cause<span
-                                    style="color:#e86666"> *</span></label>
-
-                            <textarea class="form-control border-task-description" id="direct_cause" name="direct_cause"></textarea>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="root_cause" class="col-sm-12 col-form-label" name="root_cause">Root Cause<span
-                                    style="color:#e86666"> *</span></label>
-                            <textarea class="form-control border-task-description" id="root_cause"></textarea>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="place" class="col-sm-12 col-form-label" name="place">Place<span
-                                    style="color:#e86666"> *</span></label>
-                            <textarea class="form-control border-task-description" id="place" name="place"></textarea>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="impact" class="col-sm-12 col-form-label" name="impact">Impact<span
-                                    style="color:#e86666"> *</span></label>
-                            <textarea class="form-control border-task-description" id="impact" name="impact"></textarea>
-                        </div>
-
-                        <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <button type="button" id="addIssue" class="btn btn-primary" >Save Data</button>
-                        </div>
+                        <select class="form-select border-task-description" aria-label="Select Responsible Party" id="responsible_party" name="responsible_party"></select>
 
                     </div>
-                    <!-- issue modal end -->
+
+                    <div class="col-lg-12" style="margin-bottom: 80px;">
+                        <label for="description" class="col-sm-12 col-form-label" name="name">Description<span
+                                style="color:#e86666"> *</span></label>
+                        <div class="quill-editor-bubble form-control" id="description" name="description"></div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="direct_cause" class="col-sm-12 col-form-label" name="direct_cause">Direct Cause<span
+                                style="color:#e86666"> *</span></label>
+
+                        <textarea class="form-control border-task-description" id="direct_cause" name="direct_cause"></textarea>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="root_cause" class="col-sm-12 col-form-label" name="root_cause">Root Cause<span
+                                style="color:#e86666"> *</span></label>
+                        <textarea class="form-control border-task-description" id="root_cause"></textarea>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="place" class="col-sm-12 col-form-label" name="place">Place<span
+                                style="color:#e86666"> *</span></label>
+                        <textarea class="form-control border-task-description" id="place" name="place"></textarea>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="impact" class="col-sm-12 col-form-label" name="impact">Impact<span
+                                style="color:#e86666"> *</span></label>
+                        <textarea class="form-control border-task-description" id="impact" name="impact"></textarea>
+                    </div>
+
+                    <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
+                        <button type="button" id="addIssue" class="btn btn-primary" >Save Data</button>
+                    </div>
 
                 </div>
-
-
+                <!-- issue modal end -->
 
             </div>
+        </div>
 
+    </div>
+</div>
+<!-- add issue modal end -->
+
+
+
+<!--    issue detail modal start-->
+<div class="modal fade issueDetails" id="issueDetailsModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Issue Details</h4>
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
+
+                        <h6 data-toggle="collapse" href="#details"><i class="fas fa-chevron-circle-down"></i>  Details</h6>
+                        <div id="details" class="collapse">
+                            <div class="col mb-3">
+
+                                <span class="d-flex custom-issue-margin"><h6 >Title:</h6><p class="icon-title col-6 text-center" id="issueTitleDetails"></p></span>
+
+                            </div>
+                            <div class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Category:</h6><p class="icon-title badge bg-secondary issue_details_margin" id="issue_categoryDetails"></p></span>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Direct Cause:</h6><p class="icon-title col-4 text-center" id="direct_causeDetails"></p></span>
+
+                            </div>
+
+                            <div class="col mb-3">
+                                <span class="d-flex custom-issue-margin"><h6 >Root Cause:</h6><p class="icon-title col-4 text-center" id="root_causeDetails"></p></span>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Place:</h6><p class="icon-title col-6 text-center" id="placeDetails"></p></span>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Impact:</h6><p class="icon-title col-lg-5 text-center" id="impactDetails"></p></span>
+
+                            </div>
+
+                            <div class="col mb-3">
+                                <span class="d-flex custom-issue-margin"><h6>Corrective Action:</h6><p class="icon-title col-4 text-center" id="correctiveDetails"></p></span>
+
+                            </div>
+                            <div class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Preventive Action:</h6><p class="icon-title col-4 text-center" id="preventiveDetails"></p></span>
+
+                            </div>
+                        </div>
+
+
+                        <h6 data-toggle="collapse" href="#peoples"><i class="fas fa-chevron-circle-down"></i> People</h6>
+
+                        <div id="peoples" class="collapse">
+                            <div class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Uploader:</h6><p class="icon-title col-6 text-center"  id="uploaderDetails"></p></span>
+
+                            </div>
+                            <div  class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Person In Charge:</h6><p class="icon-title col-4 text-center" id="picDetails"></p></span>
+
+                            </div>
+                            <div  class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Responsible Party:</h6><p class="icon-title col-6 text-center" id="rpDetails"></p></span>
+
+                            </div>
+                        </div>
+
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne">
+
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        <h6><i class="fas fa-chevron-circle-down"></i>Description</h6>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"  data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body" id="descriptionDetails"></div>
+                                </div>
+                            </div>
+                            <div class="col mb-3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <!-- add issue modal end -->
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
@@ -575,51 +672,15 @@
                     console.log("Data" + data);
                     const sortContainer = $('#sort');
 
-                    // Loop through the retrieved data and create content for each item
                     data.forEach(item => {
-                        const issueDiv = `
-                        <div class="p-md-3 p-sm-2 mt-3">
-                            <div class="card">
-                                <div class="card-header border-bottom text-dark">
-                                    <div class="d-flex justify-content-between align-items-center gap-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="card-title">${item.title}</h6>
-                                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                                ${item.user_pic.name}
-                                            </p>
-                                        </div>
-                                        <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
-                                            ${item.status === 'true' ? 'Solved' : 'Unsolved'}
-                                        </span>
-                                    </div>
-                                    <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <p>Posted</p>
-                                            <span>${new Date(item.created_date)}</span>
-                                            <p>Modified at</p>
-                                            <span>${getTimeElapsed(item.updated_date)}</span>
-                                        </div>
-                                        <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
-                                            See More
-                                        </button>
-                                    </div>
-                                    <div class="col issue-time-line d-flex gap-2">
-                                        <p class="btn custom-color rounded-pill">${item.issue_category}</p>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="code-block">
-                                        <p>${item.description}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                        const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
-
                     });
 
-                    $('.see-more-button').click(function () {
+
+
+
+                    $('#sort').on('click', '.see-more-button', function() {
                         // Get the issue ID directly from the button's data-id attribute
                         const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
                         console.log('Clicked button with data-iD:', issueId);
@@ -631,14 +692,18 @@
                             success: function (data) {
                                 console.log('Data received:', data);
                                 if (data) {
-                                    $('#corrective_actionValue').text(data.corrective_action);
-                                    $('#preventive_actionValue').text(data.preventive_action);
-                                    $('#direct_causeValue').text(data.direct_cause);
-                                    $('#root_causeValue').text(data.root_cause);
-                                    $('#impactValue').text(data.impact);
-                                    $('#placeValue').text(data.place);
+                                    $('#corrective_actionInput').text(data.corrective_action);
+                                    $('#preventive_actionInput').text(data.preventive_action);
+                                    if(data.solved === false){
+                                        $('#solve-btn').hide();
+                                        $('#issue-edit-btn').show();
+                                    }else{
+                                        $('#solve-btn').show();
+                                        $('#issue-edit-btn').hide();
+                                    }
+
                                     $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
-                                    $('#issueDetailModal').modal('show');
+                                    $('#issueEditModal').modal('show');
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
                                 }
@@ -648,6 +713,47 @@
                             }
                         });
                     });
+
+
+                    $('#sort').on('click', '.issueDetails', function() {
+                        $('#details').collapse('show');
+                        $('#peoples').collapse('show');
+
+                        // Get the issue ID directly from the button's data-id attribute
+                        const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
+                        console.log('Clicked button with data-iD:', issueId);
+
+                        $.ajax({
+                            url: 'api/issue/list/byId/' + issueId,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                console.log('Data received:', data);
+                                if (data) {
+                                    $('#issueTitleDetails').text(data.title);
+                                    $('#issue_categoryDetails').text(data.issue_category);
+                                    $('#uploaderDetails').text(data.user_uploader.name);
+                                    $('#picDetails').text(data.user_pic.name);
+                                    $('#rpDetails').text(data.responsible_party.name);
+                                    $('#descriptionDetails').html(data.description);
+                                    $('#direct_causeDetails').text(data.direct_cause);
+                                    $('#root_causeDetails').text(data.root_cause);
+                                    $('#placeDetails').text(data.place);
+                                    $('#impactDetails').text(data.impact);
+                                    $('#correctiveDetails').text(data.corrective_action);
+                                    $('#preventiveDetails').text(data.preventive_action);
+                                    $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+                                    $('#issueDetailsModal').modal('show');
+                                } else {
+                                    console.log('No data received for issue ID:', issueId);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('AJAX error:', error);
+                            }
+                        });
+                    });
+
                 },
                 error: function (error) {
                     console.log('Error fetching data:', error);
@@ -659,60 +765,45 @@
 
 
         loadData();
-    });
 
+        // Function to create HTML content for each issue
+        // details lists
 
     // for update
-    const issueEditBtn = document.getElementById('issue-edit-btn');
+        const issueEditBtn = document.getElementById('issue-edit-btn');
+        const solveBtn = document.getElementById('solve-btn');
 
-    // document.querySelector("issueDetailModal").addEventListener("hide.bs.modal", () => {
-    //     issueEditBtn.innerText = "Edit"
-    // })
+        solveBtn.addEventListener('click',function (e){
+            alert("Your issue solved");
+        });
 
-    issueEditBtn.addEventListener('click', function (e) {
-        console.log("click")
-        if (this.innerText === 'Edit') {
-            // Switch to edit mode
-            const editableFields = document.querySelectorAll('.editable');
-            editableFields.forEach((field, index) => {
-                const input = document.createElement('textarea');
-                input.value = field.innerText;
-                input.setAttribute('rows', 5);
-                input.classList.add('form-control');
-                input.classList.add('editable');
+        issueEditBtn.addEventListener('click', function (e) {
+            const corrective_action = $('#corrective_actionInput').val();
+            const preventive_action = $('#preventive_actionInput').val();
+            const solved = $('#solve-btn').val();
+            const issueId = $(this).data('issueId');
+            console.log(solved + " solveddddddd");
 
-                input.id = `newInput_${index}`;
+            if (solved === "true") {
+                // If solved, hide the "issue-edit-btn" and show the "solve-btn"
+                $("#issue-edit-btn").hide();
+                $("#solveBtn").show();
+            } else {
+                // If not solved, hide the "solve-btn" and show the "issue-edit-btn"
+                $("#issue-edit-btn").show();
+                $("#solveBtn").hide();
+            }
 
-                field.innerHTML = '';
-                field.appendChild(input);
-            });
+            if (corrective_action === "" || preventive_action === "") {
+                alert('Please fill in all the required fields.');
+                return;
+            }
 
-            this.innerText = 'Save';
-        } else if (this.innerText === 'Save') {
-            // Switch back to view mode
-            const issueId = $(this).data('id');
-            console.log('Issue ID:', issueId);
-            const corrective_action = document.getElementById('newInput_0').value;
-            const preventive_action = document.getElementById('newInput_1').value;
-            const direct_cause = document.getElementById('newInput_2').value;
-            const root_cause = document.getElementById('newInput_3').value;
-            const impact = document.getElementById('newInput_4').value;
-            const place = document.getElementById('newInput_5').value;
-
-
-
-
-            // Collect the updated values from input fields
             const updatedDetails = {
-
                 corrective_action: corrective_action,
                 preventive_action: preventive_action,
-                direct_cause: direct_cause,
-                root_cause: root_cause,
-                impact: impact,
-                place: place,
                 updated_date: new Date().getTime(),
-
+                solved: solved,
             };
 
             console.log("UpdateDetails", updatedDetails);
@@ -749,17 +840,171 @@
                     alert("Error updating issue: " + xhr.responseText);
                     console.log("Error updating issue");
                 },
-
-
                 complete: function () {
                     // Optionally, close the modal or perform other actions upon completion
                     $('#issueDetailModal').modal('hide');
                 }
             });
 
-            this.innerText = 'Edit';
+        });
+
+
+
+        // for search bar
+        $("#status-filter").on("change", function() {
+            filterIssues();
+        });
+
+        $("#solved-filter").on("change", function() {
+            filterSolvedIssues();
+        });
+
+
+        function filterIssues() {
+            var status = $('#status-filter').val();
+            console.log("status", status);
+
+            $.ajax({
+                url: '/api/issue/list/status/' + status,
+                type: 'GET',
+                success: function(data) {
+                    console.log('Success. Received data:', data);
+
+                    const sortContainer = $('#sort');
+                    sortContainer.empty(); // Clear previous content
+
+                    // Check if data is not empty
+                    if (data && data.length > 0) {
+                        // Loop through the retrieved data and create content for each item
+                        data.forEach(item => {
+                            const issueDiv = createIssueCard(item);
+                            sortContainer.append(issueDiv);
+                        });
+                    } else {
+                        // Handle case when data is empty
+                        sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                    }
+                },
+
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                    console.log('XHR:', xhr);
+                    console.log('Status:', status);
+
+                    // Display the error response in the console
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log('Error response:', response);
+                    } catch (e) {
+                        console.log('Error parsing response:', e);
+                    }
+
+                    alert('Error fetching data.');
+                }
+            });
+        }
+
+        // for solved
+        function filterSolvedIssues() {
+            var solved = $('#solved-filter').val();
+            console.log("solved", solved);
+
+            $.ajax({
+                url: '/api/issue/list/solved/' + solved,
+                type: 'GET',
+                success: function(data) {
+                    console.log('Success. Received data:', data);
+
+                    const sortContainer = $('#sort');
+                    sortContainer.empty(); // Clear previous content
+
+                    // Check if data is not empty
+                    if (data && data.length > 0) {
+                        // Loop through the retrieved data and create content for each item
+                        data.forEach(item => {
+                            const issueDiv = createIssueCard(item);
+                            sortContainer.append(issueDiv);
+                        });
+                    } else {
+                        // Handle case when data is empty
+                        sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                    }
+                },
+
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                    console.log('XHR:', xhr);
+                    console.log('Status:', status);
+
+                    // Display the error response in the console
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log('Error response:', response);
+                    } catch (e) {
+                        console.log('Error parsing response:', e);
+                    }
+
+                    alert('Error fetching data.');
+                }
+            });
+        }
+
+        function createIssueCard(item) {
+            return `
+                    <div class="p-sm-2 ">
+                            <div class="card">
+                                <div class="card-header border-bottom text-dark">
+                                    <div class="d-flex justify-content-between align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <h5 class="card-title issueDetails" data-id="${item.id}" style="text-decoration: none; cursor:pointer;">${item.title}</h5>
+
+                                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                                ${item.responsible_party.name}
+                                            </p>
+                                              <span class="card-title badge rounded-pill bg-${item.solved === true ? 'success' : 'danger'}">
+                                            ${item.solved === true ? 'Solved' : 'Unsolved'}
+
+                                        </span>
+
+                                        </div>
+                                        <span> <button type="button" class="btn btn-info see-more-button" data-id="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                    <div class="card-body">
+
+                                        <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                               <div class="code-block overflow-scroll p-3 "  data-bs-target="#description" style="width:auto; max-height:250px; background:rgba(0, 0, 0, 0) !important;">
+                                                <p>${item.description}</p>
+                                                </div>
+
+                                        </div>
+                                         <p class="badge bg-secondary " style="margin-left:15px;">${item.issue_category}</p>
+
+                                        <div class="d-flex justify-content-end align-items-center" style="margin-right: 20px;">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <p> Posted  <span class="text-muted ">${new Date(item.created_date)} </span></p>
+
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1" style="margin-left:5px;">
+                                            <p> Modified at <span class="text-muted">${getTimeElapsed(item.updated_date)}</span></p>
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    `;
         }
     });
+
+
+
 
 
 
