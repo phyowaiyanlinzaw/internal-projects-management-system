@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DeliverableTypeDto {
-    private long id;
+    private Long id;
     private String type;
 }

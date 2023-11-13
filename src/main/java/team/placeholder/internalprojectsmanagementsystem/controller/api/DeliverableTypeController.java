@@ -26,7 +26,7 @@ public class DeliverableTypeController {
         fakerService.generateAndSaveDeliverableTypes(count);
         return ResponseEntity.ok("Fake deliverable types generated successfully");
     }
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<Set<DeliverableTypeDto>> getAll() {
         return new ResponseEntity<>(deliverableTypeService.getAll(), HttpStatus.OK);
     }

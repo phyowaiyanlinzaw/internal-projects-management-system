@@ -45,7 +45,7 @@ public interface UserService {
 
     Long countAllByDepartmentId(Long departmentId);
 
-    List<UserDto> getProjectManagersByProjectId(Long projectId);
+    List<UserDto> getAllEmployeesExceptPMOAndSDQC();
 
     List<UserDto> getEmployeeByProjectId(Long projectId);
 

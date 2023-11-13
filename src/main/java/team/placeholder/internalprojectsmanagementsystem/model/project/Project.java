@@ -29,7 +29,9 @@ public class Project implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String background;
+
     private int duration;
     private long start_date;
     private long end_date;
