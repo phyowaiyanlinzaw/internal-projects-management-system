@@ -176,17 +176,17 @@
             import { getUser } from "/js/currentLoginUser.js";
 
             const languageList = {
-                "c#": "/images/languages/c#.png",
-                "c++": "/images/languages/c++.png",
-                "html": "/images/languages/html.png",
-                "java": "/images/languages/java.png",
-                "js": "/images/languages/js.png",
-                "php": "/images/languages/php.png",
-                "python": "/images/languages/python.png",
-                "ruby": "/images/languages/ruby.png",
-                "SQL": "/images/languages/SQL.png",
-                "css" : "/images/languages/css.png",
-                "typescript": "/images/languages/typescript.png"
+                "c#": "/images/languages/c#-min.png",
+                "c++": "/images/languages/c++-min.png",
+                "html": "/images/languages/html-min.png",
+                "java": "/images/languages/java-min.png",
+                "js": "/images/languages/js-min.png",
+                "php": "/images/languages/php-min.png",
+                "python": "/images/languages/python-min.png",
+                "ruby": "/images/languages/ruby-min.png",
+                "SQL": "/images/languages/SQL-min.png",
+                "css" : "/images/languages/css-min.png",
+                "typescript": "/images/languages/typescript-min.png"
             }
 
             console.log("await getUser " , await getUser());
@@ -974,7 +974,13 @@
                 });
             });
 
-            let employeeList = loginUser.employees;
+            let employeeList;
+
+            if(loginUser.currentUser.role === 'PROJECT_MANAGER') {
+
+                employeeList = await getData("/api/currentuser/available/employees");
+
+            }
 
             console.log("EMPLOYEE LIST : " , employeeList);
 
@@ -1215,12 +1221,12 @@
                             $("#validation-form")[0].reset();
                             console.log("this projce has benn saved", data);
                             // event.currentTarget.submit();
-                            await getAllProjects();
-
+                            window.top.location = window.top.location;
                         },
                         error: function (data) {
                             alert("Error registering project");
                             // event.currentTarget.submit();
+                            window.top.location = window.top.location;
                         },
                     });
                 });
@@ -2659,5 +2665,8 @@
         <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
         <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
+            </div>
     </body>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="/js/notification.js" type="module"></script>
 </html>

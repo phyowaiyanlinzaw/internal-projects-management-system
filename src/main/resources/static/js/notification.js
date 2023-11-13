@@ -1,9 +1,20 @@
 import {getData} from "/js/api-function.js";
 import {getTimeElapsed} from "/js/time.js";
 
+
+const loginUser = await getData("/api/currentuser");
+
+const currentlyWorkingProject = await getData(`/api/project/list/ID/${loginUser.currentUser.id}/IN_PROGRESS`);
+
 // function for creating anchor element
 const createA = ({id, description, time}) => {
+
     const anchor = document.createElement("a");
+    if(loginUser.currentUser.role === "PROJECT_MANAGER") {
+        anchor.href = "/issue";
+    } else {
+        anchor.href = "/project/" + currentlyWorkingProject.projectId;
+    }
     anchor.className = "dropdown-item";
 
     const heading = document.createElement("h6");
@@ -20,11 +31,12 @@ const createA = ({id, description, time}) => {
     return anchor;
 }
 
-const loginUser = await getData("/api/currentuser");
-
 const notiList = await getData(`/api/notification/list/${loginUser.currentUser.id}`);
 
+console.log("lee pal", notiList);
+
 if(notiList.length === 0) {
+    console.log("No notifications")
     document.querySelector("#notification-container").innerHTML = "<p class='text-center'>No notifications</p>"
     document.querySelector("#notification-light").classList.add("d-none");
 } else {
@@ -40,6 +52,25 @@ if(notiList.length === 0) {
             time: noti.noti_time
         });
 
+        anchor.addEventListener("click", function () {
+            console.log("clicked");
+            console.log(noti.id);
+            fetch(`/api/notification/delete/byuserid`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(
+                    loginUser.currentUser.id
+                )
+            }).then(response => {
+                console.log(response);
+                if (response.status === 200) {
+                    console.log("Notification deleted");
+                }
+            })
+        })
+
         const hr = document.createElement("hr");
         hr.className = "dropdown-divider";
 
@@ -47,7 +78,6 @@ if(notiList.length === 0) {
         notificationContainer.appendChild(anchor);
         notificationContainer.appendChild(hr);
     }
-
 }
 
 const pusher = new Pusher('3c0b3426bd0875be392f', {
@@ -56,6 +86,8 @@ const pusher = new Pusher('3c0b3426bd0875be392f', {
 
 const channel = pusher.subscribe(`my-channel-${loginUser.currentUser.id}`);
 channel.bind('noti-event', function(response) {
+
+    document.querySelector("#notification-container").innerHTML = "";
 
     document.querySelector("#notification-light").classList.remove("d-none");
 
@@ -88,6 +120,8 @@ channel.bind('noti-event', function(response) {
     notificationContainer.appendChild(hr);
 });
 
-document.querySelector("#notification-dropdown").addEventListener("shown.bs.dropdown", () => {
+document.querySelector("#notification-light-container").addEventListener("shown.bs.dropdown",  () => {
+
     document.querySelector("#notification-light").classList.add("d-none");
-})
+
+});

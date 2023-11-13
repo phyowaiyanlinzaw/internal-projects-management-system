@@ -23,4 +23,8 @@ public interface IssueService {
 
     IssueDto getIssueListsByIdAndStatus(long issues, String status);
 
+    List<IssueDto> getPendingIssueList();
+
+    List<IssueDto> updateStatusOfIssueList(List<IssueDto> issues);
+
 }

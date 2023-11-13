@@ -29,7 +29,8 @@ export function getTimeElapsed(selectedMillisecond) {
 
     if (timeElapsedInSeconds < MINUTE) {
         result = timeElapsedInSeconds;
-        prefix = result > 1 ? " seconds ago" : " second ago";
+        if(result < 1) return " just now";
+        prefix = " seconds ago";
     } else if (timeElapsedInSeconds < HOUR) {
         result = Math.floor(timeElapsedInSeconds / MINUTE);
         prefix = result > 1 ? " minutes ago" : " minute ago";
@@ -62,16 +63,12 @@ export function formatDateFromMilliseconds(milliseconds) {
 
     console.log(year)
 
-    const formattedDate = `${day} ${month} ${year}`;
-    return formattedDate;
+    return `${day} ${month} ${year}`;
 }
 
 export function calculateDuration(startDate, endDate) {
-    const startTimestamp = startDate
-    const endTimestamp = endDate
-
     // Calculate the difference in milliseconds
-    const durationInMilliseconds = endTimestamp - startTimestamp;
+    const durationInMilliseconds = endDate - startDate;
 
     // Calculate the number of months and the remainder in days
     const months = Math.floor(durationInMilliseconds / (30.44 * 24 * 60 * 60 * 1000));

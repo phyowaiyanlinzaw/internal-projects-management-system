@@ -5,15 +5,21 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.user.ClientServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.issue.IssueService;
 
 import java.util.ArrayList;
@@ -29,22 +35,12 @@ public class IssueServiceImpl implements IssueService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
+    private final ClientRepository clientRepository;
+    private final NotificationServiceImpl notificationService;
 
     @Override
     public IssueDto save(IsuDto isuDto) {
-        Issue issue = new Issue();
-        issue.setTitle(isuDto.getTitle());
-        issue.setDescription(isuDto.getDescription());
-        issue.setPlace(isuDto.getPlace());
-        issue.setImpact(isuDto.getImpact());
-        issue.setRoot_cause(isuDto.getRoot_cause());
-        issue.setDirect_cause(isuDto.getDirect_cause());
-        issue.setCorrective_action(isuDto.getCorrective_action());
-        issue.setPreventive_action(isuDto.getPreventive_action());
-        issue.setSolved(isuDto.isSolved());
-        issue.setCreated_date(isuDto.getCreated_date());
-        issue.setUpdated_date(isuDto.getUpdated_date());
-        issue.setSolved_date(isuDto.getSolved_date());
+        Issue issue = modelMapper.map(isuDto, Issue.class);
         if (isuDto.getIssue_category() != null) {
             issue.setIssue_category(Category.valueOf(isuDto.getIssue_category()));
         }
@@ -55,6 +51,8 @@ public class IssueServiceImpl implements IssueService {
         issue.setUser_pic(userRepository.findById(isuDto.getUser_pic()));
         issue.setResponsible_party(isuDto.getResponsible_party());
         issue.setProject(projectRepository.findById(isuDto.getProject_id()));
+
+        notificationService.save("New issue has been created", isuDto.getUser_pic());
 
         issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
 
@@ -81,8 +79,17 @@ public class IssueServiceImpl implements IssueService {
                     UserDto userUploader = modelMapper.map(issue.getUser_uploader(), UserDto.class);
                     issueDto.setUser_uploader(userUploader);
                 }
-                issueDtos.add(issueDto);
 
+                ProjectDto projectDto = new ProjectDto();
+
+                projectDto.setId(issue.getProject().getId());
+                projectDto.setName(issue.getProject().getName());
+
+                issueDto.setProjectDto(projectDto);
+
+                if(!issue.getIssueStatus().equals(IssueStatus.PENDING)) {
+                    issueDtos.add(issueDto);
+                }
             }
         }
 
@@ -142,6 +149,63 @@ public class IssueServiceImpl implements IssueService {
 
     }
 
+    @Override
+    public List<IssueDto> getPendingIssueList() {
+
+        List<Issue> pendingIssue = issueRepository.findAllByIssueStatus(IssueStatus.PENDING);
+
+        List<IssueDto> issueDtos = new ArrayList<>();
+
+        for(Issue issue : pendingIssue) {
+
+            IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+
+            if(issue.getResponsible_type().equals(ResponsibleType.CLIENT)) {
+                issueDto.setResponsible_party(clientRepository.findById(issue.getResponsible_party()));
+            } else if(issue.getResponsible_type().equals(ResponsibleType.EMPLOYEE)) {
+                User user = userRepository.findById(issue.getResponsible_party());
+                issueDto.setResponsible_party(modelMapper.map(user, UserDto.class));
+            }
+
+            issueDto.setUser_uploader(modelMapper.map(issue.getUser_uploader(), UserDto.class));
+
+            ProjectDto projectDto = new ProjectDto();
+
+            projectDto.setId(issue.getProject().getId());
+            projectDto.setName(issue.getProject().getName());
+
+            issueDto.setProjectDto(projectDto);
+
+            issueDtos.add(issueDto);
+
+        }
+        return issueDtos;
+    }
+
+
+    @Override
+    public List<IssueDto> updateStatusOfIssueList(List<IssueDto> issues) {
+        // TODO Auto-generated method stub
+        List<IssueDto> issueDtos = new ArrayList<>();
+
+        for(IssueDto issueDto : issues) {
+
+            log.info("Issue status : " + issueDto.getStatus());
+
+            Issue issue = issueRepository.findById(issueDto.getId());
+
+            issue.setIssueStatus(IssueStatus.valueOf(issueDto.getStatus()));
+
+            issueRepository.save(issue);
+
+            IssueDto issueDto2 = modelMapper.map(issue, IssueDto.class);
+            issueDtos.add(issueDto2);
+        }
+
+        return issueDtos;
+    }
+
+    
 
 }
 
