@@ -238,10 +238,14 @@ public class ProjectServiceImpl implements ProjectService {
             for(Deliverable deliverable : project.getDeliverables()) {
                 DeliverableDto deliverableDto = modelMapper.map(deliverable, DeliverableDto.class);
                 deliverableDto.setDeliverableType(modelMapper.map(deliverable.getDeliverableTypes(), DeliverableTypeDto.class));
+
+
                 deliverableList.add(deliverableDto);
             }
 
             projectDto.setDeliverableDto(deliverableList);
+
+
             if(project.getUsers() != null) {
                 List<UserDto> userDtos = new ArrayList<>();
                 for(User user : project.getUsers()) {

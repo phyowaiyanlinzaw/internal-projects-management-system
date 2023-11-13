@@ -305,11 +305,7 @@
                 ["link"],
             ];
             //Save Review
-            document
-                .querySelector("#review-form")
-                .addEventListener("submit", function (e){
 
-                })
 
             // SAVE CLIENT
             document
@@ -670,7 +666,7 @@
                     document.querySelector(
                         "#project-detail-background"
                     ).innerText = targetData.background;
-
+//------------------------architecture list start
                     document.querySelector("#architectures-list-in-edit").textContent = ''
 
                     targetData.architectureDto.forEach(a => {
@@ -699,6 +695,35 @@
 
                         document.querySelector("#architectures-list-in-edit").appendChild(div);
                     })
+
+                    //------------------------ architecture list end
+
+                    //------------------------ deliverable list start
+                    document.querySelector("#deliverable-type").textContent = ''
+
+                    targetData.deliverableDto.forEach(a => {
+                        const div = document.createElement("div");
+                        div.classList.add("d-flex", "gap-2", "align-items-center", "justify-content-center");
+
+                        const input = document.createElement('input');
+                        input.type = 'checkbox'
+
+                        if(a.status) {
+                            input.setAttribute("checked")
+                        }
+
+                        const p = document.createElement("p");
+                        p.textContent = a.deliverableType.type;
+                        console.log(a.status)
+                        console.log(a.deliverableType.type)
+                        p.classList.add("fs-6", "fw-bold");
+                        div.appendChild(p);
+                        div.appendChild(input)
+
+                        document.querySelector("#deliverable-type").appendChild(div);
+                    });
+
+                    //------------------------ deliverable list end
 
                     document.querySelector("#project-detail-name").value =
                         targetData.name;
@@ -785,10 +810,10 @@
                     //Review
                     detailMoal.querySelector(
                         "#project-internal-review-count"
-                    ).innerHTML = targetData.reviewDto.internal_review_count;
+                    ).value = targetData.reviewDto.internal_review_count;
                     detailMoal.querySelector(
                         "#project-external-review-count"
-                    ).innerHTML = targetData.reviewDto.external_review_count;
+                    ).value = targetData.reviewDto.external_review_count;
                     //______________________________________________
 
                     detailMoal.querySelector(
@@ -801,6 +826,8 @@
                     detailMoal.querySelector(
                         "#project-current-phase"
                     ).innerText = targetData.current_phase;
+
+
 
                     //_____________________________
                     detailMoal.querySelector(
@@ -2256,7 +2283,7 @@
                                                     <div class="row mb-3">
                                                         <label
                                                             for="background"
-                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            class="colmd-4 col-lg-3 col-form-label"
                                                             >Background</label
                                                         >
                                                         <div
@@ -2542,24 +2569,30 @@
                                             </div>
 
                                             <div class="tab-pane fade profile-edit pt-3" id="review">
-                                                <div
-                                                        class="fs-2 text-center"
-                                                        id="project-internal-review-count"
-                                                >
+                                                <div class="row mb-3">
+                                                    <label for="project-internal-review-count"
+                                                            class="col-md-4 col-lg-3 col-form-label">External Review</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input
+                                                                name="project_name"
+                                                                type="number"
+                                                                class="form-control"
+                                                                id="project-internal-review-count"/>
+                                                    </div>
                                                 </div>
 
-                                                <div
-                                                        class="fs-2 text-center"
-                                                        id="project-external-review-count"
-                                                >
+                                                <div class="row mb-3">
+                                                    <label for="project-external-review-count"
+                                                           class="col-md-4 col-lg-3 col-form-label">Internal Review</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input
+                                                                name="project_name"
+                                                                type="number"
+                                                                class="form-control"
+                                                                id="project-external-review-count"/>
+                                                    </div>
                                                 </div>
                                             </div>
-
-
-
-
-
-
 
                                             <div
                                                     class="tab-pane fade pt-3"
@@ -2571,12 +2604,7 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade pt-3" id="deliverable-list">
-                                                <table id="deliverable-table">
-                                                    <tr>
-                                                        <th>Id</th>
-                                                        <th>Architecture Name</th>
-                                                    </tr>
-                                                </table>
+                                                <div id="deliverable-type" class="d-flex gap-2"></div>
                                             </div>
                                 </div>
                             </div>
