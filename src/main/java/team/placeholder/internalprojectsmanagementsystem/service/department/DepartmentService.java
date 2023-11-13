@@ -1,5 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.service.department;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 

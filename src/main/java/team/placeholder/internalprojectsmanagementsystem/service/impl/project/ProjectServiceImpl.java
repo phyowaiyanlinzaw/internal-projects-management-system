@@ -422,6 +422,11 @@ public class ProjectServiceImpl implements ProjectService {
         return userDtos;
     }
 
+    public int getKPI(int phase, int review_count){
+        int kpi = phase / review_count;
+        return kpi;
+    }
+
 
 
 
