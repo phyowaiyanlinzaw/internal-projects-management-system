@@ -50,7 +50,11 @@
                  id="dropdrown-search-bar">
                 <div class="d-flex flex-row justify-content-lg-between position-relative">
 
-                    <div class="d-inline-block d-flex mb-3" style="margin-left:520px;">
+                    <div class="d-inline-block d-flex mb-3" style="margin-left:450px;">
+                        <button class="btn btn-info me-2" id="reset-btn">
+                            reset
+                        </button>
+
                         <select id="status-filter" class="form-control me-2" >
                             <option value="" selected disabled>Status</option>
                             <option value="PENDING">PENDING</option>
@@ -849,6 +853,13 @@
 
         });
 
+
+        $("#reset-btn").on("click", function () {
+            $("#status-filter").val('');
+            $("#solved-filter").val('');
+            $("#category-filter").val('');
+            loadData();
+        });
 
 
         // for search bar
