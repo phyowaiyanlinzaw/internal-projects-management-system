@@ -14,5 +14,6 @@ public class TaskRequestDto {
     private String tasksGroup;
     private long plan_start_time;
     private long plan_end_time;
+    private Double plan_hours;
     private String status;
 }
