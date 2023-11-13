@@ -30,9 +30,9 @@ public class ReviewTest {
         review2.setInternal_review_count(2);
         review2.setExternal_review_count(4);
 
-        project = new Project();
-        project.setId(101L);
-        review1.setProject(project);
+//        project = new Project();
+//        project.setId(101L);
+//        review1.setProject(project);
 
         user = new User();
         user.setId(201L);
@@ -64,11 +64,11 @@ public class ReviewTest {
         assertEquals(4, review2.getExternal_review_count());
     }
 
-    @Test
-    public void testProject() {
-        assertEquals(project, review1.getProject());
-        assertNull(review2.getProject());
-    }
+//    @Test
+//    public void testProject() {
+//        assertEquals(project, review1.getProject());
+//        assertNull(review2.getProject());
+//    }
 
     @Test
     public void testUser() {

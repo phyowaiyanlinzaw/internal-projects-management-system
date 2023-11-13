@@ -498,6 +498,8 @@
                 }
             }
 
+            //____________________________________current project
+
             for (let i = 0; i < pList.length; i++) {
                 let currentProject = pList[i];
 
@@ -647,12 +649,17 @@
                 return formattedDate;
             }
 
+            const log = console.log;
+
+            log(pList)
+
             motherContainer.addEventListener("click", function (e) {
                 let target = e.target;
 
                 if (target.hasAttribute("data-bs-target")) {
                     let id = parseInt(target.getAttribute("id"));
                     let targetData = pList.find((a) => a.id == id);
+
 
                     document.querySelector(
                         "#project-detail-background"
@@ -768,12 +775,16 @@
                     detailMoal.querySelector(
                         "#project-department-name"
                     ).innerHTML = targetData.departmentDto.name;
+
+                    //Review
                     detailMoal.querySelector(
                         "#project-internal-review-count"
-                    ).value = targetData.inReview;
+                    ).innerHTML = targetData.reviewDto.internal_review_count;
                     detailMoal.querySelector(
                         "#project-external-review-count"
-                    ).value = targetData.exReview;
+                    ).innerHTML = targetData.reviewDto.external_review_count;
+                    //______________________________________________
+
                     detailMoal.querySelector(
                         "#project-duration"
                     ).innerText = `${duration}`;
@@ -784,6 +795,8 @@
                     detailMoal.querySelector(
                         "#project-current-phase"
                     ).innerText = targetData.current_phase;
+
+                    //_____________________________
                     detailMoal.querySelector(
                         "#client-email-address"
                     ).innerHTML = targetData.clientDto.email;
@@ -793,7 +806,10 @@
                     detailMoal.querySelector(
                         "#my-dear-customer-name"
                     ).innerHTML = targetData.clientDto.name;
+
                 }
+
+                //_____________________________________________
             });
 
             document.querySelector("#project-detail-edit-form").addEventListener("submit", function (e) {
@@ -1288,38 +1304,6 @@
             //list project end
         </script>
 
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                loadData();
-
-                function loadData() {
-                    $.ajax({
-                        type: "GET",
-                        url: "/api/deliverable-type/list", // Replace with the actual URL of your Spring Boot endpoint
-                        success: function (data) {
-                            updateTable(data);
-                        },
-                        error: function (error) {
-                            console.log("Error fetching data: " + error);
-                        }
-                    });
-                }
-
-                function updateTable(data) {
-                    var table = $("#deliverable-table");
-
-                    // Clear existing rows
-                    table.find("tr:gt(0)").remove();
-
-                    // Add new rows based on the received data
-                    $.each(data, function (index, item) {
-                        var row = $("<tr><td>" + item.id + "</td><td>" + item.type+ "</td></tr>");
-                        table.append(row);
-                    });
-                }
-            });
-        </script>
 
     </head>
 
@@ -2551,56 +2535,25 @@
                                                 </div>
                                             </div>
 
-                                            <div
-                                                class="tab-pane fade pt-3"
-                                                id="review"
-                                            >
-                                                <div class="row mb-3">
-                                                    <label
-                                                        for="project-external-review-count"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                        >External Review</label
-                                                    >
-                                                    <div
-                                                        class="col-md-8 col-lg-9"
-                                                    >
-                                                        <input
-                                                            name="project_name"
-                                                            type="number"
-                                                            class="form-control"
-                                                            id="project-external-review-count"
-                                                        />
-                                                    </div>
+                                            <div class="tab-pane fade profile-edit pt-3" id="review">
+                                                <div
+                                                        class="fs-2 text-center"
+                                                        id="project-internal-review-count"
+                                                >
                                                 </div>
 
-                                                <div class="row mb-3">
-                                                    <label
-                                                        for="project-internal-review-count"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                        >Internal Review</label
-                                                    >
-                                                    <div
-                                                        class="col-md-8 col-lg-9"
-                                                    >
-                                                        <input
-                                                            name="project_name"
-                                                            type="text"
-                                                            class="form-control"
-                                                            id="project-internal-review-count"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div class="text-center">
-                                                    <a
-                                                        href=""
-                                                        class="btn btn-primary"
-                                                        style="
-                                                            background-color: #369;
-                                                        "
-                                                        >Save Review</a
-                                                    >
+                                                <div
+                                                        class="fs-2 text-center"
+                                                        id="project-external-review-count"
+                                                >
                                                 </div>
                                             </div>
+
+
+
+
+
+
 
                                             <div
                                                     class="tab-pane fade pt-3"

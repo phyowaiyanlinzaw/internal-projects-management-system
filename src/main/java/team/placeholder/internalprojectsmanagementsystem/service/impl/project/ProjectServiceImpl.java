@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.*;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
@@ -19,7 +18,6 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
 import java.time.Instant;
@@ -141,12 +139,11 @@ public class ProjectServiceImpl implements ProjectService {
                 log.info("project manager name should be shown here " + project.getProjectManager().getName());
                 projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
                 log.info("adjf;ladjf;lf", projectDto.getDepartmentDto());
-
                 projectDto.getDepartmentDto().getUsers().clear();
                 projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
                 projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
                 projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
-
+                projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
                 List<UserDto> userDtos = new ArrayList<>();
                 for (User user : project.getUsers()) {
                     user.getProjects().clear();
@@ -257,6 +254,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+            projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
             projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
             projectDto.setSystemOutLineDto(modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class));
 

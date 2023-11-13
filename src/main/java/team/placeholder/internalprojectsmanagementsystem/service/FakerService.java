@@ -2,8 +2,6 @@ package team.placeholder.internalprojectsmanagementsystem.service;
 
 import com.github.javafaker.Faker;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,9 +18,7 @@ import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueR
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 
-import java.util.Date;
 import java.util.List;
 
 @Service

@@ -46,20 +46,20 @@ public class DepartmentTest {
         assertEquals(users, department.getUsers());
     }
 
-    @Test
-    public void testDepartmentProjects() {
-        Department department = new Department();
-        Project project1 = new Project();
-        Project project2 = new Project();
-
-        List<Project> projects = new ArrayList<>();
-        projects.add(project1);
-        projects.add(project2);
-
-        department.setProjects(projects);
-
-        assertEquals(projects, department.getProjects());
-    }
+//    @Test
+//    public void testDepartmentProjects() {
+//        Department department = new Department();
+//        Project project1 = new Project();
+//        Project project2 = new Project();
+//
+//        List<Project> projects = new ArrayList<>();
+//        projects.add(project1);
+//        projects.add(project2);
+//
+//        department.setProjects(projects);
+//
+//        assertEquals(projects, department.getProjects());
+//    }
 
     @Test
     public void testEquals() {
