@@ -17,7 +17,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     long count();
 
-    List<Department> findAll(Pageable pageable);
+   List<Department> findAll();
 
 //    long countAllByProjectsId(long id);
 

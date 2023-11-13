@@ -762,7 +762,6 @@
                             }
                         });
                     });
-
                 },
                 error: function (error) {
                     console.log('Error fetching data:', error);
@@ -779,7 +778,12 @@
         const solveBtn = document.getElementById('solve-btn');
 
         solveBtn.addEventListener('click',function (e){
-            alert("Your issue solved");
+           // alert("Your issue solved");
+            Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+            });
         });
 
         issueEditBtn.addEventListener('click', function (e) {
@@ -796,6 +800,25 @@
             } else {
                 // If not solved, hide the "solve-btn" and show the "issue-edit-btn"
                 $("#issue-edit-btn").show();
+                Swal.fire({
+                    title: "Are you sure!",
+                    text: "Are you sure want to solve?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Your have been successful to solved.",
+                            icon: "success"
+                        });
+                    }else{
+                        return false;
+                    }
+                });
                 $("#solveBtn").hide();
             }
 
@@ -823,7 +846,6 @@
                 success: function (data) {
                     console.log(data);
                     console.log("Issue Updated Successfully");
-                    alert("Issue Updated Successfully");
                 },
                 error: function (xhr, status, error) {
                     console.log('Status:', status);
@@ -860,7 +882,6 @@
             $("#category-filter").val('');
             loadData();
         });
-
 
         // for search bar
         $("#status-filter").on("change", function() {
@@ -1068,13 +1089,33 @@
         }
     });
 
+    function showError(message) {
+        $("#errorText").text(message);
+        $("#errorAlert").show();
 
+        setTimeout(function () {
+            $("#errorAlert").hide();
+        }, 1000);
 
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#errorAlert").hide();
+        });
+    }
 
+    function showSuccess(message) {
+        $("#successText").text(message);
+        $("#successAlert").show();
 
+        setTimeout(function () {
+            $("#successAlert").hide();
+        }, 1000);
 
-
-
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#successAlert").hide();
+        });
+    }
 </script>
 </body>
 </html>
