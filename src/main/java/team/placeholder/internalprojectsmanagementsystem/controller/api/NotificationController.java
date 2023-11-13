@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NotiDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 
 import java.util.List;
@@ -28,6 +26,17 @@ public class NotificationController {
         List<NotiDto> notiDto = notificationService.getAllNotificationByUserId(id);
 
         return ResponseEntity.ok(notiDto);
+    }
+
+    @DeleteMapping("/delete/byuserid")
+    public void deleteAllNotiByUserId(@RequestBody long id) {
+        log.info("In deleteAllNotiByUserId method");
+
+        List<NotiDto> notificationList = notificationService.getAllNotificationByUserId(id);
+
+        for (NotiDto notiDto : notificationList) {
+            notificationService.deleteNotification(notiDto.getId());
+        }
     }
 
 }

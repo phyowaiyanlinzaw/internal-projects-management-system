@@ -644,6 +644,7 @@
         const modal = document.getElementById("task-details");
 
         function createTaskDiv(task) {
+            console.log(task)
             const taskDiv = document.createElement("div");
             taskDiv.classList.add(
                 "task",
@@ -825,6 +826,7 @@
                 } else if (status.some(a => currentZone.getAttribute("id") === a)) {
                     console.log("the task indeed drop on the one of the three zone")
                     console.log(currentTaskData.status, currentZone.getAttribute("id"))
+                    console.log(currentZone)
                     if (currentTaskData.status !== currentZone.getAttribute("id")) {
                         currentTaskData.status = currentZone.getAttribute("id")
 
@@ -835,29 +837,6 @@
                         if (currentTaskData.status === 'FINISHED') {
                             currentTaskData.actual_end_time = new Date().getTime()
                         }
-
-                        // sendData(
-                        //     "/api/task/update/status",
-                        //     "POST",
-                        //     {
-                        //         id : currentTaskData.id,
-                        //         status: currentTaskData.status,
-                        //         actual_start_time: currentTaskData.actual_start_time,
-                        //         actual_end_time: currentTaskData.actual_end_time
-                        //     },
-                        //     (error, response) => {
-                        //         if (error) {
-                        //             console.error("Error for URL /api/task/update", error);
-                        //         } else {
-                        //             console.log(
-                        //                 "Response for URL /api/task/update",
-                        //                 response
-                        //             );
-                        //
-                        //         }
-                        //         currentTaskData.status = currentZone.getAttribute("id")//reset the status to the original status
-                        //     }
-                        // )
                         $.ajax({
                             url: '/api/task/update/status',
                             method: 'POST',
@@ -963,13 +942,19 @@
                     .classList.remove("drag-over");
                 bModal.hide();
                 console.log("this task will be deleted", currentTask);
-                sendData('/api/task/delete', "POST", currentTaskData, (error, response) => {
-                    if (error) {
-                        console.log("Error for Url : /api/task/delete", error)
-                    } else {
-                        console.log("Response for Url : /api/task/delete", response)
-                    }
-                })
+                $.ajax({
+                    url: `/api/task/delete`,
+                    type: "DELETE",
+                    data: JSON.stringify(currentTaskData.id),
+                    contentType: "application/json",
+                    success: function (response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    },
+                });
             } else if (e.target.innerText.toLowerCase() === "no") {
                 document
                     .querySelector(".trash")

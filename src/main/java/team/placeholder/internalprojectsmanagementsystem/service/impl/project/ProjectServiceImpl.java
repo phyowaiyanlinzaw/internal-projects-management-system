@@ -43,6 +43,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ReviewRepo reviewRepo;
     private final ModelMapper  modelMapper;
     private final TaskRepository taskRepository;
+    private final AESImpl aes;
 
     @Transactional
     @Override
@@ -95,6 +96,12 @@ public class ProjectServiceImpl implements ProjectService {
         project2.setStatus("In_Progress");
         newReview.setUser(userRepository.getReferenceById(projectDto.getProjectManagerUserDto().getId()));
         projectRepository.save(project2);
+
+        for (User user : users) {
+            AvailableUser availableUser = aes.getAvailableUserByUserId(user.getId());
+            availableUser.setAvaliable(false);
+            aes.save(availableUser);
+        }
 
         projectDto.setReviewDto(modelMapper.map(newReview, ReviewDto.class));
         projectDto.setId(project2.getId());

@@ -41,7 +41,7 @@
                     );
                     background-size: 12px 12px;">
 
-        <div th:replace="fragments/navigation :: navigation-with-search"></div>
+        <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
         <div class="container-fluid">
 
@@ -105,14 +105,56 @@
                 </div>
             </div>
 
+            <ul class="nav nav-tabs nav-tabs-bordered mt-2 d-none" id="issue-link">
+                <li class="nav-item">
+                    <button
+                        class="nav-link active"
+                        data-bs-toggle="tab"
+                        data-bs-target="#sort-container"
+                    >
+                        Issue List
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button
+                        class="nav-link position-relative"
+                        data-bs-toggle="tab"
+                        data-bs-target="#new-issue-list"
+                    >
+                    <span
+                        class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle"
+                        id="notification-light-for-new-issue"
+                        style="padding: 7px;">
+                    </span>
+                        New Issue
+                    </button>
+                </li>
+            </ul>
 
-            <!--  Issue list-->
-            <div class="row row-cols-1" id="sort">
-                <!--                issue list will be here-->
+            <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active row row-cols-1" id="sort-container">
+
+                </div>
+
+                <div class="tab-pane fade row row-cols-1" id="new-issue-list">
+                    <div class="d-flex justify-content-between">
+                        <div id="all-approval-input">
+                            <input type="radio" id="all-duplicate" name="approval" value="DUPLICATE" class="all-approval-input"/>
+                            <label for="all-duplicate">All Duplicate</label>
+                            <input type="radio" id="all-approve" name="approval" value="APPROVE" class="all-approval-input"/>
+                            <label for="all-approve">All Approve</label>
+                            <input type="radio" id="all-decline" name="approval" value="DECLINE" class="all-approval-input"/>
+                            <label for="all-decline">All Decline</label>
+                        </div>
+                        
+                        <div>
+                            <button type="button" class="btn btn-primary" id="all-approval-btn">Submit</button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
-            <!--  Issue list end-->
-
         </div>
     </div>
     <!-- Content End -->
@@ -246,8 +288,7 @@
                 </div>
                 <!-- issue modal end -->
 
-            </div>
-        </div>
+                </div>
 
     </div>
 </div>
@@ -356,9 +397,9 @@
     </div>
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
-    ><i class="bi bi-arrow-up"></i
-    ></a>
+<!--    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"-->
+<!--    ><i class="bi bi-arrow-up"></i-->
+<!--    ></a>-->
 </div>
 
 
@@ -396,6 +437,7 @@
 <script src="/js/custome.js"></script>
 
 <script src="/js/currentLoginUser.js" type="module" async></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
 <script type="module">
     $(document).ready(function () {
@@ -467,9 +509,17 @@
     let data = [];
     const currentLoginUserRole = getLoginUser.currentUser.role;
 
+    console.log(currentLoginUserRole)
+    console.log(currentLoginUserRole === "FOC")
+
     if(currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
-        document.getElementById("add-issue").classList.remove("d-none");
+        document.querySelector('[data-bs-target="#add-issue"]').classList.remove("d-none");
     }
+
+    if(currentLoginUserRole === 'PROJECT_MANAGER') {
+        document.querySelector("#issue-link").classList.remove("d-none")
+    }
+
     // const currentUser = await getUser();
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
     console.log("dataForIssue", dataForIssue);
@@ -483,83 +533,87 @@
             theme: "snow",
         });
 
-        $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
-            data = userData; // Set the data array with the retrieved user data
-            const user_pic = $('#user_pic');
-            user_pic.empty();
-            user_pic.append($('<option>', {
-                value: '',
-                text: 'Select a Member',
-                data: {picUrl: ''},
-            }));
-            if (userData.userList) {
-                userData.userList.forEach(user => {
-                    user_pic.append($('<option>', {
-                        value: user.id,
-                        text: user.name,
-                        data: { picUrl: user.picUrl },
-                        user: user,
-                    }));
-                });
+        if (currentLoginUserRole === 'EMPLOYEE' || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
+            $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
+                data = userData; // Set the data array with the retrieved user data
+                console.log("User Data: " + JSON.stringify(data));
+                const user_pic = $('#user_pic');
+
+                user_pic.empty();
+                user_pic.append($('<option>', {
+                    value: '',
+                    text: 'Select a Member',
+                    data: {picUrl: ''},
+                }));
+
+                user_pic.append($('<option>', {
+                    value: getLoginUser.currentUser.projectManager.id,
+                    text: getLoginUser.currentUser.projectManager.name,
+                    data: {picUrl: getLoginUser.currentUser.projectManager.picUrl},
+
+                    user: getLoginUser.currentUser.projectManager,
+                }));
+            });
+
+            let clientData = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`);
+
+            console.log(clientData)
+
+
+            function populateClientName() {
+                const responsiblePartySelect = $('#responsible_party');
+                responsiblePartySelect.empty();
+                responsiblePartySelect.append($('<option>', {
+                    value: `client_${clientData.client.id}`,
+                    text: `${clientData.client.name}`,
+                }));
             }
-        });
-        let clientData = [];
-
-
-        function populateClientName() {
-            const responsiblePartySelect = $('#responsible_party');
-            responsiblePartySelect.empty();
-            responsiblePartySelect.append($('<option>', {
-                value: `client_${clientData.client.id}`,
-                text: `${clientData.client.name}`,
-            }));
-        }
 
 // Function to populate the responsible party select box with user names
-        function populateUserNames() {
-            const responsiblePartySelect = $('#responsible_party');
-            responsiblePartySelect.empty();
+            function populateUserNames() {
+                const responsiblePartySelect = $('#responsible_party');
+                responsiblePartySelect.empty();
 
-            responsiblePartySelect.append($('<option>', {
-                text: 'Select Responsible Party',
-            }));
+                responsiblePartySelect.append($('<option>', {
+                    text: 'Select Responsible Party',
+                }));
 
-            if (clientData.userList) {
-                clientData.userList.forEach(user => {
-                    responsiblePartySelect.append($('<option>', {
-                        value: `user_${user.id}`,
-                        text: `${user.name}`,
-                        data: { picUrl: user.picUrl },
-                        user: user,
-                    }));
-                });
+                if (clientData.userList) {
+                    clientData.userList.forEach(user => {
+                        responsiblePartySelect.append($('<option>', {
+                            value: `user_${user.id}`,
+                            text: `${user.name}`,
+                            data: {picUrl: user.picUrl},
+                            user: user,
+                        }));
+                    });
+                }
             }
-        }
 
 // Fetch client data and populate the select box initially
-        $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
-            clientData = data;
-            console.log("Client Data: " + JSON.stringify(clientData));
-            // Check the "Client" checkbox initially
-            $('#responsible_type').prop('checked', true);
-            populateClientName();
-        });
-        let actual_responsible_type = 'CLIENT';
+            $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
+                clientData = data;
+                console.log("Client Data: " + JSON.stringify(clientData));
+                // Check the "Client" checkbox initially
+                $('#responsible_type').prop('checked', true);
+                populateClientName();
+            });
+            let actual_responsible_type = 'CLIENT';
 
 // Event handler for the "Client" checkbox
-        $('#responsible_type').on('change', function () {
-            const isChecked = $(this).is(':checked');
+            $('#responsible_type').on('change', function () {
+                const isChecked = $(this).is(':checked');
 
-            if (isChecked) {
-                // If the "Client" checkbox is checked, show only the client's name
-                populateClientName();
-                actual_responsible_type = 'CLIENT'
-            } else {
-                // If the "Client" checkbox is not checked, show user names
-                populateUserNames();
-                actual_responsible_type = 'EMPLOYEE'
-            }
-        });
+                if (isChecked) {
+                    // If the "Client" checkbox is checked, show only the client's name
+                    populateClientName();
+                    actual_responsible_type = 'CLIENT'
+                } else {
+                    // If the "Client" checkbox is not checked, show user names
+                    populateUserNames();
+                    actual_responsible_type = 'EMPLOYEE'
+                }
+            });
 
         $('#addIssue').on('click', async function () {
             const title = $('#title').val();
@@ -590,13 +644,12 @@
             }
 
 
-            const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party.split("_")[1]);
+                const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party.split("_")[1]);
 
 
+                const uploaderId = getLoginUser.currentUser.id;
 
-            const uploaderId = getLoginUser.currentUser.id;
-
-            console.log("Uploader Id", uploaderId);
+                console.log("Uploader Id", uploaderId);
 
             const requestData = {
                 title: title,
@@ -615,37 +668,37 @@
                 user_pic:selectedUserId,
 
 
-            };
+                };
 
-            console.log('Request Data:', requestData);
+                console.log('Request Data:', requestData);
 
-            $.ajax({
-                url: 'api/issue/save',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(requestData),
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    alert('Issue Created Successfully');
-                },
-                error: function (xhr, status, error) {
-                    console.log('Status:', status);
-                    console.log('Error:', error);
-                    console.log('Server response:', xhr.responseText);
+                $.ajax({
+                    url: 'api/issue/save',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        alert('Issue Created Successfully');
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Status:', status);
+                        console.log('Error:', error);
+                        console.log('Server response:', xhr.responseText);
 
-                    if (xhr.getResponseHeader('Content-Type') === 'application/json') {
-                        // Handle JSON response
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            console.log('JSON Response:', response);
-                        } catch (e) {
-                            console.log('JSON parsing error:', e);
+                        if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                            // Handle JSON response
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                console.log('JSON Response:', response);
+                            } catch (e) {
+                                console.log('JSON parsing error:', e);
+                            }
+                        } else {
+                            // Handle non-JSON response
+                            console.log('Non-JSON Response:', xhr.responseText);
                         }
-                    } else {
-                        // Handle non-JSON response
-                        console.log('Non-JSON Response:', xhr.responseText);
-                    }
 
                     alert('Error creating issue: ' + xhr.responseText);
                     console.log('Error creating issue');
@@ -769,11 +822,128 @@
                 }
             });
         }
+
         loadData();
 
+        const pendingIssueList = await getData("/api/issue/list/pending")
 
-        // details lists
+        if(pendingIssueList.length !== 0) {
+            document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
+        }
 
+        for(let i = 0; i < pendingIssueList.length; i++) {
+
+            const currentIssue = pendingIssueList[i];
+
+            document.getElementById("new-issue-list").innerHTML += `<div class="p-md-3 p-sm-2">
+            <div class="card item-issue-approval" id="issueapprovalitem-${currentIssue.id}">
+                <div class="d-inline p-2 issue-approval">
+                    <input type="radio" name="approval-${currentIssue.id}" value="DUPLICATE"/>
+                    <label>Duplicate</label>
+                    <input type="radio" name="approval-${currentIssue.id}" value="APPROVE"/>
+                    <label>Approve</label>
+                    <input type="radio" name="approval-${currentIssue.id}" value="DECLINE"/>
+                    <label>Decline</label>
+                </div>
+                <div class="card-header border-bottom text-dark">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <h6 class="card-title card-text">${currentIssue.title}</h6>
+                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                ${currentIssue.user_pic.name}
+                            </p>
+                        </div>
+                        <span
+                            class="card-title badge rounded-pill bg-${currentIssue.status === 'Success' ? 'success' : 'danger'}">
+                                            ${currentIssue.status === 'true' ? 'Solved' : 'Unsolved'}
+                                        </span>
+                    </div>
+                    <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <p>Posted</p>
+                            <span>${new Date(currentIssue.created_date)}</span>
+                            <p>Modified at</p>
+                            <span>${getTimeElapsed(currentIssue.created_date)}</span>
+                        </div>
+                        <button class="btn btn-primary btn-sm see-more-button" data-id="${currentIssue.id}"
+                                data-bs-target="#issueDetailModal" data-bs-toggle="modal">
+                            See More
+                        </button>
+                    </div>
+                    <div class="col issue-time-line d-flex gap-2">
+                        <p class="btn custom-color rounded-pill">${currentIssue.issue_category}</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="code-block">
+                        <p>${currentIssue.description}</p>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        }
+        const allApprovalRadios = document.querySelectorAll('.all-approval-input');
+
+        console.log("all radiio button" ,allApprovalRadios)
+
+        // Attach a click event listener to each radio button in #all-approval
+        allApprovalRadios.forEach(allApprovalRadio => {
+            allApprovalRadio.addEventListener('click', function() {
+                // Get the value of the clicked radio button
+                const selectedValue = this.value;
+                console.log(selectedValue)
+
+                // Set the corresponding radio buttons in .item sections to the same value
+                document.querySelectorAll('.issue-approval input[value="' + selectedValue + '"]').forEach(itemRadio => {
+                    itemRadio.checked = true;
+                });
+            });
+        });
+
+        document.querySelector("#all-approval-btn").addEventListener("click", function() {
+
+            const updateIssueList = [];
+
+            const issueList = document.querySelectorAll(".item-issue-approval");
+
+            issueList.forEach((item, index) => {
+                // Get the value of the selected radio button in the corresponding .item section
+                const selectedRadio = item.querySelector('.issue-approval input[type="radio"]:checked');
+      
+                // Check if a radio button is selected
+                if (selectedRadio) {
+                        // Add data to the array
+                    updateIssueList.push({
+                        id: parseInt(item.getAttribute("id").split("-")[1]), // Assuming each item has a unique identifier
+                        status: selectedRadio.value
+                    });
+                } else {
+                // Handle the case where no radio button is selected for an item
+                console.log(`No radio button selected for item ${index + 1}`);
+            }
+            });
+            console.log(updateIssueList)
+
+            if(updateIssueList.length != 0) {
+                $.ajax({
+                url: `/api/issue/update/status/issuelist`, // Update the URL to include the issue ID
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(updateIssueList),
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    console.log("Issue Updated Successfully");
+                    alert("Issue Updated Successfully");
+                    window.top.location = window.top.location;
+                },
+                
+            });
+            }
+
+        })
+
+    });
     // for update
         const issueEditBtn = document.getElementById('issue-edit-btn');
         const solveBtn = document.getElementById('solve-btn');
@@ -1076,5 +1246,6 @@
 
 
 </script>
+<script src="/js/notification.js" type="module"></script>
 </body>
 </html>

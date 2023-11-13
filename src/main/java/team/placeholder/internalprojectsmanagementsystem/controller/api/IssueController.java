@@ -128,5 +128,18 @@ public class IssueController {
     public Page<IssueDto> issues(Pageable pageable){
         return issueService.pages(pageable);
     }
+    @GetMapping("/list/pending")
+    public ResponseEntity<List<IssueDto>> getIssueByPending() {
+
+        List<IssueDto> issueDtos = issueService.getPendingIssueList();
+
+        return ResponseEntity.ok(issueDtos);
+    }
+
+    @PutMapping("/update/status/issuelist")
+    public ResponseEntity<List<IssueDto>> updateIssueList(@RequestBody List<IssueDto> issueDtos) {
+        List<IssueDto> updatedIssueList = issueService.updateStatusOfIssueList(issueDtos);
+        return ResponseEntity.ok(updatedIssueList);
+    }
 
 }
