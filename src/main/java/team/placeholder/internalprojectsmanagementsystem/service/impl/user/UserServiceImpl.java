@@ -121,6 +121,9 @@ public class UserServiceImpl implements UserService {
             Department department = user.getDepartment();
             DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
             UserDto userDto = modelmapper.map(user, UserDto.class);
+            if(user.getProjectManager() != null) {
+                userDto.setProjectManager(modelmapper.map(user.getProjectManager(), UserDto.class));
+            }
             userDto.setDepartmentdto(departmentDto);
             return userDto;
         } else {

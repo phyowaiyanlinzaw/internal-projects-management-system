@@ -25,4 +25,6 @@ public interface IssueService {
 
     List<IssueDto> getPendingIssueList();
 
+    List<IssueDto> updateStatusOfIssueList(List<IssueDto> issues);
+
 }

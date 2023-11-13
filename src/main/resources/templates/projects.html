@@ -968,7 +968,13 @@
                 });
             });
 
-            let employeeList = await getData("/api/currentuser/available/employees");
+            let employeeList;
+
+            if(loginUser.currentUser.role === 'PROJECT_MANAGER') {
+
+                employeeList = await getData("/api/currentuser/available/employees");
+
+            }
 
             console.log(employeeList);
 
@@ -2642,5 +2648,8 @@
         <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
         <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
+            </div>
     </body>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="/js/notification.js" type="module"></script>
 </html>

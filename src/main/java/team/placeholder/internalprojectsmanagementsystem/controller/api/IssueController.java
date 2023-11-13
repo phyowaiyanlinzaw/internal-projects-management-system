@@ -124,6 +124,10 @@ public class IssueController {
         return ResponseEntity.ok(issueDtos);
     }
 
-
+    @PutMapping("/update/status/issuelist")
+    public ResponseEntity<List<IssueDto>> updateIssueList(@RequestBody List<IssueDto> issueDtos) {
+        List<IssueDto> updatedIssueList = issueService.updateStatusOfIssueList(issueDtos);
+        return ResponseEntity.ok(updatedIssueList);
+    }
 
 }

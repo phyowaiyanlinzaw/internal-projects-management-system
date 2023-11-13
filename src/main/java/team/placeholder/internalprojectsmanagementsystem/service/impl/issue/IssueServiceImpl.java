@@ -17,6 +17,7 @@ import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueR
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.ClientServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.issue.IssueService;
@@ -35,6 +36,7 @@ public class IssueServiceImpl implements IssueService {
     private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
     private final ClientRepository clientRepository;
+    private final NotificationServiceImpl notificationService;
 
     @Override
     public IssueDto save(IsuDto isuDto) {
@@ -49,6 +51,8 @@ public class IssueServiceImpl implements IssueService {
         issue.setUser_pic(userRepository.findById(isuDto.getUser_pic()));
         issue.setResponsible_party(isuDto.getResponsible_party());
         issue.setProject(projectRepository.findById(isuDto.getProject_id()));
+
+        notificationService.save("New issue has been created", isuDto.getUser_pic());
 
         issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
 
@@ -178,6 +182,30 @@ public class IssueServiceImpl implements IssueService {
         return issueDtos;
     }
 
+
+    @Override
+    public List<IssueDto> updateStatusOfIssueList(List<IssueDto> issues) {
+        // TODO Auto-generated method stub
+        List<IssueDto> issueDtos = new ArrayList<>();
+
+        for(IssueDto issueDto : issues) {
+
+            log.info("Issue status : " + issueDto.getStatus());
+
+            Issue issue = issueRepository.findById(issueDto.getId());
+
+            issue.setIssueStatus(IssueStatus.valueOf(issueDto.getStatus()));
+
+            issueRepository.save(issue);
+
+            IssueDto issueDto2 = modelMapper.map(issue, IssueDto.class);
+            issueDtos.add(issueDto2);
+        }
+
+        return issueDtos;
+    }
+
+    
 
 }
 
