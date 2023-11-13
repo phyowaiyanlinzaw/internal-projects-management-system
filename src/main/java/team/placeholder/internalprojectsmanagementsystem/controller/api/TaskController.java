@@ -68,4 +68,9 @@ public class TaskController {
 //            return ResponseEntity.ok(tasksDtos);
 //    }
 
+    @DeleteMapping("/delete")
+    public void deleteTask(@RequestBody long id) {
+        taskService.deleteById(id);
+    }
+
 }

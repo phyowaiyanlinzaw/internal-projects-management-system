@@ -57,7 +57,33 @@ public class IssueServiceImpl implements IssueService {
         issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
 
         Issue issue1 = issueRepository.save(issue);
-        return modelMapper.map(issue1, IssueDto.class);
+
+        IssueDto issueDto = new IssueDto();
+
+        issueDto.setId(issue1.getId());
+        issueDto.setTitle(issue1.getTitle());
+        issueDto.setDescription(issue1.getDescription());
+        issueDto.setPlace(issue1.getPlace());
+        issueDto.setImpact(issue1.getImpact());
+        issueDto.setRoot_cause(issue1.getRoot_cause());
+        issueDto.setDirect_cause(issue1.getDirect_cause());
+        issueDto.setCorrective_action(issue1.getCorrective_action());
+        issueDto.setPreventive_action(issue1.getPreventive_action());
+        if(issue1.getResponsible_type().equals(ResponsibleType.CLIENT)) {
+            issueDto.setResponsible_party(clientRepository.findById(issue1.getResponsible_party()));
+        } else if(issue1.getResponsible_type().equals(ResponsibleType.EMPLOYEE)) {
+            User user = userRepository.findById(issue1.getResponsible_party());
+            issueDto.setResponsible_party(modelMapper.map(user, UserDto.class));
+        }
+        issueDto.setSolved(issue1.isSolved());
+        issueDto.setCreated_date(issue1.getCreated_date());
+        issueDto.setUpdated_date(issue1.getUpdated_date());
+        issueDto.setSolved_date(issue1.getSolved_date());
+        issueDto.setStatus(issue1.getIssueStatus().toString());
+        issueDto.setIssue_category(issue1.getIssue_category().toString());
+        issueDto.setResponsible_type(issue1.getResponsible_type().toString());
+
+        return issueDto;
 
     }
 

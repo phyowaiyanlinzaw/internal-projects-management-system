@@ -3,6 +3,7 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.config.Task;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ActualManMonthDto;
@@ -119,7 +120,9 @@ public class TaskServiceImpl implements TasksService {
             TasksDto taskDto = modelMapper.map(task, TasksDto.class);
             taskDto.setUserDto(userDto);
             taskDto.setProjectDto(projectDto);
-            taskDtoList.add(taskDto);
+            if(!task.isDeleted()) {
+                taskDtoList.add(taskDto);
+            }
         }
         return taskDtoList;
     }
@@ -240,6 +243,15 @@ public class TaskServiceImpl implements TasksService {
             }
         }
         return planManMonthDtos;
+    }
+
+    @Override
+    public void deleteById(long id) {
+        Tasks task = taskRepository.findById(id).orElse(null);
+
+        task.setDeleted(true);
+
+        taskRepository.save(task);
     }
 
 //    @Override
