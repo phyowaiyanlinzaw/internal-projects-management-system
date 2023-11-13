@@ -95,7 +95,7 @@ public class IssueServiceImpl implements IssueService {
         issueDto.setUpdated_date(issue1.getUpdated_date());
         issueDto.setSolved_date(issue1.getSolved_date());
         issueDto.setStatus(issue1.getIssueStatus().toString());
-        issueDto.setIssue_category(issue1.getIssue_category().toString());
+        issueDto.setIssueCategory(issue1.getIssueCategory().toString());
         issueDto.setResponsible_type(issue1.getResponsible_type().toString());
 
         return issueDto;
@@ -178,13 +178,13 @@ public class IssueServiceImpl implements IssueService {
         return null;
     }
 
-    @Override
-    public IssueDto getIssueListsByIdAndStatus(long issues, String status) {
-        Issue issue =issueRepository.findById(issues);
-
-        return modelMapper.map(issue, IssueDto.class);
-
-    }
+//    @Override
+//    public IssueDto getIssueListsByIdAndStatus(long issues, String status) {
+//        Issue issue =issueRepository.findById(issues);
+//
+//        return modelMapper.map(issue, IssueDto.class);
+//
+//    }
 
     @Override
     public List<IssueDto> getPendingIssueList() {
@@ -242,13 +242,9 @@ public class IssueServiceImpl implements IssueService {
         return issueDtos;
     }
 
-    
-
-}
     public List<IssueDto> getIssuesByUserId(long userId) {
         return null;
     }
-
 
     public List<IssueDto> getIssuesByStatus(String status) {
         IssueStatus issueStatus = IssueStatus.valueOf(status.toUpperCase());
@@ -274,11 +270,6 @@ public class IssueServiceImpl implements IssueService {
         return issueDtos;
     }
 
-    public Page<IssueDto> pages(Pageable pageable){
-        Page<Issue> issues = issueRepository.findAll(pageable);
-
-        return issues.map(issue -> modelMapper.map(issue, IssueDto.class));
-    }
 
     public List<IssueDto> getIssuesByCategory(String category) {
         Category issueCategory = Category.valueOf(category.toUpperCase());
