@@ -6,7 +6,7 @@ import java.util.Map;
 
 @Data
 public class ActualManMonthDto {
-    private long actualManMonthHours;
+    private Double actualManMonthHours;
     private String monthName;
 
 }
