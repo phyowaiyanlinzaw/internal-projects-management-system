@@ -62,7 +62,6 @@ public class ProjectServiceImpl implements ProjectService {
         List<Deliverable> deliverable = new ArrayList<>();
 
         for (DeliverableDto deliverableDto : projectDto.getDeliverableDto()) {
-            log.info("deliveralbe type id : " + deliverableDto.getDeliverableType().getId());
             if (deliverableDto.getDeliverableType().getId() == null) {
                 DeliverableType newDeliverableType = deliverableTypeService.save(deliverableDto.getDeliverableType());
                 System.out.print(newDeliverableType);
