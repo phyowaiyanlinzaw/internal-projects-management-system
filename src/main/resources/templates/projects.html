@@ -428,7 +428,7 @@
 
             console.log(pList);
 
-            const dPList = await getData("/api/project/list");
+            const dPList = await getData("/api/department/list");
 
             dPList.forEach((item) => {
                 const option = document.createElement("option");
@@ -782,7 +782,7 @@
                     ).value = targetData.exReview;
                     detailMoal.querySelector(
                         "#project-duration"
-                    ).innerText = `${duration}`;
+                    ).innerText = `${targetData.duration} ${targetData.duration < 1 ? " month" : " months"}`;
                     detailMoal.querySelector("#project-start-date").innerText =
                         formatDateFromMilliseconds(targetData.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =
@@ -818,16 +818,25 @@
 
                 console.log(project)
 
-                sendData("/api/project/update", "PUT", project)
-                    .then((response) => {
-                        console.log(response)
-                    })
-                    .then((message) => {
-                        console.log(message);
-                        alert("Project updated successfully");
-                        location.reload();
-                        e.currentTarget.submit();
-                    })
+                $.ajax({
+                    url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
+                    type: "PUT",
+                    data: JSON.stringify(project),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: async function (data) {
+                        alert("Project registered successfully");
+                        // Reset the form if needed
+                        console.log("this projce has benn saved", data);
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                    error: function (data) {
+                        alert("Error registering project");
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                });
             })
 
             document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
@@ -842,16 +851,25 @@
                     integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
                 }
 
-                sendData(`/api/project/update/amount/${projectId}`, "PUT", amountDto)
-                    .then((response) => {
-                        console.log(response)
-                    })
-                    .then((message) => {
-                        console.log(message);
-                        alert("Project updated successfully");
-                        location.reload();
-                        e.currentTarget.submit();
-                    })
+                $.ajax({
+                    url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
+                    type: "PUT",
+                    data: JSON.stringify(amountDto),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: async function (data) {
+                        alert("Project registered successfully");
+                        // Reset the form if needed
+                        console.log("this projce has benn saved", data);
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                    error: function (data) {
+                        alert("Error registering project");
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                });
             })
 
             const sortProjectByDepartment = await getData(
