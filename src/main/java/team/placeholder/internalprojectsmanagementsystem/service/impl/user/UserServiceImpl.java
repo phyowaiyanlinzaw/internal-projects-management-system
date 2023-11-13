@@ -227,26 +227,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getProjectManagersByProjectId(Long projectId) {
-        List<User> users = userRepository.findAllByProjectId(projectId);
-
+    public List<UserDto> getAllEmployeesExceptPMOAndSDQC() {
+        List<User> users = userRepository.findAll();
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {
-            //print out user project with lambda
-            for (Project project : user.getProjects()) {
-                log.info("USER PROJECT : {}",project.getName());
+            if (!user.getRole().equals(Role.PMO) && !user.getRole().equals(Role.SDQC)) {
+                Department department = user.getDepartment();
+                DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
+                Set<Project> projects = user.getProjects();
+                Set<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).collect(Collectors.toSet());
+                UserDto userDto = modelmapper.map(user, UserDto.class);
+                userDto.setDepartmentdto(departmentDto);
+                userDto.setProjectsByUsers(projectDtos);
+                userDtos.add(userDto);
             }
-            Department department = user.getDepartment();
-            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
-            Set<Project> projects = user.getProjects();
-            Set<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).collect(Collectors.toSet());
-            UserDto userDto = modelmapper.map(user, UserDto.class);
-            userDto.setDepartmentdto(departmentDto);
-            userDto.setProjectsByUsers(projectDtos);
-            userDtos.add(userDto);
         }
         return userDtos;
     }
+
+//    @Override
+//    public List<UserDto> getProjectManagersByProjectId(Long projectId) {
+//        List<User> users = userRepository.findAllByProjectId(projectId);
+//
+//        List<UserDto> userDtos = new ArrayList<>();
+//        for (User user : users) {
+//            //print out user project with lambda
+//            for (Project project : user.getProjects()) {
+//                log.info("USER PROJECT : {}",project.getName());
+//            }
+//            Department department = user.getDepartment();
+//            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
+//            Set<Project> projects = user.getProjects();
+//            Set<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).collect(Collectors.toSet());
+//            UserDto userDto = modelmapper.map(user, UserDto.class);
+//            userDto.setDepartmentdto(departmentDto);
+//            userDto.setProjectsByUsers(projectDtos);
+//            userDtos.add(userDto);
+//        }
+//        return userDtos;
+//    }
 
     @Override
     public List<UserDto> getEmployeeByProjectId(Long projectId) {

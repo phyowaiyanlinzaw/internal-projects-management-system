@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
       lang="en">
@@ -49,10 +48,14 @@
 
             <div class="container-fluid d-md-block pt-2 ps-s pe-2"
                  id="dropdrown-search-bar">
-                <div class="d-flex flex-row justify-content-between position-relative">
+                <div class="d-flex flex-row justify-content-lg-between position-relative">
 
-                    <div class="d-inline-block d-flex mb-3">
-                        <select id="status-filter" class="form-control">
+                    <div class="d-inline-block d-flex mb-3" style="margin-left:450px;">
+                        <button class="btn btn-info me-2" id="reset-btn">
+                            reset
+                        </button>
+
+                        <select id="status-filter" class="form-control me-2" >
                             <option value="" selected disabled>Status</option>
                             <option value="PENDING">PENDING</option>
                             <option value="APPROVE">APPROVE</option>
@@ -60,11 +63,26 @@
                             <option value="DUPLICATE">DUPLICATE</option>
                         </select>
 
-                        <select id="solved-filter" class="form-control">
+                        <select id="solved-filter" class="form-control me-2">
                             <option value="" selected disabled>Choose</option>
                             <option value="1">Solved</option>
                             <option value="0">Unsolved</option>
                         </select>
+
+
+                        <select id="category-filter" class="form-control me-2">
+                            <option value="" selected disabled>Category</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="BUG">BUG</option>
+                            <option value="COMMUNICATION">COMMUNICATION</option>
+                            <option value="TECHNICAL">TECHNICAL</option>
+                            <option value="BUDGET">BUDGET</option>
+                            <option value="DESIGN">DESIGN</option>
+                            <option value="TESTING">TESTING</option>
+                            <option value="OTHER">OTHER</option>
+
+                        </select>
+
                     </div>
 
 
@@ -106,8 +124,8 @@
                 <div class="modal-header">
                     <h4>Issue Details</h4>
                     <div class="d-flex justify-content-center align-items-center gap-3">
-                        <div class="btn btn-primary" id="issue-edit-btn">Save</div>
-                        <div class="btn btn-success" id="resolve-btn">Mark as Resolve <i class="fa-solid fa-check"></i></div>
+                        <div class="btn btn-primary" id="issue-edit-btn">Mark as Resolve <i class="fa-solid fa-check"></i></div>
+                        <div class="btn btn-success" id="solve-btn">Solve <i class="fa-solid fa-check-double"></i></div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
@@ -115,6 +133,7 @@
                     <div class="container-fluid">
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
                             <div class="col mb-3">
+                                <input type="hidden" id="solved" />
                                 <h5 class="icon-title"><i class="fas fa-wrench text-dark"></i> Corrective Action</h5>
                                 <textarea id="corrective_actionInput" class="form-control form-control-sm btn-space" name="corrective_action" rows="5"></textarea>
 
@@ -153,7 +172,7 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
+                        <label for="issue_category" class="col-sm-12 col-form-label" name="issueCategory">Issue Category<span
                                 style="color:red"> *</span></label>
                         <select class="form-select border-task-description" name="issue_category" id="issue_category" >
                             <option selected>Select Issue Category</option>
@@ -278,16 +297,21 @@
                             </div>
 
                             <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Impact:</h6><p class="icon-title col-lg-5 text-center" id="impactDetails"></p></span>
+                                <span class="d-flex custom-issue-margin"><h6>Impact:</h6><p class="icon-title col-lg-6 text-center" id="impactDetails"></p></span>
 
                             </div>
 
                             <div class="col mb-3">
-                                <span class="d-flex custom-issue-margin"><h6>Corrective Action:</h6><p class="icon-title col-5 text-center" id="correctiveDetails"></p></span>
+                                <span class="d-flex custom-issue-margin"><h6>Corrective Action:</h6><p class="icon-title col-4 text-center" id="correctiveDetails"></p></span>
 
                             </div>
                             <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Preventive Action:</h6><p class="icon-title col-6 text-center" id="preventiveDetails"></p></span>
+                                <span class="d-flex custom-issue-margin"><h6>Preventive Action:</h6><p class="icon-title col-4 text-center" id="preventiveDetails"></p></span>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <span class="d-flex custom-issue-margin"><h6>Solved Date:</h6><p class="icon-title col-6 text-center" id="solveDateDetails"></p></span>
 
                             </div>
                         </div>
@@ -405,19 +429,13 @@
             return `${months} month${months > 1 ? 's' : ''} ago`;
         }
     }
-
     import {getUser} from "/js/currentLoginUser.js";
     import {getTimeElapsed} from "/js/time.js";
     import {getData} from "/js/api-function.js";
-
-
     console.log(await getUser());
-
-
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
-
     let toolbaroptions = [
         // Test-style
         ["bold", "italic", "underline"],
@@ -443,21 +461,18 @@
         // Adding code snippet or blockquote
         ["code-block", "blockquote"],
     ];
-
     // If you want to initialize Quill for a specific element, you can do it like this:
     let getLoginUser = await getUser();
-
     console.log("current login user " , getLoginUser)
-
     let data = [];
+    const currentLoginUserRole = getLoginUser.currentUser.role;
 
+    if(currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
+        document.getElementById("add-issue").classList.remove("d-none");
+    }
     // const currentUser = await getUser();
-
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
-
     console.log("dataForIssue", dataForIssue);
-
-
     $(document).ready(async function () {
 
         let specificQuillEditor = document.querySelector("#description"); // Change the selector as needed
@@ -468,20 +483,14 @@
             theme: "snow",
         });
 
-
-
-
         $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
             data = userData; // Set the data array with the retrieved user data
-
             const user_pic = $('#user_pic');
             user_pic.empty();
             user_pic.append($('<option>', {
                 value: '',
                 text: 'Select a Member',
                 data: {picUrl: ''},
-
-
             }));
             if (userData.userList) {
                 userData.userList.forEach(user => {
@@ -494,15 +503,12 @@
                 });
             }
         });
-
-
         let clientData = [];
 
 
         function populateClientName() {
             const responsiblePartySelect = $('#responsible_party');
             responsiblePartySelect.empty();
-
             responsiblePartySelect.append($('<option>', {
                 value: `client_${clientData.client.id}`,
                 text: `${clientData.client.name}`,
@@ -534,13 +540,10 @@
         $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
             clientData = data;
             console.log("Client Data: " + JSON.stringify(clientData));
-
             // Check the "Client" checkbox initially
             $('#responsible_type').prop('checked', true);
-
             populateClientName();
         });
-
         let actual_responsible_type = 'CLIENT';
 
 // Event handler for the "Client" checkbox
@@ -566,14 +569,10 @@
             const root_cause = $('#root_cause').val();
             const direct_cause = $('#direct_cause').val();
             const responsible_party = $('#responsible_party').val();
-            const issue_category = $('#issue_category').val();
+            const issue_category = $('#issueCategory').val();
             const responsible_type = actual_responsible_type;
             const selectedUserId = $('#user_pic').val();
-
-
-
-
-
+            const issueId = $('#issue-edit-btn').data('issueId');
             if (
                 title === "" ||
                 description === "" ||
@@ -585,8 +584,6 @@
                 issue_category === ""||
                 selectedUserId === ""||
                 responsible_type === ""
-
-
             ) {
                 alert('Please fill in all the required fields.');
                 return;
@@ -611,7 +608,7 @@
                 root_cause: root_cause,
                 direct_cause: direct_cause,
                 responsible_party: selectedResponsibleParty.id,
-                issue_category: issue_category,
+                issueCategory: issue_category,
                 responsible_type: responsible_type,
                 project_id: dataForIssue.projectId,
                 user_uploader:uploaderId,
@@ -660,8 +657,7 @@
 
     });
 
-
-
+    let currentIssueId;
     $(document).ready(function() {
         function loadData() {
             $.ajax({
@@ -680,7 +676,7 @@
 
 
 
-                    $('.see-more-button').click(function () {
+                    $('#sort').on('click', '.see-more-button', function() {
                         // Get the issue ID directly from the button's data-id attribute
                         const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
                         console.log('Clicked button with data-iD:', issueId);
@@ -694,12 +690,18 @@
                                 if (data) {
                                     $('#corrective_actionInput').text(data.corrective_action);
                                     $('#preventive_actionInput').text(data.preventive_action);
-                                    // $('#direct_causeValue').text(data.direct_cause);
-                                    // $('#root_causeValue').text(data.root_cause);
-                                    // $('#impactValue').text(data.impact);
-                                    // $('#placeValue').text(data.place);
+                                    if(data.solved === false){
+                                        $('#solve-btn').hide();
+                                        $('#issue-edit-btn').show();
+                                    }else{
+                                        $('#solve-btn').show();
+                                        $('#issue-edit-btn').hide();
+                                    }
+
                                     $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+
                                     $('#issueEditModal').modal('show');
+
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
                                 }
@@ -711,10 +713,19 @@
                     });
 
 
-
-                    $('.issueDetails').click(function () {
+                    $('#sort').on('click', '.issueDetails', function() {
                         $('#details').collapse('show');
                         $('#peoples').collapse('show');
+
+                        function formatDate(timestamp) {
+                            // Assuming data.solved_date is a timestamp in milliseconds
+                            const date = new Date(timestamp);
+
+                            // Format the date as a string (adjust the format as needed)
+                            const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+                            return formattedDate;
+                        }
 
                         // Get the issue ID directly from the button's data-id attribute
                         const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
@@ -728,7 +739,7 @@
                                 console.log('Data received:', data);
                                 if (data) {
                                     $('#issueTitleDetails').text(data.title);
-                                    $('#issue_categoryDetails').text(data.issue_category);
+                                    $('#issue_categoryDetails').text(data.issueCategory);
                                     $('#uploaderDetails').text(data.user_uploader.name);
                                     $('#picDetails').text(data.user_pic.name);
                                     $('#rpDetails').text(data.responsible_party.name);
@@ -739,9 +750,8 @@
                                     $('#impactDetails').text(data.impact);
                                     $('#correctiveDetails').text(data.corrective_action);
                                     $('#preventiveDetails').text(data.preventive_action);
+                                    $('#solveDateDetails').text(formatDate(data.solved_date));
                                     $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
-                                    $('#resolve-btn').data('issueId', issueId); // Set the issueId
-
                                     $('#issueDetailsModal').modal('show');
                                 } else {
                                     console.log('No data received for issue ID:', issueId);
@@ -758,109 +768,48 @@
                     console.log('Error fetching data:', error);
                 }
             });
-
         }
-
-
-
         loadData();
 
 
+        // details lists
 
-        // for update
+    // for update
         const issueEditBtn = document.getElementById('issue-edit-btn');
-        const issueResolveBtn = document.getElementById('resolve-btn');
+        const solveBtn = document.getElementById('solve-btn');
+
+        solveBtn.addEventListener('click',function (e){
+            alert("Your issue solved");
+        });
 
         issueEditBtn.addEventListener('click', function (e) {
-
-                const corrective_action = $('#corrective_actionInput').val();
-                const preventive_action = $('#preventive_actionInput').val();
-                const issueId = $(this).data('issueId');
-                let solved = false;
-
-
-                if (corrective_action === "" || preventive_action === "") {
-                    alert('Please fill in all the required fields.');
-                    return;
-                }else{
-                    solved = true;
-                }
-
-                const updatedDetails = {
-                    corrective_action: corrective_action,
-                    preventive_action: preventive_action,
-                    updated_date: new Date().getTime(),
-                    solved: solved,
-
-                };
-
-                console.log("UpdateDetails", updatedDetails);
-
-                $.ajax({
-                    url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify(updatedDetails),
-                    dataType: 'json',
-                    success: function (data) {
-                        console.log(data);
-                        console.log("Issue Updated Successfully");
-                        alert("Issue Updated Successfully");
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('Status:', status);
-                        console.log('Error:', error);
-                        console.log('Server response:', xhr.responseText);
-
-                        if (xhr.getResponseHeader('Content-Type') === 'application/json') {
-                            // Handle JSON response
-                            try {
-                                const response = JSON.parse(xhr.responseText);
-                                console.log('JSON Response:', response);
-                            } catch (e) {
-                                console.log('JSON parsing error:', e);
-                            }
-                        } else {
-                            // Handle non-JSON response
-                            console.log('Non-JSON Response:', xhr.responseText);
-                        }
-
-                        alert("Error updating issue: " + xhr.responseText);
-                        console.log("Error updating issue");
-                    },
-
-
-                    complete: function () {
-                        // Optionally, close the modal or perform other actions upon completion
-                        $('#issueDetailModal').modal('hide');
-                    }
-                });
-
-            }
-        );
-
-        issueResolveBtn.addEventListener('click', function (e) {
-
             const corrective_action = $('#corrective_actionInput').val();
             const preventive_action = $('#preventive_actionInput').val();
+            const solved = $('#solve-btn').val();
             const issueId = $(this).data('issueId');
+            console.log(solved + " solveddddddd");
 
-            let solved = false;
+            if (solved === "true") {
+                // If solved, hide the "issue-edit-btn" and show the "solve-btn"
+                $("#issue-edit-btn").hide();
+                $("#solveBtn").show();
+            } else {
+                // If not solved, hide the "solve-btn" and show the "issue-edit-btn"
+                $("#issue-edit-btn").show();
+                $("#solveBtn").hide();
+            }
 
             if (corrective_action === "" || preventive_action === "") {
                 alert('Please fill in all the required fields.');
                 return;
-            } else {
-                solved = true;
             }
-
-            console.log("solved", solved);
 
             const updatedDetails = {
                 corrective_action: corrective_action,
                 preventive_action: preventive_action,
                 updated_date: new Date().getTime(),
-                solved: true,
+                solved_date: new Date().getTime(),
+                solved: solved,
             };
 
             console.log("UpdateDetails", updatedDetails);
@@ -893,18 +842,25 @@
                         // Handle non-JSON response
                         console.log('Non-JSON Response:', xhr.responseText);
                     }
-
                     alert("Error updating issue: " + xhr.responseText);
                     console.log("Error updating issue");
                 },
-
-
                 complete: function () {
                     // Optionally, close the modal or perform other actions upon completion
                     $('#issueDetailModal').modal('hide');
                 }
             });
+
         });
+
+
+        $("#reset-btn").on("click", function () {
+            $("#status-filter").val('');
+            $("#solved-filter").val('');
+            $("#category-filter").val('');
+            loadData();
+        });
+
 
         // for search bar
         $("#status-filter").on("change", function() {
@@ -914,6 +870,10 @@
         $("#solved-filter").on("change", function() {
             filterSolvedIssues();
         });
+
+        $("#category-filter").on("change",function (){
+            filterCategory();
+        })
 
 
         function filterIssues() {
@@ -1006,8 +966,54 @@
         }
 
 
-        // Function to create HTML content for each issue
-        // details lists
+        // for Category filter
+        function filterCategory() {
+            var category = $('#category-filter').val();
+            console.log("category", category);
+
+            $.ajax({
+                url: '/api/issue/list/category/'+category,
+                type: 'GET',
+                success: function(data) {
+                    console.log('Success. Received data:', data);
+
+                    const sortContainer = $('#sort');
+                    sortContainer.empty(); // Clear previous content
+
+                    // Check if data is not empty
+                    if (data && data.length > 0) {
+                        // Loop through the retrieved data and create content for each item
+                        data.forEach(item => {
+                            const issueDiv = createIssueCard(item);
+                            sortContainer.append(issueDiv);
+                        });
+                    } else {
+                        // Handle case when data is empty
+                        sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                    }
+                },
+
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                    console.log('XHR:', xhr);
+                    console.log('Status:', status);
+
+                    // Display the error response in the console
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log('Error response:', response);
+                    } catch (e) {
+                        console.log('Error parsing response:', e);
+                    }
+
+                    alert('Error fetching data.');
+                }
+            });
+        }
+
+
+
+        // for issue list
         function createIssueCard(item) {
             return `
                     <div class="p-sm-2 ">
@@ -1039,7 +1045,7 @@
                                                 </div>
 
                                         </div>
-                                         <p class="badge bg-secondary " style="margin-left:15px;">${item.issue_category}</p>
+                                         <p class="badge bg-secondary " style="margin-left:15px;">${item.issueCategory}</p>
 
                                         <div class="d-flex justify-content-end align-items-center" style="margin-right: 20px;">
                                         <div class="d-flex align-items-center gap-1">
@@ -1063,164 +1069,12 @@
     });
 
 
-    // $(document.ready(function () {
-    //     let totalPages = 1;
-    //
-    //     function fetchPages(startPage) {
-    //     }
-    //
-    //     console.log('startPage: ' + startPage);
-    //
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "api/issue/pages",
-    //         data: {
-    //             page: startPage,
-    //             size: 5
-    //         },
-    //         success: function (response) {
-    //             const sortContainer = $('#sort');
-    //             sortContainer.empty(); // Clear previous content
-    //
-    //             // Check if data is not empty
-    //             if (data && data.length > 0) {
-    //                 // Loop through the retrieved data and create content for each item
-    //                 data.forEach(item => {
-    //                     const issueDiv = createIssueCard(item);
-    //                     sortContainer.append(issueDiv);
-    //                 });
-    //             } else {
-    //                 // Handle case when data is empty
-    //                 sortContainer.html('<p style="text-align: center;">No results found.</p>');
-    //             }
-    //             if ($('ul.pagination li').length - 2 != response.totalPages) {
-    //
-    //                 $('ul.pagination').empty();
-    //                 buildPagination(response);
-    //             }
-    //         },
-    //         error: function (e) {
-    //             alert("ERROR: ", e);
-    //             console.log("ERROR: ", e);
-    //         }
-    //
-    //     });
-    //
-    //
-    // });
-    //
-    //
 
 
 
 
-    //     function buildPagination(response) {
-    //         totalPages = response.totalPages;
-    //
-    //         var pageNumber = response.pageable.pageNumber;
-    //
-    //         var numLinks = 5;
-    //
-    //         // print 'previous' link only if not on page one
-    //         var first = '';
-    //         var prev = '';
-    //         if (pageNumber > 0) {
-    //             if(pageNumber !== 0) {
-    //                 first = '<li class="page-item"><a class="page-link">« First</a></li>';
-    //             }
-    //             prev = '<li class="page-item"><a class="page-link">‹ Prev</a></li>';
-    //         } else {
-    //             prev = ''; // on the page one, don't show 'previous' link
-    //             first = ''; // nor 'first page' link
-    //         }
-    //
-    //         // print 'next' link only if not on the last page
-    //         var next = '';
-    //         var last = '';
-    //         if (pageNumber < totalPages) {
-    //             if(pageNumber !== totalPages - 1) {
-    //                 next = '<li class="page-item"><a class="page-link">Next ›</a></li>';
-    //                 last = '<li class="page-item"><a class="page-link">Last »</a></li>';
-    //             }
-    //         } else {
-    //             next = ''; // on the last page, don't show 'next' link
-    //             last = ''; // nor 'last page' link
-    //         }
-    //
-    //         var start = pageNumber - (pageNumber % numLinks) + 1;
-    //         var end = start + numLinks - 1;
-    //         end = Math.min(totalPages, end);
-    //         var pagingLink = '';
-    //
-    //         for (var i = start; i <= end; i++) {
-    //             if (i == pageNumber + 1) {
-    //                 pagingLink += '<li class="page-item active"><a class="page-link"> ' + i + ' </a></li>'; // no need to create a link to current page
-    //             } else {
-    //                 pagingLink += '<li class="page-item"><a class="page-link"> ' + i + ' </a></li>';
-    //             }
-    //         }
-    //
-    //         // return the page navigation link
-    //         pagingLink = first + prev + pagingLink + next + last;
-    //
-    //         $("ul.pagination").append(pagingLink);
-    //     }
-    //
-    // $(document).on("click", "ul.pagination li a", function() {
-    //     var data = $(this).attr('data');
-    //     let val = $(this).text();
-    //     console.log('val: ' + val);
-    //
-    //     // click on the NEXT tag
-    //     if(val.toUpperCase() === "« FIRST") {
-    //         let currentActive = $("li.active");
-    //         fetchNotes(0);
-    //         $("li.active").removeClass("active");
-    //         // add .active to next-pagination li
-    //         currentActive.next().addClass("active");
-    //     } else if(val.toUpperCase() === "LAST »") {
-    //         fetchNotes(totalPages - 1);
-    //         $("li.active").removeClass("active");
-    //         // add .active to next-pagination li
-    //         currentActive.next().addClass("active");
-    //     } else if(val.toUpperCase() === "NEXT ›") {
-    //         let activeValue = parseInt($("ul.pagination li.active").text());
-    //         if(activeValue < totalPages){
-    //             let currentActive = $("li.active");
-    //             startPage = activeValue;
-    //             fetchNotes(startPage);
-    //             // remove .active class for the old li tag
-    //             $("li.active").removeClass("active");
-    //             // add .active to next-pagination li
-    //             currentActive.next().addClass("active");
-    //         }
-    //     } else if(val.toUpperCase() === "‹ PREV") {
-    //         let activeValue = parseInt($("ul.pagination li.active").text());
-    //         if(activeValue > 1) {
-    //             // get the previous page
-    //             startPage = activeValue - 2;
-    //             fetchNotes(startPage);
-    //             let currentActive = $("li.active");
-    //             currentActive.removeClass("active");
-    //             // add .active to previous-pagination li
-    //             currentActive.prev().addClass("active");
-    //         }
-    //     } else {
-    //         startPage = parseInt(val - 1);
-    //         fetchNotes(startPage);
-    //         // add focus to the li tag
-    //         $("li.active").removeClass("active");
-    //         $(this).parent().addClass("active");
-    //         //$(this).addClass("active");
-    //     }
-    // });
-    //
-    // (function(){
-    //     // get first-page at initial time
-    //     fetchNotes(0);
-    // })
-    // });
-    //
+
+
 </script>
 </body>
 </html>

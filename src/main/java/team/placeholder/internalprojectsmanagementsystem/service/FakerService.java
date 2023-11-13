@@ -144,7 +144,7 @@ public class FakerService {
             Issue issue = new Issue();
             issue.setProject(projectRepository.findAll().get(faker.random().nextInt(projectRepository.findAll().size())));
             issue.setImpact(faker.lorem().paragraph());
-            issue.setIssue_category(Category.values()[faker.random().nextInt(Category.values().length)]);
+            issue.setIssueCategory(Category.values()[faker.random().nextInt(Category.values().length)]);
             issue.setDescription(faker.lorem().paragraph());
             issue.setCorrective_action(faker.lorem().paragraph());
             issue.setRoot_cause(faker.lorem().paragraph());

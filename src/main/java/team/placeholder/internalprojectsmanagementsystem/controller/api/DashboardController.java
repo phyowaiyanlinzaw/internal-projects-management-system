@@ -1,25 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ReviewDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import java.util.logging.Logger;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
-
-@RestController
-@RequiredArgsConstructor
-@Slf4j
 public class DashboardController {
     private final ProjectServiceImpl projectService;
     private final TaskServiceImpl taskService;
@@ -50,4 +30,20 @@ public class DashboardController {
 
         return  0 ;
     }
+
+    private  final TaskServiceImpl taskService;
+
+    @GetMapping("/actual-man-month/project/{projectId}")
+    public ResponseEntity<List<ActualManMonthDto>> getMonthlyManMonth(
+            @PathVariable("projectId") long projectId
+    ) {
+        return ResponseEntity.ok(taskService.calculateMonthlyActualManHoursFromTasks(projectId));
+        }
+
+        @GetMapping("/plan-man-month/project/{projectId}")
+        public ResponseEntity<List<PlanManMonthDto>> getMonthlyPlanManMonth(
+                @PathVariable("projectId") long projectId
+        ) {
+            return ResponseEntity.ok(taskService.calculateMonthlyPlanManHoursFromTasks(projectId));
+        }
 }
