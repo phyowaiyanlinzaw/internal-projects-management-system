@@ -175,7 +175,7 @@
                         <label for="issue_category" class="col-sm-12 col-form-label" name="issueCategory">Issue Category<span
                                 style="color:red"> *</span></label>
                         <select class="form-select border-task-description" name="issue_category" id="issue_category" >
-                            <option selected>Select Issue Category</option>
+                            <option value="" selected disabled>Select Issue Category</option>
                             <option value="ERROR">Error</option>
                             <option value="BUG">Bug</option>
                             <option value="COMMUNICATION">Communication</option>
@@ -561,6 +561,307 @@
             }
         });
 
+
+        // validation For Issue
+
+        let  validatedForm = $('#add-issue');
+        function validateTitle() {
+            const title = $('#title').val();
+            const errorContainer = $('#title').siblings('.error-container');
+            if (title.length < 1) {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Title is required")
+                        .css("margin", "0")
+                        .addClass('error-message');
+
+                    $('#title').after('<div class="error-container"></div>');
+                    $('#title').siblings('.error-container').append(p);
+                }
+
+                $('#title').addClass('is-invalid');
+                $('#title').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#title').addClass('is-valid');
+                $('#title').removeClass('is-invalid');
+            }
+        }
+        function validateDescription() {
+            const description = $('.quill-editor-bubble').find('.ql-editor').html().trim();
+            const errorContainer = $('.quill-editor-bubble').siblings('.error-container');
+
+            if (!description || description.length === 0) {
+                validatedForm = false;
+
+                // Check if the error message container already exists
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Description is required")
+                        .css("margin", "0")
+                        .addClass('error-message');
+
+                    // Create a container for the error message and append the message to it
+                    $('.quill-editor-bubble').after('<div class="error-container"></div>').siblings('.error-container').append(p);
+                }
+
+                $('.quill-editor-bubble').addClass('is-invalid');
+                $('.quill-editor-bubble').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                // Remove the error message container if it exists
+                if (errorContainer.length > 0) {
+                    errorContainer.remove();
+                }
+                $('.quill-editor-bubble').addClass('is-valid');
+                $('.quill-editor-bubble').removeClass('is-invalid');
+            }
+        }
+
+
+        function validatePlace() {
+            const place = $('#place').val();
+            const errorContainer = $('#place').siblings('.error-container');
+            if (place.length < 1) {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                let p = $("<p>")
+                    .addClass("text-danger fs-6")
+                    .text(
+                        "Place is required"
+                    )
+                    .css("margin", "0");
+
+                $('#place').after('<div class="error-container"></div>');
+                $('#place').siblings('.error-container').append(p);
+            }
+                $('#place').addClass('is-invalid');
+                $('#place').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#place').addClass('is-valid');
+                $('#place').removeClass('is-invalid');
+            }
+        }
+
+        function validateImpact() {
+            const impact = $('#impact').val();
+            const errorContainer = $('#impact').siblings('.error-container');
+            if (impact.length < 1) {
+                validatedForm = false;
+                if(errorContainer.length === 0) {
+                let p = $("<p>")
+                    .addClass("text-danger fs-6")
+                    .text(
+                        "Impact is required"
+                    )
+                    .css("margin", "0");
+                $('#impact').after('<div class="error-container"></div>');
+                $('#impact').siblings('.error-container').append(p);
+            }
+
+                $('#impact').addClass('is-invalid');
+                $('#impact').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#impact').addClass('is-valid');
+                $('#impact').removeClass('is-invalid');
+            }
+        }
+
+        function validateRootCause() {
+            const rootCause = $('#root_cause').val();
+            const errorContainer = $('#root_cause').siblings('.error-container');
+            if (rootCause.length < 1) {
+                validatedForm = false;
+                if(errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Root Cause is required"
+                        )
+                        .css("margin", "0");
+                    $('#root_cause').after('<div class="error-container"></div>');
+                    $('#root_cause').siblings('.error-container').append(p);
+                }
+
+                $('#root_cause').addClass('is-invalid');
+                $('#root_cause').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#root_cause').addClass('is-valid');
+                $('#root_cause').removeClass('is-invalid');
+            }
+        }
+
+        function validateDirectCause() {
+            const directCause = $('#direct_cause').val();
+            const errorContainer = $('#direct_cause').siblings('.error-container');
+            if (directCause.length < 1) {
+                validatedForm = false;
+                if(errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Direct Cause is required"
+                        )
+                        .css("margin", "0");
+                    $('#direct_cause').after('<div class="error-container"></div>');
+                    $('#direct_cause').siblings('.error-container').append(p);
+                }
+
+
+                $('#direct_cause').addClass('is-invalid');
+                $('#direct_cause').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#direct_cause').addClass('is-valid');
+                $('#direct_cause').removeClass('is-invalid');
+            }
+        }
+
+        function validateIssueCategory() {
+            const issueCategory = $('#issue_category').val();
+            const errorContainer = $('#issue_category').siblings('.error-container');
+
+            if(!issueCategory || issueCategory === "") {
+
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Issue Category is required"
+                        )
+                        .css("margin", "0");
+                    $('#issue_category').after('<div class="error-container"></div>');
+                    $('#issue_category').siblings('.error-container').append(p);
+                }
+
+                $('#issue_category').addClass('is-invalid');
+                $('#issue_category').removeClass('is-valid');
+            }
+        else
+            {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#issue_category').addClass('is-valid');
+                $('#issue_category').removeClass('is-invalid');
+            }
+        }
+
+        function validateResponsibleParty() {
+            const responsibleParty = $('#responsible_party').val();
+            const errorContainer = $('#responsible_party').siblings('.error-container');
+            if(!responsibleParty || responsibleParty === "") {
+                validatedForm = false;
+                if(errorContainer.length === 0) {
+                let p = $("<p>")
+                    .addClass("text-danger fs-6")
+                    .text(
+                        "Responsible Party is required"
+                    )
+                    .css("margin", "0");
+                $('#responsibleParty').after('<div class="error-container"></div>');
+                $('#responsibleParty').siblings('.error-container').append(p);
+            }
+                $('#responsibleParty').addClass('is-invalid');
+                $('#responsibleParty').removeClass('is-valid');
+            }else{
+                validatedForm = true;
+                errorContainer.remove();
+                $('#responsibleParty').addClass('is-valid');
+                $('#responsibleParty').removeClass('is-invalid');
+            }
+        }
+
+        function validateUserPic() {
+            const userPic = $('#user_pic').val();
+            const errorContainer = $('#user_pic').siblings('.error-container');
+            if(!userPic || userPic === "") {
+                validatedForm = false;
+                if(errorContainer.length === 0) {
+                let p = $("<p>")
+                    .addClass("text-danger fs-6")
+                    .text(
+                        "Person In Charge is required"
+                    )
+                    .css("margin", "0");
+                $('#user_pic').after('<div class="error-container"></div>');
+                $('#user_pic').siblings('.error-container').append(p);
+            }
+                $('#user_pic').addClass('is-invalid');
+                $('#user_pic').removeClass('is-valid');
+            }else{
+               validatedForm = true;
+                errorContainer.remove();
+                $('#user_pic').addClass('is-valid');
+                $('#user_pic').removeClass('is-invalid');
+            }
+        }
+
+        function validateIssue() {
+            validateTitle();
+            validateDescription();
+            validatePlace();
+            validateImpact();
+            validateRootCause();
+            validateDirectCause();
+            validateIssueCategory();
+            validateResponsibleParty();
+            validateUserPic();
+            return validatedForm;
+
+        }
+
+        $('#title').on('input', function () {
+            validateTitle();
+        });
+
+        $('.quill-editor-bubble .ql-editor').on('input', function () {
+            validateDescription();
+        });
+
+
+        $('#place').on('input', function () {
+            validatePlace();
+        });
+
+        $('#impact').on('input', function () {
+            validateImpact();
+        });
+
+        $('#root_cause').on('input', function () {
+            validateRootCause();
+        });
+
+        $('#direct_cause').on('input', function () {
+            validateDirectCause();
+        });
+
+        $('#issue_category').on('change', function () {
+            validateIssueCategory();
+        });
+
+        $('#responsible_party').on('change', function () {
+            validateResponsibleParty();
+        });
+
+        $('#user_pic').on('change', function () {
+            validateUserPic();
+        });
+
+
+
+        //for add issue
         $('#addIssue').on('click', async function () {
             const title = $('#title').val();
             const description = a.root.innerHTML;
@@ -573,25 +874,15 @@
             const responsible_type = actual_responsible_type;
             const selectedUserId = $('#user_pic').val();
             const issueId = $('#issue-edit-btn').data('issueId');
-            if (
-                title === "" ||
-                description === "" ||
-                place === "" ||
-                impact === "" ||
-                root_cause === "" ||
-                direct_cause === "" ||
-                responsible_party === "" ||
-                issue_category === ""||
-                selectedUserId === ""||
-                responsible_type === ""
-            ) {
-                alert('Please fill in all the required fields.');
-                return;
-            }
 
+            console.log("Issue Id", issueId);
 
             const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party.split("_")[1]);
 
+
+            if(!validateIssue()){
+                return;
+            }
 
 
             const uploaderId = getLoginUser.currentUser.id;
@@ -616,6 +907,8 @@
 
 
             };
+
+
 
             console.log('Request Data:', requestData);
 
@@ -672,8 +965,6 @@
                         const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
                     });
-
-
 
 
                     $('#sort').on('click', '.see-more-button', function() {
