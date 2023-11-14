@@ -381,14 +381,11 @@
                         return await getData(
                             `/api/project/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
                         );
-                        break;
-
                     case "DEPARTMENT_HEAD":
                         console.log("department head");
                         return await getData(
                             `/api/project/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
                         );
-                        break;
                     case "EMPLOYEE":
                     case "CONTRACT":
                     case "FOC":
