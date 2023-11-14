@@ -62,7 +62,7 @@ public class TaskController {
     public ResponseEntity<TasksDto> updateTaskData(
             @RequestBody TaskRequestDto taskRequestDto
     ){
-        return null;
+        return ResponseEntity.ok(taskService.updateTaskData(taskRequestDto));
     }
 
     @DeleteMapping("/delete")

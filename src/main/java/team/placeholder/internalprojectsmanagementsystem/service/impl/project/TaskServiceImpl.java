@@ -115,12 +115,17 @@ public class TaskServiceImpl implements TasksService {
         if (task==null){
             return null;
         }
-
         task.setTitle(taskRequestDto.getTitle());
         task.setDescription(taskRequestDto.getDescription());
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
         task.setUser(userRepository.findById(taskRequestDto.getUserId()));
-        return null;
+        task.setPlan_start_time(taskRequestDto.getPlan_start_time());
+        task.setPlan_end_time(taskRequestDto.getPlan_end_time());
+        task.setPlan_hours(taskRequestDto.getPlan_hours());
+
+        taskRepository.save(task);
+
+        return modelMapper.map(task,TasksDto.class);
     }
 
     @Override
