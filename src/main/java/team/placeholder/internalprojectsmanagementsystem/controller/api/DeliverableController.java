@@ -11,6 +11,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,28 +29,28 @@ public class DeliverableController {
         return "Fake deliverables generated successfully";
     }
 
-//    @PostMapping("/update-status")
-//    public ResponseEntity<String> updateDeliverableStatus(@RequestBody List<Deliverable> deliverables) {
-//        try {
-//            deliverableService.updateDeliverableStatus(deliverables);
-//            return ResponseEntity.ok("Status updated successfully");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(500).body("Error updating status");
-//        }
-//    }
 
-    @PutMapping("/update-status/{id}")
-    public ResponseEntity<DeliverableDto> updateDeliverable(@PathVariable long id, @RequestBody DeliverableDto deliverableDto) {
-      deliverableDto.setId(id);
-        DeliverableDto updatedDeliverableDto = deliverableService.updateDeliverable(deliverableDto);
+    @PutMapping("/update-status")
+    public ResponseEntity<List<DeliverableDto>> updateDeliverable(@RequestBody List<DeliverableDto> deliverableDtoList) {
+        List<DeliverableDto> updatedDeliverables = new ArrayList<>();
+        System.out.println("----------" +updatedDeliverables);
+        for (DeliverableDto deliverableDto : deliverableDtoList) {
 
-        if (updatedDeliverableDto != null) {
-            return ResponseEntity.ok(updatedDeliverableDto);
+
+            DeliverableDto updatedDeliverableDto = deliverableService.updateDeliverable(deliverableDto);
+
+            if (updatedDeliverableDto != null) {
+                updatedDeliverables.add(updatedDeliverableDto);
+            }
+        }
+
+        if (!updatedDeliverables.isEmpty()) {
+            return ResponseEntity.ok(updatedDeliverables);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 
 
 

@@ -708,10 +708,11 @@
                         deliverableId = a.id;
                         const input = document.createElement('input');
                         input.type = 'checkbox';
+                        input.setAttribute("id", `checkbox-${a.id}`)
 
 
                         if (a.status) {
-                            input.checked = false;
+                            input.checked = true;
                         }
 
                         const p = document.createElement("p");
@@ -724,29 +725,32 @@
 
                         document.querySelector("#deliverable-type").appendChild(div);
                     });
+                    //_______________________________________deliverable list end
 
+
+                    //_______________________________________deliverable update alert box put
                     document.querySelector("#deliverable-type-form").addEventListener("submit", function (event) {
                         event.preventDefault();
-                        targetData.deliverableDto.forEach(a => {
-                            const checkbox = document.querySelector(`#checkbox-${a.deliverableType.id}`);
 
-                            if (checkbox && checkbox.checked) {
-                                a.status = true;
-                            } else {
-                                a.status = false;
+                        let deliverableList = [];
+
+                        targetData.deliverableDto.forEach(a => {
+                            const checkbox = document.querySelector(`#checkbox-${a.id}`);
+
+                            if (checkbox.checked) {
+                                deliverableList.push({id:a.id, status: true})
                             }
                         });
 
 
-                        console.log("delivv    "+deliverableId);
-                        // Send the updated data to the server using fetch or any other method
-                        // Example using fetch:
-                        fetch(`/api/deliverable/update-status/${deliverableId}`, {
+                        console.log("deliverable",deliverableList);
+
+                        fetch(`/api/deliverable/update-status`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({deliverableDto: targetData.deliverableDto}),
+                            body: JSON.stringify(deliverableList),
                         })
                             .then(response => response.json())
                             .then(data => {
@@ -757,8 +761,7 @@
                             });
                     });
 
-                    //------------------------ deliverable list end
-
+                    //____________________________________________________deliverable update end
                     document.querySelector("#project-detail-name").value =
                         targetData.name;
 

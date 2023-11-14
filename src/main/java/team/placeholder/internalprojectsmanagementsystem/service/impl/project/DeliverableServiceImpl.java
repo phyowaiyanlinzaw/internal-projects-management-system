@@ -41,7 +41,7 @@ public class DeliverableServiceImpl implements DeliverableService {
             deliverable.setStatus(deliverableDto.isStatus());
             deliverableRepository.save(deliverable);
 
-            return modelMapper.map(deliverable, deliverableDto.getClass());
+            return modelMapper.map(deliverable,DeliverableDto.class);
         }else {
             return null;
         }
