@@ -945,15 +945,10 @@
 
             console.log("Issue Id", issueId);
 
-            const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party.split("_")[1]);
-
-
             if(!validateIssue()){
                 return;
             }
 
-
-            const uploaderId = getLoginUser.currentUser.id;
                 const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
 
 
