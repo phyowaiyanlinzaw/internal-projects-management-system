@@ -721,6 +721,16 @@
             });
         }
     });
+
+    function formatDate(timestamp) {
+        // Assuming data.solved_date is a timestamp in milliseconds
+        const date = new Date(timestamp);
+
+        // Format the date as a string (adjust the format as needed)
+        const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+        return formattedDate;
+    }
         
     function createIssueCard(item) {
                 return `
@@ -757,11 +767,11 @@
 
                                         <div class="d-flex justify-content-end align-items-center" style="margin-right: 20px;">
                                         <div class="d-flex align-items-center gap-1">
-                                            <p> Posted  <span class="text-muted ">${new Date(item.created_date)} </span></p>
+                                            <p class="text-muted"> Posted  <span style="font-size: x-small; color: black;">${formatDate(item.created_date)} </span></p>
 
                                         </div>
                                         <div class="d-flex align-items-center gap-1" style="margin-left:5px;">
-                                            <p> Modified at <span class="text-muted">${getTimeElapsed(item.updated_date)}</span></p>
+                                            <p class="text-muted"> Modified at <span style="font-size: x-small; color: black;">${getTimeElapsed(item.updated_date)}</span></p>
                                         </div>
                                     </div>
                                     </div>
@@ -846,23 +856,12 @@
                                 });
                             });
 
-
                             $('#sort').on('click', '.issueDetails', function () {
 
                                 console.log("click on issueDetails ")
 
                                 $('#details').collapse('show');
                                 $('#peoples').collapse('show');
-
-                                function formatDate(timestamp) {
-                                    // Assuming data.solved_date is a timestamp in milliseconds
-                                    const date = new Date(timestamp);
-
-                                    // Format the date as a string (adjust the format as needed)
-                                    const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-
-                                    return formattedDate;
-                                }
 
                                 // Get the issue ID directly from the button's data-id attribute
                                 const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
