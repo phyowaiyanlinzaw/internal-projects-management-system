@@ -606,15 +606,19 @@
                 );
                 progressCircle.setAttribute("data-min-value", "0");
                 progressCircle.setAttribute("data-max-value", "100");
+
+
+                let percentage;
+                if(currentProject.totalTaskCount !== 0){
+                    percentage= currentProject.completeTaskCount / currentProject.totalTaskCount * 100;
+                } else {
+                    percentage = 0;
+                }
+                console.log("percentage",percentage);
+
                 progressCircle.setAttribute(
                     "data-value",
-                    currentProject.totalTask == 0
-                        ? (
-                              (currentProject.completeTaskCount /
-                                  currentProject.totalTaskCount) *
-                              100
-                          ).toString()
-                        : 0
+                    percentage
                 );
                 progressCircle.setAttribute("data-type", "percent");
 
@@ -1307,6 +1311,12 @@
                 const maxValue = $(this).attr("data-max-value");
                 const value = $(this).attr("data-value");
                 const type = $(this).attr("data-type");
+
+                console.log("minValue : " , minValue);
+                console.log("maxValue : " , maxValue);
+                console.log("value : " , value);
+                console.log("type : " , type);
+
 
                 if (value < 40) {
                     this.classList.add("circle-progress-secondary");
