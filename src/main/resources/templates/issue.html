@@ -810,7 +810,7 @@
                             });
 
 
-                            $('#sort').on('click', '.see-more-button', function () {
+                            $('.tab-content').on('click', '.see-more-button', function () {
                                 // Get the issue ID directly from the button's data-id attribute
                                 const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
                                 console.log('Clicked button with data-iD:', issueId);
