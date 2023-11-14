@@ -243,7 +243,7 @@
 
 
 
-
+                $("#validation-form").submit(function (event) {
 
                     const deli =
                         this.querySelector("#deliverable").value === ""
@@ -260,6 +260,7 @@
                         });
                     }
                     console.log(a.settings.whitelist);
+                });
             });
 
             let arcccList = await getArchitecturelist();
@@ -270,6 +271,7 @@
                         'input[name="architectures"]'
                     );
                     const a = initializeTagify(inputElement, architectureList);
+                    $("#validation-form").submit(function (event) {
                         const arch =
                             inputElement.value === ""
                                 ? []
@@ -283,6 +285,7 @@
                             });
                         }
                         console.log(a.settings.whitelist);
+                    });
                 })
                 .catch((error) => {
                     console.log("Error:", error);
@@ -1202,24 +1205,22 @@
 
 
                 // Validation for project
-                let validatedProjectForm = $('#validation-form');
+                let validatedProjectForm = false;
                 console.log("validation eeee");
                 function validateProjectName() {
                     const prjName = $('#name').val();
                     const errorContainer = $('#name').siblings('.error-container');
-                    console.log("click or input")
-                    if ( prjName.length < 1) {
-                        if(errorContainer.length === 0) {
+
+                    if (prjName.trim().length < 1) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text(
-                                    "Project Name is required"
-                                )
+                                .text("Project Name is required")
                                 .css("margin", "0");
                             $('#name').after('<div class="error-container"></div>');
                             $('#name').siblings('.error-container').append(p);
                         }
-
 
                         $('#name').addClass('is-invalid');
                         $('#name').removeClass('is-valid');
@@ -1230,15 +1231,15 @@
                         $('#name').removeClass('is-invalid');
                     }
                 }
-
                 function validateProjectClient() {
                     const prjclient = $('#client').val();
                     const errorContainer = $('#client').siblings('.error-container');
                     if (!prjclient  || prjclient .length === 0) {
+                        validatedProjectForm  = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("client is required")
+                                .text("Client is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1261,10 +1262,11 @@
                     const employeelist = $('#employee-list').val();
                     const errorContainer = $('#employee-list').siblings('.error-container');
                     if (!employeelist  || employeelist .length === 0) {
+                        validatedProjectForm  = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("client is required")
+                                .text("Employee is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1287,10 +1289,11 @@
                     const prjduration = $('#project-add-duration').val();
                     const errorContainer = $('#project-add-duration').siblings('.error-container');
                     if (prjduration.length < 1) {
+                        validatedProjectForm  = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("project-add-duration is required")
+                                .text("End duration is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1313,10 +1316,11 @@
                     const background = $('#project-detail-background').val();
                     const errorContainer = $('#project-detail-background').siblings('.error-container');
                     if (background.length < 1) {
+                        validatedProjectForm  = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("background is required")
+                                .text("Background is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1338,10 +1342,11 @@
                     const architectures = $('#architectures').val();
                     const errorContainer = $('#architectures').siblings('.error-container');
                     if (!architectures  || architectures.length === 0) {
+                        validatedProjectForm  = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("architectures is required")
+                                .text("Architecture is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1363,10 +1368,11 @@
                     const systemOutlines = $('#systemOutlines').val();
                     const errorContainer = $('#systemOutlines').siblings('.error-container');
                     if (!systemOutlines  || systemOutlines .length === 0) {
+                        validatedProjectForm  = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("systemOutlines is required")
+                                .text("SystemOutline is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1389,10 +1395,11 @@
                     const deliverable = $('#deliverable').val();
                     const errorContainer = $('#deliverable').siblings('.error-container');
                     if (!deliverable  || deliverable .length === 0) {
+                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("deliverable is required")
+                                .text("Deliverable is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1415,6 +1422,7 @@
                     const objective = $('#objective').val();
                     const errorContainer = $('#objective').siblings('.error-container');
                     if (objective.length < 1) {
+                        validatedProjectForm  = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1440,6 +1448,7 @@
                     const start_date = $('#start-date').val();
                     const errorContainer = $('#start_date ').siblings('.error-container');
                     if (start_date .length === 0) {
+                        validatedProjectForm =true;
                         if (errorContainer.length === 0) {
                         let p = $("<p>")
                             .addClass("text-danger fs-6")
@@ -1454,15 +1463,29 @@
                     $('#start_date ').addClass('is-invalid');
                     $('#start_date ').removeClass('is-valid');
 
-                    } else {
+                } else {
                        validatedProjectForm  = true;
-                        errorContainer.remove();
-                        $('#start_date').addClass('is-valid');
-                        $('#start_date').removeClass('is-invalid');
-                    }
+                    errorContainer.remove();
+                    $('#start_date').addClass('is-valid');
+                    $('#start_date').removeClass('is-invalid');
                 }
+            }
 
+                function validateProject() {
+                    validateProjectName();
+                    validateProjectClient();
+                    validateProjectEmployee();
+                    validatePrjDuration();
+                    validatePrjBackground();
+                    validatePrjArchitecture();
+                    validatePrjDeliverable();
+                    validatePrjSystemOutline();
+                    validatePrjObjective();
+                    validateStartDate();
+                    console.log("")
+                    return validatedProjectForm ;
 
+                }
 
                 $('#name').on('input', function () {
                     validateProjectName();
@@ -1489,15 +1512,15 @@
                     validatePrjBackground();
                 });
 
-                $('#architectures').on('change', function () {
+                $('#architectures').on('input', function () {
                     validatePrjArchitecture();
                 });
 
-                $('#deliverable').on('change', function () {
+                $('#deliverable').on('input', function () {
                     validatePrjDeliverable();
                 });
 
-                $('#systemOutlines').on('change', function () {
+                $('#systemOutlines').on('input', function () {
                     validatePrjSystemOutline();
                 });
 
@@ -1510,7 +1533,7 @@
                 });
 
 
-                document.querySelector("#validation-form").addEventListener('submit',function (event) {
+                $("#project-add-btn").on('click', function (event) {
                     console.log("submitted")
                     event.preventDefault(); // Prevent the form from submitting the traditional way
 
@@ -1543,20 +1566,20 @@
 
 
 
-                    if (
-                        projectName === "" ||
-                        client === "" ||
-                        startDate === 0 ||
-                        duration === 0 ||
-                        background === "" ||
-                        architectures === "" ||
-                        systemOutlines === "" ||
-                        deliverable === "" ||
-                        objective === "<p><br></p>"
-                    ) {
-                        alert("Please fill all the fields");
-                        return;
-                    }
+                    // if (
+                    //     projectName === "" ||
+                    //     client === "" ||
+                    //     startDate === 0 ||
+                    //     duration === 0 ||
+                    //     background === "" ||
+                    //     architectures === "" ||
+                    //     systemOutlines === "" ||
+                    //     deliverable === "" ||
+                    //     objective === "<p><br></p>"
+                    // ) {
+                    //     alert("Please fill all the fields");
+                    //     return;
+                    // }
 
                     architectures = JSON.parse(architectures);
 
@@ -1587,9 +1610,9 @@
                         }
                     })
 
-                    // if(!validateProject()){
-                    //     return;
-                    // }
+                    if(!validateProject()){
+                        return;
+                    }
 
                     // You may want to add some form validation here before sending the data
                     console.log(objective);
@@ -2162,6 +2185,7 @@
                                             type="submit"
                                             class="btn btn-primary col-2"
                                             data-dismiss="modal"
+                                            id="project-add-btn"
                                         >
                                             Add
                                         </button>
