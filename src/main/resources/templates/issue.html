@@ -659,324 +659,304 @@
             });
 
 
-        // validation For Issue
+            // validation For Issue
 
-        let  validatedForm = $('#add-issue');
-        function validateTitle() {
-            const title = $('#title').val();
-            const errorContainer = $('#title').siblings('.error-container');
-            if (title.length < 1) {
-                validatedForm = false;
-                if (errorContainer.length === 0) {
-                    let p = $("<p>")
-                        .addClass("text-danger fs-6")
-                        .text("Title is required")
-                        .css("margin", "0")
-                        .addClass('error-message');
+            let validatedForm = $('#add-issue');
 
-                    $('#title').after('<div class="error-container"></div>');
-                    $('#title').siblings('.error-container').append(p);
-                }
+            function validateTitle() {
+                const title = $('#title').val();
+                const errorContainer = $('#title').siblings('.error-container');
+                if (title.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Title is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
 
-                $('#title').addClass('is-invalid');
-                $('#title').removeClass('is-valid');
-            } else {
-                validatedForm = true;
-                errorContainer.remove();
-                $('#title').addClass('is-valid');
-                $('#title').removeClass('is-invalid');
-            }
-        }
-        function validateDescription() {
-            const description = $('.quill-editor-bubble').find('.ql-editor').html().trim();
-            const errorContainer = $('.quill-editor-bubble').siblings('.error-container');
+                        $('#title').after('<div class="error-container"></div>');
+                        $('#title').siblings('.error-container').append(p);
+                    }
 
-            if (!description || description.length === 0) {
-                validatedForm = false;
-
-                // Check if the error message container already exists
-                if (errorContainer.length === 0) {
-                    let p = $("<p>")
-                        .addClass("text-danger fs-6")
-                        .text("Description is required")
-                        .css("margin", "0")
-                        .addClass('error-message');
-
-                    // Create a container for the error message and append the message to it
-                    $('.quill-editor-bubble').after('<div class="error-container"></div>').siblings('.error-container').append(p);
-                }
-
-                $('.quill-editor-bubble').addClass('is-invalid');
-                $('.quill-editor-bubble').removeClass('is-valid');
-            } else {
-                validatedForm = true;
-                // Remove the error message container if it exists
-                if (errorContainer.length > 0) {
+                    $('#title').addClass('is-invalid');
+                    $('#title').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
                     errorContainer.remove();
+                    $('#title').addClass('is-valid');
+                    $('#title').removeClass('is-invalid');
                 }
-                $('.quill-editor-bubble').addClass('is-valid');
-                $('.quill-editor-bubble').removeClass('is-invalid');
-            }
-        }
-
-
-        function validatePlace() {
-            const place = $('#place').val();
-            const errorContainer = $('#place').siblings('.error-container');
-            if (place.length < 1) {
-                validatedForm = false;
-                if (errorContainer.length === 0) {
-                let p = $("<p>")
-                    .addClass("text-danger fs-6")
-                    .text(
-                        "Place is required"
-                    )
-                    .css("margin", "0");
-
-                $('#place').after('<div class="error-container"></div>');
-                $('#place').siblings('.error-container').append(p);
-            }
-                $('#place').addClass('is-invalid');
-                $('#place').removeClass('is-valid');
-            } else {
-                validatedForm = true;
-                errorContainer.remove();
-                $('#place').addClass('is-valid');
-                $('#place').removeClass('is-invalid');
-            }
-        }
-
-        function validateImpact() {
-            const impact = $('#impact').val();
-            const errorContainer = $('#impact').siblings('.error-container');
-            if (impact.length < 1) {
-                validatedForm = false;
-                if(errorContainer.length === 0) {
-                let p = $("<p>")
-                    .addClass("text-danger fs-6")
-                    .text(
-                        "Impact is required"
-                    )
-                    .css("margin", "0");
-                $('#impact').after('<div class="error-container"></div>');
-                $('#impact').siblings('.error-container').append(p);
             }
 
-                $('#impact').addClass('is-invalid');
-                $('#impact').removeClass('is-valid');
-            } else {
-                validatedForm = true;
-                errorContainer.remove();
-                $('#impact').addClass('is-valid');
-                $('#impact').removeClass('is-invalid');
-            }
-        }
+            function validateDescription() {
+                const description = $('.quill-editor-bubble').find('.ql-editor').html().trim();
+                const errorContainer = $('.quill-editor-bubble').siblings('.error-container');
 
-        function validateRootCause() {
-            const rootCause = $('#root_cause').val();
-            const errorContainer = $('#root_cause').siblings('.error-container');
-            if (rootCause.length < 1) {
-                validatedForm = false;
-                if(errorContainer.length === 0) {
-                    let p = $("<p>")
-                        .addClass("text-danger fs-6")
-                        .text(
-                            "Root Cause is required"
-                        )
-                        .css("margin", "0");
-                    $('#root_cause').after('<div class="error-container"></div>');
-                    $('#root_cause').siblings('.error-container').append(p);
+                if (!description || description.length === 0) {
+                    validatedForm = false;
+
+                    // Check if the error message container already exists
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Description is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        // Create a container for the error message and append the message to it
+                        $('.quill-editor-bubble').after('<div class="error-container"></div>').siblings('.error-container').append(p);
+                    }
+
+                    $('.quill-editor-bubble').addClass('is-invalid');
+                    $('.quill-editor-bubble').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    // Remove the error message container if it exists
+                    if (errorContainer.length > 0) {
+                        errorContainer.remove();
+                    }
+                    $('.quill-editor-bubble').addClass('is-valid');
+                    $('.quill-editor-bubble').removeClass('is-invalid');
                 }
-
-                $('#root_cause').addClass('is-invalid');
-                $('#root_cause').removeClass('is-valid');
-            } else {
-                validatedForm = true;
-                errorContainer.remove();
-                $('#root_cause').addClass('is-valid');
-                $('#root_cause').removeClass('is-invalid');
             }
-        }
 
-        function validateDirectCause() {
-            const directCause = $('#direct_cause').val();
-            const errorContainer = $('#direct_cause').siblings('.error-container');
-            if (directCause.length < 1) {
-                validatedForm = false;
-                if(errorContainer.length === 0) {
-                    let p = $("<p>")
-                        .addClass("text-danger fs-6")
-                        .text(
-                            "Direct Cause is required"
-                        )
-                        .css("margin", "0");
-                    $('#direct_cause').after('<div class="error-container"></div>');
-                    $('#direct_cause').siblings('.error-container').append(p);
+
+            function validatePlace() {
+                const place = $('#place').val();
+                const errorContainer = $('#place').siblings('.error-container');
+                if (place.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Place is required"
+                            )
+                            .css("margin", "0");
+
+                        $('#place').after('<div class="error-container"></div>');
+                        $('#place').siblings('.error-container').append(p);
+                    }
+                    $('#place').addClass('is-invalid');
+                    $('#place').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#place').addClass('is-valid');
+                    $('#place').removeClass('is-invalid');
                 }
-
-
-                $('#direct_cause').addClass('is-invalid');
-                $('#direct_cause').removeClass('is-valid');
-            } else {
-                validatedForm = true;
-                errorContainer.remove();
-                $('#direct_cause').addClass('is-valid');
-                $('#direct_cause').removeClass('is-invalid');
             }
-        }
 
-        function validateIssueCategory() {
-            const issueCategory = $('#issue_category').val();
-            const errorContainer = $('#issue_category').siblings('.error-container');
+            function validateImpact() {
+                const impact = $('#impact').val();
+                const errorContainer = $('#impact').siblings('.error-container');
+                if (impact.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Impact is required"
+                            )
+                            .css("margin", "0");
+                        $('#impact').after('<div class="error-container"></div>');
+                        $('#impact').siblings('.error-container').append(p);
+                    }
 
-            if(!issueCategory || issueCategory === "") {
-
-                validatedForm = false;
-                if (errorContainer.length === 0) {
-                    let p = $("<p>")
-                        .addClass("text-danger fs-6")
-                        .text(
-                            "Issue Category is required"
-                        )
-                        .css("margin", "0");
-                    $('#issue_category').after('<div class="error-container"></div>');
-                    $('#issue_category').siblings('.error-container').append(p);
+                    $('#impact').addClass('is-invalid');
+                    $('#impact').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#impact').addClass('is-valid');
+                    $('#impact').removeClass('is-invalid');
                 }
-
-                $('#issue_category').addClass('is-invalid');
-                $('#issue_category').removeClass('is-valid');
-            }
-        else
-            {
-                validatedForm = true;
-                errorContainer.remove();
-                $('#issue_category').addClass('is-valid');
-                $('#issue_category').removeClass('is-invalid');
-            }
-        }
-
-        function validateResponsibleParty() {
-            const responsibleParty = $('#responsible_party').val();
-            const errorContainer = $('#responsible_party').siblings('.error-container');
-            if(!responsibleParty || responsibleParty === "") {
-                validatedForm = false;
-                if(errorContainer.length === 0) {
-                let p = $("<p>")
-                    .addClass("text-danger fs-6")
-                    .text(
-                        "Responsible Party is required"
-                    )
-                    .css("margin", "0");
-                $('#responsibleParty').after('<div class="error-container"></div>');
-                $('#responsibleParty').siblings('.error-container').append(p);
-            }
-                $('#responsibleParty').addClass('is-invalid');
-                $('#responsibleParty').removeClass('is-valid');
-            }else{
-                validatedForm = true;
-                errorContainer.remove();
-                $('#responsibleParty').addClass('is-valid');
-                $('#responsibleParty').removeClass('is-invalid');
-            }
-        }
-
-        function validateUserPic() {
-            const userPic = $('#user_pic').val();
-            const errorContainer = $('#user_pic').siblings('.error-container');
-            if(!userPic || userPic === "") {
-                validatedForm = false;
-                if(errorContainer.length === 0) {
-                let p = $("<p>")
-                    .addClass("text-danger fs-6")
-                    .text(
-                        "Person In Charge is required"
-                    )
-                    .css("margin", "0");
-                $('#user_pic').after('<div class="error-container"></div>');
-                $('#user_pic').siblings('.error-container').append(p);
-            }
-                $('#user_pic').addClass('is-invalid');
-                $('#user_pic').removeClass('is-valid');
-            }else{
-               validatedForm = true;
-                errorContainer.remove();
-                $('#user_pic').addClass('is-valid');
-                $('#user_pic').removeClass('is-invalid');
-            }
-        }
-
-        function validateIssue() {
-            validateTitle();
-            validateDescription();
-            validatePlace();
-            validateImpact();
-            validateRootCause();
-            validateDirectCause();
-            validateIssueCategory();
-            validateResponsibleParty();
-            validateUserPic();
-            return validatedForm;
-
-        }
-
-        $('#title').on('input', function () {
-            validateTitle();
-        });
-
-        $('.quill-editor-bubble .ql-editor').on('input', function () {
-            validateDescription();
-        });
-
-        $('#place').on('input', function () {
-            validatePlace();
-        });
-
-        $('#impact').on('input', function () {
-            validateImpact();
-        });
-
-        $('#root_cause').on('input', function () {
-            validateRootCause();
-        });
-
-        $('#direct_cause').on('input', function () {
-            validateDirectCause();
-        });
-
-        $('#issue_category').on('change', function () {
-            validateIssueCategory();
-        });
-
-        $('#responsible_party').on('change', function () {
-            validateResponsibleParty();
-        });
-
-        $('#user_pic').on('change', function () {
-            validateUserPic();
-        });
-
-
-
-        //for add issue
-        $('#addIssue').on('click', async function () {
-            const title = $('#title').val();
-            const description = a.root.innerHTML;
-            const place = $('#place').val();
-            const impact = $('#impact').val();
-            const root_cause = $('#root_cause').val();
-            const direct_cause = $('#direct_cause').val();
-            const responsible_party = $('#responsible_party').val();
-            const issue_category = $('#issueCategory').val();
-            const responsible_type = actual_responsible_type;
-            const selectedUserId = $('#user_pic').val();
-            const issueId = $('#issue-edit-btn').data('issueId');
-
-            console.log("Issue Id", issueId);
-
-            if(!validateIssue()){
-                return;
             }
 
+            function validateRootCause() {
+                const rootCause = $('#root_cause').val();
+                const errorContainer = $('#root_cause').siblings('.error-container');
+                if (rootCause.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Root Cause is required"
+                            )
+                            .css("margin", "0");
+                        $('#root_cause').after('<div class="error-container"></div>');
+                        $('#root_cause').siblings('.error-container').append(p);
+                    }
+
+                    $('#root_cause').addClass('is-invalid');
+                    $('#root_cause').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#root_cause').addClass('is-valid');
+                    $('#root_cause').removeClass('is-invalid');
+                }
+            }
+
+            function validateDirectCause() {
+                const directCause = $('#direct_cause').val();
+                const errorContainer = $('#direct_cause').siblings('.error-container');
+                if (directCause.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Direct Cause is required"
+                            )
+                            .css("margin", "0");
+                        $('#direct_cause').after('<div class="error-container"></div>');
+                        $('#direct_cause').siblings('.error-container').append(p);
+                    }
+
+
+                    $('#direct_cause').addClass('is-invalid');
+                    $('#direct_cause').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#direct_cause').addClass('is-valid');
+                    $('#direct_cause').removeClass('is-invalid');
+                }
+            }
+
+            function validateIssueCategory() {
+                const issueCategory = $('#issue_category').val();
+                const errorContainer = $('#issue_category').siblings('.error-container');
+
+                if (!issueCategory || issueCategory === "") {
+
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Issue Category is required"
+                            )
+                            .css("margin", "0");
+                        $('#issue_category').after('<div class="error-container"></div>');
+                        $('#issue_category').siblings('.error-container').append(p);
+                    }
+
+                    $('#issue_category').addClass('is-invalid');
+                    $('#issue_category').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#issue_category').addClass('is-valid');
+                    $('#issue_category').removeClass('is-invalid');
+                }
+            }
+
+            function validateResponsibleParty() {
+                const responsibleParty = $('#responsible_party').val();
+                const errorContainer = $('#responsible_party').siblings('.error-container');
+                if (!responsibleParty || responsibleParty === "") {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Responsible Party is required"
+                            )
+                            .css("margin", "0");
+                        $('#responsibleParty').after('<div class="error-container"></div>');
+                        $('#responsibleParty').siblings('.error-container').append(p);
+                    }
+                    $('#responsibleParty').addClass('is-invalid');
+                    $('#responsibleParty').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#responsibleParty').addClass('is-valid');
+                    $('#responsibleParty').removeClass('is-invalid');
+                }
+            }
+
+            function validateUserPic() {
+                const userPic = $('#user_pic').val();
+                const errorContainer = $('#user_pic').siblings('.error-container');
+                if (!userPic || userPic === "") {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Person In Charge is required"
+                            )
+                            .css("margin", "0");
+                        $('#user_pic').after('<div class="error-container"></div>');
+                        $('#user_pic').siblings('.error-container').append(p);
+                    }
+                    $('#user_pic').addClass('is-invalid');
+                    $('#user_pic').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#user_pic').addClass('is-valid');
+                    $('#user_pic').removeClass('is-invalid');
+                }
+            }
+
+            function validateIssue() {
+                validateTitle();
+                validateDescription();
+                validatePlace();
+                validateImpact();
+                validateRootCause();
+                validateDirectCause();
+                validateIssueCategory();
+                validateResponsibleParty();
+                validateUserPic();
+                return validatedForm;
+
+            }
+
+            $('#title').on('input', function () {
+                validateTitle();
+            });
+
+            $('.quill-editor-bubble .ql-editor').on('input', function () {
+                validateDescription();
+            });
+
+            $('#place').on('input', function () {
+                validatePlace();
+            });
+
+            $('#impact').on('input', function () {
+                validateImpact();
+            });
+
+            $('#root_cause').on('input', function () {
+                validateRootCause();
+            });
+
+            $('#direct_cause').on('input', function () {
+                validateDirectCause();
+            });
+
+            $('#issue_category').on('change', function () {
+                validateIssueCategory();
+            });
+
+            $('#responsible_party').on('change', function () {
+                validateResponsibleParty();
+            });
+
+            $('#user_pic').on('change', function () {
+                validateUserPic();
+            });
+
+
+            //for add issue
             $('#addIssue').on('click', async function () {
                 const title = $('#title').val();
                 const description = a.root.innerHTML;
@@ -985,93 +965,112 @@
                 const root_cause = $('#root_cause').val();
                 const direct_cause = $('#direct_cause').val();
                 const responsible_party = $('#responsible_party').val();
-                const issue_category = $('#issue_category').val();
-                console.log(issue_category)
+                const issue_category = $('#issueCategory').val();
                 const responsible_type = actual_responsible_type;
                 const selectedUserId = $('#user_pic').val();
                 const issueId = $('#issue-edit-btn').data('issueId');
-                if (
-                    title === "" ||
-                    description === "" ||
-                    place === "" ||
-                    impact === "" ||
-                    root_cause === "" ||
-                    direct_cause === "" ||
-                    responsible_party === "" ||
-                    issue_category === "" ||
-                    selectedUserId === "" ||
-                    responsible_type === ""
-                ) {
-                    //alert('Please fill in all the required fields.');
-                    showerror('Please fill in all the required fields.');
+
+                console.log("Issue Id", issueId);
+
+                if (!validateIssue()) {
                     return;
                 }
-                const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
+
+                $('#addIssue').on('click', async function () {
+                    const title = $('#title').val();
+                    const description = a.root.innerHTML;
+                    const place = $('#place').val();
+                    const impact = $('#impact').val();
+                    const root_cause = $('#root_cause').val();
+                    const direct_cause = $('#direct_cause').val();
+                    const responsible_party = $('#responsible_party').val();
+                    const issue_category = $('#issue_category').val();
+                    console.log(issue_category)
+                    const responsible_type = actual_responsible_type;
+                    const selectedUserId = $('#user_pic').val();
+                    const issueId = $('#issue-edit-btn').data('issueId');
+                    if (
+                        title === "" ||
+                        description === "" ||
+                        place === "" ||
+                        impact === "" ||
+                        root_cause === "" ||
+                        direct_cause === "" ||
+                        responsible_party === "" ||
+                        issue_category === "" ||
+                        selectedUserId === "" ||
+                        responsible_type === ""
+                    ) {
+                        //alert('Please fill in all the required fields.');
+                        showerror('Please fill in all the required fields.');
+                        return;
+                    }
+                    const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
 
 
-                const uploaderId = getLoginUser.currentUser.id;
+                    const uploaderId = getLoginUser.currentUser.id;
 
-                console.log("Uploader Id", uploaderId);
+                    console.log("Uploader Id", uploaderId);
 
-                const requestData = {
-                    title: title,
-                    description: description,
-                    place: place,
-                    impact: impact,
-                    created_date: new Date().getTime(),
-                    updated_date: new Date().getTime(),
-                    root_cause: root_cause,
-                    direct_cause: direct_cause,
-                    responsible_party: selectedResponsibleParty,
-                    issueCategory: issue_category,
-                    responsible_type: responsible_type,
-                    project_id: dataForIssue.projectId,
-                    user_uploader: uploaderId,
-                    user_pic: selectedUserId,
+                    const requestData = {
+                        title: title,
+                        description: description,
+                        place: place,
+                        impact: impact,
+                        created_date: new Date().getTime(),
+                        updated_date: new Date().getTime(),
+                        root_cause: root_cause,
+                        direct_cause: direct_cause,
+                        responsible_party: selectedResponsibleParty,
+                        issueCategory: issue_category,
+                        responsible_type: responsible_type,
+                        project_id: dataForIssue.projectId,
+                        user_uploader: uploaderId,
+                        user_pic: selectedUserId,
 
 
-                };
+                    };
 
-                console.log('Request Data:', requestData);
+                    console.log('Request Data:', requestData);
 
-                $.ajax({
-                    url: 'api/issue/save',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(requestData),
-                    dataType: 'json',
-                    success: function (data) {
-                        console.log(data);
-                        //alert('Issue Created Successfully');
-                        showsuccess('Issue Created Successfully');
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('Status:', status);
-                        console.log('Error:', error);
-                        console.log('Server response:', xhr.responseText);
+                    $.ajax({
+                        url: 'api/issue/save',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(requestData),
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            //alert('Issue Created Successfully');
+                            showsuccess('Issue Created Successfully');
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Status:', status);
+                            console.log('Error:', error);
+                            console.log('Server response:', xhr.responseText);
 
-                        if (xhr.getResponseHeader('Content-Type') === 'application/json') {
-                            // Handle JSON response
-                            try {
-                                const response = JSON.parse(xhr.responseText);
-                                console.log('JSON Response:', response);
-                            } catch (e) {
-                                console.log('JSON parsing error:', e);
+                            if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                                // Handle JSON response
+                                try {
+                                    const response = JSON.parse(xhr.responseText);
+                                    console.log('JSON Response:', response);
+                                } catch (e) {
+                                    console.log('JSON parsing error:', e);
+                                }
+                            } else {
+                                // Handle non-JSON response
+                                console.log('Non-JSON Response:', xhr.responseText);
                             }
-                        } else {
-                            // Handle non-JSON response
-                            console.log('Non-JSON Response:', xhr.responseText);
-                        }
 
-                        alert('Error creating issue: ' + xhr.responseText);
-                        console.log('Error creating issue');
-                    },
+                            alert('Error creating issue: ' + xhr.responseText);
+                            console.log('Error creating issue');
+                        },
+                    });
                 });
             });
-        }
-    });
-        
-    function createIssueCard(item) {
+
+
+            function createIssueCard(item) {
                 return `
                     <div class="p-sm-2 ">
                             <div class="card">
@@ -1123,16 +1122,16 @@
 
                     `;
             }
-        
-    
-    let currentIssueId;
+
+
+            let currentIssueId;
             $(document).ready(async function () {
 
                 let unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
 
                 console.log("unsolved Issue list", unsolvedIssueList)
 
-                for(let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+                for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
                     const issue = unsolvedIssueList[i];
 
@@ -1388,104 +1387,104 @@
                 showSuccess("Your Issue Solved.");
             });
 
-    issueEditBtn.addEventListener('click', function (e) {
-        const corrective_action = $('#corrective_actionInput').val();
-        const preventive_action = $('#preventive_actionInput').val();
-        const solved = $('#solve-btn').val();
-        const issueId = $(this).data('issueId');
-        console.log(solved + " solveddddddd");
-        if (corrective_action === "" || preventive_action === "") {
-            // alert('Please fill in all the required fields.');
-            showError('Please fill in all the required fields.');
-            return;
-        }
+            issueEditBtn.addEventListener('click', function (e) {
+                const corrective_action = $('#corrective_actionInput').val();
+                const preventive_action = $('#preventive_actionInput').val();
+                const solved = $('#solve-btn').val();
+                const issueId = $(this).data('issueId');
+                console.log(solved + " solveddddddd");
+                if (corrective_action === "" || preventive_action === "") {
+                    // alert('Please fill in all the required fields.');
+                    showError('Please fill in all the required fields.');
+                    return;
+                }
 
-        if (solved === "true") {
-            // If solved, hide the "issue-edit-btn" and show the "solve-btn"
-            $("#issue-edit-btn").hide();
-            $("#solveBtn").show();
-        } else {
-            // If not solved, show the confirmation modal
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Are you sure you want to solve?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const updatedDetails = {
-                        corrective_action: corrective_action,
-                        preventive_action: preventive_action,
-                        updated_date: new Date().getTime(),
-                        solved_date: new Date().getTime(),
-                        solved: solved,
-                    };
-                    console.log("UpdateDetails", updatedDetails);
+                if (solved === "true") {
+                    // If solved, hide the "issue-edit-btn" and show the "solve-btn"
+                    $("#issue-edit-btn").hide();
+                    $("#solveBtn").show();
+                } else {
+                    // If not solved, show the confirmation modal
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "Are you sure you want to solve?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const updatedDetails = {
+                                corrective_action: corrective_action,
+                                preventive_action: preventive_action,
+                                updated_date: new Date().getTime(),
+                                solved_date: new Date().getTime(),
+                                solved: solved,
+                            };
+                            console.log("UpdateDetails", updatedDetails);
 
-                    $.ajax({
-                        url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
-                        type: 'PUT',
-                        contentType: 'application/json',
-                        data: JSON.stringify(updatedDetails),
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log(data);
-                            console.log("Issue Updated Successfully");
-                            // Update 'solved' to true after a successful AJAX request
-                            $('#solve-btn').val("true");
-                            const spanContent = 'Solved';
-                            const spanColor = 'success';
-                            $('#solved').empty().html(`<span class="card-title badge rounded-pill bg-${spanColor}" id="solved">${spanContent}</span>`);
-                            Swal.fire({
-                                title: "Success!",
-                                text: "You have successfully solved the issue.",
-                                icon: "success"
-                            });
-                            console.log("Success")
-                            $("#issue-edit-btn").hide();
-                            $("#solve-btn").show();
+                            $.ajax({
+                                url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
+                                type: 'PUT',
+                                contentType: 'application/json',
+                                data: JSON.stringify(updatedDetails),
+                                dataType: 'json',
+                                success: function (data) {
+                                    console.log(data);
+                                    console.log("Issue Updated Successfully");
+                                    // Update 'solved' to true after a successful AJAX request
+                                    $('#solve-btn').val("true");
+                                    const spanContent = 'Solved';
+                                    const spanColor = 'success';
+                                    $('#solved').empty().html(`<span class="card-title badge rounded-pill bg-${spanColor}" id="solved">${spanContent}</span>`);
+                                    Swal.fire({
+                                        title: "Success!",
+                                        text: "You have successfully solved the issue.",
+                                        icon: "success"
+                                    });
+                                    console.log("Success")
+                                    $("#issue-edit-btn").hide();
+                                    $("#solve-btn").show();
 
 
-                        },
-                        error: function (xhr, status, error) {
-                            console.log('Status:', status);
-                            console.log('Error:', error);
-                            console.log('Server response:', xhr.responseText);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log('Status:', status);
+                                    console.log('Error:', error);
+                                    console.log('Server response:', xhr.responseText);
 
-                            if (xhr.getResponseHeader('Content-Type') === 'application/json') {
-                                // Handle JSON response
-                                try {
-                                    const response = JSON.parse(xhr.responseText);
-                                    console.log('JSON Response:', response);
-                                } catch (e) {
-                                    console.log('JSON parsing error:', e);
+                                    if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                                        // Handle JSON response
+                                        try {
+                                            const response = JSON.parse(xhr.responseText);
+                                            console.log('JSON Response:', response);
+                                        } catch (e) {
+                                            console.log('JSON parsing error:', e);
+                                        }
+                                    } else {
+                                        // Handle non-JSON response
+                                        console.log('Non-JSON Response:', xhr.responseText);
+                                    }
+                                    alert("Error updating issue: " + xhr.responseText);
+                                    console.log("Error updating issue");
+                                },
+                                complete: function () {
+                                    // Optionally, close the modal or perform other actions upon completion
+                                    $('#issueDetailModal').modal('hide');
                                 }
-                            } else {
-                                // Handle non-JSON response
-                                console.log('Non-JSON Response:', xhr.responseText);
-                            }
-                            alert("Error updating issue: " + xhr.responseText);
-                            console.log("Error updating issue");
-                        },
-                        complete: function () {
-                            // Optionally, close the modal or perform other actions upon completion
-                            $('#issueDetailModal').modal('hide');
+                            });
+
+                        } else {
+                            // User clicked "No," stop the process and close the modal
+                            return false;
                         }
                     });
 
-                } else {
-                    // User clicked "No," stop the process and close the modal
-                    return false;
+                    // Hide the "solve-btn" regardless of user choice
+                    $("#solveBtn").hide();
                 }
             });
-
-            // Hide the "solve-btn" regardless of user choice
-            $("#solveBtn").hide();
-        }
-    });
 
 
             $("#reset-btn").on("click", function () {
@@ -1644,60 +1643,65 @@
                     }
                 });
             }
+
             // for issue list
-    function showError(message) {
-        $("#errorText").text(message);
-        $("#errorAlert").show();
+            function showError(message) {
+                $("#errorText").text(message);
+                $("#errorAlert").show();
 
-        setTimeout(function () {
-            $("#errorAlert").hide();
-        }, 3000);
+                setTimeout(function () {
+                    $("#errorAlert").hide();
+                }, 3000);
 
-        //close alert box
-        $(".btn-close").on("click", function () {
-            $("#errorAlert").hide();
-        });
-    }
-    function showSuccess(message) {
-        $("#successText").text(message);
-        $("#successAlert").show();
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#errorAlert").hide();
+                });
+            }
 
-        setTimeout(function () {
-            $("#successAlert").hide();
-        }, 3000);
+            function showSuccess(message) {
+                $("#successText").text(message);
+                $("#successAlert").show();
 
-        //close alert box
-        $(".btn-close").on("click", function () {
-            $("#successAlert").hide();
-        });
-    }
+                setTimeout(function () {
+                    $("#successAlert").hide();
+                }, 3000);
 
-    function showerror(message) {
-        $("#error-text").text(message);
-        $("#error-alert").show();
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#successAlert").hide();
+                });
+            }
 
-        setTimeout(function () {
-            $("#error-alert").hide();
-        }, 3000);
+            function showerror(message) {
+                $("#error-text").text(message);
+                $("#error-alert").show();
 
-        //close alert box
-        $(".btn-close").on("click", function () {
-            $("#error-alert").hide();
-        });
-    }
-    function showsuccess(message) {
-        $("#success-text").text(message);
-        $("#success-alert").show();
+                setTimeout(function () {
+                    $("#error-alert").hide();
+                }, 3000);
 
-        setTimeout(function () {
-            $("#success-alert").hide();
-        }, 3000);
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#error-alert").hide();
+                });
+            }
 
-        //close alert box
-        $(".btn-close").on("click", function () {
-            $("#success-alert").hide();
-        });
-    }
+            function showsuccess(message) {
+                $("#success-text").text(message);
+                $("#success-alert").show();
+
+                setTimeout(function () {
+                    $("#success-alert").hide();
+                }, 3000);
+
+                //close alert box
+                $(".btn-close").on("click", function () {
+                    $("#success-alert").hide();
+                });
+            }
+        }
+    });
 
 
 </script>

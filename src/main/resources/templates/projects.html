@@ -207,10 +207,13 @@
             console.log(clientList);
 
             const clientSelect = document.querySelector("select[id='client']");
+
+
             clientList.forEach((client) => {
                 const option = document.createElement("option");
                 option.value = JSON.stringify(client);
                 option.textContent = client.name;
+
                 clientSelect.append(option);
             });
 
@@ -243,7 +246,6 @@
 
 
 
-                // $("#validation-form").submit(function (event) {
 
                     const deli =
                         this.querySelector("#deliverable").value === ""
@@ -1238,10 +1240,9 @@
                 });
 
 
-
-
                 // Validation for project
                 let validatedProjectForm = false;
+
                 console.log("validation eeee");
                 function validateProjectName() {
                     const prjName = $('#name').val();
@@ -1264,9 +1265,9 @@
                         errorContainer.remove();
                         $('#name').addClass('is-valid');
                         $('#name').removeClass('is-invalid');
-
                     }
                 }
+
                 function validateProjectClient() {
                     const prjclient = $('#client').val();
                     const errorContainer = $('#client').siblings('.error-container');
@@ -1310,13 +1311,12 @@
                             $('#employee-list').siblings('.error-container').append(p);
                         }
 
-                        $('#employee-list').addClass('is-invalid');
-                        $('#employee-list').removeClass('is-valid');
+                        $('#employee-list').css('border', '1px solid #dc3545');
                     } else {
                         validatedProjectForm  = true;
                         errorContainer.remove();
-                        $('#employee-list').addClass('is-valid');
-                        $('#employee-list').removeClass('is-invalid');
+                        $('#employee-list').css('border', '1px solid #28a745');
+
                     }
                 }
 
@@ -1349,8 +1349,8 @@
 
 
                 function validatePrjBackground() {
-                    const background = $('#project-detail-background').val();
-                    const errorContainer = $('#project-detail-background').siblings('.error-container');
+                    const background = $('#background').val();
+                    const errorContainer = $('#background').siblings('.error-container');
                     if (background.length < 1) {
                         validatedProjectForm  = false;
                         if (errorContainer.length === 0) {
@@ -1360,17 +1360,17 @@
                                 .css("margin", "0")
                                 .addClass('error-message');
 
-                            $('#project-detail-background').after('<div class="error-container"></div>');
-                            $('#project-detail-background').siblings('.error-container').append(p);
+                            $('#background').after('<div class="error-container"></div>');
+                            $('#background').siblings('.error-container').append(p);
                         }
 
-                        $('#project-detail-background').addClass('is-invalid');
-                        $('#project-detail-background').removeClass('is-valid');
+                        $('#background').addClass('is-invalid');
+                        $('#background').removeClass('is-valid');
                     } else {
                         validatedProjectForm  = true;
                         errorContainer.remove();
-                        $('#project-detail-background').addClass('is-valid');
-                        $('#project-detail-background').removeClass('is-invalid');
+                        $('#background').addClass('is-valid');
+                        $('#background').removeClass('is-invalid');
                     }
                 }
 
@@ -1390,25 +1390,25 @@
                             $('#architectures').siblings('.error-container').append(p);
                         }
 
-                        $('#architectures').addClass('is-invalid');
-                        $('#architectures').removeClass('is-valid');
+                        $('#architectures').css('border', '1px solid #dc3545 !important;');
                     } else {
                         validatedProjectForm  = true;
                         errorContainer.remove();
-                        $('#architectures').addClass('is-valid');
-                        $('#architectures').removeClass('is-invalid');
+                        $('#architectures').css('border', '1px solid #28a745 !important;');
                     }
                 }
 
+                // Function to validate systemOutlines
                 function validatePrjSystemOutline() {
-                    const systemOutlines = $('#systemOutlines').val();
+                    const systemOutlines = $('#systemOutlines').text().trim();
                     const errorContainer = $('#systemOutlines').siblings('.error-container');
-                    if (!systemOutlines  || systemOutlines .length === 0) {
-                        validatedProjectForm  = false;
+
+                    if (systemOutlines.length === 0) {
+                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("SystemOutline is required")
+                                .text("System Outlines is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1416,21 +1416,20 @@
                             $('#systemOutlines').siblings('.error-container').append(p);
                         }
 
-                        $('#systemOutlines').addClass('is-invalid');
-                        $('#systemOutlines').removeClass('is-valid');
+                        $('#systemOutlines').css('border', '1px solid #dc3545'); // Red border color for invalid state
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#systemOutlines').addClass('is-valid');
-                        $('#systemOutlines').removeClass('is-invalid');
+                        $('#systemOutlines').css('border', '1px solid #28a745'); // Green border color for valid state
                     }
-                }
 
+                }
 
                 function validatePrjDeliverable() {
                     const deliverable = $('#deliverable').val();
                     const errorContainer = $('#deliverable').siblings('.error-container');
-                    if (!deliverable  || deliverable .length === 0) {
+
+                    if (!deliverable || deliverable.trim().length === 0) {
                         validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
@@ -1446,7 +1445,7 @@
                         $('#deliverable').addClass('is-invalid');
                         $('#deliverable').removeClass('is-valid');
                     } else {
-                        validatedProjectForm  = true;
+                        validatedProjectForm = true;
                         errorContainer.remove();
                         $('#deliverable').addClass('is-valid');
                         $('#deliverable').removeClass('is-invalid');
@@ -1457,12 +1456,13 @@
                 function validatePrjObjective() {
                     const objective = $('#objective').val();
                     const errorContainer = $('#objective').siblings('.error-container');
-                    if (objective.length < 1) {
-                        validatedProjectForm  = false;
+
+                    if (!objective || objective.trim().length === 0) {
+                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
-                                .text("objective is required")
+                                .text("Objective is required")
                                 .css("margin", "0")
                                 .addClass('error-message');
 
@@ -1473,15 +1473,17 @@
                         $('#objective').addClass('is-invalid');
                         $('#objective').removeClass('is-valid');
                     } else {
-                        validatedProjectForm  = true;
+                        validatedProjectForm = true;
                         errorContainer.remove();
                         $('#objective').addClass('is-valid');
                         $('#objective').removeClass('is-invalid');
                     }
                 }
 
+
+
                 function validateStartDate() {
-                    const start_date = $('#start-date').val();
+                    const start_date = $('#start_date').val();
                     const errorContainer = $('#start_date ').siblings('.error-container');
                     if (start_date .length === 0) {
                         validatedProjectForm =true;
@@ -1500,28 +1502,14 @@
                     $('#start_date ').removeClass('is-valid');
 
                 } else {
-                       validatedProjectForm  = true;
+                        validatedProjectForm  = true;
                     errorContainer.remove();
                     $('#start_date').addClass('is-valid');
                     $('#start_date').removeClass('is-invalid');
                 }
             }
 
-                function validateProject() {
-                    validateProjectName();
-                    validateProjectClient();
-                    validateProjectEmployee();
-                    validatePrjDuration();
-                    validatePrjBackground();
-                    validatePrjArchitecture();
-                    validatePrjDeliverable();
-                    validatePrjSystemOutline();
-                    validatePrjObjective();
-                    validateStartDate();
-                    console.log("")
-                    return validatedProjectForm ;
 
-                }
 
                 $('#name').on('input', function () {
                     validateProjectName();
@@ -1556,9 +1544,10 @@
                     validatePrjDeliverable();
                 });
 
-                $('#systemOutlines').on('input', function () {
+                $('#systemOutlines').on('content-updated', function () {
                     validatePrjSystemOutline();
                 });
+
 
                 $('#objective').on('input', function () {
                     validatePrjObjective();
@@ -1569,9 +1558,31 @@
                 });
 
 
+                function validateProject() {
+                    validateProjectName();
+                    validateProjectClient();
+                    validateProjectEmployee();
+                    validatePrjDuration();
+                    validatePrjBackground();
+                    validatePrjArchitecture();
+                    validatePrjDeliverable();
+                    validatePrjSystemOutline();
+                    validatePrjObjective();
+                    validateStartDate();
+                    return validatedProjectForm ;
+
+                }
+
+
+
                 $("#project-add-btn").on('click', function (event) {
                     console.log("submitted")
                     event.preventDefault(); // Prevent the form from submitting the traditional way
+
+
+                    if (!validateProject()) {
+                        return;
+                    }
 
                     const projectName = $("#name").val();
                     const client = JSON.parse($("#client").val());
@@ -1600,8 +1611,6 @@
                         objective
                     );
 
-
-
                     // if (
                     //     projectName === "" ||
                     //     client === "" ||
@@ -1616,6 +1625,20 @@
                     //     alert("Please fill all the fields");
                     //     return;
                     // }
+
+
+                    let jsonData = ''; // replace with your actual JSON data
+                    if (jsonData.trim() !== '') {
+                        try {
+                            let parsedData = JSON.parse(jsonData);
+                            // Continue processing parsedData
+                        } catch (error) {
+                            console.error('Error parsing JSON:', error);
+                        }
+                    } else {
+                        console.warn('JSON data is empty.');
+                    }
+
 
                     architectures = JSON.parse(architectures);
 
@@ -1644,7 +1667,9 @@
                             status : false,
                             deliverableType : deli
                         }
-                    })
+                    });
+
+
 
                     if(!validateProject()){
                         return;
@@ -2042,8 +2067,7 @@
                                         <input
                                             type="text"
                                             class="form-control border-task-description"
-                                            id="name"
-                                            name="name"
+                                            id="name" name="name"
                                         />
                                     </div>
 
@@ -2061,7 +2085,9 @@
                                             class="form-select"
                                             id="client"
                                             name="client"
-                                        ></select>
+                                        >
+                                            <option value="" selected disabled>Choose client</option>
+                                        </select>
                                     </div>
 
                                     <!--                            start date add-->
