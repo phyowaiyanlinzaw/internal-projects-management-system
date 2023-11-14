@@ -98,7 +98,7 @@ public class ViewController {
     }
 
     @GetMapping("/department")
-    @PreAuthorize("hasAuthority('PMO')")
+    @PreAuthorize("hasRole('FOC')")
     public String department() { return "department"; }
 
     @GetMapping("/reset-password")
@@ -107,7 +107,7 @@ public class ViewController {
     @GetMapping("/issue")
     public String issue() {return "issue";}
 
-//    @PreAuthorize("hasAuthority('PMO')")
+    @PreAuthorize("hasAuthority('PMO')")
     @GetMapping("/employees")
     public String employees() {return "employees";}
 
