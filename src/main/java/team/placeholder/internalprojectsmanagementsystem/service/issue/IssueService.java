@@ -1,9 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.service.issue;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 
 import java.util.List;
 
@@ -21,6 +19,14 @@ public interface IssueService {
 
     IssueDto getIssueByTitle(String title);
 
-    IssueDto getIssueListsByIdAndStatus(long issues, String status);
+
+    List<IssueDto> getIssuesByUserId(long userId);
+
+    List<IssueDto> getIssuesByStatus(String status);
+    List<IssueDto> getPendingIssueList(long id);
+
+    List<IssueDto> updateStatusOfIssueList(List<IssueDto> issues);
+
+    List<IssueDto> getUnsolvedIssues(long userId);
 
 }

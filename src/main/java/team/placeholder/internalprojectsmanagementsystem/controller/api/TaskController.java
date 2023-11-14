@@ -65,4 +65,9 @@ public class TaskController {
         return null;
     }
 
+    @DeleteMapping("/delete")
+    public void deleteTask(@RequestBody long id) {
+        taskService.deleteById(id);
+    }
+
 }

@@ -566,12 +566,12 @@
 
 /* Handle */
 *::-webkit-scrollbar-thumb {
-    background: #4759fe;
+    background: rgba(0, 0, 0, 0);
 }
 
 /* Handle on hover */
 *::-webkit-scrollbar-thumb:hover {
-    background: #838fff;
+    background: rgba(0, 0, 0, 0);
 }
 
 /* Track */
@@ -1185,10 +1185,20 @@
     margin-left: 40px; /* Adjust the value as needed */
 }
 
-.architecture-image {
+.custom-issue-margin {
+    margin-left: 20px; /* Adjust the value as needed */
+}
 
+.issue_details_margin {
+    margin-left: 100px; /* Adjust the value as needed */
+}
+
+.architecture-image {
     width: 40px;
     height: 40px;
+}
 
+.select-filter{
+    -webkit-appearance: menulist;
 }
 

@@ -3,6 +3,8 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.I
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.issue.IssueServiceImpl;
+
 
 import java.util.*;
 
@@ -25,6 +28,7 @@ public class IssueController {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+    private final ModelMapper modelmapper;
 
     @GetMapping("/list")
     public ResponseEntity<List<IssueDto>> getAllIssues() {
@@ -73,6 +77,13 @@ public class IssueController {
     @PutMapping("/update/{id}")
     public ResponseEntity<IssueDto> updateIssue(@PathVariable long id, @RequestBody IssueDto issueDto) {
         issueDto.setId(id);
+
+        if(issueDto.getCorrective_action().equals(null) && issueDto.getPreventive_action().equals(null)){
+            issueDto.setSolved(false);
+        }else{
+            issueDto.setSolved(true);
+        }
+
         IssueDto updatedIssue = issueService.updateIssue(issueDto);
         if (updatedIssue != null) {
             System.out.println("Issue updated successfully");
@@ -83,32 +94,6 @@ public class IssueController {
         }
     }
 
-    @GetMapping("/list/ID/{id}/{status}")
-    public ResponseEntity<Map<String, Object>> getProjectByIdAndStatus(@PathVariable long id, @PathVariable String status) {
-        List<IssueDto> issueList = (List<IssueDto>) issueService.getIssueListsByIdAndStatus(id, status);
-
-        if (issueList == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Long currentIssueId = null;
-
-        // Using Java streams for a more concise and functional approach
-        Optional<IssueDto> matchingIssue = issueList.stream()
-                .filter(issueDto -> issueDto != null && status.equalsIgnoreCase(issueDto.getStatus()))
-                .findFirst();
-
-        if (matchingIssue.isPresent()) {
-            currentIssueId = matchingIssue.get().getId();
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Map<String, Object> projectMap = new HashMap<>();
-        projectMap.put("projectId", currentIssueId);
-
-        return new ResponseEntity<>(projectMap, HttpStatus.OK);
-    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteIssue(@RequestBody IssueDto issueDto) {
@@ -116,8 +101,52 @@ public class IssueController {
         return ResponseEntity.ok("Issue deleted successfully");
     }
 
+    @GetMapping("/list/status/{status}")
+    public ResponseEntity<List<IssueDto>> getFilteredDetails(@PathVariable(name = "status") String status) {
+        List<IssueDto> filteredDetails = issueService.getIssuesByStatus(status);
+        return ResponseEntity.ok(filteredDetails);
+    }
 
+    @GetMapping("list/solved/{solved}")
+    public List<IssueDto> getIssuesBySolvedStatus(@PathVariable(value = "solved", required = false) Boolean solved) {
+        if (solved == true) {
+            return issueService.getIssuesBySolvedStatus(true);
+        }else if(solved == false){
+            return issueService.getIssuesBySolvedStatus(false);
+        }else{
+            return issueService.getAllIssues();
+        }
+    }
 
+    @GetMapping("/list/category/{category}")
+    public ResponseEntity<List<IssueDto>> getFilteredCategory(@PathVariable(name = "category") String category) {
+        List<IssueDto> filteredDetails = issueService.getIssuesByCategory(category);
+        return ResponseEntity.ok(filteredDetails);
+    }
 
+    @GetMapping("/list/pending/{id}")
+    public ResponseEntity<List<IssueDto>> getIssueByPending(@PathVariable long id) {
+
+        List<IssueDto> issueDtos = issueService.getPendingIssueList(id);
+
+        for(var a : issueDtos) {
+            log.info(a.getTitle());
+            System.out.print("i have no idea +++++++" + a.getTitle());
+        }
+
+        return ResponseEntity.ok(issueDtos);
+    }
+
+    @PutMapping("/update/status/issuelist")
+    public ResponseEntity<List<IssueDto>> updateIssueList(@RequestBody List<IssueDto> issueDtos) {
+        List<IssueDto> updatedIssueList = issueService.updateStatusOfIssueList(issueDtos);
+        return ResponseEntity.ok(updatedIssueList);
+    }
+
+    @GetMapping("/list/unsolved/{id}")
+    public ResponseEntity<List<IssueDto>> getUnsolvedIssues(@PathVariable long id) {
+        List<IssueDto> issueDtos = issueService.getUnsolvedIssues(id);
+        return ResponseEntity.ok(issueDtos);
+    }
 
 }

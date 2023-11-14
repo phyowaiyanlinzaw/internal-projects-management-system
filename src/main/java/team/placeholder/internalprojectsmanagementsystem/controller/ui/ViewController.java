@@ -98,7 +98,7 @@ public class ViewController {
     }
 
     @GetMapping("/department")
-    @PreAuthorize("hasAuthority('PMO')")
+    @PreAuthorize("hasRole('FOC')")
     public String department() { return "department"; }
 
     @GetMapping("/reset-password")

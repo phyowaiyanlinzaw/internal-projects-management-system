@@ -2,6 +2,7 @@ package team.placeholder.internalprojectsmanagementsystem.service.project;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.KPIDto;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ public interface ProjectService {
     long countTaskById(long id);
 
     ProjectDto getProjectByUsersIdAndStatus(long users, String status);
+
+    KPIDto getKPI(long id);
 
     //get start and end month of the projects
 
