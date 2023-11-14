@@ -61,7 +61,7 @@ public class Issue{
 
     @ManyToOne
     @JoinColumn(name="pic_id")
-    private User user_pic;
+    private User pic;
 
     @Override
     public boolean equals(Object o) {

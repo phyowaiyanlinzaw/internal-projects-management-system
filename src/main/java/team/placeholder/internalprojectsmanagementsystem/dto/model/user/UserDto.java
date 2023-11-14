@@ -26,7 +26,6 @@ public class UserDto {
     @JsonProperty("department")
     private DepartmentDto departmentdto;
 
-    @JsonIgnore
 //    @JsonBackReference
 //    @JsonProperty("project_manager")
     private UserDto projectManager;

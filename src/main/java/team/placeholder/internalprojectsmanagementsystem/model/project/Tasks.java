@@ -39,7 +39,8 @@ public class Tasks implements Serializable {
     private TasksGroup tasksGroup;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
+
+    private boolean deleted;
 
 }

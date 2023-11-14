@@ -33,4 +33,6 @@ public interface TasksService {
 
     List<PlanManMonthDto> calculateMonthlyPlanManHoursFromTasks(long projectId);
 
+    void deleteById(long id);
+
 }

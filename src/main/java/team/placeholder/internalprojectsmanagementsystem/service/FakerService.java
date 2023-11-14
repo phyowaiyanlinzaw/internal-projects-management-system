@@ -153,7 +153,7 @@ public class FakerService {
             issue.setSolved_date(faker.number().numberBetween(System.currentTimeMillis() - 31536000000L, System.currentTimeMillis()));
             issue.setTitle(faker.job().field());
             issue.setUpdated_date(faker.number().numberBetween(System.currentTimeMillis() - 31536000000L, System.currentTimeMillis()));
-            issue.setUser_pic(userRepository.findAll().get(faker.random().nextInt(userRepository.findAll().size())));
+            issue.setPic(userRepository.findAll().get(faker.random().nextInt(userRepository.findAll().size())));
             issue.setUser_uploader(userRepository.findAll().get(faker.random().nextInt(userRepository.findAll().size())));
             issueRepository.save(issue);
         }
