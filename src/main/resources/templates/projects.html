@@ -398,7 +398,7 @@
                         );
                     default:
                         console.log("pmo or sdqc");
-                        return await getData(`/api/project/list/for/pmo-and-sdqc`);
+                        return await getData(`/api/project/list`);
                 }
             }
 
@@ -415,7 +415,7 @@
                 loginUser.currentUser.role == "SDQC"
             ) {
                 departmentProjectId = await getData(
-                    "/api/project/list/for/pmoandsdqc"
+                    "/api/project/list/for/pmo-and-sdqc"
                 );
             }
 
@@ -554,6 +554,7 @@
                 );
                 img.style.width = "40px";
                 img.alt = "Profile Image";
+                img.loading = "lazy";
 
                 const h5 = document.createElement("h5");
                 h5.classList.add(
@@ -679,6 +680,7 @@
                         const image = document.createElement("img");
 
                         image.style.width = "40px"
+                        image.loading = "lazy"
 
                         if (languageList[a.tech_name]) {
                             image.setAttribute("src", languageList[a.tech_name]);
@@ -1878,6 +1880,7 @@
                                             src="/images/avatars/pm_avatar.svg"
                                             alt="Profile"
                                             class="rounded-circle"
+                                            loading="lazy"
                                         />
                                         <h4 id="pm-name-modal"></h4>
                                         <div class="social-links mt-2">
