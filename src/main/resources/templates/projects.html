@@ -884,15 +884,20 @@
                 .addEventListener("change", function () {
                     const allDiv = motherContainer.children;
                     const selectedDepartmentId = this.value;
-
-                    for (let i = 0; i < allDiv.length; i++) {
-                        if (
-                            sortProjectByDepartment[
-                                selectedDepartmentId
-                            ].includes(parseInt(allDiv[i].id.split("-")[1]))
-                        ) {
-                            allDiv[i].style.display = "block";
-                        } else {
+                    console.log(sortProjectByDepartment)
+                    console.log(selectedDepartmentId)
+                    console.log(sortProjectByDepartment[parseInt(selectedDepartmentId)])
+                    if (sortProjectByDepartment.hasOwnProperty(parseInt(selectedDepartmentId))) {
+                        for (let i = 0; i < allDiv.length; i++) {
+                            if (sortProjectByDepartment[selectedDepartmentId].includes(parseInt(allDiv[i].id.split("-")[1]))) {
+                                allDiv[i].style.display = "block";
+                            } else {
+                                allDiv[i].style.display = "none";
+                            }
+                        }
+                    } else {
+                        // If selected department has no projects, set all divs to display: none
+                        for (let i = 0; i < allDiv.length; i++) {
                             allDiv[i].style.display = "none";
                         }
                     }
@@ -1000,7 +1005,10 @@
             if(loginUser.currentUser.role === 'PROJECT_MANAGER') {
 
                 employeeList = await getData("/api/currentuser/available/employees");
+            }
 
+            if(login.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO') {
+                document.querySelector("#department-filter-container").classList.remove("d-none");
             }
 
             console.log("EMPLOYEE LIST : " , employeeList);
@@ -1437,7 +1445,7 @@
                                 <option value="December">December</option>
                             </select>
                         </div>
-                        <div class="d-inline-block">
+                        <div class="d-inline-block d-none" id="department-filter-container">
                             <select
                                 id="department-filter"
                                 class="form-control"
