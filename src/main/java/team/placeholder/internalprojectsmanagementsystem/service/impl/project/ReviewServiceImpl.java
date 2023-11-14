@@ -61,7 +61,19 @@ public class ReviewServiceImpl implements ReviewService {
         return null;
     }
 
+    @Override
+    public ReviewDto updateReview(ReviewDto reviewDto) {
+            Review review = reviewRepo.findById(reviewDto.getId());
+            if (review != null){
+                review.setExternal_review_count(reviewDto.getExternal_review_count());
+                review.setInternal_review_count(reviewDto.getInternal_review_count());
+                reviewRepo.save(review);
 
+                return modelMapper.map(review, ReviewDto.class);
+            }else {
+                return null;
+            }
+    }
 
 
 }
