@@ -28,22 +28,13 @@
     <link rel="stylesheet" href="/font/bootstrap-icons.min.css"/>
 
     <!-- Libraries Stylesheet -->
-    <link
-            href="/lib/owlcarousel/assets/owl.carousel.min.css"
-            rel="stylesheet"
-    />
-    <link
-            href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
-            rel="stylesheet"
-    />
+    <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet"/>
+    <link href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="/lib/quill/quill.bubble.css"/>
     <link rel="stylesheet" href="/lib/quill/quill.snow.css"/>
     <link href="/css/bootstrap.min.css" rel="stylesheet"/>
 
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"/>
 
     <link href="/css/daypilot.css" rel="stylesheet" type="text/css"/>
 
@@ -81,16 +72,17 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/logout-modal.js"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/logout-modal.js"></script>
+
     <script type="module" defer>
-
-
-
-
+        $(document).ready(function () {
+            confirmLogout();
+        });
         //department list ________________________________________________
         //________________________________________________________________
         import {getData} from "/js/api-function.js";
@@ -306,7 +298,7 @@
 
             setTimeout(function () {
                 $("#errorAlert").hide();
-            }, 1000);
+            }, 3000);
 
             //close alert box
             $(".btn-close").on("click", function () {
@@ -320,7 +312,7 @@
 
             setTimeout(function () {
                 $("#successAlert").hide();
-            }, 1000);
+            }, 3000);
 
             //close alert box
             $(".btn-close").on("click", function () {

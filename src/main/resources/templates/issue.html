@@ -187,6 +187,18 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
+                            <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                <strong>Error : </strong> <span id="errorText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                <strong>Success : </strong> <span id="successText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
                             <div class="col mb-3">
                                 <input type="hidden" id="solved" />
                                 <h5 class="icon-title"><i class="fas fa-wrench text-dark"></i> Corrective Action</h5>
@@ -220,6 +232,18 @@
 
                 <!-- issue modal start -->
                 <div class="row g-3 "  id="addIssueValidationForm">
+                    <div class="alert alert-danger alert-dismissible" id="error-alert" style="display: none;">
+                        <strong>Error : </strong> <span id="error-text"></span>
+                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="alert alert-success alert-dismissible" id="success-alert" style="display: none;">
+                        <strong>Success : </strong> <span id="success-text"></span>
+                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                            &times;
+                        </button>
+                    </div>
                     <div class="col-lg-6">
                         <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
                                 style="color:#e86666"> *</span></label>
@@ -452,9 +476,13 @@
 <script src="/js/currentLoginUser.js" type="module" async></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
+
 <script type="module">
     $(document).ready(function () {
-        confirmLogout();
+        setupLogoutConfirmation();
     });
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.comd
@@ -653,16 +681,12 @@
                     selectedUserId === "" ||
                     responsible_type === ""
                 ) {
-                    alert('Please fill in all the required fields.');
+                    //alert('Please fill in all the required fields.');
+                    showerror('Please fill in all the required fields.');
                     return;
                 }
-
-
                 const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
-
-
                 const uploaderId = getLoginUser.currentUser.id;
-
                 console.log("Uploader Id", uploaderId);
 
                 const requestData = {
@@ -694,7 +718,8 @@
                     dataType: 'json',
                     success: function (data) {
                         console.log(data);
-                        alert('Issue Created Successfully');
+                        //alert('Issue Created Successfully');
+                        showsuccess('Issue Created Successfully');
                     },
                     error: function (xhr, status, error) {
                         console.log('Status:', status);
@@ -1017,7 +1042,8 @@
                             success: function (data) {
                                 console.log(data);
                                 console.log("Issue Updated Successfully");
-                                alert("Issue Updated Successfully");
+                                // alert("Issue Updated Successfully");
+                                showSuccess("Issue Updated Successfuly.");
                                 window.top.location = window.top.location;
                             },
 
@@ -1031,79 +1057,108 @@
             const solveBtn = document.getElementById('solve-btn');
 
             solveBtn.addEventListener('click', function (e) {
-                alert("Your issue solved");
+                //alert("Your issue solved");
+                showSuccess("Your Issue Solved.");
             });
 
-            issueEditBtn.addEventListener('click', function (e) {
-                const corrective_action = $('#corrective_actionInput').val();
-                const preventive_action = $('#preventive_actionInput').val();
-                const solved = $('#solve-btn').val();
-                const issueId = $(this).data('issueId');
-                console.log(solved + " solveddddddd");
+    issueEditBtn.addEventListener('click', function (e) {
+        const corrective_action = $('#corrective_actionInput').val();
+        const preventive_action = $('#preventive_actionInput').val();
+        const solved = $('#solve-btn').val();
+        const issueId = $(this).data('issueId');
+        console.log(solved + " solveddddddd");
+        if (corrective_action === "" || preventive_action === "") {
+            // alert('Please fill in all the required fields.');
+            showError('Please fill in all the required fields.');
+            return;
+        }
 
-                if (solved === "true") {
-                    // If solved, hide the "issue-edit-btn" and show the "solve-btn"
-                    $("#issue-edit-btn").hide();
-                    $("#solveBtn").show();
-                } else {
-                    // If not solved, hide the "solve-btn" and show the "issue-edit-btn"
-                    $("#issue-edit-btn").show();
-                    $("#solveBtn").hide();
-                }
+        if (solved === "true") {
+            // If solved, hide the "issue-edit-btn" and show the "solve-btn"
+            $("#issue-edit-btn").hide();
+            $("#solveBtn").show();
+        } else {
+            // If not solved, show the confirmation modal
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Are you sure you want to solve?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const updatedDetails = {
+                        corrective_action: corrective_action,
+                        preventive_action: preventive_action,
+                        updated_date: new Date().getTime(),
+                        solved_date: new Date().getTime(),
+                        solved: solved,
+                    };
+                    console.log("UpdateDetails", updatedDetails);
 
-                if (corrective_action === "" || preventive_action === "") {
-                    alert('Please fill in all the required fields.');
-                    return;
-                }
+                    $.ajax({
+                        url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify(updatedDetails),
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            console.log("Issue Updated Successfully");
+                            // Update 'solved' to true after a successful AJAX request
+                            $('#solve-btn').val("true");
+                            const spanContent = 'Solved';
+                            const spanColor = 'success';
+                            $('#solved').empty().html(`<span class="card-title badge rounded-pill bg-${spanColor}" id="solved">${spanContent}</span>`);
+                            Swal.fire({
+                                title: "Success!",
+                                text: "You have successfully solved the issue.",
+                                icon: "success"
+                            });
+                            console.log("Success")
+                            $("#issue-edit-btn").hide();
+                            $("#solve-btn").show();
 
-                const updatedDetails = {
-                    corrective_action: corrective_action,
-                    preventive_action: preventive_action,
-                    updated_date: new Date().getTime(),
-                    solved_date: new Date().getTime(),
-                    solved: solved,
-                };
 
-                console.log("UpdateDetails", updatedDetails);
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Status:', status);
+                            console.log('Error:', error);
+                            console.log('Server response:', xhr.responseText);
 
-                $.ajax({
-                    url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify(updatedDetails),
-                    dataType: 'json',
-                    success: function (data) {
-                        console.log(data);
-                        console.log("Issue Updated Successfully");
-                        alert("Issue Updated Successfully");
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('Status:', status);
-                        console.log('Error:', error);
-                        console.log('Server response:', xhr.responseText);
-
-                        if (xhr.getResponseHeader('Content-Type') === 'application/json') {
-                            // Handle JSON response
-                            try {
-                                const response = JSON.parse(xhr.responseText);
-                                console.log('JSON Response:', response);
-                            } catch (e) {
-                                console.log('JSON parsing error:', e);
+                            if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                                // Handle JSON response
+                                try {
+                                    const response = JSON.parse(xhr.responseText);
+                                    console.log('JSON Response:', response);
+                                } catch (e) {
+                                    console.log('JSON parsing error:', e);
+                                }
+                            } else {
+                                // Handle non-JSON response
+                                console.log('Non-JSON Response:', xhr.responseText);
                             }
-                        } else {
-                            // Handle non-JSON response
-                            console.log('Non-JSON Response:', xhr.responseText);
+                            alert("Error updating issue: " + xhr.responseText);
+                            console.log("Error updating issue");
+                        },
+                        complete: function () {
+                            // Optionally, close the modal or perform other actions upon completion
+                            $('#issueDetailModal').modal('hide');
                         }
-                        alert("Error updating issue: " + xhr.responseText);
-                        console.log("Error updating issue");
-                    },
-                    complete: function () {
-                        // Optionally, close the modal or perform other actions upon completion
-                        $('#issueDetailModal').modal('hide');
-                    }
-                });
+                    });
 
+                } else {
+                    // User clicked "No," stop the process and close the modal
+                    return false;
+                }
             });
+
+            // Hide the "solve-btn" regardless of user choice
+            $("#solveBtn").hide();
+        }
+    });
 
 
             $("#reset-btn").on("click", function () {
@@ -1166,8 +1221,8 @@
                         } catch (e) {
                             console.log('Error parsing response:', e);
                         }
-
-                        alert('Error fetching data.');
+                        showError('Error fetching data.');
+                        //alert('Error fetching data.');
                     }
                 });
             }
@@ -1262,17 +1317,60 @@
                     }
                 });
             }
-
-
             // for issue list
-            
-        
+    function showError(message) {
+        $("#errorText").text(message);
+        $("#errorAlert").show();
 
+        setTimeout(function () {
+            $("#errorAlert").hide();
+        }, 3000);
 
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#errorAlert").hide();
+        });
+    }
+    function showSuccess(message) {
+        $("#successText").text(message);
+        $("#successAlert").show();
 
+        setTimeout(function () {
+            $("#successAlert").hide();
+        }, 3000);
 
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#successAlert").hide();
+        });
+    }
 
+    function showerror(message) {
+        $("#error-text").text(message);
+        $("#error-alert").show();
 
+        setTimeout(function () {
+            $("#error-alert").hide();
+        }, 3000);
+
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#error-alert").hide();
+        });
+    }
+    function showsuccess(message) {
+        $("#success-text").text(message);
+        $("#success-alert").show();
+
+        setTimeout(function () {
+            $("#success-alert").hide();
+        }, 3000);
+
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#success-alert").hide();
+        });
+    }
 
 
 </script>
