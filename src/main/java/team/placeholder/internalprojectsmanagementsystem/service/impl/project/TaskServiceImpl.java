@@ -91,7 +91,7 @@ public class TaskServiceImpl implements TasksService {
 
     @Override
     public TasksDto updateTaskStatus(long taskId, String status, long startTime, long endTime) {
-        Tasks task = taskRepository.findById(taskId).orElse(null);
+        Tasks task = taskRepository.findById(taskId);
         if (task == null) {
             return null;
         }
@@ -106,6 +106,18 @@ public class TaskServiceImpl implements TasksService {
         }
         taskRepository.save(task);
         return modelMapper.map(task, TasksDto.class);
+    }
+
+    @Override
+    public TasksDto updateTaskData(TaskRequestDto taskRequestDto) {
+        Tasks task = taskRepository.findById(taskRequestDto.getId());
+        if (task==null){
+            return null;
+        }
+
+//        taskRequestDto.getTitle().equals(null) ? task.setTitle(task.getTitle()) : task.setTitle(taskRequestDto.getTitle());
+
+        return null;
     }
 
     @Override

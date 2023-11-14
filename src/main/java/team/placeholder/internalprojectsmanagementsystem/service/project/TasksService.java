@@ -16,6 +16,8 @@ public interface TasksService {
 
     TasksDto updateTaskStatus(long taskId,String status,long startTime,long endTime);
 
+    TasksDto updateTaskData(TaskRequestDto taskRequestDto);
+
     List<TasksDto> getTasksByProjectId(long id);
 
     List<TasksDto> getTasksByUserId(long id);
