@@ -1119,7 +1119,7 @@
                 employeeList = await getData("/api/currentuser/available/employees");
             }
 
-            if(login.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO') {
+            if(loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO') {
                 document.querySelector("#department-filter-container").classList.remove("d-none");
             }
 
@@ -3077,7 +3077,9 @@
                                                             name="project_name"
                                                             type="number"
                                                             class="form-control"
+                                                            min="0"
                                                             id="project-external-review-count"
+                                                            oninput="validity.valid||(value='');"
                                                         />
                                                     </div>
                                                 </div>
@@ -3093,8 +3095,10 @@
                                                     >
                                                         <input
                                                             name="project_name"
-                                                            type="text"
+                                                            type="number"
+                                                            min="0"
                                                             class="form-control"
+                                                            oninput="validity.valid||(value='');"
                                                             id="project-internal-review-count"
                                                         />
                                                     </div>

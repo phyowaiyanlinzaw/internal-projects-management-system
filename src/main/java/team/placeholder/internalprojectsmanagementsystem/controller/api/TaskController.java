@@ -58,15 +58,12 @@ public class TaskController {
             return ResponseEntity.ok(taskService.updateTaskStatus(id,status,actual_start_time,actual_end_time));
     }
 
-//    @GetMapping("/list/project-id/{id}/start/{startMonth}/end/{endMonth}")
-//    public ResponseEntity<List<TasksDto>> getTasksFromCertainRangeOfMonth(
-//            @PathVariable("id") long projectId,
-//            @PathVariable("startMonth") String startMonth,
-//            @PathVariable("endMonth") String endMonth
-//    ){
-//        List<TasksDto> tasksDtos= taskService.findTasksByStartAndEndMonth(projectId,startMonth,endMonth);
-//            return ResponseEntity.ok(tasksDtos);
-//    }
+    @GetMapping("update/data")
+    public ResponseEntity<TasksDto> updateTaskData(
+            @RequestBody TaskRequestDto taskRequestDto
+    ){
+        return null;
+    }
 
     @DeleteMapping("/delete")
     public void deleteTask(@RequestBody long id) {

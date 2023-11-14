@@ -51,6 +51,8 @@ public class TaskServiceImpl implements TasksService {
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
         task.setPlan_start_time(taskRequestDto.getPlan_start_time());
         task.setPlan_end_time(taskRequestDto.getPlan_end_time());
+        task.setPlan_hours(taskRequestDto.getPlan_hours());
+        task.setDue(false);
         task.setStatus(TaskStatus.TODO);
         User user = userRepository.findById(taskRequestDto.getUserId());
         Project project = projectRepository.findById(taskRequestDto.getProjectId());
@@ -90,7 +92,7 @@ public class TaskServiceImpl implements TasksService {
 
     @Override
     public TasksDto updateTaskStatus(long taskId, String status, long startTime, long endTime) {
-        Tasks task = taskRepository.findById(taskId).orElse(null);
+        Tasks task = taskRepository.findById(taskId);
         if (task == null) {
             return null;
         }
@@ -105,6 +107,20 @@ public class TaskServiceImpl implements TasksService {
         }
         taskRepository.save(task);
         return modelMapper.map(task, TasksDto.class);
+    }
+
+    @Override
+    public TasksDto updateTaskData(TaskRequestDto taskRequestDto) {
+        Tasks task = taskRepository.findById(taskRequestDto.getId());
+        if (task==null){
+            return null;
+        }
+
+        task.setTitle(taskRequestDto.getTitle());
+        task.setDescription(taskRequestDto.getDescription());
+        task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
+        task.setUser(userRepository.findById(taskRequestDto.getUserId()));
+        return null;
     }
 
     @Override
@@ -247,85 +263,11 @@ public class TaskServiceImpl implements TasksService {
 
     @Override
     public void deleteById(long id) {
-        Tasks task = taskRepository.findById(id).orElse(null);
+        Tasks task = taskRepository.findById(id);
 
         task.setDeleted(true);
 
         taskRepository.save(task);
     }
-
-//    @Override
-//    public List<TasksDto> findTasksByStartAndEndMonth(long projectId, String startMonthYear, String endMonthYear) {
-//        // Assuming 'projectId' is the ID of the project associated with tasks
-//        List<TasksDto> tasksDtos = taskRepository.findByProjectId(projectId).stream()
-//                .map(task -> modelMapper.map(task, TasksDto.class))
-//                .toList();
-//
-//        // Filter tasks based on the start and end months
-//        return filterTasksByMonthRange(tasksDtos, startMonthYear, endMonthYear);
-//    }
-
-//    private List<TasksDto> filterTasksByMonthRange(List<TasksDto> tasks, String startMonthYear, String endMonthYear) {
-//        List<TasksDto> filteredTasks = new ArrayList<>();
-//
-//        // Parse the start and end month-year strings
-//        int startYear = Integer.parseInt(startMonthYear.split("-")[0]);
-//        int startMonth = Integer.parseInt(startMonthYear.split("-")[1]);
-//
-//        int endYear = Integer.parseInt(endMonthYear.split("-")[0]);
-//        int endMonth = Integer.parseInt(endMonthYear.split("-")[1]);
-//
-//        // Iterate through tasks and include those within the specified month range
-//        for (TasksDto tasksDto : tasks) {
-//            long taskPlanStartTime = tasksDto.getPlan_start_time();
-//            String taskStartMonthYear = getMonthYearFromDate(taskPlanStartTime);
-//
-//            try {
-//                Date taskDate = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).parse(taskStartMonthYear);
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTime(taskDate);
-//
-//                int taskYear = calendar.get(Calendar.YEAR);
-//                int taskMonth = calendar.get(Calendar.MONTH) + 1; // Month is 0-based
-//
-//                if (isMonthYearInRange(taskYear, taskMonth, startYear, startMonth, endYear, endMonth)) {
-//                    filteredTasks.add(tasksDto);
-//                }
-//            } catch (ParseException e) {
-//                log.error("Error while parsing date: {}", e.getMessage());
-//            }
-//        }
-//
-//        return filteredTasks;
-//    }
-
-//    @Override
-//    public List<TasksDto> findTasksByStartAndEndMonth(long projectId, String startMonth, String endMonth) {
-//        List<TasksDto> tasks = taskRepository.findByProjectId(projectId).stream()
-//                .map(task -> modelMapper.map(task, TasksDto.class))
-//                .toList();
-//
-//        return filterTasksByMonthRange(tasks, startMonth, endMonth);
-//    }
-//
-//    @Override
-//    public List<TasksDto> filterTasksByMonthRange(List<TasksDto> tasks, String startMonth, String endMonth) {
-//        List<TasksDto> filteredTasks = new ArrayList<>();
-//
-//        // Iterate through tasks and include those within the specified month range
-//        for (TasksDto tasksDto : tasks) {
-//            long taskPlanStartTime = tasksDto.getPlan_start_time();
-//            String taskStartMonth = getStartMonthFromDate(taskPlanStartTime);
-//
-//            log.info("Task start month: {}", taskStartMonth);
-//
-//            if (isMonthInRange(startMonth, endMonth, taskStartMonth)) {
-//                filteredTasks.add(tasksDto);
-//            }
-//        }
-//
-//        return filteredTasks;
-//    }
-//
 
 }

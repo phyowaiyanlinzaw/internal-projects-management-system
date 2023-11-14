@@ -148,7 +148,33 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public IssueDto getIssueById(long id) {
         Issue issue = issueRepository.findById(id);
-        return issue != null ? modelMapper.map(issue, IssueDto.class) : null;
+
+        IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+
+        if (issue.getPic() != null) {
+            UserDto userPic = modelMapper.map(issue.getPic(), UserDto.class);
+            issueDto.setUser_pic(userPic);
+        }
+
+        if (issue.getUser_uploader() != null) {
+            UserDto userUploader = modelMapper.map(issue.getUser_uploader(), UserDto.class);
+            issueDto.setUser_uploader(userUploader);
+        }
+
+        if(issue.getResponsible_type().equals(ResponsibleType.CLIENT)) {
+            issueDto.setResponsible_party(modelMapper.map(clientRepository.findById(issue.getResponsible_party()), ClientDto.class));
+        } else if(issue.getResponsible_type().equals(ResponsibleType.EMPLOYEE)) {
+            issueDto.setResponsible_party(modelMapper.map(userRepository.findById(issue.getResponsible_party()), UserDto.class));
+        }
+
+        ProjectDto projectDto = new ProjectDto();
+
+        projectDto.setId(issue.getProject().getId());
+        projectDto.setName(issue.getProject().getName());
+
+        issueDto.setProjectDto(projectDto);
+
+        return issueDto;
     }
 
     @Override
