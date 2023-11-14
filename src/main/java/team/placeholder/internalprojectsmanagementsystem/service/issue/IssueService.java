@@ -23,8 +23,10 @@ public interface IssueService {
     List<IssueDto> getIssuesByUserId(long userId);
 
     List<IssueDto> getIssuesByStatus(String status);
-    List<IssueDto> getPendingIssueList();
+    List<IssueDto> getPendingIssueList(long id);
 
     List<IssueDto> updateStatusOfIssueList(List<IssueDto> issues);
+
+    List<IssueDto> getUnsolvedIssues(long userId);
 
 }

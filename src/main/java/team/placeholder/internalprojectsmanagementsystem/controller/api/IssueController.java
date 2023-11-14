@@ -124,14 +124,15 @@ public class IssueController {
         return ResponseEntity.ok(filteredDetails);
     }
 
-    @GetMapping("/pages")
-    public Page<IssueDto> issues(Pageable pageable){
-        return issueService.pages(pageable);
-    }
-    @GetMapping("/list/pending")
-    public ResponseEntity<List<IssueDto>> getIssueByPending() {
+    @GetMapping("/list/pending/{id}")
+    public ResponseEntity<List<IssueDto>> getIssueByPending(@PathVariable long id) {
 
-        List<IssueDto> issueDtos = issueService.getPendingIssueList();
+        List<IssueDto> issueDtos = issueService.getPendingIssueList(id);
+
+        for(var a : issueDtos) {
+            log.info(a.getTitle());
+            System.out.print("i have no idea +++++++" + a.getTitle());
+        }
 
         return ResponseEntity.ok(issueDtos);
     }
@@ -140,6 +141,12 @@ public class IssueController {
     public ResponseEntity<List<IssueDto>> updateIssueList(@RequestBody List<IssueDto> issueDtos) {
         List<IssueDto> updatedIssueList = issueService.updateStatusOfIssueList(issueDtos);
         return ResponseEntity.ok(updatedIssueList);
+    }
+
+    @GetMapping("/list/unsolved/{id}")
+    public ResponseEntity<List<IssueDto>> getUnsolvedIssues(@PathVariable long id) {
+        List<IssueDto> issueDtos = issueService.getUnsolvedIssues(id);
+        return ResponseEntity.ok(issueDtos);
     }
 
 }

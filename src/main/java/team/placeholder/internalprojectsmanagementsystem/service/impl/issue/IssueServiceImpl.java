@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
@@ -23,6 +24,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServic
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.ClientServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.issue.IssueService;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +65,7 @@ public class IssueServiceImpl implements IssueService {
             issue.setResponsible_type(ResponsibleType.valueOf(isuDto.getResponsible_type()));
         }
         issue.setUser_uploader(userRepository.findById(isuDto.getUser_uploader()));
-        issue.setUser_pic(userRepository.findById(isuDto.getUser_pic()));
+        issue.setPic(userRepository.findById(isuDto.getUser_pic()));
         issue.setResponsible_party(isuDto.getResponsible_party());
         issue.setProject(projectRepository.findById(isuDto.getProject_id()));
 
@@ -111,14 +113,20 @@ public class IssueServiceImpl implements IssueService {
         for (Issue issue : issueList) {
             if (issue != null) {
                 IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
-                if (issue.getUser_pic() != null) {
-                    UserDto userPic = modelMapper.map(issue.getUser_pic(), UserDto.class);
+                if (issue.getPic() != null) {
+                    UserDto userPic = modelMapper.map(issue.getPic(), UserDto.class);
                     issueDto.setUser_pic(userPic);
                 }
 
                 if (issue.getUser_uploader() != null) {
                     UserDto userUploader = modelMapper.map(issue.getUser_uploader(), UserDto.class);
                     issueDto.setUser_uploader(userUploader);
+                }
+
+                if(issue.getResponsible_type().equals(ResponsibleType.CLIENT)) {
+                    issueDto.setResponsible_party(modelMapper.map(clientRepository.findById(issue.getResponsible_party()), ClientDto.class));
+                } else if(issue.getResponsible_type().equals(ResponsibleType.EMPLOYEE)) {
+                    issueDto.setResponsible_party(modelMapper.map(userRepository.findById(issue.getResponsible_party()), UserDto.class));
                 }
 
                 ProjectDto projectDto = new ProjectDto();
@@ -187,13 +195,15 @@ public class IssueServiceImpl implements IssueService {
 //    }
 
     @Override
-    public List<IssueDto> getPendingIssueList() {
+    public List<IssueDto> getPendingIssueList(long id) {
 
-        List<Issue> pendingIssue = issueRepository.findAllByIssueStatus(IssueStatus.PENDING);
+        List<Issue> pendingIssue = issueRepository.findAllByIssueStatusAndPicId(IssueStatus.PENDING, id);
 
         List<IssueDto> issueDtos = new ArrayList<>();
 
         for(Issue issue : pendingIssue) {
+
+            log.info("iss pending list : " + issue.getTitle());
 
             IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
 
@@ -203,6 +213,8 @@ public class IssueServiceImpl implements IssueService {
                 User user = userRepository.findById(issue.getResponsible_party());
                 issueDto.setResponsible_party(modelMapper.map(user, UserDto.class));
             }
+
+            issueDto.setUser_pic(modelMapper.map(issue.getPic(), UserDto.class));
 
             issueDto.setUser_uploader(modelMapper.map(issue.getUser_uploader(), UserDto.class));
 
@@ -239,6 +251,41 @@ public class IssueServiceImpl implements IssueService {
             issueDtos.add(issueDto2);
         }
 
+        return issueDtos;
+    }
+
+    @Override
+    public List<IssueDto> getUnsolvedIssues(long userId) {
+
+        List<Issue> issues = issueRepository.findAllBySolvedFalseAndPicId(userId);
+
+        List<IssueDto> issueDtos = new ArrayList<>();
+
+        for(Issue issue : issues) {
+
+            log.info("iss pending list : " + issue.getTitle());
+
+            IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+
+            if(issue.getResponsible_type().equals(ResponsibleType.CLIENT)) {
+                issueDto.setResponsible_party(clientRepository.findById(issue.getResponsible_party()));
+            } else if(issue.getResponsible_type().equals(ResponsibleType.EMPLOYEE)) {
+                User user = userRepository.findById(issue.getResponsible_party());
+                issueDto.setResponsible_party(modelMapper.map(user, UserDto.class));
+            }
+
+            issueDto.setUser_uploader(modelMapper.map(issue.getUser_uploader(), UserDto.class));
+
+            ProjectDto projectDto = new ProjectDto();
+
+            projectDto.setId(issue.getProject().getId());
+            projectDto.setName(issue.getProject().getName());
+
+            issueDto.setProjectDto(projectDto);
+
+            issueDtos.add(issueDto);
+
+        }
         return issueDtos;
     }
 
