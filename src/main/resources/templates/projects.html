@@ -176,17 +176,17 @@
             import { getUser } from "/js/currentLoginUser.js";
 
             const languageList = {
-                "c#": "/images/languages/c#.png",
-                "c++": "/images/languages/c++.png",
-                "html": "/images/languages/html.png",
-                "java": "/images/languages/java.png",
-                "js": "/images/languages/js.png",
-                "php": "/images/languages/php.png",
-                "python": "/images/languages/python.png",
-                "ruby": "/images/languages/ruby.png",
-                "SQL": "/images/languages/SQL.png",
-                "css" : "/images/languages/css.png",
-                "typescript": "/images/languages/typescript.png"
+                "c#": "/images/languages/c#-min.png",
+                "c++": "/images/languages/c++-min.png",
+                "html": "/images/languages/html-min.png",
+                "java": "/images/languages/java-min.png",
+                "js": "/images/languages/js-min.png",
+                "php": "/images/languages/php-min.png",
+                "python": "/images/languages/python-min.png",
+                "ruby": "/images/languages/ruby-min.png",
+                "SQL": "/images/languages/SQL-min.png",
+                "css" : "/images/languages/css-min.png",
+                "typescript": "/images/languages/typescript-min.png"
             }
 
             console.log("await getUser " , await getUser());
@@ -428,7 +428,7 @@
 
             console.log(pList);
 
-            const dPList = await getData("/api/project/list");
+            const dPList = await getData("/api/department/list");
 
             dPList.forEach((item) => {
                 const option = document.createElement("option");
@@ -606,15 +606,19 @@
                 );
                 progressCircle.setAttribute("data-min-value", "0");
                 progressCircle.setAttribute("data-max-value", "100");
+
+
+                let percentage;
+                if(currentProject.totalTaskCount !== 0){
+                    percentage= currentProject.completeTaskCount / currentProject.totalTaskCount * 100;
+                } else {
+                    percentage = 0;
+                }
+                console.log("percentage",percentage);
+
                 progressCircle.setAttribute(
                     "data-value",
-                    currentProject.totalTask == 0
-                        ? (
-                              (currentProject.completeTaskCount /
-                                  currentProject.totalTaskCount) *
-                              100
-                          ).toString()
-                        : 0
+                    percentage
                 );
                 progressCircle.setAttribute("data-type", "percent");
 
@@ -782,7 +786,7 @@
                     ).value = targetData.exReview;
                     detailMoal.querySelector(
                         "#project-duration"
-                    ).innerText = `${duration}`;
+                    ).innerText = `${targetData.duration} ${targetData.duration < 1 ? " month" : " months"}`;
                     detailMoal.querySelector("#project-start-date").innerText =
                         formatDateFromMilliseconds(targetData.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =
@@ -818,16 +822,25 @@
 
                 console.log(project)
 
-                sendData("/api/project/update", "PUT", project)
-                    .then((response) => {
-                        console.log(response)
-                    })
-                    .then((message) => {
-                        console.log(message);
-                        alert("Project updated successfully");
-                        location.reload();
-                        e.currentTarget.submit();
-                    })
+                $.ajax({
+                    url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
+                    type: "PUT",
+                    data: JSON.stringify(project),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: async function (data) {
+                        alert("Project registered successfully");
+                        // Reset the form if needed
+                        console.log("this projce has benn saved", data);
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                    error: function (data) {
+                        alert("Error registering project");
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                });
             })
 
             document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
@@ -842,16 +855,25 @@
                     integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
                 }
 
-                sendData(`/api/project/update/amount/${projectId}`, "PUT", amountDto)
-                    .then((response) => {
-                        console.log(response)
-                    })
-                    .then((message) => {
-                        console.log(message);
-                        alert("Project updated successfully");
-                        location.reload();
-                        e.currentTarget.submit();
-                    })
+                $.ajax({
+                    url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
+                    type: "PUT",
+                    data: JSON.stringify(amountDto),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: async function (data) {
+                        alert("Project registered successfully");
+                        // Reset the form if needed
+                        console.log("this projce has benn saved", data);
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                    error: function (data) {
+                        alert("Error registering project");
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                });
             })
 
             const sortProjectByDepartment = await getData(
@@ -974,7 +996,13 @@
                 });
             });
 
-            let employeeList = loginUser.employees;
+            let employeeList;
+
+            if(loginUser.currentUser.role === 'PROJECT_MANAGER') {
+
+                employeeList = await getData("/api/currentuser/available/employees");
+
+            }
 
             console.log("EMPLOYEE LIST : " , employeeList);
 
@@ -1215,12 +1243,12 @@
                             $("#validation-form")[0].reset();
                             console.log("this projce has benn saved", data);
                             // event.currentTarget.submit();
-                            await getAllProjects();
-
+                            window.top.location = window.top.location;
                         },
                         error: function (data) {
                             alert("Error registering project");
                             // event.currentTarget.submit();
+                            window.top.location = window.top.location;
                         },
                     });
                 });
@@ -1283,6 +1311,12 @@
                 const maxValue = $(this).attr("data-max-value");
                 const value = $(this).attr("data-value");
                 const type = $(this).attr("data-type");
+
+                console.log("minValue : " , minValue);
+                console.log("maxValue : " , maxValue);
+                console.log("value : " , value);
+                console.log("type : " , type);
+
 
                 if (value < 40) {
                     this.classList.add("circle-progress-secondary");
@@ -2659,5 +2693,8 @@
         <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
         <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
+            </div>
     </body>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="/js/notification.js" type="module"></script>
 </html>
