@@ -14,12 +14,19 @@ public class TasksDto {
     private Long id;
     private TaskStatus status;
     private String title,description;
+
     private long plan_start_time;
     private long plan_end_time;
+
     private long actual_start_time;
     private long actual_end_time;
+
+
     private Double plan_hours;
     private Double actual_hours;
+
+    private boolean due;
+
     private UserDto userDto;
     private TasksGroup tasksGroup;
     private ProjectDto projectDto;

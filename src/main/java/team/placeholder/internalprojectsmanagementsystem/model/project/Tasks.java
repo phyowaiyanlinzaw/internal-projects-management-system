@@ -34,6 +34,8 @@ public class Tasks implements Serializable {
     private long actual_end_time;
     private Double actual_hours;
 
+    private boolean due;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")
     private Project project;

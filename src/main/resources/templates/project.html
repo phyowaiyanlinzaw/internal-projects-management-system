@@ -412,7 +412,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label
                                     for="start_date"
                                     class="col-sm-12 col-form-label"
@@ -428,7 +428,7 @@
                             />
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label
                                     for="end_date"
                                     class="col-sm-12 col-form-label"
@@ -441,6 +441,22 @@
                                     type="text"
                                     class="form-control border-task-description"
                                     id="end_date"
+                            />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label
+                                    for="plan-hours"
+                                    class="col-sm-12 col-form-label"
+                            >Plan Hours
+                                <span style="color: red">
+                                            *</span
+                                ></label
+                            >
+                            <input
+                                    type="number"
+                                    class="form-control border-task-description"
+                                    id="plan-hours"
                             />
                         </div>
 
@@ -541,7 +557,6 @@
                 onSelect: function (dateText, inst) {
                     if (dateText !== "") {
                         var dateObject = $(this).datepicker('getDate');
-
                         $("#end_date").datepicker('option', 'minDate', dateObject);
 
                     }
@@ -741,10 +756,7 @@
                 //change input value from that taskdata
                 document.getElementById('taskTitle').innerText = currentTaskData.title
                 document.getElementById('description-editor').value = currentTaskData.description
-                // document.getElementById('tduration').value = currentTaskData.duration
-                // document.getElementById('task-detail-start_time').value = currentTaskData.start_time
 
-                // change status span text according to the status and also change badge color
                 if (currentTaskData.status === 'TODO') {
                     document.getElementById('status').innerText = "TODO"
                     document.getElementById('status').classList.add('bg-primary')
@@ -1090,8 +1102,9 @@
                 title: $("#title").val(),
                 description: $("#description").val(),
                 // Convert to Unix timestamp
-                plan_start_time: new Date($("#start_time").val()).getTime(),
-                plan_end_time: new Date($("#end_time").val()).getTime(),
+                plan_start_time: new Date($("#start_date").val()).getTime(),
+                plan_end_time: new Date($("#end_date").val()).getTime(),
+                plan_hours : $("#plan-hours").val(),
                 tasksGroup: $("#group").val(),
                 projectId:
                     parseInt(projectId)

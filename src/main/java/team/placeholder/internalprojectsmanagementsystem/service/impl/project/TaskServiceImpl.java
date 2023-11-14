@@ -50,6 +50,8 @@ public class TaskServiceImpl implements TasksService {
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
         task.setPlan_start_time(taskRequestDto.getPlan_start_time());
         task.setPlan_end_time(taskRequestDto.getPlan_end_time());
+        task.setPlan_hours(taskRequestDto.getPlan_hours());
+        task.setDue(false);
         task.setStatus(TaskStatus.TODO);
         User user = userRepository.findById(taskRequestDto.getUserId());
         Project project = projectRepository.findById(taskRequestDto.getProjectId());
