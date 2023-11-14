@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 public class TaskRequestDto {
 
+    private long id;
     private String title;
     private String description;
     private long projectId;

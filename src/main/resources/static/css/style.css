@@ -604,7 +604,7 @@
 }
 
 .lane {
-    width: 225px;
+    width: 350px;
 }
 
 .heading {
@@ -613,14 +613,19 @@
     margin-bottom: 8px;
 }
 
+.py-hee{
+    padding-block: 14px;
+    padding-inline: 10px;
+}
+
 .swim-lane {
     display: flex;
     flex-direction: column;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
     overflow: auto;
-    width: 225px;
+    width: 100%;
     row-gap: 12px;
-    max-height: 480px;
+    min-height: 480px;
     flex-shrink: 0;
     overflow-x: hidden;
 }
@@ -628,6 +633,10 @@
 .task {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     cursor: grab;
+    padding: 20px 16px 16px 16px;
+    margin-bottom: 12px;
+    transition: 0.2s;
+    height: 100px
 }
 
 .is-dragging {
