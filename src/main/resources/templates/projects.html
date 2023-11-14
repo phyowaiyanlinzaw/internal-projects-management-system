@@ -243,7 +243,7 @@
 
 
 
-                $("#validation-form").submit(function (event) {
+                // $("#validation-form").submit(function (event) {
 
                     const deli =
                         this.querySelector("#deliverable").value === ""
@@ -261,7 +261,7 @@
                     }
                     console.log(a.settings.whitelist);
                 });
-            });
+            // });
 
             let arcccList = await getArchitecturelist();
 
@@ -381,7 +381,7 @@
                     if (errorContainer.length === 0) {
                         let p = $("<p>")
                             .addClass("text-danger fs-6")
-                            .text("Please enter a valid phone number with 10 digits.")
+                            .text("Please enter a valid phone number with 11 digits.")
                             .css("margin", "0")
                             .addClass('error-message');
 
@@ -1236,6 +1236,7 @@
                         }
                     }
                 });
+
 
 
 
