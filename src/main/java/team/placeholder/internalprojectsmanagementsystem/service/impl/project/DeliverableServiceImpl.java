@@ -14,6 +14,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.project.Deliver
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -33,4 +34,29 @@ public class DeliverableServiceImpl implements DeliverableService {
         return null;
     }
 
-}
+    @Override
+    public DeliverableDto updateDeliverable(DeliverableDto deliverableDto) {
+        Deliverable deliverable = deliverableRepository.findById(deliverableDto.getId());
+        if (deliverable !=null){
+            deliverable.setStatus(deliverableDto.isStatus());
+            deliverableRepository.save(deliverable);
+
+            return modelMapper.map(deliverable, deliverableDto.getClass());
+        }else {
+            return null;
+        }
+    }
+
+
+//    public void updateDeliverableStatus(List<Deliverable> deliverables) {
+//        for (Deliverable deliverable : deliverables) {
+//
+//            Deliverable existingDeliverable = deliverableRepository.findById(deliverable.getId())
+//                    .orElseThrow(() -> new RuntimeException("Deliverable not found with id: " + deliverable.getId()));
+//            existingDeliverable.setStatus(deliverable.isStatus());
+//
+//            deliverableRepository.save(existingDeliverable);
+//        }
+//
+//    }
+    }
