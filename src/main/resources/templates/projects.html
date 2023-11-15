@@ -1375,26 +1375,25 @@
                 }
 
                 function validatePrjArchitecture() {
-                    const architectures = $('#architectures').val();
+                    const architectures = $('#architectures').val().trim();
                     const errorContainer = $('#architectures').siblings('.error-container');
-                    if (!architectures  || architectures.length === 0) {
-                        validatedProjectForm  = false;
-                        if (errorContainer.length === 0) {
-                            let p = $("<p>")
-                                .addClass("text-danger fs-6")
-                                .text("Architecture is required")
-                                .css("margin", "0")
-                                .addClass('error-message');
 
-                            $('#architectures').after('<div class="error-container"></div>');
-                            $('#architectures').siblings('.error-container').append(p);
+                    if (!architectures) {
+                        validatedProjectForm = false;
+
+                        if (errorContainer.length === 0) {
+                            let p = $("<div>")
+                                .addClass("text-danger fs-6 error-message")
+                                .text("Architecture is required");
+
+                            $('#architectures').after(p);
                         }
 
-                        $('#architectures').css('border', '1px solid #dc3545 !important;');
+                        $('#architectures').addClass('is-invalid');
                     } else {
-                        validatedProjectForm  = true;
+                        validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#architectures').css('border', '1px solid #28a745 !important;');
+                        $('#architectures').removeClass('is-invalid').addClass('is-valid');
                     }
                 }
 
@@ -2172,6 +2171,8 @@
                                             placeholder="enter to add your own architecture"
                                             required
                                         />
+                                        <div class="invalid-feedback error-container"></div>
+
                                     </div>
 
                                     <!--                                systemoutline add-->
@@ -2899,11 +2900,11 @@
                                                     </div>
 
                                                     <div
-                                                        class="text-center mt-5"
+                                                        class="mt-lg-5"
                                                     >
                                                         <button
                                                             type="submit"
-                                                            class="btn btn-primary"
+                                                            class="btn-sm btn-primary"
                                                         >
                                                             Save Changes
                                                         </button>

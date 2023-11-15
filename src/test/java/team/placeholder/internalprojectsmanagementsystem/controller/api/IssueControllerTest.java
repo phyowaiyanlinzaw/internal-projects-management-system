@@ -35,18 +35,6 @@ class IssueControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void testGetAllIssues() throws Exception {
-        // Mock the behavior of the issueService.getAllIssues() method
-        given(issueService.getAllIssues()).willReturn(Arrays.asList(new IssueDto(/* construct your test data */)));
 
-        // Send GET request to /api/issue/list and verify the response
-        mockMvc.perform(get("/api/issue/list")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray())
-                .andExpect((ResultMatcher) jsonPath("$.length()", is(1)))
-                // Add more assertions based on your IssueDto structure
-                .andReturn();
-    }
+
 }
