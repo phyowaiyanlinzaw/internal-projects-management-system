@@ -183,11 +183,23 @@ public class IssueServiceImpl implements IssueService {
 
         if (issue != null) {
             // Add null checks before updating properties
-            issue.setCorrective_action(issueDto.getCorrective_action());
-            issue.setPreventive_action(issueDto.getPreventive_action());
-            issue.setSolved(issueDto.isSolved());
+
+            issue.setTitle(issueDto.getTitle() != null ? issueDto.getTitle() : issue.getTitle());
+            issue.setIssueCategory(issueDto.getIssueCategory() != null ? Category.valueOf(issueDto.getIssueCategory()) : issue.getIssueCategory());
+            issue.setDirect_cause(issueDto.getDirect_cause() != null ? issueDto.getDirect_cause() : issue.getDirect_cause());
+            issue.setRoot_cause(issueDto.getRoot_cause() != null ? issueDto.getRoot_cause() : issue.getRoot_cause());
+            issue.setPlace(issueDto.getPlace() != null ? issueDto.getPlace() : issue.getPlace());
+            issue.setDescription(issueDto.getDescription() != null ? issueDto.getDescription() : issue.getDescription());
+            issue.setCorrective_action(issueDto.getCorrective_action() != null ? issueDto.getCorrective_action() : issue.getCorrective_action());
+            issue.setPreventive_action(issueDto.getPreventive_action() != null ? issueDto.getPreventive_action() : issue.getPreventive_action());
+            
+            if(issue.getCorrective_action() == null && issue.getPreventive_action() == null) {
+                issue.setSolved(false);
+            } else {
+                issue.setSolved(true);
+            }
             issue.setUpdated_date(issueDto.getUpdated_date());
-            issue.setSolved_date(issueDto.getSolved_date());
+            issue.setSolved_date(issueDto.getSolved_date() != 0 ? issueDto.getSolved_date() : issue.getSolved_date());
 
             issueRepository.save(issue);
             return modelMapper.map(issue, IssueDto.class);

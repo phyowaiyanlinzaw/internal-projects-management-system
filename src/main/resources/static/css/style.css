@@ -1209,3 +1209,11 @@
 .rotate-icon.rotate {
     transform: rotate(-180deg); /* Adjust the angle as needed */
 }
+
+.ql-container {
+    padding: 0 !important;
+}
+
+.ql-editor {
+    padding: 10px !important;
+}

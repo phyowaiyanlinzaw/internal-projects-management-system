@@ -78,12 +78,6 @@ public class IssueController {
     public ResponseEntity<IssueDto> updateIssue(@PathVariable long id, @RequestBody IssueDto issueDto) {
         issueDto.setId(id);
 
-        if(issueDto.getCorrective_action().equals(null) && issueDto.getPreventive_action().equals(null)){
-            issueDto.setSolved(false);
-        }else{
-            issueDto.setSolved(true);
-        }
-
         IssueDto updatedIssue = issueService.updateIssue(issueDto);
         if (updatedIssue != null) {
             System.out.println("Issue updated successfully");

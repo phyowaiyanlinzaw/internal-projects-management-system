@@ -440,11 +440,18 @@
                                 <h6>Created Date:</h6>
                                 <p id="solveDateDetails"></p>
                             </div>
+
+                            <div class="col mb-3 d-none" id="issue-detail-save-btn-container">
+                                <button class="btn btn-success" id="issue-detail-save-btn">Save</button>
+                            </div>
                         </div>
 
                         <h6 data-toggle="collapse" href="#issue-detail-description" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>Description</h6>
                         <div id="issue-detail-description" class="accordion-collapse collapse">
                             <div class="accordion-body" id="descriptionDetails"></div>
+                            <div class="col mb-3 d-none" id="issue-description-save-btn-container">
+                                <button class="btn btn-success" id="issue-description-save-btn">Save</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -500,7 +507,67 @@
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
 
 <script type="module">
+
+    
+
     $(document).ready(function () {
+
+        const issueDetialEdit = document.querySelector("#details")
+
+        const saveButton = issueDetialEdit.querySelector("#issue-detail-save-btn-container")
+
+        saveButton.addEventListener("click", function (e) {
+            console.log("this suck")
+
+            const issueId = issueDetialEdit.getAttribute("data-currentEditingIssueId")
+            const issueTitle = issueDetialEdit.querySelector("#issueTitleDetails").value
+            const issueCategory = issueDetialEdit.querySelector("#issue_categoryDetails").value
+            const directCause = issueDetialEdit.querySelector("#direct_causeDetails").value
+            const rootCause = issueDetialEdit.querySelector("#root_causeDetails").value
+            const place = issueDetialEdit.querySelector("#placeDetails").value
+            const impact = issueDetialEdit.querySelector("#impactDetails").value
+
+            const issue = {
+                  id: issueId,
+                  title: issueTitle,
+                  issueCategory: issueCategory,
+                  direct_cause: directCause,
+                  root_cause: rootCause,
+                  place: place,
+                  impact: impact,
+                  updated_date : Date.now()
+                }
+
+            console.log(issueTitle, issueCategory, directCause, rootCause, place, impact, issueId)
+
+            $.ajax({
+                url: `/api/issue/update/${issueId}`, // Replace with your actual URL
+                type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(issue),
+                success: function (response) {
+                  console.log('Ajax request successful:', response);
+                  // Handle success response
+                    saveButton.classList.add('d-none')
+                },
+                error: function (xhr, status, error) {
+                  console.log('Ajax request error:', error);
+                  // Handle error response
+                }
+            });
+
+        })
+
+        issueDetialEdit.addEventListener("input", function (e) {
+            console.log("this suck")
+            
+
+            if (saveButton.classList.contains("d-none")) {
+                saveButton.classList.remove("d-none")
+            }
+
+        })
         setupLogoutConfirmation();
     });
 
@@ -918,6 +985,7 @@
                                     success: function (data) {
                                         console.log('Data received:', data);
                                         if (data) {
+                                            $("#details").attr("data-currentEditingIssueId", data.id);
                                             $('#issueTitleDetails').val(data.title);
                                             $('#issue_categoryDetails').val(data.issueCategory);
                                             $('#uploaderDetails').text(data.user_uploader.name);
@@ -934,6 +1002,37 @@
                                                 0,
                                                 data.description
                                             );
+                                            issueDetail.on('text-change', function(delta, source) {
+                                                console.log("text change", issueDetail.root.innerHTML)
+                                                $("#issue-description-save-btn-container").removeClass("d-none")
+                                            });
+                                            $("#issue-description-save-btn").on('click', function() {
+
+                                                const issue = {
+                                                    id: data.id,
+                                                    description: issueDetail.root.innerHTML,
+                                                    updated_date : Date.now()
+                                                }
+
+                                                console.log("issue", issue)
+
+                                                $.ajax({
+                                                    url: `/api/issue/update/${data.id}`, // Replace with your actual URL
+                                                    type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
+                                                    dataType: 'json',
+                                                    contentType: 'application/json',
+                                                    data: JSON.stringify(issue),
+                                                    success: function (response) {
+                                                        console.log('Ajax request successful:', response);
+                                                        // Handle success response
+                                                        $("#issue-description-save-btn-container").addClass('d-none')
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.log('Ajax request error:', error);
+                                                        // Handle error response
+                                                    }
+                                                });
+                                            })
                                             $('#direct_causeDetails').val(data.direct_cause);
                                             $('#root_causeDetails').val(data.root_cause);
                                             $('#placeDetails').val(data.place);
@@ -943,7 +1042,14 @@
                                             $('#solveDateDetails').text(formatDate(data.created_date));
                                             $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
                                             $('#issueDetailsModal').modal('show');
-                                            if(getLoginUser.currentUser.id !== data.user_uploader.id){
+
+                                            const notSamePerson = getLoginUser.currentUser.id !== data.user_uploader.id
+
+                                            if(notSamePerson) {
+                                                console.log(getLoginUser.currentUser.id)
+                                                console.log(data.user_uploader.id)
+                                                console.log(getLoginUser.currentUser.id !== data.user_uploader.id)
+                                                console.log("solved", data.solved)
                                                 $('#issueTitleDetails').prop('disabled', true);
                                                 $('#issue_categoryDetails').prop('disabled', true);
                                                 $('#descriptionDetails').prop('disabled', true);
@@ -952,7 +1058,28 @@
                                                 $('#placeDetails').prop('disabled', true);
                                                 $('#impactDetails').prop('disabled', true);
                                                 issueDetail.enable(false)
+                                            } else {
+                                                if(data.solved) {
+                                                    $('#issueTitleDetails').prop('disabled', true);
+                                                    $('#issue_categoryDetails').prop('disabled', true);
+                                                    $('#descriptionDetails').prop('disabled', true);
+                                                    $('#direct_causeDetails').prop('disabled', true);
+                                                    $('#root_causeDetails').prop('disabled', true);
+                                                    $('#placeDetails').prop('disabled', true);
+                                                    $('#impactDetails').prop('disabled', true);
+                                                    issueDetail.enable(false)
+                                                } else {
+                                                    $('#issueTitleDetails').prop('disabled', false);
+                                                    $('#issue_categoryDetails').prop('disabled', false);
+                                                    $('#descriptionDetails').prop('disabled', false);
+                                                    $('#direct_causeDetails').prop('disabled', false);
+                                                    $('#root_causeDetails').prop('disabled', false);
+                                                    $('#placeDetails').prop('disabled', false);
+                                                    $('#impactDetails').prop('disabled', false);
+                                                    issueDetail.enable(true)
+                                                }
                                             }
+                                            
                                         } else {
                                             console.log('No data received for issue ID:', issueId);
                                         }
