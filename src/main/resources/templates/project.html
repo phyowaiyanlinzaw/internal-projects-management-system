@@ -730,6 +730,9 @@
                     <label for="actual-hours-input" class="col-form-label"></label>
                     <input type="number" class="form-control" id="actual-hours-input">
                 </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="actual-hours-input-btn">Submit</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1287,11 +1290,22 @@
                         if (currentTaskData.status === 'FINISHED') {
                             //show modal box to ask for actual hours input type=number
                             $('#actual-hours-input-modal').modal('show')
-                            $('#actual-hours-input-modal').on('shown.bs.modal', function () {
-                                $('#actual-hours-input').trigger('focus')
-                            })
-                            $('#actual-hours-input-modal').on('hidden.bs.modal', function () {
-                                currentTaskData.actual_hours = parseInt($('#actual-hours-input').val())
+                            //get the input element
+                            const actualHoursInput = document.getElementById('actual-hours-input')
+                            //add event listener to the input element
+                            actualHoursInput.addEventListener('change', function (e) {
+                                //get the value of the input
+                                const actualHours = parseInt(e.target.value)
+                                //check if the value is valid
+                                if (actualHours > 0) {
+                                    //hide the modal box
+                                    $('#actual-hours-input-modal').modal('hide')
+                                    //set the actual hours to the current task data
+                                    currentTaskData.actual_hours = actualHours
+                                } else {
+                                    //show alert
+                                    alert('Please enter a valid number')
+                                }
                             })
 
                             currentTaskData.actual_end_time = new Date().getTime()
