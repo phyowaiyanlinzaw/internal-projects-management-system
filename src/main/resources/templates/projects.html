@@ -655,20 +655,24 @@
                 return formattedDate;
             }
 
-            motherContainer.addEventListener("click", function (e) {
+            motherContainer.addEventListener("click", async function (e) {
                 let target = e.target;
 
                 if (target.hasAttribute("data-bs-target")) {
                     let id = parseInt(target.getAttribute("id"));
                     let targetData = pList.find((a) => a.id == id);
 
+                    const currentProejctDetail = await getData(`/api/project/list/${id}`);
+
+                    console.log(currentProejctDetail)
+
                     document.querySelector(
                         "#project-detail-background"
-                    ).innerText = targetData.background;
+                    ).innerText = currentProejctDetail.background;
 
                     document.querySelector("#architectures-list-in-edit").textContent = ''
 
-                    targetData.architectureDto.forEach(a => {
+                    currentProejctDetail.architectureDto.forEach(a => {
 
                         const div = document.createElement("div");
 
@@ -697,7 +701,7 @@
                     })
 
                     document.querySelector("#project-detail-name").value =
-                        targetData.name;
+                        currentProejctDetail.name;
 
                     const objectiveQuill = new Quill(
                         "#show-project-objective",
@@ -709,9 +713,9 @@
                         }
                     );
 
-                    document.querySelector("#navigate-task").href = `/project/${targetData.id}`
+                    document.querySelector("#navigate-task").href = `/project/${currentProejctDetail.id}`
 
-                    document.querySelector("#current-edditing-projetc-id").value = targetData.id;
+                    document.querySelector("#current-edditing-projetc-id").value = currentProejctDetail.id;
 
                     console.log(document.querySelector("#current-edditing-projetc-id").value)
 
@@ -719,89 +723,89 @@
 
                     objectiveQuill.clipboard.dangerouslyPasteHTML(
                         0,
-                        targetData.objective
+                        currentProejctDetail.objective
                     );
 
                     document.querySelector("#project-edit-duration").value =
-                        targetData.duration;
+                        currentProejctDetail.duration;
 
                     document.querySelector("#start-date").value =
-                        formmatDateFromMillisecondForEdit(targetData.start_date);
+                        formmatDateFromMillisecondForEdit(currentProejctDetail.start_date);
 
                     document.querySelector("#end-date-in-edit").value =
-                        formatDateFromMilliseconds(targetData.end_date);
+                        formatDateFromMilliseconds(currentProejctDetail.end_date);
 
                     const phaseOptionList = document.querySelectorAll("#edit-project-phase option")
 
                     console.log(phaseOptionList)
 
                     phaseOptionList.forEach(a => {
-                        if (a.value === targetData.current_phase) {
+                        if (a.value === currentProejctDetail.current_phase) {
                             a.selected = true
                         }
                     })
 
                     editObjectiveEditor.clipboard.dangerouslyPasteHTML(
                         0,
-                        targetData.objective
+                        currentProejctDetail.objective
                     );
 
-                    console.log(targetData);
+                    console.log(currentProejctDetail);
 
-                    updateListItems(targetData.systemOutLineDto);
+                    updateListItems(currentProejctDetail.systemOutLineDto);
 
-                    updateSpanValues(targetData.amountDto);
+                    updateSpanValues(currentProejctDetail.amountDto);
 
                     let duration = calculateDuration(
-                        targetData.start_date,
-                        targetData.end_date
+                        currentProejctDetail.start_date,
+                        currentProejctDetail.end_date
                     );
-                    detailMoal.querySelector("#basic-design-count").innerText = targetData.amountDto.basic_design;
-                    detailMoal.querySelector("#detail-design-count").innerText = targetData.amountDto.detail_design;
-                    detailMoal.querySelector("#coding-count").innerText = targetData.amountDto.coding;
-                    detailMoal.querySelector("#unit-testing-count").innerText = targetData.amountDto.unit_testing;
-                    detailMoal.querySelector("#integrated-testing-count").innerText = targetData.amountDto.integrated_testing;
+                    detailMoal.querySelector("#basic-design-count").innerText = currentProejctDetail.amountDto.basic_design;
+                    detailMoal.querySelector("#detail-design-count").innerText = currentProejctDetail.amountDto.detail_design;
+                    detailMoal.querySelector("#coding-count").innerText = currentProejctDetail.amountDto.coding;
+                    detailMoal.querySelector("#unit-testing-count").innerText = currentProejctDetail.amountDto.unit_testing;
+                    detailMoal.querySelector("#integrated-testing-count").innerText = currentProejctDetail.amountDto.integrated_testing;
 
-                    detailMoal.querySelector("#edit-basic-design-count").value = targetData.amountDto.basic_design;
-                    detailMoal.querySelector("#edit-detail-design-count").value = targetData.amountDto.detail_design;
-                    detailMoal.querySelector("#edit-coding-count").value = targetData.amountDto.coding;
-                    detailMoal.querySelector("#edit-unit-testing-count").value = targetData.amountDto.unit_testing;
-                    detailMoal.querySelector("#edit-integrated-testing-count").value = targetData.amountDto.integrated_testing;
+                    detailMoal.querySelector("#edit-basic-design-count").value = currentProejctDetail.amountDto.basic_design;
+                    detailMoal.querySelector("#edit-detail-design-count").value = currentProejctDetail.amountDto.detail_design;
+                    detailMoal.querySelector("#edit-coding-count").value = currentProejctDetail.amountDto.coding;
+                    detailMoal.querySelector("#edit-unit-testing-count").value = currentProejctDetail.amountDto.unit_testing;
+                    detailMoal.querySelector("#edit-integrated-testing-count").value = currentProejctDetail.amountDto.integrated_testing;
 
                     detailMoal.querySelector(".modal-title").innerText =
-                        targetData.name;
+                        currentProejctDetail.name;
                     detailMoal.querySelector("#project-background").innerText =
-                        targetData.background;
+                        currentProejctDetail.background;
                     detailMoal.querySelector("#project-name").innerText =
-                        targetData.name;
+                        currentProejctDetail.name;
                     detailMoal.querySelector(
                         "#project-department-name"
-                    ).innerHTML = targetData.departmentDto.name;
+                    ).innerHTML = currentProejctDetail.departmentDto.name;
                     detailMoal.querySelector(
                         "#project-internal-review-count"
-                    ).value = targetData.inReview;
+                    ).value = currentProejctDetail.inReview;
                     detailMoal.querySelector(
                         "#project-external-review-count"
-                    ).value = targetData.exReview;
+                    ).value = currentProejctDetail.exReview;
                     detailMoal.querySelector(
                         "#project-duration"
-                    ).innerText = `${targetData.duration} ${targetData.duration < 1 ? " month" : " months"}`;
+                    ).innerText = `${currentProejctDetail.duration} ${currentProejctDetail.duration < 1 ? " month" : " months"}`;
                     detailMoal.querySelector("#project-start-date").innerText =
-                        formatDateFromMilliseconds(targetData.start_date);
+                        formatDateFromMilliseconds(currentProejctDetail.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =
-                        formatDateFromMilliseconds(targetData.end_date);
+                        formatDateFromMilliseconds(currentProejctDetail.end_date);
                     detailMoal.querySelector(
                         "#project-current-phase"
-                    ).innerText = targetData.current_phase;
+                    ).innerText = currentProejctDetail.current_phase;
                     detailMoal.querySelector(
                         "#client-email-address"
-                    ).innerHTML = targetData.clientDto.email;
+                    ).innerHTML = currentProejctDetail.clientDto.email;
                     detailMoal.querySelector(
                         "#client-phone-contect"
-                    ).innerHTML = targetData.clientDto.phone;
+                    ).innerHTML = currentProejctDetail.clientDto.phone;
                     detailMoal.querySelector(
                         "#my-dear-customer-name"
-                    ).innerHTML = targetData.clientDto.name;
+                    ).innerHTML = currentProejctDetail.clientDto.name;
                 }
             });
 
