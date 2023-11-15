@@ -1202,3 +1202,18 @@
     -webkit-appearance: menulist;
 }
 
+.rotate-icon {
+    transition: transform 0.5s ease-in-out;
+}
+
+.rotate-icon.rotate {
+    transform: rotate(-180deg); /* Adjust the angle as needed */
+}
+
+.ql-container {
+    padding: 0 !important;
+}
+
+.ql-editor {
+    padding: 10px !important;
+}

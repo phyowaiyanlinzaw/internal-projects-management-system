@@ -183,11 +183,23 @@ public class IssueServiceImpl implements IssueService {
 
         if (issue != null) {
             // Add null checks before updating properties
-            issue.setCorrective_action(issueDto.getCorrective_action());
-            issue.setPreventive_action(issueDto.getPreventive_action());
-            issue.setSolved(issueDto.isSolved());
+
+            issue.setTitle(issueDto.getTitle() != null ? issueDto.getTitle() : issue.getTitle());
+            issue.setIssueCategory(issueDto.getIssueCategory() != null ? Category.valueOf(issueDto.getIssueCategory()) : issue.getIssueCategory());
+            issue.setDirect_cause(issueDto.getDirect_cause() != null ? issueDto.getDirect_cause() : issue.getDirect_cause());
+            issue.setRoot_cause(issueDto.getRoot_cause() != null ? issueDto.getRoot_cause() : issue.getRoot_cause());
+            issue.setPlace(issueDto.getPlace() != null ? issueDto.getPlace() : issue.getPlace());
+            issue.setDescription(issueDto.getDescription() != null ? issueDto.getDescription() : issue.getDescription());
+            issue.setCorrective_action(issueDto.getCorrective_action() != null ? issueDto.getCorrective_action() : issue.getCorrective_action());
+            issue.setPreventive_action(issueDto.getPreventive_action() != null ? issueDto.getPreventive_action() : issue.getPreventive_action());
+            
+            if(issue.getCorrective_action() == null && issue.getPreventive_action() == null) {
+                issue.setSolved(false);
+            } else {
+                issue.setSolved(true);
+            }
             issue.setUpdated_date(issueDto.getUpdated_date());
-            issue.setSolved_date(issueDto.getSolved_date());
+            issue.setSolved_date(issueDto.getSolved_date() != 0 ? issueDto.getSolved_date() : issue.getSolved_date());
 
             issueRepository.save(issue);
             return modelMapper.map(issue, IssueDto.class);
@@ -196,29 +208,7 @@ public class IssueServiceImpl implements IssueService {
         }
     }
 
-    @Override
-    public void deleteIssue(long id) {
-        Issue issue = issueRepository.findById(id);
-        if (issue != null) {
-            issueRepository.delete(issue);
-        } else {
-            log.error("Issue not found");
-        }
 
-    }
-
-    @Override
-    public IssueDto getIssueByTitle(String title) {
-        return null;
-    }
-
-//    @Override
-//    public IssueDto getIssueListsByIdAndStatus(long issues, String status) {
-//        Issue issue =issueRepository.findById(issues);
-//
-//        return modelMapper.map(issue, IssueDto.class);
-//
-//    }
 
     @Override
     public List<IssueDto> getPendingIssueList(long id) {
@@ -315,9 +305,6 @@ public class IssueServiceImpl implements IssueService {
         return issueDtos;
     }
 
-    public List<IssueDto> getIssuesByUserId(long userId) {
-        return null;
-    }
 
     public List<IssueDto> getIssuesByStatus(String status) {
         IssueStatus issueStatus = IssueStatus.valueOf(status.toUpperCase());

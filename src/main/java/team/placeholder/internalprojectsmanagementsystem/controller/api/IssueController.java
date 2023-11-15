@@ -63,26 +63,9 @@ public class IssueController {
     }
 
 
-    @GetMapping("/lists/byTitle/{title}")
-    public ResponseEntity<IssueDto> getIssueByTitle(@PathVariable String title) {
-        IssueDto issue = issueService.getIssueByTitle(title);
-
-        if (issue != null) {
-            return ResponseEntity.ok(issue);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity<IssueDto> updateIssue(@PathVariable long id, @RequestBody IssueDto issueDto) {
         issueDto.setId(id);
-
-        if(issueDto.getCorrective_action().equals(null) && issueDto.getPreventive_action().equals(null)){
-            issueDto.setSolved(false);
-        }else{
-            issueDto.setSolved(true);
-        }
 
         IssueDto updatedIssue = issueService.updateIssue(issueDto);
         if (updatedIssue != null) {
@@ -92,13 +75,6 @@ public class IssueController {
             System.out.println("Failed to update issue");
             return ResponseEntity.badRequest().body(null);
         }
-    }
-
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteIssue(@RequestBody IssueDto issueDto) {
-         issueService.deleteIssue(issueDto.getId());
-        return ResponseEntity.ok("Issue deleted successfully");
     }
 
     @GetMapping("/list/status/{status}")

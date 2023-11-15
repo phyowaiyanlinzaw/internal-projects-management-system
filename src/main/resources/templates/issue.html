@@ -146,7 +146,7 @@
 
                 </div>
 
-                <div class="tab-pane fade show active row row-cols-1" id="unsolved-issues">
+                <div class="tab-pane fade show row row-cols-1" id="unsolved-issues">
 
                 </div>
 
@@ -254,7 +254,7 @@
                         <label for="issue_category" class="col-sm-12 col-form-label" name="issueCategory">Issue Category<span
                                 style="color:red"> *</span></label>
                         <select class="form-select border-task-description" name="issue_category" id="issue_category" >
-                            <option selected>Select Issue Category</option>
+                            <option value="" disabled selected>Select Issue Category</option>
                             <option value="ERROR">Error</option>
                             <option value="BUG">Bug</option>
                             <option value="COMMUNICATION">Communication</option>
@@ -331,6 +331,15 @@
 </div>
 <!-- add issue modal end -->
 
+<script>
+    function rotateIcon(element) {
+        // Get the icon element
+        const icon = element.querySelector('.rotate-icon');
+
+        // Toggle the 'rotate' class to apply or remove rotation
+        icon.classList.toggle('rotate');
+    }
+</script>
 
 
 <!--    issue detail modal start-->
@@ -347,84 +356,101 @@
                 <div class="container-fluid">
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
 
-                        <h6 data-toggle="collapse" href="#details"><i class="fas fa-chevron-circle-down"></i>  Details</h6>
-                        <div id="details" class="collapse">
+                        <h6 data-toggle="collapse" href="#peoples" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i> People</h6>
+
+                        <div id="peoples" class="accordion-collapse collapse accordion-body">
+                            <div class="col mb-3 ">
+                                <h6>Uploader:</h6>
+                                <p class=""  id="uploaderDetails"></p>
+                            </div>
+                            <div  class="col mb-3 ">
+                                <h6>Person In Charge:</h6>
+                                <p class="" id="picDetails"></p>
+
+                            </div>
+                            <div  class="col mb-3 ">
+                                <h6>Responsible Party:</h6>
+                                <p class="" id="rpDetails"></p>
+                            </div>
+                        </div>
+
+                        <h6 data-toggle="collapse" href="#solution-detail" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Solution</h6>
+                        <div id="solution-detail" class="accordion-collapse collapse accordion-body">
                             <div class="col mb-3">
 
-                                <span class="d-flex custom-issue-margin"><h6 >Title:</h6><p class="icon-title col-6 text-center" id="issueTitleDetails"></p></span>
+                                <h6 >Corrective Action :</h6>
+                                <p class="" id="correctiveDetails"></p>
 
                             </div>
-                            <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Category:</h6><p class="icon-title badge bg-secondary issue_details_margin" id="issue_categoryDetails"></p></span>
-
-                            </div>
-
-                            <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Direct Cause:</h6><p class="icon-title col-4 text-center" id="direct_causeDetails"></p></span>
-
-                            </div>
-
                             <div class="col mb-3">
-                                <span class="d-flex custom-issue-margin"><h6 >Root Cause:</h6><p class="icon-title col-4 text-center" id="root_causeDetails"></p></span>
 
-                            </div>
-
-                            <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Place:</h6><p class="icon-title col-6 text-center" id="placeDetails"></p></span>
-
-                            </div>
-
-                            <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Impact:</h6><p class="icon-title col-lg-6 text-center" id="impactDetails"></p></span>
-
-                            </div>
-
-                            <div class="col mb-3">
-                                <span class="d-flex custom-issue-margin"><h6>Corrective Action:</h6><p class="icon-title col-4 text-center" id="correctiveDetails"></p></span>
-
-                            </div>
-                            <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Preventive Action:</h6><p class="icon-title col-4 text-center" id="preventiveDetails"></p></span>
-
-                            </div>
-
-                            <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Solved Date:</h6><p class="icon-title col-6 text-center" id="solveDateDetails"></p></span>
+                                <h6 >Preventive Action :</h6>
+                                <p class="" id="preventiveDetails"></p>
 
                             </div>
                         </div>
 
+                        <h6 data-toggle="collapse" href="#details" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Details</h6>
+                        <div id="details" class="accordion-collapse collapse accordion-body">
+                            <div class="col mb-3">
 
-                        <h6 data-toggle="collapse" href="#peoples"><i class="fas fa-chevron-circle-down"></i> People</h6>
+                                <label for="issueTitleDetails" >Title:</label>
+                                <input type="text" class="form-control" id="issueTitleDetails"/>
 
-                        <div id="peoples" class="collapse">
+                            </div>
                             <div class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Uploader:</h6><p class="icon-title col-6 text-center"  id="uploaderDetails"></p></span>
+                                <label for="issue_categoryDetails">Category:</label>
+                                <select id="issue_categoryDetails" class="form-control me-2">
+                                    <option value="ERROR">ERROR</option>
+                                    <option value="BUG">BUG</option>
+                                    <option value="COMMUNICATION">COMMUNICATION</option>
+                                    <option value="TECHNICAL">TECHNICAL</option>
+                                    <option value="BUDGET">BUDGET</option>
+                                    <option value="DESIGN">DESIGN</option>
+                                    <option value="TESTING">TESTING</option>
+                                </select>
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <label for="direct_causeDetails">Direct Cause:</label>
+                                <textarea class="form-control" id="direct_causeDetails"></textarea>
 
                             </div>
-                            <div  class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Person In Charge:</h6><p class="icon-title col-4 text-center" id="picDetails"></p></span>
+
+                            <div class="col mb-3">
+                                <label for="root_causeDetails">Root Cause:</label>
+                                <textarea class="form-control" id="root_causeDetails"></textarea>
 
                             </div>
-                            <div  class="col mb-3 ">
-                                <span class="d-flex custom-issue-margin"><h6>Responsible Party:</h6><p class="icon-title col-6 text-center" id="rpDetails"></p></span>
 
+                            <div class="col mb-3 ">
+                                <label for="placeDetails">Place:</label>
+                                <textarea class="form-control" id="placeDetails"></textarea>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+
+                                <label for="impactDetails">Impact:</label>
+                                <textarea class="form-control" id="impactDetails"></textarea>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <h6>Created Date:</h6>
+                                <p id="solveDateDetails"></p>
+                            </div>
+
+                            <div class="col mb-3 d-none" id="issue-detail-save-btn-container">
+                                <button class="btn btn-success" id="issue-detail-save-btn">Save</button>
                             </div>
                         </div>
 
-                        <div class="accordion accordion-flush" id="accordionFlushExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingOne">
-
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                        <h6><i class="fas fa-chevron-circle-down"></i>Description</h6>
-                                    </button>
-                                </h2>
-                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"  data-bs-parent="#accordionFlushExample">
-                                    <div class="accordion-body" id="descriptionDetails"></div>
-                                </div>
-                            </div>
-                            <div class="col mb-3">
+                        <h6 data-toggle="collapse" href="#issue-detail-description" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>Description</h6>
+                        <div id="issue-detail-description" class="accordion-collapse collapse">
+                            <div class="accordion-body" id="descriptionDetails"></div>
+                            <div class="col mb-3 d-none" id="issue-description-save-btn-container">
+                                <button class="btn btn-success" id="issue-description-save-btn">Save</button>
                             </div>
                         </div>
                     </div>
@@ -481,9 +507,72 @@
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
 
 <script type="module">
+
+
+
     $(document).ready(function () {
+
+        const issueDetialEdit = document.querySelector("#details")
+
+        const saveButton = issueDetialEdit.querySelector("#issue-detail-save-btn-container")
+
+        saveButton.addEventListener("click", function (e) {
+            console.log("this suck")
+
+            const issueId = issueDetialEdit.getAttribute("data-currentEditingIssueId")
+            const issueTitle = issueDetialEdit.querySelector("#issueTitleDetails").value
+            const issueCategory = issueDetialEdit.querySelector("#issue_categoryDetails").value
+            const directCause = issueDetialEdit.querySelector("#direct_causeDetails").value
+            const rootCause = issueDetialEdit.querySelector("#root_causeDetails").value
+            const place = issueDetialEdit.querySelector("#placeDetails").value
+            const impact = issueDetialEdit.querySelector("#impactDetails").value
+
+            const issue = {
+                  id: issueId,
+                  title: issueTitle,
+                  issueCategory: issueCategory,
+                  direct_cause: directCause,
+                  root_cause: rootCause,
+                  place: place,
+                  impact: impact,
+                  updated_date : Date.now()
+                }
+
+            console.log(issueTitle, issueCategory, directCause, rootCause, place, impact, issueId)
+
+            $.ajax({
+                url: `/api/issue/update/${issueId}`, // Replace with your actual URL
+                type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(issue),
+                success: function (response) {
+                  console.log('Ajax request successful:', response);
+                  // Handle success response
+                    saveButton.classList.add('d-none')
+                },
+                error: function (xhr, status, error) {
+                  console.log('Ajax request error:', error);
+                  // Handle error response
+                }
+            });
+
+        })
+
+        issueDetialEdit.addEventListener("input", function (e) {
+            console.log("this suck")
+
+
+            if (saveButton.classList.contains("d-none")) {
+                saveButton.classList.remove("d-none")
+            }
+
+        })
         setupLogoutConfirmation();
     });
+
+
+
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.comd
     function getTimeAgo(timestamp) {
@@ -656,6 +745,305 @@
                 }
             });
 
+
+            // validation For Issue
+
+            let validatedForm = $('#add-issue');
+
+            function validateTitle() {
+                const title = $('#title').val();
+                const errorContainer = $('#title').siblings('.error-container');
+                if (title.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Title is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#title').after('<div class="error-container"></div>');
+                        $('#title').siblings('.error-container').append(p);
+                    }
+
+                    $('#title').addClass('is-invalid');
+                    $('#title').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#title').addClass('is-valid');
+                    $('#title').removeClass('is-invalid');
+                }
+            }
+
+            function validateDescription() {
+                const description = $('.quill-editor-bubble').find('.ql-editor').html().trim();
+                const errorContainer = $('.quill-editor-bubble').siblings('.error-container');
+
+                if (!description || description.length === 0) {
+                    validatedForm = false;
+
+                    // Check if the error message container already exists
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Description is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        // Create a container for the error message and append the message to it
+                        $('.quill-editor-bubble').after('<div class="error-container"></div>').siblings('.error-container').append(p);
+                    }
+
+                    $('.quill-editor-bubble').addClass('is-invalid');
+                    $('.quill-editor-bubble').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    // Remove the error message container if it exists
+                    if (errorContainer.length > 0) {
+                        errorContainer.remove();
+                    }
+                    $('.quill-editor-bubble').addClass('is-valid');
+                    $('.quill-editor-bubble').removeClass('is-invalid');
+                }
+            }
+
+
+            function validatePlace() {
+                const place = $('#place').val();
+                const errorContainer = $('#place').siblings('.error-container');
+                if (place.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Place is required"
+                            )
+                            .css("margin", "0");
+
+                        $('#place').after('<div class="error-container"></div>');
+                        $('#place').siblings('.error-container').append(p);
+                    }
+                    $('#place').addClass('is-invalid');
+                    $('#place').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#place').addClass('is-valid');
+                    $('#place').removeClass('is-invalid');
+                }
+            }
+
+            function validateImpact() {
+                const impact = $('#impact').val();
+                const errorContainer = $('#impact').siblings('.error-container');
+                if (impact.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Impact is required"
+                            )
+                            .css("margin", "0");
+                        $('#impact').after('<div class="error-container"></div>');
+                        $('#impact').siblings('.error-container').append(p);
+                    }
+
+                    $('#impact').addClass('is-invalid');
+                    $('#impact').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#impact').addClass('is-valid');
+                    $('#impact').removeClass('is-invalid');
+                }
+            }
+
+            function validateRootCause() {
+                const rootCause = $('#root_cause').val();
+                const errorContainer = $('#root_cause').siblings('.error-container');
+                if (rootCause.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Root Cause is required"
+                            )
+                            .css("margin", "0");
+                        $('#root_cause').after('<div class="error-container"></div>');
+                        $('#root_cause').siblings('.error-container').append(p);
+                    }
+
+                    $('#root_cause').addClass('is-invalid');
+                    $('#root_cause').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#root_cause').addClass('is-valid');
+                    $('#root_cause').removeClass('is-invalid');
+                }
+            }
+
+            function validateDirectCause() {
+                const directCause = $('#direct_cause').val();
+                const errorContainer = $('#direct_cause').siblings('.error-container');
+                if (directCause.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Direct Cause is required"
+                            )
+                            .css("margin", "0");
+                        $('#direct_cause').after('<div class="error-container"></div>');
+                        $('#direct_cause').siblings('.error-container').append(p);
+                    }
+
+
+                    $('#direct_cause').addClass('is-invalid');
+                    $('#direct_cause').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#direct_cause').addClass('is-valid');
+                    $('#direct_cause').removeClass('is-invalid');
+                }
+            }
+
+            function validateIssueCategory() {
+                const issueCategory = $('#issue_category').val();
+                const errorContainer = $('#issue_category').siblings('.error-container');
+
+                if (!issueCategory || issueCategory === "") {
+
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Issue Category is required"
+                            )
+                            .css("margin", "0");
+                        $('#issue_category').after('<div class="error-container"></div>');
+                        $('#issue_category').siblings('.error-container').append(p);
+                    }
+
+                    $('#issue_category').addClass('is-invalid');
+                    $('#issue_category').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#issue_category').addClass('is-valid');
+                    $('#issue_category').removeClass('is-invalid');
+                }
+            }
+
+            function validateResponsibleParty() {
+                const responsibleParty = $('#responsible_party').val();
+                const errorContainer = $('#responsible_party').siblings('.error-container');
+                if (!responsibleParty || responsibleParty === "") {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Responsible Party is required"
+                            )
+                            .css("margin", "0");
+                        $('#responsibleParty').after('<div class="error-container"></div>');
+                        $('#responsibleParty').siblings('.error-container').append(p);
+                    }
+                    $('#responsibleParty').addClass('is-invalid');
+                    $('#responsibleParty').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#responsibleParty').addClass('is-valid');
+                    $('#responsibleParty').removeClass('is-invalid');
+                }
+            }
+
+            function validateUserPic() {
+                const userPic = $('#user_pic').val();
+                const errorContainer = $('#user_pic').siblings('.error-container');
+                if (!userPic || userPic === "") {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Person In Charge is required"
+                            )
+                            .css("margin", "0");
+                        $('#user_pic').after('<div class="error-container"></div>');
+                        $('#user_pic').siblings('.error-container').append(p);
+                    }
+                    $('#user_pic').addClass('is-invalid');
+                    $('#user_pic').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#user_pic').addClass('is-valid');
+                    $('#user_pic').removeClass('is-invalid');
+                }
+            }
+
+            function validateIssue() {
+                validateTitle();
+                validateDescription();
+                validatePlace();
+                validateImpact();
+                validateRootCause();
+                validateDirectCause();
+                validateIssueCategory();
+                validateResponsibleParty();
+                validateUserPic();
+                return validatedForm;
+
+            }
+
+            $('#title').on('input', function () {
+                validateTitle();
+            });
+
+            $('.quill-editor-bubble .ql-editor').on('input', function () {
+                validateDescription();
+            });
+
+            $('#place').on('input', function () {
+                validatePlace();
+            });
+
+            $('#impact').on('input', function () {
+                validateImpact();
+            });
+
+            $('#root_cause').on('input', function () {
+                validateRootCause();
+            });
+
+            $('#direct_cause').on('input', function () {
+                validateDirectCause();
+            });
+
+            $('#issue_category').on('change', function () {
+                validateIssueCategory();
+            });
+
+            $('#responsible_party').on('change', function () {
+                validateResponsibleParty();
+            });
+
+            $('#user_pic').on('change', function () {
+                validateUserPic();
+            });
+
+
+            //for add issue
             $('#addIssue').on('click', async function () {
                 const title = $('#title').val();
                 const description = a.root.innerHTML;
@@ -669,22 +1057,12 @@
                 const responsible_type = actual_responsible_type;
                 const selectedUserId = $('#user_pic').val();
                 const issueId = $('#issue-edit-btn').data('issueId');
-                if (
-                    title === "" ||
-                    description === "" ||
-                    place === "" ||
-                    impact === "" ||
-                    root_cause === "" ||
-                    direct_cause === "" ||
-                    responsible_party === "" ||
-                    issue_category === "" ||
-                    selectedUserId === "" ||
-                    responsible_type === ""
-                ) {
-                    //alert('Please fill in all the required fields.');
+
+                if (!validateIssue()) {
                     showerror('Please fill in all the required fields.');
                     return;
                 }
+
                 const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
                 const uploaderId = getLoginUser.currentUser.id;
                 console.log("Uploader Id", uploaderId);
@@ -746,7 +1124,17 @@
             });
         }
     });
-        
+
+    function formatDate(timestamp) {
+        // Assuming data.solved_date is a timestamp in milliseconds
+        const date = new Date(timestamp);
+
+        // Format the date as a string (adjust the format as needed)
+        const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+        return formattedDate;
+    }
+
     function createIssueCard(item) {
                 return `
                     <div class="p-sm-2 ">
@@ -782,11 +1170,11 @@
 
                                         <div class="d-flex justify-content-end align-items-center" style="margin-right: 20px;">
                                         <div class="d-flex align-items-center gap-1">
-                                            <p> Posted  <span class="text-muted ">${new Date(item.created_date)} </span></p>
+                                            <p class="text-muted"> Posted  <span style="font-size: x-small; color: black;">${formatDate(item.created_date)} </span></p>
 
                                         </div>
                                         <div class="d-flex align-items-center gap-1" style="margin-left:5px;">
-                                            <p> Modified at <span class="text-muted">${getTimeElapsed(item.updated_date)}</span></p>
+                                            <p class="text-muted"> Modified at <span style="font-size: x-small; color: black;">${getTimeElapsed(item.updated_date)}</span></p>
                                         </div>
                                     </div>
                                     </div>
@@ -871,23 +1259,9 @@
                                 });
                             });
 
-
-                            $('#sort').on('click', '.issueDetails', function () {
+                            $('.tab-content').on('click', '.issueDetails', function () {
 
                                 console.log("click on issueDetails ")
-
-                                $('#details').collapse('show');
-                                $('#peoples').collapse('show');
-
-                                function formatDate(timestamp) {
-                                    // Assuming data.solved_date is a timestamp in milliseconds
-                                    const date = new Date(timestamp);
-
-                                    // Format the date as a string (adjust the format as needed)
-                                    const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-
-                                    return formattedDate;
-                                }
 
                                 // Get the issue ID directly from the button's data-id attribute
                                 const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
@@ -900,21 +1274,101 @@
                                     success: function (data) {
                                         console.log('Data received:', data);
                                         if (data) {
-                                            $('#issueTitleDetails').text(data.title);
-                                            $('#issue_categoryDetails').text(data.issueCategory);
+                                            $("#details").attr("data-currentEditingIssueId", data.id);
+                                            $('#issueTitleDetails').val(data.title);
+                                            $('#issue_categoryDetails').val(data.issueCategory);
                                             $('#uploaderDetails').text(data.user_uploader.name);
                                             $('#picDetails').text(data.user_pic.name);
                                             $('#rpDetails').text(data.responsible_party.name);
-                                            $('#descriptionDetails').html(data.description);
-                                            $('#direct_causeDetails').text(data.direct_cause);
-                                            $('#root_causeDetails').text(data.root_cause);
-                                            $('#placeDetails').text(data.place);
-                                            $('#impactDetails').text(data.impact);
+                                            const issueDetail = new Quill(document.querySelector('#descriptionDetails'), {
+                                                modules: {
+                                                    toolbar: toolbaroptions,
+                                                },
+                                                theme: 'bubble',
+                                            });
+                                            issueDetail.root.innerHTML = '';
+                                            issueDetail.clipboard.dangerouslyPasteHTML(
+                                                0,
+                                                data.description
+                                            );
+                                            issueDetail.on('text-change', function(delta, source) {
+                                                console.log("text change", issueDetail.root.innerHTML)
+                                                $("#issue-description-save-btn-container").removeClass("d-none")
+                                            });
+                                            $("#issue-description-save-btn").on('click', function() {
+
+                                                const issue = {
+                                                    id: data.id,
+                                                    description: issueDetail.root.innerHTML,
+                                                    updated_date : Date.now()
+                                                }
+
+                                                console.log("issue", issue)
+
+                                                $.ajax({
+                                                    url: `/api/issue/update/${data.id}`, // Replace with your actual URL
+                                                    type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
+                                                    dataType: 'json',
+                                                    contentType: 'application/json',
+                                                    data: JSON.stringify(issue),
+                                                    success: function (response) {
+                                                        console.log('Ajax request successful:', response);
+                                                        // Handle success response
+                                                        $("#issue-description-save-btn-container").addClass('d-none')
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.log('Ajax request error:', error);
+                                                        // Handle error response
+                                                    }
+                                                });
+                                            })
+                                            $('#direct_causeDetails').val(data.direct_cause);
+                                            $('#root_causeDetails').val(data.root_cause);
+                                            $('#placeDetails').val(data.place);
+                                            $('#impactDetails').val(data.impact);
                                             $('#correctiveDetails').text(data.corrective_action);
                                             $('#preventiveDetails').text(data.preventive_action);
-                                            $('#solveDateDetails').text(formatDate(data.solved_date));
+                                            $('#solveDateDetails').text(formatDate(data.created_date));
                                             $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
                                             $('#issueDetailsModal').modal('show');
+
+                                            const notSamePerson = getLoginUser.currentUser.id !== data.user_uploader.id
+
+                                            if(notSamePerson) {
+                                                console.log(getLoginUser.currentUser.id)
+                                                console.log(data.user_uploader.id)
+                                                console.log(getLoginUser.currentUser.id !== data.user_uploader.id)
+                                                console.log("solved", data.solved)
+                                                $('#issueTitleDetails').prop('disabled', true);
+                                                $('#issue_categoryDetails').prop('disabled', true);
+                                                $('#descriptionDetails').prop('disabled', true);
+                                                $('#direct_causeDetails').prop('disabled', true);
+                                                $('#root_causeDetails').prop('disabled', true);
+                                                $('#placeDetails').prop('disabled', true);
+                                                $('#impactDetails').prop('disabled', true);
+                                                issueDetail.enable(false)
+                                            } else {
+                                                if(data.solved) {
+                                                    $('#issueTitleDetails').prop('disabled', true);
+                                                    $('#issue_categoryDetails').prop('disabled', true);
+                                                    $('#descriptionDetails').prop('disabled', true);
+                                                    $('#direct_causeDetails').prop('disabled', true);
+                                                    $('#root_causeDetails').prop('disabled', true);
+                                                    $('#placeDetails').prop('disabled', true);
+                                                    $('#impactDetails').prop('disabled', true);
+                                                    issueDetail.enable(false)
+                                                } else {
+                                                    $('#issueTitleDetails').prop('disabled', false);
+                                                    $('#issue_categoryDetails').prop('disabled', false);
+                                                    $('#descriptionDetails').prop('disabled', false);
+                                                    $('#direct_causeDetails').prop('disabled', false);
+                                                    $('#root_causeDetails').prop('disabled', false);
+                                                    $('#placeDetails').prop('disabled', false);
+                                                    $('#impactDetails').prop('disabled', false);
+                                                    issueDetail.enable(true)
+                                                }
+                                            }
+
                                         } else {
                                             console.log('No data received for issue ID:', issueId);
                                         }

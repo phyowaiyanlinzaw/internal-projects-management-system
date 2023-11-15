@@ -14,14 +14,6 @@ public interface IssueService {
 
     IssueDto updateIssue(IssueDto issueDto);
 
-    void deleteIssue(long id);
-
-
-    IssueDto getIssueByTitle(String title);
-
-
-    List<IssueDto> getIssuesByUserId(long userId);
-
     List<IssueDto> getIssuesByStatus(String status);
     List<IssueDto> getPendingIssueList(long id);
 
