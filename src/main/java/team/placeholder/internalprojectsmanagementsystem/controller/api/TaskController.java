@@ -40,6 +40,13 @@ public class TaskController {
 
     }
 
+    @GetMapping("/list/project/{projectId}/user/{userId}")
+    public ResponseEntity<List<TasksDto>> taskListByProjectIdAndUserId(@PathVariable long projectId, @PathVariable long userId) {
+
+            return ResponseEntity.ok(taskService.getTasksByProjectAndUserId(projectId, userId));
+
+    }
+
     @PostMapping("/save")
     public ResponseEntity<TasksDto> saveTask(@RequestBody TaskRequestDto tasksDto) {
 
@@ -58,7 +65,7 @@ public class TaskController {
             return ResponseEntity.ok(taskService.updateTaskStatus(id,status,actual_start_time,actual_end_time));
     }
 
-    @GetMapping("update/data")
+    @PostMapping("/update/data")
     public ResponseEntity<TasksDto> updateTaskData(
             @RequestBody TaskRequestDto taskRequestDto
     ){

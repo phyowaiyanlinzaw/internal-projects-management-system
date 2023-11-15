@@ -154,7 +154,36 @@ public class TaskServiceImpl implements TasksService {
         List<TasksDto> taskDtoList = new ArrayList<>();
 
         for (Tasks task : taskList) {
-            taskDtoList.add(modelMapper.map(task, TasksDto.class));
+            User user = task.getUser();
+            Project project = task.getProject();
+            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+            UserDto userDto = modelMapper.map(user, UserDto.class);
+            TasksDto taskDto = modelMapper.map(task, TasksDto.class);
+            taskDto.setUserDto(userDto);
+            taskDto.setProjectDto(projectDto);
+            if(!task.isDeleted()) {
+                taskDtoList.add(taskDto);
+            }
+        }
+        return taskDtoList;
+    }
+
+    @Override
+    public List<TasksDto> getTasksByProjectAndUserId(long projectId, long userId) {
+        List<Tasks> taskList = taskRepository.findTasksByProjectIdAndUserId(projectId, userId);
+        List<TasksDto> taskDtoList = new ArrayList<>();
+
+        for (Tasks task : taskList) {
+            User user = task.getUser();
+            Project project = task.getProject();
+            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+            UserDto userDto = modelMapper.map(user, UserDto.class);
+            TasksDto taskDto = modelMapper.map(task, TasksDto.class);
+            taskDto.setUserDto(userDto);
+            taskDto.setProjectDto(projectDto);
+            if(!task.isDeleted()) {
+                taskDtoList.add(taskDto);
+            }
         }
         return taskDtoList;
     }
