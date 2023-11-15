@@ -208,29 +208,7 @@ public class IssueServiceImpl implements IssueService {
         }
     }
 
-    @Override
-    public void deleteIssue(long id) {
-        Issue issue = issueRepository.findById(id);
-        if (issue != null) {
-            issueRepository.delete(issue);
-        } else {
-            log.error("Issue not found");
-        }
 
-    }
-
-    @Override
-    public IssueDto getIssueByTitle(String title) {
-        return null;
-    }
-
-//    @Override
-//    public IssueDto getIssueListsByIdAndStatus(long issues, String status) {
-//        Issue issue =issueRepository.findById(issues);
-//
-//        return modelMapper.map(issue, IssueDto.class);
-//
-//    }
 
     @Override
     public List<IssueDto> getPendingIssueList(long id) {
@@ -327,9 +305,6 @@ public class IssueServiceImpl implements IssueService {
         return issueDtos;
     }
 
-    public List<IssueDto> getIssuesByUserId(long userId) {
-        return null;
-    }
 
     public List<IssueDto> getIssuesByStatus(String status) {
         IssueStatus issueStatus = IssueStatus.valueOf(status.toUpperCase());

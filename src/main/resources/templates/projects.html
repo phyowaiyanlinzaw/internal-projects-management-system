@@ -207,10 +207,13 @@
             console.log(clientList);
 
             const clientSelect = document.querySelector("select[id='client']");
+
+
             clientList.forEach((client) => {
                 const option = document.createElement("option");
                 option.value = JSON.stringify(client);
                 option.textContent = client.name;
+
                 clientSelect.append(option);
             });
 
@@ -241,7 +244,9 @@
                     },
                 });
 
-                $("#validation-form").submit(function (event) {
+
+
+
                     const deli =
                         this.querySelector("#deliverable").value === ""
                             ? []
@@ -258,7 +263,7 @@
                     }
                     console.log(a.settings.whitelist);
                 });
-            });
+            // });
 
             let arcccList = await getArchitecturelist();
 
@@ -308,6 +313,116 @@
                 ["link"],
             ];
 
+            // Validation For Client
+
+            let validatedForm = $('#client-form');
+            function validateName() {
+                const name = $('#client-name').val();
+                const errorContainer = $('#client-name').siblings('.error-container');
+                if (name.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Name is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#client-name').after('<div class="error-container"></div>');
+                        $('#client-name').siblings('.error-container').append(p);
+                    }
+
+                    $('#client-name').addClass('is-invalid');
+                    $('#client-name').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#client-name').addClass('is-valid');
+                    $('#client-name').removeClass('is-invalid');
+                }
+            }
+
+            function validateEmail() {
+                const email = $('#client-email').val()
+                const emailRegex =
+                    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+                const errorContainer = $('#client-email').siblings('.error-container');
+                if (emailRegex.test(email) === false) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Email is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#client-email').after('<div class="error-container"></div>');
+                        $('#client-email').siblings('.error-container').append(p);
+                    }
+
+                    $('#client-email').addClass('is-invalid');
+                    $('#client-email').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#client-email').addClass('is-valid');
+                    $('#client-email').removeClass('is-invalid');
+                }
+                
+            }
+
+            function validatePhone() {
+                const phone = $('#client-phone').val();
+                const errorContainer = $('#client-phone').siblings('.error-container');
+
+                // Check for the phone number pattern
+                const isValidPhone = /^[0-9]{11}$/.test(phone);
+                if (!isValidPhone) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Please enter a valid phone number with 11 digits.")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#client-phone').after('<div class="error-container"></div>');
+                        $('#client-phone').siblings('.error-container').append(p);
+                    }
+
+                    $('#client-phone').addClass('is-invalid');
+                    $('#client-phone').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#client-phone').addClass('is-valid');
+                    $('#client-phone').removeClass('is-invalid');
+                }
+            }
+
+
+            function validateClient() {
+           validateName();
+           validateEmail();
+           validatePhone();
+           return validatedForm;
+
+        }
+
+        $('#client-name').on('input', function () {
+            validateName();
+        });
+
+        $('#client-email').on('input', function () {
+            validateEmail();
+        });
+
+        $('#client-phone').on('input', function () {
+            validatePhone();
+        });            
+
+
             // SAVE CLIENT
             document
                 .querySelector("#client-form")
@@ -318,8 +433,7 @@
                     let email = document.querySelector("#client-email").value;
                     let phone = document.querySelector("#client-phone").value;
 
-                    if (name === "" || email === "" || phone === "") {
-                        alert("client form empty");
+                    if(!validateClient()){
                         return;
                     }
 
@@ -1063,23 +1177,23 @@
                     });
 
                 document.querySelector("#start-date").addEventListener("change", function () {
-                        const projectDruation = document.querySelector(
-                            "#project-edit-duration"
-                        ).value;
+                    const projectDruation = document.querySelector(
+                        "#project-edit-duration"
+                    ).value;
 
-                        const projectEndDate = document.querySelector(
-                            "#end-date-in-edit"
-                        );
+                    const projectEndDate = document.querySelector(
+                        "#end-date-in-edit"
+                    );
 
-                        const endDate = calculateEndDate(
-                            new Date(this.value).getTime(),
-                            projectDruation
-                        );
+                    const endDate = calculateEndDate(
+                        new Date(this.value).getTime(),
+                        projectDruation
+                    );
 
-                        projectEndDate.value = formatDateFromMilliseconds(
-                            endDate.getTime()
-                        );
-                    });
+                    projectEndDate.value = formatDateFromMilliseconds(
+                        endDate.getTime()
+                    );
+                });
 
                 document
                     .querySelector("#project-add-duration")
@@ -1107,30 +1221,371 @@
                     });
 
                 document.querySelector("#project-edit-duration").addEventListener("input", function () {
-                        const projectStartDate =
-                            document.querySelector("#start-date").value;
+                    const projectStartDate =
+                        document.querySelector("#start-date").value;
 
-                        if (projectStartDate !== "") {
-                            const projectEndDate = document.querySelector(
-                                "#end-date-in-edit"
-                            );
+                    if (projectStartDate !== "") {
+                        const projectEndDate = document.querySelector(
+                            "#end-date-in-edit"
+                        );
 
-                            // Calculate the end date only when there's a valid start date
-                            const endDate = calculateEndDate(
-                                new Date(projectStartDate).getTime(),
-                                this.value
-                            );
+                        // Calculate the end date only when there's a valid start date
+                        const endDate = calculateEndDate(
+                            new Date(projectStartDate).getTime(),
+                            this.value
+                        );
 
-                            // Check if endDate is not NaN
-                            if (!isNaN(endDate)) {
-                                projectEndDate.value =
-                                    formatDateFromMilliseconds(endDate);
-                            }
+                        // Check if endDate is not NaN
+                        if (!isNaN(endDate)) {
+                            projectEndDate.value =
+                                formatDateFromMilliseconds(endDate);
                         }
-                    });
+                    }
+                });
 
-                $("#validation-form").submit(function (event) {
+
+                // Validation for project
+                let validatedProjectForm = false;
+
+                console.log("validation eeee");
+                function validateProjectName() {
+                    const prjName = $('#name').val();
+                    const errorContainer = $('#name').siblings('.error-container');
+
+                    if (prjName.trim().length < 1) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Project Name is required")
+                                .css("margin", "0");
+                            $('#name').after('<div class="error-container"></div>');
+                            $('#name').siblings('.error-container').append(p);
+                        }
+                        $('#name').addClass('is-invalid');
+                        $('#name').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#name').addClass('is-valid');
+                        $('#name').removeClass('is-invalid');
+                    }
+                }
+
+                function validateProjectClient() {
+                    const prjclient = $('#client').val();
+                    const errorContainer = $('#client').siblings('.error-container');
+                    if (!prjclient  || prjclient .length === 0) {
+                        validatedProjectForm  = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Client is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#client').after('<div class="error-container"></div>');
+                            $('#client').siblings('.error-container').append(p);
+                        }
+
+                        $('#client').addClass('is-invalid');
+                        $('#client').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm  = true;
+                        errorContainer.remove();
+                        $('#client').addClass('is-valid');
+                        $('#client').removeClass('is-invalid');
+                    }
+                }
+
+
+                function validateProjectEmployee() {
+                    const employeelist = $('#employee-list').val();
+                    const errorContainer = $('#employee-list').siblings('.error-container');
+                    if (!employeelist  || employeelist .length === 0) {
+                        validatedProjectForm  = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Employee is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#employee-list').after('<div class="error-container"></div>');
+                            $('#employee-list').siblings('.error-container').append(p);
+                        }
+
+                        $('#employee-list').css('border', '1px solid #dc3545');
+                    } else {
+                        validatedProjectForm  = true;
+                        errorContainer.remove();
+                        $('#employee-list').css('border', '1px solid #28a745');
+
+                    }
+                }
+
+
+                function validatePrjDuration() {
+                    const prjduration = $('#project-add-duration').val();
+                    const errorContainer = $('#project-add-duration').siblings('.error-container');
+                    if (prjduration.length < 1) {
+                        validatedProjectForm  = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("End duration is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#project-add-duration').after('<div class="error-container"></div>');
+                            $('#project-add-duration').siblings('.error-container').append(p);
+                        }
+
+                        $('#project-add-duration').addClass('is-invalid');
+                        $('#project-add-duration').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm  = true;
+                        errorContainer.remove();
+                        $('#project-add-duration').addClass('is-valid');
+                        $('#project-add-duration').removeClass('is-invalid');
+                    }
+                }
+
+
+                function validatePrjBackground() {
+                    const background = $('#background').val();
+                    const errorContainer = $('#background').siblings('.error-container');
+                    if (background.length < 1) {
+                        validatedProjectForm  = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Background is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#background').after('<div class="error-container"></div>');
+                            $('#background').siblings('.error-container').append(p);
+                        }
+
+                        $('#background').addClass('is-invalid');
+                        $('#background').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm  = true;
+                        errorContainer.remove();
+                        $('#background').addClass('is-valid');
+                        $('#background').removeClass('is-invalid');
+                    }
+                }
+
+                function validatePrjArchitecture() {
+                    const architectures = $('#architectures').val().trim();
+                    const errorContainer = $('#architectures').siblings('.error-container');
+
+                    if (!architectures) {
+                        validatedProjectForm = false;
+
+                        if (errorContainer.length === 0) {
+                            let p = $("<div>")
+                                .addClass("text-danger fs-6 error-message")
+                                .text("Architecture is required");
+
+                            $('#architectures').after(p);
+                        }
+
+                        $('#architectures').addClass('is-invalid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#architectures').removeClass('is-invalid').addClass('is-valid');
+                    }
+                }
+
+                // Function to validate systemOutlines
+                function validatePrjSystemOutline() {
+                    const systemOutlines = $('#systemOutlines').text().trim();
+                    const errorContainer = $('#systemOutlines').siblings('.error-container');
+
+                    if (systemOutlines.length === 0) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("System Outlines is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#systemOutlines').after('<div class="error-container"></div>');
+                            $('#systemOutlines').siblings('.error-container').append(p);
+                        }
+
+                        $('#systemOutlines').css('border', '1px solid #dc3545'); // Red border color for invalid state
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#systemOutlines').css('border', '1px solid #28a745'); // Green border color for valid state
+                    }
+
+                }
+
+                function validatePrjDeliverable() {
+                    const deliverable = $('#deliverable').val();
+                    const errorContainer = $('#deliverable').siblings('.error-container');
+
+                    if (!deliverable || deliverable.trim().length === 0) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Deliverable is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#deliverable').after('<div class="error-container"></div>');
+                            $('#deliverable').siblings('.error-container').append(p);
+                        }
+
+                        $('#deliverable').addClass('is-invalid');
+                        $('#deliverable').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#deliverable').addClass('is-valid');
+                        $('#deliverable').removeClass('is-invalid');
+                    }
+                }
+
+
+                function validatePrjObjective() {
+                    const objective = $('#objective').val();
+                    const errorContainer = $('#objective').siblings('.error-container');
+
+                    if (!objective || objective.trim().length === 0) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Objective is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#objective').after('<div class="error-container"></div>');
+                            $('#objective').siblings('.error-container').append(p);
+                        }
+
+                        $('#objective').addClass('is-invalid');
+                        $('#objective').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#objective').addClass('is-valid');
+                        $('#objective').removeClass('is-invalid');
+                    }
+                }
+
+
+
+                function validateStartDate() {
+                    const start_date = $('#start_date').val();
+                    const errorContainer = $('#start_date ').siblings('.error-container');
+                    if (start_date .length === 0) {
+                        validatedProjectForm =true;
+                        if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Date is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#start_date ').after('<div class="error-container"></div>');
+                        $('#start_date ').siblings('.error-container').append(p);
+                    }
+
+                    $('#start_date ').addClass('is-invalid');
+                    $('#start_date ').removeClass('is-valid');
+
+                } else {
+                        validatedProjectForm  = true;
+                    errorContainer.remove();
+                    $('#start_date').addClass('is-valid');
+                    $('#start_date').removeClass('is-invalid');
+                }
+            }
+
+
+
+                $('#name').on('input', function () {
+                    validateProjectName();
+                });
+
+                $('#client').on('change', function () {
+                    validateProjectClient();
+                });
+
+                $('#employee-list').on('change', function () {
+                    validateProjectEmployee();
+                });
+
+                $('#start-date').on('input', function () {
+                    validateStartDate();
+                });
+
+
+                $('#project-add-duration').on('input', function () {
+                    validatePrjDuration();
+                });
+
+                $('#background').on('input', function () {
+                    validatePrjBackground();
+                });
+
+                $('#architectures').on('input', function () {
+                    validatePrjArchitecture();
+                });
+
+                $('#deliverable').on('input', function () {
+                    validatePrjDeliverable();
+                });
+
+                $('#systemOutlines').on('content-updated', function () {
+                    validatePrjSystemOutline();
+                });
+
+
+                $('#objective').on('input', function () {
+                    validatePrjObjective();
+                });
+
+                $('#start_date').on('input',function () {
+                    validateStartDate();
+                });
+
+
+                function validateProject() {
+                    validateProjectName();
+                    validateProjectClient();
+                    validateProjectEmployee();
+                    validatePrjDuration();
+                    validatePrjBackground();
+                    validatePrjArchitecture();
+                    validatePrjDeliverable();
+                    validatePrjSystemOutline();
+                    validatePrjObjective();
+                    validateStartDate();
+                    return validatedProjectForm ;
+
+                }
+
+
+
+                $("#project-add-btn").on('click', function (event) {
+                    console.log("submitted")
                     event.preventDefault(); // Prevent the form from submitting the traditional way
+
+
+                    if (!validateProject()) {
+                        return;
+                    }
 
                     const projectName = $("#name").val();
                     const client = JSON.parse($("#client").val());
@@ -1158,20 +1613,22 @@
                         deliverable,
                         objective
                     );
-                    if (
-                        projectName === "" ||
-                        client === "" ||
-                        startDate === 0 ||
-                        duration === 0 ||
-                        background === "" ||
-                        architectures === "" ||
-                        systemOutlines === "" ||
-                        deliverable === "" ||
-                        objective === "<p><br></p>"
-                    ) {
-                        alert("Please fill all the fields");
-                        return;
+
+
+
+
+                    let jsonData = ''; // replace with your actual JSON data
+                    if (jsonData.trim() !== '') {
+                        try {
+                            let parsedData = JSON.parse(jsonData);
+                            // Continue processing parsedData
+                        } catch (error) {
+                            console.error('Error parsing JSON:', error);
+                        }
+                    } else {
+                        console.warn('JSON data is empty.');
                     }
+
 
                     architectures = JSON.parse(architectures);
 
@@ -1200,7 +1657,13 @@
                             status : false,
                             deliverableType : deli
                         }
-                    })
+                    });
+
+
+
+                    if(!validateProject()){
+                        return;
+                    }
 
                     // You may want to add some form validation here before sending the data
                     console.log(objective);
@@ -1594,8 +2057,7 @@
                                         <input
                                             type="text"
                                             class="form-control border-task-description"
-                                            id="name"
-                                            name="name"
+                                            id="name" name="name"
                                         />
                                     </div>
 
@@ -1613,7 +2075,9 @@
                                             class="form-select"
                                             id="client"
                                             name="client"
-                                        ></select>
+                                        >
+                                            <option value="" selected disabled>Choose client</option>
+                                        </select>
                                     </div>
 
                                     <!--                            start date add-->
@@ -1687,7 +2151,7 @@
                                             class="form-control border-task-description"
                                             id="background"
                                             name="background"
-                                            required
+
                                         ></textarea>
                                     </div>
 
@@ -1711,6 +2175,8 @@
                                             placeholder="enter to add your own architecture"
                                             required
                                         />
+                                        <div class="invalid-feedback error-container"></div>
+
                                     </div>
 
                                     <!--                                systemoutline add-->
@@ -1779,6 +2245,7 @@
                                             type="submit"
                                             class="btn btn-primary col-2"
                                             data-dismiss="modal"
+                                            id="project-add-btn"
                                         >
                                             Add
                                         </button>
@@ -1806,9 +2273,7 @@
                                             type="text"
                                             class="form-control border-task-description"
                                             id="client-name"
-                                            name="name"
-                                            required
-                                        />
+                                            name="name" />
                                     </div>
 
                                     <div class="col-md-12">
@@ -1824,14 +2289,13 @@
                                             class="form-control border-task-description"
                                             id="client-email"
                                             name="email"
-                                            required
                                         />
                                     </div>
 
                                     <div class="col-md-12">
                                         <label
                                             for="client-phone"
-                                            class="col-sm-12 col-form-label"
+                                            class="col-sm-12 col-form-label "
                                             >Phone<span style="color: red">
                                                 *</span
                                             ></label
@@ -1841,7 +2305,7 @@
                                             class="form-control border-task-description"
                                             id="client-phone"
                                             name="phone"
-                                            parttern="[0-9]{10}"
+                                            parttern="[0-9]{11}" placeholder="09123456789"
                                         />
                                     </div>
 
@@ -2340,7 +2804,7 @@
                                                                 class="form-control border-task-description"
                                                                 name="background"
                                                                 id="project-detail-background"
-                                                                required
+
                                                             ></textarea>
                                                         </div>
                                                     </div>
@@ -2440,11 +2904,11 @@
                                                     </div>
 
                                                     <div
-                                                        class="text-center mt-5"
+                                                        class="mt-lg-5"
                                                     >
                                                         <button
                                                             type="submit"
-                                                            class="btn btn-primary"
+                                                            class="btn-sm btn-primary"
                                                         >
                                                             Save Changes
                                                         </button>

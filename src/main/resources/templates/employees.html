@@ -126,7 +126,8 @@
                         <div>
                             <select id="memberSelect" class="form-select form-select-lg mb-3"
                                     aria-label=".form-select-lg example" style="font-size: 16px;" required>
-                                <option value="PROJECT_MANAGER" selected>Project Manager</option>
+                                <option value="" selected disabled>Select Role</option>
+                                <option value="PROJECT_MANAGER">Project Manager</option>
                                 <option value="EMPLOYEE">Member</option>
                                 <option value="FOC">FOC</option>
                                 <option value="CONTRACT">Contract</option>
@@ -270,6 +271,10 @@
                 // Make an AJAX request to populate departmentSelect options
                 $.get('/api/department/list', function (data) {
                     departmentSelect.empty();
+
+                    departmentSelect.append($('<option>', {
+                        text: 'Select Department',
+                    }));
                     $.each(data, function (index, department) {
                         departmentSelect.append($('<option>', {
                             value: department.id,
@@ -329,6 +334,128 @@
         }
 
 
+        // For Employee Register
+
+        let validatedForm = $('#register-employee-btn');
+
+        function validateUsername() {
+            const username = $('#floatingText').val();
+            const errorContainer = $('#floatingText').siblings('.error-container');
+            if (username.length < 1) {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Username is required")
+                        .css("margin", "0")
+                        .addClass('error-message');
+
+                    $('#floatingText').after('<div class="error-container"></div>');
+                    $('#floatingText').siblings('.error-container').append(p);
+                }
+
+                $('#floatingText').addClass('is-invalid');
+                $('#floatingText').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#floatingText').addClass('is-valid');
+                $('#floatingText').removeClass('is-invalid');
+            }
+        }
+
+        function validateEmail() {
+            const email = $('#floatingInput').val();
+            const emailRegex =
+                /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+            const errorContainer = $('#floatingInput').siblings('.error-container');
+            if (emailRegex.test(email) === false) {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Email is required")
+                        .css("margin", "0")
+                        .addClass('error-message');
+
+                    $('#floatingInput').after('<div class="error-container"></div>');
+                    $('#floatingInput').siblings('.error-container').append(p);
+                }
+
+                $('#floatingInput').addClass('is-invalid');
+                $('#floatingInput').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#floatingInput').addClass('is-valid');
+                $('#floatingInput').removeClass('is-invalid');
+            }
+        }
+
+        function validateDepartment() {
+            const department = $('#memberSelect').val();
+
+            const errorContainer = $('#memberSelect').siblings('.error-container');
+            if (!department ||department.length === 0) {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Role is required")
+                        .css("margin-top", "0")
+                        .addClass('error-message');
+
+                    $('#memberSelect').after('<div class="error-container"></div>');
+                    $('#memberSelect').siblings('.error-container').append(p);
+                }
+
+                $('#memberSelect').addClass('is-invalid');
+                $('#memberSelect').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#memberSelect').addClass('is-valid');
+                $('#memberSelect').removeClass('is-invalid');
+            }
+        }
+
+        function validateProjectManager() {
+            const role = $('#projectManagerSelect').val();
+
+            if (!role || role.length === 0) {
+                validatedForm = false;
+
+            } else {
+                validatedForm = true;
+            }
+        }
+
+        function validateIssue() {
+           validateUsername();
+           validateEmail();
+           validateDepartment();
+           validateProjectManager();
+            return validatedForm;
+        }
+
+        $('#floatingText').on('input', function () {
+            validateUsername();
+        });
+
+        $('#floatingInput').on('input', function () {
+            validateEmail();
+        });
+
+        $('#memberSelect').on('change', function () {
+            validateDepartment();
+        });
+
+        $('#projectManagerSelect').on('change', function () {
+            validateProjectManager();
+        });
+
+
         $('#register-employee-btn').click(function () {
             var username = $('#floatingText').val();
             var email = $('#floatingInput').val();
@@ -336,8 +463,8 @@
             var departmentId = $('#departmentSelect').val();
             var projectManagerId = $('#projectManagerSelect').val();
 
-            if (username === '' || email === '' || role === '' || departmentId === '' || projectManagerId === '') {
-                showError("Please fill all the fields...")
+
+            if(!validateIssue()){
                 return;
             }
 
