@@ -179,11 +179,31 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id);
         if (project != null) {
 
-            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+            
+                ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+                SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
+                projectDto.setSystemOutLineDto(systemOutLineDto);
+                projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+                projectDto.setProjectManagerUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
 
-            projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+                log.info("project manager name should be shown here " + project.getProjectManager().getName());
+                projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
+                log.info("adjf;ladjf;lf", projectDto.getDepartmentDto());
 
-            projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
+                projectDto.getDepartmentDto().getUsers().clear();
+                projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
+                projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
+                projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+
+                List<UserDto> userDtos = new ArrayList<>();
+                for (User user : project.getUsers()) {
+                    user.getProjects().clear();
+                    userDtos.add(modelMapper.map(user, UserDto.class));
+                }
+                projectDto.setMembersUserDto(userDtos);
+                projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
+                projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
+                projectDto.setDeliverableDto(project.getDeliverables().stream().map(deliverable -> modelMapper.map(deliverable, DeliverableDto.class)).collect(Collectors.toList()));
 
             return projectDto;
         } else {
