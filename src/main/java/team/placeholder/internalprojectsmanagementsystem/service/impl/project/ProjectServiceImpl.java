@@ -201,7 +201,7 @@ public class ProjectServiceImpl implements ProjectService {
                     userDtos.add(modelMapper.map(user, UserDto.class));
                 }
                 projectDto.setMembersUserDto(userDtos);
-
+                projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
                 projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
                 projectDto.setDeliverableDto(project.getDeliverables().stream().map(deliverable -> modelMapper.map(deliverable, DeliverableDto.class)).collect(Collectors.toList()));
 
