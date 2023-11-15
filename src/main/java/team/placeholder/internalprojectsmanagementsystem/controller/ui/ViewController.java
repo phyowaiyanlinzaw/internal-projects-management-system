@@ -86,6 +86,8 @@ public class ViewController {
         return "project";
     }
 
+
+
     @GetMapping("/project/all")
     public String project(){
         return "projects";
@@ -107,7 +109,7 @@ public class ViewController {
     @GetMapping("/issue")
     public String issue() {return "issue";}
 
-    @PreAuthorize("hasAuthority('PMO')")
+    @PreAuthorize("hasRole('PMO')")
     @GetMapping("/employees")
     public String employees() {return "employees";}
 

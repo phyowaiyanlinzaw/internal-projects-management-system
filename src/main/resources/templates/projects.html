@@ -919,8 +919,13 @@
                 }
             });
 
+            const editProjectObjective = document.querySelector("#edit-project-objective");
+
+
             document.querySelector("#project-detail-edit-form").addEventListener("submit", function (e) {
                 e.preventDefault()
+
+
 
                 const project = {
                     id: parseInt(document.querySelector("#current-edditing-projetc-id").value),
@@ -932,6 +937,10 @@
                     current_phase: document.querySelector("#edit-project-phase").value,
                     objective: editObjectiveEditor.root.innerHTML
                 }
+
+
+
+
 
                 console.log(project)
 
@@ -1374,28 +1383,34 @@
                     }
                 }
 
+
                 function validatePrjArchitecture() {
-                    const architectures = $('#architectures').val().trim();
+                    const architectures= $('#architectures').val();
                     const errorContainer = $('#architectures').siblings('.error-container');
 
-                    if (!architectures) {
+                    if (!architectures || architectures.trim().length === 0) {
                         validatedProjectForm = false;
-
                         if (errorContainer.length === 0) {
-                            let p = $("<div>")
-                                .addClass("text-danger fs-6 error-message")
-                                .text("Architecture is required");
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Architecture is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
 
-                            $('#architectures').after(p);
+                            $('#architectures').after('<div class="error-container"></div>');
+                            $('#architectures').siblings('.error-container').append(p);
                         }
 
                         $('#architectures').addClass('is-invalid');
+                        $('#architectures').removeClass('is-valid');
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#architectures').removeClass('is-invalid').addClass('is-valid');
+                        $('#architectures').addClass('is-valid');
+                        $('#architectures').removeClass('is-invalid');
                     }
                 }
+
 
                 // Function to validate systemOutlines
                 function validatePrjSystemOutline() {
@@ -1441,13 +1456,16 @@
                             $('#deliverable').siblings('.error-container').append(p);
                         }
 
-                        $('#deliverable').addClass('is-invalid');
-                        $('#deliverable').removeClass('is-valid');
+                        // $('#deliverable').addClass('is-invalid');
+                        // $('#deliverable').removeClass('is-valid');
+
+                        $('#deliverable').css('border', '1px solid #dc3545');
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#deliverable').addClass('is-valid');
-                        $('#deliverable').removeClass('is-invalid');
+                        // $('#deliverable').addClass('is-valid');
+                        // $('#deliverable').removeClass('is-invalid');
+                        $('#deliverable').css('border', '1px solid #28a745');
                     }
                 }
 
