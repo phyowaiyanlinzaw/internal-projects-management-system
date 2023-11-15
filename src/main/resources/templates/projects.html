@@ -58,11 +58,6 @@
             type="text/css"
             href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"
         />
-        <link
-            rel="stylesheet"
-            type="text/css"
-            href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css"
-        />
 
         <!-- Bootstrap Tables -->
         <link
@@ -86,7 +81,7 @@
             href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"
             rel="stylesheet"
         />
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js" defer></script>
         <link
             href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
             rel="stylesheet"
@@ -144,12 +139,12 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
             defer
         ></script>
-        <script
-            src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/js/coreui.bundle.min.js"
-            integrity="sha384-Iqk8EE7ao72xAVBuuQTEwrU5N2IdvpJER5ZzM6LxwcXHqj2WstttaOvopXziv0nU"
-            crossorigin="anonymous"
-            defer
-        ></script>
+<!--        <script-->
+<!--            src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/js/coreui.bundle.min.js"-->
+<!--            integrity="sha384-Iqk8EE7ao72xAVBuuQTEwrU5N2IdvpJER5ZzM6LxwcXHqj2WstttaOvopXziv0nU"-->
+<!--            crossorigin="anonymous"-->
+<!--            defer-->
+<!--        ></script>-->
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
         <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
@@ -762,6 +757,8 @@
                     });
 
                     //____________________________________________________deliverable update end
+
+
                     document.querySelector("#project-detail-name").value =
                         targetData.name;
 
@@ -844,7 +841,7 @@
                         "#project-department-name"
                     ).innerHTML = targetData.departmentDto.name;
 
-                    //Review
+                    //________________________________________Review
                     detailMoal.querySelector(
                         "#project-internal-review-count"
                     ).value = targetData.reviewDto.internal_review_count;
@@ -852,6 +849,40 @@
                         "#project-external-review-count"
                     ).value = targetData.reviewDto.external_review_count;
                     //______________________________________________
+
+                    //_______________review update
+                    document.querySelector("#updateButton").addEventListener("click", async function () {
+
+                        var internalReviewCount = document.getElementById("project-internal-review-count").value;
+                        var externalReviewCount = document.getElementById("project-external-review-count").value;
+
+
+                        var data = {
+                            internal_review_count: internalReviewCount,
+                            external_review_count: externalReviewCount
+                        };
+
+
+                        fetch("/api/review/update-review/" + targetData.id, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Review counts updated successfully:', data);
+
+                            })
+                            .catch(error => {
+                                console.error('Error updating review counts:', error);
+
+                            });
+                    });
+
+
+                    //____________________________________reveiw update end
 
                     detailMoal.querySelector(
                         "#project-duration"
@@ -2606,29 +2637,37 @@
 
                                             <div class="tab-pane fade profile-edit pt-3" id="review">
                                                 <div class="row mb-3">
-                                                    <label for="project-internal-review-count"
-                                                            class="col-md-4 col-lg-3 col-form-label">External Review</label>
+                                                    <label for="project-external-review-count" class="col-md-4 col-lg-3 col-form-label">External Review</label>
                                                     <div class="col-md-8 col-lg-9">
                                                         <input
-                                                                name="project_name"
+                                                                name="project_external_review_count"
                                                                 type="number"
                                                                 class="form-control"
-                                                                id="project-internal-review-count"/>
+                                                                id="project-external-review-count"
+                                                        />
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-3">
-                                                    <label for="project-external-review-count"
-                                                           class="col-md-4 col-lg-3 col-form-label">Internal Review</label>
+                                                    <label for="project-internal-review-count" class="col-md-4 col-lg-3 col-form-label">Internal Review</label>
                                                     <div class="col-md-8 col-lg-9">
                                                         <input
-                                                                name="project_name"
+                                                                name="project_internal_review_count"
                                                                 type="number"
                                                                 class="form-control"
-                                                                id="project-external-review-count"/>
+                                                                id="project-internal-review-count"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-3">
+                                                    <div class="col-md-8 offset-md-4 col-lg-9 offset-lg-3">
+                                                        <button id="updateButton">Update</button>
                                                     </div>
                                                 </div>
                                             </div>
+
+
 
                                             <div
                                                     class="tab-pane fade pt-3"
