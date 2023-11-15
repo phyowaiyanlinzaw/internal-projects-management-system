@@ -121,6 +121,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @GetMapping("employee/list")
+    public ResponseEntity<List<UserDto>> getAllEmployeesExceptPMOAndSDQC() {
+        return ResponseEntity.ok(userService.getAllEmployeesExceptPMOAndSDQC());
+    }
+
     @GetMapping("list/role/{role}")
     public ResponseEntity<List<UserDto>> getAllUsersByRole(@PathVariable Role role) {
         return ResponseEntity.ok(userService.getAllByRole(role));

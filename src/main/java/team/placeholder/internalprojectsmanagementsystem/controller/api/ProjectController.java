@@ -3,7 +3,6 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 
-import org.codehaus.groovy.transform.sc.transformers.RangeExpressionTransformer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,24 +13,14 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Amount;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
-import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
-import java.sql.Date;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 @RestController
@@ -168,7 +157,7 @@ public class ProjectController {
         return ResponseEntity.ok(deliverableTypeService.getAll());
     }
 
-    @GetMapping(value = "/list/{role}/{id}")
+    @GetMapping(value = "/list/role/{role}/id/{id}")
     public ResponseEntity<List<ProjectDto>> getAllProjectsByRole(@PathVariable String role, @PathVariable Long id){
 
         //store the project list from the 
@@ -201,24 +190,30 @@ public class ProjectController {
 
         List<ProjectDto> projectList = projectService.getAllProjects();
 
-        Map<Long, List<Long>> departmentProejctMap = new HashMap<>();
+        Map<Long, List<Long>> departmentProjectMap = new HashMap<>();
 
-        for(ProjectDto proejct: projectList) {
-            Long departmentId = proejct.getDepartmentDto().getId();
-            Long projectId = proejct.getId();
+        for(ProjectDto project: projectList) {
+            Long departmentId = project.getDepartmentDto().getId();
+            Long projectId = project.getId();
 
-            if(departmentProejctMap.containsKey(departmentId)) {
-                departmentProejctMap.get(departmentId).add(projectId);
+            if(departmentProjectMap.containsKey(departmentId)) {
+                departmentProjectMap.get(departmentId).add(projectId);
             } else {
                 List<Long> projectIds = new ArrayList<>();
                 projectIds.add(projectId);
-                departmentProejctMap.put(departmentId, projectIds);
+                departmentProjectMap.put(departmentId, projectIds);
             }
 
         }
 
-        return new ResponseEntity<>(departmentProejctMap, HttpStatus.OK);
+        return new ResponseEntity<>(departmentProjectMap, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/list/department-name/{name}")
+    public ResponseEntity<List<ProjectDto>> getAllProjectsByDepartmentName(@PathVariable String name){
+        List<ProjectDto> projects = projectService.getAllProjectsByDepartmentName(name);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/list/ID/{id}/{status}")
@@ -234,7 +229,7 @@ public class ProjectController {
                 currentProjectId = projectDto.getId();
 
                 ClientDto clientDto = projectDto.getClientDto();
-                List<UserDto> userDtos = projectDto.getUserDtos();
+                List<UserDto> userDtos = projectDto.getMembersUserDto();
 
                 projectMap.put("client", clientDto);
                 projectMap.put("userList", userDtos);
@@ -247,7 +242,7 @@ public class ProjectController {
         return new ResponseEntity<>(projectMap, HttpStatus.OK);
     }
 
-    @GetMapping("/list/for/pmoandsdqc")
+    @GetMapping("/list/for/pmo-and-sdqc")
     public ResponseEntity<Map<Long,List<Long>>> getProjectWithDpId() {
 
         List<Project> projectList = projectRepository.findAll();
@@ -273,7 +268,7 @@ public class ProjectController {
 
     private ResponseEntity<List<ProjectDto>> getListResponseEntity(List<ProjectDto> projects) {
         for(ProjectDto projectDto : projects){
-            if(projectDto.getUserDto() != null) {
+            if(projectDto.getProjectManagerUserDto() != null) {
 //                if(projectDto.getUserDto().getProjectList() != null) {
 //                    projectDto.getUserDto().getProjectList().clear();
 //                }

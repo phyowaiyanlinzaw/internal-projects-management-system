@@ -140,7 +140,7 @@ public class FakerService {
             Issue issue = new Issue();
             issue.setProject(projectRepository.findAll().get(faker.random().nextInt(projectRepository.findAll().size())));
             issue.setImpact(faker.lorem().paragraph());
-            issue.setIssue_category(Category.values()[faker.random().nextInt(Category.values().length)]);
+            issue.setIssueCategory(Category.values()[faker.random().nextInt(Category.values().length)]);
             issue.setDescription(faker.lorem().paragraph());
             issue.setCorrective_action(faker.lorem().paragraph());
             issue.setRoot_cause(faker.lorem().paragraph());
@@ -149,7 +149,7 @@ public class FakerService {
             issue.setSolved_date(faker.number().numberBetween(System.currentTimeMillis() - 31536000000L, System.currentTimeMillis()));
             issue.setTitle(faker.job().field());
             issue.setUpdated_date(faker.number().numberBetween(System.currentTimeMillis() - 31536000000L, System.currentTimeMillis()));
-            issue.setUser_pic(userRepository.findAll().get(faker.random().nextInt(userRepository.findAll().size())));
+            issue.setPic(userRepository.findAll().get(faker.random().nextInt(userRepository.findAll().size())));
             issue.setUser_uploader(userRepository.findAll().get(faker.random().nextInt(userRepository.findAll().size())));
             issueRepository.save(issue);
         }

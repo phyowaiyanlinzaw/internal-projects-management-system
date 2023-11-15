@@ -28,8 +28,13 @@ public class Tasks implements Serializable {
 
     private long plan_start_time;
     private long plan_end_time;
+    private Double plan_hours;
+
     private long actual_start_time;
     private long actual_end_time;
+    private Double actual_hours;
+
+    private boolean due;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")
@@ -39,7 +44,8 @@ public class Tasks implements Serializable {
     private TasksGroup tasksGroup;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
+
+    private boolean deleted;
 
 }

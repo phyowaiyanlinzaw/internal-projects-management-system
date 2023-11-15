@@ -33,7 +33,7 @@
         <link rel="stylesheet" href="/font/bootstrap-icons.min.css" />
 
         <!-- Libraries Stylesheet -->
-        <link1
+        <link
             href="/lib/owlcarousel/assets/owl.carousel.min.css"
             rel="stylesheet"
         />
@@ -139,12 +139,12 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
             defer
         ></script>
-<!--        <script-->
-<!--            src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/js/coreui.bundle.min.js"-->
-<!--            integrity="sha384-Iqk8EE7ao72xAVBuuQTEwrU5N2IdvpJER5ZzM6LxwcXHqj2WstttaOvopXziv0nU"-->
-<!--            crossorigin="anonymous"-->
-<!--            defer-->
-<!--        ></script>-->
+        <script
+            src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/js/coreui.bundle.min.js"
+            integrity="sha384-Iqk8EE7ao72xAVBuuQTEwrU5N2IdvpJER5ZzM6LxwcXHqj2WstttaOvopXziv0nU"
+            crossorigin="anonymous"
+            defer
+        ></script>
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
         <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
@@ -171,20 +171,20 @@
             import { getUser } from "/js/currentLoginUser.js";
 
             const languageList = {
-                "c#": "/images/languages/c#.png",
-                "c++": "/images/languages/c++.png",
-                "html": "/images/languages/html.png",
-                "java": "/images/languages/java.png",
-                "js": "/images/languages/js.png",
-                "php": "/images/languages/php.png",
-                "python": "/images/languages/python.png",
-                "ruby": "/images/languages/ruby.png",
-                "SQL": "/images/languages/SQL.png",
-                "css" : "/images/languages/css.png",
-                "typescript": "/images/languages/typescript.png"
+                "c#": "/images/languages/c#-min.png",
+                "c++": "/images/languages/c++-min.png",
+                "html": "/images/languages/html-min.png",
+                "java": "/images/languages/java-min.png",
+                "js": "/images/languages/js-min.png",
+                "php": "/images/languages/php-min.png",
+                "python": "/images/languages/python-min.png",
+                "ruby": "/images/languages/ruby-min.png",
+                "SQL": "/images/languages/SQL-min.png",
+                "css" : "/images/languages/css-min.png",
+                "typescript": "/images/languages/typescript-min.png"
             }
 
-            console.log(await getUser());
+            console.log("await getUser " , await getUser());
 
             const loginUser = await getUser();
 
@@ -198,12 +198,17 @@
             }
 
             const clientList = await getClientList();
+
             console.log(clientList);
+
             const clientSelect = document.querySelector("select[id='client']");
+
+
             clientList.forEach((client) => {
                 const option = document.createElement("option");
                 option.value = JSON.stringify(client);
                 option.textContent = client.name;
+
                 clientSelect.append(option);
             });
 
@@ -233,7 +238,10 @@
                         closeOnSelect: false,
                     },
                 });
-                $("#validation-form").submit(function (event) {
+
+
+
+
                     const deli =
                         this.querySelector("#deliverable").value === ""
                             ? []
@@ -250,7 +258,7 @@
                     }
                     console.log(a.settings.whitelist);
                 });
-            });
+            // });
 
             let arcccList = await getArchitecturelist();
 
@@ -299,7 +307,115 @@
                 // Adding image, link, video, or formula
                 ["link"],
             ];
-            //Save Review
+
+            // Validation For Client
+
+            let validatedForm = $('#client-form');
+            function validateName() {
+                const name = $('#client-name').val();
+                const errorContainer = $('#client-name').siblings('.error-container');
+                if (name.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Name is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#client-name').after('<div class="error-container"></div>');
+                        $('#client-name').siblings('.error-container').append(p);
+                    }
+
+                    $('#client-name').addClass('is-invalid');
+                    $('#client-name').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#client-name').addClass('is-valid');
+                    $('#client-name').removeClass('is-invalid');
+                }
+            }
+
+            function validateEmail() {
+                const email = $('#client-email').val()
+                const emailRegex =
+                    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+                const errorContainer = $('#client-email').siblings('.error-container');
+                if (emailRegex.test(email) === false) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Email is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#client-email').after('<div class="error-container"></div>');
+                        $('#client-email').siblings('.error-container').append(p);
+                    }
+
+                    $('#client-email').addClass('is-invalid');
+                    $('#client-email').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#client-email').addClass('is-valid');
+                    $('#client-email').removeClass('is-invalid');
+                }
+
+            }
+
+            function validatePhone() {
+                const phone = $('#client-phone').val();
+                const errorContainer = $('#client-phone').siblings('.error-container');
+
+                // Check for the phone number pattern
+                const isValidPhone = /^[0-9]{11}$/.test(phone);
+                if (!isValidPhone) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Please enter a valid phone number with 11 digits.")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#client-phone').after('<div class="error-container"></div>');
+                        $('#client-phone').siblings('.error-container').append(p);
+                    }
+
+                    $('#client-phone').addClass('is-invalid');
+                    $('#client-phone').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#client-phone').addClass('is-valid');
+                    $('#client-phone').removeClass('is-invalid');
+                }
+            }
+
+
+            function validateClient() {
+           validateName();
+           validateEmail();
+           validatePhone();
+           return validatedForm;
+
+        }
+
+        $('#client-name').on('input', function () {
+            validateName();
+        });
+
+        $('#client-email').on('input', function () {
+            validateEmail();
+        });
+
+        $('#client-phone').on('input', function () {
+            validatePhone();
+        });
 
 
             // SAVE CLIENT
@@ -312,8 +428,7 @@
                     let email = document.querySelector("#client-email").value;
                     let phone = document.querySelector("#client-phone").value;
 
-                    if (name === "" || email === "" || phone === "") {
-                        alert("client form empty");
+                    if(!validateClient()){
                         return;
                     }
 
@@ -373,22 +488,19 @@
                     case "PROJECT_MANAGER":
                         console.log("project manager");
                         return await getData(
-                            `/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`
+                            `/api/project/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
                         );
-                        break;
-
                     case "DEPARTMENT_HEAD":
                         console.log("department head");
                         return await getData(
-                            `/api/project/list/${loginUser.currentUser.role}/${loginUser.currentUser.id}`
+                            `/api/project/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
                         );
-                        break;
                     case "EMPLOYEE":
                     case "CONTRACT":
                     case "FOC":
                         console.log("one of the memeber");
                         return await getData(
-                            `/api/project/list/MEMBER/${loginUser.currentUser.id}`
+                            `/api/project/list/role/MEMBER/id/${loginUser.currentUser.id}`
                         );
                     default:
                         console.log("pmo or sdqc");
@@ -409,7 +521,7 @@
                 loginUser.currentUser.role == "SDQC"
             ) {
                 departmentProjectId = await getData(
-                    "/api/project/list/for/pmoandsdqc"
+                    "/api/project/list/for/pmo-and-sdqc"
                 );
             }
 
@@ -422,7 +534,7 @@
 
             console.log(pList);
 
-            const dPList = await getData("/api/project/list");
+            const dPList = await getData("/api/department/list");
 
             dPList.forEach((item) => {
                 const option = document.createElement("option");
@@ -530,6 +642,9 @@
                 );
                 h2.innerText = currentProject.name;
 
+                const pm_name_modal = document.getElementById("pm-name-modal");
+                pm_name_modal.innerText = currentProject.projectManagerUserDto.name;
+
                 const dFlexBetween = document.createElement("div");
                 dFlexBetween.classList.add("d-flex", "justify-content-between");
 
@@ -547,6 +662,7 @@
                 );
                 img.style.width = "40px";
                 img.alt = "Profile Image";
+                img.loading = "lazy";
 
                 const h5 = document.createElement("h5");
                 h5.classList.add(
@@ -559,7 +675,7 @@
                     "ms-2"
                 );
 
-                h5.innerText = currentProject.userDto.name;
+                h5.innerText = currentProject.projectManagerUserDto.name;
 
                 const a = document.createElement("a");
                 a.href = "#";
@@ -599,15 +715,19 @@
                 );
                 progressCircle.setAttribute("data-min-value", "0");
                 progressCircle.setAttribute("data-max-value", "100");
+
+
+                let percentage;
+                if(currentProject.totalTaskCount !== 0){
+                    percentage= currentProject.completeTaskCount / currentProject.totalTaskCount * 100;
+                } else {
+                    percentage = 0;
+                }
+                console.log("percentage",percentage);
+
                 progressCircle.setAttribute(
                     "data-value",
-                    currentProject.totalTask == 0
-                        ? (
-                              (currentProject.completeTaskCount /
-                                  currentProject.totalTaskCount) *
-                              100
-                          ).toString()
-                        : 0
+                    percentage
                 );
                 progressCircle.setAttribute("data-type", "percent");
 
@@ -646,17 +766,12 @@
                 return formattedDate;
             }
 
-            const log = console.log;
-
-            log(pList)
-
-            motherContainer.addEventListener("click", async function (e) {
+            motherContainer.addEventListener("click", function (e) {
                 let target = e.target;
 
                 if (target.hasAttribute("data-bs-target")) {
                     let id = parseInt(target.getAttribute("id"));
                     let targetData = pList.find((a) => a.id == id);
-
 
                     document.querySelector(
                         "#project-detail-background"
@@ -673,6 +788,7 @@
                         const image = document.createElement("img");
 
                         image.style.width = "40px"
+                        image.loading = "lazy"
 
                         if (languageList[a.tech_name]) {
                             image.setAttribute("src", languageList[a.tech_name]);
@@ -886,7 +1002,7 @@
 
                     detailMoal.querySelector(
                         "#project-duration"
-                    ).innerText = `${duration}`;
+                    ).innerText = `${targetData.duration} ${targetData.duration < 1 ? " month" : " months"}`;
                     detailMoal.querySelector("#project-start-date").innerText =
                         formatDateFromMilliseconds(targetData.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =
@@ -906,7 +1022,6 @@
                     detailMoal.querySelector(
                         "#my-dear-customer-name"
                     ).innerHTML = targetData.clientDto.name;
-
                 }
 
                 //_____________________________________________
@@ -928,16 +1043,25 @@
 
                 console.log(project)
 
-                sendData("/api/project/update", "PUT", project)
-                    .then((response) => {
-                        console.log(response)
-                    })
-                    .then((message) => {
-                        console.log(message);
-                        alert("Project updated successfully");
-                        location.reload();
-                        e.currentTarget.submit();
-                    })
+                $.ajax({
+                    url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
+                    type: "PUT",
+                    data: JSON.stringify(project),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: async function (data) {
+                        alert("Project registered successfully");
+                        // Reset the form if needed
+                        console.log("this projce has benn saved", data);
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                    error: function (data) {
+                        alert("Error registering project");
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                });
             })
 
             document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
@@ -952,16 +1076,25 @@
                     integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
                 }
 
-                sendData(`/api/project/update/amount/${projectId}`, "PUT", amountDto)
-                    .then((response) => {
-                        console.log(response)
-                    })
-                    .then((message) => {
-                        console.log(message);
-                        alert("Project updated successfully");
-                        location.reload();
-                        e.currentTarget.submit();
-                    })
+                $.ajax({
+                    url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
+                    type: "PUT",
+                    data: JSON.stringify(amountDto),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: async function (data) {
+                        alert("Project registered successfully");
+                        // Reset the form if needed
+                        console.log("this projce has benn saved", data);
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                    error: function (data) {
+                        alert("Error registering project");
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                });
             })
 
             const sortProjectByDepartment = await getData(
@@ -973,15 +1106,20 @@
                 .addEventListener("change", function () {
                     const allDiv = motherContainer.children;
                     const selectedDepartmentId = this.value;
-
-                    for (let i = 0; i < allDiv.length; i++) {
-                        if (
-                            sortProjectByDepartment[
-                                selectedDepartmentId
-                            ].includes(parseInt(allDiv[i].id.split("-")[1]))
-                        ) {
-                            allDiv[i].style.display = "block";
-                        } else {
+                    console.log(sortProjectByDepartment)
+                    console.log(selectedDepartmentId)
+                    console.log(sortProjectByDepartment[parseInt(selectedDepartmentId)])
+                    if (sortProjectByDepartment.hasOwnProperty(parseInt(selectedDepartmentId))) {
+                        for (let i = 0; i < allDiv.length; i++) {
+                            if (sortProjectByDepartment[selectedDepartmentId].includes(parseInt(allDiv[i].id.split("-")[1]))) {
+                                allDiv[i].style.display = "block";
+                            } else {
+                                allDiv[i].style.display = "none";
+                            }
+                        }
+                    } else {
+                        // If selected department has no projects, set all divs to display: none
+                        for (let i = 0; i < allDiv.length; i++) {
                             allDiv[i].style.display = "none";
                         }
                     }
@@ -1084,9 +1222,18 @@
                 });
             });
 
-            let employeeList = loginUser.employees;
+            let employeeList;
 
-            console.log(employeeList);
+            if(loginUser.currentUser.role === 'PROJECT_MANAGER') {
+
+                employeeList = await getData("/api/currentuser/available/employees");
+            }
+
+            if(loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO') {
+                document.querySelector("#department-filter-container").classList.remove("d-none");
+            }
+
+            console.log("EMPLOYEE LIST : " , employeeList);
 
             let empTagifyList = [];
 
@@ -1134,23 +1281,23 @@
                     });
 
                 document.querySelector("#start-date").addEventListener("change", function () {
-                        const projectDruation = document.querySelector(
-                            "#project-edit-duration"
-                        ).value;
+                    const projectDruation = document.querySelector(
+                        "#project-edit-duration"
+                    ).value;
 
-                        const projectEndDate = document.querySelector(
-                            "#end-date-in-edit"
-                        );
+                    const projectEndDate = document.querySelector(
+                        "#end-date-in-edit"
+                    );
 
-                        const endDate = calculateEndDate(
-                            new Date(this.value).getTime(),
-                            projectDruation
-                        );
+                    const endDate = calculateEndDate(
+                        new Date(this.value).getTime(),
+                        projectDruation
+                    );
 
-                        projectEndDate.value = formatDateFromMilliseconds(
-                            endDate.getTime()
-                        );
-                    });
+                    projectEndDate.value = formatDateFromMilliseconds(
+                        endDate.getTime()
+                    );
+                });
 
                 document
                     .querySelector("#project-add-duration")
@@ -1178,30 +1325,371 @@
                     });
 
                 document.querySelector("#project-edit-duration").addEventListener("input", function () {
-                        const projectStartDate =
-                            document.querySelector("#start-date").value;
+                    const projectStartDate =
+                        document.querySelector("#start-date").value;
 
-                        if (projectStartDate !== "") {
-                            const projectEndDate = document.querySelector(
-                                "#end-date-in-edit"
-                            );
+                    if (projectStartDate !== "") {
+                        const projectEndDate = document.querySelector(
+                            "#end-date-in-edit"
+                        );
 
-                            // Calculate the end date only when there's a valid start date
-                            const endDate = calculateEndDate(
-                                new Date(projectStartDate).getTime(),
-                                this.value
-                            );
+                        // Calculate the end date only when there's a valid start date
+                        const endDate = calculateEndDate(
+                            new Date(projectStartDate).getTime(),
+                            this.value
+                        );
 
-                            // Check if endDate is not NaN
-                            if (!isNaN(endDate)) {
-                                projectEndDate.value =
-                                    formatDateFromMilliseconds(endDate);
-                            }
+                        // Check if endDate is not NaN
+                        if (!isNaN(endDate)) {
+                            projectEndDate.value =
+                                formatDateFromMilliseconds(endDate);
                         }
-                    });
+                    }
+                });
 
-                $("#validation-form").submit(function (event) {
+
+                // Validation for project
+                let validatedProjectForm = false;
+
+                console.log("validation eeee");
+                function validateProjectName() {
+                    const prjName = $('#name').val();
+                    const errorContainer = $('#name').siblings('.error-container');
+
+                    if (prjName.trim().length < 1) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Project Name is required")
+                                .css("margin", "0");
+                            $('#name').after('<div class="error-container"></div>');
+                            $('#name').siblings('.error-container').append(p);
+                        }
+                        $('#name').addClass('is-invalid');
+                        $('#name').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#name').addClass('is-valid');
+                        $('#name').removeClass('is-invalid');
+                    }
+                }
+
+                function validateProjectClient() {
+                    const prjclient = $('#client').val();
+                    const errorContainer = $('#client').siblings('.error-container');
+                    if (!prjclient  || prjclient .length === 0) {
+                        validatedProjectForm  = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Client is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#client').after('<div class="error-container"></div>');
+                            $('#client').siblings('.error-container').append(p);
+                        }
+
+                        $('#client').addClass('is-invalid');
+                        $('#client').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm  = true;
+                        errorContainer.remove();
+                        $('#client').addClass('is-valid');
+                        $('#client').removeClass('is-invalid');
+                    }
+                }
+
+
+                function validateProjectEmployee() {
+                    const employeelist = $('#employee-list').val();
+                    const errorContainer = $('#employee-list').siblings('.error-container');
+                    if (!employeelist  || employeelist .length === 0) {
+                        validatedProjectForm  = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Employee is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#employee-list').after('<div class="error-container"></div>');
+                            $('#employee-list').siblings('.error-container').append(p);
+                        }
+
+                        $('#employee-list').css('border', '1px solid #dc3545');
+                    } else {
+                        validatedProjectForm  = true;
+                        errorContainer.remove();
+                        $('#employee-list').css('border', '1px solid #28a745');
+
+                    }
+                }
+
+
+                function validatePrjDuration() {
+                    const prjduration = $('#project-add-duration').val();
+                    const errorContainer = $('#project-add-duration').siblings('.error-container');
+                    if (prjduration.length < 1) {
+                        validatedProjectForm  = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("End duration is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#project-add-duration').after('<div class="error-container"></div>');
+                            $('#project-add-duration').siblings('.error-container').append(p);
+                        }
+
+                        $('#project-add-duration').addClass('is-invalid');
+                        $('#project-add-duration').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm  = true;
+                        errorContainer.remove();
+                        $('#project-add-duration').addClass('is-valid');
+                        $('#project-add-duration').removeClass('is-invalid');
+                    }
+                }
+
+
+                function validatePrjBackground() {
+                    const background = $('#background').val();
+                    const errorContainer = $('#background').siblings('.error-container');
+                    if (background.length < 1) {
+                        validatedProjectForm  = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Background is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#background').after('<div class="error-container"></div>');
+                            $('#background').siblings('.error-container').append(p);
+                        }
+
+                        $('#background').addClass('is-invalid');
+                        $('#background').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm  = true;
+                        errorContainer.remove();
+                        $('#background').addClass('is-valid');
+                        $('#background').removeClass('is-invalid');
+                    }
+                }
+
+                function validatePrjArchitecture() {
+                    const architectures = $('#architectures').val().trim();
+                    const errorContainer = $('#architectures').siblings('.error-container');
+
+                    if (!architectures) {
+                        validatedProjectForm = false;
+
+                        if (errorContainer.length === 0) {
+                            let p = $("<div>")
+                                .addClass("text-danger fs-6 error-message")
+                                .text("Architecture is required");
+
+                            $('#architectures').after(p);
+                        }
+
+                        $('#architectures').addClass('is-invalid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#architectures').removeClass('is-invalid').addClass('is-valid');
+                    }
+                }
+
+                // Function to validate systemOutlines
+                function validatePrjSystemOutline() {
+                    const systemOutlines = $('#systemOutlines').text().trim();
+                    const errorContainer = $('#systemOutlines').siblings('.error-container');
+
+                    if (systemOutlines.length === 0) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("System Outlines is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#systemOutlines').after('<div class="error-container"></div>');
+                            $('#systemOutlines').siblings('.error-container').append(p);
+                        }
+
+                        $('#systemOutlines').css('border', '1px solid #dc3545'); // Red border color for invalid state
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#systemOutlines').css('border', '1px solid #28a745'); // Green border color for valid state
+                    }
+
+                }
+
+                function validatePrjDeliverable() {
+                    const deliverable = $('#deliverable').val();
+                    const errorContainer = $('#deliverable').siblings('.error-container');
+
+                    if (!deliverable || deliverable.trim().length === 0) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Deliverable is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#deliverable').after('<div class="error-container"></div>');
+                            $('#deliverable').siblings('.error-container').append(p);
+                        }
+
+                        $('#deliverable').addClass('is-invalid');
+                        $('#deliverable').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#deliverable').addClass('is-valid');
+                        $('#deliverable').removeClass('is-invalid');
+                    }
+                }
+
+
+                function validatePrjObjective() {
+                    const objective = $('#objective').val();
+                    const errorContainer = $('#objective').siblings('.error-container');
+
+                    if (!objective || objective.trim().length === 0) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Objective is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#objective').after('<div class="error-container"></div>');
+                            $('#objective').siblings('.error-container').append(p);
+                        }
+
+                        $('#objective').addClass('is-invalid');
+                        $('#objective').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#objective').addClass('is-valid');
+                        $('#objective').removeClass('is-invalid');
+                    }
+                }
+
+
+
+                function validateStartDate() {
+                    const start_date = $('#start_date').val();
+                    const errorContainer = $('#start_date ').siblings('.error-container');
+                    if (start_date .length === 0) {
+                        validatedProjectForm =true;
+                        if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Date is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#start_date ').after('<div class="error-container"></div>');
+                        $('#start_date ').siblings('.error-container').append(p);
+                    }
+
+                    $('#start_date ').addClass('is-invalid');
+                    $('#start_date ').removeClass('is-valid');
+
+                } else {
+                        validatedProjectForm  = true;
+                    errorContainer.remove();
+                    $('#start_date').addClass('is-valid');
+                    $('#start_date').removeClass('is-invalid');
+                }
+            }
+
+
+
+                $('#name').on('input', function () {
+                    validateProjectName();
+                });
+
+                $('#client').on('change', function () {
+                    validateProjectClient();
+                });
+
+                $('#employee-list').on('change', function () {
+                    validateProjectEmployee();
+                });
+
+                $('#start-date').on('input', function () {
+                    validateStartDate();
+                });
+
+
+                $('#project-add-duration').on('input', function () {
+                    validatePrjDuration();
+                });
+
+                $('#background').on('input', function () {
+                    validatePrjBackground();
+                });
+
+                $('#architectures').on('input', function () {
+                    validatePrjArchitecture();
+                });
+
+                $('#deliverable').on('input', function () {
+                    validatePrjDeliverable();
+                });
+
+                $('#systemOutlines').on('content-updated', function () {
+                    validatePrjSystemOutline();
+                });
+
+
+                $('#objective').on('input', function () {
+                    validatePrjObjective();
+                });
+
+                $('#start_date').on('input',function () {
+                    validateStartDate();
+                });
+
+
+                function validateProject() {
+                    validateProjectName();
+                    validateProjectClient();
+                    validateProjectEmployee();
+                    validatePrjDuration();
+                    validatePrjBackground();
+                    validatePrjArchitecture();
+                    validatePrjDeliverable();
+                    validatePrjSystemOutline();
+                    validatePrjObjective();
+                    validateStartDate();
+                    return validatedProjectForm ;
+
+                }
+
+
+
+                $("#project-add-btn").on('click', function (event) {
+                    console.log("submitted")
                     event.preventDefault(); // Prevent the form from submitting the traditional way
+
+
+                    if (!validateProject()) {
+                        return;
+                    }
 
                     const projectName = $("#name").val();
                     const client = JSON.parse($("#client").val());
@@ -1229,19 +1717,20 @@
                         deliverable,
                         objective
                     );
-                    if (
-                        projectName === "" ||
-                        client === "" ||
-                        startDate === 0 ||
-                        duration === 0 ||
-                        background === "" ||
-                        architectures === "" ||
-                        systemOutlines === "" ||
-                        deliverable === "" ||
-                        objective === "<p><br></p>"
-                    ) {
-                        alert("Please fill all the fields");
-                        return;
+
+
+
+
+                    let jsonData = ''; // replace with your actual JSON data
+                    if (jsonData.trim() !== '') {
+                        try {
+                            let parsedData = JSON.parse(jsonData);
+                            // Continue processing parsedData
+                        } catch (error) {
+                            console.error('Error parsing JSON:', error);
+                        }
+                    } else {
+                        console.warn('JSON data is empty.');
                     }
 
                     architectures = JSON.parse(architectures);
@@ -1265,10 +1754,25 @@
                         console.log(matchingObj);
                         return matchingObj ? matchingObj : { type: deli.value };
                     });
+
+                    const deliverableList = deliverTypeList.map(deli => {
+                        return {
+                            status : false,
+                            deliverableType : deli
+                        }
+                    });
+
+
+
+                    if(!validateProject()){
+                        return;
+                    }
+
                     // You may want to add some form validation here before sending the data
                     console.log(objective);
                     console.log(architectures);
                     console.log(empList);
+                    console.log(deliverTypeList)
                     const project = {
                         name: projectName,
                         clientDto: client,
@@ -1285,9 +1789,7 @@
                             return acc;
                         }, {}),
                         current_phase: "PLANNING",
-                        deliverableDto: deliverTypeList.map((item) => ({
-                            deliverableType: { type: item.type },
-                        })),
+                        deliverableDto: deliverableList,
                         objective: objective,
                         amountDto: {
                             basic_design: 0,
@@ -1299,10 +1801,10 @@
                         departmentDto: {
                             id: loginUser.currentUser.department.id,
                         },
-                        userDto: {
+                        projectManagerUserDto: {
                             id: loginUser.currentUser.id,
                         },
-                        userDtos: empList.map((str) => ({ id: parseInt(str) })),
+                        membersUserDto: empList.map((str) => ({ id: parseInt(str) })),
                     };
                     console.log(project);
                     //Perform the AJAX request
@@ -1318,12 +1820,12 @@
                             $("#validation-form")[0].reset();
                             console.log("this projce has benn saved", data);
                             // event.currentTarget.submit();
-                            await getAllProjects();
-
+                            window.top.location = window.top.location;
                         },
                         error: function (data) {
                             alert("Error registering project");
                             // event.currentTarget.submit();
+                            window.top.location = window.top.location;
                         },
                     });
                 });
@@ -1377,11 +1879,21 @@
                 maxWidth: "100%",
             });
 
+            console.log("SYSSELECT" , sysSelect);
+
+
+
             $(".circle-progress").each(function () {
                 const minValue = $(this).attr("data-min-value");
                 const maxValue = $(this).attr("data-max-value");
                 const value = $(this).attr("data-value");
                 const type = $(this).attr("data-type");
+
+                console.log("minValue : " , minValue);
+                console.log("maxValue : " , maxValue);
+                console.log("value : " , value);
+                console.log("type : " , type);
+
 
                 if (value < 40) {
                     this.classList.add("circle-progress-secondary");
@@ -1471,7 +1983,7 @@
                                 <option value="December">December</option>
                             </select>
                         </div>
-                        <div class="d-inline-block">
+                        <div class="d-inline-block d-none" id="department-filter-container">
                             <select
                                 id="department-filter"
                                 class="form-control"
@@ -1616,8 +2128,7 @@
                                         <input
                                             type="text"
                                             class="form-control border-task-description"
-                                            id="name"
-                                            name="name"
+                                            id="name" name="name"
                                         />
                                     </div>
 
@@ -1635,7 +2146,9 @@
                                             class="form-select"
                                             id="client"
                                             name="client"
-                                        ></select>
+                                        >
+                                            <option value="" selected disabled>Choose client</option>
+                                        </select>
                                     </div>
 
                                     <!--                            start date add-->
@@ -1709,7 +2222,7 @@
                                             class="form-control border-task-description"
                                             id="background"
                                             name="background"
-                                            required
+
                                         ></textarea>
                                     </div>
 
@@ -1733,6 +2246,8 @@
                                             placeholder="enter to add your own architecture"
                                             required
                                         />
+                                        <div class="invalid-feedback error-container"></div>
+
                                     </div>
 
                                     <!--                                systemoutline add-->
@@ -1801,6 +2316,7 @@
                                             type="submit"
                                             class="btn btn-primary col-2"
                                             data-dismiss="modal"
+                                            id="project-add-btn"
                                         >
                                             Add
                                         </button>
@@ -1828,9 +2344,7 @@
                                             type="text"
                                             class="form-control border-task-description"
                                             id="client-name"
-                                            name="name"
-                                            required
-                                        />
+                                            name="name" />
                                     </div>
 
                                     <div class="col-md-12">
@@ -1846,14 +2360,13 @@
                                             class="form-control border-task-description"
                                             id="client-email"
                                             name="email"
-                                            required
                                         />
                                     </div>
 
                                     <div class="col-md-12">
                                         <label
                                             for="client-phone"
-                                            class="col-sm-12 col-form-label"
+                                            class="col-sm-12 col-form-label "
                                             >Phone<span style="color: red">
                                                 *</span
                                             ></label
@@ -1863,7 +2376,7 @@
                                             class="form-control border-task-description"
                                             id="client-phone"
                                             name="phone"
-                                            parttern="[0-9]{10}"
+                                            parttern="[0-9]{11}" placeholder="09123456789"
                                         />
                                     </div>
 
@@ -1911,8 +2424,9 @@
                                             src="/images/avatars/pm_avatar.svg"
                                             alt="Profile"
                                             class="rounded-circle"
+                                            loading="lazy"
                                         />
-                                        <h4>Kevin Anderson</h4>
+                                        <h4 id="pm-name-modal"></h4>
                                         <div class="social-links mt-2">
                                             <h5>Project Manager</h5>
                                         </div>
@@ -2350,7 +2864,7 @@
                                                     <div class="row mb-3">
                                                         <label
                                                             for="background"
-                                                            class="colmd-4 col-lg-3 col-form-label"
+                                                            class="col-md-4 col-lg-3 col-form-label"
                                                             >Background</label
                                                         >
                                                         <div
@@ -2361,7 +2875,7 @@
                                                                 class="form-control border-task-description"
                                                                 name="background"
                                                                 id="project-detail-background"
-                                                                required
+
                                                             ></textarea>
                                                         </div>
                                                     </div>
@@ -2461,11 +2975,11 @@
                                                     </div>
 
                                                     <div
-                                                        class="text-center mt-5"
+                                                        class="mt-lg-5"
                                                     >
                                                         <button
                                                             type="submit"
-                                                            class="btn btn-primary"
+                                                            class="btn-sm btn-primary"
                                                         >
                                                             Save Changes
                                                         </button>
@@ -2635,39 +3149,60 @@
                                                 </div>
                                             </div>
 
-                                            <div class="tab-pane fade profile-edit pt-3" id="review">
+                                            <div
+                                                class="tab-pane fade pt-3"
+                                                id="review"
+                                            >
                                                 <div class="row mb-3">
-                                                    <label for="project-external-review-count" class="col-md-4 col-lg-3 col-form-label">External Review</label>
-                                                    <div class="col-md-8 col-lg-9">
+                                                    <label
+                                                        for="project-external-review-count"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >External Review</label
+                                                    >
+                                                    <div
+                                                        class="col-md-8 col-lg-9"
+                                                    >
                                                         <input
-                                                                name="project_external_review_count"
-                                                                type="number"
-                                                                class="form-control"
-                                                                id="project-external-review-count"
+                                                            name="project_name"
+                                                            type="number"
+                                                            class="form-control"
+                                                            min="0"
+                                                            id="project-external-review-count"
+                                                            oninput="validity.valid||(value='');"
                                                         />
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-3">
-                                                    <label for="project-internal-review-count" class="col-md-4 col-lg-3 col-form-label">Internal Review</label>
-                                                    <div class="col-md-8 col-lg-9">
+                                                    <label
+                                                        for="project-internal-review-count"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >Internal Review</label
+                                                    >
+                                                    <div
+                                                        class="col-md-8 col-lg-9"
+                                                    >
                                                         <input
-                                                                name="project_internal_review_count"
-                                                                type="number"
-                                                                class="form-control"
-                                                                id="project-internal-review-count"
+                                                            name="project_name"
+                                                            type="number"
+                                                            min="0"
+                                                            class="form-control"
+                                                            oninput="validity.valid||(value='');"
+                                                            id="project-internal-review-count"
                                                         />
                                                     </div>
                                                 </div>
-
-                                                <div class="row mb-3">
-                                                    <div class="col-md-8 offset-md-4 col-lg-9 offset-lg-3">
-                                                        <button id="updateButton">Update</button>
-                                                    </div>
+                                                <div class="text-center">
+                                                    <a
+                                                        href=""
+                                                        class="btn btn-primary"
+                                                        style="
+                                                            background-color: #369;
+                                                        "
+                                                        >Save Review</a
+                                                    >
                                                 </div>
                                             </div>
-
-
 
                                             <div
                                                     class="tab-pane fade pt-3"
@@ -2710,5 +3245,8 @@
         <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
         <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
+            </div>
     </body>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="/js/notification.js" type="module"></script>
 </html>

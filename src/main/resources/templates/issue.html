@@ -10,6 +10,10 @@
         .ql-editor {
 
         }
+
+        [aria-expanded="true"] .fa-chevron-down {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 
@@ -37,18 +41,58 @@
                     );
                     background-size: 12px 12px;">
 
-        <div th:replace="fragments/navigation :: navigation-with-search"></div>
+        <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
         <div class="container-fluid">
+
+
             <div class="container-fluid d-md-block pt-2 ps-s pe-2"
                  id="dropdrown-search-bar">
-                <div class="d-flex flex-row justify-content-between position-relative">
-                    <form class="d-md-flex">
-                        <input class="form-control border-0" type="search" placeholder="Search" />
-                    </form>
+                <div class="d-flex flex-row justify-content-lg-between position-relative">
+
+                    <div class="d-inline-block d-flex mb-3" style="margin-left:450px;">
+                        <button class="btn btn-info me-2" id="reset-btn">
+                            reset
+                        </button>
+
+                        <select id="status-filter" class="form-control me-2" >
+                            <option value="" selected disabled>Status</option>
+                            <option value="PENDING">PENDING</option>
+                            <option value="APPROVE">APPROVE</option>
+                            <option value="DECLINE">DECLINE</option>
+                            <option value="DUPLICATE">DUPLICATE</option>
+                        </select>
+
+                        <select id="solved-filter" class="form-control me-2">
+                            <option value="" selected disabled>Choose</option>
+                            <option value="1">Solved</option>
+                            <option value="0">Unsolved</option>
+                        </select>
+
+
+                        <select id="category-filter" class="form-control me-2">
+                            <option value="" selected disabled>Category</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="BUG">BUG</option>
+                            <option value="COMMUNICATION">COMMUNICATION</option>
+                            <option value="TECHNICAL">TECHNICAL</option>
+                            <option value="BUDGET">BUDGET</option>
+                            <option value="DESIGN">DESIGN</option>
+                            <option value="TESTING">TESTING</option>
+                            <option value="OTHER">OTHER</option>
+
+                        </select>
+
+                    </div>
+
+
                     <div class="position-absolute end-0 d-flex gap-3">
+
+                        <form class="d-md-flex">
+                            <input class="form-control border-0" type="search" placeholder="Search" />
+                        </form>
                         <!-- modal toggle button start -->
-                        <button type="button" class="btn btn-light align-self-start d-none" data-bs-toggle="modal" data-bs-target="#add-issue">
+                        <button type="button" class="btn d-none btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                         <!-- modal toggle button end -->
@@ -61,183 +105,364 @@
                 </div>
             </div>
 
+            <ul class="nav nav-tabs nav-tabs-bordered mt-2 d-none" id="issue-link">
+                <li class="nav-item">
+                    <button
+                        class="nav-link active"
+                        data-bs-toggle="tab"
+                        data-bs-target="#sort"
+                    >
+                        Issue List
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button
+                            class="nav-link position-relative"
+                            data-bs-toggle="tab"
+                            data-bs-target="#unsolved-issues"
+                    >
+                        Unsolved Issues
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button
+                        class="nav-link position-relative"
+                        data-bs-toggle="tab"
+                        data-bs-target="#new-issue-list"
+                    >
+                    <span
+                        class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle"
+                        id="notification-light-for-new-issue"
+                        style="padding: 7px;">
+                    </span>
+                        New Issues
+                    </button>
+                </li>
+            </ul>
 
-            <!--  Issue list-->
-            <div class="row row-cols-1" id="sort">
-                <!--                issue list will be here-->
+            <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active row row-cols-1" id="sort">
+
+                </div>
+
+                <div class="tab-pane fade show row row-cols-1" id="unsolved-issues">
+
+                </div>
+
+                <div class="tab-pane fade row row-cols-1" id="new-issue-list">
+                    <div class="d-flex justify-content-between">
+                        <div id="all-approval-input">
+                            <input type="radio" id="all-duplicate" name="approval" value="DUPLICATE" class="all-approval-input"/>
+                            <label for="all-duplicate">All Duplicate</label>
+                            <input type="radio" id="all-approve" name="approval" value="APPROVE" class="all-approval-input"/>
+                            <label for="all-approve">All Approve</label>
+                            <input type="radio" id="all-decline" name="approval" value="DECLINE" class="all-approval-input"/>
+                            <label for="all-decline">All Decline</label>
+                        </div>
+
+                        <div>
+                            <button type="button" class="btn btn-primary" id="all-approval-btn">Submit</button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
-            <!--  Issue list end-->
-
         </div>
     </div>
     <!-- Content End -->
 
     <!--    issue detail modal start-->
-    <div class="modal fade" id="issueDetailModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="issueEditModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4>Issue Details</h4>
                     <div class="d-flex justify-content-center align-items-center gap-3">
-                        <div class="btn btn-primary" id="issue-edit-btn" data-issueId="" >Edit</div>
+                        <div class="btn btn-primary" id="issue-edit-btn">Mark as Resolve <i class="fa-solid fa-check"></i></div>
+                        <div class="btn btn-success" id="solve-btn">Solve <i class="fa-solid fa-check-double"></i></div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
-                            <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-wrench text-primary"></i> Corrective Action</h5>
-                                <span class="editable text-wrap custom-left-margin" id="corrective_actionValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="corrective_actionInput" name="corrective_action" />-->
-                                </span>
+                            <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                <strong>Error : </strong> <span id="errorText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                <strong>Success : </strong> <span id="successText"></span>
+                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    &times;
+                                </button>
                             </div>
                             <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-shield-alt text-primary"></i>Preventive Action</h5>
-                                <span class="editable text-break custom-left-margin" id="preventive_actionValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="preventive_actionInput" name="preventive_action" />-->
-                                </span>
+                                <input type="hidden" id="solved" />
+                                <h5 class="icon-title"><i class="fas fa-wrench text-dark"></i> Corrective Action</h5>
+                                <textarea id="corrective_actionInput" class="form-control form-control-sm btn-space" name="corrective_action" rows="5"></textarea>
+
                             </div>
                             <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-arrow-right text-primary"></i> Direct Cause</h5>
-                                <span class="editable text-break custom-left-margin" id="direct_causeValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="direct_causeInput" name="direct_cause" />-->
-                                </span>
+                                <h5 class="icon-title"><i class="fas fa-shield-alt text-dark"></i>Preventive Action</h5>
+                                <textarea id="preventive_actionInput" class="form-control form-control-sm btn-space" name="preventive_action" rows="5"></textarea>
+
                             </div>
-                            <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-code-branch text-primary"></i>Root Cause</h5>
-                                <span class="editable text-break custom-left-margin" id="root_causeValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="root_causeInput" name="root_cause" />-->
-                                </span>
-                            </div>
-                            <div class="col mb-3">
-                                <h5 class="icon-title"> <i class="fas fa-exclamation-circle text-primary"></i> Impact</h5>
-                                <span class="editable text-break custom-left-margin" id="impactValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="impactInput" name="impact" />-->
-                                </span>
-                            </div>
-                            <div class="col mb-3">
-                                <h5 class="icon-title"><i class="fas fa-map-marker text-primary"></i>Place</h5>
-                                <span class="editable text-break custom-left-margin" id="placeValue">
-<!--                                    <input type="text" class="form-control form-control-sm btn-space" id="placeInput" name="place" />-->
-                                </span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- add issue modal start -->
-    <div class="modal fade bd-example-modal-lg" id="add-issue" data-bs-keyboard="true">
-        <div class="modal-dialog modal-lg">
+</div>
+<!-- add issue modal start -->
+<div class="modal fade bd-example-modal-lg" id="add-issue" data-bs-keyboard="true">
+    <div class="modal-dialog modal-lg">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5">Create New Issue</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Create New Issue</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- TODO :: REDESIGN FORM FOR ADDING DEPARTMENT -->
 
-                    <!-- issue modal start -->
-                    <div class="row g-3 "  id="addIssueValidationForm">
-                        <div class="col-lg-6">
-                            <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
-                                    style="color:#e86666"> *</span></label>
-                            <input type="text" class="form-control border-task-description" id="title" name="title" placeholder="Title">
-                        </div>
+                <!-- issue modal start -->
+                <div class="row g-3 "  id="addIssueValidationForm">
+                    <div class="alert alert-danger alert-dismissible" id="error-alert" style="display: none;">
+                        <strong>Error : </strong> <span id="error-text"></span>
+                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="alert alert-success alert-dismissible" id="success-alert" style="display: none;">
+                        <strong>Success : </strong> <span id="success-text"></span>
+                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
+                                style="color:#e86666"> *</span></label>
+                        <input type="text" class="form-control border-task-description" id="title" name="title" placeholder="Title">
+                    </div>
 
-                        <div class="col-lg-6">
-                            <label for="issue_category" class="col-sm-12 col-form-label" name="issue_category">Issue Category<span
-                                    style="color:red"> *</span></label>
-                            <select class="form-select border-task-description" name="issue_category" id="issue_category" >
-                                <option selected>Select Issue Category</option>
-                                <option value="ERROR">Error</option>
-                                <option value="BUG">Bug</option>
-                                <option value="COMMUNICATION">Communication</option>
-                                <option value="TECHNICAL">Technical</option>
-                                <option value="BUDGET">Budget</option>
-                                <option value="DESIGN">Design</option>
-                                <option value="TESTING">Testing</option>
-                                <option value="OTHER">Other</option>
-                            </select>
-                        </div>
+                    <div class="col-lg-6">
+                        <label for="issue_category" class="col-sm-12 col-form-label" name="issueCategory">Issue Category<span
+                                style="color:red"> *</span></label>
+                        <select class="form-select border-task-description" name="issue_category" id="issue_category" >
+                            <option value="" disabled selected>Select Issue Category</option>
+                            <option value="ERROR">Error</option>
+                            <option value="BUG">Bug</option>
+                            <option value="COMMUNICATION">Communication</option>
+                            <option value="TECHNICAL">Technical</option>
+                            <option value="BUDGET">Budget</option>
+                            <option value="DESIGN">Design</option>
+                            <option value="TESTING">Testing</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
 
 
-                        <div class="col-lg-6">
-                            <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
-                                    style="color:red"> *</span></label>
-                            <select class="form-select border-task-description" data-live-search="true" aria-label="Select PIC"  id="user_pic" name="user_pic" >
+                    <div class="col-lg-6">
+                        <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
+                                style="color:red"> *</span></label>
+                        <select class="form-select border-task-description" data-live-search="true" aria-label="Select PIC"  id="user_pic" name="user_pic" >
 
-                            </select>
-                        </div>
+                        </select>
+                    </div>
 
 
-                        <div class="col-lg-6">
-                            <div class="form-check-inline">
+                    <div class="col-lg-6">
+                        <div class="form-check-inline">
                             <span><label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_type">Responsible Party <span
                                     style="color:red"> *</span>  <input class="form-check-input " type="checkbox" id="responsible_type" name="client_checkbox" value="CLIENT" style="margin-left:130px;"> <label class="form-check-label" >Client</label></label>
                              </span>
-                            </div>
-
-                            <select class="form-select border-task-description" aria-label="Select Responsible Party" id="responsible_party" name="responsible_party"></select>
-
                         </div>
 
-                        <div class="col-lg-12" style="margin-bottom: 80px;">
-                            <label for="description" class="col-sm-12 col-form-label" name="name">Description<span
-                                    style="color:#e86666"> *</span></label>
-                            <div class="quill-editor-bubble form-control" id="description" name="description"></div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="direct_cause" class="col-sm-12 col-form-label" name="direct_cause">Direct Cause<span
-                                    style="color:#e86666"> *</span></label>
-
-                            <textarea class="form-control border-task-description" id="direct_cause" name="direct_cause"></textarea>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="root_cause" class="col-sm-12 col-form-label" name="root_cause">Root Cause<span
-                                    style="color:#e86666"> *</span></label>
-                            <textarea class="form-control border-task-description" id="root_cause"></textarea>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="place" class="col-sm-12 col-form-label" name="place">Place<span
-                                    style="color:#e86666"> *</span></label>
-                            <textarea class="form-control border-task-description" id="place" name="place"></textarea>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <label for="impact" class="col-sm-12 col-form-label" name="impact">Impact<span
-                                    style="color:#e86666"> *</span></label>
-                            <textarea class="form-control border-task-description" id="impact" name="impact"></textarea>
-                        </div>
-
-                        <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <button type="button" id="addIssue" class="btn btn-primary" >Save Data</button>
-                        </div>
+                        <select class="form-select border-task-description" aria-label="Select Responsible Party" id="responsible_party" name="responsible_party"></select>
 
                     </div>
-                    <!-- issue modal end -->
+
+                    <div class="col-lg-12" style="margin-bottom: 80px;">
+                        <label for="description" class="col-sm-12 col-form-label" name="name">Description<span
+                                style="color:#e86666"> *</span></label>
+                        <div class="quill-editor-bubble form-control" id="description" name="description"></div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="direct_cause" class="col-sm-12 col-form-label" name="direct_cause">Direct Cause<span
+                                style="color:#e86666"> *</span></label>
+
+                        <textarea class="form-control border-task-description" id="direct_cause" name="direct_cause"></textarea>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="root_cause" class="col-sm-12 col-form-label" name="root_cause">Root Cause<span
+                                style="color:#e86666"> *</span></label>
+                        <textarea class="form-control border-task-description" id="root_cause"></textarea>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="place" class="col-sm-12 col-form-label" name="place">Place<span
+                                style="color:#e86666"> *</span></label>
+                        <textarea class="form-control border-task-description" id="place" name="place"></textarea>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label for="impact" class="col-sm-12 col-form-label" name="impact">Impact<span
+                                style="color:#e86666"> *</span></label>
+                        <textarea class="form-control border-task-description" id="impact" name="impact"></textarea>
+                    </div>
+
+                    <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
+                        <button type="button" id="addIssue" class="btn btn-primary" >Save Data</button>
+                    </div>
 
                 </div>
-
-
+                <!-- issue modal end -->
 
             </div>
-
         </div>
     </div>
-    <!-- add issue modal end -->
+</div>
+<!-- add issue modal end -->
+
+<script>
+    function rotateIcon(element) {
+        // Get the icon element
+        const icon = element.querySelector('.rotate-icon');
+
+        // Toggle the 'rotate' class to apply or remove rotation
+        icon.classList.toggle('rotate');
+    }
+</script>
+
+
+<!--    issue detail modal start-->
+<div class="modal fade issueDetails" id="issueDetailsModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Issue Details</h4>
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
+
+                        <h6 data-toggle="collapse" href="#peoples" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i> People</h6>
+
+                        <div id="peoples" class="accordion-collapse collapse accordion-body">
+                            <div class="col mb-3 ">
+                                <h6>Uploader:</h6>
+                                <p class=""  id="uploaderDetails"></p>
+                            </div>
+                            <div  class="col mb-3 ">
+                                <h6>Person In Charge:</h6>
+                                <p class="" id="picDetails"></p>
+
+                            </div>
+                            <div  class="col mb-3 ">
+                                <h6>Responsible Party:</h6>
+                                <p class="" id="rpDetails"></p>
+                            </div>
+                        </div>
+
+                        <h6 data-toggle="collapse" href="#solution-detail" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Solution</h6>
+                        <div id="solution-detail" class="accordion-collapse collapse accordion-body">
+                            <div class="col mb-3">
+
+                                <h6 >Corrective Action :</h6>
+                                <p class="" id="correctiveDetails"></p>
+
+                            </div>
+                            <div class="col mb-3">
+
+                                <h6 >Preventive Action :</h6>
+                                <p class="" id="preventiveDetails"></p>
+
+                            </div>
+                        </div>
+
+                        <h6 data-toggle="collapse" href="#details" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Details</h6>
+                        <div id="details" class="accordion-collapse collapse accordion-body">
+                            <div class="col mb-3">
+
+                                <label for="issueTitleDetails" >Title:</label>
+                                <input type="text" class="form-control" id="issueTitleDetails"/>
+
+                            </div>
+                            <div class="col mb-3 ">
+                                <label for="issue_categoryDetails">Category:</label>
+                                <select id="issue_categoryDetails" class="form-control me-2">
+                                    <option value="ERROR">ERROR</option>
+                                    <option value="BUG">BUG</option>
+                                    <option value="COMMUNICATION">COMMUNICATION</option>
+                                    <option value="TECHNICAL">TECHNICAL</option>
+                                    <option value="BUDGET">BUDGET</option>
+                                    <option value="DESIGN">DESIGN</option>
+                                    <option value="TESTING">TESTING</option>
+                                </select>
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <label for="direct_causeDetails">Direct Cause:</label>
+                                <textarea class="form-control" id="direct_causeDetails"></textarea>
+
+                            </div>
+
+                            <div class="col mb-3">
+                                <label for="root_causeDetails">Root Cause:</label>
+                                <textarea class="form-control" id="root_causeDetails"></textarea>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <label for="placeDetails">Place:</label>
+                                <textarea class="form-control" id="placeDetails"></textarea>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+
+                                <label for="impactDetails">Impact:</label>
+                                <textarea class="form-control" id="impactDetails"></textarea>
+
+                            </div>
+
+                            <div class="col mb-3 ">
+                                <h6>Created Date:</h6>
+                                <p id="solveDateDetails"></p>
+                            </div>
+
+                            <div class="col mb-3 d-none" id="issue-detail-save-btn-container">
+                                <button class="btn btn-success" id="issue-detail-save-btn">Save</button>
+                            </div>
+                        </div>
+
+                        <h6 data-toggle="collapse" href="#issue-detail-description" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>Description</h6>
+                        <div id="issue-detail-description" class="accordion-collapse collapse">
+                            <div class="accordion-body" id="descriptionDetails"></div>
+                            <div class="col mb-3 d-none" id="issue-description-save-btn-container">
+                                <button class="btn btn-success" id="issue-description-save-btn">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
-    ><i class="bi bi-arrow-up"></i
-    ></a>
+<!--    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"-->
+<!--    ><i class="bi bi-arrow-up"></i-->
+<!--    ></a>-->
 </div>
 
 
@@ -275,11 +500,79 @@
 <script src="/js/custome.js"></script>
 
 <script src="/js/currentLoginUser.js" type="module" async></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
 
 <script type="module">
+
+
+
     $(document).ready(function () {
-        confirmLogout();
+
+        const issueDetialEdit = document.querySelector("#details")
+
+        const saveButton = issueDetialEdit.querySelector("#issue-detail-save-btn-container")
+
+        saveButton.addEventListener("click", function (e) {
+            console.log("this suck")
+
+            const issueId = issueDetialEdit.getAttribute("data-currentEditingIssueId")
+            const issueTitle = issueDetialEdit.querySelector("#issueTitleDetails").value
+            const issueCategory = issueDetialEdit.querySelector("#issue_categoryDetails").value
+            const directCause = issueDetialEdit.querySelector("#direct_causeDetails").value
+            const rootCause = issueDetialEdit.querySelector("#root_causeDetails").value
+            const place = issueDetialEdit.querySelector("#placeDetails").value
+            const impact = issueDetialEdit.querySelector("#impactDetails").value
+
+            const issue = {
+                  id: issueId,
+                  title: issueTitle,
+                  issueCategory: issueCategory,
+                  direct_cause: directCause,
+                  root_cause: rootCause,
+                  place: place,
+                  impact: impact,
+                  updated_date : Date.now()
+                }
+
+            console.log(issueTitle, issueCategory, directCause, rootCause, place, impact, issueId)
+
+            $.ajax({
+                url: `/api/issue/update/${issueId}`, // Replace with your actual URL
+                type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(issue),
+                success: function (response) {
+                  console.log('Ajax request successful:', response);
+                  // Handle success response
+                    saveButton.classList.add('d-none')
+                },
+                error: function (xhr, status, error) {
+                  console.log('Ajax request error:', error);
+                  // Handle error response
+                }
+            });
+
+        })
+
+        issueDetialEdit.addEventListener("input", function (e) {
+            console.log("this suck")
+
+
+            if (saveButton.classList.contains("d-none")) {
+                saveButton.classList.remove("d-none")
+            }
+
+        })
+        setupLogoutConfirmation();
     });
+
+
+
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.comd
     function getTimeAgo(timestamp) {
@@ -346,9 +639,17 @@
     let data = [];
     const currentLoginUserRole = getLoginUser.currentUser.role;
 
+    console.log(currentLoginUserRole)
+    console.log(currentLoginUserRole === "FOC")
+
     if(currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
-        document.getElementById("add-issue").classList.remove("d-none");
+        document.querySelector('[data-bs-target="#add-issue"]').classList.remove("d-none");
     }
+
+    if(currentLoginUserRole === 'PROJECT_MANAGER') {
+        document.querySelector("#issue-link").classList.remove("d-none")
+    }
+
     // const currentUser = await getUser();
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
     console.log("dataForIssue", dataForIssue);
@@ -362,355 +663,1174 @@
             theme: "snow",
         });
 
-        $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
-            data = userData; // Set the data array with the retrieved user data
-            const user_pic = $('#user_pic');
-            user_pic.empty();
-            user_pic.append($('<option>', {
-                value: '',
-                text: 'Select a Member',
-                data: {picUrl: ''},
-            }));
-            if (userData.userList) {
-                userData.userList.forEach(user => {
-                    user_pic.append($('<option>', {
-                        value: user.id,
-                        text: user.name,
-                        data: { picUrl: user.picUrl },
-                        user: user,
-                    }));
-                });
+        if (currentLoginUserRole === 'EMPLOYEE' || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
+            $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
+                data = userData; // Set the data array with the retrieved user data
+                console.log("User Data: " + JSON.stringify(data));
+                const user_pic = $('#user_pic');
+
+                user_pic.empty();
+                user_pic.append($('<option>', {
+                    value: '',
+                    text: 'Select a Member',
+                    data: {picUrl: ''},
+                }));
+
+                user_pic.append($('<option>', {
+                    value: getLoginUser.currentUser.projectManager.id,
+                    text: getLoginUser.currentUser.projectManager.name,
+                    data: {picUrl: getLoginUser.currentUser.projectManager.picUrl},
+
+                    user: getLoginUser.currentUser.projectManager,
+                }));
+            });
+
+            let clientData = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`);
+
+            console.log(clientData)
+
+
+            function populateClientName() {
+                const responsiblePartySelect = $('#responsible_party');
+                responsiblePartySelect.empty();
+                responsiblePartySelect.append($('<option>', {
+                    value: `client_${clientData.client.id}`,
+                    text: `${clientData.client.name}`,
+                }));
             }
-        });
-        let clientData = [];
-
-
-        function populateClientName() {
-            const responsiblePartySelect = $('#responsible_party');
-            responsiblePartySelect.empty();
-            responsiblePartySelect.append($('<option>', {
-                value: `client_${clientData.client.id}`,
-                text: `${clientData.client.name}`,
-            }));
-        }
 
 // Function to populate the responsible party select box with user names
-        function populateUserNames() {
-            const responsiblePartySelect = $('#responsible_party');
-            responsiblePartySelect.empty();
+            function populateUserNames() {
+                const responsiblePartySelect = $('#responsible_party');
+                responsiblePartySelect.empty();
 
-            responsiblePartySelect.append($('<option>', {
-                text: 'Select Responsible Party',
-            }));
+                responsiblePartySelect.append($('<option>', {
+                    text: 'Select Responsible Party',
+                }));
 
-            if (clientData.userList) {
-                clientData.userList.forEach(user => {
-                    responsiblePartySelect.append($('<option>', {
-                        value: `user_${user.id}`,
-                        text: `${user.name}`,
-                        data: { picUrl: user.picUrl },
-                        user: user,
-                    }));
-                });
+                if (clientData.userList) {
+                    clientData.userList.forEach(user => {
+                        responsiblePartySelect.append($('<option>', {
+                            value: `user_${user.id}`,
+                            text: `${user.name}`,
+                            data: {picUrl: user.picUrl},
+                            user: user,
+                        }));
+                    });
+                }
             }
-        }
 
 // Fetch client data and populate the select box initially
-        $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
-            clientData = data;
-            console.log("Client Data: " + JSON.stringify(clientData));
-            // Check the "Client" checkbox initially
-            $('#responsible_type').prop('checked', true);
-            populateClientName();
-        });
-        let actual_responsible_type = 'CLIENT';
+            $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
+                clientData = data;
+                console.log("Client Data: " + JSON.stringify(clientData));
+                // Check the "Client" checkbox initially
+                $('#responsible_type').prop('checked', true);
+                populateClientName();
+            });
+            let actual_responsible_type = 'CLIENT';
 
 // Event handler for the "Client" checkbox
-        $('#responsible_type').on('change', function () {
-            const isChecked = $(this).is(':checked');
+            $('#responsible_type').on('change', function () {
+                const isChecked = $(this).is(':checked');
 
-            if (isChecked) {
-                // If the "Client" checkbox is checked, show only the client's name
-                populateClientName();
-                actual_responsible_type = 'CLIENT'
-            } else {
-                // If the "Client" checkbox is not checked, show user names
-                populateUserNames();
-                actual_responsible_type = 'EMPLOYEE'
-            }
-        });
-
-        $('#addIssue').on('click', async function () {
-            const title = $('#title').val();
-            const description = a.root.innerHTML;
-            const place = $('#place').val();
-            const impact = $('#impact').val();
-            const root_cause = $('#root_cause').val();
-            const direct_cause = $('#direct_cause').val();
-            const responsible_party = $('#responsible_party').val();
-            const issue_category = $('#issue_category').val();
-            const responsible_type = actual_responsible_type;
-            const selectedUserId = $('#user_pic').val();
-            const issueId = $('#issue-edit-btn').data('issueId');
-            if (
-                title === "" ||
-                description === "" ||
-                place === "" ||
-                impact === "" ||
-                root_cause === "" ||
-                direct_cause === "" ||
-                responsible_party === "" ||
-                issue_category === ""||
-                selectedUserId === ""||
-                responsible_type === ""
-            ) {
-                alert('Please fill in all the required fields.');
-                return;
-            }
+                if (isChecked) {
+                    // If the "Client" checkbox is checked, show only the client's name
+                    populateClientName();
+                    actual_responsible_type = 'CLIENT'
+                } else {
+                    // If the "Client" checkbox is not checked, show user names
+                    populateUserNames();
+                    actual_responsible_type = 'EMPLOYEE'
+                }
+            });
 
 
-            const selectedResponsibleParty = data.userList.find(user => user.id == responsible_party.split("_")[1]);
+            // validation For Issue
 
+            let validatedForm = $('#add-issue');
 
+            function validateTitle() {
+                const title = $('#title').val();
+                const errorContainer = $('#title').siblings('.error-container');
+                if (title.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Title is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
 
-            const uploaderId = getLoginUser.currentUser.id;
-
-            console.log("Uploader Id", uploaderId);
-
-            const requestData = {
-                title: title,
-                description: description,
-                place: place,
-                impact: impact,
-                created_date: new Date().getTime(),
-                updated_date: new Date().getTime(),
-                root_cause: root_cause,
-                direct_cause: direct_cause,
-                responsible_party: selectedResponsibleParty.id,
-                issue_category: issue_category,
-                responsible_type: responsible_type,
-                project_id: dataForIssue.projectId,
-                user_uploader:uploaderId,
-                user_pic:selectedUserId,
-
-
-            };
-
-            console.log('Request Data:', requestData);
-
-            $.ajax({
-                url: 'api/issue/save',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(requestData),
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    alert('Issue Created Successfully');
-                },
-                error: function (xhr, status, error) {
-                    console.log('Status:', status);
-                    console.log('Error:', error);
-                    console.log('Server response:', xhr.responseText);
-
-                    if (xhr.getResponseHeader('Content-Type') === 'application/json') {
-                        // Handle JSON response
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            console.log('JSON Response:', response);
-                        } catch (e) {
-                            console.log('JSON parsing error:', e);
-                        }
-                    } else {
-                        // Handle non-JSON response
-                        console.log('Non-JSON Response:', xhr.responseText);
+                        $('#title').after('<div class="error-container"></div>');
+                        $('#title').siblings('.error-container').append(p);
                     }
 
-                    alert('Error creating issue: ' + xhr.responseText);
-                    console.log('Error creating issue');
-                },
+                    $('#title').addClass('is-invalid');
+                    $('#title').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#title').addClass('is-valid');
+                    $('#title').removeClass('is-invalid');
+                }
+            }
+
+            function validateDescription() {
+                const description = $('.quill-editor-bubble').find('.ql-editor').html().trim();
+                const errorContainer = $('.quill-editor-bubble').siblings('.error-container');
+
+                if (!description || description.length === 0) {
+                    validatedForm = false;
+
+                    // Check if the error message container already exists
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Description is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        // Create a container for the error message and append the message to it
+                        $('.quill-editor-bubble').after('<div class="error-container"></div>').siblings('.error-container').append(p);
+                    }
+
+                    $('.quill-editor-bubble').addClass('is-invalid');
+                    $('.quill-editor-bubble').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    // Remove the error message container if it exists
+                    if (errorContainer.length > 0) {
+                        errorContainer.remove();
+                    }
+                    $('.quill-editor-bubble').addClass('is-valid');
+                    $('.quill-editor-bubble').removeClass('is-invalid');
+                }
+            }
+
+
+            function validatePlace() {
+                const place = $('#place').val();
+                const errorContainer = $('#place').siblings('.error-container');
+                if (place.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Place is required"
+                            )
+                            .css("margin", "0");
+
+                        $('#place').after('<div class="error-container"></div>');
+                        $('#place').siblings('.error-container').append(p);
+                    }
+                    $('#place').addClass('is-invalid');
+                    $('#place').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#place').addClass('is-valid');
+                    $('#place').removeClass('is-invalid');
+                }
+            }
+
+            function validateImpact() {
+                const impact = $('#impact').val();
+                const errorContainer = $('#impact').siblings('.error-container');
+                if (impact.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Impact is required"
+                            )
+                            .css("margin", "0");
+                        $('#impact').after('<div class="error-container"></div>');
+                        $('#impact').siblings('.error-container').append(p);
+                    }
+
+                    $('#impact').addClass('is-invalid');
+                    $('#impact').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#impact').addClass('is-valid');
+                    $('#impact').removeClass('is-invalid');
+                }
+            }
+
+            function validateRootCause() {
+                const rootCause = $('#root_cause').val();
+                const errorContainer = $('#root_cause').siblings('.error-container');
+                if (rootCause.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Root Cause is required"
+                            )
+                            .css("margin", "0");
+                        $('#root_cause').after('<div class="error-container"></div>');
+                        $('#root_cause').siblings('.error-container').append(p);
+                    }
+
+                    $('#root_cause').addClass('is-invalid');
+                    $('#root_cause').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#root_cause').addClass('is-valid');
+                    $('#root_cause').removeClass('is-invalid');
+                }
+            }
+
+            function validateDirectCause() {
+                const directCause = $('#direct_cause').val();
+                const errorContainer = $('#direct_cause').siblings('.error-container');
+                if (directCause.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Direct Cause is required"
+                            )
+                            .css("margin", "0");
+                        $('#direct_cause').after('<div class="error-container"></div>');
+                        $('#direct_cause').siblings('.error-container').append(p);
+                    }
+
+
+                    $('#direct_cause').addClass('is-invalid');
+                    $('#direct_cause').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#direct_cause').addClass('is-valid');
+                    $('#direct_cause').removeClass('is-invalid');
+                }
+            }
+
+            function validateIssueCategory() {
+                const issueCategory = $('#issue_category').val();
+                const errorContainer = $('#issue_category').siblings('.error-container');
+
+                if (!issueCategory || issueCategory === "") {
+
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Issue Category is required"
+                            )
+                            .css("margin", "0");
+                        $('#issue_category').after('<div class="error-container"></div>');
+                        $('#issue_category').siblings('.error-container').append(p);
+                    }
+
+                    $('#issue_category').addClass('is-invalid');
+                    $('#issue_category').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#issue_category').addClass('is-valid');
+                    $('#issue_category').removeClass('is-invalid');
+                }
+            }
+
+            function validateResponsibleParty() {
+                const responsibleParty = $('#responsible_party').val();
+                const errorContainer = $('#responsible_party').siblings('.error-container');
+                if (!responsibleParty || responsibleParty === "") {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Responsible Party is required"
+                            )
+                            .css("margin", "0");
+                        $('#responsibleParty').after('<div class="error-container"></div>');
+                        $('#responsibleParty').siblings('.error-container').append(p);
+                    }
+                    $('#responsibleParty').addClass('is-invalid');
+                    $('#responsibleParty').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#responsibleParty').addClass('is-valid');
+                    $('#responsibleParty').removeClass('is-invalid');
+                }
+            }
+
+            function validateUserPic() {
+                const userPic = $('#user_pic').val();
+                const errorContainer = $('#user_pic').siblings('.error-container');
+                if (!userPic || userPic === "") {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text(
+                                "Person In Charge is required"
+                            )
+                            .css("margin", "0");
+                        $('#user_pic').after('<div class="error-container"></div>');
+                        $('#user_pic').siblings('.error-container').append(p);
+                    }
+                    $('#user_pic').addClass('is-invalid');
+                    $('#user_pic').removeClass('is-valid');
+                } else {
+                    validatedForm = true;
+                    errorContainer.remove();
+                    $('#user_pic').addClass('is-valid');
+                    $('#user_pic').removeClass('is-invalid');
+                }
+            }
+
+            function validateIssue() {
+                validateTitle();
+                validateDescription();
+                validatePlace();
+                validateImpact();
+                validateRootCause();
+                validateDirectCause();
+                validateIssueCategory();
+                validateResponsibleParty();
+                validateUserPic();
+                return validatedForm;
+
+            }
+
+            $('#title').on('input', function () {
+                validateTitle();
             });
-        });
+
+            $('.quill-editor-bubble .ql-editor').on('input', function () {
+                validateDescription();
+            });
+
+            $('#place').on('input', function () {
+                validatePlace();
+            });
+
+            $('#impact').on('input', function () {
+                validateImpact();
+            });
+
+            $('#root_cause').on('input', function () {
+                validateRootCause();
+            });
+
+            $('#direct_cause').on('input', function () {
+                validateDirectCause();
+            });
+
+            $('#issue_category').on('change', function () {
+                validateIssueCategory();
+            });
+
+            $('#responsible_party').on('change', function () {
+                validateResponsibleParty();
+            });
+
+            $('#user_pic').on('change', function () {
+                validateUserPic();
+            });
 
 
+            //for add issue
+            $('#addIssue').on('click', async function () {
+                const title = $('#title').val();
+                const description = a.root.innerHTML;
+                const place = $('#place').val();
+                const impact = $('#impact').val();
+                const root_cause = $('#root_cause').val();
+                const direct_cause = $('#direct_cause').val();
+                const responsible_party = $('#responsible_party').val();
+                const issue_category = $('#issue_category').val();
+                console.log(issue_category)
+                const responsible_type = actual_responsible_type;
+                const selectedUserId = $('#user_pic').val();
+                const issueId = $('#issue-edit-btn').data('issueId');
 
+                if (!validateIssue()) {
+                    showerror('Please fill in all the required fields.');
+                    return;
+                }
+
+                const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
+                const uploaderId = getLoginUser.currentUser.id;
+                console.log("Uploader Id", uploaderId);
+
+                const requestData = {
+                    title: title,
+                    description: description,
+                    place: place,
+                    impact: impact,
+                    created_date: new Date().getTime(),
+                    updated_date: new Date().getTime(),
+                    root_cause: root_cause,
+                    direct_cause: direct_cause,
+                    responsible_party: selectedResponsibleParty,
+                    issueCategory: issue_category,
+                    responsible_type: responsible_type,
+                    project_id: dataForIssue.projectId,
+                    user_uploader: uploaderId,
+                    user_pic: selectedUserId,
+
+
+                };
+
+                console.log('Request Data:', requestData);
+
+                $.ajax({
+                    url: 'api/issue/save',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        //alert('Issue Created Successfully');
+                        showsuccess('Issue Created Successfully');
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Status:', status);
+                        console.log('Error:', error);
+                        console.log('Server response:', xhr.responseText);
+
+                        if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                            // Handle JSON response
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                console.log('JSON Response:', response);
+                            } catch (e) {
+                                console.log('JSON parsing error:', e);
+                            }
+                        } else {
+                            // Handle non-JSON response
+                            console.log('Non-JSON Response:', xhr.responseText);
+                        }
+
+                        alert('Error creating issue: ' + xhr.responseText);
+                        console.log('Error creating issue');
+                    },
+                });
+            });
+        }
     });
 
-    let currentIssueId;
-    $(document).ready(function() {
-        function loadData() {
-            $.ajax({
-                url: 'api/issue/list',
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    console.log("Data" + data);
-                    const sortContainer = $('#sort');
+    function formatDate(timestamp) {
+        // Assuming data.solved_date is a timestamp in milliseconds
+        const date = new Date(timestamp);
 
-                    // Loop through the retrieved data and create content for each item
-                    data.forEach(item => {
-                        const issueDiv = `
-                        <div class="p-md-3 p-sm-2 mt-3">
+        // Format the date as a string (adjust the format as needed)
+        const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+        return formattedDate;
+    }
+
+    function createIssueCard(item) {
+                return `
+                    <div class="p-sm-2 ">
                             <div class="card">
                                 <div class="card-header border-bottom text-dark">
                                     <div class="d-flex justify-content-between align-items-center gap-2">
                                         <div class="d-flex align-items-center gap-2">
-                                            <h6 class="card-title">${item.title}</h6>
+                                            <h5 class="card-title issueDetails" data-id="${item.id}" style="text-decoration: none; cursor:pointer;">${item.title}</h5>
+
                                             <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                                ${item.user_pic.name}
+                                                ${item.responsible_party.name}
                                             </p>
+                                              <span class="card-title badge rounded-pill bg-${item.solved === true ? 'success' : 'danger'}">
+                                            ${item.solved === true ? 'Solved' : 'Unsolved'}
+
+                                        </span>
+
                                         </div>
-                                        <span class="card-title badge rounded-pill bg-${item.status === 'Success' ? 'success' : 'danger'}">
-                                            ${item.status === 'true' ? 'Solved' : 'Unsolved'}
+                                        <span> <button type="button" class="btn btn-info see-more-button" data-id="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
                                         </span>
                                     </div>
-                                    <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <p>Posted</p>
-                                            <span>${new Date(item.created_date)}</span>
-                                            <p>Modified at</p>
-                                            <span>${getTimeElapsed(item.updated_date)}</span>
-                                        </div>
-                                        <button class="btn btn-primary btn-sm see-more-button" data-id="${item.id}" data-bs-target="#issueDetailModal" data-bs-toggle="modal">
-                                            See More
-                                        </button>
-                                    </div>
-                                    <div class="col issue-time-line d-flex gap-2">
-                                        <p class="btn custom-color rounded-pill">${item.issue_category}</p>
-                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="code-block">
-                                        <p>${item.description}</p>
+
+                                    <div class="card-body">
+
+                                        <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                               <div class="code-block overflow-scroll p-3 "  data-bs-target="#description" style="width:auto; max-height:250px; background:rgba(0, 0, 0, 0) !important;">
+                                                <p>${item.description}</p>
+                                                </div>
+
+                                        </div>
+                                         <p class="badge bg-secondary " style="margin-left:15px;">${item.issueCategory}</p>
+
+                                        <div class="d-flex justify-content-end align-items-center" style="margin-right: 20px;">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <p class="text-muted"> Posted  <span style="font-size: x-small; color: black;">${formatDate(item.created_date)} </span></p>
+
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1" style="margin-left:5px;">
+                                            <p class="text-muted"> Modified at <span style="font-size: x-small; color: black;">${getTimeElapsed(item.updated_date)}</span></p>
+                                        </div>
                                     </div>
+                                    </div>
+
+                                   </div>
                                 </div>
                             </div>
                         </div>
+
+
                     `;
-                        sortContainer.append(issueDiv);
+            }
+        
+    
+    let currentIssueId;
+            $(document).ready(async function () {
+
+                let unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
+
+                console.log("unsolved Issue list", unsolvedIssueList)
+
+                for(let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+
+                    const issue = unsolvedIssueList[i];
+
+                    createIssueCard(issue);
+
+                    document.querySelector("#unsolved-issues").innerHTML += createIssueCard(issue);
+                }
+
+                function loadData() {
+                    $.ajax({
+                        url: 'api/issue/list',
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log("Data" + data);
+                            const sortContainer = $('#sort');
+
+                            data.forEach(item => {
+
+                                console.log("item : ", item)
+
+                                const issueDiv = createIssueCard(item);
+                                sortContainer.append(issueDiv);
+                            });
+
+
+                            $('.tab-content').on('click', '.see-more-button', function () {
+                                // Get the issue ID directly from the button's data-id attribute
+                                const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
+                                console.log('Clicked button with data-iD:', issueId);
+
+                                $.ajax({
+                                    url: 'api/issue/list/byId/' + issueId,
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        console.log('Data received:', data);
+                                        if (data) {
+                                            $('#corrective_actionInput').text(data.corrective_action);
+                                            $('#preventive_actionInput').text(data.preventive_action);
+                                            if (data.solved === false) {
+                                                $('#solve-btn').hide();
+                                                $('#issue-edit-btn').show();
+                                            } else {
+                                                $('#solve-btn').show();
+                                                $('#issue-edit-btn').hide();
+                                            }
+
+                                            $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+
+                                            $('#issueEditModal').modal('show');
+
+                                        } else {
+                                            console.log('No data received for issue ID:', issueId);
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.log('AJAX error:', error);
+                                    }
+                                });
+                            });
+
+                            $('.tab-content').on('click', '.issueDetails', function () {
+
+                                console.log("click on issueDetails ")
+
+                                // Get the issue ID directly from the button's data-id attribute
+                                const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
+                                console.log('Clicked button with data-iD:', issueId);
+
+                                $.ajax({
+                                    url: 'api/issue/list/byId/' + issueId,
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        console.log('Data received:', data);
+                                        if (data) {
+                                            $("#details").attr("data-currentEditingIssueId", data.id);
+                                            $('#issueTitleDetails').val(data.title);
+                                            $('#issue_categoryDetails').val(data.issueCategory);
+                                            $('#uploaderDetails').text(data.user_uploader.name);
+                                            $('#picDetails').text(data.user_pic.name);
+                                            $('#rpDetails').text(data.responsible_party.name);
+                                            const issueDetail = new Quill(document.querySelector('#descriptionDetails'), {
+                                                modules: {
+                                                    toolbar: toolbaroptions,
+                                                },
+                                                theme: 'bubble',
+                                            });
+                                            issueDetail.root.innerHTML = '';
+                                            issueDetail.clipboard.dangerouslyPasteHTML(
+                                                0,
+                                                data.description
+                                            );
+                                            issueDetail.on('text-change', function(delta, source) {
+                                                console.log("text change", issueDetail.root.innerHTML)
+                                                $("#issue-description-save-btn-container").removeClass("d-none")
+                                            });
+                                            $("#issue-description-save-btn").on('click', function() {
+
+                                                const issue = {
+                                                    id: data.id,
+                                                    description: issueDetail.root.innerHTML,
+                                                    updated_date : Date.now()
+                                                }
+
+                                                console.log("issue", issue)
+
+                                                $.ajax({
+                                                    url: `/api/issue/update/${data.id}`, // Replace with your actual URL
+                                                    type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
+                                                    dataType: 'json',
+                                                    contentType: 'application/json',
+                                                    data: JSON.stringify(issue),
+                                                    success: function (response) {
+                                                        console.log('Ajax request successful:', response);
+                                                        // Handle success response
+                                                        $("#issue-description-save-btn-container").addClass('d-none')
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.log('Ajax request error:', error);
+                                                        // Handle error response
+                                                    }
+                                                });
+                                            })
+                                            $('#direct_causeDetails').val(data.direct_cause);
+                                            $('#root_causeDetails').val(data.root_cause);
+                                            $('#placeDetails').val(data.place);
+                                            $('#impactDetails').val(data.impact);
+                                            $('#correctiveDetails').text(data.corrective_action);
+                                            $('#preventiveDetails').text(data.preventive_action);
+                                            $('#solveDateDetails').text(formatDate(data.created_date));
+                                            $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+                                            $('#issueDetailsModal').modal('show');
+
+                                            const notSamePerson = getLoginUser.currentUser.id !== data.user_uploader.id
+
+                                            if(notSamePerson) {
+                                                console.log(getLoginUser.currentUser.id)
+                                                console.log(data.user_uploader.id)
+                                                console.log(getLoginUser.currentUser.id !== data.user_uploader.id)
+                                                console.log("solved", data.solved)
+                                                $('#issueTitleDetails').prop('disabled', true);
+                                                $('#issue_categoryDetails').prop('disabled', true);
+                                                $('#descriptionDetails').prop('disabled', true);
+                                                $('#direct_causeDetails').prop('disabled', true);
+                                                $('#root_causeDetails').prop('disabled', true);
+                                                $('#placeDetails').prop('disabled', true);
+                                                $('#impactDetails').prop('disabled', true);
+                                                issueDetail.enable(false)
+                                            } else {
+                                                if(data.solved) {
+                                                    $('#issueTitleDetails').prop('disabled', true);
+                                                    $('#issue_categoryDetails').prop('disabled', true);
+                                                    $('#descriptionDetails').prop('disabled', true);
+                                                    $('#direct_causeDetails').prop('disabled', true);
+                                                    $('#root_causeDetails').prop('disabled', true);
+                                                    $('#placeDetails').prop('disabled', true);
+                                                    $('#impactDetails').prop('disabled', true);
+                                                    issueDetail.enable(false)
+                                                } else {
+                                                    $('#issueTitleDetails').prop('disabled', false);
+                                                    $('#issue_categoryDetails').prop('disabled', false);
+                                                    $('#descriptionDetails').prop('disabled', false);
+                                                    $('#direct_causeDetails').prop('disabled', false);
+                                                    $('#root_causeDetails').prop('disabled', false);
+                                                    $('#placeDetails').prop('disabled', false);
+                                                    $('#impactDetails').prop('disabled', false);
+                                                    issueDetail.enable(true)
+                                                }
+                                            }
+
+                                        } else {
+                                            console.log('No data received for issue ID:', issueId);
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.log('AJAX error:', error);
+                                    }
+                                });
+                            });
+
+                        },
+                        error: function (error) {
+                            console.log('Error fetching data:', error);
+                        }
                     });
+                }
 
-                    $('.see-more-button').click(function () {
-                        // Get the issue ID directly from the button's data-id attribute
-                        const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
-                        console.log('Clicked button with data-iD:', issueId);
+                loadData();
 
-                        $.ajax({
-                            url: 'api/issue/list/byId/' + issueId,
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function (data) {
-                                console.log('Data received:', data);
-                                if (data) {
-                                    $('#corrective_actionValue').text(data.corrective_action);
-                                    $('#preventive_actionValue').text(data.preventive_action);
-                                    $('#direct_causeValue').text(data.direct_cause);
-                                    $('#root_causeValue').text(data.root_cause);
-                                    $('#impactValue').text(data.impact);
-                                    $('#placeValue').text(data.place);
-                                    $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
-                                    $('#issueDetailModal').modal('show');
-                                    currentIssueId = issueId;
-                                    console.log("Id Issue :",currentIssueId)
-                                } else {
-                                    console.log('No data received for issue ID:', issueId);
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.log('AJAX error:', error);
-                            }
+                const pendingIssueList = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
+
+                console.log("pending issue list", pendingIssueList)
+
+                if (pendingIssueList.length !== 0) {
+                    document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
+                }
+
+                for (let i = 0; i < pendingIssueList.length; i++) {
+
+                    const currentIssue = pendingIssueList[i];
+
+                    document.getElementById("new-issue-list").innerHTML += `<div class="p-md-3 p-sm-2">
+                        <div class="card item-issue-approval" id="issueapprovalitem-${currentIssue.id}">
+                            <div class="d-inline p-2 issue-approval">
+                                <input type="radio" name="approval-${currentIssue.id}" value="DUPLICATE"/>
+                                <label>Duplicate</label>
+                                <input type="radio" name="approval-${currentIssue.id}" value="APPROVE"/>
+                                <label>Approve</label>
+                                <input type="radio" name="approval-${currentIssue.id}" value="DECLINE"/>
+                                <label>Decline</label>
+                            </div>
+                            <div class="card-header border-bottom text-dark">
+                                <div class="d-flex justify-content-between align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="card-title card-text">${currentIssue.title}</h6>
+                                        <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                            ${currentIssue.user_pic.name}
+                                        </p>
+                                    </div>
+                                    <span
+                                        class="card-title badge rounded-pill bg-${currentIssue.status === 'Success' ? 'success' : 'danger'}">
+                                            ${currentIssue.status === 'true' ? 'Solved' : 'Unsolved'}
+                                    </span>
+                                </div>
+                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <p>Posted</p>
+                                        <span>${new Date(currentIssue.created_date)}</span>
+                                        <p>Modified at</p>
+                                        <span>${getTimeElapsed(currentIssue.created_date)}</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm see-more-button" data-id="${currentIssue.id}"
+                                            data-bs-target="#issueDetailModal" data-bs-toggle="modal">
+                                            See More
+                                    </button>
+                                </div>
+                                <div class="col issue-time-line d-flex gap-2">
+                                    <p class="btn custom-color rounded-pill">${currentIssue.issue_category}</p>
+                                </div>
+                            </div>
+                                <div class="card-body">
+                                    <div class="code-block">
+                                        <p>${currentIssue.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                }
+                const allApprovalRadios = document.querySelectorAll('.all-approval-input');
+
+                console.log("all radiio button", allApprovalRadios)
+
+                // Attach a click event listener to each radio button in #all-approval
+                allApprovalRadios.forEach(allApprovalRadio => {
+                    allApprovalRadio.addEventListener('click', function () {
+                        // Get the value of the clicked radio button
+                        const selectedValue = this.value;
+                        console.log(selectedValue)
+
+                        // Set the corresponding radio buttons in .item sections to the same value
+                        document.querySelectorAll('.issue-approval input[value="' + selectedValue + '"]').forEach(itemRadio => {
+                            itemRadio.checked = true;
                         });
                     });
-                },
-                error: function (error) {
-                    console.log('Error fetching data:', error);
+                });
+
+                document.querySelector("#all-approval-btn").addEventListener("click", function () {
+
+                    const updateIssueList = [];
+
+                    const issueList = document.querySelectorAll(".item-issue-approval");
+
+                    issueList.forEach((item, index) => {
+                        // Get the value of the selected radio button in the corresponding .item section
+                        const selectedRadio = item.querySelector('.issue-approval input[type="radio"]:checked');
+
+                        // Check if a radio button is selected
+                        if (selectedRadio) {
+                            // Add data to the array
+                            updateIssueList.push({
+                                id: parseInt(item.getAttribute("id").split("-")[1]), // Assuming each item has a unique identifier
+                                status: selectedRadio.value
+                            });
+                        } else {
+                            // Handle the case where no radio button is selected for an item
+                            console.log(`No radio button selected for item ${index + 1}`);
+                        }
+                    });
+                    console.log(updateIssueList)
+
+                    if (updateIssueList.length != 0) {
+                        $.ajax({
+                            url: `/api/issue/update/status/issuelist`, // Update the URL to include the issue ID
+                            type: 'PUT',
+                            contentType: 'application/json',
+                            data: JSON.stringify(updateIssueList),
+                            dataType: 'json',
+                            success: function (data) {
+                                console.log(data);
+                                console.log("Issue Updated Successfully");
+                                // alert("Issue Updated Successfully");
+                                showSuccess("Issue Updated Successfuly.");
+                                window.top.location = window.top.location;
+                            },
+
+                        });
+                    }
+
+                })
+            });
+            // for update
+            const issueEditBtn = document.getElementById('issue-edit-btn');
+            const solveBtn = document.getElementById('solve-btn');
+
+            solveBtn.addEventListener('click', function (e) {
+                //alert("Your issue solved");
+                showSuccess("Your Issue Solved.");
+            });
+
+    issueEditBtn.addEventListener('click', function (e) {
+        const corrective_action = $('#corrective_actionInput').val();
+        const preventive_action = $('#preventive_actionInput').val();
+        const solved = $('#solve-btn').val();
+        const issueId = $(this).data('issueId');
+        console.log(solved + " solveddddddd");
+        if (corrective_action === "" || preventive_action === "") {
+            // alert('Please fill in all the required fields.');
+            showError('Please fill in all the required fields.');
+            return;
+        }
+
+        if (solved === "true") {
+            // If solved, hide the "issue-edit-btn" and show the "solve-btn"
+            $("#issue-edit-btn").hide();
+            $("#solveBtn").show();
+        } else {
+            // If not solved, show the confirmation modal
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Are you sure you want to solve?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const updatedDetails = {
+                        corrective_action: corrective_action,
+                        preventive_action: preventive_action,
+                        updated_date: new Date().getTime(),
+                        solved_date: new Date().getTime(),
+                        solved: solved,
+                    };
+                    console.log("UpdateDetails", updatedDetails);
+
+                    $.ajax({
+                        url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify(updatedDetails),
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            console.log("Issue Updated Successfully");
+                            // Update 'solved' to true after a successful AJAX request
+                            $('#solve-btn').val("true");
+                            const spanContent = 'Solved';
+                            const spanColor = 'success';
+                            $('#solved').empty().html(`<span class="card-title badge rounded-pill bg-${spanColor}" id="solved">${spanContent}</span>`);
+                            Swal.fire({
+                                title: "Success!",
+                                text: "You have successfully solved the issue.",
+                                icon: "success"
+                            });
+                            console.log("Success")
+                            $("#issue-edit-btn").hide();
+                            $("#solve-btn").show();
+
+
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('Status:', status);
+                            console.log('Error:', error);
+                            console.log('Server response:', xhr.responseText);
+
+                            if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                                // Handle JSON response
+                                try {
+                                    const response = JSON.parse(xhr.responseText);
+                                    console.log('JSON Response:', response);
+                                } catch (e) {
+                                    console.log('JSON parsing error:', e);
+                                }
+                            } else {
+                                // Handle non-JSON response
+                                console.log('Non-JSON Response:', xhr.responseText);
+                            }
+                            alert("Error updating issue: " + xhr.responseText);
+                            console.log("Error updating issue");
+                        },
+                        complete: function () {
+                            // Optionally, close the modal or perform other actions upon completion
+                            $('#issueDetailModal').modal('hide');
+                        }
+                    });
+
+                } else {
+                    // User clicked "No," stop the process and close the modal
+                    return false;
                 }
             });
+
+            // Hide the "solve-btn" regardless of user choice
+            $("#solveBtn").hide();
         }
-        loadData();
     });
-    // for update
-    const issueEditBtn = document.getElementById('issue-edit-btn');
-    issueEditBtn.addEventListener('click', function (e) {
-        console.log("click")
-        if (this.innerText === 'Edit') {
-            // Switch to edit mode
-            const editableFields = document.querySelectorAll('.editable');
-            editableFields.forEach((field, index) => {
-                const input = document.createElement('textarea');
-                input.value = field.innerText;
-                input.setAttribute('rows', 5);
-                input.classList.add('form-control');
-                input.classList.add('editable');
-                input.id = `newInput_${index}`;
-                field.innerHTML = '';
-                field.appendChild(input);
+
+
+            $("#reset-btn").on("click", function () {
+                $("#status-filter").val('');
+                $("#solved-filter").val('');
+                $("#category-filter").val('');
+                loadData();
             });
-            this.innerText = 'Save';
-        } else if (this.innerText === 'Save') {
-            // Switch back to view mode
-            const issueId =currentIssueId;
-            console.log('Issue ID:', issueId);
-            const corrective_action = document.getElementById('newInput_0').value;
-            const preventive_action = document.getElementById('newInput_1').value;
-            const direct_cause = document.getElementById('newInput_2').value;
-            const root_cause = document.getElementById('newInput_3').value;
-            const impact = document.getElementById('newInput_4').value;
-            const place = document.getElementById('newInput_5').value;
-            // Collect the updated values from input fields
-            const updatedDetails = {
-                corrective_action: corrective_action,
-                preventive_action: preventive_action,
-                direct_cause: direct_cause,
-                root_cause: root_cause,
-                impact: impact,
-                place: place,
-                updated_date: new Date().getTime(),
-                solved: true,
 
-            };
 
-            console.log("UpdateDetails", updatedDetails);
+            // for search bar
+            $("#status-filter").on("change", function () {
+                filterIssues();
+            });
 
-            $.ajax({
-                url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(updatedDetails),
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    console.log("Issue Updated Successfully");
-                    alert("Issue Updated Successfully");
-                },
-                error: function (xhr, status, error) {
-                    console.log('Status:', status);
-                    console.log('Error:', error);
-                    console.log('Server response:', xhr.responseText);
+            $("#solved-filter").on("change", function () {
+                filterSolvedIssues();
+            });
 
-                    if (xhr.getResponseHeader('Content-Type') === 'application/json') {
-                        // Handle JSON response
+            $("#category-filter").on("change", function () {
+                filterCategory();
+            })
+
+
+            function filterIssues() {
+                var status = $('#status-filter').val();
+                console.log("status", status);
+
+                $.ajax({
+                    url: '/api/issue/list/status/' + status,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log('Success. Received data:', data);
+
+                        const sortContainer = $('#sort');
+                        sortContainer.empty(); // Clear previous content
+
+                        // Check if data is not empty
+                        if (data && data.length > 0) {
+                            // Loop through the retrieved data and create content for each item
+                            data.forEach(item => {
+                                const issueDiv = createIssueCard(item);
+                                sortContainer.append(issueDiv);
+                            });
+                        } else {
+                            // Handle case when data is empty
+                            sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                        }
+                    },
+
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                        console.log('XHR:', xhr);
+                        console.log('Status:', status);
+
+                        // Display the error response in the console
                         try {
                             const response = JSON.parse(xhr.responseText);
-                            console.log('JSON Response:', response);
+                            console.log('Error response:', response);
                         } catch (e) {
-                            console.log('JSON parsing error:', e);
+                            console.log('Error parsing response:', e);
                         }
-                    } else {
-                        // Handle non-JSON response
-                        console.log('Non-JSON Response:', xhr.responseText);
+                        showError('Error fetching data.');
+                        //alert('Error fetching data.');
                     }
-                    alert("Error updating issue: " + xhr.responseText);
-                    console.log("Error updating issue");
-                },
-                complete: function () {
-                    // Optionally, close the modal or perform other actions upon completion
-                    $('#issueDetailModal').modal('hide');
-                }
-            });
-            this.innerText = 'Edit';
-        }
-    });
+                });
+            }
+
+            // for solved
+            function filterSolvedIssues() {
+                var solved = $('#solved-filter').val();
+                console.log("solved", solved);
+
+                $.ajax({
+                    url: '/api/issue/list/solved/' + solved,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log('Success. Received data:', data);
+
+                        const sortContainer = $('#sort');
+                        sortContainer.empty(); // Clear previous content
+
+                        // Check if data is not empty
+                        if (data && data.length > 0) {
+                            // Loop through the retrieved data and create content for each item
+                            data.forEach(item => {
+                                const issueDiv = createIssueCard(item);
+                                sortContainer.append(issueDiv);
+                            });
+                        } else {
+                            // Handle case when data is empty
+                            sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                        }
+                    },
+
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                        console.log('XHR:', xhr);
+                        console.log('Status:', status);
+
+                        // Display the error response in the console
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            console.log('Error response:', response);
+                        } catch (e) {
+                            console.log('Error parsing response:', e);
+                        }
+
+                        alert('Error fetching data.');
+                    }
+                });
+            }
+
+
+            // for Category filter
+            function filterCategory() {
+                var category = $('#category-filter').val();
+                console.log("category", category);
+
+                $.ajax({
+                    url: '/api/issue/list/category/' + category,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log('Success. Received data:', data);
+
+                        const sortContainer = $('#sort');
+                        sortContainer.empty(); // Clear previous content
+
+                        // Check if data is not empty
+                        if (data && data.length > 0) {
+                            // Loop through the retrieved data and create content for each item
+                            data.forEach(item => {
+                                const issueDiv = createIssueCard(item);
+                                sortContainer.append(issueDiv);
+                            });
+                        } else {
+                            // Handle case when data is empty
+                            sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                        }
+                    },
+
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                        console.log('XHR:', xhr);
+                        console.log('Status:', status);
+
+                        // Display the error response in the console
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            console.log('Error response:', response);
+                        } catch (e) {
+                            console.log('Error parsing response:', e);
+                        }
+
+                        alert('Error fetching data.');
+                    }
+                });
+            }
+            // for issue list
+    function showError(message) {
+        $("#errorText").text(message);
+        $("#errorAlert").show();
+
+        setTimeout(function () {
+            $("#errorAlert").hide();
+        }, 3000);
+
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#errorAlert").hide();
+        });
+    }
+    function showSuccess(message) {
+        $("#successText").text(message);
+        $("#successAlert").show();
+
+        setTimeout(function () {
+            $("#successAlert").hide();
+        }, 3000);
+
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#successAlert").hide();
+        });
+    }
+
+    function showerror(message) {
+        $("#error-text").text(message);
+        $("#error-alert").show();
+
+        setTimeout(function () {
+            $("#error-alert").hide();
+        }, 3000);
+
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#error-alert").hide();
+        });
+    }
+    function showsuccess(message) {
+        $("#success-text").text(message);
+        $("#success-alert").show();
+
+        setTimeout(function () {
+            $("#success-alert").hide();
+        }, 3000);
+
+        //close alert box
+        $(".btn-close").on("click", function () {
+            $("#success-alert").hide();
+        });
+    }
+
+
 </script>
+<script src="/js/notification.js" type="module"></script>
 </body>
 </html>

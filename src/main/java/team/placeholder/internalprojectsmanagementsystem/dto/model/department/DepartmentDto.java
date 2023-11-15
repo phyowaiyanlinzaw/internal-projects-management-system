@@ -2,6 +2,7 @@ package team.placeholder.internalprojectsmanagementsystem.dto.model.department;
 
 import lombok.Getter;
 import lombok.Setter;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 
 import java.io.Serializable;
@@ -15,6 +16,6 @@ public class DepartmentDto implements Serializable {
     private long id;
     private String name;
     private List<UserDto> users;
-    private List<Project> projects;
+    private List<ProjectDto> projects;
 
 }

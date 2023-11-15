@@ -3,18 +3,12 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.support.MutableSortDefinition;
-import org.springframework.beans.support.PagedListHolder;
-import org.springframework.beans.support.PropertyComparator;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PageRequestDto;
-import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
@@ -40,6 +34,24 @@ public class DepartmentController {
     @GetMapping("list")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
        List<DepartmentDto> departmentDtos = departmentService.getAllDepartments();
+        return ResponseEntity.ok(departmentDtos);
+    }
+    @GetMapping(value = "/withPaging")
+    public ResponseEntity<List<DepartmentDto>> getAllDepartment(
+            @RequestParam(name = "pageNumber", defaultValue = "1") int currentPage) {
+        Page<DepartmentDto> page = departmentService.getAllDepartmentWitPage(currentPage);
+        long totalItems = page.getTotalElements();
+        int totalPages = page.getTotalPages();
+        List<DepartmentDto> departmentDtos = page.getContent();
+        return ResponseEntity.ok(departmentDtos);
+    }
+
+    @GetMapping(value = "/page/{pageNumber}")
+    public ResponseEntity<List<DepartmentDto>> listByPageNo(@PathVariable ("pageNumber")  int currentPage){
+        Page<DepartmentDto> page = departmentService.getAllDepartmentWitPage(currentPage);
+        long totalItems = page.getTotalElements();
+        int totalPages = page.getTotalPages();
+        List<DepartmentDto> departmentDtos = page.getContent();
         return ResponseEntity.ok(departmentDtos);
     }
 

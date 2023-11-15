@@ -25,7 +25,7 @@ public class IsuDto {
     private long updated_date;
     private long solved_date;
     private String responsible_type;
-    private String issue_category;
+    private String issueCategory;
     private String status;
     private long user_uploader;
     private long user_pic;

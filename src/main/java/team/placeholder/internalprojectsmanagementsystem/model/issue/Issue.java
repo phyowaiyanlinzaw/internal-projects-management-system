@@ -24,6 +24,8 @@ public class Issue{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String place;
     private String impact;
@@ -44,7 +46,7 @@ public class Issue{
 
 
     @Enumerated(EnumType.STRING)
-    private Category issue_category;
+    private Category issueCategory;
 
     @Enumerated(EnumType.STRING)
     private ResponsibleType responsible_type;
@@ -59,7 +61,7 @@ public class Issue{
 
     @ManyToOne
     @JoinColumn(name="pic_id")
-    private User user_pic;
+    private User pic;
 
     @Override
     public boolean equals(Object o) {
