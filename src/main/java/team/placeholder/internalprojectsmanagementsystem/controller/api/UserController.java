@@ -115,6 +115,33 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update/employee/{id}/status/{status}")
+    public ResponseEntity<String> updateEmployeeStatus(@PathVariable Long id, @PathVariable boolean status) {
+        UserDto user = userService.changeStatus(id, status);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        return ResponseEntity.ok("Employee status updated successfully");
+    }
+
+    @GetMapping("/get/id/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        UserDto user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/get/email/{email}")
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
+        UserDto user = userService.getUserByEmail(email);
+        if (user == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("list")
     public ResponseEntity<List<UserDto>> getAllUsers() {
 

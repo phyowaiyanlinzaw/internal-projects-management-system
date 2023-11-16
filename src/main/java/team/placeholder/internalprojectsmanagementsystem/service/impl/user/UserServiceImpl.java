@@ -105,8 +105,13 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(long id) {
         User user = userRepository.findById(id);
         if (user != null) {
+            Department department = user.getDepartment();
+            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
             UserDto userDto = modelmapper.map(user, UserDto.class);
-            userDto.setDepartmentdto(modelmapper.map(user.getDepartment(), DepartmentDto.class));
+            if(user.getProjectManager() != null) {
+                userDto.setProjectManager(modelmapper.map(user.getProjectManager(), UserDto.class));
+            }
+            userDto.setDepartmentdto(departmentDto);
             return userDto;
         } else {
             return null;
@@ -310,6 +315,18 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setName(userDto.getName());
             userRepository.save(user);
+        }
+    }
+
+    @Override
+    public UserDto changeStatus(long id, boolean status) {
+        User user = userRepository.findById(id);
+        if (user != null) {
+            user.setEnabled(status);
+            userRepository.save(user);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
         }
     }
 
