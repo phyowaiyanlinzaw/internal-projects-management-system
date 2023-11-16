@@ -199,6 +199,47 @@
                 if (addDepartmentButton) {
                     addDepartmentButton.classList.remove("d-none");
                 }
+                const updateButtonContainer = document.getElementById("updateButtonContainer");
+                    updateButtonContainer.innerHTML =
+                        '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
+                    document.querySelector("#updateButton").addEventListener("click", function () {
+                            var internalReviewCount =
+                                document.getElementById(
+                                    "project-internal-review-count"
+                                ).value;
+                            var externalReviewCount =
+                                document.getElementById(
+                                    "project-external-review-count"
+                                ).value;
+                            var data = {
+                                internal_review_count: internalReviewCount,
+                                external_review_count: externalReviewCount,
+                            };
+                            fetch(
+                                "/api/review/update-review/" +
+                                    targetData.id,
+                                {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(data),
+                                }
+                            )
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log(
+                                    "Review counts updated successfully:",
+                                    data
+                                );
+                            })
+                            .catch((error) => {
+                                console.error(
+                                    "Error updating review counts:",
+                                    error
+                                );
+                            });
+                        });
             }
 
             const clientList = await getClientList();
@@ -890,9 +931,9 @@
 
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
                         const updateButtonCon =
-                            document.getElementById("updateButtonCon");
+                            document.getElementById("updateButtonContainer");
                         updateButtonCon.innerHTML =
-                            '<button id="deliverable-type-form" type="button" class="btn btn-primary">Update</button>';
+                            '<button type="submit" class="btn btn-primary">Update</button>';
                         document
                             .querySelector("#deliverable-type-form")
                             .addEventListener("submit", function (event) {
@@ -915,13 +956,14 @@
 
                                 console.log("deliverable", deliverableList);
 
-                                fetch(`/api/deliverable/update-status`, {
-                                    method: "PUT",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify(deliverableList),
-                                })
+                                if(deliverableList.length !== 0) {
+                                    fetch(`/api/deliverable/update-status`, {
+                                        method: "PUT",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify(deliverableList),
+                                    })
                                     .then((response) => response.json())
                                     .then((data) => {
                                         console.log(
@@ -932,9 +974,10 @@
                                     .catch((error) => {
                                         console.error(
                                             "Error updating status:",
-                                            error
+                                        error
                                         );
                                     });
+                                }
                             });
                     }
 
@@ -967,6 +1010,8 @@
                     );
 
                     objectiveQuill.enable(false);
+
+                    objectiveQuill.root.innerHTML = '';
 
                     objectiveQuill.clipboard.dangerouslyPasteHTML(
                         0,
@@ -1059,55 +1104,6 @@
                     //______________________________________________
 
                     //_______________review update
-                    if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-                        const updateButtonContainer = document.getElementById(
-                            "updateButtonContainer"
-                        );
-                        updateButtonContainer.innerHTML =
-                            '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
-                        document
-                            .querySelector("#updateButton")
-                            .addEventListener("click", async function () {
-                                var internalReviewCount =
-                                    document.getElementById(
-                                        "project-internal-review-count"
-                                    ).value;
-                                var externalReviewCount =
-                                    document.getElementById(
-                                        "project-external-review-count"
-                                    ).value;
-
-                                var data = {
-                                    internal_review_count: internalReviewCount,
-                                    external_review_count: externalReviewCount,
-                                };
-
-                                fetch(
-                                    "/api/review/update-review/" +
-                                        targetData.id,
-                                    {
-                                        method: "PUT",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                        },
-                                        body: JSON.stringify(data),
-                                    }
-                                )
-                                    .then((response) => response.json())
-                                    .then((data) => {
-                                        console.log(
-                                            "Review counts updated successfully:",
-                                            data
-                                        );
-                                    })
-                                    .catch((error) => {
-                                        console.error(
-                                            "Error updating review counts:",
-                                            error
-                                        );
-                                    });
-                            });
-                    }
 
                     //____________________________________reveiw update end
                     detailMoal.querySelector(
@@ -1219,7 +1215,7 @@
 
             if (loginUser.currentUser.role === "PROJECT_MANAGER") {
                 const updateButtonC =
-                    document.getElementById("updateButtonCon");
+                    document.getElementById("updateButtonContainer");
                 updateButtonC.innerHTML =
                     '<button id="update" type="button" class="btn btn-primary">Update</button>';
 
@@ -2360,8 +2356,6 @@
                                         "This project has been saved",
                                         data
                                     );
-                                    // event.currentTarget.submit();
-                                    window.top.location = window.top.location;
                                 },
                                 error: function (data) {
                                     Swal.fire(
@@ -2369,8 +2363,6 @@
                                         "Error updating project amount",
                                         "error"
                                     );
-                                    // event.currentTarget.submit();
-                                    window.top.location = window.top.location;
                                 },
                             });
                         }
@@ -3800,7 +3792,7 @@
                                             >
                                                 <div
                                                     id="architectures-list-in-edit"
-                                                    class="d-flex gap-2"
+                                                    class="d-flex gap-2 flex-wrap"
                                                 ></div>
                                             </div>
                                             <div
@@ -3814,7 +3806,7 @@
                                                         <!-- Checkbox elements will be dynamically added here -->
                                                     </div>
                                                     <div
-                                                        id="updateButtonCon"
+                                                        id="updateButtonContainer"
                                                     ></div>
                                                 </form>
                                             </div>
