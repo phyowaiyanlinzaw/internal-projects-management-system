@@ -58,11 +58,6 @@
             type="text/css"
             href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"
         />
-        <link
-            rel="stylesheet"
-            type="text/css"
-            href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css"
-        />
 
         <!-- Bootstrap Tables -->
         <link
@@ -86,7 +81,7 @@
             href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"
             rel="stylesheet"
         />
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js" defer></script>
         <link
             href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
             rel="stylesheet"
@@ -428,50 +423,38 @@
                     let email = document.querySelector("#client-email").value;
                     let phone = document.querySelector("#client-phone").value;
 
-                    if (!validateClient()) {
+                    if(!validateClient()){
                         return;
                     }
 
-                    Swal.fire({
-                        title: "Are you sure want to add?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const clientDto = {
-                                name: name,
-                                email: email,
-                                phone: phone,
-                            };
+                    const clientDto = {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                    };
 
-                            console.log(clientDto);
+                    console.log(clientDto)
 
-                            $.ajax({
-                                method: "POST",
-                                url: "/api/client/save",
-                                data: JSON.stringify(clientDto),
-                                contentType: "application/json; charset=utf-8",
-                                dataType: "json",
-                                success: function (response) {
-                                    console.log(response);
-                                    const option = document.createElement("option");
-                                    option.value = JSON.stringify(response);
-                                    option.textContent = response.name;
-                                    clientSelect.append(option);
-                                    document.querySelector("#client-name").value = "";
-                                    document.querySelector("#client-email").value = "";
-                                    document.querySelector("#client-phone").value = "";
-                                    showSuccess('Client Edit Successfully...');
-                                },
-                                error: function (error) {
-                                    console.error("Error in Url : /api/client/save ", error);
-                                },
-                            });
-                        }
-                    });
+                    $.ajax({
+                      method: "POST",
+                        url: "/api/client/save",
+                        data : JSON.stringify(clientDto),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response);
+                            const option = document.createElement("option");
+                            option.value = JSON.stringify(response);
+                            option.textContent = response.name;
+                            clientSelect.append(option);
+                            document.querySelector("#client-name").value = "";
+                            document.querySelector("#client-email").value = "";
+                            document.querySelector("#client-phone").value = "";
+                        },
+                        error: function (error) {
+                            console.error("Error in Url : /api/cleient/save ", error);
+                        },
+                    })
                 });
 
 
@@ -827,6 +810,79 @@
                         document.querySelector("#architectures-list-in-edit").appendChild(div);
                     })
 
+                    //------------------------ architecture list end
+
+                    //------------------------ deliverable list start
+                    document.querySelector("#deliverable-type").textContent = ''
+                   let deliverableId;
+                    targetData.deliverableDto.forEach(a => {
+                        const div = document.createElement("div");
+                        div.classList.add("d-flex", "gap-2", "align-items-center", "justify-content-center");
+
+                        deliverableId = a.id;
+                        const input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.setAttribute("id", `checkbox-${a.id}`)
+
+
+                        if (a.status) {
+                            input.checked = true;
+                        }
+
+                        const p = document.createElement("p");
+                        p.textContent = a.deliverableType.type;
+                        console.log(a.status)
+                        console.log(a.deliverableType.type)
+                        p.classList.add("fs-6", "fw-bold");
+                        div.appendChild(p);
+                        div.appendChild(input)
+
+                        document.querySelector("#deliverable-type").appendChild(div);
+                    });
+                    //_______________________________________deliverable list end
+
+
+                    //_______________________________________deliverable update alert box put
+
+                    if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+                        const updateButtonCon = document.getElementById("updateButtonCon");
+                        updateButtonCon.innerHTML = '<button id="deliverable-type-form" type="button" class="btn btn-primary">Update</button>';
+                        document.querySelector("#deliverable-type-form").addEventListener("submit", function (event) {
+                            event.preventDefault();
+
+                            let deliverableList = [];
+
+                            targetData.deliverableDto.forEach(a => {
+                                const checkbox = document.querySelector(`#checkbox-${a.id}`);
+
+                                if (checkbox.checked) {
+                                    deliverableList.push({id: a.id, status: true})
+                                }
+                            });
+
+
+                            console.log("deliverable", deliverableList);
+
+                            fetch(`/api/deliverable/update-status`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(deliverableList),
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Status updated successfully:', data);
+                                })
+                                .catch(error => {
+                                    console.error('Error updating status:', error);
+                                });
+                        });
+                    }
+
+                    //____________________________________________________deliverable update end
+
+
                     document.querySelector("#project-detail-name").value =
                         currentProejctDetail.name;
 
@@ -910,10 +966,53 @@
                     ).innerHTML = currentProejctDetail.departmentDto.name;
                     detailMoal.querySelector(
                         "#project-internal-review-count"
-                    ).value = currentProejctDetail.inReview;
+                    ).value = currentProejctDetail.reviewDto.internal_review_count;
                     detailMoal.querySelector(
                         "#project-external-review-count"
-                    ).value = currentProejctDetail.exReview;
+                    ).value = currentProejctDetail.reviewDto.external_review_count;
+                    //______________________________________________
+
+                    //_______________review update
+                    if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+
+                        const updateButtonContainer = document.getElementById("updateButtonContainer");
+                        updateButtonContainer.innerHTML = '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
+                    document.querySelector("#updateButton").addEventListener("click", async function () {
+
+                        var internalReviewCount = document.getElementById("project-internal-review-count").value;
+                        var externalReviewCount = document.getElementById("project-external-review-count").value;
+
+
+                        var data = {
+                            internal_review_count: internalReviewCount,
+                            external_review_count: externalReviewCount
+                        };
+
+
+                        fetch("/api/review/update-review/" + targetData.id, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Review counts updated successfully:', data);
+
+                            })
+                            .catch(error => {
+                                console.error('Error updating review counts:', error);
+
+                            });
+                    });
+
+
+
+                    }
+
+
+                    //____________________________________reveiw update end
                     detailMoal.querySelector(
                         "#project-duration"
                     ).innerText = `${currentProejctDetail.duration} ${currentProejctDetail.duration < 1 ? " month" : " months"}`;
@@ -934,6 +1033,8 @@
                         "#my-dear-customer-name"
                     ).innerHTML = currentProejctDetail.clientDto.name;
                 }
+
+                //_____________________________________________
             });
 
             const editProjectObjective = document.querySelector("#edit-project-objective");
@@ -957,61 +1058,77 @@
 
 
 
+                Swal.fire({
+                    title: "Are you sure want to edit?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes"
+                }).then((result) => {
+                    if (result.isConfirmed) {
 
+                        console.log(project)
 
-                console.log(project)
+                        $.ajax({
+                            url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
+                            type: "PUT",
+                            data: JSON.stringify(project),
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            success: async function (data) {
+                            // Reset the form if needed
+                            console.log("this projce has benn saved", data);
+                            // event.currentTarget.submit();
+                            const currentUpdatedProject = document.querySelector("#project-" + editingProjectId);
+                            currentUpdatedProject.querySelector(".card-title").innerText = data.name;
+                            },
+                            error: function (data) {
+                            alert("Error registering project");
+                            // event.currentTarget.submit();
 
-                $.ajax({
-                    url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
-                    type: "PUT",
-                    data: JSON.stringify(project),
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: async function (data) {
-                        // Reset the form if needed
-                        console.log("this projce has benn saved", data);
-                        // event.currentTarget.submit();
-                        const currentUpdatedProject = document.querySelector("#project-" + editingProjectId);
-                        currentUpdatedProject.querySelector(".card-title").innerText = data.name;
-                    },
-                    error: function (data) {
-                        alert("Error registering project");
-                        // event.currentTarget.submit();
-
-                    },
+                            },
+                        });
+                    }
                 });
-            })
+            });
 
-            document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
+            if (loginUser.currentUser.role === "PROJECT_MANAGER") {
 
-                const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
+                const updateButtonC = document.getElementById("updateButtonC");
+                updateButtonC.innerHTML = '<button id="update" type="button" class="btn btn-primary">Update</button>';
 
-                const amountDto = {
-                    basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
-                    detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
-                    coding: parseInt(document.querySelector("#edit-coding-count").value),
-                    unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
-                    integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
-                }
+                document.querySelector("#update").addEventListener("click", function (e) {
 
-                $.ajax({
-                    url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
-                    type: "PUT",
-                    data: JSON.stringify(amountDto),
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: async function (data) {
-                        alert("Project registered successfully");
-                        // Reset the form if needed
-                        console.log("this projce has benn saved", data);
-                        // event.currentTarget.submit();
-                    },
-                    error: function (data) {
-                        alert("Error registering project");
-                        // event.currentTarget.submit();
-                    },
-                });
-            })
+                    const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
+
+                    const amountDto = {
+                        basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
+                        detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
+                        coding: parseInt(document.querySelector("#edit-coding-count").value),
+                        unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
+                        integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
+                    }
+
+                    $.ajax({
+                        url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
+                        type: "PUT",
+                        data: JSON.stringify(amountDto),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: async function (data) {
+                            alert("Project registered successfully");
+                            // Reset the form if needed
+                            console.log("this projce has benn saved", data);
+                            // event.currentTarget.submit();
+                        },
+                        error: function (data) {
+                            alert("Error registering project");
+                            // event.currentTarget.submit();
+                        },
+                    });
+                })
+            }
 
             const sortProjectByDepartment = await getData(
                 "/api/project/list/sort/by/department"
@@ -1528,18 +1645,18 @@
 
                         $('#start_date ').after('<div class="error-container"></div>');
                         $('#start_date ').siblings('.error-container').append(p);
-                    }
+                        }
 
-                    $('#start_date ').addClass('is-invalid');
-                    $('#start_date ').removeClass('is-valid');
+                        $('#start_date ').addClass('is-invalid');
+                        $('#start_date ').removeClass('is-valid');
 
-                } else {
+                    } else {
                         validatedProjectForm  = true;
-                    errorContainer.remove();
-                    $('#start_date').addClass('is-valid');
-                    $('#start_date').removeClass('is-invalid');
+                        errorContainer.remove();
+                        $('#start_date').addClass('is-valid');
+                        $('#start_date').removeClass('is-invalid');
+                    }
                 }
-            }
 
 
 
@@ -1605,8 +1722,6 @@
 
                 }
 
-
-
                 $("#project-add-btn").on('click', function (event) {
                     console.log("submitted")
                     event.preventDefault(); // Prevent the form from submitting the traditional way
@@ -1642,9 +1757,6 @@
                         deliverable,
                         objective
                     );
-
-
-
 
                     let jsonData = ''; // replace with your actual JSON data
                     if (jsonData.trim() !== '') {
@@ -1688,18 +1800,22 @@
                         }
                     });
 
-
-
-                    if(!validateProject()){
-                        return;
-                    }
-
-                    // You may want to add some form validation here before sending the data
                     console.log(objective);
                     console.log(architectures);
                     console.log(empList);
                     console.log(deliverTypeList)
-                    const project = {
+
+                    Swal.fire({
+                        title: "Are you sure want to edit?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            const project = {
                         name: projectName,
                         clientDto: client,
                         duration: duration,
@@ -1744,6 +1860,7 @@
                             alert("Project registered successfully");
                             // Reset the form if needed
                             $("#validation-form")[0].reset();
+                            console.log("this projce has benn saved", data);
                             console.log("this projce has benn saved", data);
                             // event.currentTarget.submit();
                             console.log("current project : ",data)
@@ -1924,7 +2041,53 @@
                         },
                     });
                 });
-            });
+
+                document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
+
+                    const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
+
+                    const amountDto = {
+                        basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
+                        detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
+                        coding: parseInt(document.querySelector("#edit-coding-count").value),
+                        unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
+                        integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
+                    }
+
+                    Swal.fire({
+                        title: "Are you sure want to update project amount?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
+                                type: "PUT",
+                                data: JSON.stringify(amountDto),
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                success: async function (data) {
+                                    Swal.fire("Success", "Project amount updated successfully", "success");
+                                    // Reset the form if needed
+                                    console.log("This project has been saved", data);
+                                    // event.currentTarget.submit();
+                                    window.top.location = window.top.location;
+                                },
+                                error: function (data) {
+                                    Swal.fire("Error", "Error updating project amount", "error");
+                                    // event.currentTarget.submit();
+                                    window.top.location = window.top.location;
+                                },
+                            });
+                        }
+                    });
+                });
+            })
+
+                
 
             let myOptions = [
                 {
@@ -2012,66 +2175,6 @@
         </script>
 
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                loadData();
-
-                function loadData() {
-                    $.ajax({
-                        type: "GET",
-                        url: "/api/deliverable-type/list", // Replace with the actual URL of your Spring Boot endpoint
-                        success: function (data) {
-                            updateTable(data);
-                        },
-                        error: function (error) {
-                            console.log("Error fetching data: " + error);
-                        }
-                    });
-                }
-
-                function updateTable(data) {
-                    var table = $("#deliverable-table");
-
-                    // Clear existing rows
-                    table.find("tr:gt(0)").remove();
-
-                    // Add new rows based on the received data
-                    $.each(data, function (index, item) {
-                        var row = $("<tr><td>" + item.id + "</td><td>" + item.type+ "</td></tr>");
-                        table.append(row);
-                    });
-                }
-            });
-
-            function showError(message) {
-                $("#errorText").text(message);
-                $("#errorAlert").show();
-
-                setTimeout(function () {
-                    $("#errorAlert").hide();
-                }, 3000);
-
-                //close alert box
-                $(".btn-close").on("click", function () {
-                    $("#errorAlert").hide();
-                });
-            }
-
-            function showSuccess(message) {
-                $("#successText").text(message);
-                $("#successAlert").show();
-
-                setTimeout(function () {
-                    $("#successAlert").hide();
-                }, 3000);
-
-                //close alert box
-                $(".btn-close").on("click", function () {
-                    $("#successAlert").hide();
-                });
-            }
-        </script>
-
     </head>
 
     <body>
@@ -2663,7 +2766,7 @@
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#edit-architecture"
                                                 >
-                                                    architecture
+                                                    Architecture
                                                 </button>
                                             </li>
 
@@ -2974,419 +3077,169 @@
                                                 <form id="project-detail-edit-form">
                                                     <input type="number" hidden id="current-edditing-projetc-id">
                                                     <div class="row mb-3">
-                                                        <label
-                                                            for="edit-project-phase"
-                                                            class="col-md-4 col-lg-3 col-form-label"
-                                                            >Current
-                                                            Phase</label
-                                                        >
-                                                        <div
-                                                            class="col-md-8 col-lg-9"
-                                                        >
+                                                        <label for="edit-project-phase" class="col-md-4 col-lg-3 col-form-label">CurrentPhase</label>
+                                                        <div class="col-md-8 col-lg-9">
                                                             
-                                                                <select
-                                                                    type="text"
-                                                                    class="form-control border-task-description"
-                                                                    name=""
-                                                                    id="edit-project-phase"
-                                                                >
-                                                                <option
-                                                                    value="PLANNING"
-                                                                >
-                                                                    Planning
-                                                                </option>
-                                                                <option
-                                                                value="DESIGN"
-                                                                >
-                                                                    Design
-                                                                </option>
-                                                                <option
-                                                                    value="CODING"
-                                                                >
-                                                                    Coding
-                                                                </option>
-                                                                <option
-                                                                value="TESTING"
-                                                                >
-                                                                    Testing
-                                                                </option>
-                                                                <option
-                                                                    value="REVIEW"
-                                                                >
-                                                                    Review
-                                                                </option>
-                                                                <option
-                                                                    value="DEPLOYMENT"
-                                                                >
-                                                                    Deployment
-                                                                </option>
-                                                                <option
-                                                                    value="MAINTENANCE"
-                                                                >
-                                                                    Maintenance
-                                                                </option>
+                                                                <select type="text" class="form-control border-task-description"
+                                                                    name="" id="edit-project-phase">
+                                                                <option value="PLANNING">Planning</option>
+                                                                <option value="DESIGN">Design</option>
+                                                                <option value="CODING">Coding</option>
+                                                                <option value="TESTING">Testing</option>
+                                                                <option value="REVIEW">Review</option>
+                                                                <option value="DEPLOYMENT">Deployment</option>
+                                                                <option value="MAINTENANCE">Maintenance</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
-                                                        <label
-                                                            for="background"
-                                                            class="col-md-4 col-lg-3 col-form-label"
-                                                            >Background</label
-                                                        >
-                                                        <div
-                                                            class="col-md-8 col-lg-9"
-                                                        >
-                                                            <textarea
-                                                                type="text"
-                                                                class="form-control border-task-description"
-                                                                name="background"
-                                                                id="project-detail-background"
-
-                                                            ></textarea>
+                                                        <label for="background" class="col-md-4 col-lg-3 col-form-label">Background</label>
+                                                        <div class="col-md-8 col-lg-9">
+                                                            <textarea type="text" class="form-control border-task-description" name="background" id="project-detail-background"></textarea>
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label
-                                                            for="project-detail-name"
-                                                            class="col-md-4 col-lg-3 col-form-label"
-                                                            >Project name</label
-                                                        >
-                                                        <div
-                                                            class="col-md-8 col-lg-9"
-                                                        >
-                                                            <input
-                                                                name="project_name"
-                                                                type="text"
-                                                                class="form-control"
-                                                                id="project-detail-name"
-                                                                required
-                                                            />
+                                                        <label for="project-detail-name" class="col-md-4 col-lg-3 col-form-label">Project name</label>
+                                                        <div class="col-md-8 col-lg-9" >
+                                                            <input name="project_name" type="text" class="form-control" id="project-detail-name" required />
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label
-                                                            for="start-date"
-                                                            class="col-md-4 col-lg-3 col-form-label"
-                                                            >start date</label
-                                                        >
-                                                        <div
-                                                            class="col-md-8 col-lg-9"
-                                                        >
-                                                            <input
-                                                                name="start_date"
-                                                                type="date"
-                                                                class="form-control"
-                                                                id="start-date"
-                                                                required
-                                                            />
+                                                        <label for="start-date" class="col-md-4 col-lg-3 col-form-label" >start date</label>
+                                                        <div class="col-md-8 col-lg-9" >
+                                                            <input name="start_date" type="date" class="form-control" id="start-date" disabled required/>
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label
-                                                            for="project-edit-duration"
-                                                            class="col-md-4 col-lg-3 col-form-label"
-                                                            >Duration</label
-                                                        >
-                                                        <div
-                                                            class="col-md-8 col-lg-9"
-                                                        >
-                                                            <input
-                                                                name="end_date"
-                                                                type="number"
-                                                                min="1"
-                                                                value="1"
-                                                                required
-                                                                class="form-control"
-                                                                id="project-edit-duration"
-                                                                oninput="validity.valid||(value='');"
-                                                            />
+                                                        <label for="project-edit-duration" class="col-md-4 col-lg-3 col-form-label">Duration</label>
+                                                        <div class="col-md-8 col-lg-9">
+                                                            <input name="end_date" type="number" min="1" value="1" required
+                                                                class="form-control" id="project-edit-duration" oninput="validity.valid||(value='');"/>
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label
-                                                            for="end-date-in-edit"
-                                                            class="col-md-4 col-lg-3 col-form-label"
-                                                            >end date</label
-                                                        >
-                                                        <div
-                                                            class="col-md-8 col-lg-9"
-                                                        >
-                                                            <input
-                                                                name="start_date"
-                                                                type="text"
-                                                                class="form-control"
-                                                                id="end-date-in-edit"
-                                                                disabled
-                                                            />
+                                                        <label for="end-date-in-edit" class="col-md-4 col-lg-3 col-form-label" >end date</label>
+                                                        <div class="col-md-8 col-lg-9">
+                                                            <input name="start_date" type="text" class="form-control" id="end-date-in-edit" disabled/>
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label
-                                                            for="objective"
-                                                            class="col-md-4 col-lg-3 col-form-label"
-                                                            >Objective</label
-                                                        >
-                                                        <div
-                                                            class="col-md-8 col-lg-9"
-                                                        >
-                                                            <div
-                                                                id="edit-project-objective"
-                                                            ></div>
-                                                        </div>
+                                                        <label for="objective" class="col-md-4 col-lg-3 col-form-label">Objective</label>
+                                                        <div class="col-md-8 col-lg-9"><div id="edit-project-objective" ></div></div>
                                                     </div>
 
-                                                    <div
-                                                        class="mt-lg-5"
-                                                    >
-                                                        <button
-                                                            type="submit"
-                                                            class="btn-sm btn-primary"
-                                                        >
-                                                            Save Changes
-                                                        </button>
-                                                    </div>
+                                                    <div class="mt-lg-5" ><button type="submit" class="btn-sm btn-primary">Save Changes</button></div>
                                                 </form>
                                                 <!-- End Profile Edit Form -->
                                             </div>
-                                            <div
-                                                class="tab-pane fade profile-edit pt-3"
-                                                id="client-info"
-                                            >
+                                            <div class="tab-pane fade profile-edit pt-3" id="client-info">
                                                 <div class="row">
-                                                    <div
-                                                        class="fs-2 text-center"
-                                                        id="my-dear-customer-name"
-                                                    >
-                                                        DAT
-                                                    </div>
-                                                    <div
-                                                        class="row row-cols-1 gap-2"
-                                                    >
-                                                        <div
-                                                            class="d-flex justify-content-start align-items-center gap-2"
-                                                        >
-                                                            <div
-                                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
-                                                            >
-                                                                <i
-                                                                    class="bi bi-envelope-at"
-                                                                ></i>
+                                                    <div class="fs-2 text-center" id="my-dear-customer-name">DAT</div>
+                                                    <div class="row row-cols-1 gap-2">
+                                                        <div class="d-flex justify-content-start align-items-center gap-2">
+                                                            <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
+                                                                <i class="bi bi-envelope-at"></i>
                                                             </div>
-                                                            <div
-                                                                class="align-self-center"
-                                                                id="client-email-address"
-                                                            >
+                                                            <div class="align-self-center" id="client-email-address" >
                                                                 suckmyfingure@gmail.com
                                                             </div>
                                                         </div>
-                                                        <div
-                                                            class="d-flex justify-content-start align-items-center gap-2"
-                                                        >
-                                                            <div
-                                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
-                                                            >
-                                                                <i
-                                                                    class="bi bi-telephone"
-                                                                ></i>
+                                                        <div class="d-flex justify-content-start align-items-center gap-2">
+                                                            <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
+                                                                <i class="bi bi-telephone"></i>
                                                             </div>
-                                                            <div
-                                                                class="align-self-center"
-                                                                id="client-phone-contect"
-                                                            >
-                                                                09 77558822
-                                                            </div>
+                                                            <div class="align-self-center" id="client-phone-contect">09 77558822</div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div
-                                                class="tab-pane fade pt-3"
-                                                id="amount"
-                                            >
-                                                <ul
-                                                    class="list-group accordion-body p-2 rounded-end"
-                                                >
-                                                    <li
-                                                        class="list-group-item d-flex justify-content-between"
-                                                    >
+                                            <div class="tab-pane fade pt-3" id="amount">
+                                                <ul class="list-group accordion-body p-2 rounded-end">
+                                                    <li class="list-group-item d-flex justify-content-between">
                                                         Basic design
                                                         <div class="number">
-                                                            <span class="minus"
-                                                                >-</span
-                                                            >
-                                                            <input
-                                                                type="text"
-                                                                value="0"
-                                                                id="edit-basic-design-count"
-                                                            />
-                                                            <span class="plus"
-                                                                >+</span
-                                                            >
+                                                            <span class="minus">-</span>
+                                                            <input type="text" value="0" id="edit-basic-design-count"/>
+                                                            <span class="plus">+</span>
                                                         </div>
                                                     </li>
-                                                    <li
-                                                        class="list-group-item d-flex justify-content-between"
-                                                    >
+                                                    <li class="list-group-item d-flex justify-content-between">
                                                         Detail design
                                                         <div class="number">
-                                                            <span class="minus"
-                                                                >-</span
-                                                            >
-                                                            <input
-                                                                type="text"
-                                                                value="0"
-                                                                id="edit-detail-design-count"
-                                                            />
-                                                            <span class="plus"
-                                                                >+</span
-                                                            >
+                                                            <span class="minus">-</span>
+                                                            <input type="text" value="0" id="edit-detail-design-count"/>
+                                                            <span class="plus">+</span>
                                                         </div>
                                                     </li>
-                                                    <li
-                                                        class="list-group-item d-flex justify-content-between"
-                                                    >
+                                                    <li class="list-group-item d-flex justify-content-between">
                                                         Coding
                                                         <div class="number">
-                                                            <span class="minus"
-                                                                >-</span
-                                                            >
-                                                            <input
-                                                                type="text"
-                                                                value="0"
-                                                                id="edit-coding-count"
-                                                            />
-                                                            <span class="plus"
-                                                                >+</span
-                                                            >
+                                                            <span class="minus">-</span>
+                                                            <input type="text" value="0" id="edit-coding-count"/>
+                                                            <span class="plus">+</span>
                                                         </div>
                                                     </li>
-                                                    <li
-                                                        class="list-group-item d-flex justify-content-between"
-                                                    >
+                                                    <li class="list-group-item d-flex justify-content-between">
                                                         Unit testing
                                                         <div class="number">
-                                                            <span class="minus"
-                                                                >-</span
-                                                            >
-                                                            <input
-                                                                type="text"
-                                                                value="0"
-                                                                id="edit-unit-testing-count"
-                                                            />
-                                                            <span class="plus"
-                                                                >+</span
-                                                            >
+                                                            <span class="minus">-</span>
+                                                            <input type="text" value="0" id="edit-unit-testing-count"/>
+                                                            <span class="plus">+</span>
                                                         </div>
                                                     </li>
-                                                    <li
-                                                        class="list-group-item d-flex justify-content-between"
-                                                    >
+                                                    <li class="list-group-item d-flex justify-content-between">
                                                         Integrated testing
                                                         <div class="number">
-                                                            <span class="minus"
-                                                                >-</span
-                                                            >
-                                                            <input
-                                                                type="text"
-                                                                value="0"
-                                                                id="edit-integrated-testing-count"
-                                                            />
-                                                            <span class="plus"
-                                                                >+</span
-                                                            >
+                                                            <span class="minus">-</span>
+                                                            <input type="text" value="0" id="edit-integrated-testing-count"/>
+                                                            <span class="plus">+</span>
                                                         </div>
                                                     </li>
                                                 </ul>
                                                 <div class="text-center">
-                                                    <button
-                                                        class="btn btn-primary"
-                                                        style="
-                                                            background-color: #369;
-                                                        "
-                                                        id="update-amount-btn"
-                                                        >Save Amount</button
-                                                    >
+                                                    <button class="btn btn-primary" style="background-color: #369;" id="update-amount-btn">Save Amount</button>
                                                 </div>
                                             </div>
 
-                                            <div
-                                                class="tab-pane fade pt-3"
-                                                id="review"
-                                            >
+                                            <div class="tab-pane fade pt-3" id="review" >
                                                 <div class="row mb-3">
-                                                    <label
-                                                        for="project-external-review-count"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                        >External Review</label
-                                                    >
-                                                    <div
-                                                        class="col-md-8 col-lg-9"
-                                                    >
-                                                        <input
-                                                            name="project_name"
-                                                            type="number"
-                                                            class="form-control"
-                                                            min="0"
-                                                            id="project-external-review-count"
-                                                            oninput="validity.valid||(value='');"
-                                                        />
+                                                    <label for="project-external-review-count" class="col-md-4 col-lg-3 col-form-label">External Review</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="project_name" type="number" class="form-control" min="0"
+                                                               id="project-external-review-count" oninput="validity.valid||(value='');"/>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-3">
-                                                    <label
-                                                        for="project-internal-review-count"
-                                                        class="col-md-4 col-lg-3 col-form-label"
-                                                        >Internal Review</label
-                                                    >
-                                                    <div
-                                                        class="col-md-8 col-lg-9"
-                                                    >
-                                                        <input
-                                                            name="project_name"
-                                                            type="number"
-                                                            min="0"
-                                                            class="form-control"
-                                                            oninput="validity.valid||(value='');"
-                                                            id="project-internal-review-count"
-                                                        />
+                                                    <label for="project-internal-review-count" class="col-md-4 col-lg-3 col-form-label" >Internal Review</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="project_name" type="number" min="0" class="form-control"
+                                                            oninput="validity.valid||(value='');" id="project-internal-review-count"/>
                                                     </div>
                                                 </div>
                                                 <div class="text-center">
-                                                    <a
-                                                        href=""
-                                                        class="btn btn-primary"
-                                                        style="
-                                                            background-color: #369;
-                                                        "
-                                                        >Save Review</a
-                                                    >
+                                                    <a href="" class="btn btn-primary" style=" background-color: #369;">Save Review</a>
                                                 </div>
                                             </div>
 
-                                            <div
-                                                    class="tab-pane fade pt-3"
-                                                    id="edit-architecture"
-                                            >
-
-                                                <div id="architectures-list-in-edit" class="d-flex gap-2">
-
-                                                </div>
+                                            <div class="tab-pane fade pt-3" id="edit-architecture">
+                                                <div id="architectures-list-in-edit" class="d-flex gap-2"> </div>
                                             </div>
                                             <div class="tab-pane fade pt-3" id="deliverable-list">
-                                                <table id="deliverable-table">
-                                                    <tr>
-                                                        <th>Id</th>
-                                                        <th>Architecture Name</th>
-                                                    </tr>
-                                                </table>
+                                                <form id="deliverable-type-form">
+                                                    <div id="deliverable-type">
+                                                        <!-- Checkbox elements will be dynamically added here -->
+                                                    </div>
+                                                    <div  id="updateButtonCon">
+                                                    </div>
+                                                </form>
+
                                             </div>
                                 </div>
                             </div>
