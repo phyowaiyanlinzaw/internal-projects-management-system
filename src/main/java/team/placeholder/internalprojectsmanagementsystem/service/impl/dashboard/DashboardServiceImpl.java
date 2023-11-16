@@ -79,9 +79,11 @@ public class DashboardServiceImpl implements DashboardService {
                     .filter(dto -> dto.getMonthName().equals(startMonthYear))
                     .findFirst();
 
+            double planHours = tasksDto.getPlan_hours() != null ? tasksDto.getPlan_hours() : 0.0;
+
             if (existingDto.isPresent()) {
                 // If the month already exists, update the actual hours
-                double updatedHours = existingDto.get().getPlanManMonthHours() + tasksDto.getActual_hours();
+                double updatedHours = existingDto.get().getPlanManMonthHours() + planHours;
                 existingDto.get().setPlanManMonthHours(updatedHours);
             } else {
                 // If the month doesn't exist, create a new ActualManMonthDto

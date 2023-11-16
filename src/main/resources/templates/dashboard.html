@@ -353,6 +353,7 @@
                         const selectedValue = $(this).data('value');
                         //change the text of project name to the dropdown button
                         projectDropdown.text($(this).text());
+                        console.log(selectedValue)
                         updateManMonthChart(selectedValue)
                     });
 
@@ -372,6 +373,8 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (data1) {
+
+                    console.log("ACTUAL " , data1);
 
                     // Update chart data for Dataset 1
                     lineChart.data.datasets[0].data = data1.map((data) => data.actualManMonthHours);
@@ -396,6 +399,9 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (data2) {
+
+                    console.log("PLAN " , data2)
+
                     // Update chart data for Dataset 2
                     lineChart.data.datasets[1].data = data2.map((data) => data.planManMonthHours);
 

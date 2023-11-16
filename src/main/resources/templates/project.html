@@ -5,6 +5,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="layout/layout"
         xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <head>
 </head>
@@ -119,6 +120,7 @@
                                             class="btn btn-primary"
                                             data-bs-toggle="modal"
                                             data-bs-target="#add-task"
+                                            id="add-task-btn"
                                     >
                                         <i
                                                 class="bi bi-plus-circle"
@@ -778,6 +780,15 @@
         import {getUser} from "/js/currentLoginUser.js";
 
         const currentUser = await getUser();
+
+        //disable add task button if user is not project manager
+        if(currentUser.currentUser.role !== "PROJECT_MANAGER"){
+            const addTaskBtn = document.getElementById("add-task-btn");
+            addTaskBtn.disabled = true;
+
+            // Add a class to style the button on hover
+            addTaskBtn.classList.add("disabled-button");
+        }
 
         var userId;
 
