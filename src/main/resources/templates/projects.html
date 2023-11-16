@@ -81,7 +81,10 @@
             href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"
             rel="stylesheet"
         />
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js" defer></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"
+            defer
+        ></script>
         <link
             href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
             rel="stylesheet"
@@ -94,7 +97,8 @@
                 margin-top: 20px;
             }
 
-            #deliverable-table th, #deliverable-table td {
+            #deliverable-table th,
+            #deliverable-table td {
                 border: 1px solid #dddddd;
                 text-align: left;
                 padding: 8px;
@@ -173,18 +177,18 @@
             const languageList = {
                 "c#": "/images/languages/c#-min.png",
                 "c++": "/images/languages/c++-min.png",
-                "html": "/images/languages/html-min.png",
-                "java": "/images/languages/java-min.png",
-                "js": "/images/languages/js-min.png",
-                "php": "/images/languages/php-min.png",
-                "python": "/images/languages/python-min.png",
-                "ruby": "/images/languages/ruby-min.png",
-                "SQL": "/images/languages/SQL-min.png",
-                "css" : "/images/languages/css-min.png",
-                "typescript": "/images/languages/typescript-min.png"
-            }
+                html: "/images/languages/html-min.png",
+                java: "/images/languages/java-min.png",
+                js: "/images/languages/js-min.png",
+                php: "/images/languages/php-min.png",
+                python: "/images/languages/python-min.png",
+                ruby: "/images/languages/ruby-min.png",
+                SQL: "/images/languages/SQL-min.png",
+                css: "/images/languages/css-min.png",
+                typescript: "/images/languages/typescript-min.png",
+            };
 
-            console.log("await getUser " , await getUser());
+            console.log("await getUser ", await getUser());
 
             const loginUser = await getUser();
 
@@ -202,7 +206,6 @@
             console.log(clientList);
 
             const clientSelect = document.querySelector("select[id='client']");
-
 
             clientList.forEach((client) => {
                 const option = document.createElement("option");
@@ -240,8 +243,6 @@
                 });
 
                 $("#validation-form").submit(function (event) {
-
-
                     const deli =
                         this.querySelector("#deliverable").value === ""
                             ? []
@@ -310,10 +311,11 @@
 
             // Validation For Client
 
-            let validatedForm = $('#client-form');
+            let validatedForm = $("#client-form");
             function validateName() {
-                const name = $('#client-name').val();
-                const errorContainer = $('#client-name').siblings('.error-container');
+                const name = $("#client-name").val();
+                const errorContainer =
+                    $("#client-name").siblings(".error-container");
                 if (name.length < 1) {
                     validatedForm = false;
                     if (errorContainer.length === 0) {
@@ -321,28 +323,33 @@
                             .addClass("text-danger fs-6")
                             .text("Name is required")
                             .css("margin", "0")
-                            .addClass('error-message');
+                            .addClass("error-message");
 
-                        $('#client-name').after('<div class="error-container"></div>');
-                        $('#client-name').siblings('.error-container').append(p);
+                        $("#client-name").after(
+                            '<div class="error-container"></div>'
+                        );
+                        $("#client-name")
+                            .siblings(".error-container")
+                            .append(p);
                     }
 
-                    $('#client-name').addClass('is-invalid');
-                    $('#client-name').removeClass('is-valid');
+                    $("#client-name").addClass("is-invalid");
+                    $("#client-name").removeClass("is-valid");
                 } else {
                     validatedForm = true;
                     errorContainer.remove();
-                    $('#client-name').addClass('is-valid');
-                    $('#client-name').removeClass('is-invalid');
+                    $("#client-name").addClass("is-valid");
+                    $("#client-name").removeClass("is-invalid");
                 }
             }
 
             function validateEmail() {
-                const email = $('#client-email').val()
+                const email = $("#client-email").val();
                 const emailRegex =
                     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-                const errorContainer = $('#client-email').siblings('.error-container');
+                const errorContainer =
+                    $("#client-email").siblings(".error-container");
                 if (emailRegex.test(email) === false) {
                     validatedForm = false;
                     if (errorContainer.length === 0) {
@@ -350,25 +357,29 @@
                             .addClass("text-danger fs-6")
                             .text("Email is required")
                             .css("margin", "0")
-                            .addClass('error-message');
+                            .addClass("error-message");
 
-                        $('#client-email').after('<div class="error-container"></div>');
-                        $('#client-email').siblings('.error-container').append(p);
+                        $("#client-email").after(
+                            '<div class="error-container"></div>'
+                        );
+                        $("#client-email")
+                            .siblings(".error-container")
+                            .append(p);
                     }
 
-                    $('#client-email').addClass('is-invalid');
-                    $('#client-email').removeClass('is-valid');
+                    $("#client-email").addClass("is-invalid");
+                    $("#client-email").removeClass("is-valid");
                 } else {
                     validatedForm = true;
                     errorContainer.remove();
-                    $('#client-email').addClass('is-valid');
-                    $('#client-email').removeClass('is-invalid');
+                    $("#client-email").addClass("is-valid");
+                    $("#client-email").removeClass("is-invalid");
                 }
-                
             }
             function validatePhone() {
-                const phone = $('#client-phone').val();
-                const errorContainer = $('#client-phone').siblings('.error-container');
+                const phone = $("#client-phone").val();
+                const errorContainer =
+                    $("#client-phone").siblings(".error-container");
 
                 // Check for the phone number pattern
                 const isValidPhone = /^[0-9]{11}$/.test(phone);
@@ -377,42 +388,47 @@
                     if (errorContainer.length === 0) {
                         let p = $("<p>")
                             .addClass("text-danger fs-6")
-                            .text("Please enter a valid phone number with 11 digits.")
+                            .text(
+                                "Please enter a valid phone number with 11 digits."
+                            )
                             .css("margin", "0")
-                            .addClass('error-message');
+                            .addClass("error-message");
 
-                        $('#client-phone').after('<div class="error-container"></div>');
-                        $('#client-phone').siblings('.error-container').append(p);
+                        $("#client-phone").after(
+                            '<div class="error-container"></div>'
+                        );
+                        $("#client-phone")
+                            .siblings(".error-container")
+                            .append(p);
                     }
 
-                    $('#client-phone').addClass('is-invalid');
-                    $('#client-phone').removeClass('is-valid');
+                    $("#client-phone").addClass("is-invalid");
+                    $("#client-phone").removeClass("is-valid");
                 } else {
                     validatedForm = true;
                     errorContainer.remove();
-                    $('#client-phone').addClass('is-valid');
-                    $('#client-phone').removeClass('is-invalid');
+                    $("#client-phone").addClass("is-valid");
+                    $("#client-phone").removeClass("is-invalid");
                 }
             }
             function validateClient() {
-           validateName();
-           validateEmail();
-           validatePhone();
-           return validatedForm;
+                validateName();
+                validateEmail();
+                validatePhone();
+                return validatedForm;
+            }
 
-        }
+            $("#client-name").on("input", function () {
+                validateName();
+            });
 
-        $('#client-name').on('input', function () {
-            validateName();
-        });
+            $("#client-email").on("input", function () {
+                validateEmail();
+            });
 
-        $('#client-email').on('input', function () {
-            validateEmail();
-        });
-
-        $('#client-phone').on('input', function () {
-            validatePhone();
-        });
+            $("#client-phone").on("input", function () {
+                validatePhone();
+            });
 
             document
                 .querySelector("#client-form")
@@ -423,7 +439,7 @@
                     let email = document.querySelector("#client-email").value;
                     let phone = document.querySelector("#client-phone").value;
 
-                    if(!validateClient()){
+                    if (!validateClient()) {
                         return;
                     }
 
@@ -433,12 +449,12 @@
                         phone: phone,
                     };
 
-                    console.log(clientDto)
+                    console.log(clientDto);
 
                     $.ajax({
-                      method: "POST",
+                        method: "POST",
                         url: "/api/client/save",
-                        data : JSON.stringify(clientDto),
+                        data: JSON.stringify(clientDto),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (response) {
@@ -452,11 +468,13 @@
                             document.querySelector("#client-phone").value = "";
                         },
                         error: function (error) {
-                            console.error("Error in Url : /api/cleient/save ", error);
+                            console.error(
+                                "Error in Url : /api/cleient/save ",
+                                error
+                            );
                         },
-                    })
+                    });
                 });
-
 
             const projectObjectiveEditor =
                 document.querySelector(".quill-editor-full");
@@ -606,9 +624,9 @@
             for (let i = pList.length - 1; i >= 0; i--) {
                 let currentProject = pList[i];
 
-                console.log("current project : ",currentProject)
-                console.log(currentProject.totalTaskCount)
-                console.log(currentProject.completeTaskCount)
+                console.log("current project : ", currentProject);
+                console.log(currentProject.totalTaskCount);
+                console.log(currentProject.completeTaskCount);
 
                 const div = document.createElement("div");
                 div.classList.add(
@@ -641,7 +659,8 @@
                 h2.innerText = currentProject.name;
 
                 const pm_name_modal = document.getElementById("pm-name-modal");
-                pm_name_modal.innerText = currentProject.projectManagerUserDto.name;
+                pm_name_modal.innerText =
+                    currentProject.projectManagerUserDto.name;
 
                 const dFlexBetween = document.createElement("div");
                 dFlexBetween.classList.add("d-flex", "justify-content-between");
@@ -714,20 +733,23 @@
                 progressCircle.setAttribute("data-min-value", "0");
                 progressCircle.setAttribute("data-max-value", "100");
 
-
                 let percentage;
-                console.log("taks ratio : ",currentProject.completeTaskCount, currentProject.totalTaskCount)
-                if(currentProject.totalTaskCount !== 0){
-                    percentage= currentProject.completeTaskCount / currentProject.totalTaskCount * 100;
+                console.log(
+                    "taks ratio : ",
+                    currentProject.completeTaskCount,
+                    currentProject.totalTaskCount
+                );
+                if (currentProject.totalTaskCount !== 0) {
+                    percentage =
+                        (currentProject.completeTaskCount /
+                            currentProject.totalTaskCount) *
+                        100;
                 } else {
                     percentage = 0;
                 }
-                console.log("percentage",percentage);
+                console.log("percentage", percentage);
 
-                progressCircle.setAttribute(
-                    "data-value",
-                    percentage
-                );
+                progressCircle.setAttribute("data-value", percentage);
                 progressCircle.setAttribute("data-type", "percent");
 
                 dFlexInner.appendChild(img);
@@ -756,11 +778,11 @@
 
                 // Get the year, month, and day from the Date object
                 const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
-                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1
+                const day = String(date.getDate()).padStart(2, "0");
 
                 // Create the formatted date string
-                const formattedDate = year + '-' + month + '-' + day;
+                const formattedDate = year + "-" + month + "-" + day;
 
                 return formattedDate;
             }
@@ -772,58 +794,79 @@
                     let id = parseInt(target.getAttribute("id"));
                     let targetData = pList.find((a) => a.id == id);
 
-                    const currentProejctDetail = await getData(`/api/project/list/${id}`);
+                    const currentProejctDetail = await getData(
+                        `/api/project/list/${id}`
+                    );
 
-                    console.log(currentProejctDetail)
+                    console.log(currentProejctDetail);
 
                     document.querySelector(
                         "#project-detail-background"
                     ).innerText = currentProejctDetail.background;
 
-                    document.querySelector("#architectures-list-in-edit").textContent = ''
+                    document.querySelector(
+                        "#architectures-list-in-edit"
+                    ).textContent = "";
 
-                    currentProejctDetail.architectureDto.forEach(a => {
-
+                    currentProejctDetail.architectureDto.forEach((a) => {
                         const div = document.createElement("div");
 
-                        div.classList.add("d-flex", "gap-2", "align-items-center", "justify-content-center");
+                        div.classList.add(
+                            "d-flex",
+                            "gap-2",
+                            "align-items-center",
+                            "justify-content-center"
+                        );
 
                         const image = document.createElement("img");
 
-                        image.style.width = "40px"
-                        image.loading = "lazy"
+                        image.style.width = "40px";
+                        image.loading = "lazy";
 
                         if (languageList[a.tech_name]) {
-                            image.setAttribute("src", languageList[a.tech_name]);
+                            image.setAttribute(
+                                "src",
+                                languageList[a.tech_name]
+                            );
                         } else {
                             // Handle the case where the language is not found in the map
-                            image.setAttribute("src", "/images/languages/default.png");
+                            image.setAttribute(
+                                "src",
+                                "/images/languages/default.png"
+                            );
                         }
 
                         div.appendChild(image);
 
                         const p = document.createElement("p");
                         p.textContent = a.tech_name;
-                        p.classList.add("fs-6", "fw-bold")
+                        p.classList.add("fs-6", "fw-bold");
                         div.appendChild(p);
 
-                        document.querySelector("#architectures-list-in-edit").appendChild(div);
-                    })
+                        document
+                            .querySelector("#architectures-list-in-edit")
+                            .appendChild(div);
+                    });
 
                     //------------------------ architecture list end
 
                     //------------------------ deliverable list start
-                    document.querySelector("#deliverable-type").textContent = ''
-                   let deliverableId;
-                    targetData.deliverableDto.forEach(a => {
+                    document.querySelector("#deliverable-type").textContent =
+                        "";
+                    let deliverableId;
+                    targetData.deliverableDto.forEach((a) => {
                         const div = document.createElement("div");
-                        div.classList.add("d-flex", "gap-2", "align-items-center", "justify-content-center");
+                        div.classList.add(
+                            "d-flex",
+                            "gap-2",
+                            "align-items-center",
+                            "justify-content-center"
+                        );
 
                         deliverableId = a.id;
-                        const input = document.createElement('input');
-                        input.type = 'checkbox';
-                        input.setAttribute("id", `checkbox-${a.id}`)
-
+                        const input = document.createElement("input");
+                        input.type = "checkbox";
+                        input.setAttribute("id", `checkbox-${a.id}`);
 
                         if (a.status) {
                             input.checked = true;
@@ -831,57 +874,71 @@
 
                         const p = document.createElement("p");
                         p.textContent = a.deliverableType.type;
-                        console.log(a.status)
-                        console.log(a.deliverableType.type)
+                        console.log(a.status);
+                        console.log(a.deliverableType.type);
                         p.classList.add("fs-6", "fw-bold");
                         div.appendChild(p);
-                        div.appendChild(input)
+                        div.appendChild(input);
 
-                        document.querySelector("#deliverable-type").appendChild(div);
+                        document
+                            .querySelector("#deliverable-type")
+                            .appendChild(div);
                     });
                     //_______________________________________deliverable list end
-
 
                     //_______________________________________deliverable update alert box put
 
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-                        const updateButtonCon = document.getElementById("updateButtonCon");
-                        updateButtonCon.innerHTML = '<button id="deliverable-type-form" type="button" class="btn btn-primary">Update</button>';
-                        document.querySelector("#deliverable-type-form").addEventListener("submit", function (event) {
-                            event.preventDefault();
+                        const updateButtonCon =
+                            document.getElementById("updateButtonCon");
+                        updateButtonCon.innerHTML =
+                            '<button id="deliverable-type-form" type="button" class="btn btn-primary">Update</button>';
+                        document
+                            .querySelector("#deliverable-type-form")
+                            .addEventListener("submit", function (event) {
+                                event.preventDefault();
 
-                            let deliverableList = [];
+                                let deliverableList = [];
 
-                            targetData.deliverableDto.forEach(a => {
-                                const checkbox = document.querySelector(`#checkbox-${a.id}`);
+                                targetData.deliverableDto.forEach((a) => {
+                                    const checkbox = document.querySelector(
+                                        `#checkbox-${a.id}`
+                                    );
 
-                                if (checkbox.checked) {
-                                    deliverableList.push({id: a.id, status: true})
-                                }
-                            });
-
-
-                            console.log("deliverable", deliverableList);
-
-                            fetch(`/api/deliverable/update-status`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify(deliverableList),
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log('Status updated successfully:', data);
-                                })
-                                .catch(error => {
-                                    console.error('Error updating status:', error);
+                                    if (checkbox.checked) {
+                                        deliverableList.push({
+                                            id: a.id,
+                                            status: true,
+                                        });
+                                    }
                                 });
-                        });
+
+                                console.log("deliverable", deliverableList);
+
+                                fetch(`/api/deliverable/update-status`, {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(deliverableList),
+                                })
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                        console.log(
+                                            "Status updated successfully:",
+                                            data
+                                        );
+                                    })
+                                    .catch((error) => {
+                                        console.error(
+                                            "Error updating status:",
+                                            error
+                                        );
+                                    });
+                            });
                     }
 
                     //____________________________________________________deliverable update end
-
 
                     document.querySelector("#project-detail-name").value =
                         currentProejctDetail.name;
@@ -896,11 +953,18 @@
                         }
                     );
 
-                    document.querySelector("#navigate-task").href = `/project/${currentProejctDetail.id}`
+                    document.querySelector(
+                        "#navigate-task"
+                    ).href = `/project/${currentProejctDetail.id}`;
 
-                    document.querySelector("#current-edditing-projetc-id").value = currentProejctDetail.id;
+                    document.querySelector(
+                        "#current-edditing-projetc-id"
+                    ).value = currentProejctDetail.id;
 
-                    console.log(document.querySelector("#current-edditing-projetc-id").value)
+                    console.log(
+                        document.querySelector("#current-edditing-projetc-id")
+                            .value
+                    );
 
                     objectiveQuill.enable(false);
 
@@ -913,20 +977,26 @@
                         currentProejctDetail.duration;
 
                     document.querySelector("#start-date").value =
-                        formmatDateFromMillisecondForEdit(currentProejctDetail.start_date);
+                        formmatDateFromMillisecondForEdit(
+                            currentProejctDetail.start_date
+                        );
 
                     document.querySelector("#end-date-in-edit").value =
-                        formatDateFromMilliseconds(currentProejctDetail.end_date);
+                        formatDateFromMilliseconds(
+                            currentProejctDetail.end_date
+                        );
 
-                    const phaseOptionList = document.querySelectorAll("#edit-project-phase option")
+                    const phaseOptionList = document.querySelectorAll(
+                        "#edit-project-phase option"
+                    );
 
-                    console.log(phaseOptionList)
+                    console.log(phaseOptionList);
 
-                    phaseOptionList.forEach(a => {
+                    phaseOptionList.forEach((a) => {
                         if (a.value === currentProejctDetail.current_phase) {
-                            a.selected = true
+                            a.selected = true;
                         }
-                    })
+                    });
 
                     editObjectiveEditor.clipboard.dangerouslyPasteHTML(
                         0,
@@ -943,17 +1013,31 @@
                         currentProejctDetail.start_date,
                         currentProejctDetail.end_date
                     );
-                    detailMoal.querySelector("#basic-design-count").innerText = currentProejctDetail.amountDto.basic_design;
-                    detailMoal.querySelector("#detail-design-count").innerText = currentProejctDetail.amountDto.detail_design;
-                    detailMoal.querySelector("#coding-count").innerText = currentProejctDetail.amountDto.coding;
-                    detailMoal.querySelector("#unit-testing-count").innerText = currentProejctDetail.amountDto.unit_testing;
-                    detailMoal.querySelector("#integrated-testing-count").innerText = currentProejctDetail.amountDto.integrated_testing;
+                    detailMoal.querySelector("#basic-design-count").innerText =
+                        currentProejctDetail.amountDto.basic_design;
+                    detailMoal.querySelector("#detail-design-count").innerText =
+                        currentProejctDetail.amountDto.detail_design;
+                    detailMoal.querySelector("#coding-count").innerText =
+                        currentProejctDetail.amountDto.coding;
+                    detailMoal.querySelector("#unit-testing-count").innerText =
+                        currentProejctDetail.amountDto.unit_testing;
+                    detailMoal.querySelector(
+                        "#integrated-testing-count"
+                    ).innerText =
+                        currentProejctDetail.amountDto.integrated_testing;
 
-                    detailMoal.querySelector("#edit-basic-design-count").value = currentProejctDetail.amountDto.basic_design;
-                    detailMoal.querySelector("#edit-detail-design-count").value = currentProejctDetail.amountDto.detail_design;
-                    detailMoal.querySelector("#edit-coding-count").value = currentProejctDetail.amountDto.coding;
-                    detailMoal.querySelector("#edit-unit-testing-count").value = currentProejctDetail.amountDto.unit_testing;
-                    detailMoal.querySelector("#edit-integrated-testing-count").value = currentProejctDetail.amountDto.integrated_testing;
+                    detailMoal.querySelector("#edit-basic-design-count").value =
+                        currentProejctDetail.amountDto.basic_design;
+                    detailMoal.querySelector(
+                        "#edit-detail-design-count"
+                    ).value = currentProejctDetail.amountDto.detail_design;
+                    detailMoal.querySelector("#edit-coding-count").value =
+                        currentProejctDetail.amountDto.coding;
+                    detailMoal.querySelector("#edit-unit-testing-count").value =
+                        currentProejctDetail.amountDto.unit_testing;
+                    detailMoal.querySelector(
+                        "#edit-integrated-testing-count"
+                    ).value = currentProejctDetail.amountDto.integrated_testing;
 
                     detailMoal.querySelector(".modal-title").innerText =
                         currentProejctDetail.name;
@@ -966,60 +1050,79 @@
                     ).innerHTML = currentProejctDetail.departmentDto.name;
                     detailMoal.querySelector(
                         "#project-internal-review-count"
-                    ).value = currentProejctDetail.reviewDto.internal_review_count;
+                    ).value =
+                        currentProejctDetail.reviewDto.internal_review_count;
                     detailMoal.querySelector(
                         "#project-external-review-count"
-                    ).value = currentProejctDetail.reviewDto.external_review_count;
+                    ).value =
+                        currentProejctDetail.reviewDto.external_review_count;
                     //______________________________________________
 
                     //_______________review update
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+                        const updateButtonContainer = document.getElementById(
+                            "updateButtonContainer"
+                        );
+                        updateButtonContainer.innerHTML =
+                            '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
+                        document
+                            .querySelector("#updateButton")
+                            .addEventListener("click", async function () {
+                                var internalReviewCount =
+                                    document.getElementById(
+                                        "project-internal-review-count"
+                                    ).value;
+                                var externalReviewCount =
+                                    document.getElementById(
+                                        "project-external-review-count"
+                                    ).value;
 
-                        const updateButtonContainer = document.getElementById("updateButtonContainer");
-                        updateButtonContainer.innerHTML = '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
-                    document.querySelector("#updateButton").addEventListener("click", async function () {
+                                var data = {
+                                    internal_review_count: internalReviewCount,
+                                    external_review_count: externalReviewCount,
+                                };
 
-                        var internalReviewCount = document.getElementById("project-internal-review-count").value;
-                        var externalReviewCount = document.getElementById("project-external-review-count").value;
-
-
-                        var data = {
-                            internal_review_count: internalReviewCount,
-                            external_review_count: externalReviewCount
-                        };
-
-
-                        fetch("/api/review/update-review/" + targetData.id, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data),
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log('Review counts updated successfully:', data);
-
-                            })
-                            .catch(error => {
-                                console.error('Error updating review counts:', error);
-
+                                fetch(
+                                    "/api/review/update-review/" +
+                                        targetData.id,
+                                    {
+                                        method: "PUT",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify(data),
+                                    }
+                                )
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                        console.log(
+                                            "Review counts updated successfully:",
+                                            data
+                                        );
+                                    })
+                                    .catch((error) => {
+                                        console.error(
+                                            "Error updating review counts:",
+                                            error
+                                        );
+                                    });
                             });
-                    });
-
-
-
                     }
-
 
                     //____________________________________reveiw update end
                     detailMoal.querySelector(
                         "#project-duration"
-                    ).innerText = `${currentProejctDetail.duration} ${currentProejctDetail.duration < 1 ? " month" : " months"}`;
+                    ).innerText = `${currentProejctDetail.duration} ${
+                        currentProejctDetail.duration < 1 ? " month" : " months"
+                    }`;
                     detailMoal.querySelector("#project-start-date").innerText =
-                        formatDateFromMilliseconds(currentProejctDetail.start_date);
+                        formatDateFromMilliseconds(
+                            currentProejctDetail.start_date
+                        );
                     detailMoal.querySelector("#project-end-date").innerText =
-                        formatDateFromMilliseconds(currentProejctDetail.end_date);
+                        formatDateFromMilliseconds(
+                            currentProejctDetail.end_date
+                        );
                     detailMoal.querySelector(
                         "#project-current-phase"
                     ).innerText = currentProejctDetail.current_phase;
@@ -1037,97 +1140,143 @@
                 //_____________________________________________
             });
 
-            const editProjectObjective = document.querySelector("#edit-project-objective");
+            const editProjectObjective = document.querySelector(
+                "#edit-project-objective"
+            );
 
+            document
+                .querySelector("#project-detail-edit-form")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
 
-            document.querySelector("#project-detail-edit-form").addEventListener("submit", function (e) {
-                e.preventDefault()
+                    const editingProjectId = document.querySelector(
+                        "#current-edditing-projetc-id"
+                    ).value;
 
-                const editingProjectId = document.querySelector("#current-edditing-projetc-id").value;
+                    const project = {
+                        id: parseInt(editingProjectId),
+                        name: document.querySelector("#project-detail-name")
+                            .value,
+                        duration: parseInt(
+                            document.querySelector("#project-edit-duration")
+                                .value
+                        ),
+                        start_date: new Date(
+                            document.querySelector("#start-date").value
+                        ).getTime(),
+                        background: document.querySelector(
+                            "#project-detail-background"
+                        ).value,
+                        end_date: new Date(
+                            document.querySelector("#end-date-in-edit").value
+                        ).getTime(),
+                        current_phase: document.querySelector(
+                            "#edit-project-phase"
+                        ).value,
+                        objective: editObjectiveEditor.root.innerHTML,
+                    };
 
-                const project = {
-                    id: parseInt(editingProjectId),
-                    name: document.querySelector("#project-detail-name").value,
-                    duration: parseInt(document.querySelector("#project-edit-duration").value),
-                    start_date: new Date(document.querySelector("#start-date").value).getTime(),
-                    background: document.querySelector("#project-detail-background").value,
-                    end_date: new Date(document.querySelector("#end-date-in-edit").value).getTime(),
-                    current_phase: document.querySelector("#edit-project-phase").value,
-                    objective: editObjectiveEditor.root.innerHTML
-                }
+                    Swal.fire({
+                        title: "Are you sure want to save?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log(project);
 
+                            $.ajax({
+                                url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
+                                type: "PUT",
+                                data: JSON.stringify(project),
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                success: async function (data) {
+                                    // Reset the form if needed
+                                    console.log(
+                                        "this projce has benn saved",
+                                        data
+                                    );
+                                    // event.currentTarget.submit();
+                                    const currentUpdatedProject =
+                                        document.querySelector(
+                                            "#project-" + editingProjectId
+                                        );
+                                    currentUpdatedProject.querySelector(
+                                        ".card-title"
+                                    ).innerText = data.name;
+                                },
+                                error: function (data) {
+                                    alert("Error registering project");
+                                    // event.currentTarget.submit();
+                                },
+                            });
+                        }
+                    });
+                });
 
+            if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+                const updateButtonC =
+                    document.getElementById("updateButtonCon");
+                updateButtonC.innerHTML =
+                    '<button id="update" type="button" class="btn btn-primary">Update</button>';
 
-                Swal.fire({
-                    title: "Are you sure want to edit?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes"
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                document
+                    .querySelector("#update")
+                    .addEventListener("click", function (e) {
+                        const projectId = parseInt(
+                            document.querySelector(
+                                "#current-edditing-projetc-id"
+                            ).value
+                        );
 
-                        console.log(project)
+                        const amountDto = {
+                            basic_design: parseInt(
+                                document.querySelector(
+                                    "#edit-basic-design-count"
+                                ).value
+                            ),
+                            detail_design: parseInt(
+                                document.querySelector(
+                                    "#edit-detail-design-count"
+                                ).value
+                            ),
+                            coding: parseInt(
+                                document.querySelector("#edit-coding-count")
+                                    .value
+                            ),
+                            unit_testing: parseInt(
+                                document.querySelector(
+                                    "#edit-unit-testing-count"
+                                ).value
+                            ),
+                            integrated_testing: parseInt(
+                                document.querySelector(
+                                    "#edit-integrated-testing-count"
+                                ).value
+                            ),
+                        };
 
                         $.ajax({
-                            url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
+                            url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
                             type: "PUT",
-                            data: JSON.stringify(project),
+                            data: JSON.stringify(amountDto),
                             dataType: "json",
                             contentType: "application/json; charset=utf-8",
                             success: async function (data) {
-                            // Reset the form if needed
-                            console.log("this projce has benn saved", data);
-                            // event.currentTarget.submit();
-                            const currentUpdatedProject = document.querySelector("#project-" + editingProjectId);
-                            currentUpdatedProject.querySelector(".card-title").innerText = data.name;
+                                alert("Project registered successfully");
+                                // Reset the form if needed
+                                console.log("this projce has benn saved", data);
+                                // event.currentTarget.submit();
                             },
                             error: function (data) {
-                            alert("Error registering project");
-                            // event.currentTarget.submit();
-
+                                alert("Error registering project");
+                                // event.currentTarget.submit();
                             },
                         });
-                    }
-                });
-            });
-
-            if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-
-                const updateButtonC = document.getElementById("updateButtonC");
-                updateButtonC.innerHTML = '<button id="update" type="button" class="btn btn-primary">Update</button>';
-
-                document.querySelector("#update").addEventListener("click", function (e) {
-
-                    const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
-
-                    const amountDto = {
-                        basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
-                        detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
-                        coding: parseInt(document.querySelector("#edit-coding-count").value),
-                        unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
-                        integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
-                    }
-
-                    $.ajax({
-                        url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
-                        type: "PUT",
-                        data: JSON.stringify(amountDto),
-                        dataType: "json",
-                        contentType: "application/json; charset=utf-8",
-                        success: async function (data) {
-                            alert("Project registered successfully");
-                            // Reset the form if needed
-                            console.log("this projce has benn saved", data);
-                            // event.currentTarget.submit();
-                        },
-                        error: function (data) {
-                            alert("Error registering project");
-                            // event.currentTarget.submit();
-                        },
                     });
-                })
             }
 
             const sortProjectByDepartment = await getData(
@@ -1139,12 +1288,22 @@
                 .addEventListener("change", function () {
                     const allDiv = motherContainer.children;
                     const selectedDepartmentId = this.value;
-                    console.log(sortProjectByDepartment)
-                    console.log(selectedDepartmentId)
-                    console.log(sortProjectByDepartment[parseInt(selectedDepartmentId)])
-                    if (sortProjectByDepartment.hasOwnProperty(parseInt(selectedDepartmentId))) {
+                    console.log(sortProjectByDepartment);
+                    console.log(selectedDepartmentId);
+                    console.log(
+                        sortProjectByDepartment[parseInt(selectedDepartmentId)]
+                    );
+                    if (
+                        sortProjectByDepartment.hasOwnProperty(
+                            parseInt(selectedDepartmentId)
+                        )
+                    ) {
                         for (let i = 0; i < allDiv.length; i++) {
-                            if (sortProjectByDepartment[selectedDepartmentId].includes(parseInt(allDiv[i].id.split("-")[1]))) {
+                            if (
+                                sortProjectByDepartment[
+                                    selectedDepartmentId
+                                ].includes(parseInt(allDiv[i].id.split("-")[1]))
+                            ) {
                                 allDiv[i].style.display = "block";
                             } else {
                                 allDiv[i].style.display = "none";
@@ -1257,16 +1416,22 @@
 
             let employeeList;
 
-            if(loginUser.currentUser.role === 'PROJECT_MANAGER') {
-
-                employeeList = await getData("/api/currentuser/available/employees");
+            if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+                employeeList = await getData(
+                    "/api/currentuser/available/employees"
+                );
             }
 
-            if(loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO') {
-                document.querySelector("#department-filter-container").classList.remove("d-none");
+            if (
+                loginUser.currentUser.role === "SDQC" ||
+                loginUser.currentUser.role === "PMO"
+            ) {
+                document
+                    .querySelector("#department-filter-container")
+                    .classList.remove("d-none");
             }
 
-            console.log("EMPLOYEE LIST : " , employeeList);
+            console.log("EMPLOYEE LIST : ", employeeList);
 
             let empTagifyList = [];
 
@@ -1313,24 +1478,25 @@
                         );
                     });
 
-                document.querySelector("#start-date").addEventListener("change", function () {
-                    const projectDruation = document.querySelector(
-                        "#project-edit-duration"
-                    ).value;
+                document
+                    .querySelector("#start-date")
+                    .addEventListener("change", function () {
+                        const projectDruation = document.querySelector(
+                            "#project-edit-duration"
+                        ).value;
 
-                    const projectEndDate = document.querySelector(
-                        "#end-date-in-edit"
-                    );
+                        const projectEndDate =
+                            document.querySelector("#end-date-in-edit");
 
-                    const endDate = calculateEndDate(
-                        new Date(this.value).getTime(),
-                        projectDruation
-                    );
+                        const endDate = calculateEndDate(
+                            new Date(this.value).getTime(),
+                            projectDruation
+                        );
 
-                    projectEndDate.value = formatDateFromMilliseconds(
-                        endDate.getTime()
-                    );
-                });
+                        projectEndDate.value = formatDateFromMilliseconds(
+                            endDate.getTime()
+                        );
+                    });
 
                 document
                     .querySelector("#project-add-duration")
@@ -1357,37 +1523,38 @@
                         }
                     });
 
-                document.querySelector("#project-edit-duration").addEventListener("input", function () {
-                    const projectStartDate =
-                        document.querySelector("#start-date").value;
+                document
+                    .querySelector("#project-edit-duration")
+                    .addEventListener("input", function () {
+                        const projectStartDate =
+                            document.querySelector("#start-date").value;
 
-                    if (projectStartDate !== "") {
-                        const projectEndDate = document.querySelector(
-                            "#end-date-in-edit"
-                        );
+                        if (projectStartDate !== "") {
+                            const projectEndDate =
+                                document.querySelector("#end-date-in-edit");
 
-                        // Calculate the end date only when there's a valid start date
-                        const endDate = calculateEndDate(
-                            new Date(projectStartDate).getTime(),
-                            this.value
-                        );
+                            // Calculate the end date only when there's a valid start date
+                            const endDate = calculateEndDate(
+                                new Date(projectStartDate).getTime(),
+                                this.value
+                            );
 
-                        // Check if endDate is not NaN
-                        if (!isNaN(endDate)) {
-                            projectEndDate.value =
-                                formatDateFromMilliseconds(endDate);
+                            // Check if endDate is not NaN
+                            if (!isNaN(endDate)) {
+                                projectEndDate.value =
+                                    formatDateFromMilliseconds(endDate);
+                            }
                         }
-                    }
-                });
+                    });
 
-
-                // Validation for project
                 let validatedProjectForm = false;
 
                 console.log("validation eeee");
+
                 function validateProjectName() {
-                    const prjName = $('#name').val();
-                    const errorContainer = $('#name').siblings('.error-container');
+                    const prjName = $("#name").val();
+                    const errorContainer =
+                        $("#name").siblings(".error-container");
 
                     if (prjName.trim().length < 1) {
                         validatedProjectForm = false;
@@ -1396,129 +1563,146 @@
                                 .addClass("text-danger fs-6")
                                 .text("Project Name is required")
                                 .css("margin", "0");
-                            $('#name').after('<div class="error-container"></div>');
-                            $('#name').siblings('.error-container').append(p);
+                            $("#name").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#name").siblings(".error-container").append(p);
                         }
-                        $('#name').addClass('is-invalid');
-                        $('#name').removeClass('is-valid');
+                        $("#name").addClass("is-invalid");
+                        $("#name").removeClass("is-valid");
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#name').addClass('is-valid');
-                        $('#name').removeClass('is-invalid');
+                        $("#name").addClass("is-valid");
+                        $("#name").removeClass("is-invalid");
                     }
                 }
 
                 function validateProjectClient() {
-                    const prjclient = $('#client').val();
-                    const errorContainer = $('#client').siblings('.error-container');
-                    if (!prjclient  || prjclient .length === 0) {
-                        validatedProjectForm  = false;
+                    const prjclient = $("#client").val();
+                    const errorContainer =
+                        $("#client").siblings(".error-container");
+                    if (!prjclient || prjclient.length === 0) {
+                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
                                 .text("Client is required")
                                 .css("margin", "0")
-                                .addClass('error-message');
+                                .addClass("error-message");
 
-                            $('#client').after('<div class="error-container"></div>');
-                            $('#client').siblings('.error-container').append(p);
+                            $("#client").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#client").siblings(".error-container").append(p);
                         }
 
-                        $('#client').addClass('is-invalid');
-                        $('#client').removeClass('is-valid');
+                        $("#client").addClass("is-invalid");
+                        $("#client").removeClass("is-valid");
                     } else {
-                        validatedProjectForm  = true;
+                        validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#client').addClass('is-valid');
-                        $('#client').removeClass('is-invalid');
+                        $("#client").addClass("is-valid");
+                        $("#client").removeClass("is-invalid");
                     }
                 }
 
-
                 function validateProjectEmployee() {
-                    const employeelist = $('#employee-list').val();
-                    const errorContainer = $('#employee-list').siblings('.error-container');
-                    if (!employeelist  || employeelist .length === 0) {
-                        validatedProjectForm  = false;
+                    const employeelist = $("#employee-list").val();
+                    const errorContainer =
+                        $("#employee-list").siblings(".error-container");
+                    if (!employeelist || employeelist.length === 0) {
+                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
                                 .text("Employee is required")
                                 .css("margin", "0")
-                                .addClass('error-message');
+                                .addClass("error-message");
 
-                            $('#employee-list').after('<div class="error-container"></div>');
-                            $('#employee-list').siblings('.error-container').append(p);
+                            $("#employee-list").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#employee-list")
+                                .siblings(".error-container")
+                                .append(p);
                         }
 
-                        $('#employee-list').css('border', '1px solid #dc3545');
+                        $("#employee-list").css("border", "1px solid #dc3545");
                     } else {
-                        validatedProjectForm  = true;
+                        validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#employee-list').css('border', '1px solid #28a745');
-
+                        $("#employee-list").css("border", "1px solid #28a745");
                     }
                 }
 
-
                 function validatePrjDuration() {
-                    const prjduration = $('#project-add-duration').val();
-                    const errorContainer = $('#project-add-duration').siblings('.error-container');
+                    const prjduration = $("#project-add-duration").val();
+                    const errorContainer = $("#project-add-duration").siblings(
+                        ".error-container"
+                    );
                     if (prjduration.length < 1) {
-                        validatedProjectForm  = false;
+                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
                                 .text("End duration is required")
                                 .css("margin", "0")
-                                .addClass('error-message');
+                                .addClass("error-message");
 
-                            $('#project-add-duration').after('<div class="error-container"></div>');
-                            $('#project-add-duration').siblings('.error-container').append(p);
+                            $("#project-add-duration").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#project-add-duration")
+                                .siblings(".error-container")
+                                .append(p);
                         }
 
-                        $('#project-add-duration').addClass('is-invalid');
-                        $('#project-add-duration').removeClass('is-valid');
+                        $("#project-add-duration").addClass("is-invalid");
+                        $("#project-add-duration").removeClass("is-valid");
                     } else {
-                        validatedProjectForm  = true;
+                        validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#project-add-duration').addClass('is-valid');
-                        $('#project-add-duration').removeClass('is-invalid');
+                        $("#project-add-duration").addClass("is-valid");
+                        $("#project-add-duration").removeClass("is-invalid");
                     }
                 }
 
-
                 function validatePrjBackground() {
-                    const background = $('#background').val();
-                    const errorContainer = $('#background').siblings('.error-container');
+                    const background = $("#background").val();
+                    const errorContainer =
+                        $("#background").siblings(".error-container");
                     if (background.length < 1) {
-                        validatedProjectForm  = false;
+                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
                                 .text("Background is required")
                                 .css("margin", "0")
-                                .addClass('error-message');
+                                .addClass("error-message");
 
-                            $('#background').after('<div class="error-container"></div>');
-                            $('#background').siblings('.error-container').append(p);
+                            $("#background").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#background")
+                                .siblings(".error-container")
+                                .append(p);
                         }
 
-                        $('#background').addClass('is-invalid');
-                        $('#background').removeClass('is-valid');
+                        $("#background").addClass("is-invalid");
+                        $("#background").removeClass("is-valid");
                     } else {
-                        validatedProjectForm  = true;
+                        validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#background').addClass('is-valid');
-                        $('#background').removeClass('is-invalid');
+                        $("#background").addClass("is-valid");
+                        $("#background").removeClass("is-invalid");
                     }
                 }
 
-
                 function validatePrjArchitecture() {
-                    const architectures= $('#architectures').val();
-                    const errorContainer = $('#architectures').siblings('.error-container');
+                    const architectures = $("#architectures").val();
+                    const errorContainer =
+                        $("#architectures").siblings(".error-container");
 
                     if (!architectures || architectures.trim().length === 0) {
                         validatedProjectForm = false;
@@ -1527,27 +1711,30 @@
                                 .addClass("text-danger fs-6")
                                 .text("Architecture is required")
                                 .css("margin", "0")
-                                .addClass('error-message');
+                                .addClass("error-message");
 
-                            $('#architectures').after('<div class="error-container"></div>');
-                            $('#architectures').siblings('.error-container').append(p);
+                            $("#architectures").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#architectures")
+                                .siblings(".error-container")
+                                .append(p);
                         }
 
-                        $('#architectures').addClass('is-invalid');
-                        $('#architectures').removeClass('is-valid');
+                        $("#architectures").addClass("is-invalid");
+                        $("#architectures").removeClass("is-valid");
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#architectures').addClass('is-valid');
-                        $('#architectures').removeClass('is-invalid');
+                        $("#architectures").addClass("is-valid");
+                        $("#architectures").removeClass("is-invalid");
                     }
                 }
 
-
-                // Function to validate systemOutlines
                 function validatePrjSystemOutline() {
-                    const systemOutlines = $('#systemOutlines').text().trim();
-                    const errorContainer = $('#systemOutlines').siblings('.error-container');
+                    const systemOutlines = $("#systemOutlines").text().trim();
+                    const errorContainer =
+                        $("#systemOutlines").siblings(".error-container");
 
                     if (systemOutlines.length === 0) {
                         validatedProjectForm = false;
@@ -1556,24 +1743,28 @@
                                 .addClass("text-danger fs-6")
                                 .text("System Outlines is required")
                                 .css("margin", "0")
-                                .addClass('error-message');
+                                .addClass("error-message");
 
-                            $('#systemOutlines').after('<div class="error-container"></div>');
-                            $('#systemOutlines').siblings('.error-container').append(p);
+                            $("#systemOutlines").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#systemOutlines")
+                                .siblings(".error-container")
+                                .append(p);
                         }
 
-                        $('#systemOutlines').css('border', '1px solid #dc3545'); // Red border color for invalid state
+                        $("#systemOutlines").css("border", "1px solid #dc3545"); // Red border color for invalid state
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#systemOutlines').css('border', '1px solid #28a745'); // Green border color for valid state
+                        $("#systemOutlines").css("border", "1px solid #28a745"); // Green border color for valid state
                     }
-
                 }
 
                 function validatePrjDeliverable() {
-                    const deliverable = $('#deliverable').val();
-                    const errorContainer = $('#deliverable').siblings('.error-container');
+                    const deliverable = $("#deliverable").val();
+                    const errorContainer =
+                        $("#deliverable").siblings(".error-container");
 
                     if (!deliverable || deliverable.trim().length === 0) {
                         validatedProjectForm = false;
@@ -1582,29 +1773,33 @@
                                 .addClass("text-danger fs-6")
                                 .text("Deliverable is required")
                                 .css("margin", "0")
-                                .addClass('error-message');
+                                .addClass("error-message");
 
-                            $('#deliverable').after('<div class="error-container"></div>');
-                            $('#deliverable').siblings('.error-container').append(p);
+                            $("#deliverable").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#deliverable")
+                                .siblings(".error-container")
+                                .append(p);
                         }
 
                         // $('#deliverable').addClass('is-invalid');
                         // $('#deliverable').removeClass('is-valid');
 
-                        $('#deliverable').css('border', '1px solid #dc3545');
+                        $("#deliverable").css("border", "1px solid #dc3545");
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
                         // $('#deliverable').addClass('is-valid');
                         // $('#deliverable').removeClass('is-invalid');
-                        $('#deliverable').css('border', '1px solid #28a745');
+                        $("#deliverable").css("border", "1px solid #28a745");
                     }
                 }
 
-
                 function validatePrjObjective() {
-                    const objective = $('#objective').val();
-                    const errorContainer = $('#objective').siblings('.error-container');
+                    const objective = $("#objective").val();
+                    const errorContainer =
+                        $("#objective").siblings(".error-container");
 
                     if (!objective || objective.trim().length === 0) {
                         validatedProjectForm = false;
@@ -1613,99 +1808,100 @@
                                 .addClass("text-danger fs-6")
                                 .text("Objective is required")
                                 .css("margin", "0")
-                                .addClass('error-message');
+                                .addClass("error-message");
 
-                            $('#objective').after('<div class="error-container"></div>');
-                            $('#objective').siblings('.error-container').append(p);
+                            $("#objective").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#objective")
+                                .siblings(".error-container")
+                                .append(p);
                         }
 
-                        $('#objective').addClass('is-invalid');
-                        $('#objective').removeClass('is-valid');
+                        $("#objective").addClass("is-invalid");
+                        $("#objective").removeClass("is-valid");
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#objective').addClass('is-valid');
-                        $('#objective').removeClass('is-invalid');
+                        $("#objective").addClass("is-valid");
+                        $("#objective").removeClass("is-invalid");
                     }
                 }
-
-
 
                 function validateStartDate() {
-                    const start_date = $('#start_date').val();
-                    const errorContainer = $('#start_date ').siblings('.error-container');
-                    if (start_date .length === 0) {
-                        validatedProjectForm =true;
+                    const start_date = $("#start_date").val();
+                    const errorContainer =
+                        $("#start_date ").siblings(".error-container");
+                    if (start_date.length === 0) {
+                        validatedProjectForm = true;
                         if (errorContainer.length === 0) {
-                        let p = $("<p>")
-                            .addClass("text-danger fs-6")
-                            .text("Date is required")
-                            .css("margin", "0")
-                            .addClass('error-message');
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Date is required")
+                                .css("margin", "0")
+                                .addClass("error-message");
 
-                        $('#start_date ').after('<div class="error-container"></div>');
-                        $('#start_date ').siblings('.error-container').append(p);
+                            $("#start_date ").after(
+                                '<div class="error-container"></div>'
+                            );
+                            $("#start_date ")
+                                .siblings(".error-container")
+                                .append(p);
                         }
 
-                        $('#start_date ').addClass('is-invalid');
-                        $('#start_date ').removeClass('is-valid');
-
+                        $("#start_date ").addClass("is-invalid");
+                        $("#start_date ").removeClass("is-valid");
                     } else {
-                        validatedProjectForm  = true;
+                        validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#start_date').addClass('is-valid');
-                        $('#start_date').removeClass('is-invalid');
+                        $("#start_date").addClass("is-valid");
+                        $("#start_date").removeClass("is-invalid");
                     }
                 }
 
-
-
-                $('#name').on('input', function () {
+                $("#name").on("input", function () {
                     validateProjectName();
                 });
 
-                $('#client').on('change', function () {
+                $("#client").on("change", function () {
                     validateProjectClient();
                 });
 
-                $('#employee-list').on('change', function () {
+                $("#employee-list").on("change", function () {
                     validateProjectEmployee();
                 });
 
-                $('#start-date').on('input', function () {
+                $("#start-date").on("input", function () {
                     validateStartDate();
                 });
 
-
-                $('#project-add-duration').on('input', function () {
+                $("#project-add-duration").on("input", function () {
                     validatePrjDuration();
                 });
 
-                $('#background').on('input', function () {
+                $("#background").on("input", function () {
                     validatePrjBackground();
                 });
 
-                $('#architectures').on('input', function () {
+                $("#architectures").on("input", function () {
                     validatePrjArchitecture();
                 });
 
-                $('#deliverable').on('input', function () {
+                $("#deliverable").on("input", function () {
                     validatePrjDeliverable();
                 });
 
-                $('#systemOutlines').on('content-updated', function () {
+                $("#systemOutlines").on("content-updated", function () {
                     validatePrjSystemOutline();
                 });
 
-
-                $('#objective').on('input', function () {
+                $("#objective").on("input", function () {
                     validatePrjObjective();
                 });
 
-                $('#start_date').on('input',function () {
+                $("#start_date").on("input", function () {
                     validateStartDate();
                 });
-
 
                 function validateProject() {
                     validateProjectName();
@@ -1718,14 +1914,12 @@
                     validatePrjSystemOutline();
                     validatePrjObjective();
                     validateStartDate();
-                    return validatedProjectForm ;
-
+                    return validatedProjectForm;
                 }
 
-                $("#project-add-btn").on('click', function (event) {
-                    console.log("submitted")
+                $("#project-add-btn").on("click", function (event) {
+                    console.log("submitted");
                     event.preventDefault(); // Prevent the form from submitting the traditional way
-
 
                     if (!validateProject()) {
                         return;
@@ -1758,18 +1952,17 @@
                         objective
                     );
 
-                    let jsonData = ''; // replace with your actual JSON data
-                    if (jsonData.trim() !== '') {
+                    let jsonData = ""; // replace with your actual JSON data
+                    if (jsonData.trim() !== "") {
                         try {
                             let parsedData = JSON.parse(jsonData);
                             // Continue processing parsedData
                         } catch (error) {
-                            console.error('Error parsing JSON:', error);
+                            console.error("Error parsing JSON:", error);
                         }
                     } else {
-                        console.warn('JSON data is empty.');
+                        console.warn("JSON data is empty.");
                     }
-
 
                     architectures = JSON.parse(architectures);
 
@@ -1793,17 +1986,17 @@
                         return matchingObj ? matchingObj : { type: deli.value };
                     });
 
-                    const deliverableList = deliverTypeList.map(deli => {
+                    const deliverableList = deliverTypeList.map((deli) => {
                         return {
-                            status : false,
-                            deliverableType : deli
-                        }
+                            status: false,
+                            deliverableType: deli,
+                        };
                     });
 
                     console.log(objective);
                     console.log(architectures);
                     console.log(empList);
-                    console.log(deliverTypeList)
+                    console.log(deliverTypeList);
 
                     Swal.fire({
                         title: "Are you sure want to edit?",
@@ -1811,248 +2004,335 @@
                         showCancelButton: true,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes"
+                        confirmButtonText: "Yes",
                     }).then((result) => {
                         if (result.isConfirmed) {
-
                             const project = {
-                        name: projectName,
-                        clientDto: client,
-                        duration: duration,
-                        start_date: startDate,
-                        end_date: calculateEndDate(
-                            startDate,
-                            duration
-                        ).getTime(),
-                        background: background,
-                        architectureDto: arcList,
-                        systemOutLineDto: systemOutlines.reduce((acc, cur) => {
-                            acc[cur] = true;
-                            return acc;
-                        }, {}),
-                        current_phase: "PLANNING",
-                        deliverableDto: deliverableList,
-                        objective: objective,
-                        amountDto: {
-                            basic_design: 0,
-                            detail_design: 0,
-                            coding: 0,
-                            unit_testing: 0,
-                            integrated_testing: 0,
-                        },
-                        departmentDto: {
-                            id: loginUser.currentUser.department.id,
-                        },
-                        projectManagerUserDto: {
-                            id: loginUser.currentUser.id,
-                        },
-                        membersUserDto: empList.map((str) => ({ id: parseInt(str) })),
-                    };
-                    console.log(project);
-                    //Perform the AJAX request
-                    $.ajax({
-                        url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
-                        type: "POST",
-                        data: JSON.stringify(project),
-                        dataType: "json",
-                        contentType: "application/json; charset=utf-8",
-                        success: async function (data) {
-                            alert("Project registered successfully");
-                            // Reset the form if needed
-                            $("#validation-form")[0].reset();
-                            console.log("this projce has benn saved", data);
-                            console.log("this projce has benn saved", data);
-                            // event.currentTarget.submit();
-                            console.log("current project : ",data)
-                            console.log(data.totalTaskCount)
-                            console.log(data.completeTaskCount)
+                                name: projectName,
+                                clientDto: client,
+                                duration: duration,
+                                start_date: startDate,
+                                end_date: calculateEndDate(
+                                    startDate,
+                                    duration
+                                ).getTime(),
+                                background: background,
+                                architectureDto: arcList,
+                                systemOutLineDto: systemOutlines.reduce(
+                                    (acc, cur) => {
+                                        acc[cur] = true;
+                                        return acc;
+                                    },
+                                    {}
+                                ),
+                                current_phase: "PLANNING",
+                                deliverableDto: deliverableList,
+                                objective: objective,
+                                amountDto: {
+                                    basic_design: 0,
+                                    detail_design: 0,
+                                    coding: 0,
+                                    unit_testing: 0,
+                                    integrated_testing: 0,
+                                },
+                                departmentDto: {
+                                    id: loginUser.currentUser.department.id,
+                                },
+                                projectManagerUserDto: {
+                                    id: loginUser.currentUser.id,
+                                },
+                                membersUserDto: empList.map((str) => ({
+                                    id: parseInt(str),
+                                })),
+                            };
 
-                            const div = document.createElement("div");
-                            div.classList.add(
-                                "p-md-3",
-                                "p-sm-2",
-                                "active-card",
-                                "mt-3",
-                                "mt-md-0",
-                                "mt-lg-0",
-                                "mt-xl-0"
-                            );
-                            div.id = `project-${data.id}`;
+                            console.log(project);
+                            //Perform the AJAX request
+                            $.ajax({
+                                url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
+                                type: "POST",
+                                data: JSON.stringify(project),
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                success: async function (data) {
+                                    alert("Project registered successfully");
+                                    // Reset the form if needed
+                                    $("#validation-form")[0].reset();
+                                    console.log(
+                                        "this projce has benn saved",
+                                        data
+                                    );
+                                    console.log(
+                                        "this projce has benn saved",
+                                        data
+                                    );
+                                    // event.currentTarget.submit();
+                                    console.log("current project : ", data);
+                                    console.log(data.totalTaskCount);
+                                    console.log(data.completeTaskCount);
 
-                            const card = document.createElement("div");
-                            card.classList.add("card", "border-success");
+                                    const div = document.createElement("div");
+                                    div.classList.add(
+                                        "p-md-3",
+                                        "p-sm-2",
+                                        "active-card",
+                                        "mt-3",
+                                        "mt-md-0",
+                                        "mt-lg-0",
+                                        "mt-xl-0"
+                                    );
 
-                            const cardHeader = document.createElement("div");
-                            cardHeader.classList.add("card-header");
+                                    div.id = `project-${data.id}`;
 
-                            const dFlexContainer = document.createElement("div");
-                            dFlexContainer.classList.add("d-flex", "flex-column");
+                                    const card = document.createElement("div");
+                                    card.classList.add(
+                                        "card",
+                                        "border-success"
+                                    );
 
-                            const h2 = document.createElement("h2");
-                            h2.classList.add(
-                                "card-title",
-                                "text-center",
-                                "text-primary",
-                                "modal-detail-title"
-                            );
-                            h2.innerText = data.name;
+                                    const cardHeader =
+                                        document.createElement("div");
+                                    cardHeader.classList.add("card-header");
 
-                            const pm_name_modal = document.getElementById("pm-name-modal");
-                            pm_name_modal.innerText = data.projectManagerUserDto.name;
+                                    const dFlexContainer =
+                                        document.createElement("div");
+                                    dFlexContainer.classList.add(
+                                        "d-flex",
+                                        "flex-column"
+                                    );
 
-                            const dFlexBetween = document.createElement("div");
-                            dFlexBetween.classList.add("d-flex", "justify-content-between");
+                                    const h2 = document.createElement("h2");
+                                    h2.classList.add(
+                                        "card-title",
+                                        "text-center",
+                                        "text-primary",
+                                        "modal-detail-title"
+                                    );
+                                    h2.innerText = data.name;
 
-                            const dFlexInner = document.createElement("div");
-                            dFlexInner.classList.add("d-flex");
+                                    const pm_name_modal =
+                                        document.getElementById(
+                                            "pm-name-modal"
+                                        );
+                                    pm_name_modal.innerText =
+                                        data.projectManagerUserDto.name;
 
-                            const img = document.createElement("img");
-                            img.src = `/images/avatars/pm_avatar.svg`;
-                            img.classList.add(
-                                "img-fluid",
-                                "rounded-circle",
-                                "d-none",
-                                "d-md-block",
-                                "d-sm-block"
-                            );
-                            img.style.width = "40px";
-                            img.alt = "Profile Image";
-                            img.loading = "lazy";
+                                    const dFlexBetween =
+                                        document.createElement("div");
+                                    dFlexBetween.classList.add(
+                                        "d-flex",
+                                        "justify-content-between"
+                                    );
 
-                            const h5 = document.createElement("h5");
-                            h5.classList.add(
-                                "card-text",
-                                "text-center",
-                                "text-align-center",
-                                "my-auto",
-                                "fst-italic",
-                                "fs-6",
-                                "ms-2"
-                            );
+                                    const dFlexInner =
+                                        document.createElement("div");
+                                    dFlexInner.classList.add("d-flex");
 
-                            h5.innerText = data.projectManagerUserDto.name;
+                                    const img = document.createElement("img");
+                                    img.src = `/images/avatars/pm_avatar.svg`;
 
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.id = data.id;
-                            a.classList.add(
-                                "btn",
-                                "btn-white",
-                                "text-secondary",
-                                "link-shadow"
-                            );
-                            a.setAttribute("data-bs-toggle", "modal");
-                            a.setAttribute("data-bs-target", "#project-details");
-                            a.innerText = "See More";
+                                    img.classList.add(
+                                        "img-fluid",
+                                        "rounded-circle",
+                                        "d-none",
+                                        "d-md-block",
+                                        "d-sm-block"
+                                    );
+                                    img.style.width = "40px";
+                                    img.alt = "Profile Image";
+                                    img.loading = "lazy";
 
-                            // Create and append the progress-related elements
-                            const cardBody = document.createElement("div");
-                            cardBody.classList.add(
-                                "card-body",
-                                "position-relative",
-                                "mx-auto"
-                            );
+                                    const h5 = document.createElement("h5");
+                                    h5.classList.add(
+                                        "card-text",
+                                        "text-center",
+                                        "text-align-center",
+                                        "my-auto",
+                                        "fst-italic",
+                                        "fs-6",
+                                        "ms-2"
+                                    );
 
-                            const progressTitle = document.createElement("p");
-                            progressTitle.classList.add(
-                                "card-title",
-                                "text-center",
-                                "fs-6",
-                                "mb-1"
-                            );
-                            progressTitle.innerText = "progress";
+                                    h5.innerText =
+                                        data.projectManagerUserDto.name;
 
-                            const progressCircle = document.createElement("div");
-                            progressCircle.id = `circle-progress-${data.id}`;
-                            progressCircle.classList.add(
-                                "circle-progress",
-                                "rounded-circle"
-                            );
-                            progressCircle.setAttribute("data-min-value", "0");
-                            progressCircle.setAttribute("data-max-value", "100");
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.id = data.id;
+                                    a.classList.add(
+                                        "btn",
+                                        "btn-white",
+                                        "text-secondary",
+                                        "link-shadow"
+                                    );
 
+                                    a.setAttribute("data-bs-toggle", "modal");
+                                    a.setAttribute(
+                                        "data-bs-target",
+                                        "#project-details"
+                                    );
+                                    a.innerText = "See More";
 
-                            let percentage;
-                            console.log("taks ratio : ",data.completeTaskCount, data.totalTaskCount)
-                            if(data.totalTaskCount !== 0){
-                                percentage= data.completeTaskCount / data.totalTaskCount * 100;
-                            } else {
-                                percentage = 0;
-                            }
-                            console.log("percentage",percentage);
+                                    // Create and append the progress-related elements
+                                    const cardBody =
+                                        document.createElement("div");
+                                    cardBody.classList.add(
+                                        "card-body",
+                                        "position-relative",
+                                        "mx-auto"
+                                    );
 
-                            progressCircle.setAttribute(
-                                "data-value",
-                                percentage
-                            );
-                            progressCircle.setAttribute("data-type", "percent");
+                                    const progressTitle =
+                                        document.createElement("p");
+                                    progressTitle.classList.add(
+                                        "card-title",
+                                        "text-center",
+                                        "fs-6",
+                                        "mb-1"
+                                    );
+                                    progressTitle.innerText = "progress";
 
-                            dFlexInner.appendChild(img);
-                            dFlexInner.appendChild(h5);
-                            dFlexBetween.appendChild(dFlexInner);
-                            dFlexBetween.appendChild(a);
-                            dFlexContainer.appendChild(h2);
-                            dFlexContainer.appendChild(dFlexBetween);
-                            cardHeader.appendChild(dFlexContainer);
-                            card.appendChild(cardHeader);
+                                    const progressCircle =
+                                        document.createElement("div");
+                                    progressCircle.id = `circle-progress-${data.id}`;
+                                    progressCircle.classList.add(
+                                        "circle-progress",
+                                        "rounded-circle"
+                                    );
+                                    progressCircle.setAttribute(
+                                        "data-min-value",
+                                        "0"
+                                    );
+                                    progressCircle.setAttribute(
+                                        "data-max-value",
+                                        "100"
+                                    );
 
-                            cardBody.appendChild(progressTitle);
-                            cardBody.appendChild(progressCircle);
-                            card.appendChild(cardBody);
+                                    let percentage;
+                                    console.log(
+                                        "taks ratio : ",
+                                        data.completeTaskCount,
+                                        data.totalTaskCount
+                                    );
+                                    if (data.totalTaskCount !== 0) {
+                                        percentage =
+                                            (data.completeTaskCount /
+                                                data.totalTaskCount) *
+                                            100;
+                                    } else {
+                                        percentage = 0;
+                                    }
+                                    console.log("percentage", percentage);
 
-                            div.appendChild(card);
+                                    progressCircle.setAttribute(
+                                        "data-value",
+                                        percentage
+                                    );
+                                    progressCircle.setAttribute(
+                                        "data-type",
+                                        "percent"
+                                    );
 
-                            motherContainer.insertBefore(div, motherContainer.childNodes[0]);
+                                    dFlexInner.appendChild(img);
+                                    dFlexInner.appendChild(h5);
+                                    dFlexBetween.appendChild(dFlexInner);
+                                    dFlexBetween.appendChild(a);
+                                    dFlexContainer.appendChild(h2);
+                                    dFlexContainer.appendChild(dFlexBetween);
+                                    cardHeader.appendChild(dFlexContainer);
+                                    card.appendChild(cardHeader);
 
-                            $(".circle-progress").each(function () {
-                                const minValue = $(this).attr("data-min-value");
-                                const maxValue = $(this).attr("data-max-value");
-                                const value = $(this).attr("data-value");
-                                const type = $(this).attr("data-type");
+                                    cardBody.appendChild(progressTitle);
+                                    cardBody.appendChild(progressCircle);
+                                    card.appendChild(cardBody);
 
-                                console.log("minValue : " , minValue);
-                                console.log("maxValue : " , maxValue);
-                                console.log("value : " , value);
-                                console.log("type : " , type);
+                                    div.appendChild(card);
 
+                                    motherContainer.insertBefore(
+                                        div,
+                                        motherContainer.childNodes[0]
+                                    );
 
-                                if (value < 40) {
-                                    this.classList.add("circle-progress-secondary");
-                                } else if (value < 70) {
-                                    this.classList.add("circle-progress-primary");
-                                } else if (value > 69) {
-                                    this.classList.add("circle-progress-success");
-                                }
+                                    $(".circle-progress").each(function () {
+                                        const minValue =
+                                            $(this).attr("data-min-value");
+                                        const maxValue =
+                                            $(this).attr("data-max-value");
+                                        const value =
+                                            $(this).attr("data-value");
+                                        const type = $(this).attr("data-type");
 
-                                if (this.id !== "" && this.id !== null) {
-                                    new CircleProgress("#" + this.id, {
-                                        min: minValue,
-                                        max: maxValue,
-                                        value: value,
-                                        textFormat: type,
+                                        console.log("minValue : ", minValue);
+                                        console.log("maxValue : ", maxValue);
+                                        console.log("value : ", value);
+                                        console.log("type : ", type);
+
+                                        if (value < 40) {
+                                            this.classList.add(
+                                                "circle-progress-secondary"
+                                            );
+                                        } else if (value < 70) {
+                                            this.classList.add(
+                                                "circle-progress-primary"
+                                            );
+                                        } else if (value > 69) {
+                                            this.classList.add(
+                                                "circle-progress-success"
+                                            );
+                                        }
+
+                                        if (
+                                            this.id !== "" &&
+                                            this.id !== null
+                                        ) {
+                                            new CircleProgress("#" + this.id, {
+                                                min: minValue,
+                                                max: maxValue,
+                                                value: value,
+                                                textFormat: type,
+                                            });
+                                        }
                                     });
-                                }
+                                },
+                                error: function (data) {
+                                    alert("Error registering project");
+                                },
                             });
-                        },
-                        error: function (data) {
-                            alert("Error registering project");
-                            // event.currentTarget.submit();
-                            // window.top.location = window.top.location;
-                        },
+                        }
                     });
                 });
+            });
 
-                document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
-
-                    const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
+            document
+                .querySelector("#update-amount-btn")
+                .addEventListener("click", function (e) {
+                    const projectId = parseInt(
+                        document.querySelector("#current-edditing-projetc-id")
+                            .value
+                    );
 
                     const amountDto = {
-                        basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
-                        detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
-                        coding: parseInt(document.querySelector("#edit-coding-count").value),
-                        unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
-                        integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
-                    }
+                        basic_design: parseInt(
+                            document.querySelector("#edit-basic-design-count")
+                                .value
+                        ),
+                        detail_design: parseInt(
+                            document.querySelector("#edit-detail-design-count")
+                                .value
+                        ),
+                        coding: parseInt(
+                            document.querySelector("#edit-coding-count").value
+                        ),
+                        unit_testing: parseInt(
+                            document.querySelector("#edit-unit-testing-count")
+                                .value
+                        ),
+                        integrated_testing: parseInt(
+                            document.querySelector(
+                                "#edit-integrated-testing-count"
+                            ).value
+                        ),
+                    };
 
                     Swal.fire({
                         title: "Are you sure want to update project amount?",
@@ -2060,7 +2340,7 @@
                         showCancelButton: true,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes"
+                        confirmButtonText: "Yes",
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
@@ -2070,14 +2350,25 @@
                                 dataType: "json",
                                 contentType: "application/json; charset=utf-8",
                                 success: async function (data) {
-                                    Swal.fire("Success", "Project amount updated successfully", "success");
+                                    Swal.fire(
+                                        "Success",
+                                        "Project amount updated successfully",
+                                        "success"
+                                    );
                                     // Reset the form if needed
-                                    console.log("This project has been saved", data);
+                                    console.log(
+                                        "This project has been saved",
+                                        data
+                                    );
                                     // event.currentTarget.submit();
                                     window.top.location = window.top.location;
                                 },
                                 error: function (data) {
-                                    Swal.fire("Error", "Error updating project amount", "error");
+                                    Swal.fire(
+                                        "Error",
+                                        "Error updating project amount",
+                                        "error"
+                                    );
                                     // event.currentTarget.submit();
                                     window.top.location = window.top.location;
                                 },
@@ -2085,9 +2376,6 @@
                         }
                     });
                 });
-            })
-
-                
 
             let myOptions = [
                 {
@@ -2137,9 +2425,7 @@
                 maxWidth: "100%",
             });
 
-            console.log("SYSSELECT" , sysSelect);
-
-
+            console.log("SYSSELECT", sysSelect);
 
             $(".circle-progress").each(function () {
                 const minValue = $(this).attr("data-min-value");
@@ -2147,11 +2433,10 @@
                 const value = $(this).attr("data-value");
                 const type = $(this).attr("data-type");
 
-                console.log("minValue : " , minValue);
-                console.log("maxValue : " , maxValue);
-                console.log("value : " , value);
-                console.log("type : " , type);
-
+                console.log("minValue : ", minValue);
+                console.log("maxValue : ", maxValue);
+                console.log("value : ", value);
+                console.log("type : ", type);
 
                 if (value < 40) {
                     this.classList.add("circle-progress-secondary");
@@ -2241,7 +2526,10 @@
                                 <option value="December">December</option>
                             </select>
                         </div>
-                        <div class="d-inline-block d-none" id="department-filter-container">
+                        <div
+                            class="d-inline-block d-none"
+                            id="department-filter-container"
+                        >
                             <select
                                 id="department-filter"
                                 class="form-control"
@@ -2386,7 +2674,8 @@
                                         <input
                                             type="text"
                                             class="form-control border-task-description"
-                                            id="name" name="name"
+                                            id="name"
+                                            name="name"
                                         />
                                     </div>
 
@@ -2405,7 +2694,9 @@
                                             id="client"
                                             name="client"
                                         >
-                                            <option value="" selected disabled>Choose client</option>
+                                            <option value="" selected disabled>
+                                                Choose client
+                                            </option>
                                         </select>
                                     </div>
 
@@ -2480,7 +2771,6 @@
                                             class="form-control border-task-description"
                                             id="background"
                                             name="background"
-
                                         ></textarea>
                                     </div>
 
@@ -2504,8 +2794,9 @@
                                             placeholder="enter to add your own architecture"
                                             required
                                         />
-                                        <div class="invalid-feedback error-container"></div>
-
+                                        <div
+                                            class="invalid-feedback error-container"
+                                        ></div>
                                     </div>
 
                                     <!--                                systemoutline add-->
@@ -2588,15 +2879,45 @@
                         <div class="tab-pane fade" id="client-create">
                             <div class="modal-body modal-lg-6">
                                 <form class="row g-4" id="client-form">
-                                    <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
-                                        <strong>Error : </strong> <span id="errorText"></span>
-                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    <div
+                                        class="alert alert-danger alert-dismissible"
+                                        id="errorAlert"
+                                        style="display: none"
+                                    >
+                                        <strong>Error : </strong>
+                                        <span id="errorText"></span>
+                                        <button
+                                            type="button"
+                                            class="btn-close btn-dark"
+                                            aria-label="close"
+                                            style="
+                                                background: transparent;
+                                                position: absolute;
+                                                top: 0;
+                                                right: 0;
+                                            "
+                                        >
                                             &times;
                                         </button>
                                     </div>
-                                    <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
-                                        <strong>Success : </strong> <span id="successText"></span>
-                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                    <div
+                                        class="alert alert-success alert-dismissible"
+                                        id="successAlert"
+                                        style="display: none"
+                                    >
+                                        <strong>Success : </strong>
+                                        <span id="successText"></span>
+                                        <button
+                                            type="button"
+                                            class="btn-close btn-dark"
+                                            aria-label="close"
+                                            style="
+                                                background: transparent;
+                                                position: absolute;
+                                                top: 0;
+                                                right: 0;
+                                            "
+                                        >
                                             &times;
                                         </button>
                                     </div>
@@ -2614,7 +2935,8 @@
                                             type="text"
                                             class="form-control border-task-description"
                                             id="client-name"
-                                            name="name" />
+                                            name="name"
+                                        />
                                     </div>
 
                                     <div class="col-md-12">
@@ -2636,7 +2958,7 @@
                                     <div class="col-md-12">
                                         <label
                                             for="client-phone"
-                                            class="col-sm-12 col-form-label "
+                                            class="col-sm-12 col-form-label"
                                             >Phone<span style="color: red">
                                                 *</span
                                             ></label
@@ -2646,7 +2968,8 @@
                                             class="form-control border-task-description"
                                             id="client-phone"
                                             name="phone"
-                                            parttern="[0-9]{11}" placeholder="09123456789"
+                                            parttern="[0-9]{11}"
+                                            placeholder="09123456789"
                                         />
                                     </div>
 
@@ -2666,9 +2989,8 @@
                 </div>
             </div>
         </div>
-        <!--    modal for add project-->
 
-        <!-- modal for project's details -->
+        <!--    modal for add project-->
         <div class="modal fade" id="project-details" data-bs-keyboard="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content">
@@ -2752,9 +3074,9 @@
 
                                             <li class="nav-item">
                                                 <button
-                                                        class="nav-link"
-                                                        data-bs-toggle="tab"
-                                                        data-bs-target="#deliverable-list"
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#deliverable-list"
                                                 >
                                                     deliverable
                                                 </button>
@@ -2762,9 +3084,9 @@
 
                                             <li class="nav-item">
                                                 <button
-                                                        class="nav-link"
-                                                        data-bs-toggle="tab"
-                                                        data-bs-target="#edit-architecture"
+                                                    class="nav-link"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#edit-architecture"
                                                 >
                                                     Architecture
                                                 </button>
@@ -2989,8 +3311,7 @@
                                                                     Design<span
                                                                         class="badge bg-primary rounded-pill"
                                                                         id="basic-design-count"
-                                                                        ></span
-                                                                    >
+                                                                    ></span>
                                                                 </li>
 
                                                                 <li
@@ -3000,8 +3321,7 @@
                                                                     Design<span
                                                                         class="badge bg-primary rounded-pill"
                                                                         id="detail-design-count"
-                                                                        ></span
-                                                                    >
+                                                                    ></span>
                                                                 </li>
 
                                                                 <li
@@ -3010,8 +3330,7 @@
                                                                     Coding<span
                                                                         class="badge bg-primary rounded-pill"
                                                                         id="coding-count"
-                                                                        ></span
-                                                                    >
+                                                                    ></span>
                                                                 </li>
 
                                                                 <li
@@ -3021,8 +3340,7 @@
                                                                     Testing<span
                                                                         class="badge bg-primary rounded-pill"
                                                                         id="unit-testing-count"
-                                                                        ></span
-                                                                    >
+                                                                    ></span>
                                                                 </li>
 
                                                                 <li
@@ -3032,8 +3350,7 @@
                                                                     Testing<span
                                                                         class="badge bg-primary rounded-pill"
                                                                         id="integrated-testing-count"
-                                                                        ></span
-                                                                    >
+                                                                    ></span>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -3074,198 +3391,465 @@
                                                 id="project-edit"
                                             >
                                                 <!-- Profile Edit Form -->
-                                                <form id="project-detail-edit-form">
-                                                    <input type="number" hidden id="current-edditing-projetc-id">
+                                                <form
+                                                    id="project-detail-edit-form"
+                                                >
+                                                    <input
+                                                        type="number"
+                                                        hidden
+                                                        id="current-edditing-projetc-id"
+                                                    />
                                                     <div class="row mb-3">
-                                                        <label for="edit-project-phase" class="col-md-4 col-lg-3 col-form-label">CurrentPhase</label>
-                                                        <div class="col-md-8 col-lg-9">
-                                                            
-                                                                <select type="text" class="form-control border-task-description"
-                                                                    name="" id="edit-project-phase">
-                                                                <option value="PLANNING">Planning</option>
-                                                                <option value="DESIGN">Design</option>
-                                                                <option value="CODING">Coding</option>
-                                                                <option value="TESTING">Testing</option>
-                                                                <option value="REVIEW">Review</option>
-                                                                <option value="DEPLOYMENT">Deployment</option>
-                                                                <option value="MAINTENANCE">Maintenance</option>
+                                                        <label
+                                                            for="edit-project-phase"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >CurrentPhase</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <select
+                                                                type="text"
+                                                                class="form-control border-task-description"
+                                                                name=""
+                                                                id="edit-project-phase"
+                                                            >
+                                                                <option
+                                                                    value="PLANNING"
+                                                                >
+                                                                    Planning
+                                                                </option>
+                                                                <option
+                                                                    value="DESIGN"
+                                                                >
+                                                                    Design
+                                                                </option>
+                                                                <option
+                                                                    value="CODING"
+                                                                >
+                                                                    Coding
+                                                                </option>
+                                                                <option
+                                                                    value="TESTING"
+                                                                >
+                                                                    Testing
+                                                                </option>
+                                                                <option
+                                                                    value="REVIEW"
+                                                                >
+                                                                    Review
+                                                                </option>
+                                                                <option
+                                                                    value="DEPLOYMENT"
+                                                                >
+                                                                    Deployment
+                                                                </option>
+                                                                <option
+                                                                    value="MAINTENANCE"
+                                                                >
+                                                                    Maintenance
+                                                                </option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
-                                                        <label for="background" class="col-md-4 col-lg-3 col-form-label">Background</label>
-                                                        <div class="col-md-8 col-lg-9">
-                                                            <textarea type="text" class="form-control border-task-description" name="background" id="project-detail-background"></textarea>
+                                                        <label
+                                                            for="background"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >Background</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <textarea
+                                                                type="text"
+                                                                class="form-control border-task-description"
+                                                                name="background"
+                                                                id="project-detail-background"
+                                                            ></textarea>
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label for="project-detail-name" class="col-md-4 col-lg-3 col-form-label">Project name</label>
-                                                        <div class="col-md-8 col-lg-9" >
-                                                            <input name="project_name" type="text" class="form-control" id="project-detail-name" required />
+                                                        <label
+                                                            for="project-detail-name"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >Project name</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <input
+                                                                name="project_name"
+                                                                type="text"
+                                                                class="form-control"
+                                                                id="project-detail-name"
+                                                                required
+                                                            />
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label for="start-date" class="col-md-4 col-lg-3 col-form-label" >start date</label>
-                                                        <div class="col-md-8 col-lg-9" >
-                                                            <input name="start_date" type="date" class="form-control" id="start-date" disabled required/>
+                                                        <label
+                                                            for="start-date"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >start date</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <input
+                                                                name="start_date"
+                                                                type="date"
+                                                                class="form-control"
+                                                                id="start-date"
+                                                                disabled
+                                                                required
+                                                            />
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label for="project-edit-duration" class="col-md-4 col-lg-3 col-form-label">Duration</label>
-                                                        <div class="col-md-8 col-lg-9">
-                                                            <input name="end_date" type="number" min="1" value="1" required
-                                                                class="form-control" id="project-edit-duration" oninput="validity.valid||(value='');"/>
+                                                        <label
+                                                            for="project-edit-duration"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >Duration</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <input
+                                                                name="end_date"
+                                                                type="number"
+                                                                min="1"
+                                                                value="1"
+                                                                required
+                                                                class="form-control"
+                                                                id="project-edit-duration"
+                                                                oninput="validity.valid||(value='');"
+                                                            />
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label for="end-date-in-edit" class="col-md-4 col-lg-3 col-form-label" >end date</label>
-                                                        <div class="col-md-8 col-lg-9">
-                                                            <input name="start_date" type="text" class="form-control" id="end-date-in-edit" disabled/>
+                                                        <label
+                                                            for="end-date-in-edit"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >end date</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <input
+                                                                name="start_date"
+                                                                type="text"
+                                                                class="form-control"
+                                                                id="end-date-in-edit"
+                                                                disabled
+                                                            />
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-3">
-                                                        <label for="objective" class="col-md-4 col-lg-3 col-form-label">Objective</label>
-                                                        <div class="col-md-8 col-lg-9"><div id="edit-project-objective" ></div></div>
+                                                        <label
+                                                            for="objective"
+                                                            class="col-md-4 col-lg-3 col-form-label"
+                                                            >Objective</label
+                                                        >
+                                                        <div
+                                                            class="col-md-8 col-lg-9"
+                                                        >
+                                                            <div
+                                                                id="edit-project-objective"
+                                                            ></div>
+                                                        </div>
                                                     </div>
 
-                                                    <div class="mt-lg-5" ><button type="submit" class="btn-sm btn-primary">Save Changes</button></div>
+                                                    <div class="mt-lg-5">
+                                                        <button
+                                                            type="submit"
+                                                            class="btn-sm btn-primary"
+                                                        >
+                                                            Save Changes
+                                                        </button>
+                                                    </div>
                                                 </form>
                                                 <!-- End Profile Edit Form -->
                                             </div>
-                                            <div class="tab-pane fade profile-edit pt-3" id="client-info">
+                                            <div
+                                                class="tab-pane fade profile-edit pt-3"
+                                                id="client-info"
+                                            >
                                                 <div class="row">
-                                                    <div class="fs-2 text-center" id="my-dear-customer-name">DAT</div>
-                                                    <div class="row row-cols-1 gap-2">
-                                                        <div class="d-flex justify-content-start align-items-center gap-2">
-                                                            <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
-                                                                <i class="bi bi-envelope-at"></i>
+                                                    <div
+                                                        class="fs-2 text-center"
+                                                        id="my-dear-customer-name"
+                                                    >
+                                                        DAT
+                                                    </div>
+                                                    <div
+                                                        class="row row-cols-1 gap-2"
+                                                    >
+                                                        <div
+                                                            class="d-flex justify-content-start align-items-center gap-2"
+                                                        >
+                                                            <div
+                                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-envelope-at"
+                                                                ></i>
                                                             </div>
-                                                            <div class="align-self-center" id="client-email-address" >
+                                                            <div
+                                                                class="align-self-center"
+                                                                id="client-email-address"
+                                                            >
                                                                 suckmyfingure@gmail.com
                                                             </div>
                                                         </div>
-                                                        <div class="d-flex justify-content-start align-items-center gap-2">
-                                                            <div class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white">
-                                                                <i class="bi bi-telephone"></i>
+                                                        <div
+                                                            class="d-flex justify-content-start align-items-center gap-2"
+                                                        >
+                                                            <div
+                                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-telephone"
+                                                                ></i>
                                                             </div>
-                                                            <div class="align-self-center" id="client-phone-contect">09 77558822</div>
+                                                            <div
+                                                                class="align-self-center"
+                                                                id="client-phone-contect"
+                                                            >
+                                                                09 77558822
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="tab-pane fade pt-3" id="amount">
-                                                <ul class="list-group accordion-body p-2 rounded-end">
-                                                    <li class="list-group-item d-flex justify-content-between">
+                                            <div
+                                                class="tab-pane fade pt-3"
+                                                id="amount"
+                                            >
+                                                <ul
+                                                    class="list-group accordion-body p-2 rounded-end"
+                                                >
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
                                                         Basic design
                                                         <div class="number">
-                                                            <span class="minus">-</span>
-                                                            <input type="text" value="0" id="edit-basic-design-count"/>
-                                                            <span class="plus">+</span>
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                                id="edit-basic-design-count"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
                                                         </div>
                                                     </li>
-                                                    <li class="list-group-item d-flex justify-content-between">
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
                                                         Detail design
                                                         <div class="number">
-                                                            <span class="minus">-</span>
-                                                            <input type="text" value="0" id="edit-detail-design-count"/>
-                                                            <span class="plus">+</span>
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                                id="edit-detail-design-count"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
                                                         </div>
                                                     </li>
-                                                    <li class="list-group-item d-flex justify-content-between">
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
                                                         Coding
                                                         <div class="number">
-                                                            <span class="minus">-</span>
-                                                            <input type="text" value="0" id="edit-coding-count"/>
-                                                            <span class="plus">+</span>
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                                id="edit-coding-count"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
                                                         </div>
                                                     </li>
-                                                    <li class="list-group-item d-flex justify-content-between">
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
                                                         Unit testing
                                                         <div class="number">
-                                                            <span class="minus">-</span>
-                                                            <input type="text" value="0" id="edit-unit-testing-count"/>
-                                                            <span class="plus">+</span>
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                                id="edit-unit-testing-count"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
                                                         </div>
                                                     </li>
-                                                    <li class="list-group-item d-flex justify-content-between">
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between"
+                                                    >
                                                         Integrated testing
                                                         <div class="number">
-                                                            <span class="minus">-</span>
-                                                            <input type="text" value="0" id="edit-integrated-testing-count"/>
-                                                            <span class="plus">+</span>
+                                                            <span class="minus"
+                                                                >-</span
+                                                            >
+                                                            <input
+                                                                type="text"
+                                                                value="0"
+                                                                id="edit-integrated-testing-count"
+                                                            />
+                                                            <span class="plus"
+                                                                >+</span
+                                                            >
                                                         </div>
                                                     </li>
                                                 </ul>
                                                 <div class="text-center">
-                                                    <button class="btn btn-primary" style="background-color: #369;" id="update-amount-btn">Save Amount</button>
+                                                    <button
+                                                        class="btn btn-primary"
+                                                        style="
+                                                            background-color: #369;
+                                                        "
+                                                        id="update-amount-btn"
+                                                    >
+                                                        Save Amount
+                                                    </button>
                                                 </div>
                                             </div>
 
-                                            <div class="tab-pane fade pt-3" id="review" >
+                                            <div
+                                                class="tab-pane fade pt-3"
+                                                id="review"
+                                            >
                                                 <div class="row mb-3">
-                                                    <label for="project-external-review-count" class="col-md-4 col-lg-3 col-form-label">External Review</label>
-                                                    <div class="col-md-8 col-lg-9">
-                                                        <input name="project_name" type="number" class="form-control" min="0"
-                                                               id="project-external-review-count" oninput="validity.valid||(value='');"/>
+                                                    <label
+                                                        for="project-external-review-count"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >External Review</label
+                                                    >
+                                                    <div
+                                                        class="col-md-8 col-lg-9"
+                                                    >
+                                                        <input
+                                                            name="project_name"
+                                                            type="number"
+                                                            class="form-control"
+                                                            min="0"
+                                                            id="project-external-review-count"
+                                                            oninput="validity.valid||(value='');"
+                                                        />
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-3">
-                                                    <label for="project-internal-review-count" class="col-md-4 col-lg-3 col-form-label" >Internal Review</label>
-                                                    <div class="col-md-8 col-lg-9">
-                                                        <input name="project_name" type="number" min="0" class="form-control"
-                                                            oninput="validity.valid||(value='');" id="project-internal-review-count"/>
+                                                    <label
+                                                        for="project-internal-review-count"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >Internal Review</label
+                                                    >
+                                                    <div
+                                                        class="col-md-8 col-lg-9"
+                                                    >
+                                                        <input
+                                                            name="project_name"
+                                                            type="number"
+                                                            min="0"
+                                                            class="form-control"
+                                                            oninput="validity.valid||(value='');"
+                                                            id="project-internal-review-count"
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div class="text-center">
-                                                    <a href="" class="btn btn-primary" style=" background-color: #369;">Save Review</a>
+                                                    <a
+                                                        href=""
+                                                        class="btn btn-primary"
+                                                        style="
+                                                            background-color: #369;
+                                                        "
+                                                        >Save Review</a
+                                                    >
                                                 </div>
                                             </div>
 
-                                            <div class="tab-pane fade pt-3" id="edit-architecture">
-                                                <div id="architectures-list-in-edit" class="d-flex gap-2"> </div>
+                                            <div
+                                                class="tab-pane fade pt-3"
+                                                id="edit-architecture"
+                                            >
+                                                <div
+                                                    id="architectures-list-in-edit"
+                                                    class="d-flex gap-2"
+                                                ></div>
                                             </div>
-                                            <div class="tab-pane fade pt-3" id="deliverable-list">
-                                                <form id="deliverable-type-form">
+                                            <div
+                                                class="tab-pane fade pt-3"
+                                                id="deliverable-list"
+                                            >
+                                                <form
+                                                    id="deliverable-type-form"
+                                                >
                                                     <div id="deliverable-type">
                                                         <!-- Checkbox elements will be dynamically added here -->
                                                     </div>
-                                                    <div  id="updateButtonCon">
-                                                    </div>
+                                                    <div
+                                                        id="updateButtonCon"
+                                                    ></div>
                                                 </form>
-
                                             </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a
+                                    href="/project"
+                                    class="btn btn-primary"
+                                    id="navigate-task"
+                                    >manage task</a
+                                >
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <a href="/project" class="btn btn-primary" id="navigate-task"
-                            >manage task</a
-                        >
-                    </div>
                 </div>
+                <!-- modal for project's details -->
+
+                <!-- Scripts -->
+
+                <!-- fontawesome -->
+
+                <!-- sort (department, project), form validation and search bar behavior are all here -->
+
+                <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
+                <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
+                <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
             </div>
         </div>
+
         <!-- modal for project's details -->
 
-        <!-- Scripts -->
-
-        <!-- fontawesome -->
-
-        <!-- sort (department, project), form validation and search bar behavior are all here -->
-
-        <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
-        <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
-            </div>
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+        <script src="/js/notification.js" type="module"></script>
     </body>
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <script src="/js/notification.js" type="module"></script>
 </html>
