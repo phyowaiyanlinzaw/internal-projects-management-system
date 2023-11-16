@@ -85,7 +85,7 @@ const pusher = new Pusher('3c0b3426bd0875be392f', {
 });
 
 const channel = pusher.subscribe(`my-channel-${loginUser.currentUser.id}`);
-channel.bind('noti-event', function(response) {
+channel.bind('task-noti-event', function(response) {
 
     document.querySelector("#notification-container").innerHTML = "";
 
@@ -118,6 +118,12 @@ channel.bind('noti-event', function(response) {
     const notificationContainer = document.querySelector("#notification-container");
     notificationContainer.appendChild(anchor);
     notificationContainer.appendChild(hr);
+});
+
+channel.bind("issue-noti-event", function(response) {
+
+    console.log("in issue noti event function");
+    console.log(response);
 });
 
 document.querySelector("#notification-light-container").addEventListener("shown.bs.dropdown",  () => {

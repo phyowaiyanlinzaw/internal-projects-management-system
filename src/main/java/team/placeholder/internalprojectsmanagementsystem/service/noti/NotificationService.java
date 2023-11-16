@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface NotificationService {
 
-    public void save(String description, long userId);
+    public void save(String description, long userId, String eventName, Object... objects);
 
-    public void sendNotification(NotiDto notiDto, long userId);
+    public void sendNotification(NotiDto notiDto, long userId, String eventName, Object... objects);
 
     public List<NotiDto> getAllNotificationByUserId(long id);
 

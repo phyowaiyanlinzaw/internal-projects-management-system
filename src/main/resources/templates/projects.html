@@ -612,8 +612,16 @@
                 }
             }
 
-            for (let i = 0; i < pList.length; i++) {
+            console.log("second project : ", pList[1])
+            console.log("total task count in project : ", pList[1].totalTaskCount)
+            console.log("completed task count in project : ", pList[1].completeTaskCount)
+
+            for (let i = pList.length - 1; i >= 0; i--) {
                 let currentProject = pList[i];
+
+                console.log("current project : ",currentProject)
+                console.log(currentProject.totalTaskCount)
+                console.log(currentProject.completeTaskCount)
 
                 const div = document.createElement("div");
                 div.classList.add(
@@ -721,6 +729,7 @@
 
 
                 let percentage;
+                console.log("taks ratio : ",currentProject.completeTaskCount, currentProject.totalTaskCount)
                 if(currentProject.totalTaskCount !== 0){
                     percentage= currentProject.completeTaskCount / currentProject.totalTaskCount * 100;
                 } else {
@@ -926,8 +935,10 @@
             document.querySelector("#project-detail-edit-form").addEventListener("submit", function (e) {
                 e.preventDefault()
 
+                const editingProjectId = document.querySelector("#current-edditing-projetc-id").value;
+
                 const project = {
-                    id: parseInt(document.querySelector("#current-edditing-projetc-id").value),
+                    id: parseInt(editingProjectId),
                     name: document.querySelector("#project-detail-name").value,
                     duration: parseInt(document.querySelector("#project-edit-duration").value),
                     start_date: new Date(document.querySelector("#start-date").value).getTime(),
@@ -946,16 +957,16 @@
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: async function (data) {
-                        alert("Project registered successfully");
                         // Reset the form if needed
                         console.log("this projce has benn saved", data);
                         // event.currentTarget.submit();
-                        window.top.location = window.top.location;
+                        const currentUpdatedProject = document.querySelector("#project-" + editingProjectId);
+                        currentUpdatedProject.querySelector(".card-title").innerText = data.name;
                     },
                     error: function (data) {
                         alert("Error registering project");
                         // event.currentTarget.submit();
-                        window.top.location = window.top.location;
+
                     },
                 });
             })
@@ -983,12 +994,10 @@
                         // Reset the form if needed
                         console.log("this projce has benn saved", data);
                         // event.currentTarget.submit();
-                        window.top.location = window.top.location;
                     },
                     error: function (data) {
                         alert("Error registering project");
                         // event.currentTarget.submit();
-                        window.top.location = window.top.location;
                     },
                 });
             })
@@ -1717,12 +1726,181 @@
                             $("#validation-form")[0].reset();
                             console.log("this projce has benn saved", data);
                             // event.currentTarget.submit();
-                            window.top.location = window.top.location;
+                            console.log("current project : ",data)
+                            console.log(data.totalTaskCount)
+                            console.log(data.completeTaskCount)
+
+                            const div = document.createElement("div");
+                            div.classList.add(
+                                "p-md-3",
+                                "p-sm-2",
+                                "active-card",
+                                "mt-3",
+                                "mt-md-0",
+                                "mt-lg-0",
+                                "mt-xl-0"
+                            );
+                            div.id = `project-${data.id}`;
+
+                            const card = document.createElement("div");
+                            card.classList.add("card", "border-success");
+
+                            const cardHeader = document.createElement("div");
+                            cardHeader.classList.add("card-header");
+
+                            const dFlexContainer = document.createElement("div");
+                            dFlexContainer.classList.add("d-flex", "flex-column");
+
+                            const h2 = document.createElement("h2");
+                            h2.classList.add(
+                                "card-title",
+                                "text-center",
+                                "text-primary",
+                                "modal-detail-title"
+                            );
+                            h2.innerText = data.name;
+
+                            const pm_name_modal = document.getElementById("pm-name-modal");
+                            pm_name_modal.innerText = data.projectManagerUserDto.name;
+
+                            const dFlexBetween = document.createElement("div");
+                            dFlexBetween.classList.add("d-flex", "justify-content-between");
+
+                            const dFlexInner = document.createElement("div");
+                            dFlexInner.classList.add("d-flex");
+
+                            const img = document.createElement("img");
+                            img.src = `/images/avatars/pm_avatar.svg`;
+                            img.classList.add(
+                                "img-fluid",
+                                "rounded-circle",
+                                "d-none",
+                                "d-md-block",
+                                "d-sm-block"
+                            );
+                            img.style.width = "40px";
+                            img.alt = "Profile Image";
+                            img.loading = "lazy";
+
+                            const h5 = document.createElement("h5");
+                            h5.classList.add(
+                                "card-text",
+                                "text-center",
+                                "text-align-center",
+                                "my-auto",
+                                "fst-italic",
+                                "fs-6",
+                                "ms-2"
+                            );
+
+                            h5.innerText = data.projectManagerUserDto.name;
+
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.id = data.id;
+                            a.classList.add(
+                                "btn",
+                                "btn-white",
+                                "text-secondary",
+                                "link-shadow"
+                            );
+                            a.setAttribute("data-bs-toggle", "modal");
+                            a.setAttribute("data-bs-target", "#project-details");
+                            a.innerText = "See More";
+
+                            // Create and append the progress-related elements
+                            const cardBody = document.createElement("div");
+                            cardBody.classList.add(
+                                "card-body",
+                                "position-relative",
+                                "mx-auto"
+                            );
+
+                            const progressTitle = document.createElement("p");
+                            progressTitle.classList.add(
+                                "card-title",
+                                "text-center",
+                                "fs-6",
+                                "mb-1"
+                            );
+                            progressTitle.innerText = "progress";
+
+                            const progressCircle = document.createElement("div");
+                            progressCircle.id = `circle-progress-${data.id}`;
+                            progressCircle.classList.add(
+                                "circle-progress",
+                                "rounded-circle"
+                            );
+                            progressCircle.setAttribute("data-min-value", "0");
+                            progressCircle.setAttribute("data-max-value", "100");
+
+
+                            let percentage;
+                            console.log("taks ratio : ",data.completeTaskCount, data.totalTaskCount)
+                            if(data.totalTaskCount !== 0){
+                                percentage= data.completeTaskCount / data.totalTaskCount * 100;
+                            } else {
+                                percentage = 0;
+                            }
+                            console.log("percentage",percentage);
+
+                            progressCircle.setAttribute(
+                                "data-value",
+                                percentage
+                            );
+                            progressCircle.setAttribute("data-type", "percent");
+
+                            dFlexInner.appendChild(img);
+                            dFlexInner.appendChild(h5);
+                            dFlexBetween.appendChild(dFlexInner);
+                            dFlexBetween.appendChild(a);
+                            dFlexContainer.appendChild(h2);
+                            dFlexContainer.appendChild(dFlexBetween);
+                            cardHeader.appendChild(dFlexContainer);
+                            card.appendChild(cardHeader);
+
+                            cardBody.appendChild(progressTitle);
+                            cardBody.appendChild(progressCircle);
+                            card.appendChild(cardBody);
+
+                            div.appendChild(card);
+
+                            motherContainer.insertBefore(div, motherContainer.childNodes[0]);
+
+                            $(".circle-progress").each(function () {
+                                const minValue = $(this).attr("data-min-value");
+                                const maxValue = $(this).attr("data-max-value");
+                                const value = $(this).attr("data-value");
+                                const type = $(this).attr("data-type");
+
+                                console.log("minValue : " , minValue);
+                                console.log("maxValue : " , maxValue);
+                                console.log("value : " , value);
+                                console.log("type : " , type);
+
+
+                                if (value < 40) {
+                                    this.classList.add("circle-progress-secondary");
+                                } else if (value < 70) {
+                                    this.classList.add("circle-progress-primary");
+                                } else if (value > 69) {
+                                    this.classList.add("circle-progress-success");
+                                }
+
+                                if (this.id !== "" && this.id !== null) {
+                                    new CircleProgress("#" + this.id, {
+                                        min: minValue,
+                                        max: maxValue,
+                                        value: value,
+                                        textFormat: type,
+                                    });
+                                }
+                            });
                         },
                         error: function (data) {
                             alert("Error registering project");
                             // event.currentTarget.submit();
-                            window.top.location = window.top.location;
+                            // window.top.location = window.top.location;
                         },
                     });
                 });
