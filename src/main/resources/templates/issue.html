@@ -43,34 +43,32 @@
 
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
-        <div class="container-fluid">
-
-
-            <div class="container-fluid d-md-block pt-2 ps-s pe-2"
-                 id="dropdrown-search-bar">
-                <div class="d-flex flex-row justify-content-lg-between position-relative">
-
-                    <div class="d-inline-block d-flex mb-3" style="margin-left:450px;">
-                        <button class="btn btn-info me-2" id="reset-btn">
-                            reset
-                        </button>
-
-                        <select id="status-filter" class="form-control me-2" >
+            <div
+                    class="container-fluid pt-2 ps-s pe-2"
+                    id="dropdrown-search-bar"
+            >
+                <div class="d-flex flex-row justify-content-end gap-2">
+                    <button class="btn btn-info" id="reset-btn">
+                        reset
+                    </button>
+                    <div class="d-inline-block">
+                        <select id="status-filter" class="form-control" >
                             <option value="" selected disabled>Status</option>
                             <option value="PENDING">PENDING</option>
                             <option value="APPROVE">APPROVE</option>
                             <option value="DECLINE">DECLINE</option>
                             <option value="DUPLICATE">DUPLICATE</option>
                         </select>
-
-                        <select id="solved-filter" class="form-control me-2">
+                    </div>
+                    <div class="d-inline-block">
+                        <select id="solved-filter" class="form-control">
                             <option value="" selected disabled>Choose</option>
                             <option value="1">Solved</option>
                             <option value="0">Unsolved</option>
                         </select>
-
-
-                        <select id="category-filter" class="form-control me-2">
+                    </div>
+                    <div class="d-inline-block">
+                        <select id="category-filter" class="form-control">
                             <option value="" selected disabled>Category</option>
                             <option value="ERROR">ERROR</option>
                             <option value="BUG">BUG</option>
@@ -80,37 +78,34 @@
                             <option value="DESIGN">DESIGN</option>
                             <option value="TESTING">TESTING</option>
                             <option value="OTHER">OTHER</option>
-
                         </select>
-
                     </div>
-
-
-                    <div class="position-absolute end-0 d-flex gap-3">
-
-                        <form class="d-md-flex">
-                            <input class="form-control border-0" type="search" placeholder="Search" />
-                        </form>
-                        <!-- modal toggle button start -->
-                        <button type="button" class="btn d-none btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
-                            <i class="bi bi-plus-lg"></i>
-                        </button>
-                        <!-- modal toggle button end -->
-
-                        <!-- sortting button -->
-                        <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
-                    </div>
+                    <form class="d-inline-block">
+                        <input
+                                class="form-control border-0"
+                                type="search"
+                                placeholder="Search project "
+                        />
+                    </form>
+                    <!-- modal toggle button start -->
+                    <button type="button" class="btn d-none btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                    <!-- modal toggle button end -->
+                    <!-- sortting button -->
+                    <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+                </div>
 
                     <!-- Modal -->
-                </div>
             </div>
 
-            <ul class="nav nav-tabs nav-tabs-bordered mt-2 d-none" id="issue-link">
+        <div class="container-fluid mt-2">
+            <ul class="nav nav-tabs nav-tabs-bordered d-none" id="issue-link">
                 <li class="nav-item">
                     <button
                         class="nav-link active"
                         data-bs-toggle="tab"
-                        data-bs-target="#sort"
+                        data-bs-target="#sort-container"
                     >
                         Issue List
                     </button>
@@ -142,7 +137,7 @@
 
             <div class="tab-content pt-2">
 
-                <div class="tab-pane fade show active row row-cols-1" id="sort">
+                <div class="tab-pane fade show active row row-cols-1" id="sort-container">
 
                 </div>
 
@@ -571,7 +566,37 @@
         setupLogoutConfirmation();
     });
 
+    document.querySelector("button[data-bs-target=\"#sort-container\"]").addEventListener("show.bs.tab", async function (e) {
 
+        const issueListContainer = document.querySelector("#sort-container")
+
+        const issueList = await getData("/api/issue/list");
+
+        issueListContainer.innerHTML = '';
+
+        for(let i = issueList.length - 1; i >= 0; i--) {
+
+            issueListContainer.insertBefore(createIssueCard(issueList[i]), issueListContainer.childNodes[0]);
+
+        }
+
+    })
+
+    document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function(e) {
+
+        const unsolvedIssueListContainer = document.querySelector("#unsolved-issues")
+
+        const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
+
+        unsolvedIssueListContainer.innerHTML = '';
+
+        for(let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+
+            unsolvedIssueListContainer.insertBefore(createIssueCard(unsolvedIssueList[i]), unsolvedIssueListContainer.childNodes[0]);
+
+        }
+
+    })
 
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.comd
@@ -1137,15 +1162,20 @@
     }
 
     function createIssueCard(item) {
-                return `
+
+        const issueCard = document.createElement("div");
+
+        issueCard.classList.add("p-sm-2");
+
+        issueCard.innerHTML = `
                     <div class="p-sm-2 ">
                             <div class="card">
                                 <div class="card-header border-bottom text-dark">
                                     <div class="d-flex justify-content-between align-items-center gap-2">
                                         <div class="d-flex align-items-center gap-2">
-                                            <h5 class="card-title issueDetails" data-id="${item.id}" style="text-decoration: none; cursor:pointer;">${item.title}</h5>
+                                            <h5 class="card-text issueDetails" data-id="${item.id}" style="text-decoration: none; cursor:pointer;">${item.title}</h5>
 
-                                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                            <p class="card-text badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
                                                 ${item.responsible_party.name}
                                             </p>
                                               <span class="card-title badge rounded-pill bg-${item.solved === true ? 'success' : 'danger'}">
@@ -1186,7 +1216,9 @@
                         </div>
 
 
-                    `;
+                    `
+
+                return issueCard;
             }
         
     
@@ -1203,7 +1235,7 @@
 
                     createIssueCard(issue);
 
-                    document.querySelector("#unsolved-issues").innerHTML += createIssueCard(issue);
+                    document.querySelector("#unsolved-issues").insertBefore(createIssueCard(issue), document.querySelector("#unsolved-issues").childNodes[0]);
                 }
 
                 function loadData() {
@@ -1213,173 +1245,15 @@
                         dataType: 'json',
                         success: function (data) {
                             console.log("Data" + data);
-                            const sortContainer = $('#sort');
+                            const sortContainer = $('#sort-container');
 
                             data.forEach(item => {
 
                                 console.log("item : ", item)
 
                                 const issueDiv = createIssueCard(item);
-                                sortContainer.append(issueDiv);
+                                sortContainer.prepend(issueDiv);
                             });
-
-
-                            $('.tab-content').on('click', '.see-more-button', function () {
-                                // Get the issue ID directly from the button's data-id attribute
-                                const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
-                                console.log('Clicked button with data-iD:', issueId);
-
-                                $.ajax({
-                                    url: 'api/issue/list/byId/' + issueId,
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        console.log('Data received:', data);
-                                        if (data) {
-                                            $('#corrective_actionInput').text(data.corrective_action);
-                                            $('#preventive_actionInput').text(data.preventive_action);
-                                            if (data.solved === false) {
-                                                $('#solve-btn').hide();
-                                                $('#issue-edit-btn').show();
-                                            } else {
-                                                $('#solve-btn').show();
-                                                $('#issue-edit-btn').hide();
-                                            }
-
-                                            $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
-
-                                            $('#issueEditModal').modal('show');
-
-                                        } else {
-                                            console.log('No data received for issue ID:', issueId);
-                                        }
-                                    },
-                                    error: function (xhr, status, error) {
-                                        console.log('AJAX error:', error);
-                                    }
-                                });
-                            });
-
-                            $('.tab-content').on('click', '.issueDetails', function () {
-
-                                console.log("click on issueDetails ")
-
-                                // Get the issue ID directly from the button's data-id attribute
-                                const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
-                                console.log('Clicked button with data-iD:', issueId);
-
-                                $.ajax({
-                                    url: 'api/issue/list/byId/' + issueId,
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        console.log('Data received:', data);
-                                        if (data) {
-                                            $("#details").attr("data-currentEditingIssueId", data.id);
-                                            $('#issueTitleDetails').val(data.title);
-                                            $('#issue_categoryDetails').val(data.issueCategory);
-                                            $('#uploaderDetails').text(data.user_uploader.name);
-                                            $('#picDetails').text(data.user_pic.name);
-                                            $('#rpDetails').text(data.responsible_party.name);
-                                            const issueDetail = new Quill(document.querySelector('#descriptionDetails'), {
-                                                modules: {
-                                                    toolbar: toolbaroptions,
-                                                },
-                                                theme: 'bubble',
-                                            });
-                                            issueDetail.root.innerHTML = '';
-                                            issueDetail.clipboard.dangerouslyPasteHTML(
-                                                0,
-                                                data.description
-                                            );
-                                            issueDetail.on('text-change', function(delta, source) {
-                                                console.log("text change", issueDetail.root.innerHTML)
-                                                $("#issue-description-save-btn-container").removeClass("d-none")
-                                            });
-                                            $("#issue-description-save-btn").on('click', function() {
-
-                                                const issue = {
-                                                    id: data.id,
-                                                    description: issueDetail.root.innerHTML,
-                                                    updated_date : Date.now()
-                                                }
-
-                                                console.log("issue", issue)
-
-                                                $.ajax({
-                                                    url: `/api/issue/update/${data.id}`, // Replace with your actual URL
-                                                    type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
-                                                    dataType: 'json',
-                                                    contentType: 'application/json',
-                                                    data: JSON.stringify(issue),
-                                                    success: function (response) {
-                                                        console.log('Ajax request successful:', response);
-                                                        // Handle success response
-                                                        $("#issue-description-save-btn-container").addClass('d-none')
-                                                    },
-                                                    error: function (xhr, status, error) {
-                                                        console.log('Ajax request error:', error);
-                                                        // Handle error response
-                                                    }
-                                                });
-                                            })
-                                            $('#direct_causeDetails').val(data.direct_cause);
-                                            $('#root_causeDetails').val(data.root_cause);
-                                            $('#placeDetails').val(data.place);
-                                            $('#impactDetails').val(data.impact);
-                                            $('#correctiveDetails').text(data.corrective_action);
-                                            $('#preventiveDetails').text(data.preventive_action);
-                                            $('#solveDateDetails').text(formatDate(data.created_date));
-                                            $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
-                                            $('#issueDetailsModal').modal('show');
-
-                                            const notSamePerson = getLoginUser.currentUser.id !== data.user_uploader.id
-
-                                            if(notSamePerson) {
-                                                console.log(getLoginUser.currentUser.id)
-                                                console.log(data.user_uploader.id)
-                                                console.log(getLoginUser.currentUser.id !== data.user_uploader.id)
-                                                console.log("solved", data.solved)
-                                                $('#issueTitleDetails').prop('disabled', true);
-                                                $('#issue_categoryDetails').prop('disabled', true);
-                                                $('#descriptionDetails').prop('disabled', true);
-                                                $('#direct_causeDetails').prop('disabled', true);
-                                                $('#root_causeDetails').prop('disabled', true);
-                                                $('#placeDetails').prop('disabled', true);
-                                                $('#impactDetails').prop('disabled', true);
-                                                issueDetail.enable(false)
-                                            } else {
-                                                if(data.solved) {
-                                                    $('#issueTitleDetails').prop('disabled', true);
-                                                    $('#issue_categoryDetails').prop('disabled', true);
-                                                    $('#descriptionDetails').prop('disabled', true);
-                                                    $('#direct_causeDetails').prop('disabled', true);
-                                                    $('#root_causeDetails').prop('disabled', true);
-                                                    $('#placeDetails').prop('disabled', true);
-                                                    $('#impactDetails').prop('disabled', true);
-                                                    issueDetail.enable(false)
-                                                } else {
-                                                    $('#issueTitleDetails').prop('disabled', false);
-                                                    $('#issue_categoryDetails').prop('disabled', false);
-                                                    $('#descriptionDetails').prop('disabled', false);
-                                                    $('#direct_causeDetails').prop('disabled', false);
-                                                    $('#root_causeDetails').prop('disabled', false);
-                                                    $('#placeDetails').prop('disabled', false);
-                                                    $('#impactDetails').prop('disabled', false);
-                                                    issueDetail.enable(true)
-                                                }
-                                            }
-
-                                        } else {
-                                            console.log('No data received for issue ID:', issueId);
-                                        }
-                                    },
-                                    error: function (xhr, status, error) {
-                                        console.log('AJAX error:', error);
-                                    }
-                                });
-                            });
-
                         },
                         error: function (error) {
                             console.log('Error fetching data:', error);
@@ -1389,6 +1263,162 @@
 
                 loadData();
 
+                $('.tab-content').on('click', '.see-more-button', function () {
+                    // Get the issue ID directly from the button's data-id attribute
+                    const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
+                    console.log('Clicked button with data-iD:', issueId);
+
+                    $.ajax({
+                        url: 'api/issue/list/byId/' + issueId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log('Data received:', data);
+                            if (data) {
+                                $('#corrective_actionInput').text(data.corrective_action);
+                                $('#preventive_actionInput').text(data.preventive_action);
+                                if (data.solved === false) {
+                                    $('#solve-btn').hide();
+                                    $('#issue-edit-btn').show();
+                                } else {
+                                    $('#solve-btn').show();
+                                    $('#issue-edit-btn').hide();
+                                }
+
+                                $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+
+                                $('#issueEditModal').modal('show');
+
+                            } else {
+                                console.log('No data received for issue ID:', issueId);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('AJAX error:', error);
+                        }
+                    });
+                });
+
+                $('.tab-content').on('click', '.issueDetails', function () {
+
+                    console.log("click on issueDetails ")
+
+                    // Get the issue ID directly from the button's data-id attribute
+                    const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
+                    console.log('Clicked button with data-iD:', issueId);
+
+                    $.ajax({
+                        url: 'api/issue/list/byId/' + issueId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log('Data received:', data);
+                            if (data) {
+                                $("#details").attr("data-currentEditingIssueId", data.id);
+                                $('#issueTitleDetails').val(data.title);
+                                $('#issue_categoryDetails').val(data.issueCategory);
+                                $('#uploaderDetails').text(data.user_uploader.name);
+                                $('#picDetails').text(data.user_pic.name);
+                                $('#rpDetails').text(data.responsible_party.name);
+                                const issueDetail = new Quill(document.querySelector('#descriptionDetails'), {
+                                    modules: {
+                                        toolbar: toolbaroptions,
+                                    },
+                                    theme: 'bubble',
+                                });
+                                issueDetail.root.innerHTML = '';
+                                issueDetail.clipboard.dangerouslyPasteHTML(
+                                    0,
+                                    data.description
+                                );
+                                issueDetail.on('text-change', function(delta, source) {
+                                    console.log("text change", issueDetail.root.innerHTML)
+                                    $("#issue-description-save-btn-container").removeClass("d-none")
+                                });
+                                $("#issue-description-save-btn").on('click', function() {
+
+                                    const issue = {
+                                        id: data.id,
+                                        description: issueDetail.root.innerHTML,
+                                        updated_date : Date.now()
+                                    }
+
+                                    console.log("issue", issue)
+
+                                    $.ajax({
+                                        url: `/api/issue/update/${data.id}`, // Replace with your actual URL
+                                        type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
+                                        dataType: 'json',
+                                        contentType: 'application/json',
+                                        data: JSON.stringify(issue),
+                                        success: function (response) {
+                                            console.log('Ajax request successful:', response);
+                                            // Handle success response
+                                            $("#issue-description-save-btn-container").addClass('d-none')
+                                        },
+                                        error: function (xhr, status, error) {
+                                            console.log('Ajax request error:', error);
+                                            // Handle error response
+                                        }
+                                    });
+                                })
+                                $('#direct_causeDetails').val(data.direct_cause);
+                                $('#root_causeDetails').val(data.root_cause);
+                                $('#placeDetails').val(data.place);
+                                $('#impactDetails').val(data.impact);
+                                $('#correctiveDetails').text(data.corrective_action);
+                                $('#preventiveDetails').text(data.preventive_action);
+                                $('#solveDateDetails').text(formatDate(data.created_date));
+                                $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+                                $('#issueDetailsModal').modal('show');
+
+                                const notSamePerson = getLoginUser.currentUser.id !== data.user_uploader.id
+
+                                if(notSamePerson) {
+                                    console.log(getLoginUser.currentUser.id)
+                                    console.log(data.user_uploader.id)
+                                    console.log(getLoginUser.currentUser.id !== data.user_uploader.id)
+                                    console.log("solved", data.solved)
+                                    $('#issueTitleDetails').prop('disabled', true);
+                                    $('#issue_categoryDetails').prop('disabled', true);
+                                    $('#descriptionDetails').prop('disabled', true);
+                                    $('#direct_causeDetails').prop('disabled', true);
+                                    $('#root_causeDetails').prop('disabled', true);
+                                    $('#placeDetails').prop('disabled', true);
+                                    $('#impactDetails').prop('disabled', true);
+                                    issueDetail.enable(false)
+                                } else {
+                                    if(data.solved) {
+                                        $('#issueTitleDetails').prop('disabled', true);
+                                        $('#issue_categoryDetails').prop('disabled', true);
+                                        $('#descriptionDetails').prop('disabled', true);
+                                        $('#direct_causeDetails').prop('disabled', true);
+                                        $('#root_causeDetails').prop('disabled', true);
+                                        $('#placeDetails').prop('disabled', true);
+                                        $('#impactDetails').prop('disabled', true);
+                                        issueDetail.enable(false)
+                                    } else {
+                                        $('#issueTitleDetails').prop('disabled', false);
+                                        $('#issue_categoryDetails').prop('disabled', false);
+                                        $('#descriptionDetails').prop('disabled', false);
+                                        $('#direct_causeDetails').prop('disabled', false);
+                                        $('#root_causeDetails').prop('disabled', false);
+                                        $('#placeDetails').prop('disabled', false);
+                                        $('#impactDetails').prop('disabled', false);
+                                        issueDetail.enable(true)
+                                    }
+                                }
+
+                            } else {
+                                console.log('No data received for issue ID:', issueId);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log('AJAX error:', error);
+                        }
+                    });
+                });
+
                 const pendingIssueList = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
 
                 console.log("pending issue list", pendingIssueList)
@@ -1397,7 +1427,7 @@
                     document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
                 }
 
-                for (let i = 0; i < pendingIssueList.length; i++) {
+                for (let i = pendingIssueList.length - 1; i >= 0; i--) {
 
                     const currentIssue = pendingIssueList[i];
 
@@ -1437,7 +1467,7 @@
                                     </button>
                                 </div>
                                 <div class="col issue-time-line d-flex gap-2">
-                                    <p class="btn custom-color rounded-pill">${currentIssue.issue_category}</p>
+                                    <p class="btn custom-color rounded-pill">${currentIssue.issueCategory}</p>
                                 </div>
                             </div>
                                 <div class="card-body">
@@ -1502,7 +1532,6 @@
                                 console.log("Issue Updated Successfully");
                                 // alert("Issue Updated Successfully");
                                 showSuccess("Issue Updated Successfuly.");
-                                window.top.location = window.top.location;
                             },
 
                         });
@@ -1649,7 +1678,7 @@
                     success: function (data) {
                         console.log('Success. Received data:', data);
 
-                        const sortContainer = $('#sort');
+                        const sortContainer = $('#sort-container');
                         sortContainer.empty(); // Clear previous content
 
                         // Check if data is not empty
@@ -1694,7 +1723,7 @@
                     success: function (data) {
                         console.log('Success. Received data:', data);
 
-                        const sortContainer = $('#sort');
+                        const sortContainer = $('#sort-container');
                         sortContainer.empty(); // Clear previous content
 
                         // Check if data is not empty
@@ -1740,7 +1769,7 @@
                     success: function (data) {
                         console.log('Success. Received data:', data);
 
-                        const sortContainer = $('#sort');
+                        const sortContainer = $('#sort-container');
                         sortContainer.empty(); // Clear previous content
 
                         // Check if data is not empty

@@ -168,6 +168,11 @@ public class ProjectController {
             case "PROJECT_MANAGER" -> {
                 List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know
 
+                projects.forEach(project -> {
+                    log.info("total taskcount is here : {}", project.getTotalTaskCount());
+                    log.info("complete taskcount is here : {}", project.getCompleteTaskCount());
+                });
+
                 return getListResponseEntity(projects);
             }
             case "DEPARTMENT_HEAD" -> {
