@@ -1,11 +1,6 @@
 <!DOCTYPE html>
-<html
-        lang="en"
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="layout/layout"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="layout/layout" xmlns:th="http://www.thymeleaf.org">
 <head>
 </head>
 
@@ -14,15 +9,8 @@
 <script type="module" src="/js/callDataForTask.js" async></script>
 
 <!-- Spinner Start -->
-<div
-        id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
->
-    <div
-            class="spinner-border text-primary"
-            style="width: 3rem; height: 3rem"
-            role="status"
-    >
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
         <span class="sr-only">Loading...</span>
     </div>
 </div>
@@ -31,37 +19,23 @@
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
     <!-- Content Start -->
-    <div
-            class="content"
-            style="
+    <div class="content" style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
                         #444cf7 0.6000000000000001px,
                         #e5e5f7 0.6000000000000001px
-                    );
-                    background-size: 12px 12px;
-                "
-    >
-        <div
-                th:replace="fragments/navigation :: navigation-without-search"
-        ></div>
+                    ); background-size: 12px 12px;">
+        <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
         <div class="container-fluid mt-2">
             <!-- nav for task and gantt chart start -->
             <nav>
                 <ul class="nav nav-tabs rounded-top" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button
-                                class="nav-link active border-primary border border-bottom-0"
-                                id="tasks-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#task"
-                                type="button"
-                                role="tab"
-                                aria-controls="task"
-                                aria-selected="false"
-                        >
+                        <button class="nav-link active border-primary border border-bottom-0"
+                                id="tasks-tab" data-bs-toggle="tab" data-bs-target="#task"
+                                type="button" role="tab" aria-controls="task" aria-selected="false">
                             Tasks
                             <p style="display:none;" th:text="${projectId}" id="projectId"></p>
                             <p style="display:none;" th:text="${project.getStart_date()}" id="projectStartDate"></p>
@@ -69,40 +43,19 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button
-                                class="nav-link border-primary border border-bottom-0 rounded-top"
-                                id="gantt-chart-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#gantt-chart"
-                                type="button"
-                                role="tab"
-                                aria-controls="gantt-chart"
-                                aria-selected="false"
-                        >
+                        <button class="nav-link border-primary border border-bottom-0 rounded-top"
+                                id="gantt-chart-tab" data-bs-toggle="tab" data-bs-target="#gantt-chart" type="button"
+                                role="tab" aria-controls="gantt-chart" aria-selected="false">
                             Calendar
                         </button>
                     </li>
                 </ul>
             </nav>
             <!-- nav for task and gantt chart end -->
-            <div
-                    class="tab-content position-relative"
-                    style="height: 600px"
-                    id="myTabContent"
-            >
-                <div
-                        class="tab-pane fade show active"
-                        id="task"
-                        role="tabpanel"
-                        aria-labelledby="tasks-tab"
-                >
-                    <div
-                            class="d-flex justify-content-end trash-can-container dummy-trash position-absolute"
-                            style="bottom: 100px; right: 0; width: 60px"
-                    >
-                            <span class="trash align-self-end dummy-trash">
-                                <span class="dummy-trash"></span>
-                            </span>
+            <div class="tab-content position-relative" style="height: 600px" id="myTabContent">
+                <div class="tab-pane fade show active" id="task" role="tabpanel" aria-labelledby="tasks-tab">
+                    <div class="d-flex justify-content-end trash-can-container dummy-trash position-absolute" style="bottom: 100px; right: 0; width: 60px">
+                            <span class="trash align-self-end dummy-trash"><span class="dummy-trash"></span></span>
                     </div>
                     <div class="board">
                         <!-- add task form start -->
@@ -110,73 +63,35 @@
 
                         <div class="lanes" id="sort-container">
                             <div class="lane">
-                                <h3
-                                        class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center"
-                                >
+                                <h3 class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center">
                                     TODO
-                                    <button
-                                            type="submit"
-                                            class="btn btn-primary"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#add-task"
-                                    >
-                                        <i
-                                                class="bi bi-plus-circle"
-                                        ></i>
+                                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-task">
+                                        <i class="bi bi-plus-circle"></i>
                                     </button>
                                 </h3>
                                 <div class="swim-lane p-3" id="TODO">
                                 </div>
-                                <div
-                                        class="bg-primary rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
+                                <div class="bg-primary rounded-bottom" style="height: 10px"></div>
                             </div>
                             <!-- doing start -->
                             <div class="lane">
-                                <h3
-                                        class="heading bg-info text-white rounded-top py-hee"
-                                >
-                                    IN PROGRESS
-                                </h3>
-                                <div
-                                        class="swim-lane p-3"
-                                        id="IN_PROGRESS"
-                                >
-                                </div>
-                                <div
-                                        class="bg-info rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
+                                <h3 class="heading bg-info text-white rounded-top py-hee">IN PROGRESS</h3>
+                                <div class="swim-lane p-3" id="IN_PROGRESS"></div>
+                                <div class="bg-info rounded-bottom" style="height: 10px"></div>
                             </div>
                             <!-- doing end -->
                             <!-- done start -->
                             <div class="lane">
-                                <h3
-                                        class="heading bg-success text-white rounded-top py-hee"
-                                >
-                                    FINISHED
-                                </h3>
-                                <div
-                                        class="swim-lane p-3"
-                                        id="FINISHED"
-                                ></div>
-                                <div
-                                        class="bg-success rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
+                                <h3 class="heading bg-success text-white rounded-top py-hee">FINISHED</h3>
+                                <div class="swim-lane p-3" id="FINISHED"></div>
+                                <div class="bg-success rounded-bottom" style="height: 10px"></div>
                             </div>
                             <!-- done end -->
                         </div>
                     </div>
                 </div>
                 <!-- calendar start -->
-                <div
-                        class="tab-pane fade mt-3"
-                        id="gantt-chart"
-                        role="tabpanel"
-                        aria-labelledby="gantt-chart-tab"
-                >
+                <div class="tab-pane fade mt-3" id="gantt-chart" role="tabpanel" aria-labelledby="gantt-chart-tab">
                     <div id="calendar"></div>
                 </div>
 
@@ -186,258 +101,35 @@
     </div>
     <!-- Content End -->
 
-    <!-- task's details start -->
-    <div class="modal fade" id="task-details" data-bs-keyboard="true" data-bs-backdrop="static" tabindex="-1" >
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content task-content">
-                <div class="modal-header">
-                    <h2 class="card-title display-6 fw-bold" style="text-align: center;" id="taskTitle">
-                    </h2>
-                    <!-- d-none that would be hidden and later on will be shown -->
-                    <input type="text" id="taskTitleInput" class="d-none">
-                    <span class='ms-3 rounded-2 p-2 text-white' id="status"></span>
-
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row row-cols-2">
-                        <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-bars-staggered"
-                                    ></i
-                                    ></span>
-                            <label
-                                    id="description-label"
-                                    class="editable-label"
-                            >
-                                Description</label
-                            >
-                            <textarea
-                                    id="description-editor"
-                                    class="form-control editable-input"
-                                    name="description"
-                                    rows="4"
-                                    disabled
-                            ></textarea>
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-                            <i class="fa-solid fa-thumbtack"></i>
-                            <label
-                                    id="duration"
-                                    class="editable-label"
-                            >
-                                Type of Task</label
-                            >
-                            <div class="mt-2" sec:authorize="hasAnyRole('FOC','EMPLOYEE','CONTRACT','PMO','DEPARTMENT_HEAD','SDQC')">
-                                >
-                                <span class="bg-secondary text-white border-0 p-2 rounded-1" id="task-group-span"></span>
-                            </div>
-                            <select class="form-control" aria-label="Select Group" data-live-search="true"
-                                    id="task-group" name="group" sec:authorize="hasRole('PROJECT_MANAGER')">
-                                <option value="A">A - Related With Project Development</option>
-                                <option value="B">B - Training</option>
-                                <option value="C">C - Idling</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-                            <i class="fa-solid fa-users"></i>
-                            <label
-                                    for="assigned-member-tagify"
-                            >
-                                Assigned Member </label
-                            >
-                            <input
-                                    id="assigned-member-tagify"
-                                    class="editable-input"
-                                    name="member-tags"
-                                    sec:authorize="hasRole('PROJECT_MANAGER')"
-                            />
-                            <div class="mt-2"
-                                 sec:authorize="hasAnyRole('FOC','EMPLOYEE','CONTRACT','PMO','DEPARTMENT_HEAD','SDQC')">
-                                <span class="bg-dark text-white border-0 p-2 rounded-1"
-                                      id="assigned-member-span"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 mb-4">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-calendar-days"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="editable-label"
-                                    for="task-detail-start-date"
-                            >
-                                Start Date</label
-                            >
-                            <input
-                                    type="text"
-                                    id="task-detail-start-date"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
-                                        "
-                                    disabled
-                            />
-                        </div>
-
-                        <div class="col-lg-4 mb-4">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-calendar-days"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="editable-label"
-                                    for="task-detail-due-date"
-                            >
-                                Due Date</label
-                            >
-                            <input
-                                    type="text"
-                                    id="task-detail-due-date"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
-                                        "
-                                    disabled
-                            />
-                        </div>
-
-                        <div class="col-lg-4 mb-4">
-                            <span
-                            ><i
-                                    class="fa-solid fa-clock"
-                            ></i
-                            ></span>
-                            <label
-                                    class="editable-label"
-                                    for="plan-edit-hours"
-                            >
-                                Plan Hours</label>
-                            <input
-                                    type="number"
-                                    class="form-control border-task-description"
-                                    id="plan-edit-hours"
-                            />
-                        </div>
-                    </div>
-
-                    <!--                    edit button and cancel button -->
-                    <div class="text-center mt-3">
-                        <button
-                                type="submit"
-                                class="btn btn-primary col-2"
-                                data-dismiss="#task-details"
-                                id="task-edit-btn"
-                        >
-                            Edit
-                        </button>
-                        <button class="d-none col-1 rounded-2 border-2 border-success"
-                                id="save-edit-btn">
-                            <i class="fa-solid fa-circle-check text-success"></i>
-                        </button>
-                        <button class="d-none col-1 rounded-2 border-2 border-danger"
-                                id="cancel-edit-btn">
-                            <i class="fa-solid fa-circle-xmark text-danger"></i>
-                        </button>
-                        <button
-                                type="reset"
-                                class="btn btn-secondary mr-3"
-                                data-bs-dismiss="modal"
-                                id="task-cancel-btn"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- task's details end -->
-
     <!-- add task -->
     <div class="modal fade" data-bs-keyboard="true" id="add-task">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content task-content">
                 <div class="modal-header">
-                    <h2 class="card-title" style="text-align: center">
-                        Add Task
-                    </h2>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
+                    <h2 class="card-title" style="text-align: center"> Add Task </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
                 <div class="modal-body">
                     <div class="row g-3" id="todo-form">
                         <div class="col-12">
-                            <label
-                                    for="title"
-                                    class="col-sm-12 col-form-label"
-                            >Task Title <span
-                                    style="color:red"> *</span></label
-                            >
-                            <input
-                                    type="text"
-                                    class="form-control border-task-title"
-                                    id="title"
-                                    name="title"
-                            ></input>
+                            <label for="title" class="col-sm-12 col-form-label">Task Title <span style="color:red"> *</span></label>
+                            <input type="text" class="form-control border-task-title" id="title" name="title"></input>
                         </div>
 
                         <div class="col-12">
-                            <label
-                                    for="description"
-                                    class="col-sm-12 col-form-label"
-                            >Description <span
-                                    style="color:red"> *</span></label
-                            >
-                            <textarea
-                                    class="form-control border-task-description"
-                                    id="description"
-                                    name="description"
-                                    rows="2"
-                            ></textarea>
+                            <label for="description" class="col-sm-12 col-form-label" >Description <span style="color:red"> *</span></label>
+                            <textarea class="form-control border-task-description"
+                                    id="description" name="description" rows="2"></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                            <label
-                                    for="select-member"
-                                    class="col-sm-12 col-form-label"
-                            >Assign Members<span style="color: red">
-                                            *</span
-                            ></label
-                            >
-                            <input
-                                    type="text"
-                                    name="member-tags"
-                                    id="select-member"
-                                    placeholder="Select An Employee"
-                            />
+                            <label for="select-member" class="col-sm-12 col-form-label">
+                                Assign Members<span style="color: red">*</span></label>
+                            <input type="text" name="member-tags" id="select-member" placeholder="Select An Employee"/>
                         </div>
                         <div class="col-lg-6">
-                            <label for="group" class="col-sm-12 col-form-label">Group <span
-                                    style="color:red"> *</span></label>
+                            <label for="group" class="col-sm-12 col-form-label">
+                                Group <span style="color:red"> *</span></label>
                             <select class="form-control" aria-label="Select Group" data-live-search="true"
                                     id="group" name="group">
                                 <option value="A">A - Related With Project Development</option>
@@ -447,69 +139,28 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label
-                                    for="start_date"
-                                    class="col-sm-12 col-form-label"
-                            >Start Date
-                                <span style="color: red">
-                                            *</span
-                                ></label
-                            >
-                            <input
-                                    type="text"
-                                    class="form-control border-task-description"
-                                    id="start_date"
-                            />
+                            <label for="start_date" class="col-sm-12 col-form-label">
+                                Start Date<span style="color: red">*</span></label>
+                            <input type="text" class="form-control border-task-description" id="start_date"/>
                         </div>
 
                         <div class="col-md-4">
-                            <label
-                                    for="end_date"
-                                    class="col-sm-12 col-form-label"
-                            >End Date
-                                <span style="color: red">
-                                            *</span
-                                ></label
-                            >
-                            <input
-                                    type="text"
-                                    class="form-control border-task-description"
-                                    id="end_date"
-                            />
+                            <label for="end_date" class="col-sm-12 col-form-label">
+                                End Date<span style="color: red">*</span></label>
+                            <input type="text" class="form-control border-task-description" id="end_date"/>
                         </div>
 
                         <div class="col-md-4">
-                            <label
-                                    for="plan-hours"
-                                    class="col-sm-12 col-form-label"
-                            >Plan Hours
-                                <span style="color: red">
-                                            *</span
-                                ></label
-                            >
-                            <input
-                                    type="number"
-                                    class="form-control border-task-description"
-                                    id="plan-hours"
-                            />
+                            <label for="plan-hours"class="col-sm-12 col-form-label">
+                                Plan Hours<span style="color: red">*</span></label>
+                            <input type="number" class="form-control border-task-description" id="plan-hours"/>
                         </div>
 
 
                         <div class="text-center mt-3">
-                            <button
-                                    type="submit"
-                                    class="btn btn-primary col-2"
-                                    data-dismiss="modal"
-                                    id="task-add-btn"
-                            >
-                                Add
-                            </button>
-                            <button
-                                    class="btn btn-secondary mr-3"
-                                    data-dismiss="modal"
-                            >
-                                Cancel
-                            </button>
+                            <button type="submit" class="btn btn-primary col-2" data-dismiss="modal"
+                                    id="task-add-btn">Add</button>
+                            <button class="btn btn-secondary mr-3" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -518,13 +169,185 @@
     </div>
     <!-- add task -->
 
+    <!-- task's details for project manager start -->
+    <div class="modal fade" id="pm-task-details" data-bs-keyboard="true" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content task-content">
+                <div class="modal-header">
+                    <h2 class="card-title display-6 fw-bold" style="text-align: center;" id="pm-task-title">
+                    </h2>
+                    <!-- d-none that would be hidden and later on will be shown -->
+                    <input type="text" id="pm-task-title-input" class="d-none">
+                    <span class='ms-3 rounded-2 p-2 text-white' id="pm-status"></span>
+
+                    <button type="button" class="btn-close btn-close-task-details" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row row-cols-2">
+                        <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
+                                    <span><i class="fa-solid fa-bars-staggered"></i></span>
+                            <label class="editable-label" for="pm-description-editor">Description</label>
+                            <textarea id="pm-description-editor" class="form-control editable-input"
+                                    name="description" rows="4" disabled ></textarea>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <i class="fa-solid fa-thumbtack"></i>
+                            <label class="editable-label" >Type of Task</label>
+                            <div class="mt-2">
+                                <span class="bg-secondary text-white border-0 p-2 rounded-1"
+                                      id="pm-task-group-span"></span>
+                            </div>
+                            <select class="form-control d-none" aria-label="Select Group" data-live-search="true"
+                                    id="pm-task-group" name="group">
+                                <option value="A">A - Related With Project Development</option>
+                                <option value="B">B - Training</option>
+                                <option value="C">C - Idling</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <i class="fa-solid fa-users"></i>
+                            <label for="pm-assigned-member-tagify">Assigned Member </label>
+                            <input type="text"value=""  id="pm-assigned-member-tagify" class="editable-input d-none" name="member-tags" placeholder="Update Employee for Task"/>
+                            <div class="mt-2">
+                                <span class="bg-dark text-white border-0 p-2 rounded-1"
+                                      id="pm-assigned-member-span"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 mb-4">
+                            <span><i class="fa-solid fa-hourglass-start"></i></span>
+                            <label class="label">
+                                Duration</label>
+                            <div class="mt-2">
+                                <div class="badge rounded-3 bg-primary fs-6" id="pm-task-duration">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="editable-label" for="pm-task-detail-start-date">Start Date</label>
+                            <input type="text" id="pm-task-detail-start-date" class="form-control border-task editable-input"
+                                    dir="auto" data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled/>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="editable-label" for="pm-task-detail-due-date">Due Date</label>
+                            <input type="text" id="pm-task-detail-due-date" class="form-control border-task editable-input" dir="auto"
+                                    data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled/>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="editable-label" for="pm-plan-edit-hours">Plan Hours</label>
+                            <input type="number" class="form-control border-task-description" id="pm-plan-edit-hours"/>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="editable-label" for="pm-actual-edit-hours">Actual Hours</label>
+                            <input type="number" class="form-control" id="pm-actual-edit-hours"/>
+                        </div>
+
+
+                    </div>
+
+                    <!--                    edit button and cancel button -->
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-primary col-2" data-dismiss="#task-details" id="task-edit-btn">Edit</button>
+                        <button class="d-none col-1 rounded-2 border-2 border-success" id="save-edit-btn">
+                            <i class="fa-solid fa-circle-check text-success"></i>
+                        </button>
+                        <button class="d-none col-1 rounded-2 border-2 border-danger" id="cancel-edit-btn">
+                            <i class="fa-solid fa-circle-xmark text-danger"></i>
+                        </button>
+                        <button type="reset" class="btn btn-secondary mr-3 btn-close-task-details" data-bs-dismiss="modal" id="task-cancel-btn">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- task's details for project manager end -->
+
+    <!-- task's details for member start -->
+    <div class="modal fade" id="member-task-details" data-bs-keyboard="true" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content task-content">
+                <div class="modal-header">
+                    <h2 class="card-title display-6 fw-bold" style="text-align: center;" id="member-task-title">
+                    </h2>
+                    <span class='ms-3 rounded-2 p-2 text-white' id="member-task-status"></span>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row row-cols-2">
+                        <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
+                                    <span><i class="fa-solid fa-bars-staggered"></i></span>
+                            <label class="label">Description</label>
+                            <textarea id="member-task-description" class="form-control" name="description" rows="4" disabled></textarea>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <i class="fa-solid fa-thumbtack"></i>
+                            <label class="label" >Type of Task</label>
+                            <div class="mt-2">
+                                <span class="bg-secondary text-white border-0 p-2 rounded-1" id="member-task-group-span"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <i class="fa-solid fa-users"></i>
+                            <label class="label">Assigned Member </label>
+                            <div class="mt-2">
+                                <span class="bg-dark text-white border-0 p-2 rounded-1" id="member-assigned-member-span"></span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-lg-2 mb-4">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="label">Plan Hours</label>
+                            <div class="mt-2"><div class="badge rounded-3 bg-info fs-6" id="member-task-plan-hours"></div></div>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="label">Start Date</label>
+                            <input type="text" id="member-task-detail-start-date" class="form-control" dir="auto" data-autosize="true"
+                                    style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled />
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="label">Due Date</label>
+                            <input type="text" id="member-task-detail-due-date" class="form-control" dir="auto" data-autosize="true"
+                                    style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled />
+                        </div>
+
+
+                        <div class="col-lg-2 mb-4">
+                            <span><i class="fa-solid fa-hourglass-start"></i></span>
+                            <label class="label">Duration</label>
+                            <div class="mt-2"><div class="badge rounded-3 bg-primary fs-6" id="member-task-duration"></div></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- task's details for member end -->
+
+
     <!-- confrim box for delete -->
-    <div
-            class="modal fade"
-            id="confirm-box"
-            data-bs-keyboard="false"
-            data-bs-backdrop="static"
-    >
+    <div class="modal fade" id="confirm-box" data-bs-keyboard="false" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -536,6 +359,23 @@
         </div>
     </div>
     <!-- confirm box for delete -->
+
+    <!--    actual hours input modal -->
+    <div class="modal fade" id="actual-hours-input-modal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">Enter Actual Hours</div>
+                <div class="modal-body">
+                    <label for="actual-hours-input" class="col-form-label"></label>
+                    <input type="number" class="form-control" id="actual-hours-input">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="actual-hours-input-btn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    actual hours input modal -->
 
     <!--    for select drop-drown-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
@@ -574,6 +414,11 @@
     <script type="module">
         import {getData, sendData} from "/js/api-function.js";
         import {getTimeElapsed} from "/js/time.js";
+        import {getUser} from "/js/currentLoginUser.js";
+
+        const currentUser = await getUser();
+
+        var userId;
 
         const projectStartDateElement = document.getElementById("projectStartDate");
         const projectEndDateElement = document.getElementById("projectEndDate");
@@ -629,7 +474,7 @@
         console.log("MEMBERS LIST", membersList);
 
         var memberInputTag = document.querySelector('input[id=select-member]'),
-            tagify = new Tagify(memberInputTag, {
+            originalTagify = new Tagify(memberInputTag, {
                 enforceWhitelist: true,
                 mode: "select",
                 whitelist: membersList.map((member) => {
@@ -639,8 +484,8 @@
             })
 
         // bind events
-        tagify.on('add', onAddTag)
-        tagify.DOM.input.addEventListener('focus', onSelectFocus)
+        originalTagify.on('add', onAddTag)
+        originalTagify.DOM.input.addEventListener('focus', onSelectFocus)
 
         function onAddTag(e) {
 
@@ -652,133 +497,6 @@
             console.log(e)
         }
 
-        // Get all elements with the common class name
-        const editableInputs = document.querySelectorAll(".editable-input");
-        const editBtn = document.getElementById("task-edit-btn");
-        const cancelBtn = document.getElementById("task-cancel-btn");
-        const saveBtn = document.getElementById("save-edit-btn");
-        const cancelEditBtn = document.getElementById("cancel-edit-btn");
-
-        editBtn.addEventListener("click", function () {
-
-            editableInputs.forEach((input) => {
-                input.removeAttribute("disabled");
-            });
-
-            //hide title
-            document.getElementById("taskTitle").classList.add("d-none");
-            //show input
-            document.getElementById("taskTitleInput").classList.remove("d-none");
-            //set input value to title
-            document.getElementById("taskTitleInput").value = document.getElementById("taskTitle").innerText;
-
-            //hide the edit button
-            editBtn.classList.add("d-none");
-
-            //show the two button
-            saveBtn.classList.remove("d-none");
-            cancelEditBtn.classList.remove("d-none");
-
-        });
-
-        cancelEditBtn.addEventListener("click", function (event) {
-
-
-            //hide title
-            document.getElementById("taskTitle").classList.remove("d-none");
-            //show input
-            document.getElementById("taskTitleInput").classList.add("d-none");
-
-            //hide the two button
-            saveBtn.classList.add("d-none");
-            cancelEditBtn.classList.add("d-none");
-
-            //show the edit button
-            editBtn.classList.remove("d-none");
-
-            // don't let the button close modal
-            event.preventDefault();
-            editableInputs.forEach((input) => {
-                input.setAttribute("disabled", "");
-            });
-
-        });
-
-        cancelBtn.addEventListener("click", function (event) {
-
-            //hide title
-            document.getElementById("taskTitle").classList.remove("d-none");
-            //show input
-            document.getElementById("taskTitleInput").classList.add("d-none");
-
-            //hide the two button
-            saveBtn.classList.add("d-none");
-            cancelEditBtn.classList.add("d-none");
-
-            //show the edit button
-            editBtn.classList.remove("d-none");
-
-            editableInputs.forEach((input) => {
-                input.setAttribute("disabled", "");
-            });
-
-        });
-
-        saveBtn.addEventListener("click", function (event) {
-
-            //hide title
-            document.getElementById("taskTitle").classList.remove("d-none");
-            //show input
-            document.getElementById("taskTitleInput").classList.add("d-none");
-
-
-            //hide the two button
-            saveBtn.classList.add("d-none");
-            cancelEditBtn.classList.add("d-none");
-
-            //show the edit button
-            editBtn.classList.remove("d-none");
-
-            editableInputs.forEach((input) => {
-                input.setAttribute("disabled", "");
-            });
-
-            // Get the member id for the added tag , don't return array , only id please
-            const tagData = tagify.value.map((tag) => {
-                const member = membersList.find((member) => {
-                    return member.name + " | " + member.role === tag.value;
-                });
-                return member.id;
-            });
-
-            const data = {
-                id: currentTaskData.id,
-                title: $("#taskTitleInput").val(),
-                description: $("#description-editor").val(),
-                // Convert to Unix timestamp
-                plan_start_time: new Date($("#task-detail-start-date").val()).getTime(),
-                plan_end_time: new Date($("#task-detail-due-date").val()).getTime(),
-                plan_hours: $("#plan-edit-hours").val(),
-                tasksGroup: $("#task-group").val(),
-                userId: tagData[0]
-            };
-
-            // Send the task data to the backend API
-            $.ajax({
-                url: "api/task/update/data/",
-                data: JSON.stringify(data),
-                method: 'POST',
-                contentType: 'application/json', // Set the content type for the request payload
-                success: function(response) {
-                    // Handle successful response here
-                    console.log("Success:", response);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    // Handle error here
-                    console.error("Error:", textStatus, errorThrown);
-                }
-            });
-        });
 
         const todoLane = document.getElementById("TODO");
         const inProgress = document.getElementById("IN_PROGRESS");
@@ -813,7 +531,11 @@
 
             // Add a data attribute for modal triggering (if needed)
             taskDiv.setAttribute("data-bs-toggle", "modal");
-            taskDiv.setAttribute("data-bs-target", "#task-details");
+            if (currentUser.currentUser.role === 'PROJECT_MANAGER') {
+                taskDiv.setAttribute("data-bs-target", "#pm-task-details");
+            } else {
+                taskDiv.setAttribute("data-bs-target", "#member-task-details");
+            }
 
             const titleDiv = document.createElement("div");
             titleDiv.classList.add(
@@ -857,14 +579,30 @@
         let taskList = [];
 
         // Fetch the tasks from the backend API
-        $.ajax({
-            url: "/api/task/list/project/" + projectId,
-            type: "GET",
-            async: false,
-            success: function (data) {
-                taskList = data;
-            },
-        });
+        if(
+            currentUser.currentUser.role === "PROJECT_MANAGER"
+            || currentUser.currentUser.role === "PMO"
+            || currentUser.currentUser.role === "SDQC"
+            || currentUser.currentUser.role === "DEPARTMENT_HEAD"
+        ){
+            $.ajax({
+                url: "/api/task/list/project/" + projectId,
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    taskList = data;
+                },
+            });
+        }else{
+            $.ajax({
+                url: "/api/task/list/project/" + projectId + "/user/" + currentUser.currentUser.id,
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    taskList = data;
+                },
+            });
+        }
 
         for (let i = 0; i < taskList.length; i++) {
             const task = taskList[i];
@@ -892,53 +630,123 @@
             taskDiv.addEventListener("click", (e) => {
 
                 currentTaskData = taskList[parseInt(taskDiv.getAttribute('index'))]
-                console.log('click task so should change the current task data', currentTaskData)
+
                 //change input value from that taskdata
-                document.getElementById('taskTitle').innerText = currentTaskData.title
-                document.getElementById('description-editor').value = currentTaskData.description
+                document.getElementById('pm-task-title').innerText = currentTaskData.title
+                document.getElementById('member-task-title').innerText = currentTaskData.title
+
+                document.getElementById('pm-description-editor').value = currentTaskData.description
+                document.getElementById("member-task-description").value = currentTaskData.description
 
                 if (currentTaskData.status === 'TODO') {
-                    document.getElementById('status').innerText = "TODO"
-                    document.getElementById('status').classList.add('bg-primary')
+                    document.getElementById('pm-status').innerText = "TODO"
+                    document.getElementById('pm-status').classList.add('bg-primary')
+
+                    document.getElementById('member-task-status').innerText = "TODO"
+                    document.getElementById('member-task-status').classList.add('bg-primary')
                 } else if (currentTaskData.status === 'IN_PROGRESS') {
-                    document.getElementById('status').innerText = "IN PROGRESS"
-                    document.getElementById('status').classList.add('bg-info')
+                    document.getElementById('pm-status').innerText = "IN PROGRESS"
+                    document.getElementById('pm-status').classList.add('bg-info')
+
+                    document.getElementById('member-task-status').innerText = "IN PROGRESS"
+                    document.getElementById('member-task-status').classList.add('bg-info')
                 } else {
-                    document.getElementById('status').innerText = "FINISHED"
-                    document.getElementById('status').classList.add('bg-success')
+                    document.getElementById('pm-status').innerText = "FINISHED"
+                    document.getElementById('pm-status').classList.add('bg-success')
+
+                    document.getElementById('member-task-status').innerText = "FINISHED"
+                    document.getElementById('member-task-status').classList.add('bg-success')
                 }
 
-                const taskGroupSelect = document.getElementById('task-group');
+                document.getElementById("pm-assigned-member-span").innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
+                document.getElementById("member-assigned-member-span").innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
 
-                if (taskGroupSelect){
-                    if (currentTaskData.tasksGroup === 'A') {
-                        taskGroupSelect.value = 'A';
-                    } else if (currentTaskData.tasksGroup === 'B') {
-                        taskGroupSelect.value = 'B';
-                    } else {
-                        taskGroupSelect.value = 'C';
+                if (currentTaskData.tasksGroup === 'A') {
+                    document.getElementById('pm-task-group-span').innerText = "A - Related With Project Development"
+
+                    document.getElementById('member-task-group-span').innerText = "A - Related With Project Development"
+                } else if (currentTaskData.tasksGroup === 'B') {
+                    document.getElementById('pm-task-group-span').innerText = "B - Training"
+
+                    document.getElementById('member-task-group-span').innerText = "B - Training"
+                } else {
+                    document.getElementById('pm-task-group-span').innerText = "C - Idling"
+
+                    document.getElementById('member-task-group-span').innerText = "C - Idling"
+                }
+
+                function calculateWeekdayDuration(startDate, endDate) {
+                    const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+                    let totalWeekdays = 0;
+
+                    for (let currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
+                        const currentDay = currentDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+                        if (currentDay !== 0 && currentDay !== 6) {
+                            // Exclude Sunday (0) and Saturday (6)
+                            totalWeekdays++;
+                        }
                     }
+
+                    return totalWeekdays;
                 }
 
                 // Convert timestamp to Date objects
                 const startDate = new Date(currentTaskData.plan_start_time);
                 const endDate = new Date(currentTaskData.plan_end_time);
 
-// Get the date strings in 'yyyy-mm-dd' format
+                // Get the date strings in 'yyyy-mm-dd' format
                 const startDateString = startDate.toISOString().split('T')[0];
                 const endDateString = endDate.toISOString().split('T')[0];
 
-                console.log("START DATE STRING", startDateString)
-                console.log("END DATE STRING", endDateString)
+                // Set the values in the input fields
+                document.getElementById('pm-task-detail-start-date').value = startDateString;
+                document.getElementById('pm-task-detail-due-date').value = endDateString;
 
-// Set the values in the input fields
-                document.getElementById('task-detail-start-date').value = startDateString;
-                document.getElementById('task-detail-due-date').value = endDateString;
+                document.getElementById("member-task-detail-start-date").value = startDateString
+                document.getElementById("member-task-detail-due-date").value = endDateString
 
-                //preselect the tagify if that element exists
-                const assignedMemberTagifyElement = document.getElementById('assigned-member-tagify');
-                if (assignedMemberTagifyElement) {
-                    const assignedMemberTagify = document.getElementById('assigned-member-tagify'),
+                document.getElementById('pm-plan-edit-hours').value = currentTaskData.plan_hours;
+                document.getElementById('member-task-plan-hours').innerText = currentTaskData.plan_hours.toString() + " hours"
+
+                const duration = calculateWeekdayDuration(startDate,endDate);
+                document.getElementById("member-task-duration").innerText = duration.toString() + " days ";
+                document.getElementById("pm-task-duration").innerText = duration.toString()+ " days "
+
+                document.getElementById("pm-actual-edit-hours").value = currentTaskData.actual_hours === null ? 0 : currentTaskData.actual_hours;
+
+                // Get all elements with the common class name
+                const editableInputs = document.querySelectorAll(".editable-input");
+                const editBtn = document.getElementById("task-edit-btn");
+                const cancelEditBtn = document.getElementById("cancel-edit-btn");
+                const saveBtn = document.getElementById("save-edit-btn");
+                const closeTaskModalBtn = document.querySelectorAll(".btn-close-task-details");
+
+                editBtn.addEventListener("click", function () {
+
+                    editableInputs.forEach((input) => {
+                        input.removeAttribute("disabled");
+                    });
+
+                    //hide title
+                    document.getElementById("pm-task-title").classList.add("d-none");
+                    //show input
+                    document.getElementById("pm-task-title-input").classList.remove("d-none");
+                    //set input value to title
+                    document.getElementById("pm-task-title-input").value = document.getElementById("pm-task-title").innerText;
+
+                    document.getElementById("pm-task-group-span").classList.add("d-none")
+                    const taskGroupSelect = document.getElementById("pm-task-group");
+                    taskGroupSelect.classList.remove("d-none")
+                    taskGroupSelect.value = currentTaskData.tasksGroup;
+
+                    document.getElementById("pm-assigned-member-tagify").classList.remove("d-none")
+                   const tagifyEditableInput =  document.querySelector('.tagify.editable-input');
+                    if (tagifyEditableInput){
+                        document.querySelector('.tagify.editable-input').classList.remove("d-none")
+                    }
+                    document.getElementById("pm-assigned-member-span").classList.add("d-none")
+
+                        var assignedMemberTagify = document.getElementById("pm-assigned-member-tagify"),
                         tagify = new Tagify(assignedMemberTagify, {
                             enforceWhitelist: true,
                             mode: "select",
@@ -946,18 +754,157 @@
                                 return member.name + " | " + member.role;
                             }),
                             blacklist: ['foo', 'bar'],
-                        })
+                            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
+                        });
 
-                    tagify.addTags(currentTaskData.userDto.name + " | " + currentTaskData.userDto.role)
-                }
-                console.log("CURRENT TASK DATA", currentTaskData)
+                    console.log(assignedMemberTagify)
+
+                    // Function to handle the change event
+                    function handleTagifyChange(e) {
+                        // Get the member id for the added/updated tag, don't return an array, only id please
+                        let tagData = tagify.value.map((tag) => {
+                            const member = membersList.find((member) => {
+                                return member.name + " | " + member.role === tag.value;
+                            });
+                            return member.id;
+                        });
+
+                        // Update your output value or perform any other actions here
+                        userId = tagData[0];
+                    }
+
+                    // Add the change event listener
+                    assignedMemberTagify.addEventListener('change',handleTagifyChange)
+
+                    //hide the edit button
+                    editBtn.classList.add("d-none");
+
+                    //show the two button
+                    saveBtn.classList.remove("d-none");
+                    cancelEditBtn.classList.remove("d-none");
+
+                });
+
+                cancelEditBtn.addEventListener("click", function (event) {
+
+                    //hide title
+                    document.getElementById("pm-task-title").classList.remove("d-none");
+                    //show input
+                    document.getElementById("pm-task-title-input").classList.add("d-none");
+
+                    //hide the two button
+                    saveBtn.classList.add("d-none");
+                    cancelEditBtn.classList.add("d-none");
+
+                    document.getElementById("pm-task-group-span").classList.remove("d-none")
+                    document.getElementById("pm-task-group").classList.add("d-none")
+
+                    document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
+                    document.querySelector('.tagify.editable-input').classList.add("d-none")
+                    document.getElementById("pm-assigned-member-span").classList.remove("d-none")
+
+                    //show the edit button
+                    editBtn.classList.remove("d-none");
+
+                    // don't let the button close modal
+                    event.preventDefault();
+                    editableInputs.forEach((input) => {
+                        input.setAttribute("disabled", "");
+                    });
+
+                });
+
+                //loop through close task modal btns
+                closeTaskModalBtn.forEach((btn) => {
+                    btn.addEventListener("click", (event) => {
+                        //hide title
+                        document.getElementById("pm-task-title").classList.remove("d-none");
+                        //show input
+                        document.getElementById("pm-task-title-input").classList.add("d-none");
+
+                        //hide the two buttons
+                        saveBtn.classList.add("d-none");
+                        cancelEditBtn.classList.add("d-none");
+
+                        document.getElementById("pm-task-group-span").classList.remove("d-none")
+                        document.getElementById("pm-task-group").classList.add("d-none")
+
+                        document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
+                        document.querySelector('.tagify.editable-input').classList.add("d-none")
+                        document.getElementById("pm-assigned-member-span").classList.remove("d-none")
+
+                        //show the edit button
+                        editBtn.classList.remove("d-none");
+
+                        // disable editable inputs
+                        editableInputs.forEach((input) => {
+                            input.setAttribute("disabled", "");
+                        });
+                    });
+                });
+
+                saveBtn.addEventListener("click", function (event) {
+
+                    //hide title
+                    document.getElementById("pm-task-title").classList.remove("d-none");
+                    //show input
+                    document.getElementById("pm-task-title-input").classList.add("d-none");
+
+                    //hide the two button
+                    saveBtn.classList.add("d-none");
+                    cancelEditBtn.classList.add("d-none");
+
+                    document.getElementById("pm-task-group-span").classList.remove("d-none")
+                    document.getElementById("pm-task-group").classList.add("d-none")
+
+                    document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
+                    document.querySelector('.tagify.editable-input').classList.add("d-none")
+                    document.getElementById("pm-assigned-member-span").classList.remove("d-none")
+
+                    //show the edit button
+                    editBtn.classList.remove("d-none");
+
+                    editableInputs.forEach((input) => {
+                        input.setAttribute("disabled", "");
+                    });
+
+                    const data = {
+                        id: currentTaskData.id,
+                        title: $("#pm-task-title-input").val(),
+                        description: $("#pm-description-editor").val(),
+                        // Convert to Unix timestamp
+                        plan_start_time: new Date($("#pm-task-detail-start-date").val()).getTime(),
+                        plan_end_time: new Date($("#pm-task-detail-due-date").val()).getTime(),
+                        plan_hours: $("#pm-plan-edit-hours").val(),
+                        tasksGroup: $("#pm-task-group").val(),
+                        userId: userId,
+                    };
+
+                    console.log("Request Data : ",data)
+
+
+                    // Send the task data to the backend API
+                    $.ajax({
+                        url: "/api/task/update/data",
+                        data: JSON.stringify(data),
+                        method: 'POST',
+                        contentType: 'application/json', // Set the content type for the request payload
+                        success: function (response) {
+                            // close modal box
+                            $('#task-details').modal('hide')
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // Handle error here
+                            console.error("Error:", textStatus, errorThrown);
+                        }
+                    });
+                });
 
                 const assignedMemberSpan = document.getElementById('assigned-member-span')
                 //to check if that element exists
                 if (assignedMemberSpan) {
                     // Check if the user has any of the specified roles
                     if (currentTaskData.userDto.role === 'FOC' || currentTaskData.userDto.role === 'EMPLOYEE' || currentTaskData.userDto.role === 'CONTRACT' || currentTaskData.userDto.role === 'PMO' || currentTaskData.userDto.role === 'DEPARTMENT_HEAD' || currentTaskData.userDto.role === 'SDQC') {
-                        console.log("the user has one of the specified roles")
                         assignedMemberSpan.innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
                     }
                 }
@@ -969,13 +916,9 @@
                     taskList[
                         parseInt(currentTask.getAttribute("index"))
                         ];
-                console.log("CURRENT TASK DATA", currentTaskData)
                 if (currentZone.classList.contains("dummy-trash")) {
                     bModal.show();
                 } else if (status.some(a => currentZone.getAttribute("id") === a)) {
-                    console.log("the task indeed drop on the one of the three zone")
-                    console.log(currentTaskData.status, currentZone.getAttribute("id"))
-                    console.log(currentZone)
                     if (currentTaskData.status !== currentZone.getAttribute("id")) {
                         currentTaskData.status = currentZone.getAttribute("id")
 
@@ -984,6 +927,26 @@
                         }
 
                         if (currentTaskData.status === 'FINISHED') {
+                            //show modal box to ask for actual hours input type=number
+                            $('#actual-hours-input-modal').modal('show')
+                            //get the input element
+                            const actualHoursInput = document.getElementById('actual-hours-input')
+                            //add event listener to the input element
+                            actualHoursInput.addEventListener('change', function (e) {
+                                //get the value of the input
+                                const actualHours = parseInt(e.target.value)
+                                //check if the value is valid
+                                if (actualHours > 0) {
+                                    //hide the modal box
+                                    $('#actual-hours-input-modal').modal('hide')
+                                    //set the actual hours to the current task data
+                                    currentTaskData.actual_hours = actualHours
+                                } else {
+                                    //show alert
+                                    alert('Please enter a valid number')
+                                }
+                            })
+
                             currentTaskData.actual_end_time = new Date().getTime()
                         }
 
@@ -998,9 +961,32 @@
                             },
                         })
                             .then(response => {
-                                console.log('Response for URL /api/task/update', response);
-                                // Reset the status to the original status.
                                 currentTaskData.status = currentZone.getAttribute('id');
+                                console.log('Success for URL /api/task/update', response);
+                                //change the color of the task
+                                switch (currentTaskData.status) {
+                                    case "TODO":
+                                        currentTask.classList.add("bg-primary");
+                                        currentTask.classList.remove(
+                                            "bg-info",
+                                            "bg-success"
+                                        );
+                                        break;
+                                    case "IN_PROGRESS":
+                                        currentTask.classList.add("bg-info");
+                                        currentTask.classList.remove(
+                                            "bg-primary",
+                                            "bg-success"
+                                        );
+                                        break;
+                                    case "FINISHED":
+                                        currentTask.classList.add("bg-success");
+                                        currentTask.classList.remove(
+                                            "bg-primary",
+                                            "bg-info"
+                                        );
+                                        break;
+                                }
                             })
                             .catch(error => {
                                 console.error('Error for URL /api/task/update', error);
@@ -1011,6 +997,7 @@
                 taskDiv.classList.remove("is-dragging");
             });
         }
+
 
         // Example of how to use the ajaxRequest function to send data with a POST request
 
@@ -1219,7 +1206,7 @@
         //use jquery ajax
         $("#task-add-btn").on("click", function () {
             // Get the member id for the added tag , don't return array , only id please
-            const tagData = tagify.value.map((tag) => {
+            const tagData = originalTagify.value.map((tag) => {
                 const member = membersList.find((member) => {
                     return member.name + " | " + member.role === tag.value;
                 });

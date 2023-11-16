@@ -24,7 +24,7 @@ import java.util.*;
 @Slf4j
 public class IssueController {
 
-    private final IssueServiceImpl issueService;
+    final IssueServiceImpl issueService;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
@@ -48,7 +48,6 @@ public class IssueController {
         return new ResponseEntity<>(issueDto, HttpStatus.OK);
 
     }
-
 
 
     @GetMapping("/list/byId/{id}")
@@ -85,14 +84,15 @@ public class IssueController {
 
     @GetMapping("list/solved/{solved}")
     public List<IssueDto> getIssuesBySolvedStatus(@PathVariable(value = "solved", required = false) Boolean solved) {
-        if (solved == true) {
+        if (Boolean.TRUE.equals(solved)) {
             return issueService.getIssuesBySolvedStatus(true);
-        }else if(solved == false){
+        } else if (Boolean.FALSE.equals(solved)) {
             return issueService.getIssuesBySolvedStatus(false);
-        }else{
+        } else {
             return issueService.getAllIssues();
         }
     }
+
 
     @GetMapping("/list/category/{category}")
     public ResponseEntity<List<IssueDto>> getFilteredCategory(@PathVariable(name = "category") String category) {
