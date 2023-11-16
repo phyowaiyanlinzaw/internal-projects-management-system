@@ -64,7 +64,7 @@ public class TaskServiceImpl implements TasksService {
 
             Notification notification = new Notification();
 
-            notificationService.save("You have been assigned to a new task", user.getId());
+            notificationService.save("You have been assigned to a new task", user.getId(), "task-noti-event");
         } catch (Exception e) {
             log.error("Error while sending notification: {}", e.getMessage());
             log.error("Stack Trace: ", e);
