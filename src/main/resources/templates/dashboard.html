@@ -355,6 +355,7 @@
                         projectDropdown.text($(this).text());
                         console.log(selectedValue)
                         updateManMonthChart(selectedValue)
+                        updateProductivityChart(selectedValue)
                     });
 
 
@@ -369,58 +370,54 @@
         function updateManMonthChart(selectedValue) {
             // Make a jQuery AJAX call for Dataset 1
             $.ajax({
-                url: `api/dashboard/actual-man-month/project/${selectedValue}`,
+                url: `api/dashboard/man-month/project/${selectedValue}`,
                 method: 'GET',
                 dataType: 'json',
-                success: function (data1) {
-
-                    console.log("ACTUAL " , data1);
+                success: function (data) {
 
                     // Update chart data for Dataset 1
-                    lineChart.data.datasets[0].data = data1.map((data) => data.actualManMonthHours);
+                    lineChart.data.datasets[0].data = data.map((data) => data.actualManMonthHours);
+                    lineChart.data.datasets[1].data = data.map((data) => data.planManMonthHours);
                     // lineChart.data.datasets[0].data = [20]
-                    lineChart.data.labels = data1.map((data) => data.monthName);
+                    lineChart.data.labels = data.map((data) => data.monthName);
 
                     lineChart.options.scales.y.min = 0;
-                    lineChart.options.scales.y.max = Math.max(...data1.map((data) => data.actualManMonthHours)) + 100;
+                    lineChart.options.scales.y.max = Math.max(...data.map((data) => data.planManMonthHours)) + 100;
 
 
                     // Update the chart
                     lineChart.update();
                 },
-                error: function (error1) {
-                    console.error('Error fetching data for Dataset 1:', error1);
-                }
-            });
-
-            // Make a jQuery AJAX call for Dataset 2
-            $.ajax({
-                url: "api/dashboard/plan-man-month/project/" + selectedValue, // Replace with your API endpoint
-                method: 'GET',
-                dataType: 'json',
-                success: function (data2) {
-
-                    console.log("PLAN " , data2)
-
-                    // Update chart data for Dataset 2
-                    lineChart.data.datasets[1].data = data2.map((data) => data.planManMonthHours);
-
-                    lineChart.data.labels = data2.map((data) => data.monthName);
-
-                    lineChart.options.scales.y.min = 0;
-                    lineChart.options.scales.y.max = Math.max(...data2.map((data) => data.planManMonthHours)) + 100;
-
-                    // Update the chart
-                    lineChart.update();
-                },
-                error: function (error2) {
-                    console.error('Error fetching data for Dataset 2:', error2);
+                error: function (error) {
+                    console.error('Error fetching data :', error);
                 }
             });
         }
 
         function updateProductivityChart(selectedValue) {
-            //loop through the
+            $.ajax({
+                url: `api/dashboard/productivity/project/${selectedValue}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Update chart data for Dataset 1
+                    barChart.data.datasets[0].data = data.map((data) => data.productivityRatio);
+                    barChart.data.labels = data.map((data) => data.monthName);
+
+                    barChart.options.scales.y.min = 0;
+                    barChart.options.scales.y.max = 10
+
+                    // Update the chart
+                    barChart.update();
+                },
+                error: function (error) {
+                    console.error('Error fetching data :', error);
+                }
+            });
+        }
+
+        function updateKpiChart(selectedValue){
+
         }
 
         $('.chart-filter-reset-btn').on('click', function () {
@@ -437,18 +434,6 @@
             lineChart.data.labels = [];
             lineChart.update();
         });
-
-
-        //Dummy data for kpi chart
-        const screenCountsData = [90, 130, 140, 135, 150, 155, 160, 165, 170, 175, 180, 185];
-        const testCasesData = [100, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160];
-        const kStepData = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105];
-        const reviewCountsData = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]; // Assuming review counts
-
-        // Calculate the ratios
-        const screenToReviewRatios = screenCountsData.map((screenCount, index) => (screenCount / reviewCountsData[index]).toFixed(2));
-        const testToReviewRatios = testCasesData.map((testCaseCount, index) => (testCaseCount / reviewCountsData[index]).toFixed(2));
-        const kStepToReviewRatios = kStepData.map((kStepCount, index) => (kStepCount / reviewCountsData[index]).toFixed(2));
 
 
         //Get KPI chart Canvas

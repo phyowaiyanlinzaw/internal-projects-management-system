@@ -64,78 +64,26 @@ public class DashboardServiceImpl implements DashboardService {
         return manMonthDtos;
     }
 
-
-//    public List<ActualManMonthDto> getActualManHours(long projectId) {
-//        List<TasksDto> tasks = taskRepository.findByProjectId(projectId).stream()
-//                .map(task -> modelMapper.map(task, TasksDto.class))
-//                .toList();
-//
-//        List<ActualManMonthDto> actualManMonthDtos = new ArrayList<>();
-//
-//        for (TasksDto tasksDto : tasks) {
-//            long actualStartTime = tasksDto.getActual_start_time();
-//            String startMonthYear = ManMonthCalculator.getMonthYearFromDate(actualStartTime);
-//
-//            // Find the corresponding ActualManMonthDto in the list
-//            Optional<ActualManMonthDto> existingDto = actualManMonthDtos.stream()
-//                    .filter(dto -> dto.getMonthName().equals(startMonthYear))
-//                    .findFirst();
-//
-//            if (existingDto.isPresent()) {
-//                // If the month already exists, update the actual hours
-//                double updatedHours = existingDto.get().getActualManMonthHours() + tasksDto.getActual_hours();
-//                existingDto.get().setActualManMonthHours(updatedHours);
-//            } else {
-//                // If the month doesn't exist, create a new ActualManMonthDto
-//                ActualManMonthDto newDto = new ActualManMonthDto();
-//                newDto.setMonthName(startMonthYear);
-//                newDto.setActualManMonthHours(tasksDto.getActual_hours());
-//                actualManMonthDtos.add(newDto);
-//            }
-//        }
-//
-//        return actualManMonthDtos;
-//    }
-
-
-//    public List<PlanManMonthDto> getPlanManHours(long projectId) {
-//        List<TasksDto> tasks = taskRepository.findByProjectId(projectId).stream()
-//                .map(task -> modelMapper.map(task, TasksDto.class))
-//                .toList();
-//
-//        List<PlanManMonthDto> planManMonthDtos = new ArrayList<>();
-//
-//        for (TasksDto tasksDto : tasks){
-//            long planStartTIme = tasksDto.getPlan_start_time();
-//            String startMonthYear = ManMonthCalculator.getMonthYearFromDate(planStartTIme);
-//
-//            // Find the corresponding ActualManMonthDto in the list
-//            Optional<PlanManMonthDto> existingDto = planManMonthDtos.stream()
-//                    .filter(dto -> dto.getMonthName().equals(startMonthYear))
-//                    .findFirst();
-//
-//            double planHours = tasksDto.getPlan_hours() != null ? tasksDto.getPlan_hours() : 0.0;
-//
-//            if (existingDto.isPresent()) {
-//                // If the month already exists, update the actual hours
-//                double updatedHours = existingDto.get().getPlanManMonthHours() + planHours;
-//                existingDto.get().setPlanManMonthHours(updatedHours);
-//            } else {
-//                // If the month doesn't exist, create a new ActualManMonthDto
-//                PlanManMonthDto newDto = new PlanManMonthDto();
-//                newDto.setMonthName(startMonthYear);
-//                newDto.setPlanManMonthHours(tasksDto.getPlan_hours());
-//                planManMonthDtos.add(newDto);
-//            }
-//        }
-//        return planManMonthDtos;
-//    }
-
     @Override
     public List<ProductivityDto> getProductivity(long projectId) {
+        List<ManMonthDto> manMonthDtos = getManMonth(projectId);
+        List<ProductivityDto> productivityDtos = new ArrayList<>();
 
+        for (ManMonthDto manMonthDto : manMonthDtos) {
+            double actualManMonthHours = manMonthDto.getActualManMonthHours() != null ? manMonthDto.getActualManMonthHours() : 0.0;
+            double planManMonthHours = manMonthDto.getPlanManMonthHours() != null ? manMonthDto.getPlanManMonthHours() : 0.0;
 
-        return null;
+            if (planManMonthHours != 0.0) {
+                double productivityRatio = actualManMonthHours / planManMonthHours;
+
+                ProductivityDto newDto = new ProductivityDto();
+                newDto.setMonthName(manMonthDto.getMonthName());
+                newDto.setProductivityRatio(productivityRatio);
+                productivityDtos.add(newDto);
+            }
+        }
+
+        return productivityDtos;
     }
 
 
