@@ -38,6 +38,13 @@ public class DashboardController {
         return ResponseEntity.ok(dashboardService.getActualManHours(projectId));
     }
 
+    @GetMapping("/plan-man-month/project/{projectId}")
+    public ResponseEntity<List<PlanManMonthDto>> getMonthlyPlanManMonth(
+            @PathVariable("projectId") long projectId
+    ) {
+        return ResponseEntity.ok(dashboardService.getPlanManHours(projectId));
+    }
+
     @GetMapping(value="/getKPI/{id}")
     public ResponseEntity<KPIDto> getKpi(@PathVariable long id){
         KPIDto kpiDto = projectService.getKPI(id);
@@ -49,12 +56,7 @@ public class DashboardController {
         return  ResponseEntity.ok(kpiDto) ;
     }
 
-    @GetMapping("/plan-man-month/project/{projectId}")
-    public ResponseEntity<List<PlanManMonthDto>> getMonthlyPlanManMonth(
-            @PathVariable("projectId") long projectId
-    ) {
-        return null;
-    }
+
 
     @GetMapping("/productivity/project/{projectId}")
     public ResponseEntity<List<ProductivityDto>> getProductivity(
