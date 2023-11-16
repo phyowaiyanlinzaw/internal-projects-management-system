@@ -204,11 +204,10 @@
     }
 
     function statusFormatter(value,row,index){
-        if(value === true){
-            return '<span class="badge bg-success">Active</span>'
-        }else{
-            return '<span class="badge bg-danger">Inactive</span>';
-        }
+        return '<div class="form-check form-switch">' +
+            '<input class="form-check-input status-switch" type="checkbox" id="statusSwitch_' + index + '"' + (value ? 'checked' : '') + '>' +
+            '<label class="form-check-label" for="statusSwitch_' + index + '">' + (value ? 'Active' : 'Inactive') + '</label>' +
+            '</div>';
     }
 
     function operateFormatter(value,row,index){
@@ -231,6 +230,11 @@
         $('#table').bootstrapTable({});
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
+
+        if (event.target.classList.contains('status-switch')) {
+            //change status after clicking the switch
+
+        }
 
         function getDepartmentNameList() {
             var departmentNameList = [];
