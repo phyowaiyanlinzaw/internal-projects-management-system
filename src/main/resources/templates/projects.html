@@ -851,23 +851,19 @@
 
 
                     //_______________________________________deliverable update alert box put
-
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-                        const updateButtonCon = document.getElementById("updateButtonCon");
-                        updateButtonCon.innerHTML = '<button id="deliverable-type-form" type="button" class="btn btn-primary">Update</button>';
-                        document.querySelector("#deliverable-type-form").addEventListener("submit", function (event) {
-                            event.preventDefault();
+                        const updateButtonC = document.getElementById("updateButton");
 
+                        updateButtonC.addEventListener("click", function () {
                             let deliverableList = [];
 
                             targetData.deliverableDto.forEach(a => {
                                 const checkbox = document.querySelector(`#checkbox-${a.id}`);
 
                                 if (checkbox.checked) {
-                                    deliverableList.push({id: a.id, status: true})
+                                    deliverableList.push({ id: a.id, status: true })
                                 }
                             });
-
 
                             console.log("deliverable", deliverableList);
 
@@ -3252,10 +3248,8 @@
                                                     <div id="deliverable-type">
                                                         <!-- Checkbox elements will be dynamically added here -->
                                                     </div>
-                                                    <div  id="updateButtonCon">
-                                                    </div>
+                                                    <button id="updateButton" type="button" class="btn btn-primary">Update</button>
                                                 </form>
-
                                             </div>
                                 </div>
                             </div>
