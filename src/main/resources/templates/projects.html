@@ -86,23 +86,25 @@
             href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
             rel="stylesheet"
         />
-
         <style>
-            #deliverable-table {
-                width: 100%;
+            #deliverable-list table {
+                width: 30%;
+                border: 1px solid #369; /* Add border to the table */
                 border-collapse: collapse;
-                margin-top: 20px;
+                margin-bottom: 20px;
             }
 
-            #deliverable-table th, #deliverable-table td {
-                border: 1px solid #dddddd;
-                text-align: left;
+            #deliverable-list th, #deliverable-list td {
+                border: 1px solid #369;
                 padding: 8px;
+                text-align: left;
             }
 
-            #deliverable-table th {
-                background-color: #f2f2f2;
+            #deliverable-list th {
+                background-color: #6ea8fe;
             }
+
+
         </style>
         <script src="/js/fontawesome.js"></script>
 
@@ -852,16 +854,19 @@
 
                     //_______________________________________deliverable update alert box put
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-                        const updateButtonC = document.getElementById("updateButton");
 
-                        updateButtonC.addEventListener("click", function () {
+                        const updateButton1 = document.getElementById("updateButton1");
+                        updateButton1.innerHTML = '<button id="updateButtonDeli" type="button" class="btn btn-primary">Update</button>';
+
+                        document.querySelector("#updateButtonDeli").addEventListener("click", async function () {
+
                             let deliverableList = [];
 
                             targetData.deliverableDto.forEach(a => {
                                 const checkbox = document.querySelector(`#checkbox-${a.id}`);
 
                                 if (checkbox.checked) {
-                                    deliverableList.push({ id: a.id, status: true })
+                                    deliverableList.push({ id: a.id, status: true });
                                 }
                             });
 
@@ -883,6 +888,7 @@
                                 });
                         });
                     }
+
 
                     //____________________________________________________deliverable update end
 
@@ -3244,12 +3250,18 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade pt-3" id="deliverable-list">
-                                                <form id="deliverable-type-form">
-                                                    <div id="deliverable-type">
-                                                        <!-- Checkbox elements will be dynamically added here -->
-                                                    </div>
-                                                    <button id="updateButton" type="button" class="btn btn-primary">Update</button>
-                                                </form>
+                                                <table>
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Deliverable Type</th>
+
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="deliverable-type">
+                                                    <!-- Rows for deliverable-type and checkboxes will be dynamically added here -->
+                                                    </tbody>
+                                                </table>
+                                                <div id="updateButton1"></div>
                                             </div>
                                 </div>
                             </div>
