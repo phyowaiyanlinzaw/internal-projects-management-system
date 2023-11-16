@@ -45,7 +45,14 @@ public class NotificationServiceImpl implements NotificationService {
 
             NotiDto notiDto = modelMapper.map(notification, NotiDto.class);
 
-            sendNotification(notiDto, userId, eventName);
+            if(objects.length > 0) {
+                for (Object object : objects) {
+                    sendNotification(notiDto, userId, eventName, object);
+                }
+            }
+            else {
+                sendNotification(notiDto, userId, eventName);
+            }
 
         } catch (Exception e) {
             log.error("Error while sending notification: {}", e.getMessage());
