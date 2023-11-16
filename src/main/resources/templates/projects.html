@@ -58,11 +58,6 @@
             type="text/css"
             href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"
         />
-        <link
-            rel="stylesheet"
-            type="text/css"
-            href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css"
-        />
 
         <!-- Bootstrap Tables -->
         <link
@@ -86,7 +81,7 @@
             href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"
             rel="stylesheet"
         />
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js" defer></script>
         <link
             href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
             rel="stylesheet"
@@ -474,7 +469,6 @@
                     });
                 });
 
-
             const projectObjectiveEditor =
                 document.querySelector(".quill-editor-full");
 
@@ -619,6 +613,8 @@
                     }
                 }
             }
+
+            //____________________________________current project
 
             for (let i = 0; i < pList.length; i++) {
                 let currentProject = pList[i];
@@ -822,6 +818,79 @@
                         document.querySelector("#architectures-list-in-edit").appendChild(div);
                     })
 
+                    //------------------------ architecture list end
+
+                    //------------------------ deliverable list start
+                    document.querySelector("#deliverable-type").textContent = ''
+                   let deliverableId;
+                    targetData.deliverableDto.forEach(a => {
+                        const div = document.createElement("div");
+                        div.classList.add("d-flex", "gap-2", "align-items-center", "justify-content-center");
+
+                        deliverableId = a.id;
+                        const input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.setAttribute("id", `checkbox-${a.id}`)
+
+
+                        if (a.status) {
+                            input.checked = true;
+                        }
+
+                        const p = document.createElement("p");
+                        p.textContent = a.deliverableType.type;
+                        console.log(a.status)
+                        console.log(a.deliverableType.type)
+                        p.classList.add("fs-6", "fw-bold");
+                        div.appendChild(p);
+                        div.appendChild(input)
+
+                        document.querySelector("#deliverable-type").appendChild(div);
+                    });
+                    //_______________________________________deliverable list end
+
+
+                    //_______________________________________deliverable update alert box put
+
+                    if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+                        const updateButtonCon = document.getElementById("updateButtonCon");
+                        updateButtonCon.innerHTML = '<button id="deliverable-type-form" type="button" class="btn btn-primary">Update</button>';
+                        document.querySelector("#deliverable-type-form").addEventListener("submit", function (event) {
+                            event.preventDefault();
+
+                            let deliverableList = [];
+
+                            targetData.deliverableDto.forEach(a => {
+                                const checkbox = document.querySelector(`#checkbox-${a.id}`);
+
+                                if (checkbox.checked) {
+                                    deliverableList.push({id: a.id, status: true})
+                                }
+                            });
+
+
+                            console.log("deliverable", deliverableList);
+
+                            fetch(`/api/deliverable/update-status`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(deliverableList),
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Status updated successfully:', data);
+                                })
+                                .catch(error => {
+                                    console.error('Error updating status:', error);
+                                });
+                        });
+                    }
+
+                    //____________________________________________________deliverable update end
+
+
                     document.querySelector("#project-detail-name").value =
                         currentProejctDetail.name;
 
@@ -905,10 +974,53 @@
                     ).innerHTML = currentProejctDetail.departmentDto.name;
                     detailMoal.querySelector(
                         "#project-internal-review-count"
-                    ).value = currentProejctDetail.inReview;
+                    ).value = currentProejctDetail.reviewDto.internal_review_count;
                     detailMoal.querySelector(
                         "#project-external-review-count"
-                    ).value = currentProejctDetail.exReview;
+                    ).value = currentProejctDetail.reviewDto.external_review_count;
+                    //______________________________________________
+
+                    //_______________review update
+                    if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+
+                        const updateButtonContainer = document.getElementById("updateButtonContainer");
+                        updateButtonContainer.innerHTML = '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
+                    document.querySelector("#updateButton").addEventListener("click", async function () {
+
+                        var internalReviewCount = document.getElementById("project-internal-review-count").value;
+                        var externalReviewCount = document.getElementById("project-external-review-count").value;
+
+
+                        var data = {
+                            internal_review_count: internalReviewCount,
+                            external_review_count: externalReviewCount
+                        };
+
+
+                        fetch("/api/review/update-review/" + targetData.id, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Review counts updated successfully:', data);
+
+                            })
+                            .catch(error => {
+                                console.error('Error updating review counts:', error);
+
+                            });
+                    });
+
+
+
+                    }
+
+
+                    //____________________________________reveiw update end
                     detailMoal.querySelector(
                         "#project-duration"
                     ).innerText = `${currentProejctDetail.duration} ${currentProejctDetail.duration < 1 ? " month" : " months"}`;
@@ -929,6 +1041,8 @@
                         "#my-dear-customer-name"
                     ).innerHTML = currentProejctDetail.clientDto.name;
                 }
+
+                //_____________________________________________
             });
 
             const editProjectObjective = document.querySelector("#edit-project-objective");
@@ -936,8 +1050,6 @@
 
             document.querySelector("#project-detail-edit-form").addEventListener("submit", function (e) {
                 e.preventDefault()
-
-
 
                 const project = {
                     id: parseInt(document.querySelector("#current-edditing-projetc-id").value),
@@ -949,86 +1061,68 @@
                     current_phase: document.querySelector("#edit-project-phase").value,
                     objective: editObjectiveEditor.root.innerHTML
                 }
-                Swal.fire({
-                    title: "Are you sure want to edit?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes"
-                }).then((result) => {
-                    if (result.isConfirmed) {
 
+                console.log(project)
 
-                        console.log(project)
-
-                        $.ajax({
-                            url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
-                            type: "PUT",
-                            data: JSON.stringify(project),
-                            dataType: "json",
-                            contentType: "application/json; charset=utf-8",
-                            success: async function (data) {
-                                alert("Project registered successfully");
-                                // Reset the form if needed
-                                console.log("this projce has benn saved", data);
-                                // event.currentTarget.submit();
-                                window.top.location = window.top.location;
-                            },
-                            error: function (data) {
-                                alert("Error registering project");
-                                // event.currentTarget.submit();
-                                window.top.location = window.top.location;
-                            },
-                        });
-                    }
+                $.ajax({
+                    url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
+                    type: "PUT",
+                    data: JSON.stringify(project),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: async function (data) {
+                        alert("Project registered successfully");
+                        // Reset the form if needed
+                        console.log("this projce has benn saved", data);
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
+                    error: function (data) {
+                        alert("Error registering project");
+                        // event.currentTarget.submit();
+                        window.top.location = window.top.location;
+                    },
                 });
             })
 
-            document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
+            if (loginUser.currentUser.role === "PROJECT_MANAGER") {
 
-                const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
+                const updateButtonC = document.getElementById("updateButtonC");
+                updateButtonC.innerHTML = '<button id="update" type="button" class="btn btn-primary">Update</button>';
 
-                const amountDto = {
-                    basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
-                    detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
-                    coding: parseInt(document.querySelector("#edit-coding-count").value),
-                    unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
-                    integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
-                }
+                document.querySelector("#update").addEventListener("click", function (e) {
 
-                Swal.fire({
-                    title: "Are you sure want to edit?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes"
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                    const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
 
-                        $.ajax({
-                            url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
-                            type: "PUT",
-                            data: JSON.stringify(amountDto),
-                            dataType: "json",
-                            contentType: "application/json; charset=utf-8",
-                            success: async function (data) {
-                                alert("Project registered successfully");
-                                // Reset the form if needed
-                                console.log("this projce has benn saved", data);
-                                // event.currentTarget.submit();
-                                window.top.location = window.top.location;
-                            },
-                            error: function (data) {
-                                alert("Error registering project");
-                                // event.currentTarget.submit();
-                                window.top.location = window.top.location;
-                            },
-                        });
+                    const amountDto = {
+                        basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
+                        detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
+                        coding: parseInt(document.querySelector("#edit-coding-count").value),
+                        unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
+                        integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
                     }
-                });
-            })
+
+                    $.ajax({
+                        url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
+                        type: "PUT",
+                        data: JSON.stringify(amountDto),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: async function (data) {
+                            alert("Project registered successfully");
+                            // Reset the form if needed
+                            console.log("this projce has benn saved", data);
+                            // event.currentTarget.submit();
+                            window.top.location = window.top.location;
+                        },
+                        error: function (data) {
+                            alert("Error registering project");
+                            // event.currentTarget.submit();
+                            window.top.location = window.top.location;
+                        },
+                    });
+                })
+            }
 
             const sortProjectByDepartment = await getData(
                 "/api/project/list/sort/by/department"
@@ -1415,7 +1509,6 @@
                     }
                 }
 
-
                 function validatePrjArchitecture() {
                     const architectures= $('#architectures').val();
                     const errorContainer = $('#architectures').siblings('.error-container');
@@ -1442,7 +1535,6 @@
                         $('#architectures').removeClass('is-invalid');
                     }
                 }
-
 
                 // Function to validate systemOutlines
                 function validatePrjSystemOutline() {
@@ -1624,98 +1716,153 @@
 
 
 
+                $("#project-add-btn").on('click', function (event) {
+                    console.log("submitted")
+                    event.preventDefault(); // Prevent the form from submitting the traditional way
 
 
-                // document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
-                //
-                //     const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
-                //
-                //     const amountDto = {
-                //         basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
-                //         detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
-                //         coding: parseInt(document.querySelector("#edit-coding-count").value),
-                //         unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
-                //         integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
-                //     }
-                //
-                //     Swal.fire({
-                //         title: "Are you sure want to update project amount?",
-                //         icon: "warning",
-                //         showCancelButton: true,
-                //         confirmButtonColor: "#3085d6",
-                //         cancelButtonColor: "#d33",
-                //         confirmButtonText: "Yes"
-                //     }).then((result) => {
-                //         if (result.isConfirmed) {
-                //             $.ajax({
-                //                 url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
-                //                 type: "PUT",
-                //                 data: JSON.stringify(amountDto),
-                //                 dataType: "json",
-                //                 contentType: "application/json; charset=utf-8",
-                //                 success: async function (data) {
-                //                     Swal.fire("Success", "Project amount updated successfully", "success");
-                //                     // Reset the form if needed
-                //                     console.log("This project has been saved", data);
-                //                     // event.currentTarget.submit();
-                //                     window.top.location = window.top.location;
-                //                 },
-                //                 error: function (data) {
-                //                     Swal.fire("Error", "Error updating project amount", "error");
-                //                     // event.currentTarget.submit();
-                //                     window.top.location = window.top.location;
-                //                 },
-                //             });
-                //         }
-                //     });
-                // });
-
-                document.querySelector("#update-amount-btn").addEventListener("click", function (e) {
-
-                    const projectId = parseInt(document.querySelector("#current-edditing-projetc-id").value)
-
-                    const amountDto = {
-                        basic_design: parseInt(document.querySelector("#edit-basic-design-count").value),
-                        detail_design: parseInt(document.querySelector("#edit-detail-design-count").value),
-                        coding: parseInt(document.querySelector("#edit-coding-count").value),
-                        unit_testing: parseInt(document.querySelector("#edit-unit-testing-count").value),
-                        integrated_testing: parseInt(document.querySelector("#edit-integrated-testing-count").value)
+                    if (!validateProject()) {
+                        return;
                     }
 
-                    Swal.fire({
-                        title: "Are you sure want to update project amount?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
-                                type: "PUT",
-                                data: JSON.stringify(amountDto),
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
-                                success: async function (data) {
-                                    Swal.fire("Success", "Project amount updated successfully", "success");
-                                    // Reset the form if needed
-                                    console.log("This project has been saved", data);
-                                    // event.currentTarget.submit();
-                                    window.top.location = window.top.location;
-                                },
-                                error: function (data) {
-                                    Swal.fire("Error", "Error updating project amount", "error");
-                                    // event.currentTarget.submit();
-                                    window.top.location = window.top.location;
-                                },
-                            });
+                    const projectName = $("#name").val();
+                    const client = JSON.parse($("#client").val());
+                    const startDate = new Date(
+                        $("#start_date").val()
+                    ).getTime();
+                    const duration = +$("#project-add-duration").val();
+
+                    const background = $("#background").val();
+                    let architectures = $("#architectures").val();
+                    const empList = empTagifyList.selectedValues;
+                    console.log("architectures list : ", architectures);
+                    const systemOutlines = sysSelect.selectedValues;
+                    const deliverable = $("#deliverable").val();
+                    const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                    console.log(
+                        projectName,
+                        client,
+                        startDate,
+                        duration,
+                        background,
+                        architectures,
+                        empList,
+                        systemOutlines,
+                        deliverable,
+                        objective
+                    );
+
+
+
+
+                    let jsonData = ''; // replace with your actual JSON data
+                    if (jsonData.trim() !== '') {
+                        try {
+                            let parsedData = JSON.parse(jsonData);
+                            // Continue processing parsedData
+                        } catch (error) {
+                            console.error('Error parsing JSON:', error);
+                        }
+                    } else {
+                        console.warn('JSON data is empty.');
+                    }
+
+                    architectures = JSON.parse(architectures);
+
+                    const arcList = architectures.map((ar) => {
+                        const matchingObj = arcccList.find(
+                            (arccObj) => arccObj.tech_name === ar.value
+                        );
+                        console.log(matchingObj);
+                        return matchingObj
+                            ? matchingObj
+                            : { tech_name: ar.value };
+                    });
+
+                    const oldDeliTypeList = JSON.parse(deliverable);
+
+                    const deliverTypeList = oldDeliTypeList.map((deli) => {
+                        const matchingObj = deliTypeList.find(
+                            (deliObj) => deliObj.type === deli.value
+                        );
+                        console.log(matchingObj);
+                        return matchingObj ? matchingObj : { type: deli.value };
+                    });
+
+                    const deliverableList = deliverTypeList.map(deli => {
+                        return {
+                            status : false,
+                            deliverableType : deli
                         }
                     });
+
+
+
+                    if(!validateProject()){
+                        return;
+                    }
+
+                    // You may want to add some form validation here before sending the data
+                    console.log(objective);
+                    console.log(architectures);
+                    console.log(empList);
+                    console.log(deliverTypeList)
+                    const project = {
+                        name: projectName,
+                        clientDto: client,
+                        duration: duration,
+                        start_date: startDate,
+                        end_date: calculateEndDate(
+                            startDate,
+                            duration
+                        ).getTime(),
+                        background: background,
+                        architectureDto: arcList,
+                        systemOutLineDto: systemOutlines.reduce((acc, cur) => {
+                            acc[cur] = true;
+                            return acc;
+                        }, {}),
+                        current_phase: "PLANNING",
+                        deliverableDto: deliverableList,
+                        objective: objective,
+                        amountDto: {
+                            basic_design: 0,
+                            detail_design: 0,
+                            coding: 0,
+                            unit_testing: 0,
+                            integrated_testing: 0,
+                        },
+                        departmentDto: {
+                            id: loginUser.currentUser.department.id,
+                        },
+                        projectManagerUserDto: {
+                            id: loginUser.currentUser.id,
+                        },
+                        membersUserDto: empList.map((str) => ({ id: parseInt(str) })),
+                    };
+                    console.log(project);
+                    //Perform the AJAX request
+                    $.ajax({
+                        url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
+                        type: "POST",
+                        data: JSON.stringify(project),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: async function (data) {
+                            alert("Project registered successfully");
+                            // Reset the form if needed
+                            $("#validation-form")[0].reset();
+                            console.log("this projce has benn saved", data);
+                            // event.currentTarget.submit();
+                            window.top.location = window.top.location;
+                        },
+                        error: function (data) {
+                            alert("Error registering project");
+                            // event.currentTarget.submit();
+                            window.top.location = window.top.location;
+                        },
+                    });
                 });
-
-
-
             });
 
             let myOptions = [
@@ -1803,66 +1950,6 @@
             //list project end
         </script>
 
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                loadData();
-
-                function loadData() {
-                    $.ajax({
-                        type: "GET",
-                        url: "/api/deliverable-type/list", // Replace with the actual URL of your Spring Boot endpoint
-                        success: function (data) {
-                            updateTable(data);
-                        },
-                        error: function (error) {
-                            console.log("Error fetching data: " + error);
-                        }
-                    });
-                }
-
-                function updateTable(data) {
-                    var table = $("#deliverable-table");
-
-                    // Clear existing rows
-                    table.find("tr:gt(0)").remove();
-
-                    // Add new rows based on the received data
-                    $.each(data, function (index, item) {
-                        var row = $("<tr><td>" + item.id + "</td><td>" + item.type+ "</td></tr>");
-                        table.append(row);
-                    });
-                }
-            });
-
-            function showError(message) {
-                $("#errorText").text(message);
-                $("#errorAlert").show();
-
-                setTimeout(function () {
-                    $("#errorAlert").hide();
-                }, 3000);
-
-                //close alert box
-                $(".btn-close").on("click", function () {
-                    $("#errorAlert").hide();
-                });
-            }
-
-            function showSuccess(message) {
-                $("#successText").text(message);
-                $("#successAlert").show();
-
-                setTimeout(function () {
-                    $("#successAlert").hide();
-                }, 3000);
-
-                //close alert box
-                $(".btn-close").on("click", function () {
-                    $("#successAlert").hide();
-                });
-            }
-        </script>
 
     </head>
 
@@ -2872,7 +2959,7 @@
                                                                 type="date"
                                                                 class="form-control"
                                                                 id="start-date"
-                                                                disabled required
+                                                                required
                                                             />
                                                         </div>
                                                     </div>
@@ -3097,42 +3184,57 @@
                                                     </li>
                                                 </ul>
                                                 <div class="text-center">
-                                                    <button
-                                                        class="btn btn-primary"
-                                                        style="
-                                                            background-color: #369;
-                                                        "
-                                                        id="update-amount-btn"
-                                                        >Save Amount</button
-                                                    >
+                                                    <div  id="updateButtonC">
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div class="tab-pane fade pt-3" id="review">
+                                            <div
+                                                class="tab-pane fade pt-3"
+                                                id="review"
+                                            >
                                                 <div class="row mb-3">
-                                                    <label for="project-external-review-count" class="col-md-4 col-lg-3 col-form-label">External Review</label>
-                                                    <div class="col-md-8 col-lg-9">
-                                                        <input name="project_name" type="number" class="form-control" min="0"
-                                                            id="project-external-review-count" oninput="validity.valid||(value='');"/>
+                                                    <label
+                                                        for="project-external-review-count"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >External Review</label
+                                                    >
+                                                    <div
+                                                        class="col-md-8 col-lg-9"
+                                                    >
+                                                        <input
+                                                            name="project_name"
+                                                            type="number"
+                                                            class="form-control"
+                                                            min="0"
+                                                            id="project-external-review-count"
+                                                            oninput="validity.valid||(value='');"
+                                                        />
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-3">
-                                                    <label for="project-internal-review-count" class="col-md-4 col-lg-3 col-form-label">Internal Review</label>
-                                                    <div class="col-md-8 col-lg-9">
-                                                        <input name="project_name" type="number" min="0" class="form-control"
-                                                            oninput="validity.valid||(value='');" id="project-internal-review-count"/>
+                                                    <label
+                                                        for="project-internal-review-count"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >Internal Review</label
+                                                    >
+                                                    <div
+                                                        class="col-md-8 col-lg-9"
+                                                    >
+                                                        <input
+                                                            name="project_name"
+                                                            type="number"
+                                                            min="0"
+                                                            class="form-control"
+                                                            oninput="validity.valid||(value='');"
+                                                            id="project-internal-review-count"
+                                                        />
                                                     </div>
                                                 </div>
-                                                <div class="text-center">
-                                                    <a
-                                                        href=""
-                                                        class="btn btn-primary"
-                                                        style="
-                                                            background-color: #369;
-                                                        "
-                                                        >Save Review</a
-                                                    >
+                                                <div>
+                                                <div  id="updateButtonContainer">
+                                                </div>
                                                 </div>
                                             </div>
 
@@ -3146,12 +3248,14 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade pt-3" id="deliverable-list">
-                                                <table id="deliverable-table">
-                                                    <tr>
-                                                        <th>Id</th>
-                                                        <th>Architecture Name</th>
-                                                    </tr>
-                                                </table>
+                                                <form id="deliverable-type-form">
+                                                    <div id="deliverable-type">
+                                                        <!-- Checkbox elements will be dynamically added here -->
+                                                    </div>
+                                                    <div  id="updateButtonCon">
+                                                    </div>
+                                                </form>
+
                                             </div>
                                 </div>
                             </div>
