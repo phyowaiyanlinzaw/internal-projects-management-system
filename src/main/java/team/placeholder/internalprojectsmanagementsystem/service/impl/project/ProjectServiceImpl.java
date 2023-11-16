@@ -151,7 +151,7 @@ public class ProjectServiceImpl implements ProjectService {
                 projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
                 projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
                 projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
-
+                projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
                 List<UserDto> userDtos = new ArrayList<>();
                 for (User user : project.getUsers()) {
                     user.getProjects().clear();
@@ -289,6 +289,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+            projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
             projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
             projectDto.setSystemOutLineDto(modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class));
 
@@ -430,9 +431,10 @@ public class ProjectServiceImpl implements ProjectService {
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+            projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
             projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
             projectDto.setSystemOutLineDto(modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class));
-
+            projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDtoList.add(projectDto);
 
         }
@@ -488,7 +490,7 @@ public class ProjectServiceImpl implements ProjectService {
         kpiDto.setCoding_kpi(coding_kpi);
         kpiDto.setUnit_test_kpi(unit_test_kpi);
         kpiDto.setIntegrated_test_kpi(integrated_test_kpi);
-        
+
         return kpiDto;
     }
 

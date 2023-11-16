@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Amount;
@@ -132,8 +129,11 @@ public class ProjectController {
     @GetMapping(value = "/architecturelist")
     public ResponseEntity <List <ArchitectureDto>> getAllArchitecture(){
         List<ArchitectureDto> architectureDtos= architectureService.getAllArchitecture();
+        System.out.println(architectureDtos);
         return new ResponseEntity<>(architectureDtos, HttpStatus.OK);
     }
+
+
 
     @GetMapping(value = "/count/all")
     public ResponseEntity<Long> countAllProjects(){
