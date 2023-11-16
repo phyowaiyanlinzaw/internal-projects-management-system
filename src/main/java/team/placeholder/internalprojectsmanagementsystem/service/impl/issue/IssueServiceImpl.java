@@ -69,8 +69,6 @@ public class IssueServiceImpl implements IssueService {
         issue.setResponsible_party(isuDto.getResponsible_party());
         issue.setProject(projectRepository.findById(isuDto.getProject_id()));
 
-        notificationService.save("New issue has been created", isuDto.getUser_pic());
-
         issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
 
         Issue issue1 = issueRepository.save(issue);
@@ -99,6 +97,8 @@ public class IssueServiceImpl implements IssueService {
         issueDto.setStatus(issue1.getIssueStatus().toString());
         issueDto.setIssueCategory(issue1.getIssueCategory().toString());
         issueDto.setResponsible_type(issue1.getResponsible_type().toString());
+
+        notificationService.save("New issue has been created", isuDto.getUser_pic(), "issue-noti-event", issueDto);
 
         return issueDto;
 
