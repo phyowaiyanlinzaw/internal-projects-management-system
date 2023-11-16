@@ -25,7 +25,11 @@ public interface UserService {
 
     UserDto updateProfile(UserDto userDto);
 
-    void resetPassword(String email);
+    UserDto sendOtp(String email);
+
+    boolean confirmOtp(String email,String otp);
+
+    UserDto resetPassword(String email, String newPassword);
 
     void sendEmail(String to, String subject, String text);
 

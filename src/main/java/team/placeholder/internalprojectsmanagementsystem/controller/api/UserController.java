@@ -21,6 +21,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserS
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user/")
@@ -53,22 +54,31 @@ public class UserController {
         }
     }
 
-    @GetMapping("reset-password/{email}")
+    @GetMapping("send-otp/{email}")
     public ResponseEntity<String> sendEmail(@PathVariable String email) {
-        userService.resetPassword(email);
+        UserDto user = userService.sendOtp(email);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
         return ResponseEntity.ok("Email sent successfully");
+    }
+
+    @PostMapping("confirm-otp/{email}/{otp}")
+    public ResponseEntity<String> confirmOtp(@PathVariable String email,@PathVariable String otp){
+        boolean isConfirmed = userService.confirmOtp(email,otp);
+        if (!isConfirmed) {
+            return ResponseEntity.badRequest().body("OTP is not confirmed");
+        }
+        return ResponseEntity.ok("OTP has been confirmed.");
     }
 
     @PostMapping("reset-password/{email}/{newPassword}")
     public ResponseEntity<String> resetPassword(@PathVariable String email, @PathVariable String newPassword) {
 
-        UserDto user = userService.getUserByEmail(email);
-
+        UserDto user = userService.resetPassword(email, newPassword);
         if (user == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
-        user.setPassword(newPassword);
-        userService.save(user);
         return ResponseEntity.ok("Password reset successfully");
     }
 

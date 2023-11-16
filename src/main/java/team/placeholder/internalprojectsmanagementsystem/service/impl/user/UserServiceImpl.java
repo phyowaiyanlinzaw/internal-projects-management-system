@@ -24,9 +24,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AE
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final JavaMailSender mailSender;
     private final ModelMapper modelmapper;
     private final AESImpl aes;
+    private final Map<String,String> otpMap = new HashMap<>();
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -75,6 +74,41 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
 
+        }
+    }
+
+    @Override
+    public UserDto sendOtp(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            String otp = String.format("%04d", new Random().nextInt(10000));
+            otpMap.put(email,otp);
+            sendEmail(email,"OTP","Your One-timed Password is : "+otp);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean confirmOtp(String email,String otp) {
+        if (otpMap.containsKey(email) && otpMap.get(email).equals(otp)) {
+            otpMap.remove(email);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public UserDto resetPassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            userRepository.save(user);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
         }
     }
 
@@ -135,12 +169,6 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-    }
-
-    @Override
-    public void resetPassword(String email) {
-        String newPassword = PasswordGenerator.generatePassword(8);
-        sendEmail(email, "OTP Verification", "Your OTP Code is : " + newPassword);
     }
 
     @Override
