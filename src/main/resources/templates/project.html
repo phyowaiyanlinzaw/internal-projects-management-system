@@ -1,11 +1,6 @@
 <!DOCTYPE html>
-<html
-        lang="en"
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="layout/layout"
-        xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="layout/layout" xmlns:th="http://www.thymeleaf.org">
 <head>
 </head>
 
@@ -14,15 +9,8 @@
 <script type="module" src="/js/callDataForTask.js" async></script>
 
 <!-- Spinner Start -->
-<div
-        id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
->
-    <div
-            class="spinner-border text-primary"
-            style="width: 3rem; height: 3rem"
-            role="status"
-    >
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
         <span class="sr-only">Loading...</span>
     </div>
 </div>
@@ -31,37 +19,23 @@
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
     <!-- Content Start -->
-    <div
-            class="content"
-            style="
+    <div class="content" style="
                     background-color: #e5e5f7;
                     opacity: 1;
                     background-image: radial-gradient(
                         #444cf7 0.6000000000000001px,
                         #e5e5f7 0.6000000000000001px
-                    );
-                    background-size: 12px 12px;
-                "
-    >
-        <div
-                th:replace="fragments/navigation :: navigation-without-search"
-        ></div>
+                    ); background-size: 12px 12px;">
+        <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
         <div class="container-fluid mt-2">
             <!-- nav for task and gantt chart start -->
             <nav>
                 <ul class="nav nav-tabs rounded-top" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button
-                                class="nav-link active border-primary border border-bottom-0"
-                                id="tasks-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#task"
-                                type="button"
-                                role="tab"
-                                aria-controls="task"
-                                aria-selected="false"
-                        >
+                        <button class="nav-link active border-primary border border-bottom-0"
+                                id="tasks-tab" data-bs-toggle="tab" data-bs-target="#task"
+                                type="button" role="tab" aria-controls="task" aria-selected="false">
                             Tasks
                             <p style="display:none;" th:text="${projectId}" id="projectId"></p>
                             <p style="display:none;" th:text="${project.getStart_date()}" id="projectStartDate"></p>
@@ -69,40 +43,19 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button
-                                class="nav-link border-primary border border-bottom-0 rounded-top"
-                                id="gantt-chart-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#gantt-chart"
-                                type="button"
-                                role="tab"
-                                aria-controls="gantt-chart"
-                                aria-selected="false"
-                        >
+                        <button class="nav-link border-primary border border-bottom-0 rounded-top"
+                                id="gantt-chart-tab" data-bs-toggle="tab" data-bs-target="#gantt-chart" type="button"
+                                role="tab" aria-controls="gantt-chart" aria-selected="false">
                             Calendar
                         </button>
                     </li>
                 </ul>
             </nav>
             <!-- nav for task and gantt chart end -->
-            <div
-                    class="tab-content position-relative"
-                    style="height: 600px"
-                    id="myTabContent"
-            >
-                <div
-                        class="tab-pane fade show active"
-                        id="task"
-                        role="tabpanel"
-                        aria-labelledby="tasks-tab"
-                >
-                    <div
-                            class="d-flex justify-content-end trash-can-container dummy-trash position-absolute"
-                            style="bottom: 100px; right: 0; width: 60px"
-                    >
-                            <span class="trash align-self-end dummy-trash">
-                                <span class="dummy-trash"></span>
-                            </span>
+            <div class="tab-content position-relative" style="height: 600px" id="myTabContent">
+                <div class="tab-pane fade show active" id="task" role="tabpanel" aria-labelledby="tasks-tab">
+                    <div class="d-flex justify-content-end trash-can-container dummy-trash position-absolute" style="bottom: 100px; right: 0; width: 60px">
+                            <span class="trash align-self-end dummy-trash"><span class="dummy-trash"></span></span>
                     </div>
                     <div class="board">
                         <!-- add task form start -->
@@ -110,73 +63,35 @@
 
                         <div class="lanes" id="sort-container">
                             <div class="lane">
-                                <h3
-                                        class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center"
-                                >
+                                <h3 class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center">
                                     TODO
-                                    <button
-                                            type="submit"
-                                            class="btn btn-primary"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#add-task"
-                                    >
-                                        <i
-                                                class="bi bi-plus-circle"
-                                        ></i>
+                                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-task">
+                                        <i class="bi bi-plus-circle"></i>
                                     </button>
                                 </h3>
                                 <div class="swim-lane p-3" id="TODO">
                                 </div>
-                                <div
-                                        class="bg-primary rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
+                                <div class="bg-primary rounded-bottom" style="height: 10px"></div>
                             </div>
                             <!-- doing start -->
                             <div class="lane">
-                                <h3
-                                        class="heading bg-info text-white rounded-top py-hee"
-                                >
-                                    IN PROGRESS
-                                </h3>
-                                <div
-                                        class="swim-lane p-3"
-                                        id="IN_PROGRESS"
-                                >
-                                </div>
-                                <div
-                                        class="bg-info rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
+                                <h3 class="heading bg-info text-white rounded-top py-hee">IN PROGRESS</h3>
+                                <div class="swim-lane p-3" id="IN_PROGRESS"></div>
+                                <div class="bg-info rounded-bottom" style="height: 10px"></div>
                             </div>
                             <!-- doing end -->
                             <!-- done start -->
                             <div class="lane">
-                                <h3
-                                        class="heading bg-success text-white rounded-top py-hee"
-                                >
-                                    FINISHED
-                                </h3>
-                                <div
-                                        class="swim-lane p-3"
-                                        id="FINISHED"
-                                ></div>
-                                <div
-                                        class="bg-success rounded-bottom"
-                                        style="height: 10px"
-                                ></div>
+                                <h3 class="heading bg-success text-white rounded-top py-hee">FINISHED</h3>
+                                <div class="swim-lane p-3" id="FINISHED"></div>
+                                <div class="bg-success rounded-bottom" style="height: 10px"></div>
                             </div>
                             <!-- done end -->
                         </div>
                     </div>
                 </div>
                 <!-- calendar start -->
-                <div
-                        class="tab-pane fade mt-3"
-                        id="gantt-chart"
-                        role="tabpanel"
-                        aria-labelledby="gantt-chart-tab"
-                >
+                <div class="tab-pane fade mt-3" id="gantt-chart" role="tabpanel" aria-labelledby="gantt-chart-tab">
                     <div id="calendar"></div>
                 </div>
 
@@ -191,66 +106,30 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content task-content">
                 <div class="modal-header">
-                    <h2 class="card-title" style="text-align: center">
-                        Add Task
-                    </h2>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
+                    <h2 class="card-title" style="text-align: center"> Add Task </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
                 <div class="modal-body">
                     <div class="row g-3" id="todo-form">
                         <div class="col-12">
-                            <label
-                                    for="title"
-                                    class="col-sm-12 col-form-label"
-                            >Task Title <span
-                                    style="color:red"> *</span></label
-                            >
-                            <input
-                                    type="text"
-                                    class="form-control border-task-title"
-                                    id="title"
-                                    name="title"
-                            ></input>
+                            <label for="title" class="col-sm-12 col-form-label">Task Title <span style="color:red"> *</span></label>
+                            <input type="text" class="form-control border-task-title" id="title" name="title"></input>
                         </div>
 
                         <div class="col-12">
-                            <label
-                                    for="description"
-                                    class="col-sm-12 col-form-label"
-                            >Description <span
-                                    style="color:red"> *</span></label
-                            >
-                            <textarea
-                                    class="form-control border-task-description"
-                                    id="description"
-                                    name="description"
-                                    rows="2"
-                            ></textarea>
+                            <label for="description" class="col-sm-12 col-form-label" >Description <span style="color:red"> *</span></label>
+                            <textarea class="form-control border-task-description"
+                                    id="description" name="description" rows="2"></textarea>
                         </div>
 
                         <div class="col-lg-6">
-                            <label
-                                    for="select-member"
-                                    class="col-sm-12 col-form-label"
-                            >Assign Members<span style="color: red">
-                                            *</span
-                            ></label
-                            >
-                            <input
-                                    type="text"
-                                    name="member-tags"
-                                    id="select-member"
-                                    placeholder="Select An Employee"
-                            />
+                            <label for="select-member" class="col-sm-12 col-form-label">
+                                Assign Members<span style="color: red">*</span></label>
+                            <input type="text" name="member-tags" id="select-member" placeholder="Select An Employee"/>
                         </div>
                         <div class="col-lg-6">
-                            <label for="group" class="col-sm-12 col-form-label">Group <span
-                                    style="color:red"> *</span></label>
+                            <label for="group" class="col-sm-12 col-form-label">
+                                Group <span style="color:red"> *</span></label>
                             <select class="form-control" aria-label="Select Group" data-live-search="true"
                                     id="group" name="group">
                                 <option value="A">A - Related With Project Development</option>
@@ -260,69 +139,28 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label
-                                    for="start_date"
-                                    class="col-sm-12 col-form-label"
-                            >Start Date
-                                <span style="color: red">
-                                            *</span
-                                ></label
-                            >
-                            <input
-                                    type="text"
-                                    class="form-control border-task-description"
-                                    id="start_date"
-                            />
+                            <label for="start_date" class="col-sm-12 col-form-label">
+                                Start Date<span style="color: red">*</span></label>
+                            <input type="text" class="form-control border-task-description" id="start_date"/>
                         </div>
 
                         <div class="col-md-4">
-                            <label
-                                    for="end_date"
-                                    class="col-sm-12 col-form-label"
-                            >End Date
-                                <span style="color: red">
-                                            *</span
-                                ></label
-                            >
-                            <input
-                                    type="text"
-                                    class="form-control border-task-description"
-                                    id="end_date"
-                            />
+                            <label for="end_date" class="col-sm-12 col-form-label">
+                                End Date<span style="color: red">*</span></label>
+                            <input type="text" class="form-control border-task-description" id="end_date"/>
                         </div>
 
                         <div class="col-md-4">
-                            <label
-                                    for="plan-hours"
-                                    class="col-sm-12 col-form-label"
-                            >Plan Hours
-                                <span style="color: red">
-                                            *</span
-                                ></label
-                            >
-                            <input
-                                    type="number"
-                                    class="form-control border-task-description"
-                                    id="plan-hours"
-                            />
+                            <label for="plan-hours"class="col-sm-12 col-form-label">
+                                Plan Hours<span style="color: red">*</span></label>
+                            <input type="number" class="form-control border-task-description" id="plan-hours"/>
                         </div>
 
 
                         <div class="text-center mt-3">
-                            <button
-                                    type="submit"
-                                    class="btn btn-primary col-2"
-                                    data-dismiss="modal"
-                                    id="task-add-btn"
-                            >
-                                Add
-                            </button>
-                            <button
-                                    class="btn btn-secondary mr-3"
-                                    data-dismiss="modal"
-                            >
-                                Cancel
-                            </button>
+                            <button type="submit" class="btn btn-primary col-2" data-dismiss="modal"
+                                    id="task-add-btn">Add</button>
+                            <button class="btn btn-secondary mr-3" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -342,43 +180,20 @@
                     <input type="text" id="pm-task-title-input" class="d-none">
                     <span class='ms-3 rounded-2 p-2 text-white' id="pm-status"></span>
 
-                    <button
-                            type="button"
-                            class="btn-close btn-close-task-details"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
+                    <button type="button" class="btn-close btn-close-task-details" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row row-cols-2">
                         <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-bars-staggered"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="editable-label"
-                                    for="pm-description-editor"
-                            >
-                                Description</label
-                            >
-                            <textarea
-                                    id="pm-description-editor"
-                                    class="form-control editable-input"
-                                    name="description"
-                                    rows="4"
-                                    disabled
-                            ></textarea>
+                                    <span><i class="fa-solid fa-bars-staggered"></i></span>
+                            <label class="editable-label" for="pm-description-editor">Description</label>
+                            <textarea id="pm-description-editor" class="form-control editable-input"
+                                    name="description" rows="4" disabled ></textarea>
                         </div>
 
                         <div class="col-lg-5 mb-4">
                             <i class="fa-solid fa-thumbtack"></i>
-                            <label
-                                    class="editable-label"
-                            >
-                                Type of Task</label
-                            >
+                            <label class="editable-label" >Type of Task</label>
                             <div class="mt-2">
                                 <span class="bg-secondary text-white border-0 p-2 rounded-1"
                                       id="pm-task-group-span"></span>
@@ -393,18 +208,8 @@
 
                         <div class="col-lg-5 mb-4">
                             <i class="fa-solid fa-users"></i>
-                            <label
-                                    for="pm-assigned-member-tagify"
-                            >
-                                Assigned Member </label
-                            >
-                            <input
-                                    type="text"
-                                    id="pm-assigned-member-tagify"
-                                    class="editable-input d-none"
-                                    name="member-tags"
-                                    placeholder="Update Employee for Task"
-                            />
+                            <label for="pm-assigned-member-tagify">Assigned Member </label>
+                            <input type="text"value=""  id="pm-assigned-member-tagify" class="editable-input d-none" name="member-tags" placeholder="Update Employee for Task"/>
                             <div class="mt-2">
                                 <span class="bg-dark text-white border-0 p-2 rounded-1"
                                       id="pm-assigned-member-span"></span>
@@ -422,93 +227,29 @@
                         </div>
 
                         <div class="col-lg-3 mb-4">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-calendar-days"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="editable-label"
-                                    for="pm-task-detail-start-date"
-                            >
-                                Start Date</label
-                            >
-                            <input
-                                    type="text"
-                                    id="pm-task-detail-start-date"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
-                                        "
-                                    disabled
-                            />
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="editable-label" for="pm-task-detail-start-date">Start Date</label>
+                            <input type="text" id="pm-task-detail-start-date" class="form-control border-task editable-input"
+                                    dir="auto" data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled/>
                         </div>
 
                         <div class="col-lg-3 mb-4">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-calendar-days"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="editable-label"
-                                    for="pm-task-detail-due-date"
-                            >
-                                Due Date</label
-                            >
-                            <input
-                                    type="text"
-                                    id="pm-task-detail-due-date"
-                                    class="form-control border-task editable-input"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
-                                        "
-                                    disabled
-                            />
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="editable-label" for="pm-task-detail-due-date">Due Date</label>
+                            <input type="text" id="pm-task-detail-due-date" class="form-control border-task editable-input" dir="auto"
+                                    data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled/>
                         </div>
 
                         <div class="col-lg-3 mb-4">
-                            <span
-                            ><i
-                                    class="fa-solid fa-clock"
-                            ></i
-                            ></span>
-                            <label
-                                    class="editable-label"
-                                    for="pm-plan-edit-hours"
-                            >
-                                Plan Hours</label>
-                            <input
-                                    type="number"
-                                    class="form-control border-task-description"
-                                    id="pm-plan-edit-hours"
-                            />
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="editable-label" for="pm-plan-edit-hours">Plan Hours</label>
+                            <input type="number" class="form-control border-task-description" id="pm-plan-edit-hours"/>
                         </div>
 
                         <div class="col-lg-3 mb-4">
-                            <span
-                            ><i
-                                    class="fa-solid fa-clock"
-                            ></i
-                            ></span>
-                            <label
-                                    class="editable-label"
-                                    for="pm-actual-edit-hours"
-                            >
-                                Actual Hours</label>
-                            <input
-                                    type="number"
-                                    class="form-control"
-                                    id="pm-actual-edit-hours"
-                            />
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="editable-label" for="pm-actual-edit-hours">Actual Hours</label>
+                            <input type="number" class="form-control" id="pm-actual-edit-hours"/>
                         </div>
 
 
@@ -516,28 +257,14 @@
 
                     <!--                    edit button and cancel button -->
                     <div class="text-center mt-3">
-                        <button
-                                type="submit"
-                                class="btn btn-primary col-2"
-                                data-dismiss="#task-details"
-                                id="task-edit-btn"
-                        >
-                            Edit
-                        </button>
-                        <button class="d-none col-1 rounded-2 border-2 border-success"
-                                id="save-edit-btn">
+                        <button type="submit" class="btn btn-primary col-2" data-dismiss="#task-details" id="task-edit-btn">Edit</button>
+                        <button class="d-none col-1 rounded-2 border-2 border-success" id="save-edit-btn">
                             <i class="fa-solid fa-circle-check text-success"></i>
                         </button>
-                        <button class="d-none col-1 rounded-2 border-2 border-danger"
-                                id="cancel-edit-btn">
+                        <button class="d-none col-1 rounded-2 border-2 border-danger" id="cancel-edit-btn">
                             <i class="fa-solid fa-circle-xmark text-danger"></i>
                         </button>
-                        <button
-                                type="reset"
-                                class="btn btn-secondary mr-3 btn-close-task-details"
-                                data-bs-dismiss="modal"
-                                id="task-cancel-btn"
-                        >
+                        <button type="reset" class="btn btn-secondary mr-3 btn-close-task-details" data-bs-dismiss="modal" id="task-cancel-btn">
                             Cancel
                         </button>
                     </div>
@@ -556,140 +283,59 @@
                     </h2>
                     <span class='ms-3 rounded-2 p-2 text-white' id="member-task-status"></span>
 
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row row-cols-2">
                         <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-bars-staggered"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="label"
-                            >
-                                Description</label
-                            >
-                            <textarea
-                                    id="member-task-description"
-                                    class="form-control"
-                                    name="description"
-                                    rows="4"
-                                    disabled
-                            ></textarea>
+                                    <span><i class="fa-solid fa-bars-staggered"></i></span>
+                            <label class="label">Description</label>
+                            <textarea id="member-task-description" class="form-control" name="description" rows="4" disabled></textarea>
                         </div>
 
                         <div class="col-lg-5 mb-4">
                             <i class="fa-solid fa-thumbtack"></i>
-                            <label
-                                    class="label"
-                            >
-                                Type of Task</label
-                            >
+                            <label class="label" >Type of Task</label>
                             <div class="mt-2">
-                                <span class="bg-secondary text-white border-0 p-2 rounded-1"
-                                      id="member-task-group-span"></span>
+                                <span class="bg-secondary text-white border-0 p-2 rounded-1" id="member-task-group-span"></span>
                             </div>
                         </div>
 
                         <div class="col-lg-5 mb-4">
                             <i class="fa-solid fa-users"></i>
-                            <label
-                                    class="label"
-                            >
-                                Assigned Member </label
-                            >
+                            <label class="label">Assigned Member </label>
                             <div class="mt-2">
-                                <span class="bg-dark text-white border-0 p-2 rounded-1"
-                                      id="member-assigned-member-span"></span>
+                                <span class="bg-dark text-white border-0 p-2 rounded-1" id="member-assigned-member-span"></span>
                             </div>
                         </div>
 
 
 
                         <div class="col-lg-2 mb-4">
-                            <span
-                            ><i
-                                    class="fa-solid fa-clock"
-                            ></i
-                            ></span>
-                            <label
-                                    class="label"
-                            >
-                                Plan Hours</label>
-                            <div class="mt-2">
-                                <div class="badge rounded-3 bg-info fs-6" id="member-task-plan-hours">
-                                </div>
-                            </div>
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="label">Plan Hours</label>
+                            <div class="mt-2"><div class="badge rounded-3 bg-info fs-6" id="member-task-plan-hours"></div></div>
                         </div>
 
                         <div class="col-lg-5 mb-4">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-calendar-days"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="label"
-                            >
-                                Start Date</label
-                            >
-                            <input
-                                    type="text"
-                                    id="member-task-detail-start-date"
-                                    class="form-control"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
-                                        "
-                                    disabled
-                            />
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="label">Start Date</label>
+                            <input type="text" id="member-task-detail-start-date" class="form-control" dir="auto" data-autosize="true"
+                                    style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled />
                         </div>
 
                         <div class="col-lg-5 mb-4">
-                                    <span
-                                    ><i
-                                            class="fa-solid fa-calendar-days"
-                                    ></i
-                                    ></span>
-                            <label
-                                    class="label"
-                            >
-                                Due Date</label
-                            >
-                            <input
-                                    type="text"
-                                    id="member-task-detail-due-date"
-                                    class="form-control"
-                                    dir="auto"
-                                    data-autosize="true"
-                                    style="
-                                            overflow: hidden;
-                                            overflow-wrap: break-word;
-                                            height: 37px;
-                                        "
-                                    disabled
-                            />
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="label">Due Date</label>
+                            <input type="text" id="member-task-detail-due-date" class="form-control" dir="auto" data-autosize="true"
+                                    style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled />
                         </div>
 
 
                         <div class="col-lg-2 mb-4">
                             <span><i class="fa-solid fa-hourglass-start"></i></span>
-                            <label class="label">
-                                Duration</label>
-                            <div class="mt-2">
-                                <div class="badge rounded-3 bg-primary fs-6" id="member-task-duration">
-                                </div>
-                            </div>
+                            <label class="label">Duration</label>
+                            <div class="mt-2"><div class="badge rounded-3 bg-primary fs-6" id="member-task-duration"></div></div>
                         </div>
                     </div>
 
@@ -701,12 +347,7 @@
 
 
     <!-- confrim box for delete -->
-    <div
-            class="modal fade"
-            id="confirm-box"
-            data-bs-keyboard="false"
-            data-bs-backdrop="static"
-    >
+    <div class="modal fade" id="confirm-box" data-bs-keyboard="false" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -723,9 +364,7 @@
     <div class="modal fade" id="actual-hours-input-modal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    Enter Actual Hours
-                </div>
+                <div class="modal-header">Enter Actual Hours</div>
                 <div class="modal-body">
                     <label for="actual-hours-input" class="col-form-label"></label>
                     <input type="number" class="form-control" id="actual-hours-input">
