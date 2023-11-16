@@ -1565,9 +1565,7 @@
                             console.log(data);
                             console.log("Issue Updated Successfully");
                             // Update 'solved' to true after a successful AJAX request
-                            $('#solve-btn').val("true");
-                            const spanContent = 'Solved';
-                            const spanColor = 'success';
+
                             $('#solved').empty().html(`<span class="card-title badge rounded-pill bg-${spanColor}" id="solved">${spanContent}</span>`);
                             Swal.fire({
                                 title: "Success!",
