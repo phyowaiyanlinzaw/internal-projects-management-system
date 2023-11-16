@@ -67,8 +67,11 @@
                     <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="70">
                         Role
                     </th>
-                    <th data-sortable="true" data-field="projectCount" data-align="left" data-valign="middle"
-                        data-width="30" data-formatter="projectCountFormatter">Project Count
+                    <th data-sortable="true" data-field="enabled" data-align="left" data-valign="middle" data-width="30" data-formatter="statusFormatter">
+                        Status
+                    </th>
+                    <th data-field="operate" data-align="left" data-valign="middle" data-formatter="operateFormatter"
+                        data-width="100">Action
                     </th>
                 </tr>
                 </thead>
@@ -150,6 +153,22 @@
                 </div>
             </div>
         </div>
+
+        <!-- Edit Employee Modal -->
+        <div class="modal fade" id="edit-employee-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Edit Employee
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button class="btn">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -184,6 +203,21 @@
         return index + 1;
     }
 
+    function statusFormatter(value,row,index){
+        if(value === true){
+            return '<span class="badge bg-success">Active</span>'
+        }else{
+            return '<span class="badge bg-danger">Inactive</span>';
+        }
+    }
+
+    function operateFormatter(value,row,index){
+        return [
+            //edit button that opens edit modal
+            '<button class="btn btn-sm btn-primary edit-employee-btn" data-bs-toggle="modal" data-bs-target="#edit-employee-modal" title="Edit">Edit</button>',
+        ].join(' ');
+    }
+
     function departmentNameFormatter(value, row, index) {
         if (value === null) {
             return '-';
@@ -191,36 +225,6 @@
         return value.name;
     }
 
-    function projectCountFormatter(value, row, index) {
-        // 'value' may be undefined or empty initially
-        // Replace 'userId' with the actual user ID
-        const userId = row.id; // Assuming 'id' is the user ID property in your data
-
-        //return something if user id not available
-        if (userId === null) {
-            return '';
-        }
-
-        // Make an AJAX request to fetch project count data
-        $.ajax({
-            url: '/api/project/count/user/' + userId,
-            type: 'GET',
-            async: false,
-            success: function (data) {
-                // 'data' is the response object from the AJAX request
-                // 'data.projectCount' is the project count value
-                console.log(data);
-                value = data;
-            },
-            error: function (data) {
-                // Handle the error response object
-                console.log(data);
-            }
-        });
-
-        // Return the project count value
-        return value;
-    }
 
     $(function () {
 
