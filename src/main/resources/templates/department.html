@@ -204,9 +204,6 @@
                                 console.log("DH for the current dp", data);
                             }).catch(error => console.log(error))
 
-
-
-
                         });
 // Append elements to construct the structure
                         outerDiv.appendChild(cardDiv);
@@ -217,8 +214,6 @@
                         avatarGroupDiv.appendChild(mediaGroup);
                         cardBodyDiv.appendChild(avatarGroupDiv);
                         avatarGroupDiv.appendChild(seeMoreButton);
-
-
 
 // Append the container div to the document or the desired parent element
 
@@ -389,11 +384,9 @@
                 </div>
                 <div class="modal-body d-flex align-items-center justify-content-center">
                     <div class="container-fluid">
-                        <div class="row">
-
-                            <div class="card col-10 align-items-center" >
+                        <div class="row row-cols-1">
+                            <div class="card align-items-center" >
                                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                                    <!--icon-->
                                     <div class="profile-card-icon">
                                         <img src="/images/avatars/departmenthead_avatar.svg" class="rounded-circle" style="height: 100px; width: 100px" alt="department head avatar"/>
                                     </div>
@@ -401,9 +394,7 @@
                                     <h5 id="department-head"></h5>
                                 </div>
                             </div>
-
-                            <div class="col-10 pt-3">
-                                <!-- Bordered Tabs -->
+                            <div class=" pt-3">
                                 <ul class="nav nav-tabs nav-tabs-bordered">
                                     <li class="nav-item">
                                         <button class="nav-link active" data-bs-toggle="tab"
@@ -419,34 +410,23 @@
                                 </ul>
                                 <div class="tab-content pt-3">
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
-
-                                        <div class="row row-cols-lg-1 row-cols-sm-1 row-cols-md-1 row-cols-xl-2">
+                                        <div class="row row-cols-lg-1 row-cols-lg-1 row-cols-md-1 row-cols-xl-2">
 
                                             <ul class="list-group col" style="padding: 0;">
-
                                                 <li class="list-group-item d-flex justify-content-between align-items-center w-100">
-                                                    Total Project<span class="badge bg-primary rounded-pill" id="total-project"></span>
-                                                </li>
-
-                                                <br/>
-
+                                                    Total Project<span class="badge bg-primary rounded-pill text-sm" id="total-project"></span>
+                                                </li> <br/>
                                                 <li class="list-group-item d-flex justify-content-between align-items-center w-100">
-                                                    Total Member<span class="badge bg-primary rounded-pill" id="total-member"></span>
+                                                    Total Member<span class="badge bg-primary rounded-pill text-sm" id="total-member"></span>
                                                 </li>
-
                                             </ul>
-
                                             <div class="col align-self-center">
                                                 <canvas style="max-width: 960px; padding: 0; min-width: 200px"
                                                         id="department-projects-chart" height="200"></canvas>
                                             </div>
-
                                         </div>
                                     </div>
-
                                     <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-
                                         <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
                                             <strong>Error : </strong> <span id="errorText"></span>
                                             <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
@@ -467,20 +447,13 @@
                                                 <br/><br/>
                                                 <input type="text" class="form-control" name="departmentname"
                                                        placeholder="Department Name" id="edit-department-name"/>
-                                            </div>
-                                            <br/>
-
-                                            <br/>
+                                            </div> <br />
 
                                             <button  style="background-color: #369;" class="btn btn-primary py-2 w-100 mb-3"
                                                     id="edit-department">Edit
                                             </button>
-
-
                                     </div>
                                 </div>
-                                <!-- End Bordered Tabs -->
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -489,9 +462,6 @@
     </div>
     <!-- modal for department's details -->
 
-
-
-    <!-- Back to Top -->
 </div>
 
 
@@ -543,7 +513,7 @@
                 "January",
                 "February",
                 "March",
-                "Apirl",
+                "April",
                 "May",
                 "June",
                 "July",
@@ -622,29 +592,6 @@
 
 
     firstChart.config.options.animation.duration = 5000;
-
-
-    // $(document).ready(function() {
-    //     $("#load-data").click(function() {
-    //         $.ajax({
-    //             url: "api/user/count", // URL to the API endpoint
-    //             type: "GET", // HTTP method (GET, POST, etc.)
-    //             dataType: "json", // Data type to expect in response
-    //             success: function(data) {
-    //
-    //                 console.log         ("user count : " , data);
-    //             },
-    //             error: function(jqXHR, textStatus, errorThrown) {
-    //                 // Handle errors
-    //                 console.log("Error: " + textStatus, errorThrown);
-    //             }
-    //         });
-    //     });
-    // })
-
-
-
-
 
 </script>
 <script src="/js/notification.js" type="module"></script>
