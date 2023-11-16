@@ -124,6 +124,87 @@ channel.bind("issue-noti-event", function(response) {
 
     console.log("in issue noti event function");
     console.log(response);
+
+    document.querySelector("#notification-container").innerHTML = "";
+
+    document.querySelector("#notification-light").classList.remove("d-none");
+
+    const data = JSON.parse(response);
+
+    const notification = data.notification;
+    const newIssue = data.object;
+
+    console.log(notification);
+
+    console.log(notification.description);
+    console.log(notification.noti_time);
+
+    if ('description' in notification) {
+        console.log("Notification description:", notification.description);
+    } else {
+        console.log("Notification description is undefined or does not exist");
+    }
+
+    const anchor = createA({
+        id: notification.id,
+        description: notification.description,
+        time: notification.noti_time
+    })
+
+    const hr = document.createElement("hr");
+    hr.className = "dropdown-divider";
+
+    const notificationContainer = document.querySelector("#notification-container");
+    notificationContainer.appendChild(anchor);
+    notificationContainer.appendChild(hr);
+
+    const issue = `<div class="p-md-3 p-sm-2">
+                            <div class="card item-issue-approval" id="issueapprovalitem-${newIssue.id}">
+                                <div class="d-inline p-2 issue-approval">
+                                    <input type="radio" name="approval-${newIssue.id}" value="DUPLICATE"/>
+                                    <label>Duplicate</label>
+                                    <input type="radio" name="approval-${newIssue.id}" value="APPROVE"/>
+                                    <label>Approve</label>
+                                    <input type="radio" name="approval-${newIssue.id}" value="DECLINE"/>
+                                    <label>Decline</label>
+                                </div>
+                                <div class="card-header border-bottom text-dark">
+                                    <div class="d-flex justify-content-between align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <h6 class="card-title card-text">${newIssue.title}</h6>
+                                            <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
+                                                ${newIssue.user_pic.name}
+                                            </p>
+                                        </div>
+                                        <span
+                                            class="card-title badge rounded-pill bg-${newIssue.status === 'Success' ? 'success' : 'danger'}">
+                                            ${newIssue.status === 'true' ? 'Solved' : 'Unsolved'}
+                                        </span>
+                                    </div>
+                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <p>Posted</p>
+                                        <span>${new Date(newIssue.created_date)}</span>
+                                        <p>Modified at</p>
+                                        <span>${getTimeElapsed(newIssue.created_date)}</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm see-more-button" data-id="${newIssue.id}"
+                                            data-bs-target="#issueDetailModal" data-bs-toggle="modal">
+                                            See More
+                                    </button>
+                                </div>
+                                <div class="col issue-time-line d-flex gap-2">
+                                    <p class="btn custom-color rounded-pill">${newIssue.issueCategory}</p>
+                                </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="code-block">
+                                        <p>${newIssue.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+    document.querySelector("#issue-approval-container").innerHTML += issue;
 });
 
 document.querySelector("#notification-light-container").addEventListener("shown.bs.dropdown",  () => {
