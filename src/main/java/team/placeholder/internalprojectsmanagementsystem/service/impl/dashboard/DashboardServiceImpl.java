@@ -64,6 +64,33 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public List<PlanManMonthDto> getPlanManHours(long projectId) {
-        return null;
+        List<TasksDto> tasks = taskRepository.findByProjectId(projectId).stream()
+                .map(task -> modelMapper.map(task, TasksDto.class))
+                .toList();
+
+        List<PlanManMonthDto> planManMonthDtos = new ArrayList<>();
+
+        for (TasksDto tasksDto : tasks){
+            long planStartTIme = tasksDto.getPlan_start_time();
+            String startMonthYear = ManMonthCalculator.getMonthYearFromDate(planStartTIme);
+
+            // Find the corresponding ActualManMonthDto in the list
+            Optional<PlanManMonthDto> existingDto = planManMonthDtos.stream()
+                    .filter(dto -> dto.getMonthName().equals(startMonthYear))
+                    .findFirst();
+
+            if (existingDto.isPresent()) {
+                // If the month already exists, update the actual hours
+                double updatedHours = existingDto.get().getPlanManMonthHours() + tasksDto.getActual_hours();
+                existingDto.get().setPlanManMonthHours(updatedHours);
+            } else {
+                // If the month doesn't exist, create a new ActualManMonthDto
+                PlanManMonthDto newDto = new PlanManMonthDto();
+                newDto.setMonthName(startMonthYear);
+                newDto.setPlanManMonthHours(tasksDto.getPlan_hours());
+                planManMonthDtos.add(newDto);
+            }
+        }
+        return planManMonthDtos;
     }
 }

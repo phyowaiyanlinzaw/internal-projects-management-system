@@ -22,6 +22,7 @@ public class UserDto {
     @JsonIgnore
     String password;
     private Role role;
+    private boolean enabled;
 
     @JsonProperty("department")
     private DepartmentDto departmentdto;

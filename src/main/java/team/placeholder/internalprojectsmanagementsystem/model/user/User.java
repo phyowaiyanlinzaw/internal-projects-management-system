@@ -38,6 +38,8 @@ public class User {
 
     private String password;
 
+    private boolean enabled;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

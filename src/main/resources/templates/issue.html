@@ -1114,15 +1114,16 @@
                 console.log('Request Data:', requestData);
 
                 $.ajax({
-                    url: 'api/issue/save',
+                    url: '/api/issue/save',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(requestData),
                     dataType: 'json',
                     success: function (data) {
                         console.log(data);
-                        //alert('Issue Created Successfully');
                         showsuccess('Issue Created Successfully');
+                        loadData();
+
                     },
                     error: function (xhr, status, error) {
                         console.log('Status:', status);

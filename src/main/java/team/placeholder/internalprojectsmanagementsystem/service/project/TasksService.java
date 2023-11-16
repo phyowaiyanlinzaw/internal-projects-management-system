@@ -22,6 +22,8 @@ public interface TasksService {
 
     List<TasksDto> getTasksByUserId(long id);
 
+    List<TasksDto> getTasksByProjectAndUserId(long projectId, long userId);
+
     Long countTaskByProjectIdAndStatus(Long id, TaskStatus x);
 
     Long countByProjectId(long id);
