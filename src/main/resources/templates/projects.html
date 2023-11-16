@@ -366,7 +366,6 @@
                 }
                 
             }
-
             function validatePhone() {
                 const phone = $('#client-phone').val();
                 const errorContainer = $('#client-phone').siblings('.error-container');
@@ -395,8 +394,6 @@
                     $('#client-phone').removeClass('is-invalid');
                 }
             }
-
-
             function validateClient() {
            validateName();
            validateEmail();
@@ -415,10 +412,8 @@
 
         $('#client-phone').on('input', function () {
             validatePhone();
-        });            
+        });
 
-
-            // SAVE CLIENT
             document
                 .querySelector("#client-form")
                 .addEventListener("submit", function (e) {
@@ -428,38 +423,50 @@
                     let email = document.querySelector("#client-email").value;
                     let phone = document.querySelector("#client-phone").value;
 
-                    if(!validateClient()){
+                    if (!validateClient()) {
                         return;
                     }
 
-                    const clientDto = {
-                        name: name,
-                        email: email,
-                        phone: phone,
-                    };
+                    Swal.fire({
+                        title: "Are you sure want to add?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const clientDto = {
+                                name: name,
+                                email: email,
+                                phone: phone,
+                            };
 
-                    console.log(clientDto)
+                            console.log(clientDto);
 
-                    $.ajax({
-                      method: "POST",
-                        url: "/api/client/save",
-                        data : JSON.stringify(clientDto),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (response) {
-                            console.log(response);
-                            const option = document.createElement("option");
-                            option.value = JSON.stringify(response);
-                            option.textContent = response.name;
-                            clientSelect.append(option);
-                            document.querySelector("#client-name").value = "";
-                            document.querySelector("#client-email").value = "";
-                            document.querySelector("#client-phone").value = "";
-                        },
-                        error: function (error) {
-                            console.error("Error in Url : /api/cleient/save ", error);
-                        },
-                    })
+                            $.ajax({
+                                method: "POST",
+                                url: "/api/client/save",
+                                data: JSON.stringify(clientDto),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (response) {
+                                    console.log(response);
+                                    const option = document.createElement("option");
+                                    option.value = JSON.stringify(response);
+                                    option.textContent = response.name;
+                                    clientSelect.append(option);
+                                    document.querySelector("#client-name").value = "";
+                                    document.querySelector("#client-email").value = "";
+                                    document.querySelector("#client-phone").value = "";
+                                    showSuccess('Client Edit Successfully...');
+                                },
+                                error: function (error) {
+                                    console.error("Error in Url : /api/client/save ", error);
+                                },
+                            });
+                        }
+                    });
                 });
 
             const projectObjectiveEditor =
@@ -1038,6 +1045,9 @@
                 //_____________________________________________
             });
 
+            const editProjectObjective = document.querySelector("#edit-project-objective");
+
+
             document.querySelector("#project-detail-edit-form").addEventListener("submit", function (e) {
                 e.preventDefault()
 
@@ -1500,25 +1510,29 @@
                 }
 
                 function validatePrjArchitecture() {
-                    const architectures = $('#architectures').val().trim();
+                    const architectures= $('#architectures').val();
                     const errorContainer = $('#architectures').siblings('.error-container');
 
-                    if (!architectures) {
+                    if (!architectures || architectures.trim().length === 0) {
                         validatedProjectForm = false;
-
                         if (errorContainer.length === 0) {
-                            let p = $("<div>")
-                                .addClass("text-danger fs-6 error-message")
-                                .text("Architecture is required");
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Architecture is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
 
-                            $('#architectures').after(p);
+                            $('#architectures').after('<div class="error-container"></div>');
+                            $('#architectures').siblings('.error-container').append(p);
                         }
 
                         $('#architectures').addClass('is-invalid');
+                        $('#architectures').removeClass('is-valid');
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#architectures').removeClass('is-invalid').addClass('is-valid');
+                        $('#architectures').addClass('is-valid');
+                        $('#architectures').removeClass('is-invalid');
                     }
                 }
 
@@ -1566,13 +1580,16 @@
                             $('#deliverable').siblings('.error-container').append(p);
                         }
 
-                        $('#deliverable').addClass('is-invalid');
-                        $('#deliverable').removeClass('is-valid');
+                        // $('#deliverable').addClass('is-invalid');
+                        // $('#deliverable').removeClass('is-valid');
+
+                        $('#deliverable').css('border', '1px solid #dc3545');
                     } else {
                         validatedProjectForm = true;
                         errorContainer.remove();
-                        $('#deliverable').addClass('is-valid');
-                        $('#deliverable').removeClass('is-invalid');
+                        // $('#deliverable').addClass('is-valid');
+                        // $('#deliverable').removeClass('is-invalid');
+                        $('#deliverable').css('border', '1px solid #28a745');
                     }
                 }
 
@@ -2347,6 +2364,18 @@
                         <div class="tab-pane fade" id="client-create">
                             <div class="modal-body modal-lg-6">
                                 <form class="row g-4" id="client-form">
+                                    <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                        <strong>Error : </strong> <span id="errorText"></span>
+                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                            &times;
+                                        </button>
+                                    </div>
+                                    <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                        <strong>Success : </strong> <span id="successText"></span>
+                                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                            &times;
+                                        </button>
+                                    </div>
                                     <div class="col-md-12">
                                         <label
                                             for="client-name"
