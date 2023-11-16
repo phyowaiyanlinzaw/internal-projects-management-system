@@ -969,6 +969,11 @@
                     //______________________________________________
 
                     //_______________review update
+                    if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
+                        const updateButton = document.querySelector("#updateButton");
+                        if (updateButton) {
+                            updateButton.classList.add("d-none");
+                        }
                     document.querySelector("#updateButton").addEventListener("click", async function () {
 
                         var internalReviewCount = document.getElementById("project-internal-review-count").value;
@@ -998,6 +1003,10 @@
 
                             });
                     });
+
+
+
+                    }
 
 
                     //____________________________________reveiw update end
@@ -3190,15 +3199,7 @@
                                                         />
                                                     </div>
                                                 </div>
-                                                <div class="text-center">
-                                                    <a
-                                                        href=""
-                                                        class="btn btn-primary"
-                                                        style="
-                                                            background-color: #369;
-                                                        "
-                                                        >Save Review</a
-                                                    >
+                                                <div class="text-center" id="updateButtonContainer">
                                                 </div>
                                             </div>
 
