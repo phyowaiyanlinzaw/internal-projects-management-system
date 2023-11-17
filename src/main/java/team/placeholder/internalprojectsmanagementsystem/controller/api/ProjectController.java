@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
@@ -90,7 +91,6 @@ public class ProjectController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
 
     @PutMapping(value = "/update", consumes ="application/Json")
@@ -284,5 +284,9 @@ public class ProjectController {
         }
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
+
+
+
+
 
 }

@@ -50,4 +50,6 @@ public interface UserService {
     List<UserDto> getEmployeeByProjectId(Long projectId);
 
     void changeUsername(UserDto userDto);
+
+    UserDto updateUser(UserDto userDto);
 }

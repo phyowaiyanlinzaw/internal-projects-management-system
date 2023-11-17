@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -117,8 +118,8 @@ public class UserController {
 
     @GetMapping("list")
     public ResponseEntity<List<UserDto>> getAllUsers() {
-
-        return ResponseEntity.ok(userService.getAllUsers());
+        List<UserDto> userDto = userService.getAllUsers();
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @GetMapping("employee/list")
@@ -172,5 +173,31 @@ public class UserController {
         return ResponseEntity.ok("Username changed successfully");
     }
 
+
+    @GetMapping("list/byId/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
+        UserDto user = userService.getUserById(id);
+        if(user != null) {
+            return ResponseEntity.ok(user);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserDto> updateProject(@PathVariable long id, @RequestBody UserDto userDto) {
+
+        userDto.setId(id);
+        UserDto user = userService.updateUser(userDto);
+        if(user != null) {
+            System.out.println("User Update Successfully");
+            return ResponseEntity.ok(user);
+        }else{
+            System.out.println("Failed to update user");
+            return ResponseEntity.badRequest().body(null);
+        }
+
+
+    }
 
 }

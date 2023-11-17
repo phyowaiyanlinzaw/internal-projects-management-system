@@ -10,10 +10,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.AvailableUser;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -101,16 +106,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+
     @Override
     public UserDto getUserById(long id) {
         User user = userRepository.findById(id);
-        if (user != null) {
-            UserDto userDto = modelmapper.map(user, UserDto.class);
-            userDto.setDepartmentdto(modelmapper.map(user.getDepartment(), DepartmentDto.class));
+        UserDto userDto = modelmapper.map(user, UserDto.class);
+
+          userDto.setName(user.getName());
+          userDto.setEmail(user.getEmail());
+
+            if (user.getDepartment() != null) {
+               DepartmentDto department = modelmapper.map(user.getDepartment(), DepartmentDto.class);
+                userDto.setDepartmentdto(department);
+            }
+
             return userDto;
-        } else {
-            return null;
-        }
 
     }
 
@@ -312,5 +323,39 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         }
     }
+
+    @Override
+    public UserDto updateUser(UserDto userDto) {
+        try {
+            System.out.println("Received UserDto: " + userDto);
+
+            User user = userRepository.findById(userDto.getId());
+            if (user != null) {
+                System.out.println("User found: " + user);
+
+                user.setName(userDto.getName());
+                user.setEmail(userDto.getEmail());
+
+                if (userDto.getDepartmentdto() != null) {
+                    Department department = departmentRepository.findById(userDto.getDepartmentdto().getId());
+                    user.setDepartment(department);
+                }
+
+                userRepository.save(user);
+
+                System.out.println("User updated: " + user);
+                return modelmapper.map(user, UserDto.class);
+            }
+
+            System.out.println("User not found with ID: " + userDto.getId());
+            return null;
+        } catch (Exception e) {
+            System.err.println("Error updating user: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
 }
