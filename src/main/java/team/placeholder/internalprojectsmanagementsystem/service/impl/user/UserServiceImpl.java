@@ -15,6 +15,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Proje
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
@@ -300,34 +301,11 @@ public class UserServiceImpl implements UserService {
         return userDtos;
     }
 
-//    @Override
-//    public List<UserDto> getProjectManagersByProjectId(Long projectId) {
-//        List<User> users = userRepository.findAllByProjectId(projectId);
-//
-//        List<UserDto> userDtos = new ArrayList<>();
-//        for (User user : users) {
-//            //print out user project with lambda
-//            for (Project project : user.getProjects()) {
-//                log.info("USER PROJECT : {}",project.getName());
-//            }
-//            Department department = user.getDepartment();
-//            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
-//            Set<Project> projects = user.getProjects();
-//            Set<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).collect(Collectors.toSet());
-//            UserDto userDto = modelmapper.map(user, UserDto.class);
-//            userDto.setDepartmentdto(departmentDto);
-//            userDto.setProjectsByUsers(projectDtos);
-//            userDtos.add(userDto);
-//        }
-//        return userDtos;
-//    }
-
     @Override
     public List<UserDto> getEmployeeByProjectId(Long projectId) {
         List<User> users = userRepository.findAllByProjectsId(projectId);
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {
-            //print out user project with lambda
             for (Project project : user.getProjects()) {
                 log.info("USER PROJECT : {}",project.getName());
             }
@@ -353,44 +331,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
-        try {
-            System.out.println("Received UserDto: " + userDto);
-
-            User user = userRepository.findById(userDto.getId());
-            if (user != null) {
-                System.out.println("User found: " + user);
-
-                user.setName(userDto.getName());
-                user.setEmail(userDto.getEmail());
-
-                if (userDto.getDepartmentdto() != null) {
-                    Department department = departmentRepository.findById(userDto.getDepartmentdto().getId());
-                    user.setDepartment(department);
-                }
-
-                userRepository.save(user);
-
-                System.out.println("User updated: " + user);
-                return modelmapper.map(user, UserDto.class);
-            }
-
-            System.out.println("User not found with ID: " + userDto.getId());
-            return null;
-        } catch (Exception e) {
-            System.err.println("Error updating user: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-
-    @Override
     public UserDto changeStatus(long id, boolean status) {
         User user = userRepository.findById(id);
         if (user != null) {
             user.setEnabled(status);
+            userRepository.save(user);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public UserDto updateUser(UseruiDto userDto) {
+        User user = userRepository.findById(userDto.getId());
+        if (user != null) {
+            user.setName(userDto.getName());
+            user.setEmail(userDto.getEmail());
+            user.setDepartment(userDto.getDepartmentId() != 0 ? departmentRepository.findById(userDto.getDepartmentId()) : null);
             userRepository.save(user);
             return modelmapper.map(user, UserDto.class);
         } else {

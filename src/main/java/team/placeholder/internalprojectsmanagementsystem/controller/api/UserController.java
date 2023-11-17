@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.security.CustomerUserDetails;
@@ -221,9 +222,22 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<UserDto> updateProject(@PathVariable long id, @RequestBody UserDto userDto) {
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<UserDto> updateProject(@PathVariable long id, @RequestBody UserDto userDto) {
+//
+//        userDto.setId(id);
+//        UserDto user = userService.updateUser(userDto);
+//        if(user != null) {
+//            System.out.println("User Update Successfully");
+//            return ResponseEntity.ok(user);
+//        }else{
+//            System.out.println("Failed to update user");
+//            return ResponseEntity.badRequest().body(null);
+//        }
+//    }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable long id, @RequestBody UseruiDto userDto) {
         userDto.setId(id);
         UserDto user = userService.updateUser(userDto);
         if(user != null) {
@@ -233,8 +247,6 @@ public class UserController {
             System.out.println("Failed to update user");
             return ResponseEntity.badRequest().body(null);
         }
-
-
     }
 
 }
