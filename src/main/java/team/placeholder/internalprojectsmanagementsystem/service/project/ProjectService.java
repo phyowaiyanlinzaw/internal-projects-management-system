@@ -36,7 +36,7 @@ public interface ProjectService {
 
     ProjectDto getProjectByUsersIdAndStatus(long users, String status);
 
-    KPIDto getKPI(long id);
+
 
     //get start and end month of the projects
 

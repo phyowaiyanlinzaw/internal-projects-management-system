@@ -1,6 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="layout/layout" xmlns:th="http://www.thymeleaf.org">
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="layout/layout"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
 </head>
 
@@ -67,6 +73,16 @@
                                     TODO
                                     <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-task">
                                         <i class="bi bi-plus-circle"></i>
+                                    <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#add-task"
+                                            id="add-task-btn"
+                                    >
+                                        <i
+                                                class="bi bi-plus-circle"
+                                        ></i>
                                     </button>
                                 </h3>
                                 <div class="swim-lane p-3" id="TODO">
@@ -417,6 +433,16 @@
         import {getUser} from "/js/currentLoginUser.js";
 
         const currentUser = await getUser();
+
+        //disable add task button if user is not project manager
+        if(currentUser.currentUser.role !== "PROJECT_MANAGER"){
+            const addTaskBtn = document.getElementById("add-task-btn");
+            addTaskBtn.disabled = true;
+
+            // Add a class to style the button on hover
+            addTaskBtn.classList.add("disabled-button");
+            addTaskBtn.style.cursor = "not-allowed";
+        }
 
         var userId;
 
