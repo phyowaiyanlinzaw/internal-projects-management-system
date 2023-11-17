@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
@@ -165,6 +166,12 @@ public class UserServiceImpl implements UserService {
                 userDto.setProjectManager(modelmapper.map(user.getProjectManager(), UserDto.class));
             }
             userDto.setDepartmentdto(departmentDto);
+
+            if (user.getRole()==Role.valueOf("PROJECT_MANAGER")){
+                List<Project> projects = user.getProject();
+                List<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).toList();
+                userDto.setProjectsByProjectManager(projectDtos);
+            }
             return userDto;
         } else {
             return null;

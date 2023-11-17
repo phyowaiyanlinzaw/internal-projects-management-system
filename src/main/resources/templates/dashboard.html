@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-list-task fa-2x text-primary"></i>
                         <div class="ms-3">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-stack fa-2x text-primary"></i>
                         <div class="ms-3">
@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-patch-check-fill fa-2x text-primary"></i>
                         <div class="ms-3">
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col col-md-12">
+                <div class="col col-md-12" sec:authorize="hasAnyRole('PMO','SDQC','DEPARTMENT_HEAD','PROJECT_MANAGER')">
                     <div class="card border">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -104,7 +104,7 @@
 
                                 <div class="d-flex gap-2">
 
-                                    <div class="dropdown ">
+                                    <div class="dropdown" id="department-dropdown-div">
                                         <a class="dropdown-toggle text-decoration-none" type="button"
                                            id="departmentDropDown" data-bs-toggle="dropdown" aria-expanded="false">
                                             Select Department
@@ -113,7 +113,12 @@
                                         </ul>
                                     </div>
 
-                                    <div class="dropdown ">
+                                    <div id="department-name-div" style="display: none">
+                                        <span id="department-name">
+                                        </span>
+                                    </div>
+
+                                    <div class="dropdown">
                                         <a class="dropdown-toggle text-decoration-none" type="button"
                                            id="projectDropDown" data-bs-toggle="dropdown" aria-expanded="false">
                                             Select Project
@@ -136,7 +141,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col col-md-12" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
+                    <div class="card border">
+                        <div class="card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6" sec:authorize="hasAnyRole('PMO','SDQC','DEPARTMENT_HEAD','PROJECT_MANAGER')">
                     <div class="card border">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -150,7 +162,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-6" sec:authorize="hasAnyRole('PMO','SDQC','DEPARTMENT_HEAD','PROJECT_MANAGER')">
                     <div class="card border">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -207,9 +219,13 @@
 
 <script type="module">
     import {sendData, getData} from "/js/api-function.js";
+    import {getUser} from "/js/currentLoginUser.js";
+
+    const currentUser = await getUser();
 
     $(document).ready(function () {
         setupLogoutConfirmation();
+
     });
 
     $(document).ready(function () {
@@ -217,184 +233,253 @@
 
         $("#spinner").hide();
 
-        // Get the mm chart canvas
-        const mmctx = document.getElementById("man-month-chart").getContext('2d');
+        const mmChartElement = document.getElementById("man-month-chart")
+        const p1ChartElement = document.getElementById("productivity-1-chart")
+        const p2ChartElement = document.getElementById("productivity-2-chart")
+        const calendarElement = document.getElementById("calendar")
 
-        const initialManMonthData = {
-            labels: ['yyyy-mm'],
-            datasets: [{
-                label: 'Actual',
-                data: [], // actual manhours from api
-                backgroundColor: '#444cf7',
-                borderColor: '#444cf7',
-                borderWidth: 1,
-                fill: false,
-            }, {
-                label: 'Target',
-                data: [], // plan manhours from api
-                backgroundColor: '#e5e5f7',
-                borderColor: '#e5e5f7',
-                borderWidth: 1,
-                fill: false,
-            }],
-        }
+        if (calendarElement){
 
-        // Create the line chart for mm
-        const lineChart = new Chart(mmctx, {
-            type: 'bar',
-            data: initialManMonthData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max:1200
-                    }
-                }
+            const tasks = []
+
+            $.ajax({
+                url: "api/task/list/user/" + currentUser.currentUser.id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    console.log("USERS TASK : " , data)
+                    data.forEach((task) => {
+                        tasks.push(task)
+                    })
+                    buildCalendar(tasks)
+                },
+            })
+
+            function buildCalendar(tasks){
+                const calendar = new FullCalendar.Calendar(calendarElement, {
+                    initialView: 'dayGridMonth',
+                    weekends: false,
+                    headerToolbar: {
+                        left: "",
+                        center: "title",
+                        right: 'today prev,next'
+                    },
+                    events: tasks.map((task) => {
+                        return {
+                            title: task.title,
+                            extendedProps: {
+                                title: task.title,
+                                description: task.description,
+                                status: task.status,
+                                planHours: task.planHours,
+                                taskId: task.id,
+                            },
+                            start: new Date(task.plan_start_time),
+                            end: new Date(task.plan_end_time + 86400000),
+                            color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#f74444",
+                            textColor: "white",
+                            allDay:  true
+                        }
+                    }),
+                    eventDidMount: function (info) {
+                        const popover = new bootstrap.Popover(info.el, {
+                            title: info.event.extendedProps.title,
+                            content: info.event.extendedProps.description,
+                            placement: 'top',
+                            trigger: 'hover',
+                            container: 'body'
+                        });
+                    },
+                });
+                calendar.render();
             }
-        });
+        }
 
-        //Get Productivity Chart Canvas
-        const p1ctx = document.getElementById("productivity-1-chart").getContext('2d');
+        if (mmChartElement && p1ChartElement && p2ChartElement) {
+            // Get the mm chart canvas
+            const mmctx = document.getElementById("man-month-chart").getContext('2d');
 
-        const initialProductivityData = {
-            datasets: [{
-                label: 'Productivity Ratio',
-                data: [],
-                backgroundColor: '#444cf7',
-                borderColor: '#444cf7',
-                borderWidth: 1,//border width
-                fill: false,
-                tension: 0.1,//line tension
-                categoryPercentage: 0.5,//bar width
+            const initialManMonthData = {
+                labels: ['yyyy-mm'],
+                datasets: [{
+                    label: 'Actual',
+                    data: [], // actual manhours from api
+                    backgroundColor: '#444cf7',
+                    borderColor: '#444cf7',
+                    borderWidth: 1,
+                    fill: false,
+                }, {
+                    label: 'Target',
+                    data: [], // plan manhours from api
+                    backgroundColor: '#e5e5f7',
+                    borderColor: '#e5e5f7',
+                    borderWidth: 1,
+                    fill: false,
+                }],
             }
-            ]
-        }
 
-        // Create bar chart for p1ctx with percentageDifferenceData
-           const barChart = new Chart(p1ctx, {
-               type: 'line',
-               data: initialProductivityData,
-               options: {
-                   responsive: true,
-                   maintainAspectRatio: false,
-                   scales: {
-                       y: {
-                           beginAtZero: true,
-                           max: 200,
-                       }
-                   }
-               }
-           });
-
-        //Get KPI chart Canvas
-        const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
-
-        const initialKpiData = {
-            labels:["KPI"],
-            datasets: [{
-                label: 'Review KPI',
-                data: [],
-                backgroundColor: '#444cf7',
-                borderColor: '#444cf7',
-                borderWidth: 1,//border width
-                fill: false,
-            },
-                {
-                    label: 'Detail KPI',
-                    data: [],
-                    backgroundColor: '#d8077c',
-                    borderColor: '#e5e5f7',
-                    borderWidth: 1,//border width
-                    fill: false,
-                },
-                {
-                    label: 'Coding KPI',
-                    data: [],
-                    backgroundColor: '#288f0b',
-                    borderColor: '#e5e5f7',
-                    borderWidth: 1,//border width
-                    fill: false,
-                },
-                {
-                    label: 'UnitTest KPI',
-                    data: [],
-                    backgroundColor: '#b7620d',
-                    borderColor: '#e5e5f7',
-                    borderWidth: 1,//border width
-                    fill: false,
-                },
-                {
-                    label: 'IntegratedTest KPI',
-                    data: [],
-                    backgroundColor: '#14b9c5',
-                    borderColor: '#e5e5f7',
-                    borderWidth: 1,//border width
-                    fill: false,
-                }
-
-            ]
-        }
-
-        //Create bar chart for p2ctx with screenToReviewRatios
-        const barChart2 = new Chart(p2ctx, {
-            type: 'bar',
-            data: initialKpiData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 250,
-                        ticks: {
-                            stepSize: 5
-
+            // Create the line chart for mm
+            const lineChart = new Chart(mmctx, {
+                type: 'bar',
+                data: initialManMonthData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max:1200
                         }
                     }
                 }
+            });
+
+            //Get Productivity Chart Canvas
+            const p1ctx = document.getElementById("productivity-1-chart").getContext('2d');
+
+            const initialProductivityData = {
+                datasets: [{
+                    label: 'Productivity Ratio',
+                    data: [],
+                    backgroundColor: '#444cf7',
+                    borderColor: '#444cf7',
+                    borderWidth: 1,//border width
+                    fill: false,
+                    tension: 0.1,//line tension
+                    categoryPercentage: 0.5,//bar width
+                }
+                ]
             }
-        });
 
-        // Make an AJAX request to fetch the department list
-        $.ajax({
-            url: '/api/department/list', // Replace with your API endpoint
-            method: 'GET',
-            success: function (data) {
-                console.log("DEPARTMENT LIST", data);
-                const departmentDropdown = $('#departmentDropDown'); // Corrected the ID here
-                const dropdownMenu = departmentDropdown.next('.dropdown-menu');
-                dropdownMenu.empty(); // Clear the dropdown menu
+            // Create bar chart for p1ctx with percentageDifferenceData
+            const barChart = new Chart(p1ctx, {
+                type: 'line',
+                data: initialProductivityData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 200,
+                        }
+                    }
+                }
+            });
 
-                $.each(data, function (index, department) {
-                    dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${department.name}">${department.name}</a></li>`);
-                });
+            //Get KPI chart Canvas
+            const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
 
-                // Handle click event on the dynamic items
-                dropdownMenu.on('click', '.dropdown-item', function () {
-                    const selectedValue = $(this).data('value');
-                    //change the text of the dropdown button
-                    departmentDropdown.text(selectedValue);
-                    // call the api to get the project list for the selected department
-                    getProjectList(selectedValue);
-                });
-            },
-            error: function () {
-                console.error('Failed to fetch department list.');
+            const initialKpiData = {
+                labels:["KPI"],
+                datasets: [{
+                    label: 'Review KPI',
+                    data: [],
+                    backgroundColor: '#444cf7',
+                    borderColor: '#444cf7',
+                    borderWidth: 1,//border width
+                    fill: false,
+                },
+                    {
+                        label: 'Detail KPI',
+                        data: [],
+                        backgroundColor: '#d8077c',
+                        borderColor: '#e5e5f7',
+                        borderWidth: 1,//border width
+                        fill: false,
+                    },
+                    {
+                        label: 'Coding KPI',
+                        data: [],
+                        backgroundColor: '#288f0b',
+                        borderColor: '#e5e5f7',
+                        borderWidth: 1,//border width
+                        fill: false,
+                    },
+                    {
+                        label: 'UnitTest KPI',
+                        data: [],
+                        backgroundColor: '#b7620d',
+                        borderColor: '#e5e5f7',
+                        borderWidth: 1,//border width
+                        fill: false,
+                    },
+                    {
+                        label: 'IntegratedTest KPI',
+                        data: [],
+                        backgroundColor: '#14b9c5',
+                        borderColor: '#e5e5f7',
+                        borderWidth: 1,//border width
+                        fill: false,
+                    }
+
+                ]
             }
-        });
+
+            //Create bar chart for p2ctx with screenToReviewRatios
+            const barChart2 = new Chart(p2ctx, {
+                type: 'bar',
+                data: initialKpiData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 250,
+                            ticks: {
+                                stepSize: 5
+
+                            }
+                        }
+                    }
+                }
+            });
 
 
-        // Make an AJAX request to fetch the project list with the name of the department with api/project/list/department-name/{departmentName}
-        function getProjectList(departmentName) {
-            $.ajax({
-                url: `/api/project/list/department-name/${departmentName}`, // Replace with your API endpoint
-                method: 'GET',
-                success: function (data) {
-                    const projectDropdown = $('#projectDropDown'); // Corrected the ID here
-                    if (data === null || data.length === 0) {
-                        //change dropdown item to no project and disable it
+
+            switch (currentUser.currentUser.role){
+                case "PMO":
+                case "SDQC":
+                    // Make an AJAX request to fetch the department list
+                    $.ajax({
+                        url: '/api/department/list', // Replace with your API endpoint
+                        method: 'GET',
+                        success: function (data) {
+                            const departmentDropdown = $('#departmentDropDown'); // Corrected the ID here
+                            const dropdownMenu = departmentDropdown.next('.dropdown-menu');
+                            dropdownMenu.empty(); // Clear the dropdown menu
+
+                            $.each(data, function (index, department) {
+                                dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${department.name}">${department.name}</a></li>`);
+                            });
+
+                            // Handle click event on the dynamic items
+                            dropdownMenu.on('click', '.dropdown-item', function () {
+                                const selectedValue = $(this).data('value');
+                                //change the text of the dropdown button
+                                departmentDropdown.text(selectedValue);
+                                // call the api to get the project list for the selected department
+                                getProjectList(selectedValue);
+                            });
+                        },
+                        error: function () {
+                            console.error('Failed to fetch department list.');
+                        }
+                    });
+                    break;
+                case "DEPARTMENT_HEAD":
+                    $("#department-dropdown-div").hide();
+                    $("#department-name-div").show();
+                    $("#department-name").text(currentUser.currentUser.department.name);
+                    getProjectList(currentUser.currentUser.department.name);
+                    break;
+                case "PROJECT_MANAGER":
+                    $("#department-dropdown-div").hide();
+                    //initialize project drop down with currentUser.currentUser.projectsByProjectManager
+                    const projectDropdown = $('#projectDropDown');
+                    const projects = currentUser.currentUser.projectsByProjectManager;
+                    if (projects===null || projects.length === 0){
                         projectDropdown.text('No Project');
                         $('.project-dropDown').addClass('disabled');
                     } else {
@@ -403,11 +488,10 @@
                         //change dropdown item to select project
                         projectDropdown.text('Select Project');
                     }
-
                     const dropdownMenu = projectDropdown.next('.dropdown-menu');
                     dropdownMenu.empty(); // Clear the dropdown menu
 
-                    $.each(data, function (index, project) {
+                    $.each(projects, function (index, project) {
                         dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${project.id}">${project.name}</a></li>`);
                     });
 
@@ -421,118 +505,160 @@
                         updateProductivityChart(selectedValue)
                         updateKpiChart(selectedValue)
                     });
+                    break;
+                default:
+                    break;
+            }
 
 
-                },
-                error: function () {
-                    console.error('Failed to fetch project list.');
-                }
+            // Make an AJAX request to fetch the project list with the name of the department with api/project/list/department-name/{departmentName}
+            function getProjectList(departmentName) {
+                $.ajax({
+                    url: `/api/project/list/department-name/${departmentName}`, // Replace with your API endpoint
+                    method: 'GET',
+                    success: function (data) {
+                        const projectDropdown = $('#projectDropDown'); // Corrected the ID here
+                        if (data === null || data.length === 0) {
+                            //change dropdown item to no project and disable it
+                            projectDropdown.text('No Project');
+                            $('.project-dropDown').addClass('disabled');
+                        } else {
+                            //enable dropdown
+                            $('.project-dropDown').removeClass('disabled');
+                            //change dropdown item to select project
+                            projectDropdown.text('Select Project');
+                        }
+
+                        const dropdownMenu = projectDropdown.next('.dropdown-menu');
+                        dropdownMenu.empty(); // Clear the dropdown menu
+
+                        $.each(data, function (index, project) {
+                            dropdownMenu.append(`<li><a class="dropdown-item" href="#" data-value="${project.id}">${project.name}</a></li>`);
+                        });
+
+                        // Handle click event on the dynamic items
+                        dropdownMenu.on('click', '.dropdown-item', function () {
+                            const selectedValue = $(this).data('value');
+                            //change the text of project name to the dropdown button
+                            projectDropdown.text($(this).text());
+                            console.log(selectedValue)
+                            updateManMonthChart(selectedValue)
+                            updateProductivityChart(selectedValue)
+                            updateKpiChart(selectedValue)
+                        });
+
+
+                    },
+                    error: function () {
+                        console.error('Failed to fetch project list.');
+                    }
+                });
+            }
+
+            // Function to update the chart
+            function updateManMonthChart(selectedValue) {
+                // Make a jQuery AJAX call for Dataset 1
+                $.ajax({
+                    url: `api/dashboard/man-month/project/${selectedValue}`,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        // Update chart data for Dataset 1
+                        lineChart.data.datasets[0].data = data.map((data) => data.actualManMonthHours);
+                        lineChart.data.datasets[1].data = data.map((data) => data.planManMonthHours);
+                        // lineChart.data.datasets[0].data = [20]
+                        lineChart.data.labels = data.map((data) => data.monthName);
+
+                        lineChart.options.scales.y.min = 0;
+                        lineChart.options.scales.y.max = Math.max(...data.map((data) => data.planManMonthHours)) + 100;
+
+
+                        // Update the chart
+                        lineChart.update();
+                    },
+                    error: function (error) {
+                        console.error('Error fetching data :', error);
+                    }
+                });
+            }
+
+            function updateProductivityChart(selectedValue) {
+                $.ajax({
+                    url: `api/dashboard/productivity/project/${selectedValue}`,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        // Update chart data for Dataset 1
+                        barChart.data.datasets[0].data = data.map((data) => data.productivityRatio);
+                        barChart.data.labels = data.map((data) => data.monthName);
+
+                        barChart.options.scales.y.min = 0;
+                        barChart.options.scales.y.max = 10
+
+                        // Update the chart
+                        barChart.update();
+                    },
+                    error: function (error) {
+                        console.error('Error fetching data :', error);
+                    }
+                });
+            }
+
+            function updateKpiChart(selectedValue) {
+                $.ajax({
+                    url: `api/dashboard/kpi/project/${selectedValue}`,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        barChart2.data.datasets.forEach((dataset, index) => {
+                            const label = dataset.label.toLowerCase().replace(" ", "_");
+                            dataset.data.push(data[label]);
+                        });
+
+                        // Update the chart options
+                        barChart2.options.scales.y.min = 0;
+                        barChart2.options.scales.y.max = 250;
+
+                        // Update the chart
+                        barChart2.update();
+                    },
+                    error: function (error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+
+
+            $('.chart-filter-reset-btn').on('click', function () {
+                $('#departmentDropDown').text('Select Department');
+                $('#projectDropDown').text('Select Project');
+                //clear project dropdown
+                $('#projectDropDown').next('.dropdown-menu').empty();
+
+
+                lineChart.data.datasets[0].data = [];
+                lineChart.data.datasets[1].data = [];
+
+                barChart.data.datasets[0].data = [];
+                barChart.data.labels = [];
+
+                barChart2.data.datasets.forEach((dataset, index) => {
+                    dataset.data = [];
+                });
+
+
+
+                //clear x axis labels
+                lineChart.data.labels = [];
+                barChart.data.labels = [];
+                barChart2.data.labels = [];
+                lineChart.update();
+                barChart.update();
+                barChart2.update();
             });
         }
-
-        // Function to update the chart
-        function updateManMonthChart(selectedValue) {
-            // Make a jQuery AJAX call for Dataset 1
-            $.ajax({
-                url: `api/dashboard/man-month/project/${selectedValue}`,
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-
-                    // Update chart data for Dataset 1
-                    lineChart.data.datasets[0].data = data.map((data) => data.actualManMonthHours);
-                    lineChart.data.datasets[1].data = data.map((data) => data.planManMonthHours);
-                    // lineChart.data.datasets[0].data = [20]
-                    lineChart.data.labels = data.map((data) => data.monthName);
-
-                    lineChart.options.scales.y.min = 0;
-                    lineChart.options.scales.y.max = Math.max(...data.map((data) => data.planManMonthHours)) + 100;
-
-
-                    // Update the chart
-                    lineChart.update();
-                },
-                error: function (error) {
-                    console.error('Error fetching data :', error);
-                }
-            });
-        }
-
-        function updateProductivityChart(selectedValue) {
-            $.ajax({
-                url: `api/dashboard/productivity/project/${selectedValue}`,
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Update chart data for Dataset 1
-                    barChart.data.datasets[0].data = data.map((data) => data.productivityRatio);
-                    barChart.data.labels = data.map((data) => data.monthName);
-
-                    barChart.options.scales.y.min = 0;
-                    barChart.options.scales.y.max = 10
-
-                    // Update the chart
-                    barChart.update();
-                },
-                error: function (error) {
-                    console.error('Error fetching data :', error);
-                }
-            });
-        }
-
-        function updateKpiChart(selectedValue) {
-            $.ajax({
-                url: `api/dashboard/kpi/project/${selectedValue}`,
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-
-                    barChart2.data.datasets.forEach((dataset, index) => {
-                        const label = dataset.label.toLowerCase().replace(" ", "_");
-                        dataset.data.push(data[label]);
-                    });
-
-                    // Update the chart options
-                    barChart2.options.scales.y.min = 0;
-                    barChart2.options.scales.y.max = 250;
-
-                    // Update the chart
-                    barChart2.update();
-                },
-                error: function (error) {
-                    console.error('Error fetching data:', error);
-                }
-            });
-        }
-
-
-        $('.chart-filter-reset-btn').on('click', function () {
-            $('#departmentDropDown').text('Select Department');
-            $('#projectDropDown').text('Select Project');
-            //clear project dropdown
-            $('#projectDropDown').next('.dropdown-menu').empty();
-
-
-            lineChart.data.datasets[0].data = [];
-            lineChart.data.datasets[1].data = [];
-
-            barChart.data.datasets[0].data = [];
-            barChart.data.labels = [];
-
-            barChart2.data.datasets.forEach((dataset, index) => {
-                dataset.data = [];
-            });
-
-
-
-            //clear x axis labels
-            lineChart.data.labels = [];
-            barChart.data.labels = [];
-            barChart2.data.labels = [];
-            lineChart.update();
-            barChart.update();
-            barChart2.update();
-        });
 
         $.ajax({
             url: "api/task/count/status/TODO",
