@@ -192,8 +192,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registerEmployeeDto.getEmail());
         user.setPassword(registerEmployeeDto.getPassword());
         user.setRole(Role.valueOf(registerEmployeeDto.getRole()));
-
-
+        user.setEnabled(true);
         if (registerEmployeeDto.getRole().equals(Role.PROJECT_MANAGER.toString())){
             Department department = departmentRepository.findById(registerEmployeeDto.getDepartmentId());
             user.setDepartment(department);
@@ -206,6 +205,7 @@ public class UserServiceImpl implements UserService {
         User savedUser;
         try {
             savedUser = userRepository.save(user);
+            sendEmail(user.getEmail(),"Password","Your password is : "+password);
         } catch (DataIntegrityViolationException e) {
             return null;
         }

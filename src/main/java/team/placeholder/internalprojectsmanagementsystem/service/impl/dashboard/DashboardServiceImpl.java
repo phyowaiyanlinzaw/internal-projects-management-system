@@ -70,7 +70,7 @@ public class DashboardServiceImpl implements DashboardService {
             double planManMonthHours = manMonthDto.getPlanManMonthHours() != null ? manMonthDto.getPlanManMonthHours() : 0.0;
 
             if (planManMonthHours != 0.0) {
-                double productivityRatio = actualManMonthHours / planManMonthHours;
+                double productivityRatio = planManMonthHours / actualManMonthHours;
 
                 ProductivityDto newDto = new ProductivityDto();
                 newDto.setMonthName(manMonthDto.getMonthName());
