@@ -81,7 +81,8 @@ public class UserServiceImpl implements UserService {
     public UserDto sendOtp(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            String otp = String.format("%04d", new Random().nextInt(10000));
+            //generate 6 digit otp
+            String otp = String.format("%06d", new Random().nextInt(999999));
             otpMap.put(email,otp);
             sendEmail(email,"OTP","Your One-timed Password is : "+otp);
             return modelmapper.map(user, UserDto.class);
