@@ -104,6 +104,9 @@ public class ProjectServiceImpl implements ProjectService {
             aes.save(availableUser);
         }
 
+        projectDto.setTotalTaskCount(0L);
+        projectDto.setCompleteTaskCount(0L);
+
         projectDto.setReviewDto(modelMapper.map(newReview, ReviewDto.class));
         projectDto.setId(project2.getId());
         projectDto.setSystemOutLineDto(modelMapper.map(project2.getSystemOutLine(), SystemOutLineDto.class));
@@ -148,10 +151,14 @@ public class ProjectServiceImpl implements ProjectService {
                 log.info("adjf;ladjf;lf", projectDto.getDepartmentDto());
 
                 projectDto.getDepartmentDto().getUsers().clear();
-                projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
-                projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
+                projectDto.setCompleteTaskCount(
+                        project.getTasks().stream()
+                                .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                                .count()
+                );
+                projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
                 projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
-
+                projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
                 List<UserDto> userDtos = new ArrayList<>();
                 for (User user : project.getUsers()) {
                     user.getProjects().clear();
@@ -189,8 +196,16 @@ public class ProjectServiceImpl implements ProjectService {
                 log.info("adjf;ladjf;lf", projectDto.getDepartmentDto());
 
                 projectDto.getDepartmentDto().getUsers().clear();
-                projectDto.setCompleteTaskCount(project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED)).count());
-                projectDto.setTotalTaskCount(taskRepository.countByProjectId(project.getId()));
+                projectDto.setCompleteTaskCount(
+                    project.getTasks().stream()
+                            .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                            .count()
+                );
+                projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
+                log.info("total task count : " + taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
+                log.info("complete task count : " + project.getTasks().stream()
+                    .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                    .count());
                 projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
 
                 List<UserDto> userDtos = new ArrayList<>();
@@ -283,10 +298,21 @@ public class ProjectServiceImpl implements ProjectService {
                 }
                 projectDto.setMembersUserDto(userDtos);
             }
-
+            projectDto.setCompleteTaskCount(
+                        project.getTasks().stream()
+                                .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                                .count()
+                );
+            projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
+            log.info("total taks count in project : " + projectDto.getTotalTaskCount());
+            log.info("total task count : " + taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
+            log.info("complete task count : " + project.getTasks().stream()
+                    .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                    .count());
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+            projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
             projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
             projectDto.setSystemOutLineDto(modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class));
 
@@ -328,6 +354,12 @@ public class ProjectServiceImpl implements ProjectService {
                 }
                 projectDto.setMembersUserDto(userDtos);
             }
+            projectDto.setCompleteTaskCount(
+                        project.getTasks().stream()
+                                .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                                .count()
+                );
+            projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
@@ -382,7 +414,12 @@ public class ProjectServiceImpl implements ProjectService {
                 }
                 projectDto.setMembersUserDto(userDtos);
             }
-
+            projectDto.setCompleteTaskCount(
+                        project.getTasks().stream()
+                                .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                                .count()
+                );
+            projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
             projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
@@ -424,13 +461,19 @@ public class ProjectServiceImpl implements ProjectService {
                 }
                 projectDto.setMembersUserDto(userDtos);
             }
-
+            projectDto.setCompleteTaskCount(
+                        project.getTasks().stream()
+                                .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                                .count()
+                );
+            projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
+            projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
             projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
             projectDto.setSystemOutLineDto(modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class));
-
+            projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDtoList.add(projectDto);
 
         }
