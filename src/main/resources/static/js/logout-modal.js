@@ -6,8 +6,7 @@ function setupLogoutConfirmation() {
         e.preventDefault(); // Prevent the default link behavior
 
         Swal.fire({
-            title: "Are you sure!",
-            text: "You won't be able to revert this!",
+            text: "Are you sure want to log out!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -28,8 +27,7 @@ function confirmLogout() {
         e.preventDefault(); // Prevent the default link behavior
 
         Swal.fire({
-            title: "Are you sure!",
-            text: "You won't be able to revert this!",
+            text: "Are you sure want to log out!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",

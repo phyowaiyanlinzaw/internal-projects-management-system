@@ -27,7 +27,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final UserRepository userRepository;
 
     @Override
-    public void save(String description, long userId) {
+    public void save(String description, long userId, String eventName, Object... objects) {
 
         log.info("In Notification save method");
         log.info("This user will get noti : {}", (Object) userId);
@@ -45,7 +45,14 @@ public class NotificationServiceImpl implements NotificationService {
 
             NotiDto notiDto = modelMapper.map(notification, NotiDto.class);
 
-            sendNotification(notiDto, userId);
+            if(objects.length > 0) {
+                for (Object object : objects) {
+                    sendNotification(notiDto, userId, eventName, object);
+                }
+            }
+            else {
+                sendNotification(notiDto, userId, eventName);
+            }
 
         } catch (Exception e) {
             log.error("Error while sending notification: {}", e.getMessage());
@@ -57,7 +64,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendNotification(NotiDto notiDto, long userId)
+    public void sendNotification(NotiDto notiDto, long userId, String eventName, Object... objects)
     {
         log.info("In sendNotification method and setting necessary variables");
         String appId = "1629453";
@@ -75,7 +82,14 @@ public class NotificationServiceImpl implements NotificationService {
             pusher.setCluster("ap1");
             pusher.setEncrypted(true);
 
-            pusher.trigger("my-channel-" + userId, "noti-event", "{\"notification\":" + notiJson + "}");
+            if(objects.length > 0) {
+                for (Object object : objects) {
+                    pusher.trigger("my-channel-" + userId, eventName, "{\"notification\":" + notiJson + ", \"object\":" + mapper.writeValueAsString(object) + "}");
+                }
+            }
+            else {
+                pusher.trigger("my-channel-" + userId, eventName, "{\"notification\":" + notiJson + "}");
+            }
 
             log.info("Pusher is triggered");
 

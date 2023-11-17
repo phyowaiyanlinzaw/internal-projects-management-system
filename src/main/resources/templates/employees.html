@@ -246,16 +246,32 @@
     }
 
 
-    $(async function () {
+    $(function () {
 
         $('#table').bootstrapTable({});
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
 
-        // if (event.target.classList.contains('status-switch')) {
-        //     //change status after clicking the switch
-        //
-        // }
+        //change status of employee (active/inactive)
+        $('#table').on('change', '.status-switch', function () {
+            const checked = $(this).prop('checked');
+            const id = $(this).attr('id').split('_')[1];
+            const row = $('#table').bootstrapTable('getData')[id];
+            const url = '/api/user/update/employee/' + row.id + '/status/' + (checked ? 'true' : 'false');
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                success: function (data) {
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function (data, xhr) {
+                    alert('Error updating employee status');
+                },
+                complete: function () {
+                    $('#table').bootstrapTable('refresh');
+                }
+            });
+        });
 
         function getDepartmentNameList() {
             var departmentNameList = [];
@@ -333,34 +349,7 @@
         });
 
         //function show error with parameter message
-        function showError(message) {
-            $('#error-message').text(message);
-            $('#alert-danger').show();
 
-            setTimeout(function () {
-                $('#alert-danger').hide();
-            }, 1000);
-
-            //close alert box
-            $('.btn-close').click(function () {
-                $('#alert-danger').hide();
-            });
-        }
-
-        //function show success with parameter message
-        function showSuccess(message) {
-            $('#success-message').text(message);
-            $('#alert-success').show();
-
-            setTimeout(function () {
-                $('#alert-success').hide();
-            }, 1000);
-
-            //close alert box
-            $('.btn-close').click(function () {
-                $('#alert-success').hide();
-            });
-        }
 
 
         // For Employee Register
@@ -695,7 +684,34 @@
 
 
 
+    function showError(message) {
+        $('#error-message').text(message);
+        $('#alert-danger').show();
 
+        setTimeout(function () {
+            $('#alert-danger').hide();
+        }, 3000);
+
+        //close alert box
+        $('.btn-close').click(function () {
+            $('#alert-danger').hide();
+        });
+    }
+
+    //function show success with parameter message
+    function showSuccess(message) {
+        $('#success-message').text(message);
+        $('#alert-success').show();
+
+        setTimeout(function () {
+            $('#alert-success').hide();
+        }, 3000);
+
+        //close alert box
+        $('.btn-close').click(function () {
+            $('#alert-success').hide();
+        });
+    }
 </script>
 <script src="/js/notification.js" type="module"></script>
 </body>

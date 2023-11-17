@@ -12,4 +12,6 @@ public interface DeliverableService {
 
     public List<DeliverableDto> getAll();
 
+    DeliverableDto updateDeliverable(DeliverableDto deliverableDto);
+
 }

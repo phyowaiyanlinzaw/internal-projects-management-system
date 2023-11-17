@@ -25,7 +25,11 @@ public interface UserService {
 
     UserDto updateProfile(UserDto userDto);
 
-    void resetPassword(String email);
+    UserDto sendOtp(String email);
+
+    boolean confirmOtp(String email,String otp);
+
+    UserDto resetPassword(String email, String newPassword);
 
     void sendEmail(String to, String subject, String text);
 
@@ -50,6 +54,8 @@ public interface UserService {
     List<UserDto> getEmployeeByProjectId(Long projectId);
 
     void changeUsername(UserDto userDto);
+
+    UserDto changeStatus(long id, boolean status);
 
     UserDto updateUser(UserDto userDto);
 }

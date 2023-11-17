@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
@@ -132,8 +133,11 @@ public class ProjectController {
     @GetMapping(value = "/architecturelist")
     public ResponseEntity <List <ArchitectureDto>> getAllArchitecture(){
         List<ArchitectureDto> architectureDtos= architectureService.getAllArchitecture();
+        System.out.println(architectureDtos);
         return new ResponseEntity<>(architectureDtos, HttpStatus.OK);
     }
+
+
 
     @GetMapping(value = "/count/all")
     public ResponseEntity<Long> countAllProjects(){
@@ -167,6 +171,11 @@ public class ProjectController {
         switch (role) {
             case "PROJECT_MANAGER" -> {
                 List<ProjectDto> projects = projectService.getAllProjectsByProjectManagerId(id); // i odn't know
+
+                projects.forEach(project -> {
+                    log.info("total taskcount is here : {}", project.getTotalTaskCount());
+                    log.info("complete taskcount is here : {}", project.getCompleteTaskCount());
+                });
 
                 return getListResponseEntity(projects);
             }
