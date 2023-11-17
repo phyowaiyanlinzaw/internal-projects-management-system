@@ -3,11 +3,8 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.scheduling.config.Task;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ActualManMonthDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PlanManMonthDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
@@ -22,14 +19,8 @@ import team.placeholder.internalprojectsmanagementsystem.repository.project.Task
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.TasksService;
-import team.placeholder.internalprojectsmanagementsystem.util.ManMonthCalculator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static team.placeholder.internalprojectsmanagementsystem.util.ManMonthCalculator.*;
 
 @Service
 @RequiredArgsConstructor
@@ -198,101 +189,9 @@ public class TaskServiceImpl implements TasksService {
         return taskRepository.countByProjectId(id);
     }
 
-
-
     @Override
-    public List<ActualManMonthDto> calculateMonthlyActualManHoursFromTasks(long projectId) {
-        List<TasksDto> tasksDtos = taskRepository.findByProjectId(projectId).stream()
-                .map(task -> modelMapper.map(task, TasksDto.class))
-                .toList();
-
-        List<ActualManMonthDto> actualManMonthDtos = new ArrayList<>();
-        ActualManMonthDto currentDto = null;
-
-        for (TasksDto tasksDto : tasksDtos) {
-            long taskActualStartTime = tasksDto.getActual_start_time();
-            long taskActualEndTime = tasksDto.getActual_end_time();
-            String taskStartMonthYear = ManMonthCalculator.getMonthYearFromDate(taskActualStartTime);
-            String taskEndMonthYear = ManMonthCalculator.getMonthYearFromDate(taskActualEndTime);
-
-            try {
-                Date taskStartDate = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).parse(taskStartMonthYear);
-                Date taskEndDate = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).parse(taskEndMonthYear);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(taskStartDate);
-
-                while (calendar.getTime().before(taskEndDate) || calendar.getTime().equals(taskEndDate)) {
-                    String currentMonthYear = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).format(calendar.getTime());
-
-                    if (currentDto == null || !currentDto.getMonthName().equals(ManMonthCalculator.getStartMonthFromDate(taskActualStartTime))) {
-                        // Initialize a new DTO when the month changes
-                        currentDto = new ActualManMonthDto();
-                        currentDto.setMonthName(ManMonthCalculator.getStartMonthFromDate(taskActualStartTime));
-                        actualManMonthDtos.add(currentDto);
-                    }
-
-                    // Update the man-month hours for the current DTO
-                    long calculatedHours = ManMonthCalculator.calculateManHours(taskActualStartTime, Math.min(taskActualEndTime, ManMonthCalculator.getEndOfMonth(calendar)));
-                    currentDto.setActualManMonthHours(currentDto.getActualManMonthHours() + calculatedHours);
-
-                    // Move to the next month
-                    calendar.add(Calendar.MONTH, 1);
-                }
-            } catch (ParseException e) {
-                log.error("Error while parsing date: {}", e.getMessage());
-            }
-        }
-        return actualManMonthDtos;
-    }
-
-
-
-
-    @Override
-    public List<PlanManMonthDto> calculateMonthlyPlanManHoursFromTasks(long projectId) {
-        List<TasksDto> tasksDtos = taskRepository.findByProjectId(projectId).stream()
-                .map(task -> modelMapper.map(task, TasksDto.class))
-                .toList();
-
-        List<PlanManMonthDto> planManMonthDtos = new ArrayList<>();
-        PlanManMonthDto currentDto = null;
-
-        for (TasksDto tasksDto : tasksDtos){
-            long taskPlanStartTime = tasksDto.getPlan_start_time();
-            long taskPlanEndTime = tasksDto.getPlan_end_time();
-            String taskStartMonthYear = ManMonthCalculator.getMonthYearFromDate(taskPlanStartTime);
-            String taskEndMonthYear = ManMonthCalculator.getMonthYearFromDate(taskPlanEndTime);
-
-            try {
-                Date taskStartDate = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).parse(taskStartMonthYear);
-                Date taskEndDate = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).parse(taskEndMonthYear);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(taskStartDate);
-
-                while (calendar.getTime().before(taskEndDate) || calendar.getTime().equals(taskEndDate)) {
-                    String currentMonthYear = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).format(calendar.getTime());
-
-                    if (currentDto == null || !currentDto.getMonthName().equals(ManMonthCalculator.getStartMonthFromDate(taskPlanStartTime))) {
-                        // Initialize a new DTO when the month changes
-                        currentDto = new PlanManMonthDto();
-                        currentDto.setMonthName(ManMonthCalculator.getStartMonthFromDate(taskPlanStartTime));
-                        planManMonthDtos.add(currentDto);
-                    }
-
-                    // Update the man-month hours for the current DTO
-                    long calculatedHours = ManMonthCalculator.calculateManHours(taskPlanStartTime, Math.min(taskPlanEndTime, ManMonthCalculator.getEndOfMonth(calendar)));
-                    currentDto.setPlanManMonthHours(currentDto.getPlanManMonthHours() + calculatedHours);
-
-                    // Move to the next month
-                    calendar.add(Calendar.MONTH, 1);
-                }
-            } catch (ParseException e) {
-                log.error("Error while parsing date: {}", e.getMessage());
-            }
-        }
-        return planManMonthDtos;
+    public Long countByUserEmailAndStatus(String email, TaskStatus status) {
+        return taskRepository.countByUserEmailAndDeletedFalseAndStatus(email, status);
     }
 
     @Override

@@ -19,6 +19,8 @@ public interface TaskRepository extends JpaRepository<Tasks, Long> {
 
     long countByProjectIdAndDeletedFalse(long id);
 
+    long countByUserEmailAndDeletedFalseAndStatus(String email, TaskStatus status);
+
     List<Tasks> findByProjectId(long id);
 
 }

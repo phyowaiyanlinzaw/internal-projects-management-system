@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
-      lang="en">
+      lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 </head>
@@ -33,7 +33,7 @@
 
         <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
-                <div class="col-sm-6 col-xl-3">
+                <div class="col-sm-6 col-xl-3" sec:authorize="hasAnyRole('PMO','SDQC')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-collection-fill fa-2x text-primary"></i>
                         <div class="ms-3">
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xl-3">
+                <div class="col-sm-6 col-xl-3" sec:authorize="hasAnyRole('PMO','SDQC')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa-solid fa-people-group fa-3x text-primary"></i>
                         <div class="ms-3">
@@ -50,8 +50,8 @@
                             <h6 class="mb-0" id="employeeCount"></h6>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6 col-xl-3">
+                </div >
+                <div class="col-sm-6 col-xl-3" sec:authorize="hasAnyRole('PMO','SDQC')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa-solid fa-user-tie fa-3x text-primary"></i>
                         <div class="ms-3">
@@ -60,12 +60,39 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xl-3">
+                <div class="col-sm-6 col-xl-3" sec:authorize="hasAnyRole('PMO','SDQC')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-buildings-fill fa-2x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Total Department</p>
                             <h6 class="mb-0" id="departmentCount"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-list-task fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Tasks To Do</p>
+                            <h6 class="mb-0" id="to-do-tasks-Count"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-stack fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Tasks In Progress</p>
+                            <h6 class="mb-0" id="in-progress-tasks-Count"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-patch-check-fill fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Finished Tasks</p>
+                            <h6 class="mb-0" id="finished-tasks-Count"></h6>
                         </div>
                     </div>
                 </div>
@@ -186,6 +213,8 @@
     });
 
     $(document).ready(function () {
+
+
         $("#spinner").hide();
 
         // Get the mm chart canvas
@@ -505,9 +534,41 @@
             barChart2.update();
         });
 
+        $.ajax({
+            url: "api/task/count/status/TODO",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#to-do-tasks-Count").text(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
 
+        $.ajax({
+            url: "api/task/count/status/IN_PROGRESS",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#in-progress-tasks-Count").text(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
 
-
+        $.ajax({
+            url: "api/task/count/status/FINISHED",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#finished-tasks-Count").text(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
 
         //get user counts by api/user/count/all
         $.ajax({
@@ -515,11 +576,9 @@
             type: "GET",
             dataType: "json",
             success: function (data) {
-                $("#spinner").hide();
                 $("#employeeCount").text(data);
             },
             error: function (error) {
-                $("#spinner").hide();
                 console.log(error);
             }
         });
@@ -530,11 +589,9 @@
             type: "GET",
             dataType: "json",
             success: function (data) {
-                $("#spinner").hide();
                 $("#clientCount").text(data);
             },
             error: function (error) {
-                $("#spinner").hide();
                 console.log(error);
             }
         });
@@ -546,11 +603,9 @@
             type: "GET",
             dataType: "json",
             success: function (data) {
-                $("#spinner").hide();
                 $("#departmentCount").text(data);
             },
             error: function (error) {
-                $("#spinner").hide();
                 console.log(error);
             }
         });
@@ -561,11 +616,9 @@
             type: "GET",
             dataType: "json",
             success: function (data) {
-                $("#spinner").hide();
                 $("#projectCount").text(data);
             },
             error: function (error) {
-                $("#spinner").hide();
                 console.log(error);
             }
         });
