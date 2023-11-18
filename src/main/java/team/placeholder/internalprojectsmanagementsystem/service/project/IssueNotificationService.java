@@ -6,9 +6,8 @@ public interface IssueNotificationService {
 
     IssueNotificationDto save(IssueNotificationDto issueNotificationDto);
 
-    IssueNotificationDto getIssueNotificationById(long id);
 
-    void deleteIssueNotification(long id);
+
 
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
@@ -25,7 +26,11 @@ public interface UserService {
 
     UserDto updateProfile(UserDto userDto);
 
-    void resetPassword(String email);
+    UserDto sendOtp(String email);
+
+    boolean confirmOtp(String email,String otp);
+
+    UserDto resetPassword(String email, String newPassword);
 
     void sendEmail(String to, String subject, String text);
 
@@ -50,4 +55,8 @@ public interface UserService {
     List<UserDto> getEmployeeByProjectId(Long projectId);
 
     void changeUsername(UserDto userDto);
+
+    UserDto changeStatus(long id, boolean status);
+
+    UserDto updateUser(UseruiDto userDto);
 }

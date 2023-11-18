@@ -8,14 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ReviewDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ActualManMonthDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.KPIDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PlanManMonthDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.*;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProductivityDto;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.dashboard.DashboardServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 
@@ -31,28 +25,21 @@ public class DashboardController {
 
     private final DashboardServiceImpl dashboardService;
 
-    @GetMapping("/actual-man-month/project/{projectId}")
-    public ResponseEntity<List<ActualManMonthDto>> getMonthlyManMonth(
+    @GetMapping("/man-month/project/{projectId}")
+    public ResponseEntity<List<ManMonthDto>> getPlanManHours(
             @PathVariable("projectId") long projectId
     ) {
-        return ResponseEntity.ok(dashboardService.getActualManHours(projectId));
+        return ResponseEntity.ok(dashboardService.getManMonth(projectId));
     }
 
-    @GetMapping("/plan-man-month/project/{projectId}")
-    public ResponseEntity<List<PlanManMonthDto>> getMonthlyPlanManMonth(
-            @PathVariable("projectId") long projectId
-    ) {
-        return ResponseEntity.ok(dashboardService.getPlanManHours(projectId));
-    }
-
-    @GetMapping(value="/getKPI/{id}")
+    @GetMapping(value="/kpi/project/{id}")
     public ResponseEntity<KPIDto> getKpi(@PathVariable long id){
-        KPIDto kpiDto = projectService.getKPI(id);
+        KPIDto kpiDto = dashboardService.getKPI(id);
         log.info("review kpi " + kpiDto.getReview_kpi());
         log.info("detail kpi " + kpiDto.getDetail_kpi());
         log.info("coding kpi " + kpiDto.getCoding_kpi());
-        log.info("unit test kpi " + kpiDto.getUnit_test_kpi());
-        log.info("integrated test kpi " + kpiDto.getIntegrated_test_kpi());
+        log.info("unit test kpi " + kpiDto.getUnittest_kpi());
+        log.info("integrated test kpi " + kpiDto.getIntegratedtest_kpi());
         return  ResponseEntity.ok(kpiDto) ;
     }
 
@@ -62,6 +49,6 @@ public class DashboardController {
     public ResponseEntity<List<ProductivityDto>> getProductivity(
             @PathVariable("projectId") long projectId
     ) {
-        return null;
+        return ResponseEntity.ok(dashboardService.getProductivity(projectId));
     }
 }

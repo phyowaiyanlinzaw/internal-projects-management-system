@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.DeliverableTypeService;
 
 import java.util.Arrays;
@@ -25,7 +26,7 @@ class DeliverableTypeControllerTest {
     private FakerService fakerService;
 
     @Mock
-    private DeliverableTypeService deliverableTypeService;
+    private DeliverableTypeServiceImpl deliverableTypeService;
 
     @InjectMocks
     private DeliverableTypeController deliverableTypeController;
@@ -46,20 +47,20 @@ class DeliverableTypeControllerTest {
         verify(fakerService, times(1)).generateAndSaveDeliverableTypes(count);
     }
 
-//    @Test
-//    void testGetAll() {
-//        // Arrange
-//        Set<DeliverableTypeDto> mockDeliverableTypes = new HashSet<>();  // Replace with your mock data
-//        when(deliverableTypeService.getAll()).thenReturn(mockDeliverableTypes);
-//
-//        // Act
-//        ResponseEntity<Set<DeliverableTypeDto>> result = deliverableTypeController.getAll();
-//
-//        // Assert
-//        assertEquals(HttpStatus.OK, result.getStatusCode());
-//        assertEquals(mockDeliverableTypes, result.getBody());
-//
-//        // Verify that the service method was called
-//        verify(deliverableTypeService, times(1)).getAll();
-//    }
+    @Test
+    void testGetAll() {
+        // Mock data
+        Set<DeliverableTypeDto> mockDeliverableTypes = new HashSet<>();
+        when(deliverableTypeService.getAll()).thenReturn(mockDeliverableTypes);
+
+        // Call the controller method
+        ResponseEntity<Set<DeliverableTypeDto>> responseEntity = deliverableTypeController.getAll();
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockDeliverableTypes, responseEntity.getBody());
+
+        // Verify that the service method was called
+        verify(deliverableTypeService, times(1)).getAll();
+    }
 }

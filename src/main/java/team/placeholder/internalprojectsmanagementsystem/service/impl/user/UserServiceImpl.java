@@ -10,10 +10,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.AvailableUser;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -24,9 +30,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AE
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final JavaMailSender mailSender;
     private final ModelMapper modelmapper;
     private final AESImpl aes;
+    private final Map<String,String> otpMap = new HashMap<>();
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -79,6 +84,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto sendOtp(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            String otp = String.format("%04d", new Random().nextInt(10000));
+            otpMap.put(email,otp);
+            sendEmail(email,"OTP","Your One-timed Password is : "+otp);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean confirmOtp(String email,String otp) {
+        if (otpMap.containsKey(email) && otpMap.get(email).equals(otp)) {
+            otpMap.remove(email);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public UserDto resetPassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            userRepository.save(user);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public UserDto save(UserDto userDto) {
         User user = modelmapper.map(userDto, User.class);
         userRepository.save(user);
@@ -101,16 +141,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+
     @Override
     public UserDto getUserById(long id) {
         User user = userRepository.findById(id);
-        if (user != null) {
-            UserDto userDto = modelmapper.map(user, UserDto.class);
-            userDto.setDepartmentdto(modelmapper.map(user.getDepartment(), DepartmentDto.class));
+        UserDto userDto = modelmapper.map(user, UserDto.class);
+
+          userDto.setName(user.getName());
+          userDto.setEmail(user.getEmail());
+
+            if (user.getDepartment() != null) {
+               DepartmentDto department = modelmapper.map(user.getDepartment(), DepartmentDto.class);
+                userDto.setDepartmentdto(department);
+            }
+
             return userDto;
-        } else {
-            return null;
-        }
 
     }
 
@@ -130,12 +176,6 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-    }
-
-    @Override
-    public void resetPassword(String email) {
-        String newPassword = PasswordGenerator.generatePassword(8);
-        sendEmail(email, "OTP Verification", "Your OTP Code is : " + newPassword);
     }
 
     @Override
@@ -261,34 +301,11 @@ public class UserServiceImpl implements UserService {
         return userDtos;
     }
 
-//    @Override
-//    public List<UserDto> getProjectManagersByProjectId(Long projectId) {
-//        List<User> users = userRepository.findAllByProjectId(projectId);
-//
-//        List<UserDto> userDtos = new ArrayList<>();
-//        for (User user : users) {
-//            //print out user project with lambda
-//            for (Project project : user.getProjects()) {
-//                log.info("USER PROJECT : {}",project.getName());
-//            }
-//            Department department = user.getDepartment();
-//            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
-//            Set<Project> projects = user.getProjects();
-//            Set<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).collect(Collectors.toSet());
-//            UserDto userDto = modelmapper.map(user, UserDto.class);
-//            userDto.setDepartmentdto(departmentDto);
-//            userDto.setProjectsByUsers(projectDtos);
-//            userDtos.add(userDto);
-//        }
-//        return userDtos;
-//    }
-
     @Override
     public List<UserDto> getEmployeeByProjectId(Long projectId) {
         List<User> users = userRepository.findAllByProjectsId(projectId);
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {
-            //print out user project with lambda
             for (Project project : user.getProjects()) {
                 log.info("USER PROJECT : {}",project.getName());
             }
@@ -310,6 +327,32 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setName(userDto.getName());
             userRepository.save(user);
+        }
+    }
+
+    @Override
+    public UserDto changeStatus(long id, boolean status) {
+        User user = userRepository.findById(id);
+        if (user != null) {
+            user.setEnabled(status);
+            userRepository.save(user);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public UserDto updateUser(UseruiDto userDto) {
+        User user = userRepository.findById(userDto.getId());
+        if (user != null) {
+            user.setName(userDto.getName());
+            user.setEmail(userDto.getEmail());
+            user.setDepartment(userDto.getDepartmentId() != 0 ? departmentRepository.findById(userDto.getDepartmentId()) : null);
+            userRepository.save(user);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
         }
     }
 

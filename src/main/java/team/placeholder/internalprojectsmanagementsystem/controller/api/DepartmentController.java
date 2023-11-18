@@ -36,34 +36,6 @@ public class DepartmentController {
        List<DepartmentDto> departmentDtos = departmentService.getAllDepartments();
         return ResponseEntity.ok(departmentDtos);
     }
-    @GetMapping(value = "/withPaging")
-    public ResponseEntity<List<DepartmentDto>> getAllDepartment(
-            @RequestParam(name = "pageNumber", defaultValue = "1") int currentPage) {
-        Page<DepartmentDto> page = departmentService.getAllDepartmentWitPage(currentPage);
-        long totalItems = page.getTotalElements();
-        int totalPages = page.getTotalPages();
-        List<DepartmentDto> departmentDtos = page.getContent();
-        return ResponseEntity.ok(departmentDtos);
-    }
-
-    @GetMapping(value = "/page/{pageNumber}")
-    public ResponseEntity<List<DepartmentDto>> listByPageNo(@PathVariable ("pageNumber")  int currentPage){
-        Page<DepartmentDto> page = departmentService.getAllDepartmentWitPage(currentPage);
-        long totalItems = page.getTotalElements();
-        int totalPages = page.getTotalPages();
-        List<DepartmentDto> departmentDtos = page.getContent();
-        return ResponseEntity.ok(departmentDtos);
-    }
-
-    @PostMapping("save")
-    public ResponseEntity<String> save(@RequestBody DepartmentDto departmentDto) {
-        DepartmentDto savedDepartment = departmentService.save(departmentDto);
-        if (savedDepartment != null) {
-            return ResponseEntity.ok("Department saved successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to save department");
-        }
-    }
 
     @GetMapping("/byId/{id}")
     public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable("id") long id) {
@@ -100,14 +72,11 @@ public class DepartmentController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-    @DeleteMapping("/lists/delete/{id}")
-    public ResponseEntity<String> deleteDepartment(@PathVariable("id") long id) {
-        departmentService.deleteDepartment(id); // Pass the 'id' as a path variable
-        return ResponseEntity.ok("Department deleted successfully");
-    }
+
 
     @GetMapping("/count")
     public long dpCount(){
+
         return departmentService.getDeprtmentCount();
     }
 

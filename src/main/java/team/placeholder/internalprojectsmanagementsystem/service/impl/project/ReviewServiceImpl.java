@@ -30,15 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
         return null;
     }
 
-    @Override
-    public ReviewDto update(ReviewDto reviewDto) {
-        return null;
-    }
 
-    @Override
-    public void deleteReview(ReviewDto reviewDto) {
-
-    }
 
     @Override
     public List<ReviewDto> getAllReviews() {

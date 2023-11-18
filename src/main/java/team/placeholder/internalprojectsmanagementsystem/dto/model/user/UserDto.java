@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserDto {
     private long id;
     private String name;
@@ -36,5 +38,7 @@ public class UserDto {
     private Set<ProjectDto> projectsByUsers;
 
 
-
+    public UserDto(long id) {
+        this.id = id;
+    }
 }
