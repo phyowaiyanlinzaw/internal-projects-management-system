@@ -266,31 +266,322 @@
 
             let arcccList = await getArchitecturelist();
 
+            // getArchitecturelist()
+            //     .then((architectureList) => {
+            //         const inputElement = document.querySelector(
+            //             'input[name="architectures"]',
+            //             {
+            //                 texts: {
+            //                     duplicate: "Duplicates are not allowed",
+            //                     empty: "Architecture is required",
+            //                 }
+            //             }
+            //
+            //         );
+            //         const a = initializeTagify(inputElement, architectureList);
+            //         $("#validation-form").submit(function (event) {
+            //             const arch =
+            //                 inputElement.value === ""
+            //                     ? []
+            //                     : JSON.parse(inputElement.value);
+            //
+            //             if (arch.length !== 0) {
+            //                 const whitelist = a.settings.whitelist;
+            //                 arch.forEach((item) => {
+            //                     if (!whitelist.includes(item.value)) {
+            //                         whitelist.push(item.value);
+            //                     }
+            //                 });
+            //             }
+            //             console.log(a.settings.whitelist);
+            //         });
+            //     })
+            //     .catch((error) => {
+            //         console.log("Error:", error);
+            //     });
+
             getArchitecturelist()
                 .then((architectureList) => {
-                    const inputElement = document.querySelector(
-                        'input[name="architectures"]'
-                    );
-                    const a = initializeTagify(inputElement, architectureList);
-                    $("#validation-form").submit(function (event) {
-                        const arch =
-                            inputElement.value === ""
-                                ? []
-                                : JSON.parse(inputElement.value);
-                        if (arch.length !== 0) {
-                            const whitelist = a.settings.whitelist;
-                            arch.forEach((item) => {
-                                if (!whitelist.includes(item.value)) {
-                                    whitelist.push(item.value);
-                                }
-                            });
+                    const inputElement = document.querySelector('input[name="architectures"]');
+                    const tagifyInstance = initializeTagify(inputElement, architectureList);
+
+                    // Set custom texts for Tagify validation messages
+                    tagifyInstance.settings.texts = {
+                        duplicate: "Duplicates are not allowed",
+                        empty: "Architecture is required",
+                    };
+
+                    // Implement custom validation using the validate setting
+                    tagifyInstance.settings.validate = function (tagData) {
+                        if (tagData.value.trim() === "") {
+                            return tagifyInstance.TEXTS.empty;
                         }
-                        console.log(a.settings.whitelist);
+
+                        const isDuplicate = tagifyInstance.value.some((tag) => tag.value === tagData.value);
+                        if (isDuplicate) {
+                            return tagifyInstance.TEXTS.duplicate;
+                        }
+
+                        return true;
+                    };
+
+                    // Validate on form submission
+                    $("#validation-form").submit(function (event) {
+                        const validated = tagifyInstance.isValid;
+                        if (!validated) {
+                            event.preventDefault();
+                        }
+
+                        // Rest of your form submission logic...
+                    });
+
+                    // Validate on input change
+                    inputElement.addEventListener('change', function () {
+                        validatePrjArchitecture();
                     });
                 })
                 .catch((error) => {
                     console.log("Error:", error);
                 });
+
+            function validatePrjArchitecture() {
+                const architectures = $('#architectures').val();
+                const errorContainer = $('#architectures').siblings('.error-container');
+
+                if (!architectures || architectures.trim().length === 0) {
+                    validatedProjectForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Architecture is required")
+                            .css("margin", "0")
+                            .addClass('error-message');
+
+                        $('#architectures').after('<div class="error-container"></div>');
+                        $('#architectures').siblings('.error-container').append(p);
+                    }
+
+                    $('#architectures').addClass('is-invalid');
+                    $('#architectures').removeClass('is-valid');
+                } else {
+                    validatedProjectForm = true;
+                    errorContainer.remove();
+                    $('#architectures').addClass('is-valid');
+                    $('#architectures').removeClass('is-invalid');
+                }
+            }
+
+
+            // document.addEventListener('DOMContentLoaded', async () => {
+            //     try {
+            //         const arcccList = await getArchitecturelist();
+            //         const inputElement = document.querySelector('input[name="architectures"]');
+            //
+            //         // Check if Tagify is defined and initialize it
+            //         if (typeof Tagify !== 'undefined') {
+            //             const tagifyInstance = new Tagify(inputElement, {
+            //                 whitelist: arcccList.map(item => item.value), // Assuming arcccList is an array of objects with a 'value' property
+            //                 enforceWhitelist: true,
+            //                 duplicates: false,
+            //                 originalInputValueFormat: valuesArr => valuesArr.map(item => item.value),
+            //             });
+            //
+            //             // Set custom texts for validation messages
+            //             tagifyInstance.settings.templates = {
+            //                 dropdownItem: item => item.value,
+            //             };
+            //
+            //             // Implement custom validation using the validate setting
+            //             tagifyInstance.settings.validate = function(tagData) {
+            //                 if (tagData.value.trim() === "") {
+            //                     return "Architecture is required";
+            //                 }
+            //
+            //                 const isDuplicate = tagifyInstance.value.some(tag => tag.value === tagData.value);
+            //                 if (isDuplicate) {
+            //                     return "Duplicates are not allowed";
+            //                 }
+            //
+            //                 return true;
+            //             };
+            //
+            //             // Rest of your code remains unchanged
+            //             // ...
+            //         } else {
+            //             console.error("Tagify is not defined. Please make sure the library is loaded.");
+            //         }
+            //     } catch (error) {
+            //         console.log("Error:", error);
+            //     }
+            // });
+            //
+
+
+
+
+            // document.addEventListener('DOMContentLoaded', async () => {
+            //     try {
+            //         const inputElement = document.querySelector('input[name="architectures"]');
+            //
+            //         inputElement.addEventListener('input', function() {
+            //             const archHtml = inputElement.value.trim();
+            //
+            //             // Check if the input is not empty
+            //             if (archHtml === "") {
+            //                 alert("Architecture is required");
+            //             } else {
+            //                 console.log("Input value:", archHtml);
+            //             }
+            //         });
+            //
+            //         $("#validation-form").submit(function (event) {
+            //             event.preventDefault();
+            //
+            //             // Implement your form submission logic here
+            //             // For example, you can fetch the input value
+            //             const archHtml = inputElement.value.trim();
+            //
+            //             // Perform any further processing or validation
+            //
+            //             // Log the value or perform other actions
+            //             console.log("Input value on form submit:", archHtml);
+            //         });
+            //     } catch (error) {
+            //         console.log("Error:", error);
+            //     }
+            // });
+
+
+
+
+            // document.addEventListener('DOMContentLoaded', async () => {
+            //     try {
+            //         const arcccList = await getArchitecturelist();
+            //         const inputElement = document.querySelector('input[name="architectures"]');
+            //         const tagifyInstance = initializeTagify(inputElement, arcccList);
+            //
+            //         const selectElement = document.querySelector('select[name="yourSelectName"]'); // Replace with the actual name of your select element
+            //
+            //         function isTagifyEmpty(tagifyInstance) {
+            //             return tagifyInstance.value.length === 0;
+            //         }
+            //
+            //         function isSelectEmpty(selectElement) {
+            //             return selectElement.value === ""; // Adjust this check based on your select element's requirements
+            //         }
+            //
+            //         $("#validation-form").submit(function (event) {
+            //             if (isTagifyEmpty(tagifyInstance) && isSelectEmpty(selectElement)) {
+            //                 event.preventDefault();
+            //                 alert("Please fill in at least one field.");
+            //                 return;
+            //             }
+            //
+            //             // Handle the architectures input
+            //             const archHtml = inputElement.value;
+            //
+            //             if (archHtml.trim() !== "") {
+            //                 try {
+            //                     const arch = JSON.parse(archHtml);
+            //
+            //                     if (Array.isArray(arch) && arch.length !== 0) {
+            //                         const whitelist = tagifyInstance.settings.whitelist;
+            //                         arch.forEach((item) => {
+            //                             if (!whitelist.includes(item.value)) {
+            //                                 whitelist.push(item.value);
+            //                             }
+            //                         });
+            //                     } else {
+            //                         event.preventDefault();
+            //                         alert("Invalid input for Architectures. Please provide a valid JSON array.");
+            //                     }
+            //                 } catch (error) {
+            //                     event.preventDefault();
+            //                     alert("Error parsing JSON input for Architectures. Please provide a valid JSON array.");
+            //                     console.error("JSON Parsing Error:", error);
+            //                 }
+            //             }
+            //
+            //             // Handle the select input
+            //             if (isSelectEmpty(selectElement)) {
+            //                 event.preventDefault();
+            //                 alert("Please select a value for your select field.");
+            //             }
+            //
+            //             console.log(tagifyInstance.settings.whitelist);
+            //             console.log("Selected value from the select:", selectElement.value);
+            //         });
+            //     } catch (error) {
+            //         console.log("Error:", error);
+            //     }
+            // });
+
+            function initializeTagifyAndValidation() {
+                let validatedProjectForm = false;
+
+                // Your Tagify initialization code...
+
+                // Validate on input change
+                inputElement.addEventListener('change', function () {
+                    validatePrjArchitecture();
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    const arcccList = await getArchitecturelist();
+                    const inputElement = document.querySelector('input[name="architectures"]');
+                    initializeTagifyAndValidation(arcccList, inputElement);
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            });
+
+
+
+            // document.addEventListener('DOMContentLoaded', async () => {
+            //     try {
+            //         const arcccList = await getArchitecturelist();
+            //         const inputElement = document.querySelector('input[name="architectures"]');
+            //         const tagifyInstance = initializeTagify(inputElement, arcccList);
+            //
+            //
+            //         function isTagifyEmpty(tagifyInstance) {
+            //             return tagifyInstance.value.length === 0;
+            //         }
+            //
+            //         $("#validation-form").submit(function (event) {
+            //
+            //             if (isTagifyEmpty(tagifyInstance)) {
+            //                 event.preventDefault();
+            //                 alert("Tagify is empty. Please add at least one tag.");
+            //                 return;
+            //             }
+            //
+            //             const archHtml = inputElement.value;
+            //             const archText = (new DOMParser()).parseFromString(archHtml, 'text/html').body.innerText;
+            //
+            //
+            //             const arch = archText === "" ? [] : JSON.parse(archText);
+            //
+            //             const a = initializeTagify(inputElement, arch);
+            //
+            //             if (arch.length !== 0) {
+            //                 const whitelist = a.settings.whitelist;
+            //                 arch.forEach((item) => {
+            //                     if (!whitelist.includes(item.value)) {
+            //                         whitelist.push(item.value);
+            //                     }
+            //                 });
+            //             }
+            //
+            //
+            //             console.log(tagifyInstance.settings.whitelist);
+            //         });
+            //     } catch (error) {
+            //         console.log("Error:", error);
+            //     }
+            // });
 
             const toolbaroptions = [
                 // Test-style
@@ -1525,7 +1816,7 @@
                 }
 
                 function validatePrjArchitecture() {
-                    const architectures= $('#architectures').val();
+                    const architectures = $('#architectures').val();
                     const errorContainer = $('#architectures').siblings('.error-container');
 
                     if (!architectures || architectures.trim().length === 0) {
