@@ -1165,7 +1165,7 @@
 
 #calendar {
     max-width: 1200px;
-    max-height: 600px;
+    max-height:600px;
     margin: 0 auto;
 }
 .fc-col-header-cell-cushion,.fc-daygrid-day-number{
