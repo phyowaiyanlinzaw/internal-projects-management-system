@@ -141,14 +141,13 @@ public class ProjectServiceImpl implements ProjectService {
         for (Project project : projectList) {
             if (project != null) {
                 ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
-                SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
-                projectDto.setSystemOutLineDto(systemOutLineDto);
+                if(project.getSystemOutLine()!=null){
+                    SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
+                    projectDto.setSystemOutLineDto(systemOutLineDto);
+                }
                 projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
                 projectDto.setProjectManagerUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
-
-                log.info("project manager name should be shown here " + project.getProjectManager().getName());
                 projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
-                log.info("adjf;ladjf;lf", projectDto.getDepartmentDto());
 
                 projectDto.getDepartmentDto().getUsers().clear();
                 projectDto.setCompleteTaskCount(

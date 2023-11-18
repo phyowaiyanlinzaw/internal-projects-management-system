@@ -36,6 +36,7 @@ public class FakerService {
     private final ReviewRepo reviewRepository;
     private final SystemOutlineRepository systemOutlineRepository;
     private final IssueRepository issueRepository;
+    private final AvailableUserRepo aes;
     private final Faker faker = new Faker();
 
     //generate fake clients
@@ -200,6 +201,16 @@ public class FakerService {
                 user.setProjectManager(null);
             }
             userRepository.save(user);
+            generateAvailableUser(user);
+        }
+    }
+
+    private void generateAvailableUser(User user) {
+        if (user.getRole().equals(Role.EMPLOYEE) || user.getRole().equals(Role.FOC) || user.getRole().equals(Role.CONTRACT)) {
+            AvailableUser availableUser = new AvailableUser();
+            availableUser.setUser(user);
+            availableUser.setAvaliable(true);
+            aes.save(availableUser);
         }
     }
 }
