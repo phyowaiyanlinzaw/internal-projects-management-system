@@ -299,20 +299,65 @@
             //     .catch((error) => {
             //         console.log("Error:", error);
             //     });
+            //
+            // getArchitecturelist()
+            //     .then((architectureList) => {
+            //         const inputElement = document.querySelector('input[name="architectures"]');
+            //         const tagifyInstance = initializeTagify(inputElement, architectureList);
+            //
+            //         // Set custom texts for Tagify validation messages
+            //         tagifyInstance.settings.texts = {
+            //             duplicate: "Duplicates are not allowed",
+            //             empty: "Architecture is required",
+            //         };
+            //
+            //         // Implement custom validation using the validate setting
+            //         tagifyInstance.settings.validate = function (tagData) {
+            //             if (tagData.value.trim() === "") {
+            //                 return tagifyInstance.TEXTS.empty;
+            //             }
+            //
+            //             const isDuplicate = tagifyInstance.value.some((tag) => tag.value === tagData.value);
+            //             if (isDuplicate) {
+            //                 return tagifyInstance.TEXTS.duplicate;
+            //             }
+            //
+            //             return true;
+            //         };
+            //
+            //         // Validate on form submission
+            //         $("#validation-form").submit(function (event) {
+            //             const validated = tagifyInstance.isValid;
+            //             if (!validated) {
+            //                 event.preventDefault();
+            //             }
+            //
+            //             // Rest of your form submission logic...
+            //         });
+            //
+            //         // Validate on input change
+            //         inputElement.addEventListener('change', function () {
+            //             validatePrjArchitecture();
+            //         });
+            //     })
+            //     .catch((error) => {
+            //         console.log("Error:", error);
+            //     });
 
-            getArchitecturelist()
-                .then((architectureList) => {
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    const architectureList = await getArchitecturelist();
                     const inputElement = document.querySelector('input[name="architectures"]');
                     const tagifyInstance = initializeTagify(inputElement, architectureList);
 
-                    // Set custom texts for Tagify validation messages
+                    // Set custom texts for validation messages
                     tagifyInstance.settings.texts = {
                         duplicate: "Duplicates are not allowed",
                         empty: "Architecture is required",
                     };
 
                     // Implement custom validation using the validate setting
-                    tagifyInstance.settings.validate = function (tagData) {
+                    tagifyInstance.settings.validate = function(tagData) {
                         if (tagData.value.trim() === "") {
                             return tagifyInstance.TEXTS.empty;
                         }
@@ -325,24 +370,34 @@
                         return true;
                     };
 
-                    // Validate on form submission
                     $("#validation-form").submit(function (event) {
-                        const validated = tagifyInstance.isValid;
-                        if (!validated) {
-                            event.preventDefault();
+                        // Handle the architectures input
+                        const arch = tagifyInstance.value;
+
+                        if (arch.length !== 0) {
+                            const whitelist = tagifyInstance.settings.whitelist;
+                            arch.forEach((item) => {
+                                if (!whitelist.includes(item.value)) {
+                                    whitelist.push(item.value);
+                                }
+                            });
                         }
 
-                        // Rest of your form submission logic...
+                        // Display validation errors
+                        const validationErrors = tagifyInstance.validateTag();
+                        if (validationErrors.length > 0) {
+                            alert(validationErrors.join('\n'));
+                        } else {
+                            // Continue with form submission
+                            console.log("Form submitted successfully!");
+                        }
                     });
-
-                    // Validate on input change
-                    inputElement.addEventListener('change', function () {
-                        validatePrjArchitecture();
-                    });
-                })
-                .catch((error) => {
+                } catch (error) {
                     console.log("Error:", error);
-                });
+                }
+            });
+
+
 
             function validatePrjArchitecture() {
                 const architectures = $('#architectures').val();
