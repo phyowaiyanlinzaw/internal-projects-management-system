@@ -79,6 +79,33 @@ public class UserRepositoryTest {
         assertEquals(id, result.getId());
     }
 
+    @Test
+    public void testFindAllByRole(){
+
+    }
+
+    @Test
+    public void testFindAllByProjectManagerId(){
+
+    }
+
+    @Test
+    public void testFindUserByDepartmentIdAndRole(){
+
+    }
+
+    @Test
+    public void testFindCountAllByDepartmentId(){
+
+    }
+
+    @Test
+    public void testFindAllByProjectId(){
+
+    }
+
+
+
 
 
 

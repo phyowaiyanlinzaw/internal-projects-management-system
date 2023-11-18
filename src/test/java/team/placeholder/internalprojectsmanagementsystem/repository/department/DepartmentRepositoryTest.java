@@ -58,6 +58,38 @@ public class DepartmentRepositoryTest {
     }
 
 
+    @Test
+    public void testCount(){
+        long expectedCount = 5L;
+
+        when(departmentRepository.count()).thenReturn(expectedCount);
+
+        long result = departmentRepository.count();
+
+        assertEquals(expectedCount, result);
+    }
+
+    @Test
+    public void testFindAll(){
+        List<Department> expectedDepartments = new ArrayList<>();
+        expectedDepartments.add(new Department());
+        expectedDepartments.add(new Department());
+        expectedDepartments.add(new Department());
+
+        // Mock the behavior of departmentRepository.findAll
+        when(departmentRepository.findAll()).thenReturn(expectedDepartments);
+
+        // Act
+        List<Department> result = departmentRepository.findAll();
+
+        // Assert
+        assertEquals(expectedDepartments.size(), result.size());
+        for (int i = 0; i < expectedDepartments.size(); i++) {
+            assertEquals(expectedDepartments.get(i), result.get(i));
+        }
+    }
+
+
 
 
 }
