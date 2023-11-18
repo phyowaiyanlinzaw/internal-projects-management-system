@@ -1,34 +1,22 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
-import team.placeholder.internalprojectsmanagementsystem.security.CustomerUserDetails;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
-import team.placeholder.internalprojectsmanagementsystem.service.department.DepartmentService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
-
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user/")
 public class UserController {
-
     private final UserServiceImpl userService;
     private final FakerService fakerService;
     private final DepartmentServiceImpl departmentService;
