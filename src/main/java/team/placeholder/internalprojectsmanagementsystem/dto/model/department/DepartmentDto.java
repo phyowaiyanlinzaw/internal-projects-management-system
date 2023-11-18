@@ -18,4 +18,12 @@ public class DepartmentDto implements Serializable {
     private List<UserDto> users;
     private List<ProjectDto> projects;
 
+    public DepartmentDto(){
+
+    }
+
+
+    public DepartmentDto(long id) {
+        this.id = id;
+    }
 }

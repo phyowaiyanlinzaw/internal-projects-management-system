@@ -68,6 +68,47 @@ class UserServiceTest {
         assertEquals(userDto, updatedUser);
     }
 
+    @Test
+    public void testChangePassword() {
+        String email = "eep@gmail.com";
+        String oldPassword = "12345678";
+        String newPassword = "87654321";
+
+        UserDto userDto = new UserDto();
+        Mockito.when(userService.changePassword(email, oldPassword, newPassword)).thenReturn(userDto);
+        UserDto changedPassword = userService.changePassword(email, oldPassword, newPassword);
+        assertEquals(userDto, changedPassword);
+
+    }
+
+    @Test
+    public void testSendOtp() {
+        String email = "eep@gmail.com";
+        UserDto userDto = new UserDto();
+        Mockito.when(userService.sendOtp(email)).thenReturn(userDto);
+        UserDto sentOtp = userService.sendOtp(email);
+        assertEquals(userDto, sentOtp);
+
+    }
+
+    @Test
+    public void testConfirmOtp() {
+        String email = "eep@gmail.com";
+        String otp = "12345678";
+        when(otpService.validateOtp(email, otp)).thenReturn(true);
+
+        // Act
+        boolean result = userService.confirmOtp(email, otp);
+
+        // Assert
+        assertTrue(result);
+
+        // Verify that the OtpService method was called
+        verify(otpService, times(1)).validateOtp(email, otp);
+
+    }
+
+
 
 
 }

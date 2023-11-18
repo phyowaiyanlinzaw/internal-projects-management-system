@@ -275,7 +275,7 @@ public class ProjectController {
         return new ResponseEntity<>(departmentProejctMap, HttpStatus.OK);
     }
 
-    private ResponseEntity<List<ProjectDto>> getListResponseEntity(List<ProjectDto> projects) {
+    ResponseEntity<List<ProjectDto>> getListResponseEntity(List<ProjectDto> projects) {
         for(ProjectDto projectDto : projects){
             if(projectDto.getProjectManagerUserDto() != null) {
 //                if(projectDto.getUserDto().getProjectList() != null) {
@@ -293,6 +293,7 @@ public class ProjectController {
         }
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
+
 
 
 
