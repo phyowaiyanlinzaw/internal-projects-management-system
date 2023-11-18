@@ -71,9 +71,16 @@ public class Issue{
         return id == other.id;
     }
 
+
+
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + Objects.hash(title, description, place, impact, root_cause, direct_cause,
+                corrective_action, preventive_action, responsible_party, solved, created_date, updated_date,
+                solved_date, issueStatus, issueCategory, responsible_type);
+        result = 31 * result + Objects.hash(project, user_uploader, pic);
+        return result;
     }
 
 

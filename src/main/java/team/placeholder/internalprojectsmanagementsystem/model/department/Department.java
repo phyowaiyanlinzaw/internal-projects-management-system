@@ -44,7 +44,7 @@ public class Department {
         return Objects.hash(id);
     }
 
-    public Department orElse(Object o) {
+    public static Department orElse(Object o) {
         return null;
     }
 }

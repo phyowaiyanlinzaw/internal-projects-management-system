@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -30,11 +29,8 @@ public class Amount implements Serializable {
         Amount other = (Amount) o;
         return id == other.id;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    
 }
