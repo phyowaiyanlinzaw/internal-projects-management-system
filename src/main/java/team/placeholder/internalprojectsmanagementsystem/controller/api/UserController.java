@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
@@ -159,12 +158,6 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getAllUsersByRole(@PathVariable Role role) {
         return ResponseEntity.ok(userService.getAllByRole(role));
     }
-
-    @GetMapping("list/departmentId/{departmentId}")
-    public ResponseEntity<List<UserDto>> getAllUsersByDepartmentId(@PathVariable Long departmentId) {
-        return null;
-    }
-
     @GetMapping("list/projectManagerId/{projectManagerId}")
     public ResponseEntity<List<UserDto>> getAllUsersByProjectManagerId(@PathVariable Long projectManagerId) {
         return ResponseEntity.ok(userService.getAllUsersByPMId(projectManagerId));
