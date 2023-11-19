@@ -19,5 +19,58 @@ public class ArchitectureDtoTest {
         assertEquals(1L, architectureDto.getId());
         assertEquals("Sample Technology", architectureDto.getTech_name());
     }
+    @Test
+    public void testToStringWithIdAndTechName() {
+        ArchitectureDto architectureDto = new ArchitectureDto();
+        architectureDto.setId(1L);
+        architectureDto.setTech_name("TestTech");
+
+        assertEquals("ArchitectureDto{id=1, tech_name='TestTech'}", architectureDto.toString());
+    }
+
+    @Test
+    public void testToStringWithNullIdAndTechName() {
+        ArchitectureDto architectureDto = new ArchitectureDto();
+        architectureDto.setId(null);
+        architectureDto.setTech_name(null);
+
+        assertEquals("ArchitectureDto{id=null, tech_name='null'}", architectureDto.toString());
+    }
+
+    @Test
+    public void testToStringWithNullId() {
+        ArchitectureDto architectureDto = new ArchitectureDto();
+        architectureDto.setId(null);
+        architectureDto.setTech_name("TestTech");
+
+        assertEquals("ArchitectureDto{id=null, tech_name='TestTech'}", architectureDto.toString());
+    }
+
+    @Test
+    public void testToStringWithNullTechName() {
+        ArchitectureDto architectureDto = new ArchitectureDto();
+        architectureDto.setId(1L);
+        architectureDto.setTech_name(null);
+
+        assertEquals("ArchitectureDto{id=1, tech_name='null'}", architectureDto.toString());
+    }
+
+    @Test
+    public void testToStringWithEmptyTechName() {
+        ArchitectureDto architectureDto = new ArchitectureDto();
+        architectureDto.setId(1L);
+        architectureDto.setTech_name("");
+
+        assertEquals("ArchitectureDto{id=1, tech_name=''}", architectureDto.toString());
+    }
+
+    @Test
+    public void testToStringWithSpecialCharactersInTechName() {
+        ArchitectureDto architectureDto = new ArchitectureDto();
+        architectureDto.setId(1L);
+        architectureDto.setTech_name("Special#Tech");
+
+        assertEquals("ArchitectureDto{id=1, tech_name='Special#Tech'}", architectureDto.toString());
+    }
 }
 

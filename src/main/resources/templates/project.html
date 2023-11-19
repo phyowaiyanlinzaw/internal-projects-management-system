@@ -1,6 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="layout/layout" xmlns:th="http://www.thymeleaf.org">
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="layout/layout"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
 </head>
 
@@ -65,8 +71,16 @@
                             <div class="lane">
                                 <h3 class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center">
                                     TODO
-                                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-task">
-                                        <i class="bi bi-plus-circle"></i>
+                                    <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#add-task"
+                                            id="add-task-btn"
+                                    >
+                                        <i
+                                                class="bi bi-plus-circle"
+                                        ></i>
                                     </button>
                                 </h3>
                                 <div class="swim-lane p-3" id="TODO">
@@ -132,7 +146,8 @@
                                 Group <span style="color:red"> *</span></label>
                             <select class="form-control" aria-label="Select Group" data-live-search="true"
                                     id="group" name="group">
-                                <option value="A">A - Related With Project Development</option>
+                                <option value="" selected disabled>Select Group</option>
+                                 <option value="A">A - Related With Project Development</option>
                                 <option value="B">B - Training</option>
                                 <option value="C">C - Idling</option>
                             </select>
@@ -417,6 +432,16 @@
         import {getUser} from "/js/currentLoginUser.js";
 
         const currentUser = await getUser();
+
+        //disable add task button if user is not project manager
+        if(currentUser.currentUser.role !== "PROJECT_MANAGER"){
+            const addTaskBtn = document.getElementById("add-task-btn");
+            addTaskBtn.disabled = true;
+
+            // Add a class to style the button on hover
+            addTaskBtn.classList.add("disabled-button");
+            addTaskBtn.style.cursor = "not-allowed";
+        }
 
         var userId;
 
@@ -1204,6 +1229,239 @@
         //ADD TASk
         //call api/tasks/save when click add button and send data as JSON.stringify to api
         //use jquery ajax
+
+        let validatedForm = false;
+
+        function validateTitle() {
+            const title = $('#title').val();
+            const errorContainer = $('#title').siblings('.error-container');
+            if (title.length < 1) {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Title is required"
+                        )
+                        .css("margin", "0");
+                    $('#title').after('<div class="error-container"></div>');
+                    $('#title').siblings('.error-container').append(p);
+                }
+
+                $('#title').addClass('is-invalid');
+                $('#title').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#title').addClass('is-valid');
+                $('#title').removeClass('is-invalid');
+            }
+        }
+
+        function validateDescription() {
+            const description = $('#description').val();
+            const errorContainer = $('#description').siblings('.error-container');
+            if (description.length < 1) {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Description is required"
+                        )
+                        .css("margin", "0");
+                    $('#description').after('<div class="error-container"></div>');
+                    $('#description').siblings('.error-container').append(p);
+                }
+
+                $('#description').addClass('is-invalid');
+                $('#description').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#description').addClass('is-valid');
+                $('#description').removeClass('is-invalid');
+            }
+        }
+
+        function validatePlanStartTime() {
+            const start_date = $('#start_date').val();
+            const errorContainer = $('#start_date').siblings('.error-container');
+            if (start_date === "") {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Start Date is required"
+                        )
+                        .css("margin", "0");
+                    $('#start_date').after('<div class="error-container"></div>');
+                    $('#start_date').siblings('.error-container').append(p);
+                }
+
+                $('#start_date').addClass('is-invalid');
+                $('#start_date').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#start_date').addClass('is-valid');
+                $('#start_date').removeClass('is-invalid');
+            }
+        }
+
+
+
+        function validatePlanEndTime() {
+            const end_date = $('#end_date').val();
+            const errorContainer = $('#end_date').siblings('.error-container');
+            if (end_date === "") {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "End Date is required"
+                        )
+                        .css("margin", "0");
+                    $('#end_date').after('<div class="error-container"></div>');
+                    $('#end_date').siblings('.error-container').append(p);
+                }
+
+                $('#end_date').addClass('is-invalid');
+                $('#end_date').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#end_date').addClass('is-valid');
+                $('#end_date').removeClass('is-invalid');
+            }
+        }
+
+        function validatePlanHour() {
+            const plan_hours = $('#plan_hours').val();
+            const errorContainer = $('#plan_hours').siblings('.error-container');
+            if (plan_hours === "" || plan_hours < 1) {
+
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Plan Hour is required"
+                        )
+                        .css("margin", "0");
+                    $('#plan_hours').after('<div class="error-container"></div>');
+                    $('#plan_hours').siblings('.error-container').append(p);
+                }
+
+                $('#plan_hours').addClass('is-invalid');
+                $('#plan_hours').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#plan_hours').addClass('is-valid');
+                $('#plan_hours').removeClass('is-invalid');
+            }
+        }
+
+
+
+        function validateMember() {
+            const member = $('#select-member').val();
+            const errorContainer = $('#select-member').siblings('.error-container');
+            if (!member || member.length < 1 || member === "") {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Member is required"
+                        )
+                        .css("margin", "0");
+                    $('#select-member').after('<div class="error-container"></div>');
+                    $('#select-member').siblings('.error-container').append(p);
+                }
+
+                $('#select-member').addClass('is-invalid');
+                $('#select-member').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#select-member').addClass('is-valid');
+                $('#select-member').removeClass('is-invalid');
+            }
+        }
+
+        function validateTakGroup() {
+            const group = $('#group').val();
+            const errorContainer = $('#group').siblings('.error-container');
+            if (!group ||group.length < 1 || group === "") {
+                validatedForm = false;
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text(
+                            "Group is required"
+                        )
+                        .css("margin", "0");
+                    $('#group').after('<div class="error-container"></div>');
+                    $('#group').siblings('.error-container').append(p);
+                }
+
+                $('#group').addClass('is-invalid');
+                $('#group').removeClass('is-valid');
+            } else {
+                validatedForm = true;
+                errorContainer.remove();
+                $('#group').addClass('is-valid');
+                $('#group').removeClass('is-invalid');
+            }
+        }
+
+        function validateAddTask() {
+            validateTitle();
+            validateDescription();
+            validatePlanStartTime();
+            validatePlanEndTime();
+            validatePlanHour();
+            validateTakGroup();
+            validateMember();
+            return validatedForm;
+        }
+
+        $('#title').on('input', function () {
+            validateTitle();
+        });
+
+        $('#description').on('input',function() {
+            validateDescription();
+        });
+
+
+        $('#start_date').on('input',function() {
+            validatePlanStartTime();
+        });
+
+        $('#end_date').on('change',function () {
+            validatePlanEndTime();
+        });
+
+        $('#plan_hours').on('input',function () {
+            validatePlanHour();
+        });
+
+        $('#select-member').on('input',function() {
+            validateMember();
+        });
+
+
+        $('#group').on('change',function() {
+            validateTakGroup();
+        });
+
+
+
         $("#task-add-btn").on("click", function () {
             // Get the member id for the added tag , don't return array , only id please
             const tagData = originalTagify.value.map((tag) => {
@@ -1212,6 +1470,12 @@
                 });
                 return member.id;
             });
+
+            if(!validateAddTask()) {
+                return;
+            }
+
+
             const data = {
                 title: $("#title").val(),
                 description: $("#description").val(),

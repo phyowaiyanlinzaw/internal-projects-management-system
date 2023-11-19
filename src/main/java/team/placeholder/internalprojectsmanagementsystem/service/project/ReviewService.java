@@ -9,9 +9,6 @@ public interface ReviewService {
 
     Review save(ReviewDto reviewDto);
 
-    ReviewDto update(ReviewDto reviewDto);
-
-    void deleteReview(ReviewDto reviewDto);
 
     List<ReviewDto> getAllReviews();
 

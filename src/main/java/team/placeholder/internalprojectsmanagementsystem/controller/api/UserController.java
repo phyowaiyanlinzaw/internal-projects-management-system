@@ -2,30 +2,22 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
-import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
-import team.placeholder.internalprojectsmanagementsystem.security.CustomerUserDetails;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
-import team.placeholder.internalprojectsmanagementsystem.service.department.DepartmentService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
-
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user/")
 public class UserController {
-
     private final UserServiceImpl userService;
     private final FakerService fakerService;
     private final DepartmentServiceImpl departmentService;
@@ -53,22 +45,31 @@ public class UserController {
         }
     }
 
-    @GetMapping("reset-password/{email}")
+    @GetMapping("send-otp/{email}")
     public ResponseEntity<String> sendEmail(@PathVariable String email) {
-        userService.resetPassword(email);
+        UserDto user = userService.sendOtp(email);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
         return ResponseEntity.ok("Email sent successfully");
+    }
+
+    @PostMapping("confirm-otp/{email}/{otp}")
+    public ResponseEntity<String> confirmOtp(@PathVariable String email,@PathVariable String otp){
+        boolean isConfirmed = userService.confirmOtp(email,otp);
+        if (!isConfirmed) {
+            return ResponseEntity.badRequest().body("OTP is not confirmed");
+        }
+        return ResponseEntity.ok("OTP has been confirmed.");
     }
 
     @PostMapping("reset-password/{email}/{newPassword}")
     public ResponseEntity<String> resetPassword(@PathVariable String email, @PathVariable String newPassword) {
 
-        UserDto user = userService.getUserByEmail(email);
-
+        UserDto user = userService.resetPassword(email, newPassword);
         if (user == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
-        user.setPassword(newPassword);
-        userService.save(user);
         return ResponseEntity.ok("Password reset successfully");
     }
 
@@ -115,10 +116,37 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update/employee/{id}/status/{status}")
+    public ResponseEntity<String> updateEmployeeStatus(@PathVariable Long id, @PathVariable boolean status) {
+        UserDto user = userService.changeStatus(id, status);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        return ResponseEntity.ok("Employee status updated successfully");
+    }
+
+    @GetMapping("/get/id/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        UserDto user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/get/email/{email}")
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
+        UserDto user = userService.getUserByEmail(email);
+        if (user == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("list")
     public ResponseEntity<List<UserDto>> getAllUsers() {
-
-        return ResponseEntity.ok(userService.getAllUsers());
+        List<UserDto> userDto = userService.getAllUsers();
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @GetMapping("employee/list")
@@ -130,12 +158,6 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getAllUsersByRole(@PathVariable Role role) {
         return ResponseEntity.ok(userService.getAllByRole(role));
     }
-
-    @GetMapping("list/departmentId/{departmentId}")
-    public ResponseEntity<List<UserDto>> getAllUsersByDepartmentId(@PathVariable Long departmentId) {
-        return null;
-    }
-
     @GetMapping("list/projectManagerId/{projectManagerId}")
     public ResponseEntity<List<UserDto>> getAllUsersByProjectManagerId(@PathVariable Long projectManagerId) {
         return ResponseEntity.ok(userService.getAllUsersByPMId(projectManagerId));
@@ -172,5 +194,42 @@ public class UserController {
         return ResponseEntity.ok("Username changed successfully");
     }
 
+
+    @GetMapping("list/byId/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
+        UserDto user = userService.getUserById(id);
+        if(user != null) {
+            return ResponseEntity.ok(user);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<UserDto> updateProject(@PathVariable long id, @RequestBody UserDto userDto) {
+//
+//        userDto.setId(id);
+//        UserDto user = userService.updateUser(userDto);
+//        if(user != null) {
+//            System.out.println("User Update Successfully");
+//            return ResponseEntity.ok(user);
+//        }else{
+//            System.out.println("Failed to update user");
+//            return ResponseEntity.badRequest().body(null);
+//        }
+//    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable long id, @RequestBody UseruiDto userDto) {
+        userDto.setId(id);
+        UserDto user = userService.updateUser(userDto);
+        if(user != null) {
+            System.out.println("User Update Successfully");
+            return ResponseEntity.ok(user);
+        }else{
+            System.out.println("Failed to update user");
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
 }

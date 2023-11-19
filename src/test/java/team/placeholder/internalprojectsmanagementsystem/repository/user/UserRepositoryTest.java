@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,30 +34,24 @@ public class UserRepositoryTest {
         User user = new User();
         user.setEmail(email);
 
-        // Mock the behavior of userRepository.findByEmail
         when(userRepository.findByEmail(email)).thenReturn(user);
 
-        // Act
         User result = userRepository.findByEmail(email);
 
-        // Assert
         assertEquals(email, result.getEmail());
     }
 
     @Test
     public void testFindByName() {
-        // Arrange
+
         String name = "TestUser";
         User user = new User();
         user.setName(name);
 
-        // Mock the behavior of userRepository.findByName
         when(userRepository.findByName(name)).thenReturn(user);
 
-        // Act
         User result = userRepository.findByName(name);
 
-        // Assert
         assertEquals(name, result.getName());
     }
 
@@ -64,20 +59,44 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindById() {
-        // Arrange
+
         long id = 1L;
         User user = new User();
         user.setId(id);
 
-        // Mock the behavior of userRepository.findById
         when(userRepository.findById(id)).thenReturn(user);
 
-        // Act
         User result = userRepository.findById(id);
 
-        // Assert
         assertEquals(id, result.getId());
     }
+
+    @Test
+    public void testFindAllByRole(){
+
+    }
+
+    @Test
+    public void testFindAllByProjectManagerId(){
+
+    }
+
+    @Test
+    public void testFindUserByDepartmentIdAndRole(){
+
+    }
+
+    @Test
+    public void testFindCountAllByDepartmentId(){
+
+    }
+
+    @Test
+    public void testFindAllByProjectId(){
+
+    }
+
+
 
 
 

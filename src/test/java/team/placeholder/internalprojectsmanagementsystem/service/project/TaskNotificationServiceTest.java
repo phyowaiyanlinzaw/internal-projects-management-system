@@ -1,53 +1,39 @@
-//package team.placeholder.internalprojectsmanagementsystem.service.project;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.Mock;
-//import org.mockito.Mockito;
-//import org.mockito.MockitoAnnotations;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.ArgumentMatchers.any;
-//
-//public class TaskNotificationServiceTest {
-//
-//    @Mock
-//    private NotificationService notificationService;
-//
-//    @BeforeEach
-//    public void setUp() {
-//        MockitoAnnotations.initMocks(this);
-//    }
-//
-//
-//    @Test
-//    public void testSaveNotification() {
-//         NotificationDto notificationDto = new NotificationDto();
-//         Mockito.when(notificationService.save(notificationDto)).thenReturn(notificationDto);
-//         NotificationDto savedNotification = notificationService.save(notificationDto);
-//         assertEquals(notificationDto, savedNotification);
-//    }
-//
-//    @Test
-//    public void testGetNotificationById() {
-//        long id = 1;
-//        NotificationDto notificationDto = new NotificationDto();
-//        Mockito.when(notificationService.getNotificationById(id)).thenReturn(notificationDto);
-//        NotificationDto notificationById = notificationService.getNotificationById(1L);
-//        assertEquals(notificationDto, notificationById);
-//    }
-//
-//    @Test
-//    public void testGetAllNotifications() {
-//        List<NotificationDto> notificationDto = new ArrayList<>();
-//
-//        Mockito.when(notificationService.getAllNotifications()).thenReturn(notificationDto);
-//
-//        List<NotificationDto> allNotifications = notificationService.getAllNotifications();
-//        assertEquals(notificationDto, allNotifications);
-//    }
-//
-//
-//}
+package team.placeholder.internalprojectsmanagementsystem.service.project;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TaskNotificationDto;
+import team.placeholder.internalprojectsmanagementsystem.service.noti.NotificationService;
+
+import java.util.ArrayList;
+
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
+public class TaskNotificationServiceTest {
+
+    @Mock
+    private TaskNotificationService taskNotificationService;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+
+    @Test
+    public void testSaveNotification() {
+       TaskNotificationDto tasksNotificationDto = new TaskNotificationDto();
+        Mockito.when(taskNotificationService.save(tasksNotificationDto)).thenReturn(tasksNotificationDto);
+        TaskNotificationDto savedNotification = taskNotificationService.save(tasksNotificationDto);
+        assertEquals(tasksNotificationDto, savedNotification);
+    }
+
+
+
+
+
+}

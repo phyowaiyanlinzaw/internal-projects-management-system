@@ -8,6 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
@@ -89,7 +94,6 @@ public class ProjectController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
 
     @PutMapping(value = "/update", consumes ="application/Json")
@@ -273,7 +277,7 @@ public class ProjectController {
         return new ResponseEntity<>(departmentProejctMap, HttpStatus.OK);
     }
 
-    private ResponseEntity<List<ProjectDto>> getListResponseEntity(List<ProjectDto> projects) {
+    ResponseEntity<List<ProjectDto>> getListResponseEntity(List<ProjectDto> projects) {
         for(ProjectDto projectDto : projects){
             if(projectDto.getProjectManagerUserDto() != null) {
 //                if(projectDto.getUserDto().getProjectList() != null) {

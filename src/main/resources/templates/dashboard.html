@@ -1,10 +1,4 @@
-<!--
 
-    TODO :: PUT CHART
-
-    TODO :: SHOW THE NUMBER OF DEPARTMENT, EMPLOYEE, CLIENT, PROJECT
-
- -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
       lang="en">
@@ -44,7 +38,6 @@
                         <i class="bi bi-collection-fill fa-2x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Today Project</p>
-                            <!-- TODO :: SHOW THE NUMBER OF PROJECTS -->
                             <h6 class="mb-0" id="projectCount"></h6>
                         </div>
                     </div>
@@ -54,17 +47,15 @@
                         <i class="fa-solid fa-people-group fa-3x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Total Employee</p>
-                            <!-- TODO :: SHOW THE NUMBER OF EMPLOYEE -->
                             <h6 class="mb-0" id="employeeCount"></h6>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa-solid fa-dog fa-3x text-primary"></i>
+                        <i class="fa-solid fa-user-tie fa-3x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Today Client</p>
-                            <!-- TODO :: SHOW THE NUMBER OF CLIENT -->
                             <h6 class="mb-0" id="clientCount"></h6>
                         </div>
                     </div>
@@ -74,7 +65,6 @@
                         <i class="bi bi-buildings-fill fa-2x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Total Department</p>
-                            <!-- TODO :: SHOW THE NUMBER OF DEPARTMENT -->
                             <h6 class="mb-0" id="departmentCount"></h6>
                         </div>
                     </div>
@@ -138,27 +128,6 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <p class="lead">KPI</p>
-
-                                <div class="dropdown">
-                                    <a class="dropdown-toggle text-decoration-none" type="button"
-                                       id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Month
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
-                                        <li><a class="dropdown-item" href="#">January</a></li>
-                                        <li><a class="dropdown-item" href="#">February</a></li>
-                                        <li><a class="dropdown-item" href="#">March</a></li>
-                                        <li><a class="dropdown-item" href="#">April</a></li>
-                                        <li><a class="dropdown-item" href="#">May</a></li>
-                                        <li><a class="dropdown-item" href="#">June</a></li>
-                                        <li><a class="dropdown-item" href="#">July</a></li>
-                                        <li><a class="dropdown-item" href="#">August</a></li>
-                                        <li><a class="dropdown-item" href="#">September</a></li>
-                                        <li><a class="dropdown-item" href="#">October</a></li>
-                                        <li><a class="dropdown-item" href="#">November</a></li>
-                                        <li><a class="dropdown-item" href="#">December</a></li>
-                                    </ul>
-                                </div>
                             </div>
 
                             <div class="bar-chart-con">
@@ -201,7 +170,7 @@
 <script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
 <script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="/lib/quill/quill.min.js"></script>
-     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
@@ -222,11 +191,8 @@
         // Get the mm chart canvas
         const mmctx = document.getElementById("man-month-chart").getContext('2d');
 
-        // Dummy data
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
         const initialManMonthData = {
-            label: months,
+            labels: ['yyyy-mm'],
             datasets: [{
                 label: 'Actual',
                 data: [], // actual manhours from api
@@ -264,7 +230,6 @@
         const p1ctx = document.getElementById("productivity-1-chart").getContext('2d');
 
         const initialProductivityData = {
-            label: months,
             datasets: [{
                 label: 'Productivity Ratio',
                 data: [],
@@ -293,6 +258,75 @@
                    }
                }
            });
+
+        //Get KPI chart Canvas
+        const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
+
+        const initialKpiData = {
+            labels:["KPI"],
+            datasets: [{
+                label: 'Review KPI',
+                data: [],
+                backgroundColor: '#444cf7',
+                borderColor: '#444cf7',
+                borderWidth: 1,//border width
+                fill: false,
+            },
+                {
+                    label: 'Detail KPI',
+                    data: [],
+                    backgroundColor: '#d8077c',
+                    borderColor: '#e5e5f7',
+                    borderWidth: 1,//border width
+                    fill: false,
+                },
+                {
+                    label: 'Coding KPI',
+                    data: [],
+                    backgroundColor: '#288f0b',
+                    borderColor: '#e5e5f7',
+                    borderWidth: 1,//border width
+                    fill: false,
+                },
+                {
+                    label: 'UnitTest KPI',
+                    data: [],
+                    backgroundColor: '#b7620d',
+                    borderColor: '#e5e5f7',
+                    borderWidth: 1,//border width
+                    fill: false,
+                },
+                {
+                    label: 'IntegratedTest KPI',
+                    data: [],
+                    backgroundColor: '#14b9c5',
+                    borderColor: '#e5e5f7',
+                    borderWidth: 1,//border width
+                    fill: false,
+                }
+
+            ]
+        }
+
+        //Create bar chart for p2ctx with screenToReviewRatios
+        const barChart2 = new Chart(p2ctx, {
+            type: 'bar',
+            data: initialKpiData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 250,
+                        ticks: {
+                            stepSize: 5
+
+                        }
+                    }
+                }
+            }
+        });
 
         // Make an AJAX request to fetch the department list
         $.ajax({
@@ -353,7 +387,10 @@
                         const selectedValue = $(this).data('value');
                         //change the text of project name to the dropdown button
                         projectDropdown.text($(this).text());
+                        console.log(selectedValue)
                         updateManMonthChart(selectedValue)
+                        updateProductivityChart(selectedValue)
+                        updateKpiChart(selectedValue)
                     });
 
 
@@ -368,54 +405,77 @@
         function updateManMonthChart(selectedValue) {
             // Make a jQuery AJAX call for Dataset 1
             $.ajax({
-                url: `api/dashboard/actual-man-month/project/${selectedValue}`,
+                url: `api/dashboard/man-month/project/${selectedValue}`,
                 method: 'GET',
                 dataType: 'json',
-                success: function (data1) {
+                success: function (data) {
 
                     // Update chart data for Dataset 1
-                    lineChart.data.datasets[0].data = data1.map((data) => data.actualManMonthHours);
+                    lineChart.data.datasets[0].data = data.map((data) => data.actualManMonthHours);
+                    lineChart.data.datasets[1].data = data.map((data) => data.planManMonthHours);
                     // lineChart.data.datasets[0].data = [20]
-                    lineChart.data.labels = data1.map((data) => data.monthName);
+                    lineChart.data.labels = data.map((data) => data.monthName);
 
                     lineChart.options.scales.y.min = 0;
-                    lineChart.options.scales.y.max = Math.max(...data1.map((data) => data.actualManMonthHours)) + 100;
+                    lineChart.options.scales.y.max = Math.max(...data.map((data) => data.planManMonthHours)) + 100;
 
 
                     // Update the chart
                     lineChart.update();
                 },
-                error: function (error1) {
-                    console.error('Error fetching data for Dataset 1:', error1);
-                }
-            });
-
-            // Make a jQuery AJAX call for Dataset 2
-            $.ajax({
-                url: "api/dashboard/plan-man-month/project/" + selectedValue, // Replace with your API endpoint
-                method: 'GET',
-                dataType: 'json',
-                success: function (data2) {
-                    // Update chart data for Dataset 2
-                    lineChart.data.datasets[1].data = data2.map((data) => data.planManMonthHours);
-
-                    lineChart.data.labels = data2.map((data) => data.monthName);
-
-                    lineChart.options.scales.y.min = 0;
-                    lineChart.options.scales.y.max = Math.max(...data2.map((data) => data.planManMonthHours)) + 100;
-
-                    // Update the chart
-                    lineChart.update();
-                },
-                error: function (error2) {
-                    console.error('Error fetching data for Dataset 2:', error2);
+                error: function (error) {
+                    console.error('Error fetching data :', error);
                 }
             });
         }
 
         function updateProductivityChart(selectedValue) {
-            //divide actual man month from
+            $.ajax({
+                url: `api/dashboard/productivity/project/${selectedValue}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Update chart data for Dataset 1
+                    barChart.data.datasets[0].data = data.map((data) => data.productivityRatio);
+                    barChart.data.labels = data.map((data) => data.monthName);
+
+                    barChart.options.scales.y.min = 0;
+                    barChart.options.scales.y.max = 10
+
+                    // Update the chart
+                    barChart.update();
+                },
+                error: function (error) {
+                    console.error('Error fetching data :', error);
+                }
+            });
         }
+
+        function updateKpiChart(selectedValue) {
+            $.ajax({
+                url: `api/dashboard/kpi/project/${selectedValue}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+
+                    barChart2.data.datasets.forEach((dataset, index) => {
+                        const label = dataset.label.toLowerCase().replace(" ", "_");
+                        dataset.data.push(data[label]);
+                    });
+
+                    // Update the chart options
+                    barChart2.options.scales.y.min = 0;
+                    barChart2.options.scales.y.max = 250;
+
+                    // Update the chart
+                    barChart2.update();
+                },
+                error: function (error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
+
 
         $('.chart-filter-reset-btn').on('click', function () {
             $('#departmentDropDown').text('Select Department');
@@ -427,67 +487,26 @@
             lineChart.data.datasets[0].data = [];
             lineChart.data.datasets[1].data = [];
 
+            barChart.data.datasets[0].data = [];
+            barChart.data.labels = [];
+
+            barChart2.data.datasets.forEach((dataset, index) => {
+                dataset.data = [];
+            });
+
+
+
             //clear x axis labels
             lineChart.data.labels = [];
+            barChart.data.labels = [];
+            barChart2.data.labels = [];
             lineChart.update();
+            barChart.update();
+            barChart2.update();
         });
 
 
-        //Dummy data for kpi chart
-        const screenCountsData = [90, 130, 140, 135, 150, 155, 160, 165, 170, 175, 180, 185];
-        const testCasesData = [100, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160];
-        const kStepData = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105];
-        const reviewCountsData = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]; // Assuming review counts
 
-        // Calculate the ratios
-        const screenToReviewRatios = screenCountsData.map((screenCount, index) => (screenCount / reviewCountsData[index]).toFixed(2));
-        const testToReviewRatios = testCasesData.map((testCaseCount, index) => (testCaseCount / reviewCountsData[index]).toFixed(2));
-        const kStepToReviewRatios = kStepData.map((kStepCount, index) => (kStepCount / reviewCountsData[index]).toFixed(2));
-
-
-        //Get KPI chart Canvas
-        const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
-
-        //Create bar chart for p2ctx with screenToReviewRatios
-        const barChart2 = new Chart(p2ctx, {
-            type: 'line',
-            data: {
-                labels: months,
-                datasets: [
-                    {
-                        label: "Screen Counts",
-                        data: screenCountsData,
-                        backgroundColor: "rgba(75, 192, 192, 0.2)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1,
-                    },
-                    {
-                        label: "Test Cases",
-                        data: testCasesData,
-                        backgroundColor: "rgba(192, 75, 75, 0.2)",
-                        borderColor: "rgba(192, 75, 75, 1)",
-                        borderWidth: 1,
-                    },
-                    {
-                        label: "KSTEP",
-                        data: kStepData,
-                        backgroundColor: "rgba(75, 75, 192, 0.2)",
-                        borderColor: "rgba(75, 75, 192, 1)",
-                        borderWidth: 1,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                    }
-                }
-            }
-        });
 
 
         //get user counts by api/user/count/all
