@@ -1,16 +1,19 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user/")
@@ -142,8 +145,8 @@ public class UserController {
 
     @GetMapping("list")
     public ResponseEntity<List<UserDto>> getAllUsers() {
-
-        return ResponseEntity.ok(userService.getAllUsers());
+        List<UserDto> userDto = userService.getAllUsers();
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @GetMapping("employee/list")
@@ -155,8 +158,6 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getAllUsersByRole(@PathVariable Role role) {
         return ResponseEntity.ok(userService.getAllByRole(role));
     }
-
-
     @GetMapping("list/projectManagerId/{projectManagerId}")
     public ResponseEntity<List<UserDto>> getAllUsersByProjectManagerId(@PathVariable Long projectManagerId) {
         return ResponseEntity.ok(userService.getAllUsersByPMId(projectManagerId));
@@ -193,5 +194,42 @@ public class UserController {
         return ResponseEntity.ok("Username changed successfully");
     }
 
+
+    @GetMapping("list/byId/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
+        UserDto user = userService.getUserById(id);
+        if(user != null) {
+            return ResponseEntity.ok(user);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<UserDto> updateProject(@PathVariable long id, @RequestBody UserDto userDto) {
+//
+//        userDto.setId(id);
+//        UserDto user = userService.updateUser(userDto);
+//        if(user != null) {
+//            System.out.println("User Update Successfully");
+//            return ResponseEntity.ok(user);
+//        }else{
+//            System.out.println("Failed to update user");
+//            return ResponseEntity.badRequest().body(null);
+//        }
+//    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable long id, @RequestBody UseruiDto userDto) {
+        userDto.setId(id);
+        UserDto user = userService.updateUser(userDto);
+        if(user != null) {
+            System.out.println("User Update Successfully");
+            return ResponseEntity.ok(user);
+        }else{
+            System.out.println("Failed to update user");
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
 }

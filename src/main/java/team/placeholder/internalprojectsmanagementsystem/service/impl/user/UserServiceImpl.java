@@ -11,10 +11,16 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.AvailableUser;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -137,21 +143,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+
     @Override
     public UserDto getUserById(long id) {
         User user = userRepository.findById(id);
-        if (user != null) {
-            Department department = user.getDepartment();
-            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
-            UserDto userDto = modelmapper.map(user, UserDto.class);
-            if(user.getProjectManager() != null) {
-                userDto.setProjectManager(modelmapper.map(user.getProjectManager(), UserDto.class));
+        UserDto userDto = modelmapper.map(user, UserDto.class);
+
+          userDto.setName(user.getName());
+          userDto.setEmail(user.getEmail());
+
+            if (user.getDepartment() != null) {
+               DepartmentDto department = modelmapper.map(user.getDepartment(), DepartmentDto.class);
+                userDto.setDepartmentdto(department);
             }
-            userDto.setDepartmentdto(departmentDto);
+
             return userDto;
-        } else {
-            return null;
-        }
 
     }
 
@@ -302,34 +309,11 @@ public class UserServiceImpl implements UserService {
         return userDtos;
     }
 
-//    @Override
-//    public List<UserDto> getProjectManagersByProjectId(Long projectId) {
-//        List<User> users = userRepository.findAllByProjectId(projectId);
-//
-//        List<UserDto> userDtos = new ArrayList<>();
-//        for (User user : users) {
-//            //print out user project with lambda
-//            for (Project project : user.getProjects()) {
-//                log.info("USER PROJECT : {}",project.getName());
-//            }
-//            Department department = user.getDepartment();
-//            DepartmentDto departmentDto = (department != null) ? modelmapper.map(department, DepartmentDto.class) : null;
-//            Set<Project> projects = user.getProjects();
-//            Set<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).collect(Collectors.toSet());
-//            UserDto userDto = modelmapper.map(user, UserDto.class);
-//            userDto.setDepartmentdto(departmentDto);
-//            userDto.setProjectsByUsers(projectDtos);
-//            userDtos.add(userDto);
-//        }
-//        return userDtos;
-//    }
-
     @Override
     public List<UserDto> getEmployeeByProjectId(Long projectId) {
         List<User> users = userRepository.findAllByProjectsId(projectId);
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {
-            //print out user project with lambda
             for (Project project : user.getProjects()) {
                 log.info("USER PROJECT : {}",project.getName());
             }
@@ -359,6 +343,20 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id);
         if (user != null) {
             user.setEnabled(status);
+            userRepository.save(user);
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public UserDto updateUser(UseruiDto userDto) {
+        User user = userRepository.findById(userDto.getId());
+        if (user != null) {
+            user.setName(userDto.getName());
+            user.setEmail(userDto.getEmail());
+            user.setDepartment(userDto.getDepartmentId() != 0 ? departmentRepository.findById(userDto.getDepartmentId()) : null);
             userRepository.save(user);
             return modelmapper.map(user, UserDto.class);
         } else {

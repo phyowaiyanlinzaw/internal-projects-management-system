@@ -41,4 +41,13 @@ public class ProjectDto implements Serializable {
     private List<TasksDto> tasksDto;
     private List<IssueDto> issueDto;
 
+
+    public ProjectDto(Long id, DepartmentDto departmentDto, String name) {
+        this.id = id;
+        this.departmentDto = departmentDto;
+        this.name = name;
+    }
+
+
+
 }

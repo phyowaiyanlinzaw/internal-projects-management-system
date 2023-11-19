@@ -41,4 +41,25 @@ class ClientServiceTest {
         assertEquals(clientDto, allClient);
     }
 
+    @Test
+    public void testCountAll() {
+        long count = 1L;
+        Mockito.when(clientService.countAll()).thenReturn(count);
+        long countAll = clientService.countAll();
+        assertEquals(count, countAll);
+    }
+
+    @Test
+    public void testFindByProjectName() {
+        String name = "test";
+        ClientDto clientDto = new ClientDto();
+        Mockito.when(clientService.findByProjectName(name)).thenReturn(clientDto);
+        ClientDto clientByName = clientService.findByProjectName(name);
+        assertEquals(clientDto, clientByName);
+
+    }
+
+
+
+
 }

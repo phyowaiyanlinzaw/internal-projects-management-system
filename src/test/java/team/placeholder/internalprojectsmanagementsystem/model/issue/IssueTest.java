@@ -1,108 +1,179 @@
-//package team.placeholder.internalprojectsmanagementsystem.model.issue;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-//import team.placeholder.internalprojectsmanagementsystem.model.user.User;
-//
-//import java.util.Objects;
-//import java.sql.Date;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.mock;
-//
-//public class IssueTest {
-//    @MockBean
-//    private Issue issue;
-//    @MockBean
-//    private IssueCategory issueCategory;
-//    @MockBean
-//    private Project project;
-//    @MockBean
-//    private User userUploader;
-//    @MockBean
-//    private User userPic;
-//
-//    @BeforeEach
-//    public void setUp() {
-//        issue = new Issue();
-//        issue.setId(1L);
-//        issue.setTitle("Test Issue");
-//        issue.setDescription("This is a test issue.");
-//        issue.setPlace("Test place");
-//        issue.setImpact("Test impact");
-//        issue.setRoot_cause("Test root cause");
-//        issue.setDirect_cause("Test direct cause");
-//        issue.setCorrective_action("Test corrective action");
-//        issue.setPreventive_action("Test preventive action");
-//        issue.setClint_or_user(42);
-//        issue.setSolved(false);
-//        issue.setCreated_date(Date.valueOf("2023-01-01"));
-//        issue.setUpdated_date(Date.valueOf("2023-01-02"));
-//
-//        issueCategory = mock(IssueCategory.class);
-//        project = mock(Project.class);
-//        userUploader = mock(User.class);
-//        userPic = mock(User.class);
-//
-//        issue.setIssueCategory(issueCategory);
-//        issue.setProject(project);
-//        issue.setUser_uploader(userUploader);
-//        issue.setUser_pic(userPic);
-//    }
-//
-//    @Test
-//    public void testGetterAndSetterMethods() {
-//        // Test getter and setter methods
-//        assertEquals(1L, issue.getId());
-//        assertEquals("Test Issue", issue.getTitle());
-//        assertEquals("This is a test issue.", issue.getDescription());
-//        assertEquals("Test place", issue.getPlace());
-//        assertEquals("Test impact", issue.getImpact());
-//        assertEquals("Test root cause", issue.getRoot_cause());
-//        assertEquals("Test direct cause", issue.getDirect_cause());
-//        assertEquals("Test corrective action", issue.getCorrective_action());
-//        assertEquals("Test preventive action", issue.getPreventive_action());
-//        assertEquals(42, issue.getClint_or_user());
-//        assertFalse(issue.isSolved());
-//        assertEquals(Date.valueOf("2023-01-01"), issue.getCreated_date());
-//        assertEquals(Date.valueOf("2023-01-02"), issue.getUpdated_date());
-//    }
-//
-//    @Test
-//    public void testEqualsAndHashCode() {
-//        // Create two Issue objects with the same id
-//        Issue anotherIssue = new Issue();
-//        anotherIssue.setId(1L);
-//
-//        // Test equals method
-//        assertTrue(issue.equals(anotherIssue));
-//        assertTrue(anotherIssue.equals(issue));
-//
-//        // Test hashCode method
-//        assertEquals(issue.hashCode(), anotherIssue.hashCode());
-//    }
-//
-//    @Test
-//    public void testNotEquals() {
-//        // Create two Issue objects with different ids
-//        Issue anotherIssue = new Issue();
-//        anotherIssue.setId(2L);
-//
-//        // Test equals method
-//        assertFalse(issue.equals(anotherIssue));
-//        assertFalse(anotherIssue.equals(issue));
-//
-//        // As a rule, it's a good practice for different objects to have different hash codes.
-//        assertNotEquals(issue.hashCode(), anotherIssue.hashCode());
-//    }
-//
-//    @Test
-//    public void testRelationshipsWithEntities() {
-//        // Test relationships with related entities
-//        assertSame(issueCategory, issue.getIssueCategory());
-//        assertSame(project, issue.getProject());
-//        assertSame(userUploader, issue.getUser_uploader());
-//        assertSame(userPic, issue.getUser_pic());
-//    }
-//}
+package team.placeholder.internalprojectsmanagementsystem.model.issue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+public class IssueTest {
+    @Mock
+    Issue issue = mock(Issue.class);
+    @Mock
+    Project project = mock(Project.class);
+    @Mock
+    User user_uploader = mock(User.class);
+    @Mock
+    User pic = mock(User.class);
+    @BeforeEach
+    public void setUp() {
+        issue = new Issue();
+        project = mock(Project.class);
+        user_uploader = mock(User.class);
+        pic = mock(User.class);
+    }
+    @Test
+    public void testEquals() {
+        Issue other = new Issue();
+        other.setId(1L);
+
+        issue.setId(1L);
+
+        // Mocking relationships
+        issue.setProject(project);
+        other.setProject(project);
+
+        issue.setUser_uploader(user_uploader);
+        other.setUser_uploader(user_uploader);
+
+        issue.setPic(pic);
+        other.setPic(pic);
+
+        assertTrue(issue.equals(other));
+    }
+
+
+
+    @Test
+    public void testHashCode() {
+        int hashCode1 = issue.hashCode();
+        int hashCode2 = issue.hashCode();
+        assertEquals(hashCode1, hashCode2);
+
+        // Mocking relationships
+        Project mockedProject = mock(Project.class);
+        User mockedUploader = mock(User.class);
+        User mockedPic = mock(User.class);
+
+        issue.setProject(mockedProject);
+        issue.setUser_uploader(mockedUploader);
+        issue.setPic(mockedPic);
+
+        int hashCode3 = issue.hashCode();
+        assertNotEquals(hashCode1, hashCode3);
+    }
+
+@Test
+public void testGettersAndSetters() {
+    // Mocking behavior for getId() in Project, User, and Pic
+    when(project.getId()).thenReturn(1L);
+    when(user_uploader.getId()).thenReturn(1L);
+    when(pic.getId()).thenReturn(1L);
+
+    // Test getters and setters
+    issue.setId(1L);
+    issue.setTitle("Test Title");
+    issue.setDescription("Test Description");
+    issue.setPlace("Test Place");
+    issue.setImpact("Test Impact");
+    issue.setRoot_cause("Test Root_Cause");
+    issue.setDirect_cause("Test Direct_Cause");
+    issue.setCorrective_action("Test Corrective_Action");
+    issue.setPreventive_action("Test Preventive_Action");
+
+    issue.setResponsible_party(1L);
+    issue.setSolved(true);
+    issue.setCreated_date(0);
+    issue.setUpdated_date(0);
+    issue.setSolved_date(0);
+
+    issue.setIssueStatus(IssueStatus.PENDING);
+
+    issue.setIssueCategory(Category.BUG);
+
+    issue.setResponsible_type(ResponsibleType.CLIENT);
+
+    project.setId(1L);
+    issue.setProject(project);
+
+    user_uploader.setId(1L);
+    issue.setUser_uploader(user_uploader);
+
+    pic.setId(1L);
+    issue.setPic(pic);
+
+    // Assertions
+    assertEquals(1L, issue.getId());
+    assertEquals("Test Title", issue.getTitle());
+    assertEquals("Test Description", issue.getDescription());
+    assertEquals("Test Place", issue.getPlace());
+    assertEquals("Test Impact", issue.getImpact());
+    assertEquals("Test Root_Cause", issue.getRoot_cause());
+    assertEquals("Test Direct_Cause", issue.getDirect_cause());
+    assertEquals("Test Corrective_Action", issue.getCorrective_action());
+    assertEquals("Test Preventive_Action", issue.getPreventive_action());
+
+    assertEquals(1L, issue.getResponsible_party());
+    assertTrue(issue.isSolved());
+    assertEquals(0, issue.getCreated_date());
+    assertEquals(0, issue.getUpdated_date());
+    assertEquals(0, issue.getSolved_date());
+
+    assertEquals(IssueStatus.PENDING, issue.getIssueStatus());
+
+    assertEquals(Category.BUG, issue.getIssueCategory());
+
+    assertEquals(ResponsibleType.CLIENT, issue.getResponsible_type());
+
+    Project projectID = issue.getProject();
+    assertEquals(1L, projectID.getId());
+
+    User userID = issue.getUser_uploader();
+    assertEquals(1L, userID.getId());
+
+    User picID = issue.getPic();
+    assertEquals(1L, picID.getId());
+}
+
+    @Test
+    public void testAllArgsConstructor() {
+        // Create an instance of the Issue class using the generated constructor
+        Issue issue = new Issue(
+                1L,
+                "Test Title",
+                "Test Description",
+                "Test Place",
+                "Test Impact",
+                "Test Root Cause",
+                "Test Direct Cause",
+                "Test Corrective Action",
+                "Test Preventive Action",
+                1L,
+                true,
+                0L,
+                0L,
+                0L,
+                IssueStatus.PENDING,
+                Category.BUG,
+                ResponsibleType.CLIENT,
+                new Project(),
+                new User(),
+                new User()
+        );
+
+        // Verify that the fields are initialized correctly
+        assertEquals(1L, issue.getId());
+        assertEquals("Test Title", issue.getTitle());
+        assertEquals("Test Description", issue.getDescription());
+        assertEquals("Test Place", issue.getPlace());
+        // Add more assertions for other fields as needed
+    }
+
+
+}
