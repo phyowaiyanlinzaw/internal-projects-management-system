@@ -646,23 +646,23 @@
                     case "PROJECT_MANAGER":
                         console.log("project manager");
                         return await getData(
-                            `/api/project/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
+                            `/api/project/new/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
                         );
                     case "DEPARTMENT_HEAD":
                         console.log("department head");
                         return await getData(
-                            `/api/project/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
+                            `/api/project/new/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
                         );
                     case "EMPLOYEE":
                     case "CONTRACT":
                     case "FOC":
                         console.log("one of the memeber");
                         return await getData(
-                            `/api/project/list/role/MEMBER/id/${loginUser.currentUser.id}`
+                            `/api/project/new/list/role/MEMBER/id/${loginUser.currentUser.id}`
                         );
                     default:
                         console.log("pmo or sdqc");
-                        return await getData(`/api/project/list`);
+                        return await getData(`/api/project/new/list`);
                 }
             }
 
@@ -765,152 +765,108 @@
                 }
             }
 
+            function createProjectList(project) {
+
+                function formatDate(a) {
+                    const date = new Date(a)
+                    return `${date.getDate()} / ${date.getMonth() + 1} / ${date.getFullYear()}`
+                }
+
+                function getBadgeColor(status) {
+                    switch (status) {
+                        case 'TODO':
+                        return 'primary';
+                        case 'IN_PROGRESS':
+                        return 'info';
+                        case 'FINISHED':
+                        return 'success'; // default to secondary if status is not recognized
+                    }
+                }
+                const taskListHtml = project.tasks
+                    ? project.tasks.map(task => `
+                        <div class="d-flex ">
+                            <div class="col p-1 text-start ps-3">
+                                <span class="badge bg-${getBadgeColor(task.status)}">${task.status}</span>
+                            </div>
+                            <div class="col p-1 text-center">
+                                ${task.title}
+                            </div>
+                            <div class="col p-1 text-center">
+                                ${formatDate(task.plan_start_time)}
+                            </div>
+                            <div class="col p-1 text-center">
+                                ${formatDate(task.plan_end_time)}
+                            </div>
+                            <div class="col p-1 text-center">${task.userDto.name}</div>
+                            <div class="col p-1 text-center">
+                                ${task.userDto.role}
+                            </div>
+                        </div>
+                        `).join('')
+                        : '';
+
+                    const newProject = document.createElement("div") 
+                    newProject.classList.add("accordion", "container-fluid")
+                    newProject.id = `outer-project-${project.id}`
+
+                    newProject.innerHTML += `<div class="row d-flex align-items-center col-rols-5 border border-dark" id="project-${project.id}" data-bs-toggle="modal" data-bs-target="#project-details">
+                                <div class="col p-2">
+                                    <div class="progress bg-light border border-primary">
+                                        <div
+                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            style="width: ${project.percentage}%"
+                                            aria-label="Basic example"
+                                            aria-valuenow="${project.percentage}"
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                        >${project.percentage}%</div>
+                                    </div>
+                                </div>
+                                <div class="col p-0 text-center card-title">${project.projectName}</div>
+                                <div class="col p-0 text-center">
+                                    ${formatDate(project.startDate)}
+                                </div>
+                                <div class="col p-0 text-center">
+                                    ${formatDate(project.endDate)}
+                                </div>
+                                <div class="col p-0 text-center card-text">
+                                    ${project.user.name}
+                                </div>
+                                <div class="col p-0 text-center">
+                                    ${project.user.role}
+                                </div>
+                            </div>
+                            <div
+                                id="collapse-project-${project.id}"
+                                class="accordion-collapse collapse border border-top-0 border-dark pb-1"
+                                data-bs-parent="#project-${project.id}"
+                            >
+                                <div
+                                    class="text-center text-white fs-5 bg-primary"
+                                >
+                                    Task List
+                                </div>
+                                ${taskListHtml}
+                            </div>
+                            <div 
+                            class="d-flex justify-content-end rounded-1 text-white"
+                            >
+                                <i class="fa-solid fa-angle-down bg-primary p-1 rounded-bottom" data-bs-toggle="collapse"
+                            data-bs-target="#collapse-project-${project.id}"
+                            aria-expanded="true"
+                            aria-controls="collapse-project-${project.id}"
+                            style="cursor: pointer;"></i>
+                            </div>`
+
+                return newProject;
+
+            }
+
             for (let i = pList.length - 1; i >= 0; i--) {
                 let currentProject = pList[i];
 
-                console.log("current project : ", currentProject);
-                console.log(currentProject.totalTaskCount);
-                console.log(currentProject.completeTaskCount);
-
-                const div = document.createElement("div");
-                div.classList.add(
-                    "p-md-3",
-                    "p-sm-2",
-                    "active-card",
-                    "mt-3",
-                    "mt-md-0",
-                    "mt-lg-0",
-                    "mt-xl-0"
-                );
-                div.id = `project-${currentProject.id}`;
-
-                const card = document.createElement("div");
-                card.classList.add("card", "border-success");
-
-                const cardHeader = document.createElement("div");
-                cardHeader.classList.add("card-header");
-
-                const dFlexContainer = document.createElement("div");
-                dFlexContainer.classList.add("d-flex", "flex-column");
-
-                const h2 = document.createElement("h2");
-                h2.classList.add(
-                    "card-title",
-                    "text-center",
-                    "text-primary",
-                    "modal-detail-title"
-                );
-                h2.innerText = currentProject.name;
-
-                const pm_name_modal = document.getElementById("pm-name-modal");
-                pm_name_modal.innerText =
-                    currentProject.projectManagerUserDto.name;
-
-                const dFlexBetween = document.createElement("div");
-                dFlexBetween.classList.add("d-flex", "justify-content-between");
-
-                const dFlexInner = document.createElement("div");
-                dFlexInner.classList.add("d-flex");
-
-                const img = document.createElement("img");
-                img.src = `/images/avatars/pm_avatar.svg`;
-                img.classList.add(
-                    "img-fluid",
-                    "rounded-circle",
-                    "d-none",
-                    "d-md-block",
-                    "d-sm-block"
-                );
-                img.style.width = "40px";
-                img.alt = "Profile Image";
-                img.loading = "lazy";
-
-                const h5 = document.createElement("h5");
-                h5.classList.add(
-                    "card-text",
-                    "text-center",
-                    "text-align-center",
-                    "my-auto",
-                    "fst-italic",
-                    "fs-6",
-                    "ms-2"
-                );
-
-                h5.innerText = currentProject.projectManagerUserDto.name;
-
-                const a = document.createElement("a");
-                a.href = "#";
-                a.id = currentProject.id;
-                a.classList.add(
-                    "btn",
-                    "btn-white",
-                    "text-secondary",
-                    "link-shadow"
-                );
-                a.setAttribute("data-bs-toggle", "modal");
-                a.setAttribute("data-bs-target", "#project-details");
-                a.innerText = "See More";
-
-                // Create and append the progress-related elements
-                const cardBody = document.createElement("div");
-                cardBody.classList.add(
-                    "card-body",
-                    "position-relative",
-                    "mx-auto"
-                );
-
-                const progressTitle = document.createElement("p");
-                progressTitle.classList.add(
-                    "card-title",
-                    "text-center",
-                    "fs-6",
-                    "mb-1"
-                );
-                progressTitle.innerText = "progress";
-
-                const progressCircle = document.createElement("div");
-                progressCircle.id = `circle-progress-${currentProject.id}`;
-                progressCircle.classList.add(
-                    "circle-progress",
-                    "rounded-circle"
-                );
-                progressCircle.setAttribute("data-min-value", "0");
-                progressCircle.setAttribute("data-max-value", "100");
-
-                let percentage;
-                console.log(
-                    "taks ratio : ",
-                    currentProject.completeTaskCount,
-                    currentProject.totalTaskCount
-                );
-                if (currentProject.totalTaskCount !== 0) {
-                    percentage =
-                        (currentProject.completeTaskCount /
-                            currentProject.totalTaskCount) *
-                        100;
-                } else {
-                    percentage = 0;
-                }
-                console.log("percentage", percentage);
-
-                progressCircle.setAttribute("data-value", percentage);
-                progressCircle.setAttribute("data-type", "percent");
-
-                dFlexInner.appendChild(img);
-                dFlexInner.appendChild(h5);
-                dFlexBetween.appendChild(dFlexInner);
-                dFlexBetween.appendChild(a);
-                dFlexContainer.appendChild(h2);
-                dFlexContainer.appendChild(dFlexBetween);
-                cardHeader.appendChild(dFlexContainer);
-                card.appendChild(cardHeader);
-
-                cardBody.appendChild(progressTitle);
-                cardBody.appendChild(progressCircle);
-                card.appendChild(cardBody);
-
-                div.appendChild(card);
-                fragment.appendChild(div);
+                fragment.appendChild(createProjectList(currentProject));
             }
 
             motherContainer.appendChild(fragment);
@@ -934,9 +890,21 @@
             motherContainer.addEventListener("click", async function (e) {
                 let target = e.target;
 
-                if (target.hasAttribute("data-bs-target")) {
-                    let id = parseInt(target.getAttribute("id"));
+                console.log(target.getAttribute("data-bs-target"))
+
+                console.log(target)
+
+                const closestProjectDiv = target.closest('[data-bs-target="#project-details"]');
+
+                if (closestProjectDiv) {
+
+                    console.log(closestProjectDiv.getAttribute("data-bs-target"))
+
+
+                    let id = parseInt(closestProjectDiv.getAttribute("id").split("-").pop());
                     let targetData = pList.find((a) => a.id == id);
+
+                    console.log("target id", id)
 
                     const currentProejctDetail = await getData(
                         `/api/project/list/${id}`
@@ -998,7 +966,7 @@
                     document.querySelector("#deliverable-type").textContent =
                         "";
                     let deliverableId;
-                    targetData.deliverableDto.forEach((a) => {
+                    currentProejctDetail.deliverableDto.forEach((a) => {
                         const div = document.createElement("div");
                         div.classList.add(
                             "d-flex",
@@ -1289,7 +1257,7 @@
                             if (
                                 sortProjectByDepartment[
                                     selectedDepartmentId
-                                ].includes(parseInt(allDiv[i].id.split("-")[1]))
+                                ].includes(parseInt(allDiv[i].id.split("-").pop()))
                             ) {
                                 allDiv[i].style.display = "block";
                             } else {
@@ -1315,7 +1283,7 @@
                     const yearValue = parseInt(yearFilterSelect.value);
 
                     const matchingProjects = pList.filter((a) => {
-                        const projectDate = new Date(a.start_date);
+                        const projectDate = new Date(a.startDate);
                         const projectMonth = projectDate.getMonth();
                         const projectYear = projectDate.getFullYear();
                         return (
@@ -1325,8 +1293,9 @@
                     });
 
                     for (let i = 0; i < allData.length; i++) {
+                        console.log(allData[i])
                         const divId = parseInt(
-                            allData[i].getAttribute("id").split("-")[1]
+                            allData[i].getAttribute("id").split("-").pop()
                         );
 
                         if (
@@ -2045,241 +2014,7 @@
                                     alert("Project registered successfully");
                                     // Reset the form if needed
                                     $("#validation-form")[0].reset();
-                                    console.log(
-                                        "this projce has benn saved",
-                                        data
-                                    );
-                                    console.log(
-                                        "this projce has benn saved",
-                                        data
-                                    );
-                                    // event.currentTarget.submit();
-                                    console.log("current project : ", data);
-                                    console.log(data.totalTaskCount);
-                                    console.log(data.completeTaskCount);
-
-                                    const div = document.createElement("div");
-                                    div.classList.add(
-                                        "p-md-3",
-                                        "p-sm-2",
-                                        "active-card",
-                                        "mt-3",
-                                        "mt-md-0",
-                                        "mt-lg-0",
-                                        "mt-xl-0"
-                                    );
-
-                                    div.id = `project-${data.id}`;
-
-                                    const card = document.createElement("div");
-                                    card.classList.add(
-                                        "card",
-                                        "border-success"
-                                    );
-
-                                    const cardHeader =
-                                        document.createElement("div");
-                                    cardHeader.classList.add("card-header");
-
-                                    const dFlexContainer =
-                                        document.createElement("div");
-                                    dFlexContainer.classList.add(
-                                        "d-flex",
-                                        "flex-column"
-                                    );
-
-                                    const h2 = document.createElement("h2");
-                                    h2.classList.add(
-                                        "card-title",
-                                        "text-center",
-                                        "text-primary",
-                                        "modal-detail-title"
-                                    );
-                                    h2.innerText = data.name;
-
-                                    const pm_name_modal =
-                                        document.getElementById(
-                                            "pm-name-modal"
-                                        );
-                                    pm_name_modal.innerText =
-                                        data.projectManagerUserDto.name;
-
-                                    const dFlexBetween =
-                                        document.createElement("div");
-                                    dFlexBetween.classList.add(
-                                        "d-flex",
-                                        "justify-content-between"
-                                    );
-
-                                    const dFlexInner =
-                                        document.createElement("div");
-                                    dFlexInner.classList.add("d-flex");
-
-                                    const img = document.createElement("img");
-                                    img.src = `/images/avatars/pm_avatar.svg`;
-
-                                    img.classList.add(
-                                        "img-fluid",
-                                        "rounded-circle",
-                                        "d-none",
-                                        "d-md-block",
-                                        "d-sm-block"
-                                    );
-                                    img.style.width = "40px";
-                                    img.alt = "Profile Image";
-                                    img.loading = "lazy";
-
-                                    const h5 = document.createElement("h5");
-                                    h5.classList.add(
-                                        "card-text",
-                                        "text-center",
-                                        "text-align-center",
-                                        "my-auto",
-                                        "fst-italic",
-                                        "fs-6",
-                                        "ms-2"
-                                    );
-
-                                    h5.innerText =
-                                        data.projectManagerUserDto.name;
-
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.id = data.id;
-                                    a.classList.add(
-                                        "btn",
-                                        "btn-white",
-                                        "text-secondary",
-                                        "link-shadow"
-                                    );
-
-                                    a.setAttribute("data-bs-toggle", "modal");
-                                    a.setAttribute(
-                                        "data-bs-target",
-                                        "#project-details"
-                                    );
-                                    a.innerText = "See More";
-
-                                    // Create and append the progress-related elements
-                                    const cardBody =
-                                        document.createElement("div");
-                                    cardBody.classList.add(
-                                        "card-body",
-                                        "position-relative",
-                                        "mx-auto"
-                                    );
-
-                                    const progressTitle =
-                                        document.createElement("p");
-                                    progressTitle.classList.add(
-                                        "card-title",
-                                        "text-center",
-                                        "fs-6",
-                                        "mb-1"
-                                    );
-                                    progressTitle.innerText = "progress";
-
-                                    const progressCircle =
-                                        document.createElement("div");
-                                    progressCircle.id = `circle-progress-${data.id}`;
-                                    progressCircle.classList.add(
-                                        "circle-progress",
-                                        "rounded-circle"
-                                    );
-                                    progressCircle.setAttribute(
-                                        "data-min-value",
-                                        "0"
-                                    );
-                                    progressCircle.setAttribute(
-                                        "data-max-value",
-                                        "100"
-                                    );
-
-                                    let percentage;
-                                    console.log(
-                                        "taks ratio : ",
-                                        data.completeTaskCount,
-                                        data.totalTaskCount
-                                    );
-                                    if (data.totalTaskCount !== 0) {
-                                        percentage =
-                                            (data.completeTaskCount /
-                                                data.totalTaskCount) *
-                                            100;
-                                    } else {
-                                        percentage = 0;
-                                    }
-                                    console.log("percentage", percentage);
-
-                                    progressCircle.setAttribute(
-                                        "data-value",
-                                        percentage
-                                    );
-                                    progressCircle.setAttribute(
-                                        "data-type",
-                                        "percent"
-                                    );
-
-                                    dFlexInner.appendChild(img);
-                                    dFlexInner.appendChild(h5);
-                                    dFlexBetween.appendChild(dFlexInner);
-                                    dFlexBetween.appendChild(a);
-                                    dFlexContainer.appendChild(h2);
-                                    dFlexContainer.appendChild(dFlexBetween);
-                                    cardHeader.appendChild(dFlexContainer);
-                                    card.appendChild(cardHeader);
-
-                                    cardBody.appendChild(progressTitle);
-                                    cardBody.appendChild(progressCircle);
-                                    card.appendChild(cardBody);
-
-                                    div.appendChild(card);
-
-                                    motherContainer.insertBefore(
-                                        div,
-                                        motherContainer.childNodes[0]
-                                    );
-
-                                    $(".circle-progress").each(function () {
-                                        const minValue =
-                                            $(this).attr("data-min-value");
-                                        const maxValue =
-                                            $(this).attr("data-max-value");
-                                        const value =
-                                            $(this).attr("data-value");
-                                        const type = $(this).attr("data-type");
-
-                                        console.log("minValue : ", minValue);
-                                        console.log("maxValue : ", maxValue);
-                                        console.log("value : ", value);
-                                        console.log("type : ", type);
-
-                                        if (value < 40) {
-                                            this.classList.add(
-                                                "circle-progress-secondary"
-                                            );
-                                        } else if (value < 70) {
-                                            this.classList.add(
-                                                "circle-progress-primary"
-                                            );
-                                        } else if (value > 69) {
-                                            this.classList.add(
-                                                "circle-progress-success"
-                                            );
-                                        }
-
-                                        if (
-                                            this.id !== "" &&
-                                            this.id !== null
-                                        ) {
-                                            new CircleProgress("#" + this.id, {
-                                                min: minValue,
-                                                max: maxValue,
-                                                value: value,
-                                                textFormat: type,
-                                            });
-                                        }
-                                    });
+                                    createProjectList(data)
                                 },
                                 error: function (data) {
                                     alert("Error registering project");
@@ -2571,11 +2306,11 @@
                 <!-- project start -->
                 <div
                     id="grid"
-                    class="item-content animate__animated animate__fadeIn active"
+                    class="item-content animate__animated animate__fadeIn active mt-2 p-0"
                     data-toggle-extra="tab-content"
                 >
                     <div
-                        class=" container rounded-2"
+                        class=" rounded-2 px-4"
                     >
                         <div
                         class="row col-rols-6 border-bottom border border-dark fs-5 fw-bold bg-primary text-white"
@@ -2588,7 +2323,7 @@
                             <div class="col p-0 text-center">Role</div>
                         </div>
                         <div
-                            class="py-4 d-flex flex-column gap-2"
+                            class="p-3 d-flex flex-column gap-2"
                             style="background-color: #e5e5f7"
                             id='sort-container'
                         >
