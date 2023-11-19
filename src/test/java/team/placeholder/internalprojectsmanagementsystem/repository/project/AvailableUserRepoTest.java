@@ -27,16 +27,11 @@ class AvailableUserRepoTest {
     public void testFindAllByAvaliableIsTrue(){
     List<AvailableUser> expectedUsers = new ArrayList<>();
     expectedUsers.add(new AvailableUser());
-    expectedUsers.add(new AvailableUser());
-    expectedUsers.add(new AvailableUser());
 
-    // Mock the behavior of userRepository.findAllByAvailableIsTrue
     when(userRepository.findAllByAvaliableIsTrue()).thenReturn(expectedUsers);
 
-    // Act
     List<AvailableUser> result = userRepository.findAllByAvaliableIsTrue();
 
-    // Assert
     assertEquals(expectedUsers.size(), result.size());
     for (int i = 0; i < expectedUsers.size(); i++) {
         assertEquals(expectedUsers.get(i), result.get(i));
@@ -48,13 +43,11 @@ class AvailableUserRepoTest {
     long userId = 1L;
     AvailableUser expectedUser = new AvailableUser();
 
-    // Mock the behavior of userRepository.findByUserId
     when(userRepository.findByUserId(userId)).thenReturn(expectedUser);
 
-    // Act
+
     AvailableUser result = userRepository.findByUserId(userId);
 
-    // Assert
     assertEquals(expectedUser, result);
 }
 
@@ -63,8 +56,6 @@ class AvailableUserRepoTest {
 
     List<Long> userIds = Arrays.asList(1L, 2L, 3L);
     List<AvailableUser> expectedUsers = new ArrayList<>();
-    expectedUsers.add(new AvailableUser());
-    expectedUsers.add(new AvailableUser());
     expectedUsers.add(new AvailableUser());
 
     when(userRepository.findByUserIdIn(userIds)).thenReturn(expectedUsers);

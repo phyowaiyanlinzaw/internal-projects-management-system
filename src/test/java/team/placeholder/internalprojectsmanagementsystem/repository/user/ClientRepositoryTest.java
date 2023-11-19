@@ -22,18 +22,15 @@ public class ClientRepositoryTest {
 
     @Test
     public void testFindById() {
-        // Arrange
+
         long id = 1L;
         Client client = new Client();
         client.setId(id);
 
-        // Mock the behavior of clientRepository.findById
         when(clientRepository.findById(id)).thenReturn(client);
 
-        // Act
         Client result = clientRepository.findById(id);
 
-        // Assert
         assertEquals(id, result.getId());
     }
 

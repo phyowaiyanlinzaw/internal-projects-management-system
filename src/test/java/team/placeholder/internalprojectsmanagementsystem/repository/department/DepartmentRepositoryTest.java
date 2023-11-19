@@ -25,35 +25,30 @@ public class DepartmentRepositoryTest {
 
     @Test
     public void testFindById() {
-        // Arrange
+
         long id = 1L;
         Department department = new Department();
         department.setId(id);
 
-        // Mock the behavior of departmentRepository.findById
         when(departmentRepository.findById(id)).thenReturn(department);
 
-        // Act
         Department result = departmentRepository.findById(id);
 
-        // Assert
+
         assertEquals(id, result.getId());
     }
 
     @Test
     public void testFindByName() {
-        // Arrange
+
         String name = "TestDepartment";
         Department department = new Department();
         department.setName(name);
 
-        // Mock the behavior of departmentRepository.findByName
         when(departmentRepository.findByName(name)).thenReturn(department);
 
-        // Act
         Department result = departmentRepository.findByName(name);
 
-        // Assert
         assertEquals(name, result.getName());
     }
 
@@ -73,16 +68,11 @@ public class DepartmentRepositoryTest {
     public void testFindAll(){
         List<Department> expectedDepartments = new ArrayList<>();
         expectedDepartments.add(new Department());
-        expectedDepartments.add(new Department());
-        expectedDepartments.add(new Department());
 
-        // Mock the behavior of departmentRepository.findAll
         when(departmentRepository.findAll()).thenReturn(expectedDepartments);
 
-        // Act
         List<Department> result = departmentRepository.findAll();
 
-        // Assert
         assertEquals(expectedDepartments.size(), result.size());
         for (int i = 0; i < expectedDepartments.size(); i++) {
             assertEquals(expectedDepartments.get(i), result.get(i));

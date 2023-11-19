@@ -27,8 +27,7 @@ class NotificationRepositoryTest {
 
         List<Notification> expectedNotifications = new ArrayList<>();
         expectedNotifications.add(new Notification());
-        expectedNotifications.add(new Notification());
-        expectedNotifications.add(new Notification());
+
 
         when(notificationRepository.findAllByUserId(userId)).thenReturn(expectedNotifications);
 
