@@ -43,7 +43,7 @@ public class FakerService {
     public void generateAndSaveFakeClients(int numberOfClients) {
         for (int i = 0; i < numberOfClients; i++) {
             Client client = new Client();
-            client.setName(faker.name().fullName());
+            client.setName(faker.superhero().name());
             client.setEmail(faker.internet().emailAddress());
             client.setPhone(faker.phoneNumber().phoneNumber());
             clientRepository.save(client);
@@ -162,7 +162,8 @@ public class FakerService {
             //check for duplicate department name and generate new one
             String departmentName = faker.job().field();
             while (departmentRepository.findByName(departmentName) != null) {
-                departmentName = faker.job().field();
+                departmentName = faker.rickAndMorty().character();
+                //england football
             }
             department.setName(departmentName);
             departmentRepository.save(department);
@@ -172,7 +173,7 @@ public class FakerService {
     public void generateAndSaveFakeUsers(int numberOfUsers) {
         for (int i = 0; i < numberOfUsers; i++) {
             User user = new User();
-            user.setName(faker.name().fullName());
+            user.setName(faker.artist().name());
             user.setEmail(faker.internet().emailAddress());
             user.setPassword(new BCryptPasswordEncoder().encode("123123123"));
             user.setRole(Role.values()[faker.random().nextInt(Role.values().length)]);
