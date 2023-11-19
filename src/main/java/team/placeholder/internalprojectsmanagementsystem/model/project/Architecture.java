@@ -1,14 +1,11 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
-import groovy.util.logging.Slf4j;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name="architecture")
@@ -34,6 +31,12 @@ public class Architecture implements Serializable{
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+    public void setTech_name(String tech_name) {
+        if (tech_name == null) {
+            throw new NullPointerException("tech_name cannot be null");
+        }
+        this.tech_name = tech_name;
     }
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
@@ -56,4 +57,6 @@ public interface UserService {
     void changeUsername(UserDto userDto);
 
     UserDto changeStatus(long id, boolean status);
+
+    UserDto updateUser(UseruiDto userDto);
 }

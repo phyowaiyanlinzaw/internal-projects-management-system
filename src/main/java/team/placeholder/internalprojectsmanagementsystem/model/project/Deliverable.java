@@ -1,14 +1,13 @@
 package team.placeholder.internalprojectsmanagementsystem.model.project;
 
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name="deliverable")
@@ -33,7 +32,6 @@ public class Deliverable implements Serializable {
         Deliverable other = (Deliverable) o;
         return id == other.id;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(id);
