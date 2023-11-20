@@ -59,6 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectDto.getDeliverableDto().forEach(System.out::println);
         for(ArchitectureDto architectureDto : projectDto.getArchitectureDto()) {
             if(architectureDto.getId() == null) {
+                log.info("Architecture is null : {}", architectureDto.getTech_name());
                 architecture.add(architectureService.save(architectureDto));
             } else {
                 architecture.add(architectureRepository.getReferenceById(architectureDto.getId()));

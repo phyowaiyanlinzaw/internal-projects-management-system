@@ -199,149 +199,11 @@
                 if (addDepartmentButton) {
                     addDepartmentButton.classList.remove("d-none");
                 }
-                const updateButtonContainer = document.getElementById("updateButtonContainer");
+                const updateButtonContainer = document.getElementById("updateReview");
                     updateButtonContainer.innerHTML =
                         '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
-                document.querySelector("#updateButton").addEventListener("click", function () {
-                        var internalReviewCount =
-                            document.getElementById(
-                                "project-internal-review-count"
-                            ).value;
-                        var externalReviewCount =
-                            document.getElementById(
-                                "project-external-review-count"
-                            ).value;
-                        var data = {
-                            internal_review_count: internalReviewCount,
-                            external_review_count: externalReviewCount,
-                        };
-                        fetch(
-                            "/api/review/update-review/" +
-                                targetData.id,
-                            {
-                                method: "PUT",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(data),
-                            }
-                        )
-                        .then((response) => response.json())
-                        .then((data) => {
-                            console.log(
-                                "Review counts updated successfully:",
-                                data
-                            );
-                        })
-                        .catch((error) => {
-                            console.error(
-                                "Error updating review counts:",
-                                error
-                            );
-                        });
-                    });
-                
-                    const updateButtonCon = document.getElementById("updateButtonContainer");
-                    updateButtonCon.innerHTML =
-                        '<button type="submit" class="btn btn-primary">Update</button>';
-                    document
-                        .querySelector("#deliverable-type-form")
-                        .addEventListener("submit", function (event) {
-                            event.preventDefault();
-                            let deliverableList = [];
-                            targetData.deliverableDto.forEach((a) => {
-                                const checkbox = document.querySelector(
-                                    `#checkbox-${a.id}`
-                                );
-                                if (checkbox.checked) {
-                                    deliverableList.push({
-                                        id: a.id,
-                                        status: true,
-                                    });
-                                }
-                            });
-                            console.log("deliverable", deliverableList);
-                            if(deliverableList.length !== 0) {
-                                fetch(`/api/deliverable/update-status`, {
-                                    method: "PUT",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify(deliverableList),
-                                })
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    console.log(
-                                        "Status updated successfully:",
-                                        data
-                                    );
-                                })
-                                .catch((error) => {
-                                    console.error(
-                                        "Error updating status:",
-                                    error
-                                    );
-                                });
-                            }
-                        });
-                    const updateButtonC =
-                    document.getElementById("updateButtonContainer");
-                updateButtonC.innerHTML =
-                    '<button id="update" type="button" class="btn btn-primary">Update</button>';
 
-                document
-                    .querySelector("#update")
-                    .addEventListener("click", function (e) {
-                        const projectId = parseInt(
-                            document.querySelector(
-                                "#current-edditing-projetc-id"
-                            ).value
-                        );
 
-                        const amountDto = {
-                            basic_design: parseInt(
-                                document.querySelector(
-                                    "#edit-basic-design-count"
-                                ).value
-                            ),
-                            detail_design: parseInt(
-                                document.querySelector(
-                                    "#edit-detail-design-count"
-                                ).value
-                            ),
-                            coding: parseInt(
-                                document.querySelector("#edit-coding-count")
-                                    .value
-                            ),
-                            unit_testing: parseInt(
-                                document.querySelector(
-                                    "#edit-unit-testing-count"
-                                ).value
-                            ),
-                            integrated_testing: parseInt(
-                                document.querySelector(
-                                    "#edit-integrated-testing-count"
-                                ).value
-                            ),
-                        };
-
-                        $.ajax({
-                            url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
-                            type: "PUT",
-                            data: JSON.stringify(amountDto),
-                            dataType: "json",
-                            contentType: "application/json; charset=utf-8",
-                            success: async function (data) {
-                                // Reset the form if needed
-                                console.log("this projce has benn saved", data);
-                                // event.currentTarget.submit();
-                            },
-                            error: function (data) {
-                                alert("Error registering project");
-                                // event.currentTarget.submit();
-                            },
-                        });
-                    });
                     
             }
 
@@ -1198,6 +1060,75 @@
 
                     const currentProejctDetail = await getData(`/api/project/list/${id}`);
 
+                    document.querySelector("#updateButton").addEventListener("click", function () {
+                        const internalReviewCount =
+                            document.getElementById(
+                                "project-internal-review-count"
+                            ).value;
+                        const externalReviewCount =
+                            document.getElementById(
+                                "project-external-review-count"
+                            ).value;
+                        const data = {
+                            internal_review_count: internalReviewCount,
+                            external_review_count: externalReviewCount,
+                        };
+                        fetch(
+                            "/api/review/update-review/" +
+                            currentProejctDetail.id,
+                            {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(data),
+                            }
+                        )
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log(
+                                    "Review counts updated successfully:",
+                                    data
+                                );
+                            })
+                            .catch((error) => {
+                                console.error(
+                                    "Error updating review counts:",
+                                    error
+                                );
+                            });
+                    });
+
+                    document.querySelector("#updateButtonDeli").addEventListener("click", async function () {
+
+                        let deliverableList = [];
+
+                        currentProejctDetail.deliverableDto.forEach(a => {
+                            const checkbox = document.querySelector(`#checkbox-${a.id}`);
+
+                            if (checkbox.checked) {
+                                deliverableList.push({ id: a.id, status: true });
+                            }
+                        });
+
+                        console.log("deliverable", deliverableList);
+
+                        fetch(`/api/deliverable/update-status`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(deliverableList),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Status updated successfully:', data);
+                            })
+                            .catch(error => {
+                                console.error('Error updating status:', error);
+                            });
+                    });
+
                     console.log(currentProejctDetail)
 
                     document.querySelector(
@@ -1268,41 +1199,6 @@
 
 
                     //_______________________________________deliverable update alert box put
-                    if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-
-                        const updateButton1 = document.getElementById("updateButton1");
-                        updateButton1.innerHTML = '<button id="updateButtonDeli" type="button" class="btn btn-primary">Update</button>';
-
-                        document.querySelector("#updateButtonDeli").addEventListener("click", async function () {
-
-                            let deliverableList = [];
-
-                            targetData.deliverableDto.forEach(a => {
-                                const checkbox = document.querySelector(`#checkbox-${a.id}`);
-
-                                if (checkbox.checked) {
-                                    deliverableList.push({ id: a.id, status: true });
-                                }
-                            });
-
-                            console.log("deliverable", deliverableList);
-
-                            fetch(`/api/deliverable/update-status`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify(deliverableList),
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log('Status updated successfully:', data);
-                                })
-                                .catch(error => {
-                                    console.error('Error updating status:', error);
-                                });
-                        });
-                    }
 
 
                     //____________________________________________________deliverable update end
@@ -1400,43 +1296,6 @@
                     //______________________________________________
 
                     //_______________review update
-                    if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-
-                        const updateButtonContainer = document.getElementById("updateButtonContainer");
-                        updateButtonContainer.innerHTML = '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
-                    document.querySelector("#updateButton").addEventListener("click", async function () {
-
-                        var internalReviewCount = document.getElementById("project-internal-review-count").value;
-                        var externalReviewCount = document.getElementById("project-external-review-count").value;
-
-
-                        var data = {
-                            internal_review_count: internalReviewCount,
-                            external_review_count: externalReviewCount
-                        };
-
-
-                        fetch("/api/review/update-review/" + targetData.id, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data),
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log('Review counts updated successfully:', data);
-
-                            })
-                            .catch(error => {
-                                console.error('Error updating review counts:', error);
-
-                            });
-                    });
-
-
-
-                    }
 
 
                     //____________________________________reveiw update end
@@ -1499,16 +1358,13 @@
                             dataType: "json",
                             contentType: "application/json; charset=utf-8",
                             success: async function (data) {
-                                alert("Project registered successfully");
                                 // Reset the form if needed
                                 console.log("this projce has benn saved", data);
                                 // event.currentTarget.submit();
-                                window.top.location = window.top.location;
                             },
                             error: function (data) {
                                 alert("Error registering project");
                                 // event.currentTarget.submit();
-                                window.top.location = window.top.location;
                             },
                         });
                     }
@@ -1517,7 +1373,10 @@
 
             if (loginUser.currentUser.role === "PROJECT_MANAGER") {
 
-                const updateButtonC = document.getElementById("updateButtonC");
+                const updateButton1 = document.getElementById("updateDeliverable");
+                updateButton1.innerHTML = '<button id="updateButtonDeli" type="button" class="btn btn-primary">Update</button>';
+
+                const updateButtonC = document.getElementById("updateAmount");
                 updateButtonC.innerHTML = '<button id="update" type="button" class="btn btn-primary">Update</button>';
 
                 document.querySelector("#update").addEventListener("click", function (e) {
@@ -2313,75 +2172,6 @@
                     });
                 });
             });
-
-            document
-                .querySelector("#update-amount-btn")
-                .addEventListener("click", function (e) {
-                    const projectId = parseInt(
-                        document.querySelector("#current-edditing-projetc-id")
-                            .value
-                    );
-
-                    const amountDto = {
-                        basic_design: parseInt(
-                            document.querySelector("#edit-basic-design-count")
-                                .value
-                        ),
-                        detail_design: parseInt(
-                            document.querySelector("#edit-detail-design-count")
-                                .value
-                        ),
-                        coding: parseInt(
-                            document.querySelector("#edit-coding-count").value
-                        ),
-                        unit_testing: parseInt(
-                            document.querySelector("#edit-unit-testing-count")
-                                .value
-                        ),
-                        integrated_testing: parseInt(
-                            document.querySelector(
-                                "#edit-integrated-testing-count"
-                            ).value
-                        ),
-                    };
-
-                    Swal.fire({
-                        title: "Are you sure want to edit?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-
-                            //Perform the AJAX request
-                            $.ajax({
-                                url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
-                                type: "POST",
-                                data: JSON.stringify(project),
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
-                                success: async function (data) {
-                                    alert("Project registered successfully");
-                                    // Reset the form if needed
-                                    console.log(
-                                        "This project has been saved",
-                                        data
-                                    );
-                                },
-                                error: function (data) {
-                                    Swal.fire(
-                                        "Error",
-                                        "Error updating project amount",
-                                        "error"
-                                    );
-                                },
-                            });
-                        }
-                    });
-
-                });
             
 
             let myOptions = [
@@ -3717,7 +3507,7 @@
                                                     </li>
                                                 </ul>
                                                 <div class="text-center">
-                                                    <div  id="updateButtonC">
+                                                    <div  id="updateAmount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -3766,7 +3556,7 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                <div  id="updateButtonContainer">
+                                                <div  id="updateReview">
                                                 </div>
                                                 </div>
                                             </div>
@@ -3792,7 +3582,7 @@
                                                     <!-- Rows for deliverable-type and checkboxes will be dynamically added here -->
                                                     </tbody>
                                                 </table>
-                                                <div id="updateButton1"></div>
+                                                <div id="updateDeliverable"></div>
                                             </div>
                                 </div>
                             </div>
