@@ -1217,3 +1217,43 @@
 .ql-editor {
     padding: 10px !important;
 }
+
+.issue-time-line p {
+    padding: 0;
+    margin: 0;
+    opacity: 0.5;
+}
+
+.issue-time-line span {
+    font-size: 0.9em;
+    opacity: 1;
+    font-weight: 600;
+}
+.issue-title {
+    font-size: 32px;
+    cursor: pointer;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.loader {
+  margin: auto;
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

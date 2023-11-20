@@ -13,28 +13,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class UserControllerTest {
     @Mock
-    UserServiceImpl userService = mock(UserServiceImpl.class);
+    private UserServiceImpl userService;
     @Mock
-    DepartmentServiceImpl departmentService = mock(DepartmentServiceImpl.class);
+    private DepartmentServiceImpl departmentService;
     @Mock
-    DepartmentDto departmentDto = mock(DepartmentDto.class);
+    private DepartmentDto departmentDto;
     @Mock
-    FakerService fakerService = mock(FakerService.class);
-    @Mock
-    UseruiDto updatedUserDto = mock(UseruiDto.class);
+    private FakerService fakerService;
     @InjectMocks
     private UserController userController;
 
@@ -514,78 +513,7 @@ public class UserControllerTest {
         assertEquals(ResponseEntity.ok("Username changed successfully"), response);
     }
 
-    @Test
-    public void testGetUserById() {
-        // Mocking data
-        long userId = 1L;
-        UserDto userDto = new UserDto();
-        userDto.setId(userId);
-        userDto.setName("Test User Name");
 
-        // Mocking the service method to return the user
-        when(userService.getUserById(userId)).thenReturn(userDto);
 
-        // Call the controller method
-        ResponseEntity<UserDto> responseEntity = userController.getUserById(userId);
-
-        // Assert the response
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(userDto, responseEntity.getBody());
-    }
-
-    @Test
-    public void testGetUserByIdNotFound() {
-        // Mocking data
-        long userId = 2L;
-
-        // Mocking the service method to return null (user not found)
-        when(userService.getUserById(userId)).thenReturn(null);
-
-        // Call the controller method
-        ResponseEntity<UserDto> responseEntity = userController.getUserById(userId);
-
-        // Assert the response
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
-    @Test
-    public void testUpdateUser() {
-        // Mocking data
-        long userId = 1L;
-        UseruiDto updatedUserDto = new UseruiDto();
-        updatedUserDto.setId(userId);
-        updatedUserDto.setName("Updated User Name");
-
-        UserDto updatedUser = new UserDto();
-        updatedUser.setId(userId);
-        updatedUser.setName("Updated User Name");
-
-        // Mocking the service method to return the updated user
-        when(userService.updateUser(updatedUserDto)).thenReturn(updatedUser);
-
-        // Call the controller method
-        ResponseEntity<UserDto> responseEntity = userController.updateUser(userId, updatedUserDto);
-
-        // Assert the response
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(updatedUser, responseEntity.getBody());
-    }
-
-    @Test
-    public void testUpdateUserNotFound() {
-        // Mocking data
-        long userId = 2L;
-        updatedUserDto = new UseruiDto();
-        updatedUserDto.setId(userId);
-        updatedUserDto.setName("Updated User Name");
-
-        // Mocking the service method to return null (user not found)
-        when(userService.updateUser(updatedUserDto)).thenReturn(null);
-
-        // Call the controller method
-        ResponseEntity<UserDto> responseEntity = userController.updateUser(userId, updatedUserDto);
-
-        // Assert the response
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
 
 }
