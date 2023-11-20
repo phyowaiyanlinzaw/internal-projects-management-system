@@ -808,7 +808,7 @@
                     case "FOC":
                         console.log("one of the memeber");
                         return await getData(
-                            `/api/project/new/list/role/MEMBER/id/${loginUser.currentUser.id}`
+                            `/api/project/new/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`
                         );
                     default:
                         console.log("pmo or sdqc");
@@ -932,6 +932,7 @@
                         return 'success'; // default to secondary if status is not recognized
                     }
                 }
+                console.log("project percentage", project.percentage);
                 const taskListHtml = project.tasks
                     ? project.tasks.map(task => `
                         <div class="d-flex ">

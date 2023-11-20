@@ -595,7 +595,12 @@ public class ProjectServiceImpl implements ProjectService {
                 long totalTaskCount = project.getTasks().stream().filter(task -> !task.isDeleted()).count();
                 long completeTaskCount = project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted()).count();
 
-                proListDto.setPercentage(totalTaskCount == 0 ? 0 : (completeTaskCount/ totalTaskCount) * 100);
+                log.info('"' + project.getId() + '"' + " total task count : " + totalTaskCount);
+                log.info('"' + project.getId() + '"' + " complete task count : " + completeTaskCount);
+
+                proListDto.setPercentage(totalTaskCount == 0 ? 0 : (long) (((double)completeTaskCount / totalTaskCount) * 100.0));
+
+                log.info('"' + project.getId() + '"' + " percentage : " + proListDto.getPercentage() + "%" );
 
                 List<TasksDto> tasksDtoList = new ArrayList<>();
 
