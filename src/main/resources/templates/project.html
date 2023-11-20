@@ -5,7 +5,6 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="layout/layout"
         xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <head>
 </head>
@@ -81,7 +80,6 @@
                                         <i
                                                 class="bi bi-plus-circle"
                                         ></i>
-                                    </button>
                                     </button>
                                 </h3>
                                 <div class="swim-lane p-3" id="TODO">
@@ -393,9 +391,6 @@
     </div>
     <!--    actual hours input modal -->
 
-    <!--    for select drop-drown-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
     <!-- fontawesome -->
     <script src="/js/fontawesome.js"></script>
 
@@ -414,7 +409,6 @@
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
-    <script src="/js/forprogresscircleiguess.js"></script>
 
     <!-- sort (department, project), form validation and search bar behavior are all here -->
     <script src="/js/custome.js"></script>
@@ -936,7 +930,7 @@
                 }
             });
 
-            taskDiv.addEventListener("dragend", () => {
+            taskDiv.addEventListener("dragend", async () => {
                 taskDiv.classList.remove("is-dragging");
                 currentTaskData =
                     taskList[
@@ -955,23 +949,20 @@
                         if (currentTaskData.status === 'FINISHED') {
                             //show modal box to ask for actual hours input type=number
                             $('#actual-hours-input-modal').modal('show')
-                            //get the input element
-                            const actualHoursInput = document.getElementById('actual-hours-input')
-                            //add event listener to the input element
-                            actualHoursInput.addEventListener('change', function (e) {
-                                //get the value of the input
-                                const actualHours = parseInt(e.target.value)
-                                //check if the value is valid
-                                if (actualHours > 0) {
-                                    //hide the modal box
-                                    $('#actual-hours-input-modal').modal('hide')
-                                    //set the actual hours to the current task data
-                                    currentTaskData.actual_hours = actualHours
-                                } else {
-                                    //show alert
-                                    alert('Please enter a valid number')
-                                }
-                            })
+                            // Wrap the modal code in a Promise to wait for actual hours input
+                            const actualHoursInputPromise = new Promise((resolve) => {
+                                const actualHoursInput = document.getElementById('actual-hours-input');
+                                const actualHoursSubmitBtn = document.getElementById('actual-hours-input-btn');
+
+                                actualHoursSubmitBtn.addEventListener('click', function () {
+                                    currentTaskData.actual_hours = actualHoursInput.value;
+                                    $('#actual-hours-input-modal').modal('hide');
+                                    resolve(); // Resolve the Promise when actual hours are set
+                                });
+                            });
+
+                            // Wait for the Promise to be resolved before proceeding
+                            await actualHoursInputPromise;
 
                             currentTaskData.actual_end_time = new Date().getTime()
                         }
@@ -984,6 +975,7 @@
                                 status: currentTaskData.status,
                                 actual_start_time: currentTaskData.actual_start_time,
                                 actual_end_time: currentTaskData.actual_end_time,
+                                actual_hours: currentTaskData.actual_hours  === null ? 0 : currentTaskData.actual_hours
                             },
                         })
                             .then(response => {
