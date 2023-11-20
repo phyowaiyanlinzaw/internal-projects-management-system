@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
       lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
@@ -8,13 +7,14 @@
 
 <body layout:fragment="content">
 
-     <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-    <!-- Spinner End -->
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
 
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
@@ -33,6 +33,8 @@
 
         <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
+
+                <!--                sec:authorize="hasAnyRole('PMO','SDQC')"-->
                 <div class="col-sm-6 col-xl-3" sec:authorize="hasAnyRole('PMO','SDQC')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-collection-fill fa-2x text-primary"></i>
@@ -50,7 +52,7 @@
                             <h6 class="mb-0" id="employeeCount"></h6>
                         </div>
                     </div>
-                </div >
+                </div>
                 <div class="col-sm-6 col-xl-3" sec:authorize="hasAnyRole('PMO','SDQC')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa-solid fa-user-tie fa-3x text-primary"></i>
@@ -69,6 +71,69 @@
                         </div>
                     </div>
                 </div>
+                <!--                sec:authorize="hasAnyRole('PMO','SDQC')"-->
+
+                <!--                sec:authorize="hasRole('DEPARTMENT_HEAD')"-->
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('DEPARTMENT_HEAD')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-list-task fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2"></p>
+                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('DEPARTMENT_HEAD')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-stack fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2"></p>
+                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('DEPARTMENT_HEAD')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-patch-check-fill fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2"></p>
+                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                        </div>
+                    </div>
+                </div>
+                <!--                sec:authorize="hasRole('DEPARTMENT_HEAD')"-->
+
+                <!--                sec:authorize="hasRole('PROJECT_MANAGER')"-->
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-list-task fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2"></p>
+                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-stack fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2"></p>
+                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-patch-check-fill fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2"></p>
+                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                        </div>
+                    </div>
+                </div>
+                <!--                sec:authorize="hasRole('PROJECT_MANAGER')"-->
+
+                <!--                sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')"-->
                 <div class="col-sm-12 col-xl-4" sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-list-task fa-2x text-primary"></i>
@@ -96,6 +161,8 @@
                         </div>
                     </div>
                 </div>
+                <!--                sec:authorize="hasAnyRole('EMPLOYEE','FOC','CONTRACT')"-->
+
                 <div class="col col-md-12" sec:authorize="hasAnyRole('PMO','SDQC','DEPARTMENT_HEAD','PROJECT_MANAGER')">
                     <div class="card border">
                         <div class="card-body">
@@ -148,7 +215,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6" sec:authorize="hasAnyRole('PMO','SDQC','DEPARTMENT_HEAD','PROJECT_MANAGER')">
+                <div class="col-sm-12 col-md-6"
+                     sec:authorize="hasAnyRole('PMO','SDQC','DEPARTMENT_HEAD','PROJECT_MANAGER')">
                     <div class="card border">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -162,7 +230,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6" sec:authorize="hasAnyRole('PMO','SDQC','DEPARTMENT_HEAD','PROJECT_MANAGER')">
+                <div class="col-sm-12 col-md-6"
+                     sec:authorize="hasAnyRole('PMO','SDQC','DEPARTMENT_HEAD','PROJECT_MANAGER')">
                     <div class="card border">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -238,7 +307,7 @@
         const p2ChartElement = document.getElementById("productivity-2-chart")
         const calendarElement = document.getElementById("calendar")
 
-        if (calendarElement){
+        if (calendarElement) {
 
             const tasks = []
 
@@ -247,7 +316,7 @@
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
-                    console.log("USERS TASK : " , data)
+                    console.log("USERS TASK : ", data)
                     data.forEach((task) => {
                         tasks.push(task)
                     })
@@ -255,7 +324,7 @@
                 },
             })
 
-            function buildCalendar(tasks){
+            function buildCalendar(tasks) {
                 const calendar = new FullCalendar.Calendar(calendarElement, {
                     initialView: 'dayGridMonth',
                     weekends: false,
@@ -278,7 +347,7 @@
                             end: new Date(task.plan_end_time + 86400000),
                             color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#f74444",
                             textColor: "white",
-                            allDay:  true
+                            allDay: true
                         }
                     }),
                     eventDidMount: function (info) {
@@ -328,7 +397,7 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            max:1200
+                            max: 1200
                         }
                     }
                 }
@@ -371,7 +440,7 @@
             const p2ctx = document.getElementById("productivity-2-chart").getContext('2d');
 
             const initialKpiData = {
-                labels:["KPI"],
+                labels: ["KPI"],
                 datasets: [{
                     label: 'Review KPI',
                     data: [],
@@ -437,8 +506,7 @@
             });
 
 
-
-            switch (currentUser.currentUser.role){
+            switch (currentUser.currentUser.role) {
                 case "PMO":
                 case "SDQC":
                     // Make an AJAX request to fetch the department list
@@ -479,7 +547,7 @@
                     //initialize project drop down with currentUser.currentUser.projectsByProjectManager
                     const projectDropdown = $('#projectDropDown');
                     const projects = currentUser.currentUser.projectsByProjectManager;
-                    if (projects===null || projects.length === 0){
+                    if (projects === null || projects.length === 0) {
                         projectDropdown.text('No Project');
                         $('.project-dropDown').addClass('disabled');
                     } else {
@@ -649,7 +717,6 @@
                 });
 
 
-
                 //clear x axis labels
                 lineChart.data.labels = [];
                 barChart.data.labels = [];
@@ -751,8 +818,8 @@
 
     });
 
-     </script>
-     <script src="/js/notification.js" type="module"></script>
+</script>
+<script src="/js/notification.js" type="module"></script>
 </body>
 
 </html>
