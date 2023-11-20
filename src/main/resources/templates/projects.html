@@ -1019,7 +1019,7 @@
 
                 fragment.appendChild(createProjectList(currentProject));
             }
-
+            motherContainer.innerHTML = ''
             motherContainer.appendChild(fragment);
 
             const detailMoal = document.querySelector("#project-details");
@@ -2408,7 +2408,7 @@
                             id='sort-container'
                         >
                         <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
-
+                            <div class="loader"></div>
                         <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
                         </div>
                     </div>
