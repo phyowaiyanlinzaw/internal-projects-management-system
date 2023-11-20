@@ -12,13 +12,16 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.KPIDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
+import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -45,6 +48,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ModelMapper  modelMapper;
     private final TaskRepository taskRepository;
     private final AESImpl aes;
+    private final UserService userService;
 
     @Transactional
     @Override
@@ -539,10 +543,86 @@ public class ProjectServiceImpl implements ProjectService {
 
 
 
+    public List<ProListDto> newProjectLook(Role role, long id) {
 
+        List<ProListDto> ProListDto = new ArrayList<>();
 
+        List<Project> projectList = new ArrayList<>();
 
+        switch (role) {
 
+            case PROJECT_MANAGER:
+                
+                projectList = projectRepository.findAllByProjectManagerId(id);
+            
+                break;
 
+            case FOC:
+            case EMPLOYEE:
+            case CONTRACT:
+
+                projectList = projectRepository.findAllByUsersId(id);
+
+                break;
+
+            case DEPARTMENT_HEAD:
+                long departmentId = userService.getUserById(id).getDepartmentdto().getId();
+
+                projectList = projectRepository.findByDepartmentId(departmentId);
+
+                break;
+            default:
+
+                projectList = projectRepository.findAll();
+                
+                break;
+
+        }
+
+        for(Project project : projectList) {
+
+            ProListDto proListDto = new ProListDto();
+
+            proListDto.setId(project.getId());
+            proListDto.setProjectName(project.getName());
+            proListDto.setStartDate(project.getStart_date());
+            proListDto.setEndDate(project.getEnd_date());
+            proListDto.setUser(modelMapper.map(project.getProjectManager(), UserDto.class));
+
+            if(project.getTasks() != null ) {
+
+                long totalTaskCount = project.getTasks().stream().filter(task -> !task.isDeleted()).count();
+                long completeTaskCount = project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted()).count();
+
+                proListDto.setPercentage(totalTaskCount == 0 ? 0 : (completeTaskCount/ totalTaskCount) * 100);
+
+                List<TasksDto> tasksDtoList = new ArrayList<>();
+
+                for(Tasks task : project.getTasks()) {
+
+                    if(task.isDeleted()) continue;
+
+                    TasksDto tasksDto = new TasksDto();
+
+                    tasksDto.setId(task.getId());
+                    tasksDto.setTitle(task.getTitle());
+                    tasksDto.setPlan_start_time(task.getPlan_start_time());
+                    tasksDto.setPlan_end_time(task.getPlan_end_time());
+                    tasksDto.setUserDto(modelMapper.map(task.getUser(), UserDto.class));
+                    tasksDto.setStatus(task.getStatus());
+                    tasksDtoList.add(tasksDto);
+
+                }
+                proListDto.setTasks(tasksDtoList);
+            }
+
+            
+            ProListDto.add(proListDto);
+
+        }
+
+        return ProListDto;
+
+    }
 
 }
