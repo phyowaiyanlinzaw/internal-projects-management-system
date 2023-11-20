@@ -122,6 +122,22 @@ public class DashboardServiceImpl implements DashboardService {
         return kpiDto;
     }
 
+    @Override
+    public List<List<ManMonthDto>> getManMonthByDepartment(long departmentId) {
+        List<ProjectDto> projects = projectRepository.findByDepartmentId(departmentId).stream()
+                .map(project -> modelMapper.map(project, ProjectDto.class))
+                .toList();
+        List<List<ManMonthDto>> manMonthDtos = new ArrayList<>();
+
+        for (ProjectDto projectDto: projects){
+            List<ManMonthDto> manMonthDtoList = getManMonth(projectDto.getId());
+            manMonthDtos.add(manMonthDtoList);
+
+        }
+
+        return manMonthDtos;
+    }
+
     public int calculateKPI(int phase, int review_count){
         return phase / review_count;
     }
