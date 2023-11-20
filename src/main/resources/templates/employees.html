@@ -70,7 +70,7 @@
                     <th data-sortable="true" data-field="enabled" data-align="left" data-valign="middle" data-width="30" data-formatter="statusFormatter">
                         Status
                     </th>
-                    <th data-field="operate" data-align="left" data-valign="middle" data-formatter="operateFormatter"
+                    <th data-field="operate" data-align="middle" data-valign="middle" data-halign="middle" data-formatter="operateFormatter"
                         data-width="100">Action
                     </th>
                 </tr>
@@ -224,7 +224,7 @@
     function operateFormatter(value,row,index){
         return [
             //edit button that opens edit modal
-            '<button class="btn btn-sm btn-primary edit-employee-btn" data-bs-toggle="modal" data-bs-target="#edit-employee-modal" title="Edit">Edit</button>',
+            '<button class="btn btn-toolbar btn-primary edit-employee-btn" data-bs-toggle="modal" data-bs-target="#edit-employee-modal" title="Edit">Edit</button>',
         ].join(' ');
     }
 
@@ -242,10 +242,26 @@
 
         $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
 
-        // if (event.target.classList.contains('status-switch')) {
-        //     //change status after clicking the switch
-        //
-        // }
+        //change status of employee (active/inactive)
+        $('#table').on('change', '.status-switch', function () {
+            const checked = $(this).prop('checked');
+            const id = $(this).attr('id').split('_')[1];
+            const row = $('#table').bootstrapTable('getData')[id];
+            const url = '/api/user/update/employee/' + row.id + '/status/' + (checked ? 'true' : 'false');
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                success: function (data) {
+                    $('#table').bootstrapTable('refresh');
+                },
+                error: function (data, xhr) {
+                    alert('Error updating employee status');
+                },
+                complete: function () {
+                    $('#table').bootstrapTable('refresh');
+                }
+            });
+        });
 
         function getDepartmentNameList() {
             var departmentNameList = [];
