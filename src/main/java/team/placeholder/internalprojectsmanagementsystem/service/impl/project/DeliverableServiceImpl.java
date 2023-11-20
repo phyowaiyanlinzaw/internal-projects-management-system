@@ -3,19 +3,12 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Deliverable;
-import team.placeholder.internalprojectsmanagementsystem.model.project.DeliverableType;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.DeliverableRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.project.DeliverableService;
-import team.placeholder.internalprojectsmanagementsystem.service.project.DeliverableTypeService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -46,17 +39,4 @@ public class DeliverableServiceImpl implements DeliverableService {
             return null;
         }
     }
-
-
-//    public void updateDeliverableStatus(List<Deliverable> deliverables) {
-//        for (Deliverable deliverable : deliverables) {
-//
-//            Deliverable existingDeliverable = deliverableRepository.findById(deliverable.getId())
-//                    .orElseThrow(() -> new RuntimeException("Deliverable not found with id: " + deliverable.getId()));
-//            existingDeliverable.setStatus(deliverable.isStatus());
-//
-//            deliverableRepository.save(existingDeliverable);
-//        }
-//
-//    }
     }

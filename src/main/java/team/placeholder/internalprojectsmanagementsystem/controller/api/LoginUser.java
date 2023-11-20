@@ -87,7 +87,6 @@ public class LoginUser {
                     System.out.println("Employee " + employee.getId() + " is not available.");
                 }
 
-//        return new ResponseEntity<>(employeeWrokUnderPm, HttpStatus.OK);
             }
             return ResponseEntity.ok(userDtos);
         }
