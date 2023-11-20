@@ -1,6 +1,7 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ArchitectureServiceImpl implements ArchitectureService {
     private final ArchitectureRepository architectureRepository;
+    private final ModelMapper modelMapper;
     @Override
     public List<ArchitectureDto> getAllArchitecture() {
        List<Architecture> architectureList = architectureRepository.findAll();
@@ -25,7 +27,7 @@ public class ArchitectureServiceImpl implements ArchitectureService {
     @Override
     public Architecture save(ArchitectureDto architecture) {
         // TODO Auto-generated method stub
-        return(architectureRepository.save(ArchitectureMapper.toArchitecture(architecture)));
+        return(architectureRepository.save(modelMapper.map(architecture, Architecture.class)));
     }
 
     @Override

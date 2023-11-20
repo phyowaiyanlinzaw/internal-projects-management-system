@@ -15,9 +15,11 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.project.Deliv
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Amount;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
@@ -294,9 +296,14 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+    @GetMapping(value = "new/list/role/{role}/id/{id}")
+    public ResponseEntity<List<ProListDto>> newListView(@PathVariable String role, @PathVariable Long id){
 
+        //store the project list from the 
 
+        log.info("current login user role " + role);
 
-
+        return new ResponseEntity<>(projectService.newProjectLook(Role.valueOf(role), id), HttpStatus.OK);
+    }
 
 }

@@ -105,7 +105,7 @@
                     <button
                         class="nav-link active"
                         data-bs-toggle="tab"
-                        data-bs-target="#sort-container"
+                        data-bs-target="#all-issue-list"
                     >
                         Issue List
                     </button>
@@ -137,12 +137,12 @@
 
             <div class="tab-content pt-2">
 
-                <div class="tab-pane fade show active row row-cols-1" id="sort-container">
-
+                <div class="tab-pane fade show active row row-cols-1 p-2" id="all-issue-list">
+                    <div class="d-flex flex-column gap-2" id="sort-container"></div>
                 </div>
 
                 <div class="tab-pane fade show row row-cols-1" id="unsolved-issues">
-
+                    <div class="d-flex flex-column gap-2" id="unsolved-issues-container"></div>
                 </div>
 
                 <div class="tab-pane fade row row-cols-1" id="new-issue-list">
@@ -492,7 +492,6 @@
 
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
-<script src="/js/forprogresscircleiguess.js"></script>
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
@@ -518,7 +517,6 @@
             console.log("this suck")
 
             const issueId = issueDetialEdit.getAttribute("data-currentEditingIssueId")
-            const issueTitle = issueDetialEdit.querySelector("#issueTitleDetails").value
             const issueTitle = issueDetialEdit.querySelector("#issueTitleDetails").value
             const issueCategory = issueDetialEdit.querySelector("#issue_categoryDetails").value
             const directCause = issueDetialEdit.querySelector("#direct_causeDetails").value
@@ -570,7 +568,7 @@
         setupLogoutConfirmation();
     });
 
-    document.querySelector("button[data-bs-target=\"#sort-container\"]").addEventListener("show.bs.tab", async function (e) {
+    document.querySelector("button[data-bs-target=\"#all-issue-list\"]").addEventListener("show.bs.tab", async function (e) {
 
         const issueListContainer = document.querySelector("#sort-container")
 
@@ -580,15 +578,14 @@
 
         for(let i = issueList.length - 1; i >= 0; i--) {
 
-            issueListContainer.insertBefore(createIssueCard(issueList[i]), issueListContainer.childNodes[0]);
-
+            issueListContainer.appendChild(createIssueCard(issueList[i]));
         }
 
     })
 
     document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function(e) {
 
-        const unsolvedIssueListContainer = document.querySelector("#unsolved-issues")
+        const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
 
         const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
 
@@ -596,7 +593,7 @@
 
         for(let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
-            unsolvedIssueListContainer.insertBefore(createIssueCard(unsolvedIssueList[i]), unsolvedIssueListContainer.childNodes[0]);
+            unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
 
         }
 
@@ -1219,84 +1216,125 @@
         const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 
         return formattedDate;
-    }
+    }      
 
-    function createIssueCard(item) {
+    function createIssueCard(issue) {
+        console.log(issue)
+                const main = document.createElement("div");
+                main.classList.add("card", "p-0");
+                main.style.minWidth = "320px";
 
-        const issueCard = document.createElement("div");
+                const cardHeader = `<div class="card-header justify-content-between">
+                <div
+                    class="d-flex justify-content-between align-items-center flex-wrap"
+                >
+                    <div class="d-flex gap-3 align-items-center flex-wrap">
+                        <span class="issue-title issueDetails" data-id="${issue.id}" style="font-size: 32px;cursor: pointer;font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande","Lucida Sans Unicode", Geneva, Verdana, sans-serif;">${issue.title}</span>
+                    </div>
 
-        issueCard.classList.add("p-sm-2");
-
-        issueCard.innerHTML = `
-                    <div class="p-sm-2 ">
-                            <div class="card">
-                                <div class="card-header border-bottom text-dark">
-                                    <div class="d-flex justify-content-between align-items-center gap-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h5 class="card-text issueDetails" data-id="${item.id}" style="text-decoration: none; cursor:pointer;">${item.title}</h5>
-
-                                            <p class="card-text badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                                ${item.responsible_party.name}
-                                            </p>
-                                              <span class="card-title badge rounded-pill bg-${item.solved === true ? 'success' : 'danger'}">
-                                            ${item.solved === true ? 'Solved' : 'Unsolved'}
-
-                                        </span>
-
-                                        </div>
-                                        <span> <button type="button" class="btn btn-info see-more-button" data-id="${item.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        </span>
-                                    </div>
-                                </div>
-
-                                    <div class="card-body">
-
-                                        <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                               <div class="code-block overflow-scroll p-3 "  data-bs-target="#description" style="width:auto; max-height:250px; background:rgba(0, 0, 0, 0) !important;">
-                                                <p>${item.description}</p>
-                                                </div>
-
-                                        </div>
-                                         <p class="badge bg-secondary " style="margin-left:15px;">${item.issueCategory}</p>
-
-                                        <div class="d-flex justify-content-end align-items-center" style="margin-right: 20px;">
-                                        <div class="d-flex align-items-center gap-1">
-                                            <p class="text-muted"> Posted  <span style="font-size: x-small; color: black;">${formatDate(item.created_date)} </span></p>
-
-                                        </div>
-                                        <div class="d-flex align-items-center gap-1" style="margin-left:5px;">
-                                            <p class="text-muted"> Modified at <span style="font-size: x-small; color: black;">${getTimeElapsed(item.updated_date)}</span></p>
-                                        </div>
-                                    </div>
-                                    </div>
-
-                                   </div>
-                                </div>
-                            </div>
+                    <div class="d-flex justify-content-between gap-2">
+                        <div>
+                            <span class="badge bg-success">${issue.issueCategory}</span>
+                            <span class="badge bg-primary bg-${issue.solved === true ? 'danger' : 'primary'}">
+                                ${issue.solved === true ? 'Closed' : 'Open'}
+                            </span>
                         </div>
+                        <button
+                            type="button"
+                            class="btn btn-info see-more-button text-white"
+                            data-id="${issue.id}"
+                        >
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col issue-time-line d-flex gap-4 flex-wrap">
+                    <div class="d-flex align-items-center gap-2">
+                        <p style="padding: 0;margin: 0;opacity: 0.5;">Uploader</p>
+                        <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">zaw lin shien</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <p style="padding: 0;margin: 0;opacity: 0.5;">Posted</p>
+                            <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">${formatDate(issue.created_date)}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <p style="padding: 0;margin: 0;opacity: 0.5;">Modified at</p>
+                            <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">${getTimeElapsed(issue.updated_date)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
 
+                const cardBody = document.createElement("div");
+                cardBody.classList.add("card-body", "accordion-item", "p-0");
+                cardBody.id = `accordionExample-${issue.id}`;
 
-                    `
+                const h2 = `<h2 class="accordion-header" id="headingTwo">
+            <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target= "#collapse-${issue.id}"
+                aria-expanded="false"
+                aria-controls="collapseTwo"
+            >
+                Description
+            </button>
+        </h2>`;
 
-                return issueCard;
-            }
-        
-    
-    let currentIssueId;
-            $(document).ready(async function () {
+                const collapse = document.createElement("div");
+                collapse.id = `collapse-${issue.id}`;
+                collapse.classList.add("accordion-collapse", "collapse");
+                collapse.setAttribute("aria-labelledby", "headingTwo");
+                collapse.setAttribute("data-bs-parent", `#accordionExample-${issue.id}`);
 
-                let unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
+                // quill editor goes in here
+                const accordionBody = document.createElement("div");
+                accordionBody.id = `quill-editor-${issue.id}`;
+                accordionBody.classList.add("accordion-body");
 
-                console.log("unsolved Issue list", unsolvedIssueList)
+                function initializeQuill() {
+                    console.log("Before Quill initialization");
+                    const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
+                    console.log(quillContainer);
 
-                for(let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+                    let quill;
 
-                    const issue = unsolvedIssueList[i];
-
-                    createIssueCard(issue);
-
-                    document.querySelector("#unsolved-issues").insertBefore(createIssueCard(issue), document.querySelector("#unsolved-issues").childNodes[0]);
+                    if (quillContainer) {
+                        quill = new Quill(quillContainer, {
+                            modules: {
+                                toolbar: false,
+                            },
+                            theme: "snow",
+                        });
+                    
+                        quill.clipboard.dangerouslyPasteHTML(0, issue.description);
+                        quill.enable(false);
+                    }
+                
+                    console.log("After Quill initialization");
+                    console.log("this feels suck man", quill);
                 }
+
+                cardBody.innerHTML = h2;
+                collapse.appendChild(accordionBody);
+
+                cardBody.appendChild(collapse);
+
+                main.innerHTML = cardHeader;
+                main.appendChild(cardBody);
+
+                console.log(main)
+
+                setTimeout(initializeQuill, 1000);
+
+                return main;
+
+            } 
+
+    let currentIssueId;
+            $(document).ready(async function () {                
 
                 function loadData() {
                     $.ajax({
@@ -1479,6 +1517,150 @@
                     });
                 });
 
+                function createPendingIssueCard(issue) {
+        console.log(issue)
+                const outerDiv = document.createElement("div");
+                outerDiv.classList.add("item-issue-approval");
+                outerDiv.id = `issueapprovalitem-${issue.id}`;
+
+                const approvalContainer = document.createElement("div");
+                approvalContainer.classList.add(
+                    "d-inline-flex",
+                    "bg-primary",
+                    "gap-2",
+                    "flex-row",
+                    "p-2",
+                    "border-top",
+                    "rounded-top",
+                    "text-white",
+                    "issue-approval"
+                );
+
+                approvalContainer.innerHTML += `
+                    <input type="radio" name="approval-${issue.id}" value="DUPLICATE">
+                    <label>duplicate</label>
+                    <input type="radio" name="approval-${issue.id}" value="APPROVE">
+                    <label>approve</label>
+                    <input type="radio" name="approval-${issue.id}" value="DECLINE">
+                    <label>decline</label>
+                `;
+
+                const main = document.createElement("div");
+                main.classList.add("card", "p-0");
+                main.style.minWidth = "320px";
+
+                const cardHeader = `<div class="card-header justify-content-between">
+                <div
+                    class="d-flex justify-content-between align-items-center flex-wrap"
+                >
+                    <div class="d-flex gap-3 align-items-center flex-wrap">
+                        <span class="issue-title issueDetails" data-id="${issue.id}" style="font-size: 32px;cursor: pointer;font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande","Lucida Sans Unicode", Geneva, Verdana, sans-serif;">${issue.title}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between gap-2">
+                        <div>
+                            <span class="badge bg-success">${issue.issueCategory}</span>
+                            <span class="badge bg-primary bg-${issue.solved === true ? 'danger' : 'primary'}">
+                                ${issue.solved === true ? 'Closed' : 'Open'}
+                            </span>
+                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-info see-more-button text-white"
+                            data-id="${issue.id}"
+                        >
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col issue-time-line d-flex gap-4 flex-wrap">
+                    <div class="d-flex align-items-center gap-2">
+                        <p style="padding: 0;margin: 0;opacity: 0.5;">Uploader</p>
+                        <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">zaw lin shien</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <p style="padding: 0;margin: 0;opacity: 0.5;">Posted</p>
+                            <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">${formatDate(issue.created_date)}</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <p style="padding: 0;margin: 0;opacity: 0.5;">Modified at</p>
+                            <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">${getTimeElapsed(issue.updated_date)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+                const cardBody = document.createElement("div");
+                cardBody.classList.add("card-body", "accordion-item", "p-0");
+                cardBody.id = `accordionExample-${issue.id}`;
+
+                const h2 = `<h2 class="accordion-header" id="headingTwo">
+            <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target= "#collapse-${issue.id}"
+                aria-expanded="false"
+                aria-controls="collapseTwo"
+            >
+                Description
+            </button>
+        </h2>`;
+
+                const collapse = document.createElement("div");
+                collapse.id = `collapse-${issue.id}`;
+                collapse.classList.add("accordion-collapse", "collapse");
+                collapse.setAttribute("aria-labelledby", "headingTwo");
+                collapse.setAttribute("data-bs-parent", `#accordionExample-${issue.id}`);
+
+                // quill editor goes in here
+                const accordionBody = document.createElement("div");
+                accordionBody.id = `quill-editor-${issue.id}`;
+                accordionBody.classList.add("accordion-body");
+
+                function initializeQuill() {
+                    console.log("Before Quill initialization");
+                    const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
+                    console.log(quillContainer);
+
+                    let quill;
+
+                    if (quillContainer) {
+                        quill = new Quill(quillContainer, {
+                            modules: {
+                                toolbar: false,
+                            },
+                            theme: "snow",
+                        });
+                    
+                        quill.clipboard.dangerouslyPasteHTML(0, issue.description);
+                        quill.enable(false);
+                    }
+                
+                    console.log("After Quill initialization");
+                    console.log("this feels suck man", quill);
+                }
+
+                cardBody.innerHTML = h2;
+                collapse.appendChild(accordionBody);
+
+                cardBody.appendChild(collapse);
+
+                main.innerHTML = cardHeader;
+                main.appendChild(cardBody);
+
+                console.log(main)
+
+                setTimeout(initializeQuill, 1000);
+
+                outerDiv.appendChild(approvalContainer);
+                outerDiv.appendChild(main);
+
+                return outerDiv;
+
+            }
+
                 const pendingIssueList = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
 
                 console.log("pending issue list", pendingIssueList)
@@ -1491,52 +1673,7 @@
 
                     const currentIssue = pendingIssueList[i];
 
-                    document.getElementById("new-issue-list").innerHTML += `<div class="p-md-3 p-sm-2">
-                        <div class="card item-issue-approval" id="issueapprovalitem-${currentIssue.id}">
-                            <div class="d-inline p-2 issue-approval">
-                                <input type="radio" name="approval-${currentIssue.id}" value="DUPLICATE"/>
-                                <label>Duplicate</label>
-                                <input type="radio" name="approval-${currentIssue.id}" value="APPROVE"/>
-                                <label>Approve</label>
-                                <input type="radio" name="approval-${currentIssue.id}" value="DECLINE"/>
-                                <label>Decline</label>
-                            </div>
-                            <div class="card-header border-bottom text-dark">
-                                <div class="d-flex justify-content-between align-items-center gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <h6 class="card-title card-text">${currentIssue.title}</h6>
-                                        <p class="card-title badge d-flex align-items-center p-1 pe-2 text-primary-emphasis bg-primary border border-primary rounded-pill">
-                                            ${currentIssue.user_pic.name}
-                                        </p>
-                                    </div>
-                                    <span
-                                        class="card-title badge rounded-pill bg-${currentIssue.status === 'Success' ? 'success' : 'danger'}">
-                                            ${currentIssue.status === 'true' ? 'Solved' : 'Unsolved'}
-                                    </span>
-                                </div>
-                                <div class="col d-flex justify-content-between align-items-center issue-time-line d-flex gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <p>Posted</p>
-                                        <span>${new Date(currentIssue.created_date)}</span>
-                                        <p>Modified at</p>
-                                        <span>${getTimeElapsed(currentIssue.created_date)}</span>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm see-more-button" data-id="${currentIssue.id}"
-                                            data-bs-target="#issueDetailModal" data-bs-toggle="modal">
-                                            See More
-                                    </button>
-                                </div>
-                                <div class="col issue-time-line d-flex gap-2">
-                                    <p class="btn custom-color rounded-pill">${currentIssue.issueCategory}</p>
-                                </div>
-                            </div>
-                                <div class="card-body">
-                                    <div class="code-block">
-                                        <p>${currentIssue.description}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`;
+                    document.getElementById("new-issue-list").appendChild(createPendingIssueCard(currentIssue))
                 }
                 const allApprovalRadios = document.querySelectorAll('.all-approval-input');
 
@@ -1562,10 +1699,14 @@
 
                     const issueList = document.querySelectorAll(".item-issue-approval");
 
+                    console.log(issueList)
+
                     issueList.forEach((item, index) => {
                         // Get the value of the selected radio button in the corresponding .item section
-                        const selectedRadio = item.querySelector('.issue-approval input[type="radio"]:checked');
-
+                        console.log("Before radio button selection");
+const selectedRadio = item.querySelector(".issue-approval input[type='radio']:checked");
+console.log(selectedRadio);
+console.log("After radio button selection");
                         // Check if a radio button is selected
                         if (selectedRadio) {
                             // Add data to the array
