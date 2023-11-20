@@ -505,6 +505,9 @@
 <script type="module">
 
 
+    $(document).ready(function () {
+        setupLogoutConfirmation();
+    });
 
     $(document).ready(function () {
 
@@ -1182,7 +1185,7 @@
         const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 
         return formattedDate;
-    }      
+    }
 
     function createIssueCard(issue) {
         console.log(issue)
@@ -1274,11 +1277,11 @@
                             },
                             theme: "snow",
                         });
-                    
+
                         quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                         quill.enable(false);
                     }
-                
+
                     console.log("After Quill initialization");
                     console.log("this feels suck man", quill);
                 }
@@ -1297,10 +1300,10 @@
 
                 return main;
 
-            } 
+            }
 
     let currentIssueId;
-            $(document).ready(async function () {                
+            $(document).ready(async function () {
 
                 function loadData() {
                     $.ajax({
@@ -1599,11 +1602,11 @@
                             },
                             theme: "snow",
                         });
-                    
+
                         quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                         quill.enable(false);
                     }
-                
+
                     console.log("After Quill initialization");
                     console.log("this feels suck man", quill);
                 }
