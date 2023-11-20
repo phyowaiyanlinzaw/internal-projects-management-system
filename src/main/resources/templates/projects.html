@@ -812,7 +812,7 @@
                         );
                     default:
                         console.log("pmo or sdqc");
-                        return await getData(`/api/project/new/list`);
+                        return await getData(`/api/project/new/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`);
                 }
             }
 

@@ -109,6 +109,11 @@ public class ProjectServiceImpl implements ProjectService {
             aes.save(availableUser);
         }
 
+        for(User user : users) {
+            user.setEnabled(true);
+            userRepository.save(user);
+        }
+
         projectDto.setTotalTaskCount(0L);
         projectDto.setCompleteTaskCount(0L);
 
