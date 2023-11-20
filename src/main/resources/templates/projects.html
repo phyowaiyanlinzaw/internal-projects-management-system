@@ -782,8 +782,6 @@
                     });
                 });
 
-            const projectObjectiveEditor =
-                document.querySelector(".quill-editor-full");
 
             const editProjectObjectiveEitor = document.querySelector(
                 "#edit-project-objective"
@@ -796,12 +794,6 @@
                 theme: "snow",
             });
 
-            const addObjectiveEditor = new Quill(projectObjectiveEditor, {
-                modules: {
-                    toolbar: toolbaroptions,
-                },
-                theme: "snow",
-            });
 
             async function getAllProjects() {
                 switch (loginUser.currentUser.role) {
@@ -1853,7 +1845,6 @@
                 }
 
                     console.log("project system outline validaiont : ", validatedProjectForm);
-                }
 
 
                 function validatePrjObjective() {
@@ -2031,14 +2022,12 @@
 
                 $("#project-add-btn").on('click', function (event) {
                     console.log("submitted")
-                    event.preventDefault(); // Prevent the form from submitting the traditional way
-
+                    event.preventDefault();
 
                     if (!validateProject()) {
                         event.preventDefault();
 
                         if (validatedProjectForm) {
-                            validatePrjDeliverable();
                             this.submit();
                         }
                         return;
@@ -2057,7 +2046,7 @@
                     console.log("architectures list : ", architectures);
                     const systemOutlines = sysSelect.selectedValues;
                     const deliverable = $("#deliverable").val();
-                    const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                    const objective = projectObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
                     console.log(
                         projectName,
                         client,
