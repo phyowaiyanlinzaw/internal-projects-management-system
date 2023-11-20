@@ -89,6 +89,17 @@ class DepartmentServiceTest {
 
     }
 
+    @Test
+    public void testLongGetDepartmentCount() {
+        long departmentCount = 1;
+
+        Mockito.when(departmentService.getDeprtmentCount()).thenReturn(departmentCount);
+
+        long retrievedDepartmentCount = departmentService.getDeprtmentCount();
+
+        assertEquals(departmentCount, retrievedDepartmentCount);
+    }
+
 
 
 

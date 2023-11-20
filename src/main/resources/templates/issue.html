@@ -284,7 +284,10 @@
                     <div class="col-lg-12" style="margin-bottom: 80px;">
                         <label for="description" class="col-sm-12 col-form-label" name="name">Description<span
                                 style="color:#e86666"> *</span></label>
-                        <div class="quill-editor-bubble form-control" id="description" name="description"></div>
+                        <div class="quill-editor-bubble" id="description" name="description" required pattern=".*\S.*"></div>
+
+                        <div id="objectiveError" class="invalid-feedback"></div>
+
                     </div>
 
                     <div class="col-lg-6">
@@ -706,13 +709,6 @@
     console.log("dataForIssue", dataForIssue);
     $(document).ready(async function () {
 
-        let specificQuillEditor = document.querySelector("#description"); // Change the selector as needed
-        const a = new Quill(specificQuillEditor, {
-            modules: {
-                toolbar: toolbaroptions,
-            },
-            theme: "snow",
-        });
 
         if (currentLoginUserRole === 'EMPLOYEE' || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
             $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
@@ -799,7 +795,7 @@
 
             // validation For Issue
 
-            let validatedForm = $('#add-issue');
+            let validatedForm = false;
 
             function validateTitle() {
                 const title = $('#title').val();
@@ -827,14 +823,32 @@
                 }
             }
 
+
+            let descriptionEditor;
+
+            function initializeQuillEditor() {
+                descriptionEditor = new Quill('.quill-editor-bubble', {
+                    modules: {
+                        toolbar: toolbaroptions
+                    },
+                    theme: 'snow'
+                });
+
+            }
+
             function validateDescription() {
-                const description = $('.quill-editor-bubble').find('.ql-editor').html().trim();
+                if (!descriptionEditor) {
+                    console.error("Quill editor not initialized");
+                    return;
+                }
+
+                const description = descriptionEditor.getText().trim();
                 const errorContainer = $('.quill-editor-bubble').siblings('.error-container');
 
                 if (!description || description.length === 0) {
                     validatedForm = false;
+                    console.log("Objective error");
 
-                    // Check if the error message container already exists
                     if (errorContainer.length === 0) {
                         let p = $("<p>")
                             .addClass("text-danger fs-6")
@@ -842,22 +856,34 @@
                             .css("margin", "0")
                             .addClass('error-message');
 
-                        // Create a container for the error message and append the message to it
                         $('.quill-editor-bubble').after('<div class="error-container"></div>').siblings('.error-container').append(p);
+                    } else {
+                        errorContainer.show();
                     }
 
                     $('.quill-editor-bubble').addClass('is-invalid');
                     $('.quill-editor-bubble').removeClass('is-valid');
                 } else {
+                    console.log("Objective success");
                     validatedForm = true;
-                    // Remove the error message container if it exists
+
                     if (errorContainer.length > 0) {
-                        errorContainer.remove();
+                        errorContainer.hide();
                     }
+
                     $('.quill-editor-bubble').addClass('is-valid');
                     $('.quill-editor-bubble').removeClass('is-invalid');
                 }
             }
+
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                initializeQuillEditor();
+            } else {
+
+                document.addEventListener('DOMContentLoaded', initializeQuillEditor);
+            }
+
+            let validationPerformed = false;
 
 
             function validatePlace() {
@@ -1061,7 +1087,7 @@
                 validateTitle();
             });
 
-            $('.quill-editor-bubble .ql-editor').on('input', function () {
+            $('.quill-editor-bubble').on('input', function () {
                 validateDescription();
             });
 
@@ -1097,7 +1123,7 @@
             //for add issue
             $('#addIssue').on('click', async function () {
                 const title = $('#title').val();
-                const description = a.root.innerHTML;
+                const description =  descriptionEditor.root.innerHTML;
                 const place = $('#place').val();
                 const impact = $('#impact').val();
                 const root_cause = $('#root_cause').val();
