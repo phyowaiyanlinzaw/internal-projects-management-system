@@ -1229,6 +1229,7 @@
 
                     <div class="d-flex justify-content-between gap-2">
                         <div>
+                            ${issue.status === 'DUPLICATE' ? '<span class="badge bg-warning">Duplicate</span>' : ''}
                             <span class="badge bg-success">${issue.issueCategory}</span>
                             <span class="badge bg-primary bg-${issue.solved === true ? 'danger' : 'primary'}">
                                 ${issue.solved === true ? 'Closed' : 'Open'}
@@ -1792,7 +1793,6 @@ console.log("After radio button selection");
                             console.log("Issue Updated Successfully");
                             // Update 'solved' to true after a successful AJAX request
 
-                            $('#solved').empty().html(`<span class="card-title badge rounded-pill bg-${spanColor}" id="solved">${spanContent}</span>`);
                             Swal.fire({
                                 title: "Success!",
                                 text: "You have successfully solved the issue.",
