@@ -166,18 +166,40 @@
             </div>
         </div>
 
+
         <!-- Edit Employee Modal -->
         <div class="modal fade" id="edit-employee-modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        Edit Employee
+                        <h5 class="modal-title">Edit Employee</h5>
                     </div>
-                    <div class="modal-body"></div>
-                    <div class="modal-footer">
-                        <button class="btn">
-                        </button>
+                    <div class="modal-body">
+                        <!--alert message bootstrap-->
+                        <input type="hidden" id="userId" />
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="editName" placeholder="jhondoe" required>
+                            <label for="floatingText">Username</label>
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="editEmail" placeholder="name@example.com"
+                                   required>
+                            <label for="floatingInput">Email address</label>
+                        </div>
+
+
+                        <div class="form-group">
+                            <select id="editDepartment" class="form-select form-select-lg mb-3"
+                                    aria-label=".form-select-lg example" style="font-size: 16px;" >
+                            </select>
+                        </div>
+
+                        <button type="submit"  class="btn btn-primary py-3 w-100 mb-2" style="background-color: #369;" id="edit_btn">Edit </button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -186,7 +208,6 @@
 </div>
 <!-- Content End -->
 
-</div>
 
 <!--    for select drop-drown-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
@@ -224,7 +245,7 @@
     function operateFormatter(value,row,index){
         return [
             //edit button that opens edit modal
-            '<button class="btn btn-toolbar btn-primary edit-employee-btn" data-bs-toggle="modal" data-bs-target="#edit-employee-modal" title="Edit">Edit</button>',
+            '<button class="btn btn-sm btn-primary edit-employee-btn" data-id="' + row.id + '" data-bs-toggle="modal" data-bs-target="#edit-employee-modal" title="Edit">Edit</button>',
         ].join(' ');
     }
 
@@ -588,6 +609,149 @@
                 }
             });
         });
+
+        // for edit employee
+        $(document).on('click', '.edit-employee-btn', function () {
+            const employeeId = $(this).data('id');
+            console.log('Edit button clicked');
+            console.log("employeeId", employeeId);
+
+            $.ajax({
+                url: '/api/user/list/byId/' + employeeId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Data received:', data);
+
+                    if (data && Object.keys(data).length > 0) {
+                        // Populate employee details in the modal
+                        $('#userId').val(data.id);
+                        $('#editName').val(data.name);
+                        $('#editEmail').val(data.email);
+                        if (data.hasOwnProperty('role') && data.role === 'PROJECT_MANAGER') {
+                            if (data.hasOwnProperty('department') && data.department !== null) {
+                                var departmentId = data.department.id;
+
+                                // Show the department select box
+                                $('#editDepartment').closest('.form-group').show();
+
+                                // Populate department options
+                                populateDepartmentOptions(departmentId);
+                            } else {
+                                console.log('No department information found for employeeId: ', employeeId);
+                            }
+                        } else {
+                            $('#editDepartment').closest('.form-group').hide();
+                        }
+
+                    } else {
+                        console.log('No or invalid data received for employeeId: ', employeeId);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                    // Handle AJAX error
+                }
+            });
+        });
+
+        function populateDepartmentOptions(selectedDepartmentId) {
+            $.ajax({
+                url: '/api/department/list',
+                type: 'GET',
+                success: function (data) {
+                    var departmentSelect = $('#editDepartment');
+                    departmentSelect.empty();
+
+                    departmentSelect.append($('<option>', {
+                        value: '',
+                        text: 'Select Department',
+                    }));
+
+                    $.each(data, function (index, department) {
+                        departmentSelect.append($('<option>', {
+                            value: department.id,
+                            text: department.name,
+                            selected: department.id === selectedDepartmentId // Set selected based on the employee's department
+                        }));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error fetching department list:', error);
+                }
+            });
+        }
+
+
+        $(document).on('click', '#edit_btn', function () {
+            const employeeId = $('#userId').val();
+            var username = $('#editName').val();
+            var email = $('#editEmail').val();
+            var departmentId = $('#editDepartment').val();
+
+            console.log("department id : ", departmentId);
+
+            if (username === "" || email === "" || departmentId === "") {
+                alert("Please enter Edit");
+                return;
+            }
+
+            console.log("employee id : ", employeeId);
+            console.log("department id : ", departmentId);
+
+            Swal.fire({
+                title: "Are you sure want to Edit this employee?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#edit_btn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...');
+                    $('#edit_btn').prop('disabled', true);
+
+
+                    var apiUrl = '/api/user/update/' + employeeId;
+
+
+                    const payload = {
+                        id: employeeId,
+                        name: username,
+                        email: email,
+                        departmentId: departmentId,
+                    };
+
+                    console.log("payload", payload);
+
+
+                    $.ajax({
+                        url: apiUrl,
+                        type: 'PUT',
+                        data: JSON.stringify(payload),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log('Data received:', data);
+                            alert('Employee Update successfully');
+                            $('#edit-employee-modal').modal('hide');
+                            $('#edit_btn').html('Edit').prop('disabled', false);
+                            $('#table').bootstrapTable('refresh');
+                            showSuccess('Employee updated successfully');
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error updating employee');
+                            $('#edit_btn').html('Edit').prop('disabled', false);
+                            $('#alert-danger').show();
+                        },
+                        complete: function () {
+
+                        }
+                    });
+                }
+            });
+        });
+
+
 
 
     });

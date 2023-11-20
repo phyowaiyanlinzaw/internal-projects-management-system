@@ -1,4 +1,10 @@
+<!--
 
+    TODO :: CREATE MODAL TO SHOW PROJECT'S DEATILS WHEN CLICK ON EACH PROJECT
+
+    TODO :: FORM TO CREATE PROJECT IN MODAL
+
+ -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -100,6 +106,11 @@
                 background-color: #6ea8fe;
             }
 
+            .invalid-feedback {
+                color: red;
+            }
+
+
 
         </style>
         <script src="/js/fontawesome.js"></script>
@@ -198,7 +209,7 @@
                         '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
 
 
-
+                    
             }
 
             const clientList = await getClientList();
@@ -523,6 +534,29 @@
             //     }
             // });
 
+            function initializeTagifyAndValidation() {
+                let validatedProjectForm = false;
+
+                // Your Tagify initialization code...
+
+                // Validate on input change
+                inputElement.addEventListener('change', function () {
+                    validatePrjArchitecture();
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    const arcccList = await getArchitecturelist();
+                    const inputElement = document.querySelector('input[name="architectures"]');
+                    initializeTagifyAndValidation(arcccList, inputElement);
+                } catch (error) {
+                    console.error("Error:", error);
+                }
+            });
+
+
+
             // document.addEventListener('DOMContentLoaded', async () => {
             //     try {
             //         const arcccList = await getArchitecturelist();
@@ -748,8 +782,6 @@
                     });
                 });
 
-            const projectObjectiveEditor =
-                document.querySelector(".quill-editor-full");
 
             const editProjectObjectiveEitor = document.querySelector(
                 "#edit-project-objective"
@@ -762,12 +794,6 @@
                 theme: "snow",
             });
 
-            const addObjectiveEditor = new Quill(projectObjectiveEditor, {
-                modules: {
-                    toolbar: toolbaroptions,
-                },
-                theme: "snow",
-            });
 
             async function getAllProjects() {
                 switch (loginUser.currentUser.role) {
@@ -1039,75 +1065,79 @@
 
                     const currentProejctDetail = await getData(`/api/project/list/${id}`);
 
-                    document.querySelector("#updateButton").addEventListener("click", function () {
-                        const internalReviewCount =
-                            document.getElementById(
-                                "project-internal-review-count"
-                            ).value;
-                        const externalReviewCount =
-                            document.getElementById(
-                                "project-external-review-count"
-                            ).value;
-                        const data = {
-                            internal_review_count: internalReviewCount,
-                            external_review_count: externalReviewCount,
-                        };
-                        fetch(
-                            "/api/review/update-review/" +
-                            currentProejctDetail.id,
-                            {
-                                method: "PUT",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(data),
-                            }
-                        )
-                            .then((response) => response.json())
-                            .then((data) => {
-                                console.log(
-                                    "Review counts updated successfully:",
-                                    data
-                                );
-                            })
-                            .catch((error) => {
-                                console.error(
-                                    "Error updating review counts:",
-                                    error
-                                );
-                            });
-                    });
+                    if (loginUser.currentUser.role === "PROJECT_MANAGER") {
 
-                    document.querySelector("#updateButtonDeli").addEventListener("click", async function () {
-
-                        let deliverableList = [];
-
-                        currentProejctDetail.deliverableDto.forEach(a => {
-                            const checkbox = document.querySelector(`#checkbox-${a.id}`);
-
-                            if (checkbox.checked) {
-                                deliverableList.push({ id: a.id, status: true });
-                            }
+                        document.querySelector("#updateButton").addEventListener("click", function () {
+                            const internalReviewCount =
+                                document.getElementById(
+                                    "project-internal-review-count"
+                                ).value;
+                            const externalReviewCount =
+                                document.getElementById(
+                                    "project-external-review-count"
+                                ).value;
+                            const data = {
+                                internal_review_count: internalReviewCount,
+                                external_review_count: externalReviewCount,
+                            };
+                            fetch(
+                                "/api/review/update-review/" +
+                                currentProejctDetail.id,
+                                {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(data),
+                                }
+                            )
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    console.log(
+                                        "Review counts updated successfully:",
+                                        data
+                                    );
+                                })
+                                .catch((error) => {
+                                    console.error(
+                                        "Error updating review counts:",
+                                        error
+                                    );
+                                });
                         });
 
-                        console.log("deliverable", deliverableList);
 
-                        fetch(`/api/deliverable/update-status`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(deliverableList),
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log('Status updated successfully:', data);
-                            })
-                            .catch(error => {
-                                console.error('Error updating status:', error);
+                        document.querySelector("#updateButtonDeli").addEventListener("click", async function () {
+
+                            let deliverableList = [];
+
+                            currentProejctDetail.deliverableDto.forEach(a => {
+                                const checkbox = document.querySelector(`#checkbox-${a.id}`);
+
+                                if (checkbox.checked) {
+                                    deliverableList.push({id: a.id, status: true});
+                                }
                             });
-                    });
 
+                            console.log("deliverable", deliverableList);
+
+                            fetch(`/api/deliverable/update-status`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(deliverableList),
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Status updated successfully:', data);
+                                })
+                                .catch(error => {
+                                    console.error('Error updating status:', error);
+                                });
+                        });
+
+                    }
                     console.log(currentProejctDetail)
 
                     document.querySelector(
@@ -1648,6 +1678,9 @@
                 });
 
 
+                // Validation for project
+                // let validatedProjectForm = false;
+
                 console.log("validation eeee");
                 function validateProjectName() {
                     const prjName = $('#name').val();
@@ -1808,8 +1841,10 @@
                         errorContainer.remove();
                         $('#systemOutlines').css('border', '1px solid #28a745'); // Green border color for valid state
                     }
-                    console.log("project system outline validaiont : ", validatedProjectForm);
+
                 }
+
+                    console.log("project system outline validaiont : ", validatedProjectForm);
 
 
                 function validatePrjObjective() {
@@ -1871,6 +1906,65 @@
                 }
 
 
+                let projectObjectiveEditor;
+
+                function initializeQuillEditor() {
+                    projectObjectiveEditor = new Quill('.quill-editor-full', {
+                        modules: {
+                            toolbar: toolbaroptions
+                        },
+                        theme: 'snow'
+                    });
+                }
+
+                function validatePrjObjective() {
+                    if (!projectObjectiveEditor) {
+                        console.error("Quill editor not initialized");
+                        return;
+                    }
+
+                    const description = projectObjectiveEditor.getText().trim();
+                    const errorContainer = $('.quill-editor-full').siblings('.error-container');
+
+                    if (!description || description.length === 0) {
+                        validatedProjectForm = false;
+                        console.log("Objective error");
+
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Objective is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('.quill-editor-full').after('<div class="error-container"></div>').siblings('.error-container').append(p);
+                        } else {
+                            errorContainer.show(); // Show the error container
+                        }
+
+                        $('.quill-editor-full').addClass('is-invalid');
+                        $('.quill-editor-full').removeClass('is-valid');
+                    } else {
+                        console.log("Objective success");
+                        validatedProjectForm = true;
+
+                        if (errorContainer.length > 0) {
+                            errorContainer.hide(); // Hide the error container
+                        }
+
+                        $('.quill-editor-full').addClass('is-valid');
+                        $('.quill-editor-full').removeClass('is-invalid');
+                    }
+                }
+
+                if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                    initializeQuillEditor();
+                } else {
+
+                    document.addEventListener('DOMContentLoaded', initializeQuillEditor);
+                }
+
+                let validationPerformed = false;
 
                 $('#name').on('input', function () {
                     validateProjectName();
@@ -1902,12 +1996,12 @@
                 });
 
 
-                $('#objective').on('input', function () {
-                    validatePrjObjective();
-                });
-
                 $('#start_date').on('input',function () {
                     validateStartDate();
+                });
+
+                $('.quill-editor-full ').on('input', function () {
+                    validatePrjObjective();
                 });
 
 
@@ -1920,7 +2014,7 @@
                     validatePrjSystemOutline();
                     validatePrjObjective();
                     validateStartDate();
-                    return validatedProjectForm ;
+                    return validatedProjectForm;
 
                 }
 
@@ -1928,10 +2022,14 @@
 
                 $("#project-add-btn").on('click', function (event) {
                     console.log("submitted")
-                    event.preventDefault(); // Prevent the form from submitting the traditional way
-
+                    event.preventDefault();
 
                     if (!validateProject()) {
+                        event.preventDefault();
+
+                        if (validatedProjectForm) {
+                            this.submit();
+                        }
                         return;
                     }
 
@@ -1948,7 +2046,7 @@
                     console.log("architectures list : ", architectures);
                     const systemOutlines = sysSelect.selectedValues;
                     const deliverable = $("#deliverable").val();
-                    const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                    const objective = projectObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
                     console.log(
                         projectName,
                         client,
@@ -1995,7 +2093,7 @@
                         tagifyInstance.DOM.scope.classList.add("is-invalid")
                         console.warn('JSON data is empty.');
                         $("#architectures").siblings('.error-container').removeClass("d-none")
-                    } 
+                    }
 
                     let deliverableList
 
@@ -2019,7 +2117,7 @@
                             console.log(matchingObj);
                             return matchingObj ? matchingObj : { type: deli.value };
                         });
-                    
+
                         deliverableList = deliverTypeList.map(deli => {
                             return {
                                 status : false,
@@ -2041,15 +2139,7 @@
                     console.log(architectures);
                     console.log(empList);
 
-                    Swal.fire({
-                        title: "Are you sure want to edit?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+
                             const project = {
                                 name: projectName,
                                 clientDto: client,
@@ -2106,8 +2196,7 @@
                                     alert("Error registering project");
                                 },
                             });
-                        }
-                    });
+
                 });
             });
 
@@ -2541,7 +2630,7 @@
                                             placeholder="enter to add your own architecture"
                                             required
                                         />
-                                        
+
                                         <div class="error-container d-none">
                                         <p class="text-danger fs-6 error-message" style="margin-top: 0;">
                                             please select aleast one architecture
@@ -2592,27 +2681,16 @@
                                             placeholder="add value"
                                             required
                                         />
-                                        <div class="error-container d-none">
-                                        <p class="text-danger fs-6 error-message" style="margin-top: 0;">
-                                            please select aleast one item
-                                        </p>
-                                        </div>
                                     </div>
 
                                     <div
                                         class="col-lg-12"
                                         style="margin-bottom: 80px"
                                     >
-                                        <label for="objective"
-                                            >Objective<span style="color: red">
-                                                *</span
-                                            ></label
-                                        >
-                                        <div
-                                            class="quill-editor-full"
-                                            id="objective"
-                                            name="objective"
-                                        ></div>
+                                        <label for="objective">Objective<span style="color: red">*</span></label>
+                                            <div class="quill-editor-full " id="objective" name="objective" required pattern=".*\S.*"></div>
+
+                                             <div id="objectiveError" class="invalid-feedback"></div>
                                     </div>
 
                                     <div class="text-center">
