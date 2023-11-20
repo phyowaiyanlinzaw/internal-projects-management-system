@@ -7,7 +7,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Ro
 
 @Getter
 @Setter
-public class UseruiDto {
+public class UserUIDto {
     private long id;
     private String name;
     private String email;

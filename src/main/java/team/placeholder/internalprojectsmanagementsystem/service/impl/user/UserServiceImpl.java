@@ -1,26 +1,19 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
-import jakarta.mail.search.SearchTerm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UserUIDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.AvailableUser;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
@@ -351,7 +344,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UseruiDto userDto) {
+    public UserDto updateUser(UserUIDto userDto) {
         User user = userRepository.findById(userDto.getId());
         if (user != null) {
             user.setName(userDto.getName());
