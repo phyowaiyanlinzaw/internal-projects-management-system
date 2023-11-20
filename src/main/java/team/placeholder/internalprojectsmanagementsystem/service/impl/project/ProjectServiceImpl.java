@@ -273,6 +273,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Long countAllProjectsByProjectManagerId(long id) {
+        return projectRepository.countAllByProjectManagerId(id);
+    }
+
+    @Override
+    public Long countAllProjectsByProjectManagerIdAndStatus(long id, String status) {
+        return projectRepository.countAllByProjectManagerIdAndStatus(id, status);
+    }
+
+    @Override
     public List<ProjectDto> getAllProjectsByProjectManagerId(long id) {
 
         List<Project> projectList = projectRepository.findAllByProjectManagerId(id);

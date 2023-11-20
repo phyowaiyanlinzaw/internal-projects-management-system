@@ -25,6 +25,10 @@ public interface ProjectService {
 
     Long countAllProjectsByUsersId(long id);
 
+    Long countAllProjectsByProjectManagerId(long id);
+
+    Long countAllProjectsByProjectManagerIdAndStatus(long id, String status);
+
     List<ProjectDto> getAllProjectsByDepartmentId(long id);
     Long countAllProjectsByDepartmentId(long id);
 

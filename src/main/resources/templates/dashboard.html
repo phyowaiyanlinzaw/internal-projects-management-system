@@ -106,19 +106,10 @@
                 <!--                sec:authorize="hasRole('PROJECT_MANAGER')"-->
                 <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="bi bi-list-task fa-2x text-primary"></i>
+                        <i class="bi bi-collection-fill fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2"></p>
-                            <!--                            <h6 class="mb-0" id=""></h6>-->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="bi bi-stack fa-2x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2"></p>
-                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                            <p class="mb-2">Projects Count</p>
+                            <h6 class="mb-0" id="pm-projects-count"></h6>
                         </div>
                     </div>
                 </div>
@@ -126,8 +117,17 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-patch-check-fill fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2"></p>
-                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                            <p class="mb-2">Finished Projects</p>
+                            <h6 class="mb-0" id="pm-finished-projects-count"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-hourglass-split fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Ongoing Projects</p>
+                            <h6 class="mb-0" id="pm-ongoing-projects-count"></h6>
                         </div>
                     </div>
                 </div>
@@ -815,6 +815,33 @@
                 console.log(error);
             }
         });
+
+        $.ajax({
+            url: "api/project/count/project-manager/" + currentUser.currentUser.id,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#pm-projects-count").text(data);
+            },
+        })
+
+        $.ajax({
+            url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/status/In_Progress",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#pm-ongoing-projects-count").text(data);
+            },
+        })
+
+        $.ajax({
+            url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/status/Finished",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#pm-finished-projects-count").text(data);
+            },
+        })
 
     });
 
