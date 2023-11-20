@@ -1224,7 +1224,7 @@
                     class="d-flex justify-content-between align-items-center flex-wrap"
                 >
                     <div class="d-flex gap-3 align-items-center flex-wrap">
-                        <span class="issue-title issueDetails" data-id="${issue.id}" style="font-size: 32px;cursor: pointer;font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande","Lucida Sans Unicode", Geneva, Verdana, sans-serif;">${issue.title}</span>
+                        <span class="issue-title card-title issueDetails" data-id="${issue.id}" style="font-size: 32px;cursor: pointer;font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande","Lucida Sans Unicode", Geneva, Verdana, sans-serif;">${issue.title}</span>
                     </div>
 
                     <div class="d-flex justify-content-between gap-2">
@@ -1247,7 +1247,7 @@
                 <div class="col issue-time-line d-flex gap-4 flex-wrap">
                     <div class="d-flex align-items-center gap-2">
                         <p style="padding: 0;margin: 0;opacity: 0.5;">Uploader</p>
-                        <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">zaw lin shien</span>
+                        <span class="card-text" style="font-size: 0.9em;opacity: 1;font-weight: 600;">${issue.user_uploader.name}</span>
                     </div>
                     <div class="d-flex flex-wrap gap-4">
                         <div class="d-flex align-items-center gap-2">
@@ -1572,7 +1572,7 @@
                 <div class="col issue-time-line d-flex gap-4 flex-wrap">
                     <div class="d-flex align-items-center gap-2">
                         <p style="padding: 0;margin: 0;opacity: 0.5;">Uploader</p>
-                        <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">zaw lin shien</span>
+                        <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">${issue.user_uploader.name}</span>
                     </div>
                     <div class="d-flex flex-wrap gap-4">
                         <div class="d-flex align-items-center gap-2">
