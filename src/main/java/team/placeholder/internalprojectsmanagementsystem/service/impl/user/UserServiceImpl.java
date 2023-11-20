@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registerEmployeeDto.getEmail());
         user.setPassword(registerEmployeeDto.getPassword());
         user.setRole(Role.valueOf(registerEmployeeDto.getRole()));
-        user.setEnabled(true);
+        user.setEnabled(false);
         if (registerEmployeeDto.getRole().equals(Role.PROJECT_MANAGER.toString())){
             Department department = departmentRepository.findById(registerEmployeeDto.getDepartmentId());
             user.setDepartment(department);

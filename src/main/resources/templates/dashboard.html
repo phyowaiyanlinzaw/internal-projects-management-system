@@ -39,7 +39,7 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-collection-fill fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Today Project</p>
+                            <p class="mb-2">Total Projects</p>
                             <h6 class="mb-0" id="projectCount"></h6>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa-solid fa-people-group fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Total Employee</p>
+                            <p class="mb-2">Total Employees</p>
                             <h6 class="mb-0" id="employeeCount"></h6>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa-solid fa-user-tie fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Today Client</p>
+                            <p class="mb-2">Total Clients</p>
                             <h6 class="mb-0" id="clientCount"></h6>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-buildings-fill fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Total Department</p>
+                            <p class="mb-2">Total Departments</p>
                             <h6 class="mb-0" id="departmentCount"></h6>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-list-task fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Projects Count</p>
+                            <p class="mb-2">Total Projects</p>
                             <h6 class="mb-0" id="department-head-projects-count"></h6>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-stack fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Employees Count</p>
+                            <p class="mb-2">Total Employees</p>
                             <h6 class="mb-0" id="department-head-employees-count"></h6>
                         </div>
                     </div>
@@ -95,16 +95,16 @@
                 <!--                sec:authorize="hasRole('DEPARTMENT_HEAD')"-->
 
                 <!--                sec:authorize="hasRole('PROJECT_MANAGER')"-->
-                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
+                <div class="col-sm-6 col-xl-3" sec:authorize="hasRole('PROJECT_MANAGER')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-collection-fill fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Projects Count</p>
+                            <p class="mb-2">Total Projects</p>
                             <h6 class="mb-0" id="pm-projects-count"></h6>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
+                <div class="col-sm-6 col-xl-3" sec:authorize="hasRole('PROJECT_MANAGER')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-patch-check-fill fa-2x text-primary"></i>
                         <div class="ms-3">
@@ -113,12 +113,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('PROJECT_MANAGER')">
+                <div class="col-sm-6 col-xl-3" sec:authorize="hasRole('PROJECT_MANAGER')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-hourglass-split fa-2x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Ongoing Projects</p>
                             <h6 class="mb-0" id="pm-ongoing-projects-count"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3" sec:authorize="hasRole('PROJECT_MANAGER')">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="bi bi-exclamation-triangle-fill fa-2x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Total Issues</p>
+                            <h6 class="mb-0" id="pm-issues-count"></h6>
                         </div>
                     </div>
                 </div>
