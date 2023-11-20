@@ -40,6 +40,21 @@
 
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet"/>
+    <style>
+        .toggle {
+        background: none;
+        border: none;
+        color: #000000;
+        /*display: none;*/
+        /*font-size: .9em;*/
+        font-weight: 600;
+        /*padding: .5em;*/
+        position: absolute;
+        right: .75em;
+        top: 1.25em;
+        z-index: 9;
+        }
+    </style>
 </head>
 
 <body>
@@ -185,5 +200,21 @@
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnToggle").click(function () {
+            var type = $("#floatingPassword").attr("type");
+            if (type == "password") {
+                $("#floatingPassword").attr("type", "text");
+                $("#eyeIcon").removeClass("fa fa-eye");
+                $("#eyeIcon").addClass("fa fa-eye-slash");
+            } else {
+                $("#floatingPassword").attr("type", "password");
+                $("#eyeIcon").removeClass("fa fa-eye-slash");
+                $("#eyeIcon").addClass("fa fa-eye");
+            }
+        });
+    });
+</script>
 </body>
 </html>
