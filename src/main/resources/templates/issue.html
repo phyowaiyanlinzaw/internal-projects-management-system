@@ -1238,7 +1238,7 @@
                                 ${issue.solved === true ? 'Closed' : 'Open'}
                             </span>
                         </div>
-                        ${currentLoginUserRole === "PROJECT_MANAGER" ? 
+                        ${getLoginUser.currentUser.id === issue.user_pic.id ? 
                         '<button type="button" class="btn btn-info see-more-button text-white" data-id="${issue.id}">' +
                             '<i class="fa-solid fa-pen-to-square"></i>' +
                         '</button>' 
