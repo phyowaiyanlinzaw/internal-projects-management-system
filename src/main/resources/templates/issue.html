@@ -353,59 +353,62 @@
                 <div class="container-fluid">
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
 
-                        <h6 data-toggle="collapse" href="#peoples" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i> People</h6>
-
-                        <div id="peoples" class="accordion-collapse collapse accordion-body">
-                            <div class="col mb-3 ">
-                                <h6>Uploader:</h6>
-                                <p class=""  id="uploaderDetails"></p>
+                        <!-- <h6 data-toggle="collapse" href="#peoples" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i> People</h6> -->
+                        <div class="col mb-3 d-flex gap-2">
+                                <h6>Created at</h6>
+                                <span id="solveDateDetails"></span>
                             </div>
+                        <div id="peoples" class="row row-cols-2">
                             <div  class="col mb-3 ">
-                                <h6>Person In Charge:</h6>
+                                <div>
+                                    <div>
+                                        <i class="fa-solid fa-user-pen"></i>
+                                        <span>Person In Charge</span>
+                                    </div>
+                                </div>
                                 <p class="" id="picDetails"></p>
 
                             </div>
                             <div  class="col mb-3 ">
-                                <h6>Responsible Party:</h6>
+                                <div>
+                                    <div>
+                                        <i class="fa-solid fa-users-gear"></i>
+                                        <span>Responsible Party</span>
+                                    </div>
+                                </div>
                                 <p class="" id="rpDetails"></p>
                             </div>
                         </div>
 
-                        <h6 data-toggle="collapse" href="#solution-detail" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Solution</h6>
-                        <div id="solution-detail" class="accordion-collapse collapse accordion-body">
-                            <div class="col mb-3">
+                        <!-- <h6 data-toggle="collapse" href="#solution-detail" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Solution</h6> -->
 
-                                <h6 >Corrective Action :</h6>
-                                <p class="" id="correctiveDetails"></p>
-
+                        <!-- <h6 data-toggle="collapse" href="#details" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Details</h6> -->
+                        <div id="details" class="">
+                            <div>
+                                <div>
+                                    <i class="fa-solid fa-info"></i>
+                                    <span>Details</span>
+                                </div>
                             </div>
-                            <div class="col mb-3">
+                            <div class="row row-cols-2">
+                                <div class=" mb-3">
 
-                                <h6 >Preventive Action :</h6>
-                                <p class="" id="preventiveDetails"></p>
+                                    <label for="issueTitleDetails" >Title:</label>
+                                    <input type="text" class="form-control" id="issueTitleDetails"/>
 
-                            </div>
-                        </div>
-
-                        <h6 data-toggle="collapse" href="#details" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Details</h6>
-                        <div id="details" class="accordion-collapse collapse accordion-body">
-                            <div class="col mb-3">
-
-                                <label for="issueTitleDetails" >Title:</label>
-                                <input type="text" class="form-control" id="issueTitleDetails"/>
-
-                            </div>
-                            <div class="col mb-3 ">
-                                <label for="issue_categoryDetails">Category:</label>
-                                <select id="issue_categoryDetails" class="form-control me-2">
-                                    <option value="ERROR">ERROR</option>
-                                    <option value="BUG">BUG</option>
-                                    <option value="COMMUNICATION">COMMUNICATION</option>
-                                    <option value="TECHNICAL">TECHNICAL</option>
-                                    <option value="BUDGET">BUDGET</option>
-                                    <option value="DESIGN">DESIGN</option>
-                                    <option value="TESTING">TESTING</option>
-                                </select>
+                                </div>
+                                <div class=" mb-3 ">
+                                    <label for="issue_categoryDetails">Category:</label>
+                                    <select id="issue_categoryDetails" class="form-control me-2">
+                                        <option value="ERROR">ERROR</option>
+                                        <option value="BUG">BUG</option>
+                                        <option value="COMMUNICATION">COMMUNICATION</option>
+                                        <option value="TECHNICAL">TECHNICAL</option>
+                                        <option value="BUDGET">BUDGET</option>
+                                        <option value="DESIGN">DESIGN</option>
+                                        <option value="TESTING">TESTING</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="col mb-3 ">
@@ -433,18 +436,44 @@
 
                             </div>
 
-                            <div class="col mb-3 ">
-                                <h6>Created Date:</h6>
-                                <p id="solveDateDetails"></p>
-                            </div>
-
                             <div class="col mb-3 d-none" id="issue-detail-save-btn-container">
                                 <button class="btn btn-success" id="issue-detail-save-btn">Save</button>
                             </div>
                         </div>
 
-                        <h6 data-toggle="collapse" href="#issue-detail-description" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>Description</h6>
-                        <div id="issue-detail-description" class="accordion-collapse collapse">
+                        <div id="solution-detail" class="">
+                            <div>
+                                <div>
+                                    <i class="fa-brands fa-rocketchat"></i>
+                                    <span>Solution</span>
+                                </div>
+                            </div>
+                            <div class="col mb-3">
+                                <div>
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    <span>Corrective Action</span>
+                                </div>
+                                <p class="" id="correctiveDetails"></p>
+
+                            </div>
+                            <div class="col mb-3">
+                                <div>
+                                    <i class="fa-solid fa-shield"></i>
+                                    <span>Preventive Action</span>
+                                </div>
+                                <p class="" id="preventiveDetails"></p>
+
+                            </div>
+                        </div>
+
+                        <!-- <h6 data-toggle="collapse" href="#issue-detail-description" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>Description</h6> -->
+                        <div id="issue-detail-description" class="">
+                            <div>
+                                <div>
+                                    <i class="fa-solid fa-minus"></i>
+                                    <span>Description</span>
+                                </div>
+                            </div>
                             <div class="accordion-body" id="descriptionDetails"></div>
                             <div class="col mb-3 d-none" id="issue-description-save-btn-container">
                                 <button class="btn btn-success" id="issue-description-save-btn">Save</button>
@@ -505,6 +534,9 @@
 <script type="module">
 
 
+    $(document).ready(function () {
+        setupLogoutConfirmation();
+    });
 
     $(document).ready(function () {
 
@@ -1182,7 +1214,7 @@
         const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 
         return formattedDate;
-    }      
+    }
 
     function createIssueCard(issue) {
         console.log(issue)
@@ -1195,11 +1227,12 @@
                     class="d-flex justify-content-between align-items-center flex-wrap"
                 >
                     <div class="d-flex gap-3 align-items-center flex-wrap">
-                        <span class="issue-title issueDetails" data-id="${issue.id}" style="font-size: 32px;cursor: pointer;font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande","Lucida Sans Unicode", Geneva, Verdana, sans-serif;">${issue.title}</span>
+                        <span class="issue-title card-title issueDetails" data-id="${issue.id}" style="font-size: 32px;cursor: pointer;font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande","Lucida Sans Unicode", Geneva, Verdana, sans-serif;">${issue.title}</span>
                     </div>
 
                     <div class="d-flex justify-content-between gap-2">
                         <div>
+                            ${issue.status === 'DUPLICATE' ? '<span class="badge bg-warning">Duplicate</span>' : ''}
                             <span class="badge bg-success">${issue.issueCategory}</span>
                             <span class="badge bg-primary bg-${issue.solved === true ? 'danger' : 'primary'}">
                                 ${issue.solved === true ? 'Closed' : 'Open'}
@@ -1217,7 +1250,7 @@
                 <div class="col issue-time-line d-flex gap-4 flex-wrap">
                     <div class="d-flex align-items-center gap-2">
                         <p style="padding: 0;margin: 0;opacity: 0.5;">Uploader</p>
-                        <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">zaw lin shien</span>
+                        <span class="card-text" style="font-size: 0.9em;opacity: 1;font-weight: 600;">${issue.user_uploader.name}</span>
                     </div>
                     <div class="d-flex flex-wrap gap-4">
                         <div class="d-flex align-items-center gap-2">
@@ -1274,11 +1307,11 @@
                             },
                             theme: "snow",
                         });
-                    
+
                         quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                         quill.enable(false);
                     }
-                
+
                     console.log("After Quill initialization");
                     console.log("this feels suck man", quill);
                 }
@@ -1297,10 +1330,10 @@
 
                 return main;
 
-            } 
+            }
 
     let currentIssueId;
-            $(document).ready(async function () {                
+            $(document).ready(async function () {
 
                 function loadData() {
                     $.ajax({
@@ -1378,10 +1411,10 @@
                         success: function (data) {
                             console.log('Data received:', data);
                             if (data) {
+                                console.log("i have no idea help")
                                 $("#details").attr("data-currentEditingIssueId", data.id);
                                 $('#issueTitleDetails').val(data.title);
                                 $('#issue_categoryDetails').val(data.issueCategory);
-                                $('#uploaderDetails').text(data.user_uploader.name);
                                 $('#picDetails').text(data.user_pic.name);
                                 $('#rpDetails').text(data.responsible_party.name);
                                 const issueDetail = new Quill(document.querySelector('#descriptionDetails'), {
@@ -1542,7 +1575,7 @@
                 <div class="col issue-time-line d-flex gap-4 flex-wrap">
                     <div class="d-flex align-items-center gap-2">
                         <p style="padding: 0;margin: 0;opacity: 0.5;">Uploader</p>
-                        <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">zaw lin shien</span>
+                        <span style="font-size: 0.9em;opacity: 1;font-weight: 600;">${issue.user_uploader.name}</span>
                     </div>
                     <div class="d-flex flex-wrap gap-4">
                         <div class="d-flex align-items-center gap-2">
@@ -1599,11 +1632,11 @@
                             },
                             theme: "snow",
                         });
-                    
+
                         quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                         quill.enable(false);
                     }
-                
+
                     console.log("After Quill initialization");
                     console.log("this feels suck man", quill);
                 }
@@ -1763,7 +1796,6 @@ console.log("After radio button selection");
                             console.log("Issue Updated Successfully");
                             // Update 'solved' to true after a successful AJAX request
 
-                            $('#solved').empty().html(`<span class="card-title badge rounded-pill bg-${spanColor}" id="solved">${spanContent}</span>`);
                             Swal.fire({
                                 title: "Success!",
                                 text: "You have successfully solved the issue.",
