@@ -199,6 +199,47 @@
                 if (addDepartmentButton) {
                     addDepartmentButton.classList.remove("d-none");
                 }
+                const updateButtonContainer = document.getElementById("updateButtonContainer");
+                    updateButtonContainer.innerHTML =
+                        '<button id="updateButton" type="button" class="btn btn-primary">Update</button>';
+                    document.querySelector("#updateButton").addEventListener("click", function () {
+                            var internalReviewCount =
+                                document.getElementById(
+                                    "project-internal-review-count"
+                                ).value;
+                            var externalReviewCount =
+                                document.getElementById(
+                                    "project-external-review-count"
+                                ).value;
+                            var data = {
+                                internal_review_count: internalReviewCount,
+                                external_review_count: externalReviewCount,
+                            };
+                            fetch(
+                                "/api/review/update-review/" +
+                                    targetData.id,
+                                {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(data),
+                                }
+                            )
+                            .then((response) => response.json())
+                            .then((data) => {
+                                console.log(
+                                    "Review counts updated successfully:",
+                                    data
+                                );
+                            })
+                            .catch((error) => {
+                                console.error(
+                                    "Error updating review counts:",
+                                    error
+                                );
+                            });
+                        });
             }
 
             const clientList = await getClientList();
@@ -1207,6 +1248,8 @@
 
                     objectiveQuill.enable(false);
 
+                    objectiveQuill.root.innerHTML = '';
+
                     objectiveQuill.clipboard.dangerouslyPasteHTML(
                         0,
                         currentProejctDetail.objective
@@ -2167,15 +2210,17 @@
                                 success: async function (data) {
                                     alert("Project registered successfully");
                                     // Reset the form if needed
-                                    $("#validation-form")[0].reset();
-                                    console.log("this projce has benn saved", data);
-                                    // event.currentTarget.submit();
-                                    window.top.location = window.top.location;
+                                    console.log(
+                                        "This project has been saved",
+                                        data
+                                    );
                                 },
                                 error: function (data) {
-                                    alert("Error registering project");
-                                    // event.currentTarget.submit();
-                                    window.top.location = window.top.location;
+                                    Swal.fire(
+                                        "Error",
+                                        "Error updating project amount",
+                                        "error"
+                                    );
                                 },
                             });
                         }
@@ -3562,7 +3607,7 @@
                                                     id="edit-architecture"
                                             >
 
-                                                <div id="architectures-list-in-edit" class="d-flex gap-2">
+                                                <div id="architectures-list-in-edit" class="d-flex gap-2 flex-wrap">
 
                                                 </div>
                                             </div>
