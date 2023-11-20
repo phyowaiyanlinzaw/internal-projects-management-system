@@ -298,19 +298,19 @@ $(document).ready(function () {
 
 
     // Get all date input elements using a common class name or another method
-    const dateInputs = document.querySelectorAll('input[type="date"]');
+    //const dateInputs = document.querySelectorAll('input[type="date"]');
 
     // Get the current date and format it as yyyy-MM-dd
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const minDate = `${year}-${month}-${day}`;
+    // const currentDate = new Date();
+    // const year = currentDate.getFullYear();
+    // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    // const day = String(currentDate.getDate()).padStart(2, '0');
+    // const minDate = `${year}-${month}-${day}`;
 
-    // Set the min attribute for each date input
-    dateInputs.forEach((dateInput) => {
-        dateInput.setAttribute('min', minDate);
-    });
+    // // Set the min attribute for each date input
+    // dateInputs.forEach((dateInput) => {
+    //     dateInput.setAttribute('min', minDate);
+    // });
 
 });
 

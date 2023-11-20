@@ -236,10 +236,12 @@
 
             let deliTypeList = await getDeliverableTypeList();
 
+            let deliTagfy;
+
             getDeliverableTypeList().then((deliType) => {
                 const deliTypeSelect = document.querySelector("#deliverable");
                 console.log(deliType);
-                const a = new Tagify(deliTypeSelect, {
+                deliTagfy = new Tagify(deliTypeSelect, {
                     whitelist: deliType.map((item) => item.type),
                     dropdown: {
                         consoleLog: true,
@@ -249,25 +251,16 @@
                     },
                 });
 
-                $("#validation-form").submit(function (event) {
+                deliTagfy
+                    .on('input' , b => {
+                        $('#deliverable').siblings('.error-container').addClass('d-none')
+                        deliTagfy.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                    })
+                    .on("add", b => {
+                        deliTagfy.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                        $('#deliverable').siblings('.error-container').addClass('d-none')
+                    })
 
-
-                    const deli =
-                        this.querySelector("#deliverable").value === ""
-                            ? []
-                            : JSON.parse(
-                                  this.querySelector("#deliverable").value
-                              );
-                    if (deli.length !== 0) {
-                        const whitelist = a.settings.whitelist;
-                        deli.forEach((item) => {
-                            if (!whitelist.includes(item.value)) {
-                                whitelist.push(item.value);
-                            }
-                        });
-                    }
-                    console.log(a.settings.whitelist);
-                });
             });
 
             let arcccList = await getArchitecturelist();
@@ -306,16 +299,28 @@
             //         console.log("Error:", error);
             //     });
 
+            let tagifyInstance
+
             getArchitecturelist()
                 .then((architectureList) => {
                     const inputElement = document.querySelector('input[name="architectures"]');
-                    const tagifyInstance = initializeTagify(inputElement, architectureList);
+                    tagifyInstance = initializeTagify(inputElement, architectureList);
 
                     // Set custom texts for Tagify validation messages
                     tagifyInstance.settings.texts = {
                         duplicate: "Duplicates are not allowed",
                         empty: "Architecture is required",
                     };
+
+                    tagifyInstance
+                        .on('input' , a => {
+                            $('#architectures').siblings('.error-container').addClass('d-none')
+                            tagifyInstance.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                        })
+                        .on("add", a => {
+                            tagifyInstance.DOM.scope.classList.add("border", "border-success", "is-valid");
+                            $('#architectures').siblings('.error-container').addClass('d-none')
+                        })
 
                     // Implement custom validation using the validate setting
                     tagifyInstance.settings.validate = function (tagData) {
@@ -349,6 +354,8 @@
                 .catch((error) => {
                     console.log("Error:", error);
                 });
+
+                let validatedProjectForm = false;
 
             function validatePrjArchitecture() {
                 const architectures = $('#architectures').val();
@@ -521,29 +528,6 @@
             //         console.log("Error:", error);
             //     }
             // });
-
-            function initializeTagifyAndValidation() {
-                let validatedProjectForm = false;
-
-                // Your Tagify initialization code...
-
-                // Validate on input change
-                inputElement.addEventListener('change', function () {
-                    validatePrjArchitecture();
-                });
-            }
-
-            document.addEventListener('DOMContentLoaded', async () => {
-                try {
-                    const arcccList = await getArchitecturelist();
-                    const inputElement = document.querySelector('input[name="architectures"]');
-                    initializeTagifyAndValidation(arcccList, inputElement);
-                } catch (error) {
-                    console.error("Error:", error);
-                }
-            });
-
-
 
             // document.addEventListener('DOMContentLoaded', async () => {
             //     try {
@@ -1670,9 +1654,6 @@
                 });
 
 
-                // Validation for project
-                let validatedProjectForm = false;
-
                 console.log("validation eeee");
                 function validateProjectName() {
                     const prjName = $('#name').val();
@@ -1696,6 +1677,7 @@
                         $('#name').addClass('is-valid');
                         $('#name').removeClass('is-invalid');
                     }
+                    console.log("project name validaiont : ", validatedProjectForm);
                 }
 
                 function validateProjectClient() {
@@ -1722,6 +1704,7 @@
                         $('#client').addClass('is-valid');
                         $('#client').removeClass('is-invalid');
                     }
+                    console.log("project client validaiont : ", validatedProjectForm);
                 }
 
 
@@ -1748,6 +1731,7 @@
                         $('#employee-list').css('border', '1px solid #28a745');
 
                     }
+                    console.log("project employee validaiont : ", validatedProjectForm);
                 }
 
 
@@ -1775,6 +1759,7 @@
                         $('#project-add-duration').addClass('is-valid');
                         $('#project-add-duration').removeClass('is-invalid');
                     }
+                    console.log("project duration validaiont : ", validatedProjectForm)
                 }
 
 
@@ -1802,33 +1787,7 @@
                         $('#background').addClass('is-valid');
                         $('#background').removeClass('is-invalid');
                     }
-                }
-
-                function validatePrjArchitecture() {
-                    const architectures = $('#architectures').val();
-                    const errorContainer = $('#architectures').siblings('.error-container');
-
-                    if (!architectures || architectures.trim().length === 0) {
-                        validatedProjectForm = false;
-                        if (errorContainer.length === 0) {
-                            let p = $("<p>")
-                                .addClass("text-danger fs-6")
-                                .text("Architecture is required")
-                                .css("margin", "0")
-                                .addClass('error-message');
-
-                            $('#architectures').after('<div class="error-container"></div>');
-                            $('#architectures').siblings('.error-container').append(p);
-                        }
-
-                        $('#architectures').addClass('is-invalid');
-                        $('#architectures').removeClass('is-valid');
-                    } else {
-                        validatedProjectForm = true;
-                        errorContainer.remove();
-                        $('#architectures').addClass('is-valid');
-                        $('#architectures').removeClass('is-invalid');
-                    }
+                    console.log("project background validaiont : ", validatedProjectForm)
                 }
 
                 // Function to validate systemOutlines
@@ -1855,37 +1814,7 @@
                         errorContainer.remove();
                         $('#systemOutlines').css('border', '1px solid #28a745'); // Green border color for valid state
                     }
-
-                }
-
-                function validatePrjDeliverable() {
-                    const deliverable = $('#deliverable').val();
-                    const errorContainer = $('#deliverable').siblings('.error-container');
-
-                    if (!deliverable || deliverable.trim().length === 0) {
-                        validatedProjectForm = false;
-                        if (errorContainer.length === 0) {
-                            let p = $("<p>")
-                                .addClass("text-danger fs-6")
-                                .text("Deliverable is required")
-                                .css("margin", "0")
-                                .addClass('error-message');
-
-                            $('#deliverable').after('<div class="error-container"></div>');
-                            $('#deliverable').siblings('.error-container').append(p);
-                        }
-
-                        // $('#deliverable').addClass('is-invalid');
-                        // $('#deliverable').removeClass('is-valid');
-
-                        $('#deliverable').css('border', '1px solid #dc3545');
-                    } else {
-                        validatedProjectForm = true;
-                        errorContainer.remove();
-                        // $('#deliverable').addClass('is-valid');
-                        // $('#deliverable').removeClass('is-invalid');
-                        $('#deliverable').css('border', '1px solid #28a745');
-                    }
+                    console.log("project system outline validaiont : ", validatedProjectForm);
                 }
 
 
@@ -1914,6 +1843,7 @@
                         $('#objective').addClass('is-valid');
                         $('#objective').removeClass('is-invalid');
                     }
+                    console.log("project objective validaiont : ", validatedProjectForm)
                 }
 
 
@@ -1943,6 +1873,7 @@
                         $('#start_date').addClass('is-valid');
                         $('#start_date').removeClass('is-invalid');
                     }
+                    console.log("project start date validaiont : ", validatedProjectForm);
                 }
 
 
@@ -1972,14 +1903,6 @@
                     validatePrjBackground();
                 });
 
-                $('#architectures').on('input', function () {
-                    validatePrjArchitecture();
-                });
-
-                $('#deliverable').on('input', function () {
-                    validatePrjDeliverable();
-                });
-
                 $('#systemOutlines').on('content-updated', function () {
                     validatePrjSystemOutline();
                 });
@@ -2000,8 +1923,6 @@
                     validateProjectEmployee();
                     validatePrjDuration();
                     validatePrjBackground();
-                    validatePrjArchitecture();
-                    validatePrjDeliverable();
                     validatePrjSystemOutline();
                     validatePrjObjective();
                     validateStartDate();
@@ -2047,53 +1968,77 @@
                         objective
                     );
 
-
-
-
-                    let jsonData = ''; // replace with your actual JSON data
-                    if (jsonData.trim() !== '') {
+                    console.log("architectures list",architectures)
+                    console.log(architectures === "")
+                    let arcList;
+                    tagifyInstance
+                        .on('input' , a => {
+                            $('#architectures').siblings('.error-container').addClass('d-none')
+                            tagifyInstance.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                        })
+                        .on("add", a => {
+                            tagifyInstance.DOM.scope.classList.add("border", "border-success", "is-valid");
+                            $('#architectures').siblings('.error-container').addClass('d-none')
+                        })
+ // replace with your actual JSON data
+                    if (architectures !== '' ) {
                         try {
-                            let parsedData = JSON.parse(jsonData);
+                            architectures = JSON.parse(architectures);
                             // Continue processing parsedData
+                            arcList = architectures.map((ar) => {
+                        const matchingObj = arcccList.find(
+                            (arccObj) => arccObj.tech_name === ar.value
+                            );
+                            console.log(matchingObj);
+                            return matchingObj
+                            ? matchingObj
+                            : { tech_name: ar.value };
+                        });
                         } catch (error) {
                             console.error('Error parsing JSON:', error);
                         }
                     } else {
+                        tagifyInstance.DOM.scope.classList.add("is-invalid")
                         console.warn('JSON data is empty.');
+                        $("#architectures").siblings('.error-container').removeClass("d-none")
+                    } 
+
+                    let deliverableList
+
+                    deliTagfy
+                    .on('input' , b => {
+                        $('#deliverable').siblings('.error-container').addClass('d-none')
+                        deliTagfy.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                    })
+                    .on("add", b => {
+                        deliTagfy.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                        $('#deliverable').siblings('.error-container').addClass('d-none')
+                    })
+
+                    if(deliverable !== '') {
+                        const oldDeliTypeList = JSON.parse(deliverable);
+
+                        const deliverTypeList = oldDeliTypeList.map((deli) => {
+                            const matchingObj = deliTypeList.find(
+                                (deliObj) => deliObj.type === deli.value
+                            );
+                            console.log(matchingObj);
+                            return matchingObj ? matchingObj : { type: deli.value };
+                        });
+                    
+                        deliverableList = deliverTypeList.map(deli => {
+                            return {
+                                status : false,
+                                deliverableType : deli
+                            }
+                        });
+                    } else {
+                        deliTagfy.DOM.scope.classList.add("is-invalid")
+                        console.warn('JSON data is empty.');
+                        $("#deliverable").siblings('.error-container').removeClass("d-none")
                     }
 
-                    architectures = JSON.parse(architectures);
-
-                    const arcList = architectures.map((ar) => {
-                        const matchingObj = arcccList.find(
-                            (arccObj) => arccObj.tech_name === ar.value
-                        );
-                        console.log(matchingObj);
-                        return matchingObj
-                            ? matchingObj
-                            : { tech_name: ar.value };
-                    });
-
-                    const oldDeliTypeList = JSON.parse(deliverable);
-
-                    const deliverTypeList = oldDeliTypeList.map((deli) => {
-                        const matchingObj = deliTypeList.find(
-                            (deliObj) => deliObj.type === deli.value
-                        );
-                        console.log(matchingObj);
-                        return matchingObj ? matchingObj : { type: deli.value };
-                    });
-
-                    const deliverableList = deliverTypeList.map(deli => {
-                        return {
-                            status : false,
-                            deliverableType : deli
-                        }
-                    });
-
-
-
-                    if(!validateProject()){
+                    if(validateProject()){
                         return;
                     }
 
@@ -2101,7 +2046,6 @@
                     console.log(objective);
                     console.log(architectures);
                     console.log(empList);
-                    console.log(deliverTypeList);
 
                     Swal.fire({
                         title: "Are you sure want to edit?",
@@ -2152,7 +2096,6 @@
                             };
 
                             console.log(project);
-                            //Perform the AJAX request
                             $.ajax({
                                 url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
                                 type: "POST",
@@ -2604,8 +2547,12 @@
                                             placeholder="enter to add your own architecture"
                                             required
                                         />
-                                        <div class="invalid-feedback error-container"></div>
-
+                                        
+                                        <div class="error-container d-none">
+                                        <p class="text-danger fs-6 error-message" style="margin-top: 0;">
+                                            please select aleast one architecture
+                                        </p>
+                                        </div>
                                     </div>
 
                                     <!--                                systemoutline add-->
@@ -2651,6 +2598,11 @@
                                             placeholder="add value"
                                             required
                                         />
+                                        <div class="error-container d-none">
+                                        <p class="text-danger fs-6 error-message" style="margin-top: 0;">
+                                            please select aleast one item
+                                        </p>
+                                        </div>
                                     </div>
 
                                     <div
