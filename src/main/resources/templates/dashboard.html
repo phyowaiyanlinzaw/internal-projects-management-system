@@ -835,6 +835,16 @@
             },
         })
 
+        //get issues counts by api/issue/count/project-manager/{projectManagerId}
+        $.ajax({
+            url: "api/issue/count/project-manager/" + currentUser.currentUser.id,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#pm-issues-count").text(data);
+            },
+        })
+
         $.ajax({
             url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/status/In_Progress",
             type: "GET",
