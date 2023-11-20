@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
@@ -87,7 +88,8 @@ public class UserServiceImpl implements UserService {
     public UserDto sendOtp(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            String otp = String.format("%04d", new Random().nextInt(10000));
+            //generate 6 digit otp
+            String otp = String.format("%06d", new Random().nextInt(999999));
             otpMap.put(email,otp);
             sendEmail(email,"OTP","Your One-timed Password is : "+otp);
             return modelmapper.map(user, UserDto.class);
@@ -171,6 +173,12 @@ public class UserServiceImpl implements UserService {
                 userDto.setProjectManager(modelmapper.map(user.getProjectManager(), UserDto.class));
             }
             userDto.setDepartmentdto(departmentDto);
+
+            if (user.getRole()==Role.valueOf("PROJECT_MANAGER")){
+                List<Project> projects = user.getProject();
+                List<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).toList();
+                userDto.setProjectsByProjectManager(projectDtos);
+            }
             return userDto;
         } else {
             return null;
@@ -199,8 +207,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registerEmployeeDto.getEmail());
         user.setPassword(registerEmployeeDto.getPassword());
         user.setRole(Role.valueOf(registerEmployeeDto.getRole()));
-
-
+        user.setEnabled(true);
         if (registerEmployeeDto.getRole().equals(Role.PROJECT_MANAGER.toString())){
             Department department = departmentRepository.findById(registerEmployeeDto.getDepartmentId());
             user.setDepartment(department);
@@ -213,6 +220,7 @@ public class UserServiceImpl implements UserService {
         User savedUser;
         try {
             savedUser = userRepository.save(user);
+            sendEmail(user.getEmail(),"Password","Your password is : "+password);
         } catch (DataIntegrityViolationException e) {
             return null;
         }

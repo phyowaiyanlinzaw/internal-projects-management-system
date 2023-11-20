@@ -82,6 +82,7 @@
                                                 class="bi bi-plus-circle"
                                         ></i>
                                     </button>
+                                    </button>
                                 </h3>
                                 <div class="swim-lane p-3" id="TODO">
                                 </div>
@@ -1517,9 +1518,9 @@
                 timeZone: "Asis/Yangon",
                 weekends: false,
                 headerToolbar: {
-                    left: "prev,next today",
-                    center: "title",
-                    right: "dayGridMonth,timeGridWeek",
+                    left: "",
+                    center: "title prev,next today",
+                    right: "",
                 },
                 // loop through the taskList and add events to the calendar
                 events: taskList.map((task) => {
@@ -1602,14 +1603,6 @@
             });
 
             calendar.render();
-
-            // // Auto-click the first button once the DOM is ready
-            // $('.fc-next-button').click();
-            //
-            // // Wait for 2 seconds (adjust the time as needed) and then click the second button
-            // setTimeout(function () {
-            //     $('.fc-prev-button').click();
-            // }, 500); // 2000 milliseconds = 2 seconds
 
             //dynamically add bg-white class to this element .fc-view-harness
             const fcViewHarness = document.querySelector(".fc-view-harness");

@@ -43,6 +43,8 @@ public class SecurityConfig {
                                         "/lib/**",
                                         "/layout/**",
                                         "/reset-password",
+                                        "/api/user/send-otp/**",
+                                        "/api/user/confirm-otp/**",
                                         "/api/user/reset-password/**"
                                 ).permitAll()
                                 .requestMatchers("/").authenticated()

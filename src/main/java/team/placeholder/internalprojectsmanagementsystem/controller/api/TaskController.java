@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 
 import java.util.List;
@@ -18,6 +21,12 @@ import java.util.List;
 public class TaskController {
 
     private final TaskServiceImpl taskService;
+
+    @GetMapping("count/status/{status}")
+    public ResponseEntity<Long> countTaskByUserIdAndStatus(@PathVariable String status) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok(taskService.countByUserEmailAndStatus(authentication.getName(), TaskStatus.valueOf(status)));
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<TasksDto>> taskList() {

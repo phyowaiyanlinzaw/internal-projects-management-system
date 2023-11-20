@@ -241,137 +241,126 @@
 
             let deliTypeList = await getDeliverableTypeList();
 
-            let deliTypeSelect;
-            let tagifyInstance;
-            let validatedProjectForm = false;
+            let deliTagfy;
 
-            // Function to initialize deliverable type
-            async function initializeDeliverableType() {
-                try {
-                    const deliTypeList = await getDeliverableTypeList();
-                    deliTypeSelect = document.querySelector("#deliverable");
+            getDeliverableTypeList().then((deliType) => {
+                const deliTypeSelect = document.querySelector("#deliverable");
+                console.log(deliType);
+                deliTagfy = new Tagify(deliTypeSelect, {
+                    whitelist: deliType.map((item) => item.type),
+                    dropdown: {
+                        consoleLog: true,
+                        classname: "tags-look",
+                        enabled: 0,
+                        closeOnSelect: false,
+                    },
+                });
 
-                    if (!deliTypeSelect) {
-                        console.error("Unable to find deliverable element");
-                        return;
-                    }
+                deliTagfy
+                    .on('input' , b => {
+                        $('#deliverable').siblings('.error-container').addClass('d-none')
+                        deliTagfy.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                    })
+                    .on("add", b => {
+                        deliTagfy.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                        $('#deliverable').siblings('.error-container').addClass('d-none')
+                    })
 
-                    // Initialize Tagify
-                    tagifyInstance = new Tagify(deliTypeSelect, {
-                        whitelist: deliTypeList.map((item) => item.type),
-                        dropdown: {
-                            enabled: 0,
-                        },
-                    });
-
-                    console.log("Deliverable initialized successfully");
-                } catch (error) {
-                    console.error("Error during deliverable initialization:", error);
-                }
-            }
-
-            // Call the initialization function
-            initializeDeliverableType();
-
-            // Validation function
-            function validatePrjDeliverable() {
-                const tagifyValue = tagifyInstance?.value;
-                const errorContainer = $('#deliverable').siblings('.error-container');
-
-                console.log("Tagify Value:", tagifyValue);
-
-                if (!tagifyValue || (Array.isArray(tagifyValue) && tagifyValue.length === 0)) {
-                    validatedProjectForm = false;
-                    console.error("At least one deliverable is required");
-
-                    if (errorContainer.length === 0) {
-                        let p = $("<p>")
-                            .addClass("text-danger fs-6")
-                            .text("At least one deliverable is required")
-                            .css("margin", "0")
-                            .addClass('error-message');
-
-                        $('#deliverable').after('<div class="error-container"></div>');
-                        $('#deliverable').siblings('.error-container').append(p);
-                        errorContainer.show();
-                    } else {
-                        console.log("Error container exists but not shown");
-                        errorContainer.show();
-                    }
-
-                    $('#deliverable').css('border', '1px solid #dc3545');
-                } else {
-                    validatedProjectForm = true;
-                    console.log("Deliverable is valid");
-
-                    // Hide the error container using the hide() method
-                    errorContainer.hide();
-
-                    $('#deliverable').css('border', '1px solid #28a745');
-                }
-
-                console.log("Tagify Value Length:", tagifyValue.length); // Add this line for additional logging
-            }
-
-
-
+            });
 
             let arcccList = await getArchitecturelist();
 
-            document.addEventListener('DOMContentLoaded', async () => {
-                try {
-                    const architectureList = await getArchitecturelist();
-                    const inputElement = document.querySelector('input[name="architectures"]');
-                    const tagifyInstance = initializeTagify(inputElement, architectureList);
+            // getArchitecturelist()
+            //     .then((architectureList) => {
+            //         const inputElement = document.querySelector(
+            //             'input[name="architectures"]',
+            //             {
+            //                 texts: {
+            //                     duplicate: "Duplicates are not allowed",
+            //                     empty: "Architecture is required",
+            //                 }
+            //             }
+            //
+            //         );
+            //         const a = initializeTagify(inputElement, architectureList);
+            //         $("#validation-form").submit(function (event) {
+            //             const arch =
+            //                 inputElement.value === ""
+            //                     ? []
+            //                     : JSON.parse(inputElement.value);
+            //
+            //             if (arch.length !== 0) {
+            //                 const whitelist = a.settings.whitelist;
+            //                 arch.forEach((item) => {
+            //                     if (!whitelist.includes(item.value)) {
+            //                         whitelist.push(item.value);
+            //                     }
+            //                 });
+            //             }
+            //             console.log(a.settings.whitelist);
+            //         });
+            //     })
+            //     .catch((error) => {
+            //         console.log("Error:", error);
+            //     });
 
-                    // Set custom texts for validation messages
-                    // tagifyInstance.settings.texts = {
-                    //     duplicate: "Duplicates are not allowed",
-                    //     empty: "Architecture is required",
-                    // };
+            let tagifyInstance
+
+            getArchitecturelist()
+                .then((architectureList) => {
+                    const inputElement = document.querySelector('input[name="architectures"]');
+                    tagifyInstance = initializeTagify(inputElement, architectureList);
+
+                    // Set custom texts for Tagify validation messages
+                    tagifyInstance.settings.texts = {
+                        duplicate: "Duplicates are not allowed",
+                        empty: "Architecture is required",
+                    };
+
+                    tagifyInstance
+                        .on('input' , a => {
+                            $('#architectures').siblings('.error-container').addClass('d-none')
+                            tagifyInstance.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                        })
+                        .on("add", a => {
+                            tagifyInstance.DOM.scope.classList.add("border", "border-success", "is-valid");
+                            $('#architectures').siblings('.error-container').addClass('d-none')
+                        })
 
                     // Implement custom validation using the validate setting
-                    // tagifyInstance.settings.validate = function(tagData) {
-                    //     if (tagData.value.trim() === "") {
-                    //         return tagifyInstance.TEXTS.empty;
-                    //     }
-                    //
-                    //     const isDuplicate = tagifyInstance.value.some((tag) => tag.value === tagData.value);
-                    //     if (isDuplicate) {
-                    //         return tagifyInstance.TEXTS.duplicate;
-                    //     }
-                    //
-                    //     return true;
-                    // };
+                    tagifyInstance.settings.validate = function (tagData) {
+                        if (tagData.value.trim() === "") {
+                            return tagifyInstance.TEXTS.empty;
+                        }
 
-                    // $("#validation-form").submit(function (event) {
-                    //     // Handle the architectures input
-                    //     const arch = tagifyInstance.value;
-                    //
-                    //     if (arch.length !== 0) {
-                    //         const whitelist = tagifyInstance.settings.whitelist;
-                    //         arch.forEach((item) => {
-                    //             if (!whitelist.includes(item.value)) {
-                    //                 whitelist.push(item.value);
-                    //             }
-                    //         });
-                    //     }
-                    //
-                    //     // Display validation errors
-                    //     const validationErrors = tagifyInstance.validateTag();
-                    //     if (validationErrors.length > 0) {
-                    //         alert(validationErrors.join('\n'));
-                    //     } else {
-                    //         // Continue with form submission
-                    //         console.log("Form submitted successfully!");
-                    //     }
-                    // });
-                } catch (error) {
+                        const isDuplicate = tagifyInstance.value.some((tag) => tag.value === tagData.value);
+                        if (isDuplicate) {
+                            return tagifyInstance.TEXTS.duplicate;
+                        }
+
+                        return true;
+                    };
+
+                    // Validate on form submission
+                    $("#validation-form").submit(function (event) {
+                        const validated = tagifyInstance.isValid;
+                        if (!validated) {
+                            event.preventDefault();
+                        }
+
+                        // Rest of your form submission logic...
+                    });
+
+                    // Validate on input change
+                    inputElement.addEventListener('change', function () {
+                        validatePrjArchitecture();
+                    });
+                })
+                .catch((error) => {
                     console.log("Error:", error);
-                }
-            });
+                });
 
-
+                let validatedProjectForm = false;
 
             function validatePrjArchitecture() {
                 const architectures = $('#architectures').val();
@@ -793,7 +782,8 @@
                     });
                 });
 
-
+            const projectObjectiveEditor =
+                document.querySelector(".quill-editor-full");
 
             const editProjectObjectiveEitor = document.querySelector(
                 "#edit-project-objective"
@@ -806,6 +796,12 @@
                 theme: "snow",
             });
 
+            const addObjectiveEditor = new Quill(projectObjectiveEditor, {
+                modules: {
+                    toolbar: toolbaroptions,
+                },
+                theme: "snow",
+            });
 
             async function getAllProjects() {
                 switch (loginUser.currentUser.role) {
@@ -828,7 +824,7 @@
                         );
                     default:
                         console.log("pmo or sdqc");
-                        return await getData(`/api/project/new/list`);
+                        return await getData(`/api/project/new/list/role/${loginUser.currentUser.role}/id/${loginUser.currentUser.id}`);
                 }
             }
 
@@ -972,7 +968,7 @@
                         `).join('')
                         : '';
 
-                    const newProject = document.createElement("div") 
+                    const newProject = document.createElement("div")
                     newProject.classList.add("accordion", "container-fluid")
                     newProject.id = `outer-project-${project.id}`
 
@@ -1016,7 +1012,7 @@
                                 </div>
                                 ${taskListHtml}
                             </div>
-                            <div 
+                            <div
                             class="d-flex justify-content-end rounded-1 text-white"
                             >
                                 <i class="fa-solid fa-angle-down bg-primary p-1 rounded-bottom" data-bs-toggle="collapse"
@@ -1716,6 +1712,7 @@
                         $('#name').addClass('is-valid');
                         $('#name').removeClass('is-invalid');
                     }
+                    console.log("project name validaiont : ", validatedProjectForm);
                 }
 
                 function validateProjectClient() {
@@ -1742,6 +1739,7 @@
                         $('#client').addClass('is-valid');
                         $('#client').removeClass('is-invalid');
                     }
+                    console.log("project client validaiont : ", validatedProjectForm);
                 }
 
 
@@ -1768,6 +1766,7 @@
                         $('#employee-list').css('border', '1px solid #28a745');
 
                     }
+                    console.log("project employee validaiont : ", validatedProjectForm);
                 }
 
 
@@ -1795,6 +1794,7 @@
                         $('#project-add-duration').addClass('is-valid');
                         $('#project-add-duration').removeClass('is-invalid');
                     }
+                    console.log("project duration validaiont : ", validatedProjectForm)
                 }
 
 
@@ -1822,33 +1822,7 @@
                         $('#background').addClass('is-valid');
                         $('#background').removeClass('is-invalid');
                     }
-                }
-
-                function validatePrjArchitecture() {
-                    const architectures = $('#architectures').val();
-                    const errorContainer = $('#architectures').siblings('.error-container');
-
-                    if (!architectures || architectures.trim().length === 0) {
-                        validatedProjectForm = false;
-                        if (errorContainer.length === 0) {
-                            let p = $("<p>")
-                                .addClass("text-danger fs-6")
-                                .text("Architecture is required")
-                                .css("margin", "0")
-                                .addClass('error-message');
-
-                            $('#architectures').after('<div class="error-container"></div>');
-                            $('#architectures').siblings('.error-container').append(p);
-                        }
-
-                        $('#architectures').addClass('is-invalid');
-                        $('#architectures').removeClass('is-valid');
-                    } else {
-                        validatedProjectForm = true;
-                        errorContainer.remove();
-                        $('#architectures').addClass('is-valid');
-                        $('#architectures').removeClass('is-invalid');
-                    }
+                    console.log("project background validaiont : ", validatedProjectForm)
                 }
 
                 // Function to validate systemOutlines
@@ -1878,6 +1852,39 @@
 
                 }
 
+                    console.log("project system outline validaiont : ", validatedProjectForm);
+                }
+
+
+                function validatePrjObjective() {
+                    const objective = $('#objective').val();
+                    const errorContainer = $('#objective').siblings('.error-container');
+
+                    if (!objective || objective.trim().length === 0) {
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            let p = $("<p>")
+                                .addClass("text-danger fs-6")
+                                .text("Objective is required")
+                                .css("margin", "0")
+                                .addClass('error-message');
+
+                            $('#objective').after('<div class="error-container"></div>');
+                            $('#objective').siblings('.error-container').append(p);
+                        }
+
+                        $('#objective').addClass('is-invalid');
+                        $('#objective').removeClass('is-valid');
+                    } else {
+                        validatedProjectForm = true;
+                        errorContainer.remove();
+                        $('#objective').addClass('is-valid');
+                        $('#objective').removeClass('is-invalid');
+                    }
+                    console.log("project objective validaiont : ", validatedProjectForm)
+                }
+
+
 
                 function validateStartDate() {
                     const start_date = $('#start_date').val();
@@ -1904,6 +1911,7 @@
                         $('#start_date').addClass('is-valid');
                         $('#start_date').removeClass('is-invalid');
                     }
+                    console.log("project start date validaiont : ", validatedProjectForm);
                 }
 
 
@@ -1992,14 +2000,6 @@
                     validatePrjBackground();
                 });
 
-                $('#architectures').on('input', function () {
-                    validatePrjArchitecture();
-                });
-
-                $('#deliverable').on('input', function () {
-                    validatePrjDeliverable();
-                });
-
                 $('#systemOutlines').on('content-updated', function () {
                     validatePrjSystemOutline();
                 });
@@ -2020,8 +2020,6 @@
                     validateProjectEmployee();
                     validatePrjDuration();
                     validatePrjBackground();
-                    validatePrjArchitecture();
-                    validatePrjDeliverable();
                     validatePrjSystemOutline();
                     validatePrjObjective();
                     validateStartDate();
@@ -2059,7 +2057,7 @@
                     console.log("architectures list : ", architectures);
                     const systemOutlines = sysSelect.selectedValues;
                     const deliverable = $("#deliverable").val();
-                    const objective =projectObjectiveEditor.root.innerHTML;
+                    const objective = addObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
                     console.log(
                         projectName,
                         client,
@@ -2073,59 +2071,77 @@
                         objective
                     );
 
-
-
-
-                    let jsonData = ''; // replace with your actual JSON data
-                    if (jsonData.trim() !== '') {
+                    console.log("architectures list",architectures)
+                    console.log(architectures === "")
+                    let arcList;
+                    tagifyInstance
+                        .on('input' , a => {
+                            $('#architectures').siblings('.error-container').addClass('d-none')
+                            tagifyInstance.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                        })
+                        .on("add", a => {
+                            tagifyInstance.DOM.scope.classList.add("border", "border-success", "is-valid");
+                            $('#architectures').siblings('.error-container').addClass('d-none')
+                        })
+ // replace with your actual JSON data
+                    if (architectures !== '' ) {
                         try {
-                            let parsedData = JSON.parse(jsonData);
+                            architectures = JSON.parse(architectures);
                             // Continue processing parsedData
+                            arcList = architectures.map((ar) => {
+                        const matchingObj = arcccList.find(
+                            (arccObj) => arccObj.tech_name === ar.value
+                            );
+                            console.log(matchingObj);
+                            return matchingObj
+                            ? matchingObj
+                            : { tech_name: ar.value };
+                        });
                         } catch (error) {
                             console.error('Error parsing JSON:', error);
                         }
                     } else {
+                        tagifyInstance.DOM.scope.classList.add("is-invalid")
                         console.warn('JSON data is empty.');
+                        $("#architectures").siblings('.error-container').removeClass("d-none")
                     }
 
-                    architectures = JSON.parse(architectures);
+                    let deliverableList
 
-                    const arcList = architectures.map((ar) => {
-                        const matchingObj = arcccList.find(
-                            (arccObj) => arccObj.tech_name === ar.value
-                        );
-                        console.log(matchingObj);
-                        return matchingObj
-                            ? matchingObj
-                            : { tech_name: ar.value };
-                    });
+                    deliTagfy
+                    .on('input' , b => {
+                        $('#deliverable').siblings('.error-container').addClass('d-none')
+                        deliTagfy.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                    })
+                    .on("add", b => {
+                        deliTagfy.DOM.scope.classList.add("border", "border-success", 'is-valid');
+                        $('#deliverable').siblings('.error-container').addClass('d-none')
+                    })
 
-                    const oldDeliTypeList = JSON.parse(deliverable);
+                    if(deliverable !== '') {
+                        const oldDeliTypeList = JSON.parse(deliverable);
 
-                    const deliverTypeList = oldDeliTypeList.map((deli) => {
-                        const matchingObj = deliTypeList.find(
-                            (deliObj) => deliObj.type === deli.value
-                        );
-                        console.log(matchingObj);
-                        return matchingObj ? matchingObj : { type: deli.value };
-                    });
+                        const deliverTypeList = oldDeliTypeList.map((deli) => {
+                            const matchingObj = deliTypeList.find(
+                                (deliObj) => deliObj.type === deli.value
+                            );
+                            console.log(matchingObj);
+                            return matchingObj ? matchingObj : { type: deli.value };
+                        });
 
-                    const deliverableList = deliverTypeList.map(deli => {
-                        return {
-                            status : false,
-                            deliverableType : deli
-                        }
-                    });
+                        deliverableList = deliverTypeList.map(deli => {
+                            return {
+                                status : false,
+                                deliverableType : deli
+                            }
+                        });
+                    } else {
+                        deliTagfy.DOM.scope.classList.add("is-invalid")
+                        console.warn('JSON data is empty.');
+                        $("#deliverable").siblings('.error-container').removeClass("d-none")
+                    }
 
-
-
-                    if(!validateProject()){
-                        event.preventDefault();
-
-                        if (validatedProjectForm) {
-                            validatePrjDeliverable();
-                            this.submit();
-                        }
+                    if(validateProject()){
                         return;
                     }
 
@@ -2133,7 +2149,6 @@
                     console.log(objective);
                     console.log(architectures);
                     console.log(empList);
-                    console.log(deliverTypeList);
 
 
                             const project = {
@@ -2176,7 +2191,6 @@
                             };
 
                             console.log(project);
-                            //Perform the AJAX request
                             $.ajax({
                                 url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
                                 type: "POST",
@@ -2196,7 +2210,7 @@
 
                 });
             });
-            
+
 
             let myOptions = [
                 {
@@ -2627,8 +2641,12 @@
                                             placeholder="enter to add your own architecture"
                                             required
                                         />
-                                        <div class="invalid-feedback error-container"></div>
 
+                                        <div class="error-container d-none">
+                                        <p class="text-danger fs-6 error-message" style="margin-top: 0;">
+                                            please select aleast one architecture
+                                        </p>
+                                        </div>
                                     </div>
 
                                     <!--                                systemoutline add-->
