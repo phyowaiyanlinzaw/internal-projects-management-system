@@ -84,7 +84,7 @@ public class UserController {
         return ResponseEntity.ok("Employee registered successfully");
     }
 
-    @PostMapping("change-password")
+    @PutMapping("change-password")
     public ResponseEntity<String> changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

@@ -98,7 +98,6 @@ $(document).ready(function () {
         });
 
         // check the validation every time when use enter value in input
-        // TODO :: SHOULD VALIDATE OTHER DATA-TYPE
         validatedForm.on("input", function (e) {
             let target = $(e.target);
             let parent = target.parent();
@@ -136,37 +135,37 @@ $(document).ready(function () {
                     break;
 
                 // for data-type='password'
-                case "password":
-                    parent.removeClass("was-validated");
-                    let p = $("<p>")
-                        .addClass("text-danger fs-6")
-                        .text(
-                            "The password can only contain a-z, A-Z, !@#$%^&* with a minimum length of 8 characters"
-                        )
-                        .css("margin", "0");
-
-                    if (!validatePassword(target.val())) {
-                        parent.removeClass("was-validated");
-                        if (parent.find("p").length === 0) {
-                            parent.append(p);
-                        }
-                    } else {
-                        let existingP = parent.find("p");
-                        if (existingP.length > 0) {
-                            existingP.remove();
-                        }
-                        if (
-                            parent.find(".valid-feedback").length === 0 &&
-                            validatePassword(target.val())
-                        ) {
-                            existingP = $("<div>")
-                                .addClass("valid-feedback")
-                                .text("good");
-                            parent.append(existingP);
-                        }
-                        parent.addClass("was-validated");
-                    }
-                    break;
+                // case "password":
+                //     parent.removeClass("was-validated");
+                //     let p = $("<p>")
+                //         .addClass("text-danger fs-6")
+                //         .text(
+                //             "The password can only contain a-z, A-Z, !@#$%^&* with a minimum length of 8 characters"
+                //         )
+                //         .css("margin", "0");
+                //
+                //     if (!validatePassword(target.val())) {
+                //         parent.removeClass("was-validated");
+                //         if (parent.find("p").length === 0) {
+                //             parent.append(p);
+                //         }
+                //     } else {
+                //         let existingP = parent.find("p");
+                //         if (existingP.length > 0) {
+                //             existingP.remove();
+                //         }
+                //         if (
+                //             parent.find(".valid-feedback").length === 0 &&
+                //             validatePassword(target.val())
+                //         ) {
+                //             existingP = $("<div>")
+                //                 .addClass("valid-feedback")
+                //                 .text("good");
+                //             parent.append(existingP);
+                //         }
+                //         parent.addClass("was-validated");
+                //     }
+                //     break;
             }
         });
     }
