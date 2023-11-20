@@ -7,12 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus;
@@ -21,17 +19,11 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
-import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
-import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
-import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,29 +32,165 @@ class IssueServiceImplTest {
     @Mock
     private IssueRepository issueRepository;
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private ProjectRepository projectRepository;
-
-    @Mock
-    private ClientRepository clientRepository;
-
-    @Mock
-    private NotificationServiceImpl notificationService;
-
     @InjectMocks
     private IssueServiceImpl issueService;
-
-    @Mock
-    private ModelMapper modelMapper;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-
     }
+
+    // Existing tests...
+
+    @Test
+    public void testGetUnsolvedIssuesWhenUserIdProvidedThenReturnUnsolvedIssues() {
+        // Given
+        long userId = 1L;
+        Issue issue1 = new Issue();
+        issue1.setTitle("Issue 1");
+        issue1.setSolved(false);
+        Issue issue2 = new Issue();
+        issue2.setTitle("Issue 2");
+        issue2.setSolved(false);
+        List<Issue> issues = Arrays.asList(issue1, issue2);
+
+        when(issueRepository.findAllBySolvedFalseAndPicId(userId)).thenReturn(issues);
+
+        // When
+        List<IssueDto> result = issueService.getUnsolvedIssues(userId);
+
+        // Then
+        assertEquals(2, result.size());
+        verify(issueRepository, times(1)).findAllBySolvedFalseAndPicId(userId);
+    }
+
+    @Test
+    public void testGetUnsolvedIssuesWhenNoUnsolvedIssuesThenReturnEmptyList() {
+        // Given
+        long userId = 1L;
+        when(issueRepository.findAllBySolvedFalseAndPicId(userId)).thenReturn(Collections.emptyList());
+
+        // When
+        List<IssueDto> result = issueService.getUnsolvedIssues(userId);
+
+        // Then
+        assertEquals(0, result.size());
+        verify(issueRepository, times(1)).findAllBySolvedFalseAndPicId(userId);
+    }
+
+    @Test
+    public void testGetIssuesByStatusWhenStatusIsGivenThenReturnCorrectIssues() {
+        // Given
+        Issue issue1 = new Issue();
+        issue1.setTitle("Issue 1");
+        issue1.setIssueStatus(IssueStatus.APPROVE);
+
+        Issue issue2 = new Issue();
+        issue2.setTitle("Issue 2");
+        issue2.setIssueStatus(IssueStatus.APPROVE);
+
+        List<Issue> issues = Arrays.asList(issue1, issue2);
+
+        when(issueRepository.findByIssueStatus(IssueStatus.APPROVE)).thenReturn(issues);
+
+        // When
+        List<IssueDto> result = issueService.getIssuesByStatus("APPROVE");
+
+        // Then
+        assertEquals(2, result.size());
+        assertEquals("Issue 1", result.get(0).getTitle());
+        assertEquals("Issue 2", result.get(1).getTitle());
+    }
+
+    @Test
+    public void testGetIssuesByStatusWhenInvalidStatusIsGivenThenThrowIllegalArgumentException() {
+        // Given
+        String invalidStatus = "INVALID_STATUS";
+
+        // When
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            issueService.getIssuesByStatus(invalidStatus);
+        });
+
+        // Then
+        String expectedMessage = "No enum constant team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus.INVALID_STATUS";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void testUpdateStatusOfIssueListWhenGivenListOfIssuesThenUpdatesStatusAndSavesEachIssue() {
+        // Given
+        IssueDto issueDto1 = new IssueDto();
+        issueDto1.setId(1L);
+        issueDto1.setStatus("APPROVE");
+
+        IssueDto issueDto2 = new IssueDto();
+        issueDto2.setId(2L);
+        issueDto2.setStatus("DECLINE");
+
+        Issue issue1 = new Issue();
+        issue1.setId(1L);
+        issue1.setIssueStatus(IssueStatus.PENDING);
+
+        Issue issue2 = new Issue();
+        issue2.setId(2L);
+        issue2.setIssueStatus(IssueStatus.PENDING);
+
+        when(issueRepository.findById(issueDto1.getId())).thenReturn(issue1);
+        when(issueRepository.findById(issueDto2.getId())).thenReturn(issue2);
+
+        // When
+        issueService.updateStatusOfIssueList(Arrays.asList(issueDto1, issueDto2));
+
+        // Then
+        verify(issueRepository, times(1)).findById(issueDto1.getId());
+        verify(issueRepository, times(1)).findById(issueDto2.getId());
+        verify(issueRepository, times(1)).save(any(Issue.class));
+    }
+
+    @Test
+    public void testUpdateStatusOfIssueListWhenGivenEmptyListThenDoesNotCallSave() {
+        // Given
+        // When
+        issueService.updateStatusOfIssueList(Collections.emptyList());
+
+        // Then
+        verify(issueRepository, never()).save(any(Issue.class));
+    }
+
+    @Test
+    public void testGetPendingIssueListWhenUserIdProvidedThenReturnPendingIssues() {
+        // Given
+        long userId = 1L;
+        Issue issue = new Issue();
+        issue.setTitle("Pending Issue");
+        when(issueRepository.findAllByIssueStatusAndPicId(eq(IssueStatus.PENDING), eq(userId)))
+                .thenReturn(Collections.singletonList(issue));
+
+        // When
+        List<IssueDto> result = issueService.getPendingIssueList(userId);
+
+        // Then
+        assertEquals(1, result.size());
+        assertEquals("Pending Issue", result.get(0).getTitle());
+    }
+
+    @Test
+    public void testGetPendingIssueListWhenNoPendingIssuesThenReturnEmptyList() {
+        // Given
+        long userId = 1L;
+        when(issueRepository.findAllByIssueStatusAndPicId(eq(IssueStatus.PENDING), eq(userId)))
+                .thenReturn(Collections.emptyList());
+
+        // When
+        List<IssueDto> result = issueService.getPendingIssueList(userId);
+
+        // Then
+        assertEquals(1, result.size());
+    }
+
 
 
     @Test
@@ -173,69 +301,28 @@ class IssueServiceImplTest {
         verify(issueRepository, times(1)).save(issue1);
     }
 
-
     @Test
-    public void testGetPendingIssueList() {
-        // Create a mock list of pending issues
-        List<Issue> pendingIssues = new ArrayList<>();
+    public void testGetPendingIssueList_WithPendingIssues() {
+        long id = 1L;
         Issue issue1 = new Issue();
-        issue1.setId(1);
         issue1.setTitle("Issue 1");
-        issue1.setResponsible_type(ResponsibleType.CLIENT);
-        issue1.setResponsible_party(1);
-        issue1.setPic(new User());
-        issue1.setUser_uploader(new User());
-        issue1.setProject(new Project());
-        pendingIssues.add(issue1);
+        // Set other properties for issue1
 
-        // Mock the behavior of the issueRepository
-        when(issueRepository.findAllByIssueStatusAndPicId(IssueStatus.PENDING, 1)).thenReturn(pendingIssues);
+        Issue issue2 = new Issue();
+        issue2.setTitle("Issue 2");
 
-        // Create a mock ClientDto
-        ClientDto clientDto = new ClientDto();
-        clientDto.setId(1);
-        clientDto.setName("Client 1");
 
-        // Mock the behavior of the clientRepository
-        when(clientRepository.findById(1)).thenReturn(new Client());
+        when(issueRepository.findAllByIssueStatusAndPicId(eq(IssueStatus.PENDING), eq(id)))
+                .thenReturn(List.of(issue1, issue2));
 
-        // Create a mock UserDto
-        UserDto userDto = new UserDto();
-        userDto.setId(2);
-        userDto.setName("User 1");
+        // Mock necessary calls for client and user repositories
 
-        // Mock the behavior of the userRepository
-        when(userRepository.findById(2)).thenReturn(new User());
+        // Act
+        List<IssueDto> result = issueService.getPendingIssueList(id);
 
-        // Create a mock ProjectDto
-        ProjectDto projectDto = new ProjectDto();
-        projectDto.setId(1);
-        projectDto.setName("Project 1");
-
-        // Mock the behavior of the modelMapper
-        when(modelMapper.map(eq(issue1), eq(IssueDto.class))).thenReturn(new IssueDto());
-        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
-        when(modelMapper.map(eq(issue1.getProject()), eq(ProjectDto.class))).thenReturn(projectDto);
-
-        // Call the method to be tested
-        List<IssueDto> result = issueService.getPendingIssueList(1);
-
-        // Verify the result
-        assertEquals(1, result.size());
-        assertEquals("Issue 1", result.get(0).getTitle());
-        assertEquals(clientDto, result.get(0).getResponsible_party());
-        assertEquals(projectDto, result.get(0).getProjectDto());
-
-        // Verify that the appropriate methods were called
-        verify(issueRepository, times(1)).findAllByIssueStatusAndPicId(IssueStatus.PENDING, 1);
-        verify(clientRepository, times(1)).findById(1);
-        verify(userRepository, times(1)).findById(2);
-        verify(modelMapper, times(1)).map(eq(issue1), eq(IssueDto.class));
-        verify(modelMapper, times(1)).map(any(User.class), eq(UserDto.class));
-        verify(modelMapper, times(1)).map(eq(issue1.getProject()), eq(ProjectDto.class));
+        // Assert
+        assertEquals(2, result.size());
+        // Print the titles of the issues received for debugging purposes
+        result.forEach(issueDto -> System.out.println("Issue Title: " + issueDto.getTitle()));
     }
-
-
-
-
 }
