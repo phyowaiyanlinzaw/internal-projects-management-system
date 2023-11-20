@@ -16,8 +16,6 @@ public interface ProjectService {
 
     ProjectDto updateProject(ProjectDto projectDto);
 
-    long getCountByDepartment(long id);
-
     Long countAllProjects();
 
     List<ProjectDto> getAllProjectsByProjectManagerId(long id);

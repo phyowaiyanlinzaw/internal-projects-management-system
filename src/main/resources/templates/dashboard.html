@@ -74,30 +74,21 @@
                 <!--                sec:authorize="hasAnyRole('PMO','SDQC')"-->
 
                 <!--                sec:authorize="hasRole('DEPARTMENT_HEAD')"-->
-                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('DEPARTMENT_HEAD')">
+                <div class="col-sm-12 col-xl-6" sec:authorize="hasRole('DEPARTMENT_HEAD')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-list-task fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2"></p>
-                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                            <p class="mb-2">Projects Count</p>
+                            <h6 class="mb-0" id="department-head-projects-count"></h6>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('DEPARTMENT_HEAD')">
+                <div class="col-sm-12 col-xl-6" sec:authorize="hasRole('DEPARTMENT_HEAD')">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="bi bi-stack fa-2x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2"></p>
-                            <!--                            <h6 class="mb-0" id=""></h6>-->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-xl-4" sec:authorize="hasRole('DEPARTMENT_HEAD')">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="bi bi-patch-check-fill fa-2x text-primary"></i>
-                        <div class="ms-3">
-                            <p class="mb-2"></p>
-                            <!--                            <h6 class="mb-0" id=""></h6>-->
+                            <p class="mb-2">Employees Count</p>
+                            <h6 class="mb-0" id="department-head-employees-count"></h6>
                         </div>
                     </div>
                 </div>
@@ -815,6 +806,25 @@
                 console.log(error);
             }
         });
+
+        //get project counts by api/project/count/department/{departmentId} with getData()
+        $.ajax({
+            url: "/api/project/count/department/" + currentUser.currentUser.department.id,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#department-head-projects-count").text(data);
+            },
+        })
+
+        $.ajax({
+            url: "api/user/count/department/" + currentUser.currentUser.department.id,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                $("#department-head-employees-count").text(data);
+            },
+        })
 
         $.ajax({
             url: "api/project/count/project-manager/" + currentUser.currentUser.id,

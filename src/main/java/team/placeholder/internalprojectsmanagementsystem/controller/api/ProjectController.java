@@ -165,7 +165,7 @@ public class ProjectController {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/count/departmentId/{departmentId}")
+    @GetMapping(value = "/count/department/{departmentId}")
     public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId){
         return ResponseEntity.ok(projectService.countAllProjectsByDepartmentId(departmentId));
     }

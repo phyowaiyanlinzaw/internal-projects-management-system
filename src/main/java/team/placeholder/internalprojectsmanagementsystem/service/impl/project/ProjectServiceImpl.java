@@ -257,9 +257,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public long getCountByDepartment(long id) {
+    public Long countAllProjectsByDepartmentId(long id) {
 
-        return 0;
+        return projectRepository.countAllByDepartmentId(id);
     }
 
     @Override
@@ -386,11 +386,6 @@ public class ProjectServiceImpl implements ProjectService {
 
 
         return projectDtoList;
-    }
-
-    @Override
-    public Long countAllProjectsByDepartmentId(long id) {
-        return null;
     }
 
     @Override
