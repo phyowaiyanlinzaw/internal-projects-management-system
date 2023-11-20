@@ -376,6 +376,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Long countAllProjectsByDepartmentId(long id) {
+
         return null;
     }
 
