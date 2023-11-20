@@ -226,46 +226,5 @@ class DepartmentServiceImplTest {
         verify(departmentRepository, times(1)).count();
     }
 
-//    @Test
-//    public void testGetAllDepartmentWitPage() {
-//        // Create a list of Department objects
-//        Department department1 = new Department();
-//        department1.setId(1L);
-//        department1.setName("Department 1");
-//        department1.setUsers(Collections.singletonList(new UserDto(department1))); // Fix here
-//
-//        Department department2 = new Department();
-//        department2.setId(2L);
-//        department2.setName("Department 2");
-//        department2.setUsers(Collections.singletonList(new UserDto())); // Fix here
-//
-//        // Create a list of DepartmentDto objects
-//        DepartmentDto departmentDto1 = new DepartmentDto();
-//        departmentDto1.setId(1L);
-//        departmentDto1.setName("Department 1");
-//
-//        DepartmentDto departmentDto2 = new DepartmentDto();
-//        departmentDto2.setId(2L);
-//        departmentDto2.setName("Department 2");
-//
-//        when(departmentRepository.findAll(any(Pageable.class)))
-//                .thenReturn(new PageImpl<>(Arrays.asList(department1, department2)));
-//
-//        when(modelMapper.map(department1, DepartmentDto.class)).thenReturn(departmentDto1);
-//        when(modelMapper.map(department2, DepartmentDto.class)).thenReturn(departmentDto2);
-//
-//        // Call the method to be tested
-//        Page<DepartmentDto> resultPage = departmentService.getAllDepartmentWitPage(1);
-//
-//        // Verify the behavior
-//        verify(departmentRepository, times(1)).findAll(any(Pageable.class));
-//        verify(modelMapper, times(1)).map(department1, DepartmentDto.class);
-//        verify(modelMapper, times(1)).map(department2, DepartmentDto.class);
-//
-//        // Check the result
-//        assertEquals(2, resultPage.getContent().size());
-//        assertEquals(departmentDto1, resultPage.getContent().get(0));
-//        assertEquals(departmentDto2, resultPage.getContent().get(1));
-//    }
 
 }
