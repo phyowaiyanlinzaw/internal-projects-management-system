@@ -1238,13 +1238,11 @@
                                 ${issue.solved === true ? 'Closed' : 'Open'}
                             </span>
                         </div>
-                        <button
-                            type="button"
-                            class="btn btn-info see-more-button text-white"
-                            data-id="${issue.id}"
-                        >
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
+                        ${currentLoginUserRole === "PROJECT_MANAGER" ? 
+                        '<button type="button" class="btn btn-info see-more-button text-white" data-id="${issue.id}">' +
+                            '<i class="fa-solid fa-pen-to-square"></i>' +
+                        '</button>' 
+                        :''}
                     </div>
                 </div>
                 <div class="col issue-time-line d-flex gap-4 flex-wrap">

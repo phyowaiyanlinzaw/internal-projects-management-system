@@ -15,6 +15,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDt
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NotiDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
@@ -27,6 +28,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
@@ -45,6 +47,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelmapper;
     private final AESImpl aes;
     private final Map<String,String> otpMap = new HashMap<>();
+    private final NotificationServiceImpl   notificationService;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -344,6 +347,13 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setEnabled(status);
             userRepository.save(user);
+            if(!user.isEnabled()) {
+                NotiDto notiDto = new NotiDto();
+                // notiDto
+                notiDto.setDescription("You have been kick out");
+                notiDto.setNoti_time(System.currentTimeMillis());
+                notificationService.sendNotification(null, id, "logout");
+            }
             return modelmapper.map(user, UserDto.class);
         } else {
             return null;
