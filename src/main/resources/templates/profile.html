@@ -308,10 +308,8 @@ ominus-bootstrap-4.min.js"></script>
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // If the user confirmed, proceed with the AJAX request
-                        $('#loading-overlay').removeClass('d-none');
+                        //$('#loading-overlay').removeClass('d-none');
 
-                        console.log("Old Password : " , currentPassword);
-                        console.log("New Password : ", newPassword);
 
                         $.ajax({
                             url: "/api/user/change-password",
@@ -427,7 +425,7 @@ ominus-bootstrap-4.min.js"></script>
 
                 setTimeout(function () {
                     $("#errorAlert").hide();
-                }, 1000);
+                }, 3000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
@@ -441,7 +439,7 @@ ominus-bootstrap-4.min.js"></script>
 
                 setTimeout(function () {
                     $("#successAlert").hide();
-                }, 1000);
+                }, 3000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
@@ -455,7 +453,7 @@ ominus-bootstrap-4.min.js"></script>
 
                 setTimeout(function () {
                     $("#error-Alert").hide();
-                }, 1000);
+                }, 3000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
@@ -469,7 +467,7 @@ ominus-bootstrap-4.min.js"></script>
 
                 setTimeout(function () {
                     $("#success-Alert").hide();
-                }, 1000);
+                }, 3000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {

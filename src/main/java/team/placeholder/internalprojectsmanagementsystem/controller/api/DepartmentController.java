@@ -4,6 +4,8 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -13,7 +15,9 @@ import team.placeholder.internalprojectsmanagementsystem.repository.department.D
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +27,6 @@ public class DepartmentController {
 
     private final DepartmentServiceImpl departmentService;
     private final FakerService fakerService;
-    private final DepartmentRepository repository;
 
     @GetMapping("/generate-fake-departments/{count}")
     public ResponseEntity<String> generateFakeDepartments(@PathVariable("count") int count) {
@@ -36,6 +39,7 @@ public class DepartmentController {
        List<DepartmentDto> departmentDtos = departmentService.getAllDepartments();
         return ResponseEntity.ok(departmentDtos);
     }
+
 
     @GetMapping("/byId/{id}")
     public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable("id") long id) {
@@ -62,7 +66,6 @@ public class DepartmentController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<DepartmentDto> updateDepartment(@PathVariable("id") long id, @RequestBody DepartmentDto departmentDto) {
-
         departmentDto.setId(id);
         DepartmentDto updatedDepartment = departmentService.updateDepartment(departmentDto);
 
@@ -72,15 +75,8 @@ public class DepartmentController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-
-
     @GetMapping("/count")
     public long dpCount(){
-
         return departmentService.getDeprtmentCount();
     }
-
-
-
-
 }

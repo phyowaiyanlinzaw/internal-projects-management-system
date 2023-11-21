@@ -276,7 +276,7 @@
                     $('#table').bootstrapTable('refresh');
                 },
                 error: function (data, xhr) {
-                    alert('Error updating employee status');
+                    showError('Error updating employee status');
                 },
                 complete: function () {
                     $('#table').bootstrapTable('refresh');
@@ -591,14 +591,13 @@
                         }),
                         contentType: 'application/json',
                         success: function (data) {
-                            alert('Employee registered successfully');
                             $('#addEmployeeModal').modal('hide');
                             $('#register-employee-btn').html('Register').prop('disabled', false);
                             $('#table').bootstrapTable('refresh');
                             showSuccess('Employee registered successfully');
                         },
                         error: function (data, xhr) {
-                            alert('Error registering employee');
+                            showError('Error registering employee');
                             $('#register-employee-btn').html('Register').prop('disabled', false);
                             $('#alert-danger').show();
                         },
@@ -692,7 +691,7 @@
             console.log("department id : ", departmentId);
 
             if (username === "" || email === "" || departmentId === "") {
-                alert("Please enter Edit");
+                showError("Please enter Edit");
                 return;
             }
 
@@ -732,14 +731,13 @@
                         contentType: 'application/json',
                         success: function (data) {
                             console.log('Data received:', data);
-                            alert('Employee Update successfully');
                             $('#edit-employee-modal').modal('hide');
                             $('#edit_btn').html('Edit').prop('disabled', false);
                             $('#table').bootstrapTable('refresh');
                             showSuccess('Employee updated successfully');
                         },
                         error: function (xhr, status, error) {
-                            alert('Error updating employee');
+                            showError('Error updating employee');
                             $('#edit_btn').html('Edit').prop('disabled', false);
                             $('#alert-danger').show();
                         },
