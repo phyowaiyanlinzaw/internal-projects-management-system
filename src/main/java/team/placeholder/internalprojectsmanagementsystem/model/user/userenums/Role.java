@@ -1,7 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.model.user.userenums;
 
-import io.micrometer.observation.ObservationFilter;
-
 import java.util.stream.Stream;
 
 public enum Role {

@@ -7,6 +7,7 @@
         .ql-toolbar {
             color: white;
         }
+
         .ql-editor {
 
         }
@@ -43,69 +44,70 @@
 
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
-            <div
-                    class="container-fluid pt-2 ps-s pe-2"
-                    id="dropdrown-search-bar"
-            >
-                <div class="d-flex flex-row justify-content-end gap-2">
-                    <button class="btn btn-info" id="reset-btn">
-                        reset
-                    </button>
-                    <div class="d-inline-block">
-                        <select id="status-filter" class="form-control" >
-                            <option value="" selected disabled>Status</option>
-                            <option value="PENDING">PENDING</option>
-                            <option value="APPROVE">APPROVE</option>
-                            <option value="DECLINE">DECLINE</option>
-                            <option value="DUPLICATE">DUPLICATE</option>
-                        </select>
-                    </div>
-                    <div class="d-inline-block">
-                        <select id="solved-filter" class="form-control">
-                            <option value="" selected disabled>Choose</option>
-                            <option value="1">Solved</option>
-                            <option value="0">Unsolved</option>
-                        </select>
-                    </div>
-                    <div class="d-inline-block">
-                        <select id="category-filter" class="form-control">
-                            <option value="" selected disabled>Category</option>
-                            <option value="ERROR">ERROR</option>
-                            <option value="BUG">BUG</option>
-                            <option value="COMMUNICATION">COMMUNICATION</option>
-                            <option value="TECHNICAL">TECHNICAL</option>
-                            <option value="BUDGET">BUDGET</option>
-                            <option value="DESIGN">DESIGN</option>
-                            <option value="TESTING">TESTING</option>
-                            <option value="OTHER">OTHER</option>
-                        </select>
-                    </div>
-                    <form class="d-inline-block">
-                        <input
-                                class="form-control border-0"
-                                type="search"
-                                placeholder="Search project "
-                        />
-                    </form>
-                    <!-- modal toggle button start -->
-                    <button type="button" class="btn d-none btn-light align-self-start" data-bs-toggle="modal" data-bs-target="#add-issue">
-                        <i class="bi bi-plus-lg"></i>
-                    </button>
-                    <!-- modal toggle button end -->
-                    <!-- sortting button -->
-                    <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+        <div
+                class="container-fluid pt-2 ps-s pe-2"
+                id="dropdrown-search-bar"
+        >
+            <div class="d-flex flex-row justify-content-end gap-2">
+                <button class="btn btn-info" id="reset-btn">
+                    reset
+                </button>
+                <div class="d-inline-block">
+                    <select id="status-filter" class="form-control">
+                        <option value="" selected disabled>Status</option>
+                        <option value="PENDING">PENDING</option>
+                        <option value="APPROVE">APPROVE</option>
+                        <option value="DECLINE">DECLINE</option>
+                        <option value="DUPLICATE">DUPLICATE</option>
+                    </select>
                 </div>
-
-                    <!-- Modal -->
+                <div class="d-inline-block">
+                    <select id="solved-filter" class="form-control">
+                        <option value="" selected disabled>Choose</option>
+                        <option value="1">Solved</option>
+                        <option value="0">Unsolved</option>
+                    </select>
+                </div>
+                <div class="d-inline-block">
+                    <select id="category-filter" class="form-control">
+                        <option value="" selected disabled>Category</option>
+                        <option value="ERROR">ERROR</option>
+                        <option value="BUG">BUG</option>
+                        <option value="COMMUNICATION">COMMUNICATION</option>
+                        <option value="TECHNICAL">TECHNICAL</option>
+                        <option value="BUDGET">BUDGET</option>
+                        <option value="DESIGN">DESIGN</option>
+                        <option value="TESTING">TESTING</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                </div>
+                <form class="d-inline-block">
+                    <input
+                            class="form-control border-0"
+                            type="search"
+                            placeholder="Search project "
+                    />
+                </form>
+                <!-- modal toggle button start -->
+                <button type="button" class="btn d-none btn-light align-self-start" data-bs-toggle="modal"
+                        data-bs-target="#add-issue">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+                <!-- modal toggle button end -->
+                <!-- sortting button -->
+                <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
             </div>
+
+            <!-- Modal -->
+        </div>
 
         <div class="container-fluid mt-2">
             <ul class="nav nav-tabs nav-tabs-bordered d-none" id="issue-link">
                 <li class="nav-item">
                     <button
-                        class="nav-link active"
-                        data-bs-toggle="tab"
-                        data-bs-target="#all-issue-list"
+                            class="nav-link active"
+                            data-bs-toggle="tab"
+                            data-bs-target="#all-issue-list"
                     >
                         Issue List
                     </button>
@@ -121,14 +123,14 @@
                 </li>
                 <li class="nav-item">
                     <button
-                        class="nav-link position-relative"
-                        data-bs-toggle="tab"
-                        data-bs-target="#new-issue-list"
+                            class="nav-link position-relative"
+                            data-bs-toggle="tab"
+                            data-bs-target="#new-issue-list"
                     >
                     <span
-                        class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle"
-                        id="notification-light-for-new-issue"
-                        style="padding: 7px;">
+                            class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle"
+                            id="notification-light-for-new-issue"
+                            style="padding: 7px;">
                     </span>
                         New Issues
                     </button>
@@ -148,11 +150,14 @@
                 <div class="tab-pane fade row row-cols-1" id="new-issue-list">
                     <div class="d-flex justify-content-between">
                         <div id="all-approval-input">
-                            <input type="radio" id="all-duplicate" name="approval" value="DUPLICATE" class="all-approval-input"/>
+                            <input type="radio" id="all-duplicate" name="approval" value="DUPLICATE"
+                                   class="all-approval-input"/>
                             <label for="all-duplicate">All Duplicate</label>
-                            <input type="radio" id="all-approve" name="approval" value="APPROVE" class="all-approval-input"/>
+                            <input type="radio" id="all-approve" name="approval" value="APPROVE"
+                                   class="all-approval-input"/>
                             <label for="all-approve">All Approve</label>
-                            <input type="radio" id="all-decline" name="approval" value="DECLINE" class="all-approval-input"/>
+                            <input type="radio" id="all-decline" name="approval" value="DECLINE"
+                                   class="all-approval-input"/>
                             <label for="all-decline">All Decline</label>
                         </div>
 
@@ -174,7 +179,8 @@
                 <div class="modal-header">
                     <h4>Issue Details</h4>
                     <div class="d-flex justify-content-center align-items-center gap-3">
-                        <div class="btn btn-primary" id="issue-edit-btn">Mark as Resolve <i class="fa-solid fa-check"></i></div>
+                        <div class="btn btn-primary" id="issue-edit-btn">Mark as Resolve <i
+                                class="fa-solid fa-check"></i></div>
                         <div class="btn btn-success" id="solve-btn">Solve <i class="fa-solid fa-check-double"></i></div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -184,25 +190,29 @@
                         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
                             <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
                                 <strong>Error : </strong> <span id="errorText"></span>
-                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                <button type="button" class="btn-close btn-dark" aria-label="close"
+                                        style="background: transparent; position: absolute; top: 0; right: 0;">
                                     &times;
                                 </button>
                             </div>
                             <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
                                 <strong>Success : </strong> <span id="successText"></span>
-                                <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                <button type="button" class="btn-close btn-dark" aria-label="close"
+                                        style="background: transparent; position: absolute; top: 0; right: 0;">
                                     &times;
                                 </button>
                             </div>
                             <div class="col mb-3">
-                                <input type="hidden" id="solved" />
+                                <input type="hidden" id="solved"/>
                                 <h5 class="icon-title"><i class="fas fa-wrench text-dark"></i> Corrective Action</h5>
-                                <textarea id="corrective_actionInput" class="form-control form-control-sm btn-space" name="corrective_action" rows="5"></textarea>
+                                <textarea id="corrective_actionInput" class="form-control form-control-sm btn-space"
+                                          name="corrective_action" rows="5"></textarea>
 
                             </div>
                             <div class="col mb-3">
                                 <h5 class="icon-title"><i class="fas fa-shield-alt text-dark"></i>Preventive Action</h5>
-                                <textarea id="preventive_actionInput" class="form-control form-control-sm btn-space" name="preventive_action" rows="5"></textarea>
+                                <textarea id="preventive_actionInput" class="form-control form-control-sm btn-space"
+                                          name="preventive_action" rows="5"></textarea>
 
                             </div>
 
@@ -225,29 +235,32 @@
             <div class="modal-body">
 
                 <!-- issue modal start -->
-                <div class="row g-3 "  id="addIssueValidationForm">
+                <div class="row g-3 " id="addIssueValidationForm">
                     <div class="alert alert-danger alert-dismissible" id="error-alert" style="display: none;">
                         <strong>Error : </strong> <span id="error-text"></span>
-                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                        <button type="button" class="btn-close btn-dark" aria-label="close"
+                                style="background: transparent; position: absolute; top: 0; right: 0;">
                             &times;
                         </button>
                     </div>
                     <div class="alert alert-success alert-dismissible" id="success-alert" style="display: none;">
                         <strong>Success : </strong> <span id="success-text"></span>
-                        <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                        <button type="button" class="btn-close btn-dark" aria-label="close"
+                                style="background: transparent; position: absolute; top: 0; right: 0;">
                             &times;
                         </button>
                     </div>
                     <div class="col-lg-6">
                         <label for="title" class="col-sm-12 col-form-label" name="title">Issue Title<span
                                 style="color:#e86666"> *</span></label>
-                        <input type="text" class="form-control border-task-description" id="title" name="title" placeholder="Title">
+                        <input type="text" class="form-control border-task-description" id="title" name="title"
+                               placeholder="Title">
                     </div>
 
                     <div class="col-lg-6">
                         <label for="issue_category" class="col-sm-12 col-form-label" name="issueCategory">Issue Category<span
                                 style="color:red"> *</span></label>
-                        <select class="form-select border-task-description" name="issue_category" id="issue_category" >
+                        <select class="form-select border-task-description" name="issue_category" id="issue_category">
                             <option value="" disabled selected>Select Issue Category</option>
                             <option value="ERROR">Error</option>
                             <option value="BUG">Bug</option>
@@ -264,7 +277,8 @@
                     <div class="col-lg-6">
                         <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
                                 style="color:red"> *</span></label>
-                        <select class="form-select border-task-description" data-live-search="true" aria-label="Select PIC"  id="user_pic" name="user_pic" >
+                        <select class="form-select border-task-description" data-live-search="true"
+                                aria-label="Select PIC" id="user_pic" name="user_pic">
 
                         </select>
                     </div>
@@ -272,19 +286,26 @@
 
                     <div class="col-lg-6">
                         <div class="form-check-inline">
-                            <span><label for="responsible_party" class="col-sm-12 col-form-label" name="responsible_type">Responsible Party <span
-                                    style="color:red"> *</span>  <input class="form-check-input " type="checkbox" id="responsible_type" name="client_checkbox" value="CLIENT" style="margin-left:130px;"> <label class="form-check-label" >Client</label></label>
+                            <span><label for="responsible_party" class="col-sm-12 col-form-label"
+                                         name="responsible_type">Responsible Party <span
+                                    style="color:red"> *</span>  <input class="form-check-input " type="checkbox"
+                                                                        id="responsible_type" name="client_checkbox"
+                                                                        value="CLIENT"
+                                                                        style="margin-left:130px;"> <label
+                                    class="form-check-label">Client</label></label>
                              </span>
                         </div>
 
-                        <select class="form-select border-task-description" aria-label="Select Responsible Party" id="responsible_party" name="responsible_party"></select>
+                        <select class="form-select border-task-description" aria-label="Select Responsible Party"
+                                id="responsible_party" name="responsible_party"></select>
 
                     </div>
 
                     <div class="col-lg-12" style="margin-bottom: 80px;">
                         <label for="description" class="col-sm-12 col-form-label" name="name">Description<span
                                 style="color:#e86666"> *</span></label>
-                        <div class="quill-editor-bubble" id="description" name="description" required pattern=".*\S.*"></div>
+                        <div class="quill-editor-bubble" id="description" name="description" required
+                             pattern=".*\S.*"></div>
 
                         <div id="objectiveError" class="invalid-feedback"></div>
 
@@ -294,7 +315,8 @@
                         <label for="direct_cause" class="col-sm-12 col-form-label" name="direct_cause">Direct Cause<span
                                 style="color:#e86666"> *</span></label>
 
-                        <textarea class="form-control border-task-description" id="direct_cause" name="direct_cause"></textarea>
+                        <textarea class="form-control border-task-description" id="direct_cause"
+                                  name="direct_cause"></textarea>
                     </div>
 
                     <div class="col-lg-6">
@@ -316,7 +338,7 @@
                     </div>
 
                     <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                        <button type="button" id="addIssue" class="btn btn-primary" >Save Data</button>
+                        <button type="button" id="addIssue" class="btn btn-primary">Save Data</button>
                     </div>
 
                 </div>
@@ -340,7 +362,8 @@
 
 
 <!--    issue detail modal start-->
-<div class="modal fade issueDetails" id="issueDetailsModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade issueDetails" id="issueDetailsModal" tabindex="-1" aria-labelledby="staticBackdropLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -355,11 +378,11 @@
 
                         <!-- <h6 data-toggle="collapse" href="#peoples" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i> People</h6> -->
                         <div class="col mb-3 d-flex gap-2">
-                                <h6>Created at</h6>
-                                <span id="solveDateDetails"></span>
-                            </div>
+                            <h6>Created at</h6>
+                            <span id="solveDateDetails"></span>
+                        </div>
                         <div id="peoples" class="row row-cols-2">
-                            <div  class="col mb-3 ">
+                            <div class="col mb-3 ">
                                 <div>
                                     <div>
                                         <i class="fa-solid fa-user-pen"></i>
@@ -369,7 +392,7 @@
                                 <p class="" id="picDetails"></p>
 
                             </div>
-                            <div  class="col mb-3 ">
+                            <div class="col mb-3 ">
                                 <div>
                                     <div>
                                         <i class="fa-solid fa-users-gear"></i>
@@ -393,7 +416,7 @@
                             <div class="row row-cols-2">
                                 <div class=" mb-3">
 
-                                    <label for="issueTitleDetails" >Title:</label>
+                                    <label for="issueTitleDetails">Title:</label>
                                     <input type="text" class="form-control" id="issueTitleDetails"/>
 
                                 </div>
@@ -486,9 +509,9 @@
     </div>
 
     <!-- Back to Top -->
-<!--    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"-->
-<!--    ><i class="bi bi-arrow-up"></i-->
-<!--    ></a>-->
+    <!--    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"-->
+    <!--    ><i class="bi bi-arrow-up"></i-->
+    <!--    ></a>-->
 </div>
 
 
@@ -510,12 +533,6 @@
 
 <!-- javascript libraries -->
 <script src="/lib/chart/chart.min.js"></script>
-<script src="/lib/easing/easing.min.js"></script>
-<script src="/lib/waypoints/waypoints.min.js"></script>
-<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="/lib/tempusdominus/js/moment.min.js"></script>
-<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="/lib/quill/quill.min.js"></script>
 
 <!-- Template Javascript -->
@@ -556,15 +573,15 @@
             const impact = issueDetialEdit.querySelector("#impactDetails").value
 
             const issue = {
-                  id: issueId,
-                  title: issueTitle,
-                  issueCategory: issueCategory,
-                  direct_cause: directCause,
-                  root_cause: rootCause,
-                  place: place,
-                  impact: impact,
-                  updated_date : Date.now()
-                }
+                id: issueId,
+                title: issueTitle,
+                issueCategory: issueCategory,
+                direct_cause: directCause,
+                root_cause: rootCause,
+                place: place,
+                impact: impact,
+                updated_date: Date.now()
+            }
 
             console.log(issueTitle, issueCategory, directCause, rootCause, place, impact, issueId)
 
@@ -575,13 +592,13 @@
                 contentType: 'application/json',
                 data: JSON.stringify(issue),
                 success: function (response) {
-                  console.log('Ajax request successful:', response);
-                  // Handle success response
+                    console.log('Ajax request successful:', response);
+                    // Handle success response
                     saveButton.classList.add('d-none')
                 },
                 error: function (xhr, status, error) {
-                  console.log('Ajax request error:', error);
-                  // Handle error response
+                    console.log('Ajax request error:', error);
+                    // Handle error response
                 }
             });
 
@@ -607,14 +624,14 @@
 
         issueListContainer.innerHTML = '';
 
-        for(let i = issueList.length - 1; i >= 0; i--) {
+        for (let i = issueList.length - 1; i >= 0; i--) {
 
             issueListContainer.appendChild(createIssueCard(issueList[i]));
         }
 
     })
 
-    document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function(e) {
+    document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function (e) {
 
         const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
 
@@ -622,7 +639,7 @@
 
         unsolvedIssueListContainer.innerHTML = '';
 
-        for(let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+        for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
             unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
 
@@ -658,9 +675,11 @@
             return `${months} month${months > 1 ? 's' : ''} ago`;
         }
     }
+
     import {getUser} from "/js/currentLoginUser.js";
     import {getTimeElapsed} from "/js/time.js";
     import {getData} from "/js/api-function.js";
+
     console.log(await getUser());
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
@@ -692,18 +711,18 @@
     ];
     // If you want to initialize Quill for a specific element, you can do it like this:
     let getLoginUser = await getUser();
-    console.log("current login user " , getLoginUser)
+    console.log("current login user ", getLoginUser)
     let data = [];
     const currentLoginUserRole = getLoginUser.currentUser.role;
 
     console.log(currentLoginUserRole)
     console.log(currentLoginUserRole === "FOC")
 
-    if(currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
+    if (currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
         document.querySelector('[data-bs-target="#add-issue"]').classList.remove("d-none");
     }
 
-    if(currentLoginUserRole === 'PROJECT_MANAGER') {
+    if (currentLoginUserRole === 'PROJECT_MANAGER') {
         document.querySelector("#issue-link").classList.remove("d-none")
     }
 
@@ -1130,7 +1149,7 @@
             //for add issue
             $('#addIssue').on('click', async function () {
                 const title = $('#title').val();
-                const description =  descriptionEditor.root.innerHTML;
+                const description = descriptionEditor.root.innerHTML;
                 const place = $('#place').val();
                 const impact = $('#impact').val();
                 const root_cause = $('#root_cause').val();
@@ -1223,11 +1242,11 @@
 
     function createIssueCard(issue) {
         console.log(issue)
-                const main = document.createElement("div");
-                main.classList.add("card", "p-0");
-                main.style.minWidth = "320px";
+        const main = document.createElement("div");
+        main.classList.add("card", "p-0");
+        main.style.minWidth = "320px";
 
-                const cardHeader = `<div class="card-header justify-content-between">
+        const cardHeader = `<div class="card-header justify-content-between">
                 <div
                     class="d-flex justify-content-between align-items-center flex-wrap"
                 >
@@ -1268,11 +1287,11 @@
                 </div>
             </div>`;
 
-                const cardBody = document.createElement("div");
-                cardBody.classList.add("card-body", "accordion-item", "p-0");
-                cardBody.id = `accordionExample-${issue.id}`;
+        const cardBody = document.createElement("div");
+        cardBody.classList.add("card-body", "accordion-item", "p-0");
+        cardBody.id = `accordionExample-${issue.id}`;
 
-                const h2 = `<h2 class="accordion-header" id="headingTwo">
+        const h2 = `<h2 class="accordion-header" id="headingTwo">
             <button
                 class="accordion-button collapsed"
                 type="button"
@@ -1285,260 +1304,260 @@
             </button>
         </h2>`;
 
-                const collapse = document.createElement("div");
-                collapse.id = `collapse-${issue.id}`;
-                collapse.classList.add("accordion-collapse", "collapse");
-                collapse.setAttribute("aria-labelledby", "headingTwo");
-                collapse.setAttribute("data-bs-parent", `#accordionExample-${issue.id}`);
+        const collapse = document.createElement("div");
+        collapse.id = `collapse-${issue.id}`;
+        collapse.classList.add("accordion-collapse", "collapse");
+        collapse.setAttribute("aria-labelledby", "headingTwo");
+        collapse.setAttribute("data-bs-parent", `#accordionExample-${issue.id}`);
 
-                // quill editor goes in here
-                const accordionBody = document.createElement("div");
-                accordionBody.id = `quill-editor-${issue.id}`;
-                accordionBody.classList.add("accordion-body");
+        // quill editor goes in here
+        const accordionBody = document.createElement("div");
+        accordionBody.id = `quill-editor-${issue.id}`;
+        accordionBody.classList.add("accordion-body");
 
-                function initializeQuill() {
-                    console.log("Before Quill initialization");
-                    const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
-                    console.log(quillContainer);
+        function initializeQuill() {
+            console.log("Before Quill initialization");
+            const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
+            console.log(quillContainer);
 
-                    let quill;
+            let quill;
 
-                    if (quillContainer) {
-                        quill = new Quill(quillContainer, {
-                            modules: {
-                                toolbar: false,
-                            },
-                            theme: "snow",
-                        });
+            if (quillContainer) {
+                quill = new Quill(quillContainer, {
+                    modules: {
+                        toolbar: false,
+                    },
+                    theme: "snow",
+                });
 
-                        quill.clipboard.dangerouslyPasteHTML(0, issue.description);
-                        quill.enable(false);
-                    }
-
-                    console.log("After Quill initialization");
-                    console.log("this feels suck man", quill);
-                }
-
-                cardBody.innerHTML = h2;
-                collapse.appendChild(accordionBody);
-
-                cardBody.appendChild(collapse);
-
-                main.innerHTML = cardHeader;
-                main.appendChild(cardBody);
-
-                console.log(main)
-
-                setTimeout(initializeQuill, 1000);
-
-                return main;
-
+                quill.clipboard.dangerouslyPasteHTML(0, issue.description);
+                quill.enable(false);
             }
 
+            console.log("After Quill initialization");
+            console.log("this feels suck man", quill);
+        }
+
+        cardBody.innerHTML = h2;
+        collapse.appendChild(accordionBody);
+
+        cardBody.appendChild(collapse);
+
+        main.innerHTML = cardHeader;
+        main.appendChild(cardBody);
+
+        console.log(main)
+
+        setTimeout(initializeQuill, 1000);
+
+        return main;
+
+    }
+
     let currentIssueId;
-            $(document).ready(async function () {
+    $(document).ready(async function () {
 
-                function loadData() {
-                    $.ajax({
-                        url: 'api/issue/list',
-                        method: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log("Data" + data);
-                            const sortContainer = $('#sort-container');
+        function loadData() {
+            $.ajax({
+                url: 'api/issue/list',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log("Data" + data);
+                    const sortContainer = $('#sort-container');
 
-                            data.forEach(item => {
+                    data.forEach(item => {
 
-                                console.log("item : ", item)
+                        console.log("item : ", item)
 
-                                const issueDiv = createIssueCard(item);
-                                sortContainer.prepend(issueDiv);
-                            });
-                        },
-                        error: function (error) {
-                            console.log('Error fetching data:', error);
-                        }
+                        const issueDiv = createIssueCard(item);
+                        sortContainer.prepend(issueDiv);
                     });
+                },
+                error: function (error) {
+                    console.log('Error fetching data:', error);
                 }
+            });
+        }
 
-                loadData();
+        loadData();
 
-                $('.tab-content').on('click', '.see-more-button', function () {
-                    // Get the issue ID directly from the button's data-id attribute
-                    const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
-                    console.log('Clicked button with data-iD:', issueId);
+        $('.tab-content').on('click', '.see-more-button', function () {
+            // Get the issue ID directly from the button's data-id attribute
+            const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
+            console.log('Clicked button with data-iD:', issueId);
 
-                    $.ajax({
-                        url: 'api/issue/list/byId/' + issueId,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log('Data received:', data);
-                            if (data) {
-                                $('#corrective_actionInput').text(data.corrective_action);
-                                $('#preventive_actionInput').text(data.preventive_action);
-                                if (data.solved === false) {
-                                    $('#solve-btn').hide();
-                                    $('#issue-edit-btn').show();
-                                } else {
-                                    $('#solve-btn').show();
-                                    $('#issue-edit-btn').hide();
-                                }
-
-                                $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
-
-                                $('#issueEditModal').modal('show');
-
-                            } else {
-                                console.log('No data received for issue ID:', issueId);
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.log('AJAX error:', error);
+            $.ajax({
+                url: 'api/issue/list/byId/' + issueId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Data received:', data);
+                    if (data) {
+                        $('#corrective_actionInput').text(data.corrective_action);
+                        $('#preventive_actionInput').text(data.preventive_action);
+                        if (data.solved === false) {
+                            $('#solve-btn').hide();
+                            $('#issue-edit-btn').show();
+                        } else {
+                            $('#solve-btn').show();
+                            $('#issue-edit-btn').hide();
                         }
-                    });
-                });
 
-                $('.tab-content').on('click', '.issueDetails', function () {
+                        $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
 
-                    console.log("click on issueDetails ")
+                        $('#issueEditModal').modal('show');
 
-                    // Get the issue ID directly from the button's data-id attribute
-                    const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
-                    console.log('Clicked button with data-iD:', issueId);
+                    } else {
+                        console.log('No data received for issue ID:', issueId);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        });
 
-                    $.ajax({
-                        url: 'api/issue/list/byId/' + issueId,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log('Data received:', data);
-                            if (data) {
-                                console.log("i have no idea help")
-                                $("#details").attr("data-currentEditingIssueId", data.id);
-                                $('#issueTitleDetails').val(data.title);
-                                $('#issue_categoryDetails').val(data.issueCategory);
-                                $('#picDetails').text(data.user_pic.name);
-                                $('#rpDetails').text(data.responsible_party.name);
-                                const issueDetail = new Quill(document.querySelector('#descriptionDetails'), {
-                                    modules: {
-                                        toolbar: toolbaroptions,
-                                    },
-                                    theme: 'bubble',
-                                });
-                                issueDetail.root.innerHTML = '';
-                                issueDetail.clipboard.dangerouslyPasteHTML(
-                                    0,
-                                    data.description
-                                );
-                                issueDetail.on('text-change', function(delta, source) {
-                                    console.log("text change", issueDetail.root.innerHTML)
-                                    $("#issue-description-save-btn-container").removeClass("d-none")
-                                });
-                                $("#issue-description-save-btn").on('click', function() {
+        $('.tab-content').on('click', '.issueDetails', function () {
 
-                                    const issue = {
-                                        id: data.id,
-                                        description: issueDetail.root.innerHTML,
-                                        updated_date : Date.now()
-                                    }
+            console.log("click on issueDetails ")
 
-                                    console.log("issue", issue)
+            // Get the issue ID directly from the button's data-id attribute
+            const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
+            console.log('Clicked button with data-iD:', issueId);
 
-                                    $.ajax({
-                                        url: `/api/issue/update/${data.id}`, // Replace with your actual URL
-                                        type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
-                                        dataType: 'json',
-                                        contentType: 'application/json',
-                                        data: JSON.stringify(issue),
-                                        success: function (response) {
-                                            console.log('Ajax request successful:', response);
-                                            // Handle success response
-                                            $("#issue-description-save-btn-container").addClass('d-none')
-                                        },
-                                        error: function (xhr, status, error) {
-                                            console.log('Ajax request error:', error);
-                                            // Handle error response
-                                        }
-                                    });
-                                })
-                                $('#direct_causeDetails').val(data.direct_cause);
-                                $('#root_causeDetails').val(data.root_cause);
-                                $('#placeDetails').val(data.place);
-                                $('#impactDetails').val(data.impact);
-                                $('#correctiveDetails').text(data.corrective_action);
-                                $('#preventiveDetails').text(data.preventive_action);
-                                $('#solveDateDetails').text(formatDate(data.created_date));
-                                $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
-                                $('#issueDetailsModal').modal('show');
+            $.ajax({
+                url: 'api/issue/list/byId/' + issueId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Data received:', data);
+                    if (data) {
+                        console.log("i have no idea help")
+                        $("#details").attr("data-currentEditingIssueId", data.id);
+                        $('#issueTitleDetails').val(data.title);
+                        $('#issue_categoryDetails').val(data.issueCategory);
+                        $('#picDetails').text(data.user_pic.name);
+                        $('#rpDetails').text(data.responsible_party.name);
+                        const issueDetail = new Quill(document.querySelector('#descriptionDetails'), {
+                            modules: {
+                                toolbar: toolbaroptions,
+                            },
+                            theme: 'bubble',
+                        });
+                        issueDetail.root.innerHTML = '';
+                        issueDetail.clipboard.dangerouslyPasteHTML(
+                            0,
+                            data.description
+                        );
+                        issueDetail.on('text-change', function (delta, source) {
+                            console.log("text change", issueDetail.root.innerHTML)
+                            $("#issue-description-save-btn-container").removeClass("d-none")
+                        });
+                        $("#issue-description-save-btn").on('click', function () {
 
-                                const notSamePerson = getLoginUser.currentUser.id !== data.user_uploader.id
-
-                                if(notSamePerson) {
-                                    console.log(getLoginUser.currentUser.id)
-                                    console.log(data.user_uploader.id)
-                                    console.log(getLoginUser.currentUser.id !== data.user_uploader.id)
-                                    console.log("solved", data.solved)
-                                    $('#issueTitleDetails').prop('disabled', true);
-                                    $('#issue_categoryDetails').prop('disabled', true);
-                                    $('#descriptionDetails').prop('disabled', true);
-                                    $('#direct_causeDetails').prop('disabled', true);
-                                    $('#root_causeDetails').prop('disabled', true);
-                                    $('#placeDetails').prop('disabled', true);
-                                    $('#impactDetails').prop('disabled', true);
-                                    issueDetail.enable(false)
-                                } else {
-                                    if(data.solved) {
-                                        $('#issueTitleDetails').prop('disabled', true);
-                                        $('#issue_categoryDetails').prop('disabled', true);
-                                        $('#descriptionDetails').prop('disabled', true);
-                                        $('#direct_causeDetails').prop('disabled', true);
-                                        $('#root_causeDetails').prop('disabled', true);
-                                        $('#placeDetails').prop('disabled', true);
-                                        $('#impactDetails').prop('disabled', true);
-                                        issueDetail.enable(false)
-                                    } else {
-                                        $('#issueTitleDetails').prop('disabled', false);
-                                        $('#issue_categoryDetails').prop('disabled', false);
-                                        $('#descriptionDetails').prop('disabled', false);
-                                        $('#direct_causeDetails').prop('disabled', false);
-                                        $('#root_causeDetails').prop('disabled', false);
-                                        $('#placeDetails').prop('disabled', false);
-                                        $('#impactDetails').prop('disabled', false);
-                                        issueDetail.enable(true)
-                                    }
-                                }
-
-                            } else {
-                                console.log('No data received for issue ID:', issueId);
+                            const issue = {
+                                id: data.id,
+                                description: issueDetail.root.innerHTML,
+                                updated_date: Date.now()
                             }
-                        },
-                        error: function (xhr, status, error) {
-                            console.log('AJAX error:', error);
+
+                            console.log("issue", issue)
+
+                            $.ajax({
+                                url: `/api/issue/update/${data.id}`, // Replace with your actual URL
+                                type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
+                                dataType: 'json',
+                                contentType: 'application/json',
+                                data: JSON.stringify(issue),
+                                success: function (response) {
+                                    console.log('Ajax request successful:', response);
+                                    // Handle success response
+                                    $("#issue-description-save-btn-container").addClass('d-none')
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log('Ajax request error:', error);
+                                    // Handle error response
+                                }
+                            });
+                        })
+                        $('#direct_causeDetails').val(data.direct_cause);
+                        $('#root_causeDetails').val(data.root_cause);
+                        $('#placeDetails').val(data.place);
+                        $('#impactDetails').val(data.impact);
+                        $('#correctiveDetails').text(data.corrective_action);
+                        $('#preventiveDetails').text(data.preventive_action);
+                        $('#solveDateDetails').text(formatDate(data.created_date));
+                        $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+                        $('#issueDetailsModal').modal('show');
+
+                        const notSamePerson = getLoginUser.currentUser.id !== data.user_uploader.id
+
+                        if (notSamePerson) {
+                            console.log(getLoginUser.currentUser.id)
+                            console.log(data.user_uploader.id)
+                            console.log(getLoginUser.currentUser.id !== data.user_uploader.id)
+                            console.log("solved", data.solved)
+                            $('#issueTitleDetails').prop('disabled', true);
+                            $('#issue_categoryDetails').prop('disabled', true);
+                            $('#descriptionDetails').prop('disabled', true);
+                            $('#direct_causeDetails').prop('disabled', true);
+                            $('#root_causeDetails').prop('disabled', true);
+                            $('#placeDetails').prop('disabled', true);
+                            $('#impactDetails').prop('disabled', true);
+                            issueDetail.enable(false)
+                        } else {
+                            if (data.solved) {
+                                $('#issueTitleDetails').prop('disabled', true);
+                                $('#issue_categoryDetails').prop('disabled', true);
+                                $('#descriptionDetails').prop('disabled', true);
+                                $('#direct_causeDetails').prop('disabled', true);
+                                $('#root_causeDetails').prop('disabled', true);
+                                $('#placeDetails').prop('disabled', true);
+                                $('#impactDetails').prop('disabled', true);
+                                issueDetail.enable(false)
+                            } else {
+                                $('#issueTitleDetails').prop('disabled', false);
+                                $('#issue_categoryDetails').prop('disabled', false);
+                                $('#descriptionDetails').prop('disabled', false);
+                                $('#direct_causeDetails').prop('disabled', false);
+                                $('#root_causeDetails').prop('disabled', false);
+                                $('#placeDetails').prop('disabled', false);
+                                $('#impactDetails').prop('disabled', false);
+                                issueDetail.enable(true)
+                            }
                         }
-                    });
-                });
 
-                function createPendingIssueCard(issue) {
-        console.log(issue)
-                const outerDiv = document.createElement("div");
-                outerDiv.classList.add("item-issue-approval");
-                outerDiv.id = `issueapprovalitem-${issue.id}`;
+                    } else {
+                        console.log('No data received for issue ID:', issueId);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        });
 
-                const approvalContainer = document.createElement("div");
-                approvalContainer.classList.add(
-                    "d-inline-flex",
-                    "bg-primary",
-                    "gap-2",
-                    "flex-row",
-                    "p-2",
-                    "border-top",
-                    "rounded-top",
-                    "text-white",
-                    "issue-approval"
-                );
+        function createPendingIssueCard(issue) {
+            console.log(issue)
+            const outerDiv = document.createElement("div");
+            outerDiv.classList.add("item-issue-approval");
+            outerDiv.id = `issueapprovalitem-${issue.id}`;
 
-                approvalContainer.innerHTML += `
+            const approvalContainer = document.createElement("div");
+            approvalContainer.classList.add(
+                "d-inline-flex",
+                "bg-primary",
+                "gap-2",
+                "flex-row",
+                "p-2",
+                "border-top",
+                "rounded-top",
+                "text-white",
+                "issue-approval"
+            );
+
+            approvalContainer.innerHTML += `
                     <input type="radio" name="approval-${issue.id}" value="DUPLICATE">
                     <label>duplicate</label>
                     <input type="radio" name="approval-${issue.id}" value="APPROVE">
@@ -1547,11 +1566,11 @@
                     <label>decline</label>
                 `;
 
-                const main = document.createElement("div");
-                main.classList.add("card", "p-0");
-                main.style.minWidth = "320px";
+            const main = document.createElement("div");
+            main.classList.add("card", "p-0");
+            main.style.minWidth = "320px";
 
-                const cardHeader = `<div class="card-header justify-content-between">
+            const cardHeader = `<div class="card-header justify-content-between">
                 <div
                     class="d-flex justify-content-between align-items-center flex-wrap"
                 >
@@ -1593,11 +1612,11 @@
                 </div>
             </div>`;
 
-                const cardBody = document.createElement("div");
-                cardBody.classList.add("card-body", "accordion-item", "p-0");
-                cardBody.id = `accordionExample-${issue.id}`;
+            const cardBody = document.createElement("div");
+            cardBody.classList.add("card-body", "accordion-item", "p-0");
+            cardBody.id = `accordionExample-${issue.id}`;
 
-                const h2 = `<h2 class="accordion-header" id="headingTwo">
+            const h2 = `<h2 class="accordion-header" id="headingTwo">
             <button
                 class="accordion-button collapsed"
                 type="button"
@@ -1610,146 +1629,146 @@
             </button>
         </h2>`;
 
-                const collapse = document.createElement("div");
-                collapse.id = `collapse-${issue.id}`;
-                collapse.classList.add("accordion-collapse", "collapse");
-                collapse.setAttribute("aria-labelledby", "headingTwo");
-                collapse.setAttribute("data-bs-parent", `#accordionExample-${issue.id}`);
+            const collapse = document.createElement("div");
+            collapse.id = `collapse-${issue.id}`;
+            collapse.classList.add("accordion-collapse", "collapse");
+            collapse.setAttribute("aria-labelledby", "headingTwo");
+            collapse.setAttribute("data-bs-parent", `#accordionExample-${issue.id}`);
 
-                // quill editor goes in here
-                const accordionBody = document.createElement("div");
-                accordionBody.id = `quill-editor-${issue.id}`;
-                accordionBody.classList.add("accordion-body");
+            // quill editor goes in here
+            const accordionBody = document.createElement("div");
+            accordionBody.id = `quill-editor-${issue.id}`;
+            accordionBody.classList.add("accordion-body");
 
-                function initializeQuill() {
-                    console.log("Before Quill initialization");
-                    const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
-                    console.log(quillContainer);
+            function initializeQuill() {
+                console.log("Before Quill initialization");
+                const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
+                console.log(quillContainer);
 
-                    let quill;
+                let quill;
 
-                    if (quillContainer) {
-                        quill = new Quill(quillContainer, {
-                            modules: {
-                                toolbar: false,
-                            },
-                            theme: "snow",
-                        });
+                if (quillContainer) {
+                    quill = new Quill(quillContainer, {
+                        modules: {
+                            toolbar: false,
+                        },
+                        theme: "snow",
+                    });
 
-                        quill.clipboard.dangerouslyPasteHTML(0, issue.description);
-                        quill.enable(false);
-                    }
-
-                    console.log("After Quill initialization");
-                    console.log("this feels suck man", quill);
+                    quill.clipboard.dangerouslyPasteHTML(0, issue.description);
+                    quill.enable(false);
                 }
 
-                cardBody.innerHTML = h2;
-                collapse.appendChild(accordionBody);
-
-                cardBody.appendChild(collapse);
-
-                main.innerHTML = cardHeader;
-                main.appendChild(cardBody);
-
-                console.log(main)
-
-                setTimeout(initializeQuill, 1000);
-
-                outerDiv.appendChild(approvalContainer);
-                outerDiv.appendChild(main);
-
-                return outerDiv;
-
+                console.log("After Quill initialization");
+                console.log("this feels suck man", quill);
             }
 
-                const pendingIssueList = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
+            cardBody.innerHTML = h2;
+            collapse.appendChild(accordionBody);
 
-                console.log("pending issue list", pendingIssueList)
+            cardBody.appendChild(collapse);
 
-                if (pendingIssueList.length !== 0) {
-                    document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
-                }
+            main.innerHTML = cardHeader;
+            main.appendChild(cardBody);
 
-                for (let i = pendingIssueList.length - 1; i >= 0; i--) {
+            console.log(main)
 
-                    const currentIssue = pendingIssueList[i];
+            setTimeout(initializeQuill, 1000);
 
-                    document.getElementById("new-issue-list").appendChild(createPendingIssueCard(currentIssue))
-                }
-                const allApprovalRadios = document.querySelectorAll('.all-approval-input');
+            outerDiv.appendChild(approvalContainer);
+            outerDiv.appendChild(main);
 
-                console.log("all radiio button", allApprovalRadios)
+            return outerDiv;
 
-                // Attach a click event listener to each radio button in #all-approval
-                allApprovalRadios.forEach(allApprovalRadio => {
-                    allApprovalRadio.addEventListener('click', function () {
-                        // Get the value of the clicked radio button
-                        const selectedValue = this.value;
-                        console.log(selectedValue)
+        }
 
-                        // Set the corresponding radio buttons in .item sections to the same value
-                        document.querySelectorAll('.issue-approval input[value="' + selectedValue + '"]').forEach(itemRadio => {
-                            itemRadio.checked = true;
-                        });
-                    });
+        const pendingIssueList = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
+
+        console.log("pending issue list", pendingIssueList)
+
+        if (pendingIssueList.length !== 0) {
+            document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
+        }
+
+        for (let i = pendingIssueList.length - 1; i >= 0; i--) {
+
+            const currentIssue = pendingIssueList[i];
+
+            document.getElementById("new-issue-list").appendChild(createPendingIssueCard(currentIssue))
+        }
+        const allApprovalRadios = document.querySelectorAll('.all-approval-input');
+
+        console.log("all radiio button", allApprovalRadios)
+
+        // Attach a click event listener to each radio button in #all-approval
+        allApprovalRadios.forEach(allApprovalRadio => {
+            allApprovalRadio.addEventListener('click', function () {
+                // Get the value of the clicked radio button
+                const selectedValue = this.value;
+                console.log(selectedValue)
+
+                // Set the corresponding radio buttons in .item sections to the same value
+                document.querySelectorAll('.issue-approval input[value="' + selectedValue + '"]').forEach(itemRadio => {
+                    itemRadio.checked = true;
                 });
+            });
+        });
 
-                document.querySelector("#all-approval-btn").addEventListener("click", function () {
+        document.querySelector("#all-approval-btn").addEventListener("click", function () {
 
-                    const updateIssueList = [];
+            const updateIssueList = [];
 
-                    const issueList = document.querySelectorAll(".item-issue-approval");
+            const issueList = document.querySelectorAll(".item-issue-approval");
 
-                    console.log(issueList)
+            console.log(issueList)
 
-                    issueList.forEach((item, index) => {
-                        // Get the value of the selected radio button in the corresponding .item section
-                        console.log("Before radio button selection");
-const selectedRadio = item.querySelector(".issue-approval input[type='radio']:checked");
-console.log(selectedRadio);
-console.log("After radio button selection");
-                        // Check if a radio button is selected
-                        if (selectedRadio) {
-                            // Add data to the array
-                            updateIssueList.push({
-                                id: parseInt(item.getAttribute("id").split("-")[1]), // Assuming each item has a unique identifier
-                                status: selectedRadio.value
-                            });
-                        } else {
-                            // Handle the case where no radio button is selected for an item
-                            console.log(`No radio button selected for item ${index + 1}`);
-                        }
+            issueList.forEach((item, index) => {
+                // Get the value of the selected radio button in the corresponding .item section
+                console.log("Before radio button selection");
+                const selectedRadio = item.querySelector(".issue-approval input[type='radio']:checked");
+                console.log(selectedRadio);
+                console.log("After radio button selection");
+                // Check if a radio button is selected
+                if (selectedRadio) {
+                    // Add data to the array
+                    updateIssueList.push({
+                        id: parseInt(item.getAttribute("id").split("-")[1]), // Assuming each item has a unique identifier
+                        status: selectedRadio.value
                     });
-                    console.log(updateIssueList)
-
-                    if (updateIssueList.length != 0) {
-                        $.ajax({
-                            url: `/api/issue/update/status/issuelist`, // Update the URL to include the issue ID
-                            type: 'PUT',
-                            contentType: 'application/json',
-                            data: JSON.stringify(updateIssueList),
-                            dataType: 'json',
-                            success: function (data) {
-                                console.log(data);
-                                console.log("Issue Updated Successfully");
-                                // alert("Issue Updated Successfully");
-                                showSuccess("Issue Updated Successfuly.");
-                            },
-
-                        });
-                    }
-
-                })
+                } else {
+                    // Handle the case where no radio button is selected for an item
+                    console.log(`No radio button selected for item ${index + 1}`);
+                }
             });
-            // for update
-            const issueEditBtn = document.getElementById('issue-edit-btn');
-            const solveBtn = document.getElementById('solve-btn');
+            console.log(updateIssueList)
 
-            solveBtn.addEventListener('click', function (e) {
-                //alert("Your issue solved");
-                showSuccess("Your Issue Solved.");
-            });
+            if (updateIssueList.length != 0) {
+                $.ajax({
+                    url: `/api/issue/update/status/issuelist`, // Update the URL to include the issue ID
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updateIssueList),
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        console.log("Issue Updated Successfully");
+                        // alert("Issue Updated Successfully");
+                        showSuccess("Issue Updated Successfuly.");
+                    },
+
+                });
+            }
+
+        })
+    });
+    // for update
+    const issueEditBtn = document.getElementById('issue-edit-btn');
+    const solveBtn = document.getElementById('solve-btn');
+
+    solveBtn.addEventListener('click', function (e) {
+        //alert("Your issue solved");
+        showSuccess("Your Issue Solved.");
+    });
 
     issueEditBtn.addEventListener('click', function (e) {
         const corrective_action = $('#corrective_actionInput').val();
@@ -1848,163 +1867,164 @@ console.log("After radio button selection");
     });
 
 
-            $("#reset-btn").on("click", function () {
-                $("#status-filter").val('');
-                $("#solved-filter").val('');
-                $("#category-filter").val('');
-                loadData();
-            });
+    $("#reset-btn").on("click", function () {
+        $("#status-filter").val('');
+        $("#solved-filter").val('');
+        $("#category-filter").val('');
+        loadData();
+    });
 
 
-            // for search bar
-            $("#status-filter").on("change", function () {
-                filterIssues();
-            });
+    // for search bar
+    $("#status-filter").on("change", function () {
+        filterIssues();
+    });
 
-            $("#solved-filter").on("change", function () {
-                filterSolvedIssues();
-            });
+    $("#solved-filter").on("change", function () {
+        filterSolvedIssues();
+    });
 
-            $("#category-filter").on("change", function () {
-                filterCategory();
-            })
+    $("#category-filter").on("change", function () {
+        filterCategory();
+    })
 
 
-            function filterIssues() {
-                var status = $('#status-filter').val();
-                console.log("status", status);
+    function filterIssues() {
+        var status = $('#status-filter').val();
+        console.log("status", status);
 
-                $.ajax({
-                    url: '/api/issue/list/status/' + status,
-                    type: 'GET',
-                    success: function (data) {
-                        console.log('Success. Received data:', data);
+        $.ajax({
+            url: '/api/issue/list/status/' + status,
+            type: 'GET',
+            success: function (data) {
+                console.log('Success. Received data:', data);
 
-                        const sortContainer = $('#sort-container');
-                        sortContainer.empty(); // Clear previous content
+                const sortContainer = $('#sort-container');
+                sortContainer.empty(); // Clear previous content
 
-                        // Check if data is not empty
-                        if (data && data.length > 0) {
-                            // Loop through the retrieved data and create content for each item
-                            data.forEach(item => {
-                                const issueDiv = createIssueCard(item);
-                                sortContainer.append(issueDiv);
-                            });
-                        } else {
-                            // Handle case when data is empty
-                            sortContainer.html('<p style="text-align: center;">No results found.</p>');
-                        }
-                    },
+                // Check if data is not empty
+                if (data && data.length > 0) {
+                    // Loop through the retrieved data and create content for each item
+                    data.forEach(item => {
+                        const issueDiv = createIssueCard(item);
+                        sortContainer.append(issueDiv);
+                    });
+                } else {
+                    // Handle case when data is empty
+                    sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                }
+            },
 
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching data:', error);
-                        console.log('XHR:', xhr);
-                        console.log('Status:', status);
+            error: function (xhr, status, error) {
+                console.error('Error fetching data:', error);
+                console.log('XHR:', xhr);
+                console.log('Status:', status);
 
-                        // Display the error response in the console
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            console.log('Error response:', response);
-                        } catch (e) {
-                            console.log('Error parsing response:', e);
-                        }
-                        showError('Error fetching data.');
-                        //alert('Error fetching data.');
-                    }
-                });
+                // Display the error response in the console
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log('Error response:', response);
+                } catch (e) {
+                    console.log('Error parsing response:', e);
+                }
+                showError('Error fetching data.');
+                //alert('Error fetching data.');
             }
+        });
+    }
 
-            // for solved
-            function filterSolvedIssues() {
-                var solved = $('#solved-filter').val();
-                console.log("solved", solved);
+    // for solved
+    function filterSolvedIssues() {
+        var solved = $('#solved-filter').val();
+        console.log("solved", solved);
 
-                $.ajax({
-                    url: '/api/issue/list/solved/' + solved,
-                    type: 'GET',
-                    success: function (data) {
-                        console.log('Success. Received data:', data);
+        $.ajax({
+            url: '/api/issue/list/solved/' + solved,
+            type: 'GET',
+            success: function (data) {
+                console.log('Success. Received data:', data);
 
-                        const sortContainer = $('#sort-container');
-                        sortContainer.empty(); // Clear previous content
+                const sortContainer = $('#sort-container');
+                sortContainer.empty(); // Clear previous content
 
-                        // Check if data is not empty
-                        if (data && data.length > 0) {
-                            // Loop through the retrieved data and create content for each item
-                            data.forEach(item => {
-                                const issueDiv = createIssueCard(item);
-                                sortContainer.append(issueDiv);
-                            });
-                        } else {
-                            // Handle case when data is empty
-                            sortContainer.html('<p style="text-align: center;">No results found.</p>');
-                        }
-                    },
+                // Check if data is not empty
+                if (data && data.length > 0) {
+                    // Loop through the retrieved data and create content for each item
+                    data.forEach(item => {
+                        const issueDiv = createIssueCard(item);
+                        sortContainer.append(issueDiv);
+                    });
+                } else {
+                    // Handle case when data is empty
+                    sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                }
+            },
 
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching data:', error);
-                        console.log('XHR:', xhr);
-                        console.log('Status:', status);
+            error: function (xhr, status, error) {
+                console.error('Error fetching data:', error);
+                console.log('XHR:', xhr);
+                console.log('Status:', status);
 
-                        // Display the error response in the console
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            console.log('Error response:', response);
-                        } catch (e) {
-                            console.log('Error parsing response:', e);
-                        }
+                // Display the error response in the console
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log('Error response:', response);
+                } catch (e) {
+                    console.log('Error parsing response:', e);
+                }
 
-                        alert('Error fetching data.');
-                    }
-                });
+                alert('Error fetching data.');
             }
+        });
+    }
 
 
-            // for Category filter
-            function filterCategory() {
-                var category = $('#category-filter').val();
-                console.log("category", category);
+    // for Category filter
+    function filterCategory() {
+        var category = $('#category-filter').val();
+        console.log("category", category);
 
-                $.ajax({
-                    url: '/api/issue/list/category/' + category,
-                    type: 'GET',
-                    success: function (data) {
-                        console.log('Success. Received data:', data);
+        $.ajax({
+            url: '/api/issue/list/category/' + category,
+            type: 'GET',
+            success: function (data) {
+                console.log('Success. Received data:', data);
 
-                        const sortContainer = $('#sort-container');
-                        sortContainer.empty(); // Clear previous content
+                const sortContainer = $('#sort-container');
+                sortContainer.empty(); // Clear previous content
 
-                        // Check if data is not empty
-                        if (data && data.length > 0) {
-                            // Loop through the retrieved data and create content for each item
-                            data.forEach(item => {
-                                const issueDiv = createIssueCard(item);
-                                sortContainer.append(issueDiv);
-                            });
-                        } else {
-                            // Handle case when data is empty
-                            sortContainer.html('<p style="text-align: center;">No results found.</p>');
-                        }
-                    },
+                // Check if data is not empty
+                if (data && data.length > 0) {
+                    // Loop through the retrieved data and create content for each item
+                    data.forEach(item => {
+                        const issueDiv = createIssueCard(item);
+                        sortContainer.append(issueDiv);
+                    });
+                } else {
+                    // Handle case when data is empty
+                    sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                }
+            },
 
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching data:', error);
-                        console.log('XHR:', xhr);
-                        console.log('Status:', status);
+            error: function (xhr, status, error) {
+                console.error('Error fetching data:', error);
+                console.log('XHR:', xhr);
+                console.log('Status:', status);
 
-                        // Display the error response in the console
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            console.log('Error response:', response);
-                        } catch (e) {
-                            console.log('Error parsing response:', e);
-                        }
+                // Display the error response in the console
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log('Error response:', response);
+                } catch (e) {
+                    console.log('Error parsing response:', e);
+                }
 
-                        alert('Error fetching data.');
-                    }
-                });
+                alert('Error fetching data.');
             }
-            // for issue list
+        });
+    }
+
+    // for issue list
     function showError(message) {
         $("#errorText").text(message);
         $("#errorAlert").show();
@@ -2018,6 +2038,7 @@ console.log("After radio button selection");
             $("#errorAlert").hide();
         });
     }
+
     function showSuccess(message) {
         $("#successText").text(message);
         $("#successAlert").show();
@@ -2045,6 +2066,7 @@ console.log("After radio button selection");
             $("#error-alert").hide();
         });
     }
+
     function showsuccess(message) {
         $("#success-text").text(message);
         $("#success-alert").show();
