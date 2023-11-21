@@ -988,7 +988,7 @@
                 newProject.classList.add("accordion", "container-fluid");
                 newProject.id = `outer-project-${project.id}`;
 
-                newProject.innerHTML += `<div class="row d-flex align-items-center col-rols-5 border border-dark" id="project-${
+                newProject.innerHTML += `<div style="cursor:pointer;" class="row d-flex align-items-center col-rols-5 border border-dark" id="project-${
                     project.id
                 }" data-bs-toggle="modal" data-bs-target="#project-details">
                                 <div class="col p-2">
@@ -1149,10 +1149,50 @@
                             });
                     }
                     console.log(currentProejctDetail);
+                        
+                    if(loginUser.currentUser.role === 'PROJECT_MANAGER') { 
+                        document.querySelector(
+                            "#project-detail-background"
+                        ).innerText = currentProejctDetail.background;
 
-                    document.querySelector(
-                        "#project-detail-background"
-                    ).innerText = currentProejctDetail.background;
+                        document.querySelector("#project-detail-name").value =
+                        currentProejctDetail.name;
+
+                        document.querySelector(
+                            "#current-edditing-projetc-id"
+                        ).value = currentProejctDetail.id;
+
+                        document.querySelector("#project-edit-duration").value =
+                        currentProejctDetail.duration;
+
+                        document.querySelector("#start-date").value =
+                        formmatDateFromMillisecondForEdit(
+                            currentProejctDetail.start_date
+                        );
+
+                        document.querySelector("#end-date-in-edit").value =
+                        formatDateFromMilliseconds(
+                            currentProejctDetail.end_date
+                        );
+
+                        detailMoal.querySelector("#edit-basic-design-count").value =
+                        currentProejctDetail.amountDto.basic_design;
+
+                        detailMoal.querySelector(
+                            "#edit-detail-design-count"
+                        ).value = currentProejctDetail.amountDto.detail_design;
+
+                        detailMoal.querySelector("#edit-coding-count").value =
+                            currentProejctDetail.amountDto.coding;
+
+                        detailMoal.querySelector("#edit-unit-testing-count").value =
+                            currentProejctDetail.amountDto.unit_testing;
+
+                        detailMoal.querySelector(
+                            "#edit-integrated-testing-count"
+                        ).value = currentProejctDetail.amountDto.integrated_testing;
+
+                    }
 
                     document.querySelector(
                         "#architectures-list-in-edit"
@@ -1262,15 +1302,6 @@
 
                     })
 
-                    //_______________________________________deliverable list end
-
-                    //_______________________________________deliverable update alert box put
-
-                    //____________________________________________________deliverable update end
-
-                    document.querySelector("#project-detail-name").value =
-                        currentProejctDetail.name;
-
                     const objectiveQuill = new Quill(
                         "#show-project-objective",
                         {
@@ -1281,19 +1312,15 @@
                         }
                     );
 
-                    document.querySelector(
-                        "#navigate-task"
-                    ).href = `/project/${currentProejctDetail.id}`;
+                    console.log(loginUser.currentUser.role )
 
-                    document.querySelector(
-                        "#current-edditing-projetc-id"
-                    ).value = currentProejctDetail.id;
+                    if(loginUser.currentUser.role !== 'SDQC' && loginUser.currentUser.role !== 'PMO') {
+                        document.querySelector(
+                            "#navigate-task"
+                        ).href = `/project/${currentProejctDetail.id}`;
 
-                    console.log(
-                        document.querySelector("#current-edditing-projetc-id")
-                            .value
-                    );
-
+                    }
+                    
                     objectiveQuill.enable(false);
 
                     objectiveQuill.root.innerHTML = "";
@@ -1302,19 +1329,6 @@
                         0,
                         currentProejctDetail.objective
                     );
-
-                    document.querySelector("#project-edit-duration").value =
-                        currentProejctDetail.duration;
-
-                    document.querySelector("#start-date").value =
-                        formmatDateFromMillisecondForEdit(
-                            currentProejctDetail.start_date
-                        );
-
-                    document.querySelector("#end-date-in-edit").value =
-                        formatDateFromMilliseconds(
-                            currentProejctDetail.end_date
-                        );
 
                     const phaseOptionList = document.querySelectorAll(
                         "#edit-project-phase option"
@@ -1356,18 +1370,9 @@
                     ).innerText =
                         currentProejctDetail.amountDto.integrated_testing;
 
-                    detailMoal.querySelector("#edit-basic-design-count").value =
-                        currentProejctDetail.amountDto.basic_design;
-                    detailMoal.querySelector(
-                        "#edit-detail-design-count"
-                    ).value = currentProejctDetail.amountDto.detail_design;
-                    detailMoal.querySelector("#edit-coding-count").value =
-                        currentProejctDetail.amountDto.coding;
-                    detailMoal.querySelector("#edit-unit-testing-count").value =
-                        currentProejctDetail.amountDto.unit_testing;
-                    detailMoal.querySelector(
-                        "#edit-integrated-testing-count"
-                    ).value = currentProejctDetail.amountDto.integrated_testing;
+                    
+                    
+                    
                     detailMoal.querySelector("#project-background").innerText =
                         currentProejctDetail.background;
                     detailMoal.querySelector("#project-name").innerText =
@@ -1758,74 +1763,77 @@
                         );
                     });
 
-                document
-                    .querySelector("#start-date")
-                    .addEventListener("change", function () {
-                        const projectDruation = document.querySelector(
-                            "#project-edit-duration"
-                        ).value;
+                if(loginUser.currentUser.role === 'PROJECT_MANAGER') {
+                    document
+                        .querySelector("#start-date")
+                        .addEventListener("change", function () {
+                            const projectDruation = document.querySelector(
+                                "#project-edit-duration"
+                            ).value;
 
-                        const projectEndDate =
-                            document.querySelector("#end-date-in-edit");
-
-                        const endDate = calculateEndDate(
-                            new Date(this.value).getTime(),
-                            projectDruation
-                        );
-
-                        projectEndDate.value = formatDateFromMilliseconds(
-                            endDate.getTime()
-                        );
-                    });
-
-                document
-                    .querySelector("#project-add-duration")
-                    .addEventListener("input", function () {
-                        const projectStartDate =
-                            document.querySelector("#start_date").value;
-
-                        if (projectStartDate !== "") {
-                            const projectEndDate = document.querySelector(
-                                "#project-add-end-date"
-                            );
-
-                            // Calculate the end date only when there's a valid start date
-                            const endDate = calculateEndDate(
-                                new Date(projectStartDate).getTime(),
-                                this.value
-                            );
-
-                            // Check if endDate is not NaN
-                            if (!isNaN(endDate)) {
-                                projectEndDate.value =
-                                    formatDateFromMilliseconds(endDate);
-                            }
-                        }
-                    });
-
-                document
-                    .querySelector("#project-edit-duration")
-                    .addEventListener("input", function () {
-                        const projectStartDate =
-                            document.querySelector("#start-date").value;
-
-                        if (projectStartDate !== "") {
                             const projectEndDate =
                                 document.querySelector("#end-date-in-edit");
 
-                            // Calculate the end date only when there's a valid start date
                             const endDate = calculateEndDate(
-                                new Date(projectStartDate).getTime(),
-                                this.value
+                                new Date(this.value).getTime(),
+                                projectDruation
                             );
 
-                            // Check if endDate is not NaN
-                            if (!isNaN(endDate)) {
-                                projectEndDate.value =
-                                    formatDateFromMilliseconds(endDate);
+                            projectEndDate.value = formatDateFromMilliseconds(
+                                endDate.getTime()
+                            );
+                        });
+                
+
+                    document
+                        .querySelector("#project-add-duration")
+                        .addEventListener("input", function () {
+                            const projectStartDate =
+                                document.querySelector("#start_date").value;
+
+                            if (projectStartDate !== "") {
+                                const projectEndDate = document.querySelector(
+                                    "#project-add-end-date"
+                                );
+
+                                // Calculate the end date only when there's a valid start date
+                                const endDate = calculateEndDate(
+                                    new Date(projectStartDate).getTime(),
+                                    this.value
+                                );
+
+                                // Check if endDate is not NaN
+                                if (!isNaN(endDate)) {
+                                    projectEndDate.value =
+                                        formatDateFromMilliseconds(endDate);
+                                }
                             }
-                        }
-                    });
+                        });
+
+                    document
+                        .querySelector("#project-edit-duration")
+                        .addEventListener("input", function () {
+                            const projectStartDate =
+                                document.querySelector("#start-date").value;
+
+                            if (projectStartDate !== "") {
+                                const projectEndDate =
+                                    document.querySelector("#end-date-in-edit");
+
+                                // Calculate the end date only when there's a valid start date
+                                const endDate = calculateEndDate(
+                                    new Date(projectStartDate).getTime(),
+                                    this.value
+                                );
+
+                                // Check if endDate is not NaN
+                                if (!isNaN(endDate)) {
+                                    projectEndDate.value =
+                                        formatDateFromMilliseconds(endDate);
+                                }
+                            }
+                        });
+                    }
 
                 // Validation for project
                 // let validatedProjectForm = false;
@@ -2510,6 +2518,16 @@
             });
 
             //list project end
+            if(loginUser.currentUser.role !== 'PROJECT_MANAGER') {
+                $('button[data-bs-target="#project-edit"]').remove();
+                $('button[data-bs-target="#amount"]').remove();
+                $('#project-edit').remove();
+                $('#amount').remove();
+                // hide the manage task button if the role is pmo or sdqc and
+            }
+            if(loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO') {
+                $('#navigate-task').remove();
+            }
         </script>
     </head>
 
