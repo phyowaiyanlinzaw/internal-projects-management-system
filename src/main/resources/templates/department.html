@@ -77,9 +77,6 @@
         console.log(dpList)
 
         // Call the function when
-
-
-
         getAllDepartments()
             .then(data => {
                 dpList = [...data];
@@ -160,12 +157,12 @@
                                     document.querySelector("#edit-department-name").value = data.name;
                                 }
                             ).catch(error => console.log(error))
-                            getData(`/api/user/count/departmentId/${currentDp.id}`).then(data => {
+                            getData(`/api/user/count/department/${currentDp.id}`).then(data => {
                                  console.log("Total Member : " + data);
                                 document.querySelector("#total-member").textContent = data
                             }).catch(error => console.log(error))
 
-                            getData(`/api/project/count/departmentId/${currentDp.id}`).then(data => {
+                            getData(`/api/project/count/department/${currentDp.id}`).then(data => {
                                 document.querySelector("#total-project").textContent = data
                             }).catch(error => console.log(error))
 
@@ -195,7 +192,8 @@
                         fragment.appendChild(outerDiv)
                     }
                 motherContainer.appendChild(fragment);
-            }).catch(error => {console.error('Error:', error);})
+            })
+            //.catch(error => {console.error('Error:', error);})
 
         document.getElementById("edit-department").addEventListener("click", function () {
             var departmentId = document.getElementById("department-id").value;
@@ -343,7 +341,9 @@
 
         <div id="grid" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
             <div class="row" id="sort-container" style="margin: 10px">
+
             </div>
+
         </div>
         <!-- department end -->
     </div>

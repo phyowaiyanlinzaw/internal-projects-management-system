@@ -2039,6 +2039,10 @@
                         errorContainer.remove();
                         $("#systemOutlines").css("border", "1px solid #28a745"); // Green border color for valid state
                     }
+                    console.log(
+                        "project systemoutline validaiont : ",
+                        validatedProjectForm
+                    );
                 }
 
                 console.log(
@@ -2170,6 +2174,10 @@
                         $(".quill-editor-full").addClass("is-valid");
                         $(".quill-editor-full").removeClass("is-invalid");
                     }
+                    console.log(
+                        "project objective validaiont : ",
+                        validatedProjectForm
+                    );
                 }
 
                 if (
@@ -2238,12 +2246,9 @@
                     console.log("submitted");
                     event.preventDefault();
 
-                    if (!validateProject()) {
-                        event.preventDefault();
+                    validateProject()
 
-                        if (validatedProjectForm) {
-                            this.submit();
-                        }
+                    if(!validatedProjectForm) {
                         return;
                     }
 
@@ -2374,10 +2379,6 @@
                             .removeClass("d-none");
                     }
 
-                    if (validateProject()) {
-                        return;
-                    }
-
                     // You may want to add some form validation here before sending the data
                     console.log(objective);
                     console.log(architectures);
@@ -2430,7 +2431,8 @@
                             alert("Project registered successfully");
                             // Reset the form if needed
                             $("#validation-form")[0].reset();
-                            createProjectList(data);
+                            const newProject = createProjectList(data);
+                            motherContainer.insertBefore(newProject, motherContainer.childNodes[0])
                         },
                         error: function (data) {
                             alert("Error registering project");
@@ -3096,10 +3098,7 @@
         <div class="modal bg-transparent fade" id="project-details" data-bs-keyboard="true">
             <div class="modal-dialog modal-dialog-centered modal-lg bg-transparent">
                 <div class="modal-content opacity-0">
-                    
-                        
                             <div class="col bg-transparent">
-                                
                                         <ul
                                             class="nav nav-tabs nav-tabs-bordered bg-transparent"
                                         >
@@ -3881,8 +3880,6 @@
                                                 ></div>
                                             </div>
                                         </div>
-                                    
-                                
                             </div>
                             <a
                                 href="/project"
@@ -3890,7 +3887,6 @@
                                 id="navigate-task"
                                 >manage task</a
                             >
-                        
                 </div>
             </div>
         </div>

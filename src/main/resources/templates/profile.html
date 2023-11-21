@@ -303,10 +303,8 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // If the user confirmed, proceed with the AJAX request
-                        $('#loading-overlay').removeClass('d-none');
+                        //$('#loading-overlay').removeClass('d-none');
 
-                        console.log("Old Password : " , currentPassword);
-                        console.log("New Password : ", newPassword);
 
                         $.ajax({
                             url: "/api/user/change-password",
@@ -422,7 +420,7 @@
 
                 setTimeout(function () {
                     $("#errorAlert").hide();
-                }, 1000);
+                }, 3000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
@@ -436,7 +434,7 @@
 
                 setTimeout(function () {
                     $("#successAlert").hide();
-                }, 1000);
+                }, 3000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
@@ -450,7 +448,7 @@
 
                 setTimeout(function () {
                     $("#error-Alert").hide();
-                }, 1000);
+                }, 3000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
@@ -464,7 +462,7 @@
 
                 setTimeout(function () {
                     $("#success-Alert").hide();
-                }, 1000);
+                }, 3000);
 
                 //close alert box
                 $(".btn-close").on("click", function () {
