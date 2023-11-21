@@ -25,7 +25,7 @@ public interface ProjectService {
 
     Long countAllProjectsByProjectManagerId(long id);
 
-    Long countAllProjectsByProjectManagerIdAndStatus(long id, String status);
+    Long countAllProjectsByProjectManagerIdAndClosed(long id, boolean closed);
 
     List<ProjectDto> getAllProjectsByDepartmentId(long id);
     Long countAllProjectsByDepartmentId(long id);
@@ -36,9 +36,9 @@ public interface ProjectService {
 
     long countTaskById(long id);
 
-    ProjectDto getProjectByUsersIdAndStatus(long users, String status);
+    ProjectDto getProjectByUsersIdAndStatus(long userId, boolean status);
 
-
+    public void updateProjectClosed(long id, boolean condition);
 
     //get start and end month of the projects
 

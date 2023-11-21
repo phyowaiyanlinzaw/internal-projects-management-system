@@ -6,7 +6,7 @@ function setupLogoutConfirmation() {
         e.preventDefault(); // Prevent the default link behavior
 
         Swal.fire({
-            text: "Are you sure want to log out!",
+            title: "Are you sure want to log out!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -27,7 +27,7 @@ function confirmLogout() {
         e.preventDefault(); // Prevent the default link behavior
 
         Swal.fire({
-            text: "Are you sure want to log out!",
+            title: "Are you sure want to log out!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",

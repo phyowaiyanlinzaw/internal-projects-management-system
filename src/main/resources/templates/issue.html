@@ -727,7 +727,7 @@
     }
 
     // const currentUser = await getUser();
-    const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`)
+    const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/false`)
     console.log("dataForIssue", dataForIssue);
     $(document).ready(async function () {
 
@@ -790,12 +790,16 @@
             }
 
 // Fetch client data and populate the select box initially
-            $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (data) {
+            $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/false`, function (data) {
                 clientData = data;
                 console.log("Client Data: " + JSON.stringify(clientData));
                 // Check the "Client" checkbox initially
-                $('#responsible_type').prop('checked', true);
-                populateClientName();
+                if(clientData !== '' ) {
+                    $('#responsible_type').prop('checked', true);
+                    populateClientName();
+                } else {
+                    document.querySelector("button[data-bs-target='#add-issue']").classList.add('d-none')
+                }
             });
             let actual_responsible_type = 'CLIENT';
 
@@ -1141,7 +1145,7 @@
                 validateUserPic();
             });
 
-
+            if(dataForIssue !== null) {
             //for add issue
             $('#addIssue').on('click', async function () {
                 const title = $('#title').val();
@@ -1222,6 +1226,7 @@
                     },
                 });
             });
+            }
         }
     });
 

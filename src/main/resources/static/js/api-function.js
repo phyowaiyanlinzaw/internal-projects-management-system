@@ -23,6 +23,12 @@ export function getData(url) {
                 throw new Error('Network response was not ok');
             }
 
+            console.log(response)
+
+            if (response.headers.get('content-length') === '0') {
+                return null;
+            }
+
             return response.json();
         });
 }

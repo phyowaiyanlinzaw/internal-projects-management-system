@@ -644,7 +644,7 @@
                             showSuccess('Employee registered successfully');
                         },
                         error: function (data, xhr) {
-                            alert('Error registering employee');
+                            showError('Error registering employee');
                             $('#register-employee-btn').html('Register').prop('disabled', false);
                             $('#alert-danger').show();
                         },
@@ -738,7 +738,7 @@
             console.log("department id : ", departmentId);
 
             if (username === "" || email === "" || departmentId === "") {
-                alert("Please enter Edit");
+                showError("Please enter Edit");
                 return;
             }
 
@@ -778,14 +778,13 @@
                         contentType: 'application/json',
                         success: function (data) {
                             console.log('Data received:', data);
-                            alert('Employee Update successfully');
                             $('#edit-employee-modal').modal('hide');
                             $('#edit_btn').html('Edit').prop('disabled', false);
                             $('#table').bootstrapTable('refresh');
                             showSuccess('Employee updated successfully');
                         },
                         error: function (xhr, status, error) {
-                            alert('Error updating employee');
+                            showError('Error updating employee');
                             $('#edit_btn').html('Edit').prop('disabled', false);
                             $('#alert-danger').show();
                         },
