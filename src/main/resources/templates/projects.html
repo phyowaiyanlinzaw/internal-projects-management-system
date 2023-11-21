@@ -1135,6 +1135,10 @@
                                             "Review counts updated successfully:",
                                             data
                                         );
+                                        $("#alert-text").text(
+                                            "Review counts updated successfully"
+                                        );
+                                        $('#alert-modal').modal('show');
                                     })
                                     .catch((error) => {
                                         console.error(
@@ -1197,7 +1201,7 @@
                     //------------------------ architecture list end
 
                     //------------------------ deliverable list start
-                    document.querySelector("#deliverable-list").textContent =
+                    document.querySelector("#edit-deliverable-list").textContent =
                         "";
                     let deliverableId;
                     currentProejctDetail.deliverableDto.forEach((a) => {
@@ -1221,7 +1225,7 @@
 
 
                         document
-                            .querySelector("#deliverable-list")
+                            .querySelector("#edit-deliverable-list")
                             .appendChild(outerDiv);
                     });
 
@@ -1476,6 +1480,10 @@
                                         "this projce has benn saved",
                                         data
                                     );
+                                    $("#alert-text").text (
+                                        "Project Updated Successfully..."
+                                    );
+                                    $("#alert-modal").modal("show")
                                     // event.currentTarget.submit();
                                 },
                                 error: function (data) {
@@ -1536,16 +1544,13 @@
                             dataType: "json",
                             contentType: "application/json; charset=utf-8",
                             success: async function (data) {
-                                alert("Project registered successfully");
+                                
                                 // Reset the form if needed
-                                console.log("this projce has benn saved", data);
-                                // event.currentTarget.submit();
-                                window.top.location = window.top.location;
+                                $('#alert-modal').modal('show');
+                                $("#alert-text").text("Amount Updated Successfully...");
                             },
                             error: function (data) {
                                 alert("Error registering project");
-                                // event.currentTarget.submit();
-                                window.top.location = window.top.location;
                             },
                         });
                     });
@@ -3622,7 +3627,7 @@
                                                         DAT
                                                     </div>
                                                     <div
-                                                        class="row row-cols-1 gap-2"
+                                                        class="row row-cols-2"
                                                     >
                                                         <div
                                                             class="d-flex justify-content-start align-items-center gap-2"
@@ -3827,9 +3832,10 @@
                                                 ></div>
                                             </div>
                                             <div
-                                                class="tab-pane fade container px-4 pt-2 d-flex flex-column gap-2"
+                                                class="tab-pane fade flex-column gap-2"
                                                 id="deliverable-list"
                                             >
+                                                <div id="edit-deliverable-list" class="d-flex flex-column gap-2"></div>
                                             </div>
                                         </div>
                             </div>
@@ -3842,6 +3848,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="alert-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="alert alert-success text-center" role="alert" id="alert-text">
+                    
+                </div>
+            </div>
+        </div>
+
 
         <!-- modal for project's details -->
 
