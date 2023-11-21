@@ -27,7 +27,7 @@ public class Department {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<User> users;
 
-//    @OneToManyn
+//    @OneToMany
 //    private List<Project> projects;
 
 

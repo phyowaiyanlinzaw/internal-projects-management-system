@@ -125,4 +125,10 @@ public class IssueController {
         return ResponseEntity.ok(issueDtos);
     }
 
+    @GetMapping("/count/project-manager/{id}")
+    public ResponseEntity<Long> countIssuesByProjectManagerId(@PathVariable long id) {
+        long count = issueService.countIssuesByProjectManagerId(id);
+        return ResponseEntity.ok(count);
+    }
+
 }

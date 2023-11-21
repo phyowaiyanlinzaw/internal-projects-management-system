@@ -99,7 +99,7 @@ public class ProjectServiceImpl implements ProjectService {
         Review newReview = new Review();
         newReview.setUser(userRepository.getReferenceById(projectDto.getProjectManagerUserDto().getId()));
         project2.setReviews(newReview);
-        project2.setStatus("In_Progress");
+        project2.setClosed(false);
         newReview.setUser(userRepository.getReferenceById(projectDto.getProjectManagerUserDto().getId()));
         projectRepository.save(project2);
 
@@ -124,7 +124,8 @@ public class ProjectServiceImpl implements ProjectService {
         projectDto.setAmountDto(modelMapper.map(project2.getAmount(), AmountDto.class));
         projectDto.setDepartmentDto(modelMapper.map(project2.getDepartment(), DepartmentDto.class));
         projectDto.setArchitectureDto(project2.getArchitectures().stream().map(architecture1 -> modelMapper.map(architecture1, ArchitectureDto.class)).collect(Collectors.toSet()));
-
+        projectDto.setProjectManagerUserDto(modelMapper.map(project2.getProjectManager(), UserDto.class));
+        
         List<DeliverableDto> deliverableDtos = new ArrayList<>();
 
         for(Deliverable deliverable1 : deliverable) {
@@ -248,17 +249,35 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto updateProject(ProjectDto projectDto) {
         Project project = projectRepository.findById(projectDto.getId());
 
-        project.setName(projectDto.getName());
-        project.setBackground(projectDto.getBackground());
-        project.setDuration(projectDto.getDuration());
-        project.setStart_date(projectDto.getStart_date());
-        project.setEnd_date(projectDto.getEnd_date());
-        project.setCurrent_phase(projectDto.getCurrent_phase());
-        project.setObjective(projectDto.getObjective());
+        project.setName(projectDto.getName() == null ? projectDto.getName() : project.getName());
+        project.setBackground(projectDto.getBackground() == null ? projectDto.getBackground() : project.getBackground());
+        project.setDuration(projectDto.getDuration() == 0 ? projectDto.getDuration() : project.getDuration());
+        project.setStart_date(projectDto.getStart_date() == 0 ? projectDto.getStart_date() : project.getStart_date());
+        project.setEnd_date(projectDto.getEnd_date() == 0 ? projectDto.getEnd_date() : project.getEnd_date());
+        project.setCurrent_phase(projectDto.getCurrent_phase() == null ? projectDto.getCurrent_phase() : project.getCurrent_phase());
+        project.setObjective(projectDto.getObjective() == null ? projectDto.getObjective() : project.getObjective());
 
         projectRepository.save(project);
 
         return modelMapper.map(project, ProjectDto.class);
+    }
+
+    @Override
+    public void updateProjectClosed(long id, boolean condition) {
+        Project project = projectRepository.getReferenceById(id);
+        project.setClosed(condition);
+
+        if(condition) {
+            for(User user : project.getUsers()) {
+                AvailableUser availableUser = aes.getAvailableUserByUserId(user.getId());
+                availableUser.setAvaliable(true);
+                aes.save(availableUser);
+            }
+
+            project.setUsers(null);
+        }
+        
+        projectRepository.save(project);
     }
 
     @Override
@@ -283,9 +302,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Long countAllProjectsByProjectManagerIdAndStatus(long id, String status) {
-        return projectRepository.countAllByProjectManagerIdAndStatus(id, status);
+    public Long countAllProjectsByProjectManagerIdAndClosed(long id, boolean closed) {
+        return projectRepository.countAllByProjectManagerIdAndClosed(id, closed);
     }
+
 
     @Override
     public List<ProjectDto> getAllProjectsByProjectManagerId(long id) {
@@ -501,7 +521,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto getProjectByUsersIdAndStatus(long users, String status) {
+    public ProjectDto getProjectByUsersIdAndStatus(long users, boolean status) {
 
         Project project = projectRepository.findByUsersId(users);
         return modelMapper.map(project, ProjectDto.class);

@@ -35,7 +35,7 @@ public class ProjectDto implements Serializable {
     private List<DeliverableDto> deliverableDto;
     private Long completeTaskCount;
     private Long totalTaskCount;
-    private String status;
+    private boolean closed;
     private List<UserDto> membersUserDto;
 
     private List<TasksDto> tasksDto;

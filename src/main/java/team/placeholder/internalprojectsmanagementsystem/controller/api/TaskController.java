@@ -68,10 +68,11 @@ public class TaskController {
             @RequestParam("id") long id,
             @RequestParam("status") String status,
             @RequestParam("actual_start_time") long actual_start_time,
-            @RequestParam("actual_end_time") long actual_end_time
+            @RequestParam("actual_end_time") long actual_end_time,
+            @RequestParam("actual_hours") Double actual_hours
             ) {
         log.info("id: "+id+" status: "+status+" actual_start_time: "+actual_start_time+" actual_end_time: "+actual_end_time);
-            return ResponseEntity.ok(taskService.updateTaskStatus(id,status,actual_start_time,actual_end_time));
+            return ResponseEntity.ok(taskService.updateTaskStatus(id,status,actual_start_time,actual_end_time,actual_hours));
     }
 
     @PostMapping("/update/data")
