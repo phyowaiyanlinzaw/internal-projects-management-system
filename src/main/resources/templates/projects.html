@@ -40,6 +40,8 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/bootstrap-table.min.css"
         />
+        
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/css/bootstrap5-toggle.min.css" rel="stylesheet">
         <!-- Template Stylesheet -->
         <link href="/css/style.css" rel="stylesheet" />
 
@@ -1141,50 +1143,6 @@
                                         );
                                     });
                             });
-
-                        document
-                            .querySelector("#updateButtonDeli")
-                            .addEventListener("click", async function () {
-                                let deliverableList = [];
-
-                                currentProejctDetail.deliverableDto.forEach(
-                                    (a) => {
-                                        const checkbox = document.querySelector(
-                                            `#checkbox-${a.id}`
-                                        );
-
-                                        if (checkbox.checked) {
-                                            deliverableList.push({
-                                                id: a.id,
-                                                status: true,
-                                            });
-                                        }
-                                    }
-                                );
-
-                                console.log("deliverable", deliverableList);
-
-                                fetch(`/api/deliverable/update-status`, {
-                                    method: "PUT",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify(deliverableList),
-                                })
-                                    .then((response) => response.json())
-                                    .then((data) => {
-                                        console.log(
-                                            "Status updated successfully:",
-                                            data
-                                        );
-                                    })
-                                    .catch((error) => {
-                                        console.error(
-                                            "Error updating status:",
-                                            error
-                                        );
-                                    });
-                            });
                     }
                     console.log(currentProejctDetail);
 
@@ -1243,35 +1201,63 @@
                         "";
                     let deliverableId;
                     currentProejctDetail.deliverableDto.forEach((a) => {
-                        const div = document.createElement("div");
-                        div.classList.add(
-                            "d-flex",
-                            "gap-2",
-                            "align-items-center",
-                            "justify-content-center"
-                        );
 
-                        deliverableId = a.id;
+                        const outerDiv = document.createElement("div");
+                        outerDiv.className = "d-flex justify-content-between";
+
+                        // Create the inner div for the text
+                        const typeDiv = document.createElement("div");
+                        typeDiv.textContent = a.deliverableType.type;
+                        outerDiv.appendChild(typeDiv);
+
+                        const inputDiv = document.createElement("div");
                         const input = document.createElement("input");
                         input.type = "checkbox";
-                        input.setAttribute("id", `checkbox-${a.id}`);
+                        input.checked = a.status;
+                        input.id = `deliveralbe-${a.id}`
+                        input.setAttribute("data-toggle", "toggle");
+                        inputDiv.appendChild(input);
+                        outerDiv.appendChild(inputDiv);
 
-                        if (a.status) {
-                            input.checked = true;
-                        }
-
-                        const p = document.createElement("p");
-                        p.textContent = a.deliverableType.type;
-                        console.log(a.status);
-                        console.log(a.deliverableType.type);
-                        p.classList.add("fs-6", "fw-bold");
-                        div.appendChild(p);
-                        div.appendChild(input);
 
                         document
-                            .querySelector("#deliverable-type")
-                            .appendChild(div);
+                            .querySelector("#deliverable-list")
+                            .appendChild(outerDiv);
                     });
+
+                    $('input[data-toggle="toggle"]').bootstrapToggle({
+                        on: 'ready',
+                        off: 'not ready',
+                        onstyle : 'success',
+                        size: 'sm'
+                    });
+
+                    $('input[data-toggle="toggle"]').change(function() {
+
+                        const isReady = $(this).prop('checked');
+                        const deliId = $(this).attr("id");
+
+                        const actualId = deliId.split("-").pop();
+
+                        const deliverable = {
+                            id: actualId,
+                            status: isReady
+                        }
+
+                        $.ajax({
+                            url: '/api/deliverable/update-status',
+                            method: "PUT",
+                            data: JSON.stringify(deliverable),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                console.log(response);
+                                console.log("Deliverable Status Updated Successfully...");
+                            },
+                        })
+
+                    })
+
                     //_______________________________________deliverable list end
 
                     //_______________________________________deliverable update alert box put
@@ -1502,10 +1488,6 @@
                 });
 
             if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-                const updateButton1 =
-                    document.getElementById("updateDeliverable");
-                updateButton1.innerHTML =
-                    '<button id="updateButtonDeli" type="button" class="btn btn-primary">Update</button>';
 
                 const updateButtonC = document.getElementById("updateAmount");
                 updateButtonC.innerHTML =
@@ -3845,26 +3827,9 @@
                                                 ></div>
                                             </div>
                                             <div
-                                                class="tab-pane fade pt-3"
+                                                class="tab-pane fade container px-4 pt-2 d-flex flex-column gap-2"
                                                 id="deliverable-list"
                                             >
-                                                <table>
-                                                    <thead>
-                                                        <tr>
-                                                            <th>
-                                                                Deliverable Type
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody
-                                                        id="deliverable-type"
-                                                    >
-                                                        <!-- Rows for deliverable-type and checkboxes will be dynamically added here -->
-                                                    </tbody>
-                                                </table>
-                                                <div
-                                                    id="updateDeliverable"
-                                                ></div>
                                             </div>
                                         </div>
                             </div>
