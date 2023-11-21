@@ -836,7 +836,7 @@
         })
 
         $.ajax({
-            url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/status/In_Progress",
+            url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/status/" + false,
             type: "GET",
             dataType: "json",
             success: function (data) {

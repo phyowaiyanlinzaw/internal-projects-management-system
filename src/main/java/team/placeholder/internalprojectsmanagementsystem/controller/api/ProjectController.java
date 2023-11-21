@@ -52,13 +52,24 @@ public class ProjectController {
 
 
     @PostMapping(value = "/save")
-    public ResponseEntity<ProjectDto> save(@RequestBody ProjectDto project){
+    public ResponseEntity<ProListDto> save(@RequestBody ProjectDto project){
         log.info("Project: {}", (Object) project);
         ProjectDto savedProject = projectService.save(project);
+
+        ProListDto proListDto = new ProListDto();
+
         if (savedProject!=null){
-            return new ResponseEntity<>(savedProject, HttpStatus.OK);
+
+            proListDto.setId(savedProject.getId());
+            proListDto.setProjectName(savedProject.getName());
+            proListDto.setEndDate(savedProject.getEnd_date());
+            proListDto.setStartDate(savedProject.getStart_date());
+            proListDto.setPercentage(0);
+            proListDto.setUser(savedProject.getProjectManagerUserDto());
+
+            return new ResponseEntity<>(proListDto, HttpStatus.OK);
         }else {
-        return new ResponseEntity<>(savedProject, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(proListDto, HttpStatus.BAD_REQUEST);
     }}
 
     @GetMapping("/list")
@@ -161,7 +172,7 @@ public class ProjectController {
 
     @GetMapping(value = "/count/project-manager/{id}/status/{status}")
     public ResponseEntity<Long> countByProjectManagerIdAndStatus(@PathVariable long id, @PathVariable String status){
-        Long count = projectService.countAllProjectsByProjectManagerIdAndStatus(id, status);
+        Long count = projectService.countAllProjectsByProjectManagerIdAndClosed(id, Boolean.parseBoolean(status));
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
@@ -247,7 +258,7 @@ public class ProjectController {
 
         Map<String, Object> projectMap = new HashMap<>();
         for(ProjectDto projectDto : project){
-            if((status).equalsIgnoreCase(projectDto.getStatus())){
+            if(projectDto.isClosed() == Boolean.parseBoolean(status)){
 
                 currentProjectId = projectDto.getId();
 
@@ -257,10 +268,14 @@ public class ProjectController {
                 projectMap.put("client", clientDto);
                 projectMap.put("userList", userDtos);
 
-            }
+            } 
         }
 
         projectMap.put("projectId", currentProjectId);
+
+        if (currentProjectId == null) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(projectMap, HttpStatus.OK);
     }
@@ -316,6 +331,14 @@ public class ProjectController {
         log.info("current login user role " + role);
 
         return new ResponseEntity<>(projectService.newProjectLook(Role.valueOf(role), id), HttpStatus.OK);
+    }
+
+    @GetMapping("/update/status/{id}/{condition}")
+    public ResponseEntity<String> updateProjectStatus(@PathVariable long id, @PathVariable boolean condition) {
+
+        projectService.updateProjectClosed(id, condition);
+
+        return new ResponseEntity<>(" i don't know", HttpStatus.OK);
     }
 
 }

@@ -55,12 +55,16 @@
                             Calendar
                         </button>
                     </li>
+                    <li class="nav-item d-flex align-items-center" role="presentation">
+                        <input id="project-open-close" type="checkbox" data-toggle="toggle" data-on="open" data-size="mini" data-off="closed" data-onstyle="success" data-offstyle="danger">
+                    </li>
                 </ul>
+                
             </nav>
             <!-- nav for task and gantt chart end -->
             <div class="tab-content position-relative" style="height: 600px" id="myTabContent">
                 <div class="tab-pane fade show active" id="task" role="tabpanel" aria-labelledby="tasks-tab">
-                    <div class="d-flex justify-content-end trash-can-container dummy-trash position-absolute" style="bottom: 0; right: 0; width: 60px">
+                    <div class="d-flex justify-content-end trash-can-container dummy-trash position-absolute" style="bottom: 100px; right: -20px; width: 60px">
                             <span class="trash align-self-end dummy-trash"><span class="dummy-trash"></span></span>
                     </div>
                     <div class="board">
@@ -414,7 +418,6 @@
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
-    <script src="/js/forprogresscircleiguess.js"></script>
 
     <!-- sort (department, project), form validation and search bar behavior are all here -->
     <script src="/js/custome.js"></script>
@@ -427,12 +430,27 @@
     <!--    for assign member-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <script type="module">
         import {getData, sendData} from "/js/api-function.js";
         import {getTimeElapsed} from "/js/time.js";
         import {getUser} from "/js/currentLoginUser.js";
 
         const currentUser = await getUser();
+
+        if(currentUser.currentUser.role !== "PROJECT_MANAGER") {
+            document.querySelector('#project-open-close').classList.add('d-none')
+        }
+
+        const project = await getData("/api/project/list/" + document.getElementById("projectId").innerText);
+
+        console.log(project)
+
+        if(project.closed) {
+            $('#project-open-close').bootstrapToggle('off')
+        } else {
+            $('#project-open-close').bootstrapToggle('on')
+        }
 
         //disable add task button if user is not project manager
         if(currentUser.currentUser.role !== "PROJECT_MANAGER"){
@@ -443,6 +461,38 @@
             addTaskBtn.classList.add("disabled-button");
             addTaskBtn.style.cursor = "not-allowed";
         }
+
+        $('#project-open-close').change(function () {
+
+            let condition = $(this).prop('checked');
+            console.log(condition)
+            const id = parseInt(document.getElementById("projectId").innerText)
+            $.ajax({
+                url: `/api/project/update/status/${id}/${!condition}`,
+                method: "GET",
+                success: function(response) {
+                    // Handle the successful response here
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    // Handle the error here
+                    console.log(error);
+                }
+            });
+
+            if(!condition) {
+                document.querySelectorAll('.task').forEach(a => {
+                    console.log(a)
+                    a.removeAttribute("draggable")
+                })
+            } else {
+                document.querySelectorAll('.task').forEach(a => {
+                    console.log(a)
+                    a.setAttribute("draggable", true)
+                })
+            }
+        });
+
 
         var userId;
 
@@ -553,7 +603,9 @@
                     taskDiv.classList.add("bg-success");
                     break;
             }
-            taskDiv.draggable = true;
+            if(!project.closed) {
+                taskDiv.draggable = true;
+            }
 
             // Add a data attribute for modal triggering (if needed)
             taskDiv.setAttribute("data-bs-toggle", "modal");
@@ -1052,7 +1104,9 @@
                 "border-2",
                 "border"
             );
-            newTask.setAttribute("draggable", "true");
+            if(!project.closed) {
+                newTask.setAttribute("draggable", "true");
+            }
             newTask.setAttribute("data-bs-toggle", "modal");
             newTask.setAttribute("data-bs-target", "#task-details");
 
