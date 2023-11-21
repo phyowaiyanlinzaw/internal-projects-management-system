@@ -341,14 +341,80 @@
                             allDay: true
                         }
                     }),
-                    eventDidMount: function (info) {
-                        const popover = new bootstrap.Popover(info.el, {
-                            title: info.event.extendedProps.title,
-                            content: info.event.extendedProps.description,
-                            placement: 'top',
-                            trigger: 'hover',
-                            container: 'body'
+                    eventClick: function (info) {
+                        const eventTitle = info.event.title;
+                        const eventStatus = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).status;
+                        const eventDescription = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).description;
+
+                        const projectName   = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).projectDto.name;
+
+                        const planHours = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).plan_hours;
+
+                        let taskGroup = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).tasksGroup;
+
+                        if (taskGroup === 'A') {
+                            taskGroup = "Group A - Related With Project Development"
+                        } else if (taskGroup === 'B') {
+                            taskGroup = "Group B - Training"
+                        } else {
+                            taskGroup = "Group C - Idling"
+                        }
+
+                        //get plan_end_time and convert to date and do some math to show remaining days
+                        const planEndTime = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).plan_end_time;
+                        //only show date and month
+                        const planEndTimeDate = new Date(planEndTime).toLocaleDateString('en-US', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
                         });
+
+                        // Create a modal element
+                        const modal = document.createElement('div');
+                        modal.classList.add('modal');
+
+                        modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered d-flex align-items-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">${eventTitle} <span class="badge bg-primary">${eventStatus}</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row">
+                    <p class="col-6"><strong>Project : </strong> ${projectName}</p>
+                    <p class="col-6"><strong>Description :</strong> ${eventDescription}</p>
+                    <p class="col-6"><strong>Task Group :</strong> ${taskGroup}</p>
+                    <p class="col-6"><strong>Due Date :</strong> ${planEndTimeDate}</p>
+                    <p class="col-6"><strong>Plan Hours :</strong> ${planHours}</p>
+                    <!-- Add more information as needed -->
+                </div>
+            </div>
+        </div>
+    `;
+
+                        // Append the modal to the body
+                        document.body.appendChild(modal);
+
+                        // Show the modal using Bootstrap modal
+                        $(modal).modal('show');
+
+                        // Remove the modal from the DOM when it's closed
+                        $(modal).on('hidden.bs.modal', function () {
+                            $(this).remove();
+                        });
+
                     },
                 });
                 calendar.render();
