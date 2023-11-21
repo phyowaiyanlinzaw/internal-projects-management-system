@@ -82,7 +82,7 @@ public class TaskServiceImpl implements TasksService {
     }
 
     @Override
-    public TasksDto updateTaskStatus(long taskId, String status, long startTime, long endTime) {
+    public TasksDto updateTaskStatus(long taskId, String status, long startTime, long endTime, Double actual_hours) {
         Tasks task = taskRepository.findById(taskId);
         if (task == null) {
             return null;
@@ -95,6 +95,7 @@ public class TaskServiceImpl implements TasksService {
         //set only end time if status is done
         if (status.equals("FINISHED")) {
             task.setActual_end_time(endTime);
+            task.setActual_hours(actual_hours);
         }
         taskRepository.save(task);
         return modelMapper.map(task, TasksDto.class);

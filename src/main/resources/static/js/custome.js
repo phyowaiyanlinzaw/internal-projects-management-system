@@ -62,17 +62,17 @@ $(document).ready(function () {
     }
 
     // password validation
-    function validatePassword(password) {
-        // Minimum length of 8 characters
-        const minLength = 8;
-
-        // Check if the password contains at least one alphanumeric character
-        const containsAlphanumeric = /^[a-zA-Z0-9!@#$%^&*]+$/.test(password);
-
-        // Check all criteria
-        console.log(password.length >= minLength, containsAlphanumeric);
-        return password.length >= minLength && containsAlphanumeric;
-    }
+    // function validatePassword(password) {
+    //     // Minimum length of 8 characters
+    //     const minLength = 8;
+    //
+    //     // Check if the password contains at least one alphanumeric character
+    //     const containsAlphanumeric = /^[a-zA-Z0-9!@#$%^&*]+$/.test(password);
+    //
+    //     // Check all criteria
+    //     console.log(password.length >= minLength, containsAlphanumeric);
+    //     return password.length >= minLength && containsAlphanumeric;
+    // }
 
     // check if the email and password are validated or not on submit
     if (validatedForm != null) {
@@ -80,7 +80,7 @@ $(document).ready(function () {
             let email = $(this).find("#emailInput");
             let password = $(this).find("#floatingPassword");
 
-            if (!validateEmail(email.val()) || !validatePassword(password.val())) {
+            if (!validateEmail(email.val())) {
                 email.parent().addClass("was-validated");
                 if (validateEmail(email.val())) {
                     email.parent().addClass("was-validated");

@@ -249,7 +249,6 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<IssueDto> updateStatusOfIssueList(List<IssueDto> issues) {
-        // TODO Auto-generated method stub
         List<IssueDto> issueDtos = new ArrayList<>();
 
         for(IssueDto issueDto : issues) {
@@ -302,6 +301,11 @@ public class IssueServiceImpl implements IssueService {
 
         }
         return issueDtos;
+    }
+
+    @Override
+    public long countIssuesByProjectManagerId(long id) {
+        return issueRepository.countByPicId(id);
     }
 
 
