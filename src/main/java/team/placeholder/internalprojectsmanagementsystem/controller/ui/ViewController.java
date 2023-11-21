@@ -73,11 +73,6 @@ public class ViewController {
         return "profile";
     }
 
-    @GetMapping("/issues")
-    public String issues(){
-        return "issues";
-    }
-
     @GetMapping("/project/{projectId}")
     public String task(@PathVariable("projectId") Long projectId, Model model){
         model.addAttribute("tasks", taskServiceImpl.getTasksByProjectId(projectId));
@@ -98,7 +93,7 @@ public class ViewController {
     }
 
     @GetMapping("/department")
-    @PreAuthorize("hasAnyRole('DEPARTMENT_HEAD', 'SDQC', 'PMO')")
+    @PreAuthorize("hasAnyRole('SDQC', 'PMO')")
     public String department() { return "department"; }
 
     @GetMapping("/reset-password")
@@ -110,9 +105,5 @@ public class ViewController {
     @PreAuthorize("hasAnyRole('PMO', 'DEPARTMENT_HEAD', 'SDQC')")
     @GetMapping("/employees")
     public String employees() {return "employees";}
-
-
-
-
 
 }

@@ -21,4 +21,6 @@ public interface IssueService {
 
     List<IssueDto> getUnsolvedIssues(long userId);
 
+    long countIssuesByProjectManagerId(long id);
+
 }

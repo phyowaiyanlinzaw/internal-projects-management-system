@@ -62,17 +62,17 @@ $(document).ready(function () {
     }
 
     // password validation
-    function validatePassword(password) {
-        // Minimum length of 8 characters
-        const minLength = 8;
-
-        // Check if the password contains at least one alphanumeric character
-        const containsAlphanumeric = /^[a-zA-Z0-9!@#$%^&*]+$/.test(password);
-
-        // Check all criteria
-        console.log(password.length >= minLength, containsAlphanumeric);
-        return password.length >= minLength && containsAlphanumeric;
-    }
+    // function validatePassword(password) {
+    //     // Minimum length of 8 characters
+    //     const minLength = 8;
+    //
+    //     // Check if the password contains at least one alphanumeric character
+    //     const containsAlphanumeric = /^[a-zA-Z0-9!@#$%^&*]+$/.test(password);
+    //
+    //     // Check all criteria
+    //     console.log(password.length >= minLength, containsAlphanumeric);
+    //     return password.length >= minLength && containsAlphanumeric;
+    // }
 
     // check if the email and password are validated or not on submit
     if (validatedForm != null) {
@@ -80,7 +80,7 @@ $(document).ready(function () {
             let email = $(this).find("#emailInput");
             let password = $(this).find("#floatingPassword");
 
-            if (!validateEmail(email.val()) || !validatePassword(password.val())) {
+            if (!validateEmail(email.val())) {
                 email.parent().addClass("was-validated");
                 if (validateEmail(email.val())) {
                     email.parent().addClass("was-validated");
@@ -98,7 +98,6 @@ $(document).ready(function () {
         });
 
         // check the validation every time when use enter value in input
-        // TODO :: SHOULD VALIDATE OTHER DATA-TYPE
         validatedForm.on("input", function (e) {
             let target = $(e.target);
             let parent = target.parent();
@@ -136,37 +135,37 @@ $(document).ready(function () {
                     break;
 
                 // for data-type='password'
-                case "password":
-                    parent.removeClass("was-validated");
-                    let p = $("<p>")
-                        .addClass("text-danger fs-6")
-                        .text(
-                            "The password can only contain a-z, A-Z, !@#$%^&* with a minimum length of 8 characters"
-                        )
-                        .css("margin", "0");
-
-                    if (!validatePassword(target.val())) {
-                        parent.removeClass("was-validated");
-                        if (parent.find("p").length === 0) {
-                            parent.append(p);
-                        }
-                    } else {
-                        let existingP = parent.find("p");
-                        if (existingP.length > 0) {
-                            existingP.remove();
-                        }
-                        if (
-                            parent.find(".valid-feedback").length === 0 &&
-                            validatePassword(target.val())
-                        ) {
-                            existingP = $("<div>")
-                                .addClass("valid-feedback")
-                                .text("good");
-                            parent.append(existingP);
-                        }
-                        parent.addClass("was-validated");
-                    }
-                    break;
+                // case "password":
+                //     parent.removeClass("was-validated");
+                //     let p = $("<p>")
+                //         .addClass("text-danger fs-6")
+                //         .text(
+                //             "The password can only contain a-z, A-Z, !@#$%^&* with a minimum length of 8 characters"
+                //         )
+                //         .css("margin", "0");
+                //
+                //     if (!validatePassword(target.val())) {
+                //         parent.removeClass("was-validated");
+                //         if (parent.find("p").length === 0) {
+                //             parent.append(p);
+                //         }
+                //     } else {
+                //         let existingP = parent.find("p");
+                //         if (existingP.length > 0) {
+                //             existingP.remove();
+                //         }
+                //         if (
+                //             parent.find(".valid-feedback").length === 0 &&
+                //             validatePassword(target.val())
+                //         ) {
+                //             existingP = $("<div>")
+                //                 .addClass("valid-feedback")
+                //                 .text("good");
+                //             parent.append(existingP);
+                //         }
+                //         parent.addClass("was-validated");
+                //     }
+                //     break;
             }
         });
     }

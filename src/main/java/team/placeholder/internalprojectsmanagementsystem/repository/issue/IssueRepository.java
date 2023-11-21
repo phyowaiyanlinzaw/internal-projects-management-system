@@ -12,6 +12,7 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
     Issue findByTitle(String title);
     Issue findById(long id);
 
+    Long countByPicId(long id);
 
     List<Issue> findAllByIssueStatusAndPicId(IssueStatus issueStatus, long id);
 

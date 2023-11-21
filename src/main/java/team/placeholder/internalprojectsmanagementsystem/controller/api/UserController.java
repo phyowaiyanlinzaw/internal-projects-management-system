@@ -7,13 +7,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UserUIDto;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user/")
@@ -84,7 +83,7 @@ public class UserController {
         return ResponseEntity.ok("Employee registered successfully");
     }
 
-    @PostMapping("change-password")
+    @PutMapping("change-password")
     public ResponseEntity<String> changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -220,7 +219,7 @@ public class UserController {
 //    }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable long id, @RequestBody UseruiDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable long id, @RequestBody UserUIDto userDto) {
         userDto.setId(id);
         UserDto user = userService.updateUser(userDto);
         if(user != null) {

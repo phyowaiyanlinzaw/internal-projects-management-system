@@ -1,32 +1,27 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
-import jakarta.mail.search.SearchTerm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NotiDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UserUIDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
-import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.ResponsibleType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.AvailableUser;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
@@ -45,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelmapper;
     private final AESImpl aes;
     private final Map<String,String> otpMap = new HashMap<>();
+    private final NotificationServiceImpl   notificationService;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -207,7 +203,9 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registerEmployeeDto.getEmail());
         user.setPassword(registerEmployeeDto.getPassword());
         user.setRole(Role.valueOf(registerEmployeeDto.getRole()));
-        user.setEnabled(true);
+
+        user.setEnabled(user.getRole().equals(Role.PROJECT_MANAGER));
+
         if (registerEmployeeDto.getRole().equals(Role.PROJECT_MANAGER.toString())){
             Department department = departmentRepository.findById(registerEmployeeDto.getDepartmentId());
             user.setDepartment(department);
@@ -344,6 +342,13 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setEnabled(status);
             userRepository.save(user);
+            if(!user.isEnabled()) {
+                NotiDto notiDto = new NotiDto();
+                // notiDto
+                notiDto.setDescription("You have been kick out");
+                notiDto.setNoti_time(System.currentTimeMillis());
+                notificationService.sendNotification(null, id, "logout");
+            }
             return modelmapper.map(user, UserDto.class);
         } else {
             return null;
@@ -351,7 +356,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UseruiDto userDto) {
+    public UserDto updateUser(UserUIDto userDto) {
         User user = userRepository.findById(userDto.getId());
         if (user != null) {
             user.setName(userDto.getName());

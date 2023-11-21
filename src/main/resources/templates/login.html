@@ -25,21 +25,26 @@
     <!-- bootstrap icons -->
     <link rel="stylesheet" href="/font/bootstrap-icons.min.css"/>
 
-    <!-- Libraries Stylesheet -->
-    <link
-            href="/lib/owlcarousel/assets/owl.carousel.min.css"
-            rel="stylesheet"
-    />
-    <link
-            href="/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
-            rel="stylesheet"
-    />
-
     <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/bootstrap.min.css" rel="stylesheet"/>
 
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet"/>
+    <style>
+        .toggle {
+        background: none;
+        border: none;
+        color: #000000;
+        /*display: none;*/
+        /*font-size: .9em;*/
+        font-weight: 600;
+        /*padding: .5em;*/
+        position: absolute;
+        right: .75em;
+        top: 1.25em;
+        z-index: 9;
+        }
+    </style>
 </head>
 
 <body>
@@ -118,10 +123,10 @@
                                     name="password"
                                     data-type="password"
                             />
-
                             <label for="floatingPassword"
                             >Password</label
                             >
+                            <button type="button" id="btnToggle" class="toggle"><i id="eyeIcon" class="fa fa-eye"></i></button>
                         </div>
                         <div
                                 class="d-flex align-items-center justify-content-between mb-4"
@@ -171,20 +176,27 @@
 <!-- bootstrap -->
 <script src="/js/bootstrap.bundle.min.js"></script>
 
-<!-- javascript libraries -->
-<script src="/lib/chart/chart.min.js"></script>
-<script src="/lib/easing/easing.min.js"></script>
-<script src="/lib/waypoints/waypoints.min.js"></script>
-<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="/lib/tempusdominus/js/moment.min.js"></script>
-<script src="/lib/tempusdominus/js/moment-timezone.min.js"></script>
-<script src="/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
-<script src="/js/forprogresscircleiguess.js"></script>
 
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnToggle").click(function () {
+            var type = $("#floatingPassword").attr("type");
+            if (type == "password") {
+                $("#floatingPassword").attr("type", "text");
+                $("#eyeIcon").removeClass("fa fa-eye");
+                $("#eyeIcon").addClass("fa fa-eye-slash");
+            } else {
+                $("#floatingPassword").attr("type", "password");
+                $("#eyeIcon").removeClass("fa fa-eye-slash");
+                $("#eyeIcon").addClass("fa fa-eye");
+            }
+        });
+    });
+</script>
 </body>
 </html>
