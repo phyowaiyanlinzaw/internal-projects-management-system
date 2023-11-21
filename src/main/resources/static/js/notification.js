@@ -207,6 +207,10 @@ channel.bind("issue-noti-event", function(response) {
     document.querySelector("#issue-approval-container").innerHTML += issue;
 });
 
+channel.bind("logout", function() {
+    window.location.href = "/logout";
+})
+
 document.querySelector("#notification-light-container").addEventListener("shown.bs.dropdown",  () => {
 
     document.querySelector("#notification-light").classList.add("d-none");

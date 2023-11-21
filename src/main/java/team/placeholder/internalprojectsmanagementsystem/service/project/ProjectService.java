@@ -16,14 +16,16 @@ public interface ProjectService {
 
     ProjectDto updateProject(ProjectDto projectDto);
 
-    long getCountByDepartment(long id);
-
     Long countAllProjects();
 
     List<ProjectDto> getAllProjectsByProjectManagerId(long id);
 
 
     Long countAllProjectsByUsersId(long id);
+
+    Long countAllProjectsByProjectManagerId(long id);
+
+    Long countAllProjectsByProjectManagerIdAndStatus(long id, String status);
 
     List<ProjectDto> getAllProjectsByDepartmentId(long id);
     Long countAllProjectsByDepartmentId(long id);

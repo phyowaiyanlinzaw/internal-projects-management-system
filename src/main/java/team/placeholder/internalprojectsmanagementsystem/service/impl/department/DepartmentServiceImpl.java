@@ -32,11 +32,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentDto save(DepartmentDto departmentDto) {
         Department department = modelMapper.map(departmentDto, Department.class);
-        department.setName(departmentDto.getName());
-       Department savedDepartment = departmentRepository.save(department);
+        Department savedDepartment = departmentRepository.save(department);
         return modelMapper.map(savedDepartment, DepartmentDto.class);
-
     }
+
+
 
 
 

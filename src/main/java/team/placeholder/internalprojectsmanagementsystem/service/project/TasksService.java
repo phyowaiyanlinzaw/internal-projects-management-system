@@ -1,8 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.service.project;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ActualManMonthDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.PlanManMonthDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 
@@ -28,14 +26,7 @@ public interface TasksService {
 
     Long countByProjectId(long id);
 
-//    List<TasksDto> findTasksByStartAndEndMonth(long projectId, String startMonth, String endMonth);
-
-
-//    List<TasksDto> filterTasksByMonthRange(List<TasksDto> tasks, String startMonth, String endMonth);
-//
-    List<ActualManMonthDto> calculateMonthlyActualManHoursFromTasks(long projectId);
-
-    List<PlanManMonthDto> calculateMonthlyPlanManHoursFromTasks(long projectId);
+    Long countByUserEmailAndStatus(String email, TaskStatus status);
 
     void deleteById(long id);
 

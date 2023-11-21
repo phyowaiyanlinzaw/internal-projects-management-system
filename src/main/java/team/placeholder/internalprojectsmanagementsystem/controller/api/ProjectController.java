@@ -153,7 +153,19 @@ public class ProjectController {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/count/departmentId/{departmentId}")
+    @GetMapping(value = "/count/project-manager/{id}")
+    public ResponseEntity<Long> countByProjectManagerId(@PathVariable long id){
+        Long count = projectService.countAllProjectsByProjectManagerId(id);
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/count/project-manager/{id}/status/{status}")
+    public ResponseEntity<Long> countByProjectManagerIdAndStatus(@PathVariable long id, @PathVariable String status){
+        Long count = projectService.countAllProjectsByProjectManagerIdAndStatus(id, status);
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/count/department/{departmentId}")
     public ResponseEntity<Long> countAllByDepartmentId(@PathVariable Long departmentId){
         return ResponseEntity.ok(projectService.countAllProjectsByDepartmentId(departmentId));
     }

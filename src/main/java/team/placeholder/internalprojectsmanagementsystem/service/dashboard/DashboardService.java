@@ -12,4 +12,6 @@ public interface DashboardService {
     List<ProductivityDto> getProductivity(long projectId);
 
     KPIDto getKPI(long id);
+
+    List<List<ManMonthDto>> getManMonthByDepartment(long departmentId);
 }

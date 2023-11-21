@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
@@ -14,6 +15,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDt
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.NotiDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UseruiDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
@@ -26,6 +28,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
@@ -44,6 +47,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelmapper;
     private final AESImpl aes;
     private final Map<String,String> otpMap = new HashMap<>();
+    private final NotificationServiceImpl   notificationService;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -87,7 +91,8 @@ public class UserServiceImpl implements UserService {
     public UserDto sendOtp(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            String otp = String.format("%04d", new Random().nextInt(10000));
+            //generate 6 digit otp
+            String otp = String.format("%06d", new Random().nextInt(999999));
             otpMap.put(email,otp);
             sendEmail(email,"OTP","Your One-timed Password is : "+otp);
             return modelmapper.map(user, UserDto.class);
@@ -171,6 +176,12 @@ public class UserServiceImpl implements UserService {
                 userDto.setProjectManager(modelmapper.map(user.getProjectManager(), UserDto.class));
             }
             userDto.setDepartmentdto(departmentDto);
+
+            if (user.getRole()==Role.valueOf("PROJECT_MANAGER")){
+                List<Project> projects = user.getProject();
+                List<ProjectDto> projectDtos = projects.stream().map(project -> modelmapper.map(project, ProjectDto.class)).toList();
+                userDto.setProjectsByProjectManager(projectDtos);
+            }
             return userDto;
         } else {
             return null;
@@ -199,8 +210,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registerEmployeeDto.getEmail());
         user.setPassword(registerEmployeeDto.getPassword());
         user.setRole(Role.valueOf(registerEmployeeDto.getRole()));
-
-
+        user.setEnabled(true);
         if (registerEmployeeDto.getRole().equals(Role.PROJECT_MANAGER.toString())){
             Department department = departmentRepository.findById(registerEmployeeDto.getDepartmentId());
             user.setDepartment(department);
@@ -213,6 +223,7 @@ public class UserServiceImpl implements UserService {
         User savedUser;
         try {
             savedUser = userRepository.save(user);
+            sendEmail(user.getEmail(),"Password","Your password is : "+password);
         } catch (DataIntegrityViolationException e) {
             return null;
         }
@@ -336,6 +347,13 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setEnabled(status);
             userRepository.save(user);
+            if(!user.isEnabled()) {
+                NotiDto notiDto = new NotiDto();
+                // notiDto
+                notiDto.setDescription("You have been kick out");
+                notiDto.setNoti_time(System.currentTimeMillis());
+                notificationService.sendNotification(null, id, "logout");
+            }
             return modelmapper.map(user, UserDto.class);
         } else {
             return null;

@@ -109,6 +109,11 @@ public class ProjectServiceImpl implements ProjectService {
             aes.save(availableUser);
         }
 
+        for(User user : users) {
+            user.setEnabled(true);
+            userRepository.save(user);
+        }
+
         projectDto.setTotalTaskCount(0L);
         projectDto.setCompleteTaskCount(0L);
 
@@ -146,14 +151,13 @@ public class ProjectServiceImpl implements ProjectService {
         for (Project project : projectList) {
             if (project != null) {
                 ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
-                SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
-                projectDto.setSystemOutLineDto(systemOutLineDto);
+                if(project.getSystemOutLine()!=null){
+                    SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
+                    projectDto.setSystemOutLineDto(systemOutLineDto);
+                }
                 projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
                 projectDto.setProjectManagerUserDto(modelMapper.map(project.getProjectManager(), UserDto.class));
-
-                log.info("project manager name should be shown here " + project.getProjectManager().getName());
                 projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
-                log.info("adjf;ladjf;lf", projectDto.getDepartmentDto());
 
                 projectDto.getDepartmentDto().getUsers().clear();
                 projectDto.setCompleteTaskCount(
@@ -258,9 +262,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public long getCountByDepartment(long id) {
+    public Long countAllProjectsByDepartmentId(long id) {
 
-        return 0;
+        return projectRepository.countAllByDepartmentId(id);
     }
 
     @Override
@@ -271,6 +275,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Long countAllProjectsByUsersId(long id) {
         return projectRepository.countAllByUsersId(id);
+    }
+
+    @Override
+    public Long countAllProjectsByProjectManagerId(long id) {
+        return projectRepository.countAllByProjectManagerId(id);
+    }
+
+    @Override
+    public Long countAllProjectsByProjectManagerIdAndStatus(long id, String status) {
+        return projectRepository.countAllByProjectManagerIdAndStatus(id, status);
     }
 
     @Override
@@ -377,12 +391,6 @@ public class ProjectServiceImpl implements ProjectService {
 
 
         return projectDtoList;
-    }
-
-    @Override
-    public Long countAllProjectsByDepartmentId(long id) {
-
-        return null;
     }
 
     @Override

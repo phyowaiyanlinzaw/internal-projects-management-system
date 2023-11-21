@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import team.placeholder.internalprojectsmanagementsystem.dto.mapper.user.ClientMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
@@ -25,14 +27,16 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     private final ModelMapper modelMapper;
+
+
     @Override
     public ClientDto save(ClientDto clientDto) {
         Client client = new Client();
         client.setName(clientDto.getName());
         client.setEmail(clientDto.getEmail());
         client.setPhone(clientDto.getPhone());
-        clientRepository.save(client);
-        return ClientMapper.toClientDto(clientRepository.save(client));
+        Client savedClient = clientRepository.save(client);
+        return modelMapper.map(savedClient, ClientDto.class);
     }
 
     @Override

@@ -209,7 +209,6 @@ public class IssueServiceImpl implements IssueService {
     }
 
 
-
     @Override
     public List<IssueDto> getPendingIssueList(long id) {
 
