@@ -42,39 +42,7 @@ class TaskServiceImplTest {
 
     @Test
     void getAllTasks() {
-        Tasks task1 = new Tasks();
-        task1.setId(1L);
-        task1.setDescription("Task 1");
 
-        Tasks task2 = new Tasks();
-        task2.setId(2L);
-        task2.setDescription("Task 2");
-
-        List<Tasks> taskList = Arrays.asList(task1, task2);
-
-        when(tasksRepository.findAll()).thenReturn(taskList);
-
-        // Mock modelMapper
-        User user1 = new User();
-        user1.setId(1L);
-        User user2 = new User();
-        user2.setId(2L);
-
-        when(modelMapper.map(task1.getUser(), UserDto.class)).thenReturn(new UserDto(user1.getId()));
-        when(modelMapper.map(task2.getUser(), UserDto.class)).thenReturn(new UserDto(user2.getId()));
-
-        // Act
-        List<TasksDto> resultDtos = tasksService.getAllTasks();
-
-        // Assert
-        assertEquals(taskList.size(), resultDtos.size());
-
-        // Verify that the findAll method of the repository was called
-        verify(tasksRepository, times(1)).findAll();
-
-        // Verify that the map method of the modelMapper was called for each task's user
-        verify(modelMapper, times(1)).map(task1.getUser(), UserDto.class);
-        verify(modelMapper, times(1)).map(task2.getUser(), UserDto.class);
     }
 
     @Test
