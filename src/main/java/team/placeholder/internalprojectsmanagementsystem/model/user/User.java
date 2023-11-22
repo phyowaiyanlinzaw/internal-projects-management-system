@@ -9,7 +9,6 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Notificat
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
-
 import java.util.*;
 
 @Entity
@@ -48,8 +47,7 @@ public class User {
     @OneToMany(mappedBy = "projectManager", cascade = CascadeType.ALL)
     private List<Project> project;
 
-
-    @OneToMany(mappedBy = "projectManager")
+    @OneToMany(mappedBy = "projectManager",cascade = CascadeType.ALL)
     private List<User> managedUsers;
 
     @ManyToOne
@@ -73,7 +71,4 @@ public class User {
     }
 
 
-    public User orElse(Object o) {
-        return null;
-    }
 }
