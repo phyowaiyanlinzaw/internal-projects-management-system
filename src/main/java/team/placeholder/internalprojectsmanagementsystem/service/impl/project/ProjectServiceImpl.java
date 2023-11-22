@@ -627,6 +627,7 @@ public class ProjectServiceImpl implements ProjectService {
             proListDto.setStartDate(project.getStart_date());
             proListDto.setEndDate(project.getEnd_date());
             proListDto.setUser(modelMapper.map(project.getProjectManager(), UserDto.class));
+            proListDto.setClosed(project.isClosed());
 
             if(project.getTasks() != null ) {
 

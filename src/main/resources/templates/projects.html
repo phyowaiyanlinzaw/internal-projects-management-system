@@ -988,13 +988,13 @@
                 newProject.classList.add("accordion", "container-fluid");
                 newProject.id = `outer-project-${project.id}`;
 
-                newProject.innerHTML += `<div style="cursor:pointer;" class="row d-flex align-items-center col-rols-5 border border-dark" id="project-${
+                newProject.innerHTML += `<div style="cursor:pointer;" class="row d-flex align-items-center col-rols-5 border border-${project.closed ? 'danger' : 'dark'}" id="project-${
                     project.id
                 }" data-bs-toggle="modal" data-bs-target="#project-details">
                                 <div class="col p-2">
-                                    <div class="progress bg-light border border-primary">
+                                    <div class="progress bg-light border border-${project.closed ? 'danger' : 'primary'}">
                                         <div
-                                            class="progress-bar progress-bar-striped progress-bar-animated"
+                                            class="progress-bar progress-bar-striped progress-bar-animated bg-${project.closed ? 'danger' : 'primary'}"
                                             role="progressbar"
                                             style="width: ${
                                                 project.percentage

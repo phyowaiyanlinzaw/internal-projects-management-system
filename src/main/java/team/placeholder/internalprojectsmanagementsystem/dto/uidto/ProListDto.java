@@ -18,6 +18,7 @@ public class ProListDto {
     private long endDate;
     private UserDto user;
     private List<TasksDto> tasks;
+    private boolean closed;
 
     public ProListDto() {}
 
