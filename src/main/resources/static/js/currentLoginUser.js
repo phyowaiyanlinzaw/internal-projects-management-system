@@ -7,3 +7,8 @@ export async function getUser() {
         return error;
     }
 }
+
+
+export async function getCurrentLoginUser() {
+    return await getUser();
+}
