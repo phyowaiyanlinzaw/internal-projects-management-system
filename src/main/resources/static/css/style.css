@@ -626,6 +626,7 @@
     width: 100%;
     row-gap: 12px;
     min-height: 480px;
+    max-height: 480px;
     flex-shrink: 0;
     overflow-x: hidden;
 }
