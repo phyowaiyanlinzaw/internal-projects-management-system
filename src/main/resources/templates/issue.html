@@ -1231,8 +1231,7 @@
                             // Handle non-JSON response
                             console.log('Non-JSON Response:', xhr.responseText);
                         }
-
-                        alert('Error creating issue: ' + xhr.responseText);
+                        showError('Error creating issue: ' + xhr.responseText);
                         console.log('Error creating issue');
                     },
                 });

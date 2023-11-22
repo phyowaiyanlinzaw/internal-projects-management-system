@@ -25,7 +25,6 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServic
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 import team.placeholder.internalprojectsmanagementsystem.util.PasswordGenerator;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,7 @@ public class UserServiceImpl implements UserService {
     private final JavaMailSender mailSender;
     private final ModelMapper modelmapper;
     private final AESImpl aes;
-    private final Map<String,String> otpMap = new HashMap<>();
+    private Map<String,String> otpMap;
     private final NotificationServiceImpl   notificationService;
 
     @Override

@@ -7,11 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
@@ -26,24 +21,51 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DepartmentServiceImplTest {
 
-    @InjectMocks
-    private DepartmentServiceImpl departmentService;
-
     @Mock
     private DepartmentRepository departmentRepository;
 
     @Mock
     private ModelMapper modelMapper;
 
+    @InjectMocks
+    private DepartmentServiceImpl departmentService;
+
     @BeforeEach
     void setUp() {
         // Initialize mocks
         modelMapper = mock(ModelMapper.class);
         departmentRepository = mock(DepartmentRepository.class);
-        departmentService = new DepartmentServiceImpl(departmentRepository, modelMapper);
+        departmentService = new DepartmentServiceImpl(departmentRepository,modelMapper);
     }
 
-// ...
+    @Test
+    public void testGetAllDepartments() {
+        // Given
+        List<Department> departments = new ArrayList<>(); // Add sample departments
+        when(departmentRepository.findAll()).thenReturn(departments);
+
+
+        when(modelMapper.map(any(), eq(DepartmentDto.class))).thenAnswer(invocation -> {
+            Object source = invocation.getArgument(0);
+            return source; // Simply return the source object for now
+        });
+
+        // When
+        List<DepartmentDto> result = departmentService.getAllDepartments();
+
+
+
+        // Then
+        verify(departmentRepository, times(1)).findAll();
+        verify(modelMapper, atLeastOnce()).map(any(), any());
+
+        for (DepartmentDto departmentDto : result) {
+            for (UserDto user : departmentDto.getUsers()) {
+                assertTrue(user.getProjectsByUsers().isEmpty());
+                assertTrue(user.getProjectsByProjectManager().isEmpty());
+            }
+        }
+    }
 
     @Test
     public void testSaveWhenDepartmentDtoPassedThenReturnDepartmentDto() {
@@ -88,6 +110,42 @@ class DepartmentServiceImplTest {
         assertNotNull(departmentDtos);
         assertFalse(departmentDtos.isEmpty());
         verify(departmentRepository, times(1)).findAll();
+    }
+    @Test
+    public void testClearProjectsInUserDto() {
+        // Create a mock UserDto
+        UserDto userDto = new UserDto();
+        userDto.setId(1L);
+        userDto.setName("Test User");
+
+        // Create mock Projects
+        ProjectDto projectByUsers = new ProjectDto();
+        projectByUsers.setId(101L);
+        projectByUsers.setName("Project by Users");
+
+        ProjectDto projectByProjectManager = new ProjectDto();
+        projectByProjectManager.setId(102L);
+        projectByProjectManager.setName("Project by Project Manager");
+
+        // Set Projects in UserDto
+        userDto.setProjectsByUsers(Set.of(projectByUsers));
+        userDto.setProjectsByProjectManager(List.of(projectByProjectManager));
+
+
+
+        // Create an instance of DepartmentServiceImpl
+        DepartmentServiceImpl departmentService = new DepartmentServiceImpl(departmentRepository, modelMapper);
+
+        // Call the method you want to test
+        List<DepartmentDto> result = departmentService.getAllDepartments();
+
+        // Verify that the Projects in UserDto are cleared
+        for (DepartmentDto departmentDto : result) {
+            for (UserDto resultUser : departmentDto.getUsers()) {
+                assertTrue(resultUser.getProjectsByUsers().isEmpty());
+                assertTrue(resultUser.getProjectsByProjectManager().isEmpty());
+            }
+        }
     }
 
     @Test
@@ -226,5 +284,33 @@ class DepartmentServiceImplTest {
         verify(departmentRepository, times(1)).count();
     }
 
+    @Test
+    public void testDeleteDepartment() {
+        // Given
+        long departmentId = 1L;
+        Department department = new Department();
+        when(departmentRepository.findById(departmentId)).thenReturn(department);
+
+        // When
+        departmentService.deleteDepartment(departmentId);
+
+        // Then
+        verify(departmentRepository, times(1)).findById(departmentId);
+        verify(departmentRepository, times(1)).delete(department);
+    }
+
+    @Test
+    public void testDeleteDepartmentNotFound() {
+        // Given
+        long nonExistingDepartmentId = 2L;
+        when(departmentRepository.findById(nonExistingDepartmentId)).thenReturn(null);
+
+        // When
+        departmentService.deleteDepartment(nonExistingDepartmentId);
+
+        // Then
+        verify(departmentRepository, times(1)).findById(nonExistingDepartmentId);
+        verify(departmentRepository, never()).delete(any());
+    }
 
 }

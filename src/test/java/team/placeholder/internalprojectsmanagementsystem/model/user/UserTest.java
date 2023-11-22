@@ -1,153 +1,257 @@
-//package team.placeholder.internalprojectsmanagementsystem.model.user;
-//
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
-//import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
-//import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-//import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
-//import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
-//import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
-//import java.util.ArrayList;
-//import java.util.HashSet;
-//import java.util.List;
-//import java.util.Set;
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//public class UserTest {
-//
-//    @Mock
-//    private Department department;
-//    @Mock
-//    private User user;
-//
-//    @BeforeEach
-//    public void setup() {
-//        MockitoAnnotations.initMocks(this);
-//        user = new User();
-//        user.setId(1L);
-//        user.setName("John Doe");
-//        user.setEmail("john.doe@example.com");
-//        user.setPassword("password");
-//        user.setRole(Role.EMPLOYEE);
-//        user.setDepartment(department);
-//
-//        List<Tasks> tasks = new ArrayList<>();
-//        // Initialize tasks with mock data
-//
-//        List<Review> reviews = new ArrayList<>();
-//        // Initialize reviews with mock data
-//
-//        Set<Project> projects = new HashSet<>();
-//        // Initialize projects with mock data
-//
-//        List<Issue> uploader = new ArrayList<>();
-//        // Initialize user upload list with mock data
-//
-//        List<Issue> pm = new ArrayList<>();
-//        // Initialize user PM list with mock data
-//
-//        user.setTasks(tasks);
-//        user.setReviews(reviews);
-//        user.setProjects(projects);
-//        user.setUploader(uploader);
-//        user.setPm(pm);
-//    }
-//
-//    @Test
-//    public void testGetterAndSetterMethods() {
-//        // Test getter and setter methods
-//        assertEquals(1L, user.getId());
-//        assertEquals("John Doe", user.getName());
-//        assertEquals("john.doe@example.com", user.getEmail());
-//        assertEquals("password", user.getPassword());
-//        assertEquals(Role.EMPLOYEE, user.getRole());
-//        assertEquals(department, user.getDepartment());
-//    }
-//
-//    @Test
-//    public void testProjectsCollection() {
-//        // Test the projects collection
-//        Set<Project> projects = new HashSet<>();
-//        // Initialize projects with mock data
-//
-//        user.setProjects(projects);
-//
-//        assertEquals(projects, user.getProjects());
-//    }
-//
-//    @Test
-//    public void testTasksList() {
-//        // Test the tasks list
-//        List<Tasks> tasks = new ArrayList<>();
-//        // Initialize tasks with mock data
-//
-//        user.setTasks(tasks);
-//
-//        assertEquals(tasks, user.getTasks());
-//    }
-//
-//    @Test
-//    public void testReviewsList() {
-//        // Test the reviews list
-//        List<Review> reviews = new ArrayList<>();
-//        // Initialize reviews with mock data
-//
-//        user.setReviews(reviews);
-//
-//        assertEquals(reviews, user.getReviews());
-//    }
-//
-//    @Test
-//    public void testProjectList() {
-//        // Test the project list
-//        List<Project> projects = new ArrayList<>();
-//        // Initialize projects with mock data
-//
-//        user.setProject(projects);
-//
-//        assertEquals(projects, user.getProject());
-//    }
-//
-//    @Test
-//    public void testUserUploadList() {
-//        // Test the userUpload list
-//        List<Issue> uploader = new ArrayList<>();
-//        // Initialize userUpload with mock data
-//
-//        user.setUploader(uploader);
-//
-//        assertEquals(uploader, user.getUploader());
-//    }
-//
-//    @Test
-//    public void testUserPMList() {
-//        // Test the userPM list
-//        List<Issue> pm = new ArrayList<>();
-//        // Initialize userPM with mock data
-//
-//        user.setPm(pm);
-//
-//        assertEquals(pm, user.getPm());
-//    }
-//
-//    @Test
-//    public void testEqualsAndHashCode() {
-//        // Test equals and hashCode methods
-//        User anotherUser = new User();
-//        anotherUser.setId(1L);
-//        anotherUser.setName("John Doe");
-//        anotherUser.setEmail("john.doe@example.com");
-//        anotherUser.setPassword("password");
-//        anotherUser.setRole(Role.EMPLOYEE);
-//        anotherUser.setDepartment(department);
-//
-//        assertEquals(user, anotherUser);
-//        assertEquals(user.hashCode(), anotherUser.hashCode());
-//    }
-//
-//
-//    // Add more test cases as needed to cover any additional business logic or constraints in the User class.
-//}
-//
+package team.placeholder.internalprojectsmanagementsystem.model.user;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import java.util.ArrayList;
+import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+public class UserTest {
+    @Mock
+    private User user;
+    @Mock
+    private Notification notification;
+    @Mock
+    UserRepository repository = mock(UserRepository.class);
+    @Mock
+    ProjectRepository projectRepository = mock(ProjectRepository.class);
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Arrange
+        User user1 = new User();
+        user1.setId(1L);
+        user1.setName("John");
+        user1.setEmail("john@example.com");
+
+        User user2 = new User();
+        user2.setId(1L); // Same ID as user1
+        user2.setName("Jane");
+        user2.setEmail("jane@example.com");
+
+        User user3 = new User();
+        user3.setId(2L); // Different ID
+        user3.setName("John");
+        user3.setEmail("john@example.com");
+
+        // Act & Assert
+        assertEquals(user1, user2);
+        assertEquals(user1.hashCode(), user2.hashCode());
+
+        assertNotEquals(user1, user3);
+        assertNotEquals(user1.hashCode(), user3.hashCode());
+
+    }
+
+    @Test
+    void testRelationships() {
+        // Arrange
+        user = new User();
+
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("Sample Project");
+
+        user.getProjects().add(project);
+        user.setDepartment(new Department());
+        user.setTasks(new ArrayList<>());
+        user.setProject(new ArrayList<>());
+        user.setManagedUsers(new ArrayList<>());
+
+        // Act & Assert
+        assertEquals(1, user.getProjects().size());
+        assertNotNull(user.getDepartment());
+        assertNotNull(user.getTasks());
+        assertTrue(user.getTasks().isEmpty());
+        assertNotNull(user.getProject());
+        assertTrue(user.getProject().isEmpty());
+        assertNotNull(user.getManagedUsers());
+        assertTrue(user.getManagedUsers().isEmpty());
+
+        User user = new User();
+
+        // Act
+        user.getProjects().add(project);
+        user.setDepartment(new Department());
+        user.setTasks(new ArrayList<>());
+
+        // Assert
+        assertEquals(1, user.getProjects().size());
+        assertNotNull(user.getDepartment());
+        assertNotNull(user.getTasks());
+        assertTrue(user.getTasks().isEmpty());
+    }
+
+    @Test
+    void testSetterGetter() {
+        // Arrange
+        user = new User();
+
+        // Act
+        user.setId(1L);
+        user.setName("John");
+        user.setEmail("john@example.com");
+        user.setPassword("password");
+        user.setEnabled(true);
+        user.setRole(Role.FOC);
+
+        // Assert
+        assertEquals(1L, user.getId());
+        assertEquals("John", user.getName());
+        assertEquals("john@example.com", user.getEmail());
+        assertEquals("password", user.getPassword());
+        assertTrue(user.isEnabled());
+        assertEquals(Role.FOC, user.getRole());
+
+        User user = new User();
+
+        // Act
+        user.setId(1L);
+        user.setName("John");
+        user.setEmail("john@example.com");
+        user.setPassword("password");
+        user.setEnabled(true);
+        user.setRole(Role.FOC);
+
+        // Assert
+        assertEquals(1L, user.getId());
+        assertEquals("John", user.getName());
+        assertEquals("john@example.com", user.getEmail());
+        assertEquals("password", user.getPassword());
+        assertTrue(user.isEnabled());
+        assertEquals(Role.FOC, user.getRole());
+    }
+
+    @Test
+    void testUserProjectRelationship() {
+        // Arrange
+        User user = new User();
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("Sample Project");
+
+        // Act
+        user.getProjects().add(project);
+
+        // Assert
+        assertEquals(1, user.getProjects().size());
+        assertTrue(user.getProjects().contains(project));
+    }
+
+    @Test
+    void testUserProjectManagerRelationship() {
+        // Arrange
+        User user = new User();
+        User projectManager = new User();
+        projectManager.setId(1L);
+        projectManager.setName("Project Manager");
+
+        // Act
+        user.setProjectManager(projectManager);
+
+        // Assert
+        assertEquals(projectManager, user.getProjectManager());
+    }
+
+    @Test
+    void testUserSave() {
+        // Arrange
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setEmail("john@example.com");
+
+        // Set up mock behavior
+        when(repository.save(any(User.class))).thenReturn(user);
+
+        // Act
+        User savedUser = repository.save(user);
+
+        // Assert
+        assertEquals(user, savedUser);
+        verify(repository, times(1)).save(user);
+    }
+
+    @Test
+    void testUserNullValues() {
+        // Arrange
+        User user = new User();
+
+        // Act
+        user.setId(Long.MIN_VALUE);
+        user.setEmail(null);
+
+        // Assert
+        assertEquals(Long.MIN_VALUE, user.getId());
+        assertNull(user.getEmail());
+    }
+
+    @Test
+    void testProjectManagerRelationship() {
+        // Arrange
+        User projectManager = new User();
+        projectManager.setId(1L);
+        projectManager.setName("John");
+        projectManager.setEmail("john@example.com");
+        projectManager.setPassword("password");
+        projectManager.setEnabled(true);
+        projectManager.setRole(Role.FOC);
+
+        // Creating projects
+        Project project1 = new Project();
+        project1.setId(1L);
+        project1.setName("Project 1");
+
+        Project project2 = new Project();
+        project2.setId(2L);
+        project2.setName("Project 2");
+
+        // Adding projects to the project manager's list
+        projectManager.getProjects().add(project1);
+        projectManager.getProjects().add(project2);
+
+        // Act & Assert
+        assertEquals(2, projectManager.getProjects().size());
+        assertTrue(projectManager.getProjects().contains(project1));
+        assertTrue(projectManager.getProjects().contains(project2));
+    }
+
+    @Test
+    void testUserNotifications() {
+        // Arrange
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setEmail("john@example.com");
+        user.setPassword("password");
+        user.setEnabled(true);
+        user.setRole(Role.FOC);
+
+        // Creating notifications
+        Notification notification1 = new Notification();
+        notification1.setId(1L);
+
+        Notification notification2 = new Notification();
+        notification2.setId(2L);
+
+        // Adding notifications to the user's list
+        user.getNotifications().add(notification1);
+        user.getNotifications().add(notification2);
+
+        // Act & Assert
+        assertEquals(2, user.getNotifications().size());
+        assertTrue(user.getNotifications().contains(notification1));
+        assertTrue(user.getNotifications().contains(notification2));
+    }
+
+
+}
+

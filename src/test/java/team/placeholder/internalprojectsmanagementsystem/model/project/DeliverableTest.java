@@ -2,7 +2,6 @@ package team.placeholder.internalprojectsmanagementsystem.model.project;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -10,20 +9,12 @@ public class DeliverableTest {
 
     @MockBean
     Deliverable deliverable1 = mock(Deliverable.class);
-
-
     @MockBean
     private Deliverable deliverable2 = mock(Deliverable.class);
-
-    @MockBean
-    private Project project = mock(Project.class);
     @MockBean
     DeliverableType mockDeliverableType = mock(DeliverableType.class);
     @Test
     public void testSetAndGetDeliverableType() {
-        // Create a mock DeliverableType
-
-
         // Set deliverable type using setter
         deliverable1 = new Deliverable();
         deliverable1.setDeliverableTypes(mockDeliverableType);

@@ -1,7 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.department;
 
-
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -10,17 +8,21 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.department.DepartmentService;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
     private final ModelMapper modelMapper;
+
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository, ModelMapper modelMapper) {
+        this.departmentRepository = departmentRepository;
+        this.modelMapper = modelMapper;
+    }
+
 
     @Override
     public DepartmentDto save(DepartmentDto departmentDto) {

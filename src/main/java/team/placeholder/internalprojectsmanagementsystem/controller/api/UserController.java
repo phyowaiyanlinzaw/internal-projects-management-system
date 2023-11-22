@@ -1,31 +1,38 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.api;
 
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.AvailableUserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UserUIDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.AvailableUser;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.AvailableUserRepo;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.project.AvailableEmployeeService;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user/")
+@AllArgsConstructor
 public class UserController {
     private final UserServiceImpl userService;
     private final FakerService fakerService;
     private final DepartmentServiceImpl departmentService;
-
-    public UserController(UserServiceImpl userService,DepartmentServiceImpl departmentService, FakerService fakerService) {
-        this.userService = userService;
-        this.departmentService=departmentService;
-        this.fakerService = fakerService;
-    }
+    private final AvailableUserRepo availableEmployeeService;
+    private final ModelMapper modalMapper;
 
     @GetMapping("/report/list")
     public List<UserDto> getUsers() {
@@ -236,6 +243,32 @@ public class UserController {
             System.out.println("Failed to update user");
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @GetMapping("/list/available/pmId/{pmId}")
+    public ResponseEntity<List<AvailableUserDto>> getAllAvailableUsersByPMId(@PathVariable Long pmId) {
+
+        List<UserDto> users = userService.getAllUsersByPMId(pmId);
+
+        List<Long> idList = users.stream().map(UserDto::getId).toList();
+
+        List<AvailableUser> availableUsers = availableEmployeeService.findByUserIdIn(idList);
+        
+        List<AvailableUserDto> availableUserDtos = new ArrayList<>();
+
+        for (AvailableUser availableUser : availableUsers) {
+            if (availableUser.isAvaliable()) {
+                UserDto userDto = modalMapper.map(availableUser.getUser(), UserDto.class);
+                AvailableUserDto availableUserDto = new AvailableUserDto(
+                        availableUser.getId(),
+                        userDto,
+                        availableUser.isAvaliable()
+                );
+                availableUserDtos.add(availableUserDto);
+            }
+        }
+
+        return new ResponseEntity<>(availableUserDtos, HttpStatus.OK);
     }
 
 }

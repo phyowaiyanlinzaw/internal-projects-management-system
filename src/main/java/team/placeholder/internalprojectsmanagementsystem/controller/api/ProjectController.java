@@ -341,4 +341,14 @@ public class ProjectController {
         return new ResponseEntity<>(" i don't know", HttpStatus.OK);
     }
 
+    @PutMapping("/update/userlist/{projectid}")
+    public ResponseEntity<String> updateUserListInProejct(@PathVariable long projectid, @RequestBody List<UserDto> userDtos) {
+
+
+        projectService.updateUserListInProject(projectid, userDtos);
+
+        return ResponseEntity.ok("User list updated successfully");
+
+    }
+
 }
