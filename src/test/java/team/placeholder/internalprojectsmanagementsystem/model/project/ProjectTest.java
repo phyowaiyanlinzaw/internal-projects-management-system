@@ -56,6 +56,7 @@ public class ProjectTest {
         assertEquals(DevelopmentPhase.PLANNING, project.getCurrent_phase());
         assertEquals("Test Objective", project.getObjective());
     }
+
     @Test
     public void testEntity() {
         // Arrange
@@ -72,7 +73,7 @@ public class ProjectTest {
         deliverablesList.add(deliverable);
         entity.setDeliverables(deliverablesList);
 
-        entity.setStatus("InProgress");
+        entity.setClosed(true);
 
         entity.setAmount(amount);
 
@@ -81,7 +82,7 @@ public class ProjectTest {
         assertEquals(tasksList, entity.getTasks());
         assertEquals(systemOutLine, entity.getSystemOutLine());
         assertEquals(deliverablesList, entity.getDeliverables());
-        assertEquals("InProgress", entity.getStatus());
+
         assertEquals(amount, entity.getAmount());
     }
 

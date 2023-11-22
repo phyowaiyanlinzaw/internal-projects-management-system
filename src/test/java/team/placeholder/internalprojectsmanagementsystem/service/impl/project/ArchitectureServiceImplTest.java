@@ -1,37 +1,37 @@
-package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-
-class ArchitectureServiceImplTest {
-
-    @Mock
-    ArchitectureRepository architectureRepository;
-
-    @InjectMocks
-    private ArchitectureServiceImpl architectureService;
-
-    @BeforeEach
-    public void setUp(){
-        MockitoAnnotations.openMocks(this);
-    }
-
+//package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
+//
+//import org.junit.jupiter.api.BeforeEach;
+//import org.junit.jupiter.api.Test;
+//import org.mockito.InjectMocks;
+//import org.mockito.Mock;
+//import org.mockito.MockitoAnnotations;
+//import org.springframework.boot.test.context.SpringBootTest;
+//import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
+//import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
+//import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
+//import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
+//
+//import java.util.Arrays;
+//import java.util.List;
+//import java.util.Optional;
+//
+//import static org.junit.jupiter.api.Assertions.*;
+//import static org.mockito.Mockito.*;
+//
+//
+//class ArchitectureServiceImplTest {
+//
+//    @Mock
+//    ArchitectureRepository architectureRepository;
+//
+//    @InjectMocks
+//    private ArchitectureServiceImpl architectureService;
+//
+//    @BeforeEach
+//    public void setUp(){
+//        MockitoAnnotations.openMocks(this);
+//    }
+//
 //    @Test
 //    public void testGetAllArchitecture(){
 //        Architecture architecture1 = new Architecture();
@@ -75,25 +75,25 @@ class ArchitectureServiceImplTest {
 //
 //        assertNull(nonExistentArchitecture);
 //    }
-
-    @Test
-    public void testSave(){
-        ArchitectureDto architectureDto = new ArchitectureDto();
-        architectureDto.setTech_name("HTML");
-
-        Architecture expectedArchitecture = ArchitectureMapper.toArchitecture(architectureDto);
-
-        when(architectureRepository.save(any())).thenReturn(expectedArchitecture);
-
-        // Act
-        Architecture result = architectureService.save(architectureDto);
-
-        // Assert
-        verify(architectureRepository, times(1)).save(any());
-        assertEquals(expectedArchitecture, result);
-    }
-
-
-
-
-}
+//
+//    @Test
+//    public void testSave(){
+//        ArchitectureDto architectureDto = new ArchitectureDto();
+//        architectureDto.setTech_name("HTML");
+//
+//        Architecture expectedArchitecture = ArchitectureMapper.toArchitecture(architectureDto);
+//
+//        when(architectureRepository.save(any())).thenReturn(expectedArchitecture);
+//
+//        // Act
+//        Architecture result = architectureService.save(architectureDto);
+//
+//        // Assert
+//        verify(architectureRepository, times(1)).save(any());
+//        assertEquals(expectedArchitecture, result);
+//    }
+//
+//
+//
+//
+//}

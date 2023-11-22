@@ -50,16 +50,16 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-primary border border-bottom-0 rounded-top"
-                                id="add-employee-tab" data-bs-toggle="tab" data-bs-target="#show-add-employee" type="button"
-                                role="tab" aria-controls="show-add-employee" aria-selected="false">
-                            <i class="bi bi-person-plus-fill"></i>
+                                id="gantt-chart-tab" data-bs-toggle="tab" data-bs-target="#gantt-chart" type="button"
+                                role="tab" aria-controls="gantt-chart" aria-selected="false">
+                            Calendar
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-primary border border-bottom-0 rounded-top"
-                                id="gantt-chart-tab" data-bs-toggle="tab" data-bs-target="#gantt-chart" type="button"
-                                role="tab" aria-controls="gantt-chart" aria-selected="false">
-                            Calendar
+                                id="add-employee-tab" type="button"
+                                data-bs-target="#add-employee-modal" data-bs-toggle="modal">
+                            <i class="bi bi-person-plus-fill"></i>
                         </button>
                     </li>
                 </ul>
@@ -130,10 +130,6 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade mt-3" id="show-add-employee" role="tabpanel" aria-labelledby="add-employee-tab">
-                    <div id="employee-list"></div>
-                </div>
-
                 <!-- calendar start -->
                 <div class="tab-pane fade mt-3" id="gantt-chart" role="tabpanel" aria-labelledby="gantt-chart-tab">
                     <div id="calendar"></div>
@@ -152,19 +148,13 @@
                     <div class="row row-cols-3">
                         <div>Name</div>
                         <div>Role</div>
-                        <div class="text-end"><button type="button" class="btn btn-primary" onclick="toggleInpOn(this)">Select all</button></div>
+                        <div class="text-end"><button type="button" class="btn btn-primary" id="add-new-employee-to-project">Select all</button></div>
                     </div>
-                    <div class="d-flex flex-column gap-2">
-                        <div class="row row-cols-3">
-                            <div>zawlinsehin</div>
-                            <div>Role</div>
-                            <div class="text-end"><input class="pickme" type="checkbox" data-toggle="toggle" checked value="1"></div>
-                        </div>
-                        <div class="row row-cols-3">
-                            <div>ppaaya</div>
-                            <div>Role</div>
-                            <div class="text-end"><input class="pickme" type="checkbox" data-toggle="toggle" checked value="2"></div>
-                        </div>
+                    <div class="d-flex flex-column gap-2" id="list-of-employee-to-add-in-project">
+                        
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" id="save-new-employee-list">save</button>
                     </div>
                 </div>
             </div>
@@ -448,6 +438,14 @@
     </div>
     <!--    actual hours input modal -->
 
+    <div class="modal fade" id="alert-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="alert alert-success text-center" role="alert" id="alert-text">
+                
+            </div>
+        </div>
+    </div>
+
     <!-- fontawesome -->
     <script src="/js/fontawesome.js"></script>
 
@@ -508,6 +506,114 @@
             addTaskBtn.style.cursor = "not-allowed";
         }
 
+        const tabEl = document.querySelector('#add-employee-tab')
+            tabEl.addEventListener('show.bs.tab',async event => {
+            const allWorkingEmployee = await getData('/api/user/list/projectId/'+document.getElementById("projectId").innerText)
+
+            allWorkingEmployee.forEach(a => console.log(a))
+        })
+
+        document.querySelector("#add-employee-modal").addEventListener("show.bs.modal", async () => {
+
+            const empList = [];
+
+            const empToProject = await getData('/api/user/list/available/pmId/' + currentUser.currentUser.id)
+
+            const container = document.querySelector("#list-of-employee-to-add-in-project")
+            container.innerHTML = ''
+            empToProject.forEach(employee => {
+                // Create a new div element for each employee
+                const employeeDiv = document.createElement("div");
+                employeeDiv.classList.add("row", "row-cols-3");
+
+                // Create and append the child elements for employee name, role, and checkbox
+                const nameDiv = document.createElement("div");
+                nameDiv.textContent = employee.user.name;
+                employeeDiv.appendChild(nameDiv);
+
+                const roleDiv = document.createElement("div");
+                roleDiv.textContent = employee.user.role; // Replace with the actual property name in your object
+                employeeDiv.appendChild(roleDiv);
+
+                const checkboxDiv = document.createElement("div");
+                checkboxDiv.classList.add("text-end");
+                
+                const checkbox = document.createElement("input");
+                checkbox.classList.add("pickme")
+                checkbox.setAttribute("type", "checkbox");
+                checkbox.setAttribute("data-toggle", "toggle");
+                checkbox.setAttribute("value", employee.user.id);
+
+                checkboxDiv.appendChild(checkbox);
+                employeeDiv.appendChild(checkboxDiv);
+
+                // Append the employeeDiv to the container
+                container.appendChild(employeeDiv);
+                $('.pickme').bootstrapToggle({
+                    on: 'dont pick me',
+                    off: 'pick me',
+                    onstyle: 'success',
+                    size: "sm"
+                })
+            });
+
+            $('.pickme').change(function() {
+                const value = $(this).val();
+                if ($(this).prop('checked')) {
+                    // Add the value if the checkbox is checked and not already in the array
+                    if (empList.indexOf(value) === -1) {
+                        empList.push(value);
+                    }
+                } else {
+                    // Remove the value if the checkbox is unchecked
+                    const index = empList.indexOf(value);
+                    if (index !== -1) {
+                        empList.splice(index, 1);
+                    }
+                }
+                console.log(empList)
+            })
+
+            document.querySelector("#save-new-employee-list").addEventListener("click",function() {
+                
+                const empObjectList = empList.map(a => ({id: parseInt(a)}))
+
+                console.log(empObjectList)
+
+                parseInt(document.getElementById("projectId").innerText)
+
+                $.ajax({
+                    url: `/api/project/update/userlist/${document.getElementById("projectId").innerText}`,
+                    type: "PUT",
+                    data: JSON.stringify(empList),
+                    contentType: "application/json",
+                    success: function (data) {
+                        console.log(data)
+                        console.log("this is good sign")
+                        $("#alert-text").text(
+                            "New users assigned successfully to this project"
+                        );
+                        $('#alert-modal').modal('show');
+                        $("#add-employee-modal").modal('hide')
+                    },error: function () {
+                      console.log("error")
+                    },
+                });
+
+            })
+
+        })
+
+        document.querySelector("#add-new-employee-to-project").addEventListener('click',(e) => {
+            //$('.pickme').prop('checked', true).change();
+            $(e).text() == 'Select all' ? $(e).text("Deselect all") : $(e).text('Select all')
+                
+            console.log($(e).text())
+            $('.pickme').bootstrapToggle('toggle');
+
+        })
+
+
         $('#project-open-close').change(function () {
 
             let condition = $(this).prop('checked');
@@ -550,6 +656,23 @@
                         } else {
                             $('#project-open-close').bootstrapToggle('on')
                         }
+                    })
+                } else {
+                    $.ajax({
+                        url: `/api/project/update/status/${id}/${!condition}`,
+                        method: "GET",
+                        success: function(response) {
+                            // Handle the successful response here
+                            console.log(response);
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle the error here
+                            console.log(error);
+                        }
+                    });
+                    document.querySelectorAll('.task').forEach(a => {
+                        console.log(a)
+                        a.removeAttribute("draggable")
                     })
                 }
 
@@ -621,6 +744,7 @@
 
         // Function to fetch the members' list from the backend API
         let membersList = [];
+
         $.ajax({
             url: "/api/user/list/projectId/" + projectId,
             type: "GET",
@@ -629,17 +753,43 @@
                 membersList = data;
             },
         });
+
+        let originalTagify;
+            
+        document.querySelector("#add-task").addEventListener("show.bs.modal", function() {
+            let thisSuck;
+            $.ajax({
+                url: "/api/user/list/projectId/" + projectId,
+                type: "GET",
+                async: false,
+                success: function (data) {
+                    thisSuck = data;
+                },
+            });
+            originalTagify.whitelist = null
+
+            let newWhitelist = thisSuck.map((member) => {
+                return member.name + " | " + member.role;
+            });
+
+            console.log("this suck", thisSuck)
+            console.log(originalTagify)
+            originalTagify.settings.whitelist = newWhitelist;
+            
+        })
+
+        const memberInputTag = document.querySelector('input[id=select-member]')
+        originalTagify = new Tagify(memberInputTag, {
+            enforceWhitelist: true,
+            mode: "select",
+            whitelist: membersList.map((member) => {
+                return member.name + " | " + member.role;
+            }),
+            blacklist: ['foo', 'bar'],
+        })
+
         console.log("MEMBERS LIST", membersList);
 
-        var memberInputTag = document.querySelector('input[id=select-member]'),
-            originalTagify = new Tagify(memberInputTag, {
-                enforceWhitelist: true,
-                mode: "select",
-                whitelist: membersList.map((member) => {
-                    return member.name + " | " + member.role;
-                }),
-                blacklist: ['foo', 'bar'],
-            })
 
         // bind events
         originalTagify.on('add', onAddTag)
