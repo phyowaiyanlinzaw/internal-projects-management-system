@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import groovyjarjarantlr4.v4.parse.ANTLRParser.finallyClause_return;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
@@ -249,15 +250,23 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto updateProject(ProjectDto projectDto) {
         Project project = projectRepository.findById(projectDto.getId());
 
-        project.setName(projectDto.getName() == null ? projectDto.getName() : project.getName());
-        project.setBackground(projectDto.getBackground() == null ? projectDto.getBackground() : project.getBackground());
-        project.setDuration(projectDto.getDuration() == 0 ? projectDto.getDuration() : project.getDuration());
-        project.setStart_date(projectDto.getStart_date() == 0 ? projectDto.getStart_date() : project.getStart_date());
-        project.setEnd_date(projectDto.getEnd_date() == 0 ? projectDto.getEnd_date() : project.getEnd_date());
-        project.setCurrent_phase(projectDto.getCurrent_phase() == null ? projectDto.getCurrent_phase() : project.getCurrent_phase());
-        project.setObjective(projectDto.getObjective() == null ? projectDto.getObjective() : project.getObjective());
+        project.setName(projectDto.getName() == null ? project.getName() : projectDto.getName());
+        project.setBackground(projectDto.getBackground() == null ? project.getBackground() : projectDto.getBackground());
+        project.setDuration(projectDto.getDuration() == 0 ? project.getDuration() : projectDto.getDuration());
+        project.setStart_date(projectDto.getStart_date() == 0 ? project.getStart_date() : projectDto.getStart_date());
+        project.setEnd_date(projectDto.getEnd_date() == 0 ? project.getEnd_date() : projectDto.getEnd_date());
+        project.setCurrent_phase(projectDto.getCurrent_phase() == null ? project.getCurrent_phase() : projectDto.getCurrent_phase());
+        project.setObjective(projectDto.getObjective() == null ? project.getObjective() : projectDto.getObjective());
+
 
         projectRepository.save(project);
+        log.info("Data Name: " +projectDto.getName());
+        log.info("Data Background: " +projectDto.getBackground());
+        log.info("Data Duration: " +projectDto.getDuration());
+        log.info("Data StartDate: " +projectDto.getStart_date());
+        log.info("Data EndDate: " +projectDto.getEnd_date());
+        log.info("Data Current Phase: " +projectDto.getCurrent_phase());
+        log.info("Data Objective: " +projectDto.getObjective());
 
         return modelMapper.map(project, ProjectDto.class);
     }
@@ -618,6 +627,7 @@ public class ProjectServiceImpl implements ProjectService {
             proListDto.setStartDate(project.getStart_date());
             proListDto.setEndDate(project.getEnd_date());
             proListDto.setUser(modelMapper.map(project.getProjectManager(), UserDto.class));
+            proListDto.setClosed(project.isClosed());
 
             if(project.getTasks() != null ) {
 
@@ -658,6 +668,29 @@ public class ProjectServiceImpl implements ProjectService {
 
         return ProListDto;
 
+    }
+
+    @Override
+    public void updateUserListInProject(long id, List<UserDto> users) {
+
+        Project project = projectRepository.findById(id);
+
+        Set<User> users2 = new HashSet<>();
+
+        for(UserDto user : users) {
+            User newUser = userRepository.getReferenceById(user.getId());
+            users2.add(newUser);
+        }
+
+        for(User user : users2) {
+            AvailableUser avu = aes.getAvailableUserByUserId(user.getId());
+            avu.setAvaliable(false);
+            aes.save(avu);
+        }
+
+        project.setUsers(users2);
+
+        projectRepository.save(project);
     }
 
 }

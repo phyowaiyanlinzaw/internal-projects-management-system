@@ -169,7 +169,7 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <p class="lead">Monthly Man-Month</p>
 
-                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-2 align-items-center">
 
                                     <div class="dropdown" id="department-dropdown-div">
                                         <a class="dropdown-toggle text-decoration-none" type="button"
@@ -195,9 +195,26 @@
                                     </div>
 
                                     <div>
-                                        <a style="text-decoration: none"
-                                           class="text-white bg-primary p-2 rounded-pill chart-filter-reset-btn">
-                                            Reset </a>
+                                        <button
+                                                class="text-white bg-primary p-2 rounded-pill border-0"
+                                                id="chart-filter-reset-btn"
+                                        >
+                                            <i class="fa-solid fa-arrows-rotate"></i></button>
+
+                                    </div>
+                                    <div>
+                                        <button
+                                                class="text-white bg-primary p-2 rounded-pill border-0"
+                                                id="exportPdf"
+                                        >
+                                            <i class="fa-solid fa-file-pdf"></i></button>
+                                    </div>
+                                    <div>
+                                        <button
+                                                class="text-white bg-primary p-2 rounded-pill border-0"
+                                                id="exportExcel"
+                                        >
+                                            <i class="fa-solid fa-file-excel"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -268,6 +285,8 @@
 
 <!-- javascript libraries -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
 <script src="/lib/quill/quill.min.js"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
@@ -341,14 +360,80 @@
                             allDay: true
                         }
                     }),
-                    eventDidMount: function (info) {
-                        const popover = new bootstrap.Popover(info.el, {
-                            title: info.event.extendedProps.title,
-                            content: info.event.extendedProps.description,
-                            placement: 'top',
-                            trigger: 'hover',
-                            container: 'body'
+                    eventClick: function (info) {
+                        const eventTitle = info.event.title;
+                        const eventStatus = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).status;
+                        const eventDescription = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).description;
+
+                        const projectName = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).projectDto.name;
+
+                        const planHours = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).plan_hours;
+
+                        let taskGroup = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).tasksGroup;
+
+                        if (taskGroup === 'A') {
+                            taskGroup = "Group A - Related With Project Development"
+                        } else if (taskGroup === 'B') {
+                            taskGroup = "Group B - Training"
+                        } else {
+                            taskGroup = "Group C - Idling"
+                        }
+
+                        //get plan_end_time and convert to date and do some math to show remaining days
+                        const planEndTime = tasks.find((task) => {
+                            return task.title === eventTitle;
+                        }).plan_end_time;
+                        //only show date and month
+                        const planEndTimeDate = new Date(planEndTime).toLocaleDateString('en-US', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
                         });
+
+                        // Create a modal element
+                        const modal = document.createElement('div');
+                        modal.classList.add('modal');
+
+                        modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered d-flex align-items-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">${eventTitle} <span class="badge bg-primary">${eventStatus}</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row">
+                    <p class="col-6"><strong>Project : </strong> ${projectName}</p>
+                    <p class="col-6"><strong>Description :</strong> ${eventDescription}</p>
+                    <p class="col-6"><strong>Task Group :</strong> ${taskGroup}</p>
+                    <p class="col-6"><strong>Due Date :</strong> ${planEndTimeDate}</p>
+                    <p class="col-6"><strong>Plan Hours :</strong> ${planHours}</p>
+                    <!-- Add more information as needed -->
+                </div>
+            </div>
+        </div>
+    `;
+
+                        // Append the modal to the body
+                        document.body.appendChild(modal);
+
+                        // Show the modal using Bootstrap modal
+                        $(modal).modal('show');
+
+                        // Remove the modal from the DOM when it's closed
+                        $(modal).on('hidden.bs.modal', function () {
+                            $(this).remove();
+                        });
+
                     },
                 });
                 calendar.render();
@@ -496,6 +581,8 @@
                 }
             });
 
+            let selectedProject = null;
+
 
             switch (currentUser.currentUser.role) {
                 case "PMO":
@@ -516,9 +603,8 @@
                             // Handle click event on the dynamic items
                             dropdownMenu.on('click', '.dropdown-item', function () {
                                 const selectedValue = $(this).data('value');
-                                //change the text of the dropdown button
-                                departmentDropdown.text(selectedValue);
-                                // call the api to get the project list for the selected department
+                                //change the text of department name to the dropdown button
+                                departmentDropdown.text($(this).text());
                                 getProjectList(selectedValue);
                             });
                         },
@@ -597,13 +683,12 @@
 
                         // Handle click event on the dynamic items
                         dropdownMenu.on('click', '.dropdown-item', function () {
-                            const selectedValue = $(this).data('value');
+                            selectedProject = $(this).data('value');
                             //change the text of project name to the dropdown button
                             projectDropdown.text($(this).text());
-                            console.log(selectedValue)
-                            updateManMonthChart(selectedValue)
-                            updateProductivityChart(selectedValue)
-                            updateKpiChart(selectedValue)
+                            updateManMonthChart(selectedProject)
+                            updateProductivityChart(selectedProject)
+                            updateKpiChart(selectedProject)
                         });
 
 
@@ -641,6 +726,85 @@
                     }
                 });
             }
+
+            $("#exportPdf").on('click', function () {
+                window.jsPDF = window.jspdf.jsPDF;
+
+// Create a new jsPDF instance
+                const pdf = new jsPDF('portrait', 'mm', 'a4'); // Set a custom page size, e.g., A4 landscape
+
+                // Set the margins
+                const margin = 10;
+                const maxWidth = pdf.internal.pageSize.getWidth() - 2 * margin;
+
+                // Add the first chart (lineChart) to the PDF (full page width)
+                const chart1Image = lineChart.toBase64Image();
+                pdf.addImage(chart1Image, 'PNG', margin, margin, maxWidth, 50); // Adjust the dimensions as needed
+
+                // Add a separator (optional)
+                pdf.setLineWidth(0.5);
+                pdf.line(margin, 70, maxWidth + margin, 70);
+
+                // Add the second chart (barChart) to the PDF (side by side)
+                const chart2Image = barChart.toBase64Image();
+                pdf.addImage(chart2Image, 'PNG', margin, 80, maxWidth / 2 - margin, 50); // Adjust the dimensions as needed
+
+                // Add the third chart (barChart2) to the PDF (side by side)
+                const chart3Image = barChart2.toBase64Image();
+                pdf.addImage(chart3Image, 'PNG', maxWidth / 2 + margin, 80, maxWidth / 2 - margin, 50); // Adjust the dimensions as needed
+
+                // Generate a blob URL for the PDF
+                const pdfBlob = pdf.output('blob');
+                const pdfBlobUrl = URL.createObjectURL(pdfBlob);
+
+                // Open the blob URL in a new tab
+                window.open(pdfBlobUrl, '_blank');
+
+                // Optionally, revoke the blob URL after use
+                URL.revokeObjectURL(pdfBlobUrl);
+            })
+
+            $("#exportExcel").on('click', async function () {
+                try {
+                    const manMonthData = await fetchData("/api/dashboard/man-month/project/" + selectedProject);
+                    const productivityData = await fetchData("/api/dashboard/productivity/project/" + selectedProject);
+                    const kpiData = await fetchData("/api/dashboard/kpi/project/" + selectedProject);
+
+                    // Ensure data is an array
+                    const ensureArray = (data) => {
+                        return Array.isArray(data) ? data : [data];
+                    };
+
+                    const workbook = XLSX.utils.book_new();
+
+                    const manMonthSheet = XLSX.utils.json_to_sheet(ensureArray(manMonthData));
+                    const productivitySheet = XLSX.utils.json_to_sheet(ensureArray(productivityData));
+                    const kpiSheet = XLSX.utils.json_to_sheet(ensureArray(kpiData));
+
+                    XLSX.utils.book_append_sheet(workbook, manMonthSheet, 'ManMonth');
+                    XLSX.utils.book_append_sheet(workbook, productivitySheet, 'Productivity');
+                    XLSX.utils.book_append_sheet(workbook, kpiSheet, 'KPI');
+
+                    XLSX.writeFile(workbook, 'export.xlsx');
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+
+// Function to fetch data using AJAX
+            async function fetchData(url) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+                    return await response.json();
+                } catch (error) {
+                    throw new Error('Error fetching data: ' + error.message);
+                }
+            }
+
+
 
             function updateProductivityChart(selectedValue) {
                 $.ajax({
@@ -690,7 +854,7 @@
             }
 
 
-            $('.chart-filter-reset-btn').on('click', function () {
+            $('#chart-filter-reset-btn').on('click', function () {
                 $('#departmentDropDown').text('Select Department');
                 $('#projectDropDown').text('Select Project');
                 //clear project dropdown

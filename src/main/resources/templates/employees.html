@@ -35,6 +35,12 @@
                  class="ms-3">
                 <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add
                     Employee</a>
+                <select id="exportType">
+                    <option value="" disabled selected>Select Data Amount</option>
+                    <option value="all">Export All</option>
+                    <option value="selected">Export Selected</option>
+                </select>
+                <button class="btn btn-success" id="exportBtn">Export</button>
                 <!--open modal to register employee account-->
             </div>
             <table
@@ -44,6 +50,9 @@
                     data-toolbar="#toolbar"
                     data-toolbar-align="right"
                     data-search="true"
+                    data-filter-control="true"
+                    data-export-types="['csv', 'excel', 'pdf']"
+                    data-click-to-select="true"
                     data-header-style="headerStyle"
                     data-url="/api/user/employee/list"
                     data-pagination="true"
@@ -52,6 +61,7 @@
             >
                 <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5 border-white">
                 <tr>
+                    <th data-field="state" data-checkbox="true"></th>
                     <th data-sortable="true" data-formatter="indexFormatter" data-align="left" data-valign="middle"
                         data-width="100">No.
                     </th>
@@ -219,12 +229,45 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 
-<!-- Include Bootstrap Table, and Bootstrap Table Export JavaScript -->
+<!-- Include pdfmake library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
     $(document).ready(function () {
         setupLogoutConfirmation();
+    });
+
+    $("#table").bootstrapTable({
+        exportOptions: {
+            fileName: "employee-list",
+            ignoreColumn: ["operate"],
+            exportHiddenCells: true
+        },
+    })
+
+    $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
+
+    //change status of employee (active/inactive)
+    $('#table').on('change', '.status-switch', function () {
+        const checked = $(this).prop('checked');
+        const id = $(this).attr('id').split('_')[1];
+        const row = $('#table').bootstrapTable('getData')[id];
+        const url = '/api/user/update/employee/' + row.id + '/status/' + (checked ? 'true' : 'false');
+        $.ajax({
+            url: url,
+            type: 'PUT',
+            success: function (data) {
+                $('#table').bootstrapTable('refresh');
+            },
+            error: function (data, xhr) {
+                alert('Error updating employee status');
+            },
+            complete: function () {
+                $('#table').bootstrapTable('refresh');
+            }
+        });
     });
 
     function indexFormatter(value, row, index) {
@@ -252,33 +295,104 @@
         return value.name;
     }
 
+    const exportDropdown    = document.getElementById("exportType");
+    const exportBtn        = document.getElementById("exportBtn");
+
+    exportBtn.addEventListener("click", function () {
+        const exportOption = exportDropdown.value;
+        if (exportOption === "all") {
+            exportAllRows();
+        } else if (exportOption === "selected") {
+            const selectedRows = $("#table").bootstrapTable("getSelections");
+            exportSelectedRows(selectedRows);
+        }
+    });
+
+    function exportAllRows() {
+        const docDefinition = {
+            content: [
+                {
+                    text: "All Employees",
+                    style: "header"
+                },
+                {
+                    table: {
+                        widths: ["auto", "auto", "auto", "auto", "auto", "auto"],
+                        body: [
+                            [
+                                "No.",
+                                "Email",
+                                "Name",
+                                "Department",
+                                "Role",
+                                "Status"
+                            ],
+                            ...$("#table").bootstrapTable("getData").map((row,index) => [
+                                index + 1,
+                                row.email,
+                                row.name,
+                                row.department ? row.department.name : "-",
+                                row.role,
+                                row.enabled ? 'Active' : 'Inactive'
+                            ])
+                        ]
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 0, 0, 10]
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).open()
+    }
+
+    function exportSelectedRows(selectedRows) {
+        const docDefinition = {
+            content: [
+                {
+                    text: "Selected Employees",
+                    style: "header"
+                },
+                {
+                    table: {
+                        widths: ["auto", "auto", "auto", "auto", "auto", "auto"],
+                        body: [
+                            [
+                                "No.",
+                                "Email",
+                                "Name",
+                                "Department",
+                                "Role",
+                                "Status"
+                            ],
+                            ...selectedRows.map((row,index) => [
+                                index + 1,
+                                row.email,
+                                row.name,
+                                row.department ? row.department.name : "-",
+                                row.role,
+                                row.enabled ? 'Active' : 'Inactive'
+                            ])
+                        ]
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 0, 0, 10]
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).open()
+    }
 
     $(function () {
-
-        $('#table').bootstrapTable({});
-
-        $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
-
-        //change status of employee (active/inactive)
-        $('#table').on('change', '.status-switch', function () {
-            const checked = $(this).prop('checked');
-            const id = $(this).attr('id').split('_')[1];
-            const row = $('#table').bootstrapTable('getData')[id];
-            const url = '/api/user/update/employee/' + row.id + '/status/' + (checked ? 'true' : 'false');
-            $.ajax({
-                url: url,
-                type: 'PUT',
-                success: function (data) {
-                    $('#table').bootstrapTable('refresh');
-                },
-                error: function (data, xhr) {
-                    showError('Error updating employee status');
-                },
-                complete: function () {
-                    $('#table').bootstrapTable('refresh');
-                }
-            });
-        });
 
         function getDepartmentNameList() {
             var departmentNameList = [];
@@ -537,14 +651,6 @@
             var departmentId = $('#departmentSelect').val();
             var projectManagerId = $('#projectManagerSelect').val();
 
-            console.log(username, email, role, departmentId, projectManagerId)
-
-            console.log("user name", username)
-            console.log("email", email)
-            console.log("role", role)
-            console.log("department id", departmentId)
-            console.log("project manager id", projectManagerId)
-
             validateUsername();
             validateEmail();
             validateMemberRole();
@@ -587,6 +693,14 @@
                         }),
                         contentType: 'application/json',
                         success: function (data) {
+                            alert('Employee registered successfully');
+                            //empty the input fields
+                            $('#floatingText').val('');
+                            $('#floatingInput').val('');
+                            $('#memberSelect').val('');
+                            $('#departmentSelect').val('');
+                            $('#projectManagerSelect').val('');
+
                             $('#addEmployeeModal').modal('hide');
                             $('#register-employee-btn').html('Register').prop('disabled', false);
                             $('#table').bootstrapTable('refresh');
