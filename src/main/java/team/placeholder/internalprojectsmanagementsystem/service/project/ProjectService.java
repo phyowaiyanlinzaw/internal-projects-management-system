@@ -2,7 +2,9 @@ package team.placeholder.internalprojectsmanagementsystem.service.project;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.KPIDto;
+import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 
 import java.util.List;
 
@@ -41,8 +43,8 @@ public interface ProjectService {
     public void updateProjectClosed(long id, boolean condition);
 
     //get start and end month of the projects
-
-
+    
+    public void updateUserListInProject(long id , List<UserDto> users);
 
 
 }

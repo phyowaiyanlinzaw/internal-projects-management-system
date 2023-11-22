@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Notification;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Review;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
+import team.placeholder.internalprojectsmanagementsystem.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -59,7 +56,6 @@ public class User {
 
     @OneToMany(mappedBy = "projectManager")
     private List<User> managedUsers;
-
 
     @ManyToOne
     @JoinColumn(name = "pm_id", referencedColumnName = "id")

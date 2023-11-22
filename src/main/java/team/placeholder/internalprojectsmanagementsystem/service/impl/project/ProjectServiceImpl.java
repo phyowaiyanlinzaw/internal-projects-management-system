@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import groovyjarjarantlr4.v4.parse.ANTLRParser.finallyClause_return;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
@@ -658,6 +659,29 @@ public class ProjectServiceImpl implements ProjectService {
 
         return ProListDto;
 
+    }
+
+    @Override
+    public void updateUserListInProject(long id, List<UserDto> users) {
+
+        Project project = projectRepository.findById(id);
+
+        Set<User> users2 = new HashSet<>();
+
+        for(UserDto user : users) {
+            User newUser = userRepository.getReferenceById(user.getId());
+            users2.add(newUser);
+        }
+
+        for(User user : users2) {
+            AvailableUser avu = aes.getAvailableUserByUserId(user.getId());
+            avu.setAvaliable(false);
+            aes.save(avu);
+        }
+
+        project.setUsers(users2);
+
+        projectRepository.save(project);
     }
 
 }
