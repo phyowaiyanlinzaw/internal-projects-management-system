@@ -8,9 +8,9 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDt
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.DevelopmentPhase;
-
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -46,6 +46,40 @@ public class ProjectDto implements Serializable {
         this.id = id;
         this.departmentDto = departmentDto;
         this.name = name;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        ProjectDto other = (ProjectDto) obj;
+
+        return id == other.id &&
+                duration == other.duration &&
+                start_date == other.start_date &&
+                end_date == other.end_date &&
+                current_phase == other.current_phase &&
+                closed == other.closed &&
+                Objects.equals(name, other.name) &&
+                Objects.equals(objective, other.objective) &&
+                Objects.equals(clientDto, other.clientDto) &&
+                Objects.equals(projectManagerUserDto, other.projectManagerUserDto) &&
+                Objects.equals(departmentDto, other.departmentDto) &&
+                Objects.equals(amountDto, other.amountDto) &&
+                Objects.equals(architectureDto, other.architectureDto) &&
+                Objects.equals(reviewDto, other.reviewDto) &&
+                Objects.equals(systemOutLineDto, other.systemOutLineDto) &&
+                Objects.equals(completeTaskCount, other.completeTaskCount) &&
+                Objects.equals(totalTaskCount, other.totalTaskCount) &&
+                Objects.equals(membersUserDto, other.membersUserDto);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, duration, start_date, end_date, current_phase, objective, clientDto,
+                projectManagerUserDto, departmentDto, amountDto, architectureDto, reviewDto, systemOutLineDto,
+                completeTaskCount, totalTaskCount, closed, membersUserDto);
     }
 
 

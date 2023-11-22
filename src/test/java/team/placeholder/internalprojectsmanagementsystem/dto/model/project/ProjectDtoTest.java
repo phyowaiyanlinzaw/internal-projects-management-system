@@ -1,136 +1,96 @@
 package team.placeholder.internalprojectsmanagementsystem.dto.model.project;
 
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.DevelopmentPhase;
-
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
+@Slf4j
 public class ProjectDtoTest {
 
     @Test
-    void testGetterAndSetter() {
-        // Arrange
-        ProjectDto projectDto = new ProjectDto();
+    void testEqualsAndHashCode() {
+    // Mock dependencies
+    ClientDto clientDto1 = mock(ClientDto.class);
+    UserDto userDto1 = mock(UserDto.class);
+    DepartmentDto departmentDto1 = mock(DepartmentDto.class);
+    AmountDto amountDto1 = mock(AmountDto.class);
+    Set<ArchitectureDto> architectureDto1 = new HashSet<>();
+    ReviewDto reviewDto1 = mock(ReviewDto.class);
+    SystemOutLineDto systemOutLineDto1 = mock(SystemOutLineDto.class);
+    List<DeliverableDto> deliverableDto1 = mock(List.class);
+    List<UserDto> membersUserDto1 = mock(List.class);
+    List<TasksDto> tasksDto1 = mock(List.class);
+    List<IssueDto> issueDto1 = mock(List.class);
 
-        // Set values using setter methods
-        projectDto.setId(1L);
-        projectDto.setName("Project1");
-        projectDto.setBackground("Background1");
-        projectDto.setDuration(30);
-        projectDto.setStart_date(System.currentTimeMillis());
-        projectDto.setEnd_date(System.currentTimeMillis() + 2592000000L); // Adding 30 days in milliseconds
-        projectDto.setCurrent_phase(DevelopmentPhase.PLANNING);
-        projectDto.setObjective("Objective1");
+    ClientDto clientDto2 = mock(ClientDto.class);
+    UserDto userDto2 = mock(UserDto.class);
+    DepartmentDto departmentDto2 = mock(DepartmentDto.class);
+    AmountDto amountDto2 = mock(AmountDto.class);
+    Set<ArchitectureDto> architectureDto2 = new HashSet<>();
+    ReviewDto reviewDto2 = mock(ReviewDto.class);
+    SystemOutLineDto systemOutLineDto2 = mock(SystemOutLineDto.class);
+    List<DeliverableDto> deliverableDto2 = mock(List.class);
+    List<UserDto> membersUserDto2 = mock(List.class);
+    List<TasksDto> tasksDto2 = mock(List.class);
+    List<IssueDto> issueDto2 = mock(List.class);
 
-        ClientDto clientDto = new ClientDto();
-        projectDto.setClientDto(clientDto);
+        ProjectDto projectDto1 = new ProjectDto(1L, departmentDto1, "Project 1");
+        projectDto1.setClientDto(clientDto1);
+        projectDto1.setProjectManagerUserDto(userDto1);
+        projectDto1.setAmountDto(amountDto1);
+        projectDto1.setArchitectureDto(architectureDto1);
+        projectDto1.setReviewDto(reviewDto1);
+        projectDto1.setSystemOutLineDto(systemOutLineDto1);
+        projectDto1.setDeliverableDto(deliverableDto1);
+        projectDto1.setCompleteTaskCount(10L);
+        projectDto1.setTotalTaskCount(20L);
+        projectDto1.setClosed(true);
+        projectDto1.setMembersUserDto(membersUserDto1);
+        projectDto1.setTasksDto(tasksDto1);
+        projectDto1.setIssueDto(issueDto1);
 
-        UserDto projectManagerUserDto = new UserDto();
-        projectDto.setProjectManagerUserDto(projectManagerUserDto);
+        ProjectDto projectDto2 = new ProjectDto(1L, departmentDto2, "Project 1");
+        projectDto2.setClientDto(clientDto2);
+        projectDto2.setProjectManagerUserDto(userDto2);
+        projectDto2.setAmountDto(amountDto2);
+        projectDto2.setArchitectureDto(architectureDto2);
+        projectDto2.setReviewDto(reviewDto2);
+        projectDto2.setSystemOutLineDto(systemOutLineDto2);
+        projectDto2.setDeliverableDto(deliverableDto2);
+        projectDto2.setCompleteTaskCount(10L);
+        projectDto2.setTotalTaskCount(20L);
+        projectDto2.setClosed(true);
+        projectDto2.setMembersUserDto(membersUserDto2);
+        projectDto2.setTasksDto(tasksDto2);
+        projectDto2.setIssueDto(issueDto2);
 
-        DepartmentDto departmentDto = new DepartmentDto();
-        projectDto.setDepartmentDto(departmentDto);
-
-        AmountDto amountDto = new AmountDto();
-        projectDto.setAmountDto(amountDto);
-
-        projectDto.setArchitectureDto(new HashSet<>(Arrays.asList(new ArchitectureDto())));
-        projectDto.setReviewDto(new ReviewDto());
-        projectDto.setSystemOutLineDto(new SystemOutLineDto());
-        projectDto.setDeliverableDto(Arrays.asList(new DeliverableDto()));
-        projectDto.setCompleteTaskCount(1L);
-        projectDto.setTotalTaskCount(1L);
-        projectDto.setStatus("Status1");
-        projectDto.setMembersUserDto(Arrays.asList(new UserDto()));
-        projectDto.setTasksDto(Arrays.asList(new TasksDto()));
-        projectDto.setIssueDto(Arrays.asList(new IssueDto()));
-
-        projectDto.setAmountDto(amountDto);
-
-        ArchitectureDto architectureDto = new ArchitectureDto();
-        projectDto.setArchitectureDto(new HashSet<>(Arrays.asList(architectureDto)));
-
-        ReviewDto reviewDto = new ReviewDto();
-        projectDto.setReviewDto(reviewDto);
-
-        SystemOutLineDto systemOutLineDto = new SystemOutLineDto();
-        projectDto.setSystemOutLineDto(systemOutLineDto);
-
-        DeliverableDto deliverableDto = new DeliverableDto();
-        projectDto.setDeliverableDto(Arrays.asList(deliverableDto));
-
-        // Act
-        Long id = projectDto.getId();
-        String name = projectDto.getName();
-        String background = projectDto.getBackground();
-        int duration = projectDto.getDuration();
-        long start_date = projectDto.getStart_date();
-        long end_date = projectDto.getEnd_date();
-        DevelopmentPhase current_phase = projectDto.getCurrent_phase();
-        String objective = projectDto.getObjective();
-        ClientDto retrievedClientDto = projectDto.getClientDto();
-        UserDto retrievedProjectManagerUserDto = projectDto.getProjectManagerUserDto();
-        DepartmentDto retrievedDepartmentDto = projectDto.getDepartmentDto();
-        AmountDto retrievedAmountDto = projectDto.getAmountDto();
-        Set<ArchitectureDto> retrievedArchitectureDto = projectDto.getArchitectureDto();
-        ReviewDto retrievedReviewDto = projectDto.getReviewDto();
-        SystemOutLineDto retrievedSystemOutLineDto = projectDto.getSystemOutLineDto();
-        List<DeliverableDto> retrievedDeliverableDto = projectDto.getDeliverableDto();
-        Long retrievedCompleteTaskCount = projectDto.getCompleteTaskCount();
-        Long retrievedTotalTaskCount = projectDto.getTotalTaskCount();
-        String retrievedStatus = projectDto.getStatus();
-        List<UserDto> retrievedMembersUserDto = projectDto.getMembersUserDto();
-        List<TasksDto> retrievedTasksDto = projectDto.getTasksDto();
-        List<IssueDto> retrievedIssueDto = projectDto.getIssueDto();
-
-        // Assert
-        assertEquals("Project1", name);
-        assertEquals("Background1", background);
-        assertEquals(30, duration);
-        assertTrue(start_date > 0);
-        assertTrue(end_date > start_date);
-        assertEquals(DevelopmentPhase.PLANNING, current_phase);
-        assertEquals("Objective1", objective);
-        assertEquals(clientDto, retrievedClientDto);
-        assertEquals(projectManagerUserDto, retrievedProjectManagerUserDto);
-        assertEquals(departmentDto, retrievedDepartmentDto);
-        assertEquals(amountDto, retrievedAmountDto);
-        assertEquals(1, retrievedArchitectureDto.size());
-        assertEquals(reviewDto, retrievedReviewDto);
-        assertEquals(systemOutLineDto, retrievedSystemOutLineDto);
-        assertEquals(1, retrievedDeliverableDto.size());
-        assertEquals(1L, retrievedCompleteTaskCount);
-        assertEquals(1L, retrievedTotalTaskCount);
-        assertEquals(1L, id);
-        assertEquals("Status1", retrievedStatus);
-        assertEquals(1, retrievedMembersUserDto.size());
-        assertEquals(1, retrievedTasksDto.size());
-        assertEquals(1, retrievedIssueDto.size());
-    }
+        // Test equals and hashCode methods
+        assertTrue(projectDto1.equals(projectDto2));
+        assertEquals(projectDto1.hashCode(), projectDto2.hashCode());
+}
 
     @Test
-    void testConstructor() {
-        // Arrange
-        Long id = 1L;
-        DepartmentDto departmentDto = new DepartmentDto();
-        String name = "Project1";
+    void testNotEquals() {
+        // Mock dependencies
+        DepartmentDto departmentDto1 = mock(DepartmentDto.class);
+        DepartmentDto departmentDto2 = mock(DepartmentDto.class);
 
-        // Act
-        ProjectDto projectDto = new ProjectDto(id, departmentDto, name);
+        // Create two ProjectDto instances with different values
+        ProjectDto projectDto1 = new ProjectDto(1L, departmentDto1, "Project 1");
+        ProjectDto projectDto2 = new ProjectDto(2L, departmentDto2, "Project 2");
 
-        // Assert
-        assertEquals(id, projectDto.getId());
-        assertEquals(departmentDto, projectDto.getDepartmentDto());
-        assertEquals(name, projectDto.getName());
+        // Test equals and hashCode methods
+        assertFalse(projectDto1.equals(projectDto2) || projectDto2.equals(projectDto1));
+        assertFalse(projectDto1.hashCode() == projectDto2.hashCode());
     }
+
 }
