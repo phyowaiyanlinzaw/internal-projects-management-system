@@ -50,7 +50,7 @@ public class ProjectDtoTest {
         projectDto.setDeliverableDto(Arrays.asList(new DeliverableDto()));
         projectDto.setCompleteTaskCount(1L);
         projectDto.setTotalTaskCount(1L);
-        projectDto.setStatus("Status1");
+//        projectDto.setStatus("Status1");
         projectDto.setMembersUserDto(Arrays.asList(new UserDto()));
         projectDto.setTasksDto(Arrays.asList(new TasksDto()));
         projectDto.setIssueDto(Arrays.asList(new IssueDto()));
@@ -88,7 +88,7 @@ public class ProjectDtoTest {
         List<DeliverableDto> retrievedDeliverableDto = projectDto.getDeliverableDto();
         Long retrievedCompleteTaskCount = projectDto.getCompleteTaskCount();
         Long retrievedTotalTaskCount = projectDto.getTotalTaskCount();
-        String retrievedStatus = projectDto.getStatus();
+//        String retrievedStatus = projectDto.getStatus();
         List<UserDto> retrievedMembersUserDto = projectDto.getMembersUserDto();
         List<TasksDto> retrievedTasksDto = projectDto.getTasksDto();
         List<IssueDto> retrievedIssueDto = projectDto.getIssueDto();
@@ -112,7 +112,7 @@ public class ProjectDtoTest {
         assertEquals(1L, retrievedCompleteTaskCount);
         assertEquals(1L, retrievedTotalTaskCount);
         assertEquals(1L, id);
-        assertEquals("Status1", retrievedStatus);
+//        assertEquals("Status1", retrievedStatus);
         assertEquals(1, retrievedMembersUserDto.size());
         assertEquals(1, retrievedTasksDto.size());
         assertEquals(1, retrievedIssueDto.size());

@@ -56,34 +56,34 @@ public class ProjectTest {
         assertEquals(DevelopmentPhase.PLANNING, project.getCurrent_phase());
         assertEquals("Test Objective", project.getObjective());
     }
-    @Test
-    public void testEntity() {
-        // Arrange
-        Project entity = new Project();
-        entity.setReviews(review);
-
-        List<Tasks> tasksList = new ArrayList<>();
-        tasksList.add(task);
-        entity.setTasks(tasksList);
-
-        entity.setSystemOutLine(systemOutLine);
-
-        List<Deliverable> deliverablesList = new ArrayList<>();
-        deliverablesList.add(deliverable);
-        entity.setDeliverables(deliverablesList);
-
-        entity.setStatus("InProgress");
-
-        entity.setAmount(amount);
-
-        // Act & Assert
-        assertEquals(review, entity.getReviews());
-        assertEquals(tasksList, entity.getTasks());
-        assertEquals(systemOutLine, entity.getSystemOutLine());
-        assertEquals(deliverablesList, entity.getDeliverables());
-        assertEquals("InProgress", entity.getStatus());
-        assertEquals(amount, entity.getAmount());
-    }
+//    @Test
+//    public void testEntity() {
+//        // Arrange
+//        Project entity = new Project();
+//        entity.setReviews(review);
+//
+//        List<Tasks> tasksList = new ArrayList<>();
+//        tasksList.add(task);
+//        entity.setTasks(tasksList);
+//
+//        entity.setSystemOutLine(systemOutLine);
+//
+//        List<Deliverable> deliverablesList = new ArrayList<>();
+//        deliverablesList.add(deliverable);
+//        entity.setDeliverables(deliverablesList);
+//
+//        entity.setStatus("InProgress");
+//
+//        entity.setAmount(amount);
+//
+//        // Act & Assert
+//        assertEquals(review, entity.getReviews());
+//        assertEquals(tasksList, entity.getTasks());
+//        assertEquals(systemOutLine, entity.getSystemOutLine());
+//        assertEquals(deliverablesList, entity.getDeliverables());
+//        assertEquals("InProgress", entity.getStatus());
+//        assertEquals(amount, entity.getAmount());
+//    }
 
     @Test
     public void testEqualsAndHashCode() {

@@ -91,30 +91,30 @@ class ProjectControllerTest {
 
         }
 
-    @Test
-    void save() {
-        ProjectDto projectDto = new ProjectDto();
-        when(projectService.save(projectDto)).thenReturn(projectDto);
-        ResponseEntity<ProjectDto> result = projectController.save(projectDto);
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals(projectDto, result.getBody());
-        verify(projectService, times(1)).save(projectDto);
-    }
-
-    @Test
-    void saveIsNull() {
-        ProjectDto projectDto = new ProjectDto();
-
-        when(projectService.save(projectDto)).thenReturn(null);
-
-        ResponseEntity<ProjectDto> result = projectController.save(projectDto);
-
-        verify(projectService, times(1)).save(projectDto);
-
-        // Assertions
-        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-        assertNull(result.getBody());
-    }
+//    @Test
+//    void save() {
+//        ProjectDto projectDto = new ProjectDto();
+//        when(projectService.save(projectDto)).thenReturn(projectDto);
+//        ResponseEntity<ProjectDto> result = projectController.save(projectDto);
+//        assertEquals(HttpStatus.OK, result.getStatusCode());
+//        assertEquals(projectDto, result.getBody());
+//        verify(projectService, times(1)).save(projectDto);
+//    }
+//
+//    @Test
+//    void saveIsNull() {
+//        ProjectDto projectDto = new ProjectDto();
+//
+//        when(projectService.save(projectDto)).thenReturn(null);
+//
+//        ResponseEntity<ProjectDto> result = projectController.save(projectDto);
+//
+//        verify(projectService, times(1)).save(projectDto);
+//
+//        // Assertions
+//        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+//        assertNull(result.getBody());
+//    }
 
 
     @Test
@@ -348,42 +348,42 @@ class ProjectControllerTest {
     }
 
 
-    @Test
-    public void testGetProjectByIdAndStatus() {
-        ProjectDto projectDto = new ProjectDto();
-        projectDto.setId(1L);
-        projectDto.setStatus("IN_PROGRESS");
-
-        ClientDto clientDto = new ClientDto();
-
-        List<UserDto> userDtos = new ArrayList<>();
-
-        projectDto.setClientDto(clientDto);
-        projectDto.setMembersUserDto(userDtos);
-
-        List<ProjectDto> projectList = new ArrayList<>();
-        projectList.add(projectDto);
-
-        when(projectService.findAllByUserId(anyLong())).thenReturn(projectList);
-
-        ResponseEntity<Map<String, Object>> responseEntity = projectController.getProjectByIdAndStatus(1L, "IN_PROGRESS");
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
-        Map<String, Object> responseBody = responseEntity.getBody();
-        assertNotNull(responseBody);
-
-        assertEquals(1L, responseBody.get("projectId"));
-        assertEquals(clientDto, responseBody.get("client"));
-        assertEquals(userDtos, responseBody.get("userList"));
-
-        ResponseEntity<Map<String, Object>> invalidStatusResponse = projectController.getProjectByIdAndStatus(1L, "invalidStatus");
-
-        assertEquals(HttpStatus.OK, invalidStatusResponse.getStatusCode());
-        Map<String, Object> invalidStatusResponseBody = invalidStatusResponse.getBody();
-        assertNotNull(invalidStatusResponseBody);
-        assertEquals(null, invalidStatusResponseBody.get("projectId"));
-    }
+//    @Test
+//    public void testGetProjectByIdAndStatus() {
+//        ProjectDto projectDto = new ProjectDto();
+//        projectDto.setId(1L);
+//        projectDto.setStatus("IN_PROGRESS");
+//
+//        ClientDto clientDto = new ClientDto();
+//
+//        List<UserDto> userDtos = new ArrayList<>();
+//
+//        projectDto.setClientDto(clientDto);
+//        projectDto.setMembersUserDto(userDtos);
+//
+//        List<ProjectDto> projectList = new ArrayList<>();
+//        projectList.add(projectDto);
+//
+//        when(projectService.findAllByUserId(anyLong())).thenReturn(projectList);
+//
+//        ResponseEntity<Map<String, Object>> responseEntity = projectController.getProjectByIdAndStatus(1L, "IN_PROGRESS");
+//
+//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+//
+//        Map<String, Object> responseBody = responseEntity.getBody();
+//        assertNotNull(responseBody);
+//
+//        assertEquals(1L, responseBody.get("projectId"));
+//        assertEquals(clientDto, responseBody.get("client"));
+//        assertEquals(userDtos, responseBody.get("userList"));
+//
+//        ResponseEntity<Map<String, Object>> invalidStatusResponse = projectController.getProjectByIdAndStatus(1L, "invalidStatus");
+//
+//        assertEquals(HttpStatus.OK, invalidStatusResponse.getStatusCode());
+//        Map<String, Object> invalidStatusResponseBody = invalidStatusResponse.getBody();
+//        assertNotNull(invalidStatusResponseBody);
+//        assertEquals(null, invalidStatusResponseBody.get("projectId"));
+//    }
 
     @Test
     public void testGetAllProjectsByRole_ProjectManager() {

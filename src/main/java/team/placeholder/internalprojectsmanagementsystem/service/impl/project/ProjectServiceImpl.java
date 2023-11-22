@@ -249,15 +249,23 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto updateProject(ProjectDto projectDto) {
         Project project = projectRepository.findById(projectDto.getId());
 
-        project.setName(projectDto.getName() == null ? projectDto.getName() : project.getName());
-        project.setBackground(projectDto.getBackground() == null ? projectDto.getBackground() : project.getBackground());
-        project.setDuration(projectDto.getDuration() == 0 ? projectDto.getDuration() : project.getDuration());
-        project.setStart_date(projectDto.getStart_date() == 0 ? projectDto.getStart_date() : project.getStart_date());
-        project.setEnd_date(projectDto.getEnd_date() == 0 ? projectDto.getEnd_date() : project.getEnd_date());
-        project.setCurrent_phase(projectDto.getCurrent_phase() == null ? projectDto.getCurrent_phase() : project.getCurrent_phase());
-        project.setObjective(projectDto.getObjective() == null ? projectDto.getObjective() : project.getObjective());
+        project.setName(projectDto.getName() == null ? project.getName() : projectDto.getName());
+        project.setBackground(projectDto.getBackground() == null ? project.getBackground() : projectDto.getBackground());
+        project.setDuration(projectDto.getDuration() == 0 ? project.getDuration() : projectDto.getDuration());
+        project.setStart_date(projectDto.getStart_date() == 0 ? project.getStart_date() : projectDto.getStart_date());
+        project.setEnd_date(projectDto.getEnd_date() == 0 ? project.getEnd_date() : projectDto.getEnd_date());
+        project.setCurrent_phase(projectDto.getCurrent_phase() == null ? project.getCurrent_phase() : projectDto.getCurrent_phase());
+        project.setObjective(projectDto.getObjective() == null ? project.getObjective() : projectDto.getObjective());
+
 
         projectRepository.save(project);
+        log.info("Data Name: " +projectDto.getName());
+        log.info("Data Background: " +projectDto.getBackground());
+        log.info("Data Duration: " +projectDto.getDuration());
+        log.info("Data StartDate: " +projectDto.getStart_date());
+        log.info("Data EndDate: " +projectDto.getEnd_date());
+        log.info("Data Current Phase: " +projectDto.getCurrent_phase());
+        log.info("Data Objective: " +projectDto.getObjective());
 
         return modelMapper.map(project, ProjectDto.class);
     }
