@@ -36,8 +36,6 @@ public class UserDto {
     private List<ProjectDto> projectsByProjectManager;
 
     private Set<ProjectDto> projectsByUsers;
-
-
     public UserDto(long id) {
         this.id = id;
     }
