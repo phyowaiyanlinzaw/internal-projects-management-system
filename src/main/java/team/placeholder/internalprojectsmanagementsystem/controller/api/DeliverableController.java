@@ -31,24 +31,11 @@ public class DeliverableController {
 
 
     @PutMapping("/update-status")
-    public ResponseEntity<List<DeliverableDto>> updateDeliverable(@RequestBody List<DeliverableDto> deliverableDtoList) {
-        List<DeliverableDto> updatedDeliverables = new ArrayList<>();
-        System.out.println("----------" +updatedDeliverables);
-        for (DeliverableDto deliverableDto : deliverableDtoList) {
+    public ResponseEntity<DeliverableDto> updateDeliverable(@RequestBody DeliverableDto deliverableDto) {
+        
+        deliverableService.updateDeliverable(deliverableDto);
 
-
-            DeliverableDto updatedDeliverableDto = deliverableService.updateDeliverable(deliverableDto);
-
-            if (updatedDeliverableDto != null) {
-                updatedDeliverables.add(updatedDeliverableDto);
-            }
-        }
-
-        if (!updatedDeliverables.isEmpty()) {
-            return ResponseEntity.ok(updatedDeliverables);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return new ResponseEntity<>(deliverableService.updateDeliverable(deliverableDto), HttpStatus.OK);
     }
 
 

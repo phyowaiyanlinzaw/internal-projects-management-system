@@ -12,6 +12,7 @@
 <body layout:fragment="content">
 
 <script type="module" src="/js/callDataForTask.js" async></script>
+<script type="module" src="/js/currentLoginUser.js" async></script>
 
 <!-- Spinner Start -->
 <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -35,8 +36,8 @@
 
         <div class="container-fluid mt-2">
             <!-- nav for task and gantt chart start -->
-            <nav>
-                <ul class="nav nav-tabs rounded-top" id="myTab" role="tablist">
+            <nav class="d-flex justify-content-between align-items-center" id="nav-container">
+                <ul class="nav nav-tabs d-flex  rounded-top" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active border-primary border border-bottom-0"
                                 id="tasks-tab" data-bs-toggle="tab" data-bs-target="#task"
@@ -49,16 +50,37 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-primary border border-bottom-0 rounded-top"
+                                id="add-employee-tab" data-bs-toggle="tab" data-bs-target="#show-add-employee" type="button"
+                                role="tab" aria-controls="show-add-employee" aria-selected="false">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link border-primary border border-bottom-0 rounded-top"
                                 id="gantt-chart-tab" data-bs-toggle="tab" data-bs-target="#gantt-chart" type="button"
                                 role="tab" aria-controls="gantt-chart" aria-selected="false">
                             Calendar
                         </button>
                     </li>
-                    <li class="nav-item d-flex align-items-center" role="presentation">
-                        <input id="project-open-close" type="checkbox" data-toggle="toggle" data-on="open" data-size="mini" data-off="closed" data-onstyle="success" data-offstyle="danger">
-                    </li>
                 </ul>
-                
+                <script type="module">
+                    import { getCurrentLoginUser } from "/js/currentLoginUser.js";
+                    const loginUser = await getCurrentLoginUser();
+                    if (loginUser.currentUser.role === 'PROJECT_MANAGER') {
+                        const inputElement = document.createElement('input');
+                        inputElement.id = 'project-open-close';
+                        inputElement.type = 'checkbox';
+                        inputElement.checked = true;
+                        inputElement.setAttribute('data-toggle', 'toggle');
+                        inputElement.setAttribute('data-on', 'open');
+                        inputElement.setAttribute('data-off', 'closed');
+                        inputElement.setAttribute('data-size', 'sm');
+                        inputElement.setAttribute('data-onstyle', 'success');
+                        inputElement.setAttribute('data-offstyle', 'danger');
+                        const parentContainer = document.getElementById('nav-container');
+                        parentContainer.appendChild(inputElement);
+                    }
+                </script>
             </nav>
             <!-- nav for task and gantt chart end -->
             <div class="tab-content position-relative" style="height: 600px" id="myTabContent">
@@ -107,6 +129,11 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane fade mt-3" id="show-add-employee" role="tabpanel" aria-labelledby="add-employee-tab">
+                    <div id="employee-list"></div>
+                </div>
+
                 <!-- calendar start -->
                 <div class="tab-pane fade mt-3" id="gantt-chart" role="tabpanel" aria-labelledby="gantt-chart-tab">
                     <div id="calendar"></div>
@@ -117,6 +144,32 @@
         </div>
     </div>
     <!-- Content End -->
+
+    <div class="modal fade" id="add-employee-modal" tabindex="-1" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
+            <div class="modal-content ">
+                <div class="modal-body d-flex flex-column gap-2">
+                    <div class="row row-cols-3">
+                        <div>Name</div>
+                        <div>Role</div>
+                        <div class="text-end"><button type="button" class="btn btn-primary" onclick="toggleInpOn(this)">Select all</button></div>
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="row row-cols-3">
+                            <div>zawlinsehin</div>
+                            <div>Role</div>
+                            <div class="text-end"><input class="pickme" type="checkbox" data-toggle="toggle" checked value="1"></div>
+                        </div>
+                        <div class="row row-cols-3">
+                            <div>ppaaya</div>
+                            <div>Role</div>
+                            <div class="text-end"><input class="pickme" type="checkbox" data-toggle="toggle" checked value="2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- add task -->
     <div class="modal fade" data-bs-keyboard="true" id="add-task">
@@ -424,7 +477,7 @@
     <!--    for assign member-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/js/bootstrap5-toggle.min.js"></script>
     <script type="module">
         import {getData, sendData} from "/js/api-function.js";
         import {getTimeElapsed} from "/js/time.js";
@@ -432,18 +485,17 @@
 
         const currentUser = await getUser();
 
-        if(currentUser.currentUser.role !== "PROJECT_MANAGER") {
-            document.querySelector('#project-open-close').classList.add('d-none')
-        }
-
         const project = await getData("/api/project/list/" + document.getElementById("projectId").innerText);
 
         console.log(project)
+        const projectCloseBtn = document.querySelector('#project-open-close')
 
-        if(project.closed) {
-            $('#project-open-close').bootstrapToggle('off')
-        } else {
-            $('#project-open-close').bootstrapToggle('on')
+        if(projectCloseBtn) {
+            if(project.closed) {
+                $('#project-open-close').bootstrapToggle('off')
+            } else {
+                $('#project-open-close').bootstrapToggle('on')
+            }
         }
 
         //disable add task button if user is not project manager
@@ -463,35 +515,44 @@
             const id = parseInt(document.getElementById("projectId").innerText)
 
             if(!condition) {
-                Swal.fire({
-                    title: "Are you sure want to close this project? All tasks will be locked!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes"
-                }).then((result) => {
-                if (result.isConfirmed) {
-                        $.ajax({
-                            url: `/api/project/update/status/${id}/${!condition}`,
-                            method: "GET",
-                            success: function(response) {
-                                // Handle the successful response here
-                                console.log(response);
-                            },
-                            error: function(xhr, status, error) {
-                                // Handle the error here
-                                console.log(error);
-                            }
-                        });
-                        document.querySelectorAll('.task').forEach(a => {
-                            console.log(a)
-                            a.removeAttribute("draggable")
-                        })
-                    } else {
-                        $('#project-open-close').bootstrapToggle('on')
-                    }
-                })
+
+                const taskInTodo = $("#TODO").children().find("*").length
+                const taskInProgress = $("#IN_PROGRESS").children().find("*").length
+
+                console.log(taskInTodo, taskInProgress)
+
+                if(taskInTodo > 1 || taskInProgress > 1) {
+                    Swal.fire({
+                        title: "Are you sure want to close this project? there are still some tasks in progress or todo and all of them will be closed too!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                            $.ajax({
+                                url: `/api/project/update/status/${id}/${!condition}`,
+                                method: "GET",
+                                success: function(response) {
+                                    // Handle the successful response here
+                                    console.log(response);
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle the error here
+                                    console.log(error);
+                                }
+                            });
+                            document.querySelectorAll('.task').forEach(a => {
+                                console.log(a)
+                                a.removeAttribute("draggable")
+                            })
+                        } else {
+                            $('#project-open-close').bootstrapToggle('on')
+                        }
+                    })
+                }
+
             } else {
 
                 $.ajax({
