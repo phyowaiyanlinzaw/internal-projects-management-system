@@ -4,7 +4,7 @@ import {getTimeElapsed} from "/js/time.js";
 
 const loginUser = await getData("/api/currentuser");
 
-const currentlyWorkingProject = await getData(`/api/project/list/ID/${loginUser.currentUser.id}/IN_PROGRESS`);
+const currentlyWorkingProject = await getData(`/api/project/list/ID/${loginUser.currentUser.id}/false`);
 
 // function for creating anchor element
 const createA = ({id, description, time}) => {
@@ -13,7 +13,9 @@ const createA = ({id, description, time}) => {
     if(loginUser.currentUser.role === "PROJECT_MANAGER") {
         anchor.href = "/issue";
     } else {
-        anchor.href = "/project/" + currentlyWorkingProject.projectId;
+        if(currentlyWorkingProject !== null) {
+            anchor.href = "/project/" + currentlyWorkingProject.projectId;
+        }
     }
     anchor.className = "dropdown-item";
 
