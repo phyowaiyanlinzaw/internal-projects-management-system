@@ -1,11 +1,10 @@
 package team.placeholder.internalprojectsmanagementsystem.model.user;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 @Entity

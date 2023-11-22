@@ -1,99 +1,56 @@
-//package team.placeholder.internalprojectsmanagementsystem.model.user;
-//
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//public class ClientTest {
-//
-//    @MockBean
-//    private Client client;
-//
-//    @BeforeEach
-//    public void setUp() {
-//        client = new Client();
-//    }
-//
-//    @Test
-//    public void testId() {
-//        long clientId = 1;
-//        client.setId(clientId);
-//        assertEquals(clientId, client.getId());
-//    }
-//
-//    @Test
-//    public void testName() {
-//        String name = "Ei Ei Phyo";
-//        client.setName(name);
-//        assertEquals(name, client.getName());
-//    }
-//
-//    @Test
-//    public void testPhone() {
-//        String phone = "09-123456789";
-//        client.setPhone(phone);
-//        assertEquals(phone, client.getPhone());
-//    }
-//
-//    @Test
-//    public void testEmail() {
-//        String email = "eep@gmail.com";
-//        client.setEmail(email);
-//        assertEquals(email, client.getEmail());
-//    }
-//
-//    @Test
-//    public void testProjects() {
-//        List<Project> projects = new ArrayList<>();
-//        Project project1 = new Project();
-//        Project project2 = new Project();
-//
-//        projects.add(project1);
-//        projects.add(project2);
-//
-//        client.setProject(projects);
-//        assertEquals(projects, client.getProject());
-//
-//        // Test cascade and orphan removal
-//        client.setProject(new ArrayList<>());
-//        assertTrue(client.getProject().isEmpty());
-//    }
-//    @Test
-//    public void testEqualsAndHashCode() {
-//        // Create two Client objects with the same id
-//        Client client1 = new Client();
-//        client1.setId(1L);
-//
-//        Client client2 = new Client();
-//        client2.setId(1L);
-//
-//        // Test equals method
-//        assertTrue(client1.equals(client2));
-//        assertTrue(client2.equals(client1));
-//
-//        // Test hashCode method
-//        assertEquals(client1.hashCode(), client2.hashCode());
-//    }
-//
-//    @Test
-//    public void testNotEquals() {
-//        // Create two Client objects with different ids
-//        Client client1 = new Client();
-//        client1.setId(1L);
-//
-//        Client client2 = new Client();
-//        client2.setId(2L);
-//
-//        // Test equals method
-//        assertFalse(client1.equals(client2));
-//        assertFalse(client2.equals(client1));
-//
-//        // As a rule, it's a good practice for different objects to have different hash codes.
-//        assertNotEquals(client1.hashCode(), client2.hashCode());
-//    }
-//}
+package team.placeholder.internalprojectsmanagementsystem.model.user;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+public class ClientTest {
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Arrange
+        Client client1 = new Client();
+        client1.setId(1L);
+        client1.setName("John");
+        client1.setPhone("123456789");
+        client1.setEmail("john@example.com");
+
+        Client client2 = new Client();
+        client2.setId(1L); // Same ID as client1
+        client2.setName("Jane");
+        client2.setPhone("987654321");
+        client2.setEmail("jane@example.com");
+
+        Client client3 = new Client();
+        client3.setId(2L); // Different ID
+        client3.setName("John");
+        client3.setPhone("123456789");
+        client3.setEmail("john@example.com");
+
+        // Act & Assert
+        assertEquals(client1, client2);
+        assertEquals(client1.hashCode(), client2.hashCode());
+
+        assertNotEquals(client1, client3);
+        assertNotEquals(client1.hashCode(), client3.hashCode());
+    }
+
+    @Test
+    void testSetterGetter() {
+        // Arrange
+        Client client = new Client();
+
+        // Act
+        client.setId(1L);
+        client.setName("John");
+        client.setPhone("123456789");
+        client.setEmail("john@example.com");
+
+        // Assert
+        assertEquals(1L, client.getId());
+        assertEquals("John", client.getName());
+        assertEquals("123456789", client.getPhone());
+        assertEquals("john@example.com", client.getEmail());
+    }
+}

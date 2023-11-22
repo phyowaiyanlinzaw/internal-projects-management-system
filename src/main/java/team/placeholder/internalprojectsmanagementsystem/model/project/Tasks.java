@@ -7,7 +7,6 @@ import lombok.Setter;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TasksGroup;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
-
 import java.io.Serializable;
 
 @Entity
