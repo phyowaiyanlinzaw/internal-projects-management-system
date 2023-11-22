@@ -134,7 +134,12 @@
                             style="padding: 7px;">
                     </span>
                         New Issues
+
+
                     </button>
+
+                    <span><a href="issue-table"><i class="fa-solid fa-table"></i></a></span>
+
                 </li>
             </ul>
 
@@ -351,6 +356,10 @@
     </div>
 </div>
 <!-- add issue modal end -->
+
+
+
+
 
 <script>
     function rotateIcon(element) {
@@ -1902,7 +1911,7 @@
                 console.log('Success. Received data:', data);
 
                 const sortContainer = $('#sort-container');
-                sortContainer.empty(); // Clear previous content
+                sortContainer.empty();
 
                 // Check if data is not empty
                 if (data && data.length > 0) {
@@ -1910,9 +1919,9 @@
                     data.forEach(item => {
                         const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
+
                     });
                 } else {
-                    // Handle case when data is empty
                     sortContainer.html('<p style="text-align: center;">No results found.</p>');
                 }
             },

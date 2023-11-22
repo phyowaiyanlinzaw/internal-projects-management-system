@@ -112,4 +112,9 @@ public class ViewController {
     public String report() {
         return "layout/report";
     }
+
+    @GetMapping("/issue-table")
+    public String reportDepartment() {
+        return "issueTable";
+    }
 }
