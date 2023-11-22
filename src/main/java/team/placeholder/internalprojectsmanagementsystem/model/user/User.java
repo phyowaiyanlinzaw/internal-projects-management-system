@@ -52,7 +52,6 @@ public class User {
     @OneToMany(mappedBy = "projectManager")
     private List<User> managedUsers;
 
-
     @ManyToOne
     @JoinColumn(name = "pm_id", referencedColumnName = "id")
     private User projectManager;

@@ -56,6 +56,7 @@ public class ProjectTest {
         assertEquals(DevelopmentPhase.PLANNING, project.getCurrent_phase());
         assertEquals("Test Objective", project.getObjective());
     }
+
     @Test
     public void testEntity() {
         // Arrange
