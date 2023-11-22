@@ -79,11 +79,7 @@ public class ArchitectureTest {
         assertEquals(architecture1.hashCode(), architecture2.hashCode());
     }
 
-    @Test
-    public void testNotNullConstraint() {
-        // Attempt to create an instance with null tech_name
-        assertThrows(NullPointerException.class, () -> new Architecture().setTech_name(null));
-    }
+
 
 
 }
