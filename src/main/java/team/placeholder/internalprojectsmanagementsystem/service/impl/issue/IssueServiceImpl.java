@@ -314,9 +314,19 @@ public class IssueServiceImpl implements IssueService {
         List<Issue> filteredIssues = issueRepository.findByIssueStatus(issueStatus);
 
         // Assuming you have a ModelMapper bean configured
-        return filteredIssues.stream()
-                .map(issue -> modelMapper.map(issue, IssueDto.class))
-                .collect(Collectors.toList());
+
+        List<IssueDto> issueDtos = new ArrayList<>();
+
+        for(Issue issue : filteredIssues) {
+            
+            IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+
+            issueDto.setUser_pic(modelMapper.map(issue.getPic(), UserDto.class));
+
+            issueDtos.add(issueDto);
+        }
+
+        return issueDtos;
     }
 
 
@@ -327,6 +337,7 @@ public class IssueServiceImpl implements IssueService {
         for (Issue issue : filteredIssues) {
             if (issue.isSolved() == b) {
                 IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+                issueDto.setUser_pic(modelMapper.map(issue.getPic(), UserDto.class));
                 issueDtos.add(issueDto);
             }
         }
@@ -338,10 +349,18 @@ public class IssueServiceImpl implements IssueService {
         Category issueCategory = Category.valueOf(category.toUpperCase());
         List<Issue> filteredIssues = issueRepository.findByIssueCategory(issueCategory);
 
-        // Assuming you have a ModelMapper bean configured
-        return filteredIssues.stream()
-                .map(issue -> modelMapper.map(issue, IssueDto.class))
-                .collect(Collectors.toList());
+        List<IssueDto> issueDtos = new ArrayList<>();
+
+        for(Issue issue : filteredIssues) {
+            
+            IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
+
+            issueDto.setUser_pic(modelMapper.map(issue.getPic(), UserDto.class));
+
+            issueDtos.add(issueDto);
+        }
+
+        return issueDtos;
     }
 }
 

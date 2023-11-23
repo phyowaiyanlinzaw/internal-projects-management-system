@@ -1353,6 +1353,8 @@
                         }
                     });
 
+                    editObjectiveEditor.root.innerHTML = ''
+
                     editObjectiveEditor.clipboard.dangerouslyPasteHTML(
                         0,
                         currentProejctDetail.objective
@@ -1721,13 +1723,46 @@
                 });
             });
 
-            let employeeList;
+            
+            let empTagifyList = [];
+            
+            empTagifyList = VirtualSelect.init({
+                ele: "#employee-list",
+                multiple: true,
+                search: true,
+                searchByStartsWith: true,
+                popupPosition: null,
+                maxWidth: "100%",
+            });
 
             if (loginUser.currentUser.role === "PROJECT_MANAGER") {
-                employeeList = await getData(
-                    "/api/currentuser/available/employees"
-                );
+                
+                document.querySelector("#add-department-modal").addEventListener("show.bs.modal", async function() {
+                    let employeeList;
+                    employeeList = await getData(
+                        "/api/currentuser/available/employees"
+                        );
+
+                    if (employeeList) {
+                        const showEmpList = employeeList.map((item) => {
+                            console.log(item);
+                            return {
+                                label: item.name,
+                                value: item.id,
+                                alias: item.role.toLowerCase(),
+                            };
+                        });
+                        console.log("showEmpList : ",showEmpList)
+                        document.querySelector('#employee-list').setOptions(showEmpList)
+                        console.log(empTagifyList);
+                    }
+
+                })
+
+                
             }
+
+            
 
             if (
                 loginUser.currentUser.role === "SDQC" ||
@@ -1736,31 +1771,6 @@
                 document
                     .querySelector("#department-filter-container")
                     .classList.remove("d-none");
-            }
-
-            console.log("EMPLOYEE LIST : ", employeeList);
-
-            let empTagifyList = [];
-
-            if (employeeList) {
-                const showEmpList = employeeList.map((item) => {
-                    console.log(item);
-                    return {
-                        label: item.name,
-                        value: item.id,
-                        alias: item.role.toLowerCase(),
-                    };
-                });
-                empTagifyList = VirtualSelect.init({
-                    ele: "#employee-list",
-                    options: showEmpList,
-                    multiple: true,
-                    search: true,
-                    searchByStartsWith: true,
-                    popupPosition: null,
-                    maxWidth: "100%",
-                });
-                console.log(empTagifyList);
             }
 
             $(document).ready(function () {
@@ -1926,10 +1936,10 @@
                 }
 
                 function validateProjectEmployee() {
-                    const employeelist = $("#employee-list").val();
+                    const empToAddProject = $("#employee-list").val();
                     const errorContainer =
                         $("#employee-list").siblings(".error-container");
-                    if (!employeelist || employeelist.length === 0) {
+                    if (!empToAddProject || empToAddProject.length === 0) {
                         validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
@@ -2279,7 +2289,7 @@
                     const duration = +$("#project-add-duration").val();
 
                     const background = $("#background").val();
-                    let architectures = $("#architectures").val();
+                    const architectures = document.querySelector("#architectures").value;
                     const empList = empTagifyList.selectedValues;
                     console.log("architectures list : ", architectures);
                     const systemOutlines = sysSelect.selectedValues;
@@ -2323,11 +2333,12 @@
                                 .addClass("d-none");
                         });
                     // replace with your actual JSON data
+
                     if (architectures !== "") {
                         try {
-                            architectures = JSON.parse(architectures);
+                            const a = JSON.parse(architectures);
                             // Continue processing parsedData
-                            arcList = architectures.map((ar) => {
+                            arcList = a.map((ar) => {
                                 const matchingObj = arcccList.find(
                                     (arccObj) => arccObj.tech_name === ar.value
                                 );
@@ -2346,6 +2357,8 @@
                             .siblings(".error-container")
                             .removeClass("d-none");
                     }
+                    console.log("architectures : ", architectures)
+                    console.log("arcList : ", arcList)
 
                     let deliverableList;
 
