@@ -22,6 +22,13 @@ public class TaskController {
 
     private final TaskServiceImpl taskService;
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<TasksDto> getTaskById(@PathVariable long id) {
+        
+    	return ResponseEntity.ok(taskService.getTaskById(id));
+        
+    }
+
     @GetMapping("count/status/{status}")
     public ResponseEntity<Long> countTaskByUserIdAndStatus(@PathVariable String status) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

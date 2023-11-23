@@ -204,4 +204,15 @@ public class TaskServiceImpl implements TasksService {
         taskRepository.save(task);
     }
 
+    @Override
+    public TasksDto getTaskById(long id) {
+        Tasks task = taskRepository.findById(id);
+        TasksDto taskDto = modelMapper.map(task, TasksDto.class);
+        UserDto userDto = modelMapper.map(task.getUser(), UserDto.class);
+        ProjectDto projectDto = modelMapper.map(task.getProject(), ProjectDto.class);
+        taskDto.setUserDto(userDto);
+        taskDto.setProjectDto(projectDto);
+        return taskDto;
+    }
+
 }
