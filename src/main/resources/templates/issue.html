@@ -1218,6 +1218,20 @@
                         showsuccess('Issue Created Successfully');
                         loadData();
 
+                        $('#title').val('');
+                        $('#description').val('');
+                        $('#place').val('');
+                        $('#impact').val('');
+                        $('#root_cause').val('');
+                        $('#direct_cause').val('');
+                        $('#responsible_party').val('');
+                        $('#issue_category').val('');
+                        $('#user_pic').val('');
+                        $('#responsible_type').val('');
+
+
+
+
                     },
                     error: function (xhr, status, error) {
                         console.log('Status:', status);
