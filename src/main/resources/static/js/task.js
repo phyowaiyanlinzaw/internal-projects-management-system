@@ -134,11 +134,19 @@ document.querySelector("#add-employee-modal").addEventListener("show.bs.modal", 
 // select all the employee to add to the project
 document.querySelector("#add-new-employee-to-project").addEventListener('click', (e) => {
     
-    $(e).text() == 'Select all' ? $(e).text("Deselect all") : $(e).text('Select all')
+    console.log(e.target.innerText)
 
-    console.log($(e).text())
-    $('.pickme').bootstrapToggle('toggle');
+    if (e.target.innerText == 'Select all') {
+        e.target.innerText = 'Deselect all'
+        console.log($('.pickme').prop('checked'))
+        $('.pickme').bootstrapToggle('on');
 
+    } else { 
+        e.target.innerText = 'Select all'
+        console.log($('.pickme').prop('checked'))
+        $('.pickme').bootstrapToggle('off');
+
+    }
 })
 
 // to handle the project close and open
@@ -312,6 +320,327 @@ document.querySelector("#add-task").addEventListener("show.bs.modal", function (
     originalTagify.settings.whitelist = newWhitelist;
 
 })
+
+let currentTaskId;
+
+document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", async function () {
+
+    currentTaskId = this.getAttribute("current-task-id")
+    console.log("current target task id : ", currentTaskId);
+
+    currentTask = await getData("/api/task/get/" + currentTaskId)
+
+    console.log("current target task : ", currentTask);
+    
+
+    //change input value from that taskdata
+    document.getElementById('pm-task-title').innerText = currentTask.title
+    document.getElementById('member-task-title').innerText = currentTask.title
+
+    document.getElementById('pm-description-editor').value = currentTask.description
+    document.getElementById("member-task-description").value = currentTask.description
+
+    if (currentTask.status === 'TODO') {
+        document.getElementById('pm-status').innerText = "TODO"
+        document.getElementById('pm-status').classList.add('bg-primary')
+
+        document.getElementById('member-task-status').innerText = "TODO"
+        document.getElementById('member-task-status').classList.add('bg-primary')
+    } else if (currentTask.status === 'IN_PROGRESS') {
+        document.getElementById('pm-status').innerText = "IN PROGRESS"
+        document.getElementById('pm-status').classList.add('bg-info')
+
+        document.getElementById('member-task-status').innerText = "IN PROGRESS"
+        document.getElementById('member-task-status').classList.add('bg-info')
+    } else {
+        document.getElementById('pm-status').innerText = "FINISHED"
+        document.getElementById('pm-status').classList.add('bg-success')
+
+        document.getElementById('member-task-status').innerText = "FINISHED"
+        document.getElementById('member-task-status').classList.add('bg-success')
+    }
+
+    document.getElementById("pm-assigned-member-span").innerText = currentTask.userDto.name + " | " + currentTask.userDto.role
+    document.getElementById("member-assigned-member-span").innerText = currentTask.userDto.name + " | " + currentTask.userDto.role
+
+    if (currentTask.tasksGroup === 'A') {
+        document.getElementById('pm-task-group-span').innerText = "A - Related With Project Development"
+
+        document.getElementById('member-task-group-span').innerText = "A - Related With Project Development"
+    } else if (currentTask.tasksGroup === 'B') {
+        document.getElementById('pm-task-group-span').innerText = "B - Training"
+
+        document.getElementById('member-task-group-span').innerText = "B - Training"
+    } else {
+        document.getElementById('pm-task-group-span').innerText = "C - Idling"
+
+        document.getElementById('member-task-group-span').innerText = "C - Idling"
+    }
+
+    // Convert timestamp to Date objects
+    const startDate = new Date(currentTask.plan_start_time);
+    const endDate = new Date(currentTask.plan_end_time);
+
+    // Get the date strings in 'yyyy-mm-dd' format
+    const startDateString = startDate.toISOString().split('T')[0];
+    const endDateString = endDate.toISOString().split('T')[0];
+
+    // Set the values in the input fields
+    document.getElementById('pm-task-detail-start-date').value = startDateString;
+    document.getElementById('pm-task-detail-due-date').value = endDateString;
+
+    document.getElementById("member-task-detail-start-date").value = startDateString
+    document.getElementById("member-task-detail-due-date").value = endDateString
+
+    document.getElementById('pm-plan-edit-hours').value = currentTask.plan_hours;
+    document.getElementById('member-task-plan-hours').innerText = currentTask.plan_hours.toString() + " hours"
+
+    const duration = calculateWeekdayDuration(startDate, endDate);
+    document.getElementById("member-task-duration").innerText = duration.toString() + " days ";
+    document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
+
+    document.getElementById("pm-actual-edit-hours").value = currentTask.actual_hours === null ? 0 : currentTask.actual_hours;
+
+    // Get all elements with the common class name
+    const editableInputs = document.querySelectorAll(".editable-input");
+    const editBtn = document.getElementById("task-edit-btn");
+    const cancelEditBtn = document.getElementById("cancel-edit-btn");
+    
+    const closeTaskModalBtn = document.querySelectorAll(".btn-close-task-details");
+
+
+    cancelEditBtn.addEventListener("click", function (event) {
+
+        //hide title
+        document.getElementById("pm-task-title").classList.remove("d-none");
+        //show input
+        document.getElementById("pm-task-title-input").classList.add("d-none");
+
+        //hide the two button
+        saveBtn.classList.add("d-none");
+        cancelEditBtn.classList.add("d-none");
+
+        document.getElementById("pm-task-group-span").classList.remove("d-none")
+        document.getElementById("pm-task-group").classList.add("d-none")
+
+        document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
+        document.querySelector('.tagify.editable-input').classList.add("d-none")
+        document.getElementById("pm-assigned-member-span").classList.remove("d-none")
+
+        //show the edit button
+        editBtn.classList.remove("d-none");
+
+        // don't let the button close modal
+        event.preventDefault();
+        editableInputs.forEach((input) => {
+            input.setAttribute("disabled", "");
+        });
+
+    });
+
+    //loop through close task modal btns
+    closeTaskModalBtn.forEach((btn) => {
+        btn.addEventListener("click", (event) => {
+            //hide title
+            document.getElementById("pm-task-title").classList.remove("d-none");
+            //show input
+            document.getElementById("pm-task-title-input").classList.add("d-none");
+
+            //hide the two buttons
+            saveBtn.classList.add("d-none");
+            cancelEditBtn.classList.add("d-none");
+
+            document.getElementById("pm-task-group-span").classList.remove("d-none")
+            document.getElementById("pm-task-group").classList.add("d-none")
+
+            document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
+            document.getElementById("pm-assigned-member-span").classList.remove("d-none")
+
+            //show the edit button
+            editBtn.classList.remove("d-none");
+
+            // disable editable inputs
+            editableInputs.forEach((input) => {
+                input.setAttribute("disabled", "");
+            });
+        });
+    });
+
+    const assignedMemberSpan = document.getElementById('assigned-member-span')
+    //to check if that element exists
+    if (assignedMemberSpan) {
+        // Check if the user has any of the specified roles
+        if (currentTaskData.userDto.role === 'FOC' || currentTaskData.userDto.role === 'EMPLOYEE' || currentTaskData.userDto.role === 'CONTRACT' || currentTaskData.userDto.role === 'PMO' || currentTaskData.userDto.role === 'DEPARTMENT_HEAD' || currentTaskData.userDto.role === 'SDQC') {
+            assignedMemberSpan.innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
+        }
+    }
+
+
+})
+
+const saveBtn = document.getElementById("save-edit-btn");
+
+document.getElementById("task-edit-btn").addEventListener("click", function () {
+
+    document.querySelectorAll(".editable-input").forEach((input) => {
+        input.removeAttribute("disabled");
+    });
+
+    //hide title
+    document.getElementById("pm-task-title").classList.add("d-none");
+    //show input
+    document.getElementById("pm-task-title-input").classList.remove("d-none");
+    //set input value to title
+    document.getElementById("pm-task-title-input").value = document.getElementById("pm-task-title").innerText;
+
+    document.getElementById("pm-task-group-span").classList.add("d-none")
+    const taskGroupSelect = document.getElementById("pm-task-group");
+    taskGroupSelect.classList.remove("d-none")
+    taskGroupSelect.value = currentTask.tasksGroup;
+
+    document.getElementById("pm-assigned-member-tagify").classList.remove("d-none")
+    const tagifyEditableInput = document.querySelector('.tagify.editable-input');
+    if (tagifyEditableInput) {
+        document.querySelector('.tagify.editable-input').classList.remove("d-none")
+    }
+    document.getElementById("pm-assigned-member-span").classList.add("d-none")
+
+    var assignedMemberTagify = document.getElementById("pm-assigned-member-tagify"),
+        tagify = new Tagify(assignedMemberTagify, {
+            enforceWhitelist: true,
+            mode: "select",
+            whitelist: membersList.map((member) => {
+                return { id: member.id, value: member.name + " | " + member.role };
+            }),
+            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
+        });
+
+    const currentAssignedUser = { id: currentTask.userDto.id, value: currentTask.userDto.name + " | " + currentTask.userDto.role }
+
+    tagify.addTags([currentAssignedUser])
+
+    console.log(assignedMemberTagify)
+
+    // Function to handle the change event
+    function handleTagifyChange(e) {
+        // Get the member id for the added/updated tag, don't return an array, only id please
+        if(tagify.value.length !== 0) {
+            let tagData = tagify.value[0].id
+
+            console.log(tagify.value)
+
+            // Update your output value or perform any other actions here
+            userId = tagData;
+            console.log("where this shit", userId)
+        }
+    }
+
+    // Add the change event listener
+    assignedMemberTagify.addEventListener('change', handleTagifyChange)
+
+    //hide the edit button
+    this.classList.add("d-none");
+
+    //show the two button
+    saveBtn.classList.remove("d-none");
+    document.getElementById("cancel-edit-btn").classList.remove("d-none");
+
+});
+
+saveBtn.addEventListener("click", function (event) {
+
+    console.log("what the problem", currentTaskId)
+
+    const title = document.getElementById("pm-task-title")
+    const titleInput = document.getElementById("pm-task-title-input")
+    const taskGroup = document.getElementById("pm-task-group")
+    const taskGroupSpan = document.getElementById("pm-task-group-span")
+    const assignedMemberSpan = document.getElementById("pm-assigned-member-span")
+    const assignedMemberTagify = document.getElementById("pm-assigned-member-tagify")
+    const description = document.getElementById("pm-description-editor")
+    
+    //hide title
+    document.getElementById("pm-task-title").classList.remove("d-none");
+    //show input
+    document.getElementById("pm-task-title-input").classList.add("d-none");
+
+    //hide the two button
+    saveBtn.classList.add("d-none");
+    document.getElementById("cancel-edit-btn").classList.add("d-none");
+
+    document.getElementById("pm-task-group-span").classList.remove("d-none")
+    document.getElementById("pm-task-group").classList.add("d-none")
+
+    document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
+    document.querySelector('.tagify.editable-input').classList.add("d-none")
+    document.getElementById("pm-assigned-member-span").classList.remove("d-none")
+
+    //show the edit button
+    document.getElementById("task-edit-btn").classList.remove("d-none");
+
+    document.querySelectorAll(".editable-input").forEach((input) => {
+        input.setAttribute("disabled", "");
+    });
+
+    const startDate = new Date($("#pm-task-detail-start-date").val());
+    const dueDate = new Date($("#pm-task-detail-due-date").val());
+
+    if (startDate > dueDate || startDate === dueDate) {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Start date must be before due date!',
+        })
+        return;
+    }
+
+    const data = {
+        id: currentTaskId,
+        title: $("#pm-task-title-input").val(),
+        description: $("#pm-description-editor").val(),
+        // Convert to Unix timestamp
+        plan_start_time: startDate.getTime(),
+        plan_end_time: dueDate.getTime(),
+        plan_hours: $("#pm-plan-edit-hours").val(),
+        tasksGroup: $("#pm-task-group").val(),
+        actual_hours: parseInt($("#pm-actual-edit-hours").val()),
+        userId: userId,
+    };
+
+    console.log("Request Data : ", data)
+
+    $.ajax({
+        url: "/api/task/update/data",
+        data: JSON.stringify(data),
+        method: 'POST',
+        contentType: 'application/json', // Set the content type for the request payload
+        success: function (response) {
+            // close modal box
+            console.log(response)
+            console.log(response.userDto.id)
+            $(`#task-${response.id} > .modal-detail-title`).text(response.title)
+            $(`#assigned-member-span-${response.id}`).text(response.userDto.name) 
+            title.textContent = response.title
+            titleInput.value = response.title
+            taskGroupSpan.innerText = response.tasksGroup
+            assignedMemberSpan.innerText = response.userDto.name + " | " + response.userDto.role
+            assignedMemberTagify.value = response.userDto.name + " | " + response.userDto.role
+            description.value = response.description
+            document.getElementById('pm-task-detail-start-date').value = new Date(response.plan_start_time).toISOString().split('T')[0];
+            document.getElementById("pm-task-detail-due-date").value = new Date(response.plan_end_time).toISOString().split('T')[0];
+            const duration = calculateWeekdayDuration(startDate, dueDate);
+            document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
+            document.getElementById("pm-plan-edit-hours").value = response.plan_hours
+            document.getElementById("pm-actual-edit-hours").value = response.actual_hours
+            $('#task-details').modal('hide')
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Handle error here
+            console.error("Error:", textStatus, errorThrown);
+        }
+    });
+});
 
 // initialize tagify for add memeber to task
 const memberInputTag = document.querySelector('#select-member')
@@ -501,286 +830,9 @@ for (let i = 0; i < taskList.length; i++) {
 
         const taskId = taskDiv.getAttribute('id').split('-').pop();
 
-        const currentTaskData = await getData("/api/task/get/" + taskId)
+        document.querySelector("#pm-task-details").setAttribute("current-task-id", taskId)
 
-        console.log("current target task id : " , taskId);
-        console.log("current target task : ", currentTaskData);
-
-        //change input value from that taskdata
-        document.getElementById('pm-task-title').innerText = currentTaskData.title
-        document.getElementById('member-task-title').innerText = currentTaskData.title
-
-        document.getElementById('pm-description-editor').value = currentTaskData.description
-        document.getElementById("member-task-description").value = currentTaskData.description
-
-        if (currentTaskData.status === 'TODO') {
-            document.getElementById('pm-status').innerText = "TODO"
-            document.getElementById('pm-status').classList.add('bg-primary')
-
-            document.getElementById('member-task-status').innerText = "TODO"
-            document.getElementById('member-task-status').classList.add('bg-primary')
-        } else if (currentTaskData.status === 'IN_PROGRESS') {
-            document.getElementById('pm-status').innerText = "IN PROGRESS"
-            document.getElementById('pm-status').classList.add('bg-info')
-
-            document.getElementById('member-task-status').innerText = "IN PROGRESS"
-            document.getElementById('member-task-status').classList.add('bg-info')
-        } else {
-            document.getElementById('pm-status').innerText = "FINISHED"
-            document.getElementById('pm-status').classList.add('bg-success')
-
-            document.getElementById('member-task-status').innerText = "FINISHED"
-            document.getElementById('member-task-status').classList.add('bg-success')
-        }
-
-        document.getElementById("pm-assigned-member-span").innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
-        document.getElementById("member-assigned-member-span").innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
-
-        if (currentTaskData.tasksGroup === 'A') {
-            document.getElementById('pm-task-group-span').innerText = "A - Related With Project Development"
-
-            document.getElementById('member-task-group-span').innerText = "A - Related With Project Development"
-        } else if (currentTaskData.tasksGroup === 'B') {
-            document.getElementById('pm-task-group-span').innerText = "B - Training"
-
-            document.getElementById('member-task-group-span').innerText = "B - Training"
-        } else {
-            document.getElementById('pm-task-group-span').innerText = "C - Idling"
-
-            document.getElementById('member-task-group-span').innerText = "C - Idling"
-        }
-
-        // Convert timestamp to Date objects
-        const startDate = new Date(currentTaskData.plan_start_time);
-        const endDate = new Date(currentTaskData.plan_end_time);
-
-        // Get the date strings in 'yyyy-mm-dd' format
-        const startDateString = startDate.toISOString().split('T')[0];
-        const endDateString = endDate.toISOString().split('T')[0];
-
-        // Set the values in the input fields
-        document.getElementById('pm-task-detail-start-date').value = startDateString;
-        document.getElementById('pm-task-detail-due-date').value = endDateString;
-
-        document.getElementById("member-task-detail-start-date").value = startDateString
-        document.getElementById("member-task-detail-due-date").value = endDateString
-
-        document.getElementById('pm-plan-edit-hours').value = currentTaskData.plan_hours;
-        document.getElementById('member-task-plan-hours').innerText = currentTaskData.plan_hours.toString() + " hours"
-
-        const duration = calculateWeekdayDuration(startDate, endDate);
-        document.getElementById("member-task-duration").innerText = duration.toString() + " days ";
-        document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
-
-        document.getElementById("pm-actual-edit-hours").value = currentTaskData.actual_hours === null ? 0 : currentTaskData.actual_hours;
-
-        // Get all elements with the common class name
-        const editableInputs = document.querySelectorAll(".editable-input");
-        const editBtn = document.getElementById("task-edit-btn");
-        const cancelEditBtn = document.getElementById("cancel-edit-btn");
-        const saveBtn = document.getElementById("save-edit-btn");
-        const closeTaskModalBtn = document.querySelectorAll(".btn-close-task-details");
-
-        editBtn.addEventListener("click", function () {
-
-            editableInputs.forEach((input) => {
-                input.removeAttribute("disabled");
-            });
-
-            //hide title
-            document.getElementById("pm-task-title").classList.add("d-none");
-            //show input
-            document.getElementById("pm-task-title-input").classList.remove("d-none");
-            //set input value to title
-            document.getElementById("pm-task-title-input").value = document.getElementById("pm-task-title").innerText;
-
-            document.getElementById("pm-task-group-span").classList.add("d-none")
-            const taskGroupSelect = document.getElementById("pm-task-group");
-            taskGroupSelect.classList.remove("d-none")
-            taskGroupSelect.value = currentTaskData.tasksGroup;
-
-            document.getElementById("pm-assigned-member-tagify").classList.remove("d-none")
-            const tagifyEditableInput = document.querySelector('.tagify.editable-input');
-            if (tagifyEditableInput) {
-                document.querySelector('.tagify.editable-input').classList.remove("d-none")
-            }
-            document.getElementById("pm-assigned-member-span").classList.add("d-none")
-
-            var assignedMemberTagify = document.getElementById("pm-assigned-member-tagify"),
-                tagify = new Tagify(assignedMemberTagify, {
-                    enforceWhitelist: true,
-                    mode: "select",
-                    whitelist: membersList.map((member) => {
-                        return {id : member.id, value : member.name + " | " + member.role};
-                    }),
-                    blacklist: ['foo', 'bar'],
-                    originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
-                });
-
-            const currentAssignedUser = {id : currentTaskData.userDto.id, value: currentTaskData.userDto.name + " | " + currentTaskData.userDto.role}   
-
-            tagify.addTags([currentAssignedUser])
-
-            console.log(assignedMemberTagify)
-
-            // Function to handle the change event
-            function handleTagifyChange(e) {
-                // Get the member id for the added/updated tag, don't return an array, only id please
-                let tagData = tagify.value[0].id
-
-                console.log(tagify.value)
-
-                // Update your output value or perform any other actions here
-                userId = tagData;
-                console.log("where this shit", userId)
-            }
-
-            // Add the change event listener
-            assignedMemberTagify.addEventListener('change', handleTagifyChange)
-
-            //hide the edit button
-            editBtn.classList.add("d-none");
-
-            //show the two button
-            saveBtn.classList.remove("d-none");
-            cancelEditBtn.classList.remove("d-none");
-
-        });
-
-        cancelEditBtn.addEventListener("click", function (event) {
-
-            //hide title
-            document.getElementById("pm-task-title").classList.remove("d-none");
-            //show input
-            document.getElementById("pm-task-title-input").classList.add("d-none");
-
-            //hide the two button
-            saveBtn.classList.add("d-none");
-            cancelEditBtn.classList.add("d-none");
-
-            document.getElementById("pm-task-group-span").classList.remove("d-none")
-            document.getElementById("pm-task-group").classList.add("d-none")
-
-            document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
-            document.querySelector('.tagify.editable-input').classList.add("d-none")
-            document.getElementById("pm-assigned-member-span").classList.remove("d-none")
-
-            //show the edit button
-            editBtn.classList.remove("d-none");
-
-            // don't let the button close modal
-            event.preventDefault();
-            editableInputs.forEach((input) => {
-                input.setAttribute("disabled", "");
-            });
-
-        });
-
-        //loop through close task modal btns
-        closeTaskModalBtn.forEach((btn) => {
-            btn.addEventListener("click", (event) => {
-                //hide title
-                document.getElementById("pm-task-title").classList.remove("d-none");
-                //show input
-                document.getElementById("pm-task-title-input").classList.add("d-none");
-
-                //hide the two buttons
-                saveBtn.classList.add("d-none");
-                cancelEditBtn.classList.add("d-none");
-
-                document.getElementById("pm-task-group-span").classList.remove("d-none")
-                document.getElementById("pm-task-group").classList.add("d-none")
-
-                document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
-                document.querySelector('.tagify.editable-input').classList.add("d-none")
-                document.getElementById("pm-assigned-member-span").classList.remove("d-none")
-
-                //show the edit button
-                editBtn.classList.remove("d-none");
-
-                // disable editable inputs
-                editableInputs.forEach((input) => {
-                    input.setAttribute("disabled", "");
-                });
-            });
-        });
-
-        saveBtn.addEventListener("click", function (event) {
-
-            //hide title
-            document.getElementById("pm-task-title").classList.remove("d-none");
-            //show input
-            document.getElementById("pm-task-title-input").classList.add("d-none");
-
-            //hide the two button
-            saveBtn.classList.add("d-none");
-            cancelEditBtn.classList.add("d-none");
-
-            document.getElementById("pm-task-group-span").classList.remove("d-none")
-            document.getElementById("pm-task-group").classList.add("d-none")
-
-            document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
-            document.querySelector('.tagify.editable-input').classList.add("d-none")
-            document.getElementById("pm-assigned-member-span").classList.remove("d-none")
-
-            //show the edit button
-            editBtn.classList.remove("d-none");
-
-            editableInputs.forEach((input) => {
-                input.setAttribute("disabled", "");
-            });
-
-            const startDate = new Date($("#pm-task-detail-start-date").val());
-            const dueDate = new Date($("#pm-task-detail-due-date").val());
-
-            if (startDate > dueDate || startDate === dueDate) {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Start date must be before due date!',
-                })
-                return;
-            }
-
-            const data = {
-                id: currentTaskData.id,
-                title: $("#pm-task-title-input").val(),
-                description: $("#pm-description-editor").val(),
-                // Convert to Unix timestamp
-                plan_start_time: startDate.getTime(),
-                plan_end_time: dueDate.getTime(),
-                plan_hours: $("#pm-plan-edit-hours").val(),
-                tasksGroup: $("#pm-task-group").val(),
-                userId: userId,
-            };
-
-            console.log("Request Data : ", data)
-
-            $.ajax({
-                url: "/api/task/update/data",
-                data: JSON.stringify(data),
-                method: 'POST',
-                contentType: 'application/json', // Set the content type for the request payload
-                success: function (response) {
-                    // close modal box
-                    $('#task-details').modal('hide')
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    // Handle error here
-                    console.error("Error:", textStatus, errorThrown);
-                }
-            });
-        });
-
-        const assignedMemberSpan = document.getElementById('assigned-member-span')
-        //to check if that element exists
-        if (assignedMemberSpan) {
-            // Check if the user has any of the specified roles
-            if (currentTaskData.userDto.role === 'FOC' || currentTaskData.userDto.role === 'EMPLOYEE' || currentTaskData.userDto.role === 'CONTRACT' || currentTaskData.userDto.role === 'PMO' || currentTaskData.userDto.role === 'DEPARTMENT_HEAD' || currentTaskData.userDto.role === 'SDQC') {
-                assignedMemberSpan.innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
-            }
-        }
+        
     });
 
     document.getElementById('actual-hours-input').addEventListener("input", function () {
@@ -1380,18 +1432,29 @@ $("#task-add-btn").on("click", function () {
 
     };
     console.log(data)
-    $.ajax({
-        url: "/api/task/save",
-        type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json",
-        success: function (response) {
-            console.log(response);
-            location.reload();
-        },
-        error: function (response) {
-            console.log(response);
-        },
+    Swal.fire({
+        title: "Are you sure want to add?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "/api/task/save",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (response) {
+                    console.log(response);
+                    location.reload();
+                },
+                error: function (response) {
+                    console.log(response);
+                },
+            });
+        }
     });
 });
 

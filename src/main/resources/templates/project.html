@@ -330,13 +330,13 @@
                         <div class="col-lg-3 mb-4">
                             <span><i class="fa-solid fa-clock"></i></span>
                             <label class="editable-label" for="pm-plan-edit-hours">Plan Hours</label>
-                            <input type="number" class="form-control border-task-description" id="pm-plan-edit-hours"/>
+                            <input type="number" class="form-control border-task-description" id="pm-plan-edit-hours" oninput="validity.valid||(value='');" min="0"/>
                         </div>
 
                         <div class="col-lg-3 mb-4">
                             <span><i class="fa-solid fa-clock"></i></span>
                             <label class="editable-label" for="pm-actual-edit-hours">Actual Hours</label>
-                            <input type="number" class="form-control" id="pm-actual-edit-hours"/>
+                            <input type="number" class="form-control" id="pm-actual-edit-hours"oninput="validity.valid||(value='');" min="1"/>
                         </div>
 
 
@@ -344,7 +344,7 @@
 
                     <!--                    edit button and cancel button -->
                     <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-primary col-2" data-dismiss="#task-details" id="task-edit-btn">Edit</button>
+                        <button type="submit" class="btn btn-primary col-2"  id="task-edit-btn">Edit</button>
                         <button class="d-none col-1 rounded-2 border-2 border-success" id="save-edit-btn">
                             <i class="fa-solid fa-circle-check text-success"></i>
                         </button>

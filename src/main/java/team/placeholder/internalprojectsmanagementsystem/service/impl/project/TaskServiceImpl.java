@@ -108,6 +108,7 @@ public class TaskServiceImpl implements TasksService {
             return null;
         }
         task.setTitle(taskRequestDto.getTitle());
+        task.setActual_hours(taskRequestDto.getActual_hours());
         task.setDescription(taskRequestDto.getDescription());
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
         task.setUser(userRepository.findById(taskRequestDto.getUserId()));
@@ -117,7 +118,11 @@ public class TaskServiceImpl implements TasksService {
 
         taskRepository.save(task);
 
-        return modelMapper.map(task,TasksDto.class);
+        TasksDto tasksDto = modelMapper.map(task, TasksDto.class);
+
+        tasksDto.setUserDto(modelMapper.map(task.getUser(), UserDto.class));
+
+        return tasksDto;
     }
 
     @Override
