@@ -106,4 +106,9 @@ public class ViewController {
     @GetMapping("/employees")
     public String employees() {return "employees";}
 
+
+    @GetMapping("/issue-table")
+    public String reportDepartment() {
+        return "/layout/issueTable";
+    }
 }
