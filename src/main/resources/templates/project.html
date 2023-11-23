@@ -55,13 +55,39 @@
                             Calendar
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link border-primary border border-bottom-0 rounded-top"
-                                id="add-employee-tab" type="button"
-                                data-bs-target="#add-employee-modal" data-bs-toggle="modal">
-                            <i class="bi bi-person-plus-fill"></i>
-                        </button>
-                    </li>
+                    <script type="module">
+
+                        import {getCurrentLoginUser} from '/js/currentLoginUser.js'
+
+                        const dog = await getCurrentLoginUser();
+
+                        console.log("dog", dog.currentUser.role)
+
+                        if (dog.currentUser.role === 'PROJECT_MANAGER') {
+
+                            const li = document.createElement('li')
+                            li.classList = 'nav-item'
+                            li.role = 'presentation'
+                            li.id = 'add-employee-list-button-container'
+
+                            const addEmpButton = document.createElement('button')
+                            addEmpButton.classList = 'nav-link border-primary border border-bottom-0 rounded-top'
+                            addEmpButton.id = 'add-employee-tab'
+                            addEmpButton.type = 'button'
+                            addEmpButton.setAttribute("data-bs-target", "#add-employee-modal")
+                            addEmpButton.setAttribute("data-bs-toggle", "modal")
+
+                            const i = document.createElement('i')
+                            i.classList = 'bi bi-person-plus-fill'
+
+                            addEmpButton.appendChild(i)
+                            li.appendChild(addEmpButton)
+
+                            document.querySelector("#myTab").appendChild(li)
+
+                        }
+
+                    </script>
                 </ul>
                 <script type="module">
                     import { getCurrentLoginUser } from "/js/currentLoginUser.js";
@@ -425,10 +451,10 @@
     <div class="modal fade" id="actual-hours-input-modal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">Enter Actual Hours</div>
+                <div class="modal-header">Enter Actual Working Hours</div>
                 <div class="modal-body">
                     <label for="actual-hours-input" class="col-form-label"></label>
-                    <input type="number" class="form-control" id="actual-hours-input">
+                    <input type="number" class="form-control" id="actual-hours-input" oninput="validity.valid||(value='');" min="1" >
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" id="actual-hours-input-btn">Submit</button>
@@ -507,11 +533,13 @@
         }
 
         const tabEl = document.querySelector('#add-employee-tab')
+        if(tabEl) {
             tabEl.addEventListener('show.bs.tab',async event => {
-            const allWorkingEmployee = await getData('/api/user/list/projectId/'+document.getElementById("projectId").innerText)
+                const allWorkingEmployee = await getData('/api/user/list/projectId/'+document.getElementById("projectId").innerText)
 
-            allWorkingEmployee.forEach(a => console.log(a))
-        })
+                allWorkingEmployee.forEach(a => console.log(a))
+            })
+        }
 
         document.querySelector("#add-employee-modal").addEventListener("show.bs.modal", async () => {
 
@@ -1220,6 +1248,24 @@
                 }
             });
 
+            document.getElementById('actual-hours-input').addEventListener("input", function() {
+
+                console.log(this.value)
+
+                console.log(validateActualWorkingHour(parseInt(this.value)))
+
+                if(validateActualWorkingHour(parseInt(this.value))) {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.add('is-invalid');
+                }
+
+            })
+
+            function validateActualWorkingHour (x) {
+                return !isNaN(x)
+            }
             taskDiv.addEventListener("dragend", async () => {
                 taskDiv.classList.remove("is-dragging");
                 currentTaskData =
@@ -1244,11 +1290,20 @@
                                 const actualHoursInput = document.getElementById('actual-hours-input');
                                 const actualHoursSubmitBtn = document.getElementById('actual-hours-input-btn');
 
-                                actualHoursSubmitBtn.addEventListener('click', function () {
+                                const clickHandler = function () {
                                     currentTaskData.actual_hours = actualHoursInput.value;
-                                    $('#actual-hours-input-modal').modal('hide');
-                                    resolve(); // Resolve the Promise when actual hours are set
-                                });
+                                    if (validateActualWorkingHour(parseInt(actualHoursInput.value))) {
+                                        $('#actual-hours-input-modal').modal('hide');
+                                        actualHoursInput.value = '';
+                                        actualHoursInput.classList.remove('is-valid');
+                                        actualHoursSubmitBtn.removeEventListener('click', clickHandler); // Remove the event listener
+                                        resolve();
+                                    } else {
+                                        actualHoursInput.classList.add('is-invalid');
+                                    }
+                                };
+
+                                actualHoursSubmitBtn.addEventListener('click', clickHandler);
                             });
 
                             // Wait for the Promise to be resolved before proceeding
