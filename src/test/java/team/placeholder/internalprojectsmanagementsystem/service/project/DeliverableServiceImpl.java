@@ -22,10 +22,7 @@ public class DeliverableServiceImpl implements DeliverableService{
         return null;
     }
 
-    @Override
-    public List<DeliverableDto> getAll() {
-        return null;
-    }
+
 
     @Override
     public DeliverableDto updateDeliverable(DeliverableDto deliverableDto) {
