@@ -55,13 +55,39 @@
                             Calendar
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link border-primary border border-bottom-0 rounded-top"
-                                id="add-employee-tab" type="button"
-                                data-bs-target="#add-employee-modal" data-bs-toggle="modal">
-                            <i class="bi bi-person-plus-fill"></i>
-                        </button>
-                    </li>
+                    <script type="module">
+
+                        import {getCurrentLoginUser} from '/js/currentLoginUser.js'
+
+                        const dog = await getCurrentLoginUser();
+
+                        console.log("dog", dog.currentUser.role)
+
+                        if (dog.currentUser.role === 'PROJECT_MANAGER') {
+
+                            const li = document.createElement('li')
+                            li.classList = 'nav-item'
+                            li.role = 'presentation'
+                            li.id = 'add-employee-list-button-container'
+
+                            const addEmpButton = document.createElement('button')
+                            addEmpButton.classList = 'nav-link border-primary border border-bottom-0 rounded-top'
+                            addEmpButton.id = 'add-employee-tab'
+                            addEmpButton.type = 'button'
+                            addEmpButton.setAttribute("data-bs-target", "#add-employee-modal")
+                            addEmpButton.setAttribute("data-bs-toggle", "modal")
+
+                            const i = document.createElement('i')
+                            i.classList = 'bi bi-person-plus-fill'
+
+                            addEmpButton.appendChild(i)
+                            li.appendChild(addEmpButton)
+
+                            document.querySelector("#myTab").appendChild(li)
+
+                        }
+
+                    </script>
                 </ul>
                 <script type="module">
                     import { getCurrentLoginUser } from "/js/currentLoginUser.js";
@@ -507,11 +533,13 @@
         }
 
         const tabEl = document.querySelector('#add-employee-tab')
+        if(tabEl) {
             tabEl.addEventListener('show.bs.tab',async event => {
-            const allWorkingEmployee = await getData('/api/user/list/projectId/'+document.getElementById("projectId").innerText)
+                const allWorkingEmployee = await getData('/api/user/list/projectId/'+document.getElementById("projectId").innerText)
 
-            allWorkingEmployee.forEach(a => console.log(a))
-        })
+                allWorkingEmployee.forEach(a => console.log(a))
+            })
+        }
 
         document.querySelector("#add-employee-modal").addEventListener("show.bs.modal", async () => {
 

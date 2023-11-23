@@ -279,6 +279,7 @@
 
             let tagifyInstance;
 
+            
             getArchitecturelist()
                 .then((architectureList) => {
                     const inputElement = document.querySelector(
@@ -333,15 +334,6 @@
                         return true;
                     };
 
-                    // Validate on form submission
-                    $("#validation-form").submit(function (event) {
-                        const validated = tagifyInstance.isValid;
-                        if (!validated) {
-                            event.preventDefault();
-                        }
-
-                        // Rest of your form submission logic...
-                    });
 
                     // Validate on input change
                     inputElement.addEventListener("change", function () {
@@ -1286,6 +1278,10 @@
                         onstyle : 'success',
                         size: 'sm'
                     });
+
+                    if(loginUser.currentUser.role !== 'PROJECT_MANAGER') {
+                        $('input[data-toggle="toggle"]').bootstrapToggle('disable');
+                    }
 
                     $('input[data-toggle="toggle"]').change(function() {
 
@@ -2558,6 +2554,8 @@
                 $('button[data-bs-target="#amount"]').remove();
                 $('#project-edit').remove();
                 $('#amount').remove();
+                $("#project-external-review-count").attr("disabled", true);
+                $("#project-internal-review-count").attr("disabled", true);
                 // hide the manage task button if the role is pmo or sdqc and
             }
             if(loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO') {
