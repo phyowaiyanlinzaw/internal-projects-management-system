@@ -7,7 +7,6 @@
         .ql-toolbar {
             color: white;
         }
-
         .ql-editor {
 
         }
@@ -49,9 +48,11 @@
                 id="dropdrown-search-bar"
         >
             <div class="d-flex flex-row justify-content-end gap-2">
-                <button class="btn btn-info" id="reset-btn">
+                <button class="btn btn-info" id="reset-btn" style="color: #ffffff !important;">
                     reset
                 </button>
+
+                <div class="d-inline-block">
                 <div class="d-inline-block">
                     <select id="status-filter" class="form-control">
                         <option value="" selected disabled>Status</option>
@@ -96,6 +97,8 @@
                 <!-- modal toggle button end -->
                 <!-- sortting button -->
                 <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+
+
             </div>
 
             <!-- Modal -->
@@ -135,7 +138,15 @@
                         New Issues
                     </button>
                 </li>
+                <li>
+                    <div class="inline-block">
+                        <a href="issue-table"><i class="fa-solid fa-table"></i></a>
+                    </div>
+
+                </li>
             </ul>
+
+
 
             <div class="tab-content pt-2">
 
@@ -338,7 +349,8 @@
                     </div>
 
                     <div class="w-25 m-auto d-flex justify-content-center align-items-center gap-2 mt-2">
-                        <button type="button" id="addIssue" class="btn btn-primary">Save Data</button>
+                        <button type="button" id="addIssue" class="btn btn-primary" >Add Issue</button>
+
                     </div>
 
                 </div>
@@ -349,6 +361,10 @@
     </div>
 </div>
 <!-- add issue modal end -->
+
+
+
+
 
 <script>
     function rotateIcon(element) {
@@ -509,9 +525,9 @@
     </div>
 
     <!-- Back to Top -->
-    <!--    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"-->
-    <!--    ><i class="bi bi-arrow-up"></i-->
-    <!--    ></a>-->
+<!--    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"-->
+<!--    ><i class="bi bi-arrow-up"></i-->
+<!--    ></a>-->
 </div>
 
 
@@ -1261,10 +1277,10 @@
                                 ${issue.solved === true ? 'Closed' : 'Open'}
                             </span>
                         </div>
-                        ${getLoginUser.currentUser.id === issue.user_pic.id ? 
+                        ${getLoginUser.currentUser.id === issue.user_pic.id ?
                         '<button type="button" class="btn btn-info see-more-button text-white" data-id="${issue.id}">' +
                             '<i class="fa-solid fa-pen-to-square"></i>' +
-                        '</button>' 
+                        '</button>'
                         :''}
                     </div>
                 </div>
@@ -1899,7 +1915,7 @@
                 console.log('Success. Received data:', data);
 
                 const sortContainer = $('#sort-container');
-                sortContainer.empty(); // Clear previous content
+                sortContainer.empty();
 
                 // Check if data is not empty
                 if (data && data.length > 0) {
@@ -1907,9 +1923,9 @@
                     data.forEach(item => {
                         const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
+
                     });
                 } else {
-                    // Handle case when data is empty
                     sortContainer.html('<p style="text-align: center;">No results found.</p>');
                 }
             },

@@ -34,6 +34,13 @@ public class UserController {
     private final AvailableUserRepo availableEmployeeService;
     private final ModelMapper modalMapper;
 
+    @GetMapping("/report/list")
+    public List<UserDto> getUsers() {
+
+
+        return userService.getAllUsers();
+    }
+
     @GetMapping("/generate-fake-users/{count}")
     public ResponseEntity<String> generateFakeUsers(@PathVariable("count") int count) {
         fakerService.generateAndSaveFakeUsers(count);
