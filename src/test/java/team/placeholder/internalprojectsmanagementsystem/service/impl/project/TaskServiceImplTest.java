@@ -9,9 +9,13 @@ import org.modelmapper.ModelMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,23 +26,37 @@ import static org.mockito.Mockito.*;
 class TaskServiceImplTest {
 
     @Mock
-    private TaskRepository tasksRepository;
+    private TaskRepository taskRepository;
 
     @Mock
-    private ModelMapper modelMapper;
+    private UserRepository userRepository;
+
+    @Mock
+    private ProjectRepository projectRepository;
+
+    @Mock
+    private NotificationServiceImpl notificationService;
+
     @InjectMocks
-    private TaskServiceImpl tasksService;
+    private TaskServiceImpl taskService;
 
     @BeforeEach
-    public void setUp(){
-        MockitoAnnotations.
-                openMocks(this);
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
     void save() {
 
-    }
+    TaskRequestDto tasksDto = new  TaskRequestDto();
+    tasksDto.setTitle("title");
+    Tasks tasks = new Tasks();
+    tasks.setTitle("title");
+    taskService.save(tasksDto);
+    verify(taskRepository, times(1)).save(tasks);
+        }
+
+
 
     @Test
     void getAllTasks() {
