@@ -109,6 +109,6 @@ public class ViewController {
 
     @GetMapping("/issue-table")
     public String reportDepartment() {
-        return "issueTable";
+        return "/layout/issueTable";
     }
 }
