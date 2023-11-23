@@ -111,12 +111,6 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
             defer
         ></script>
-        <script
-            src="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/js/coreui.bundle.min.js"
-            integrity="sha384-Iqk8EE7ao72xAVBuuQTEwrU5N2IdvpJER5ZzM6LxwcXHqj2WstttaOvopXziv0nU"
-            crossorigin="anonymous"
-            defer
-        ></script>
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
         <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
@@ -2450,17 +2444,17 @@
 
                     console.log(project);
                     $.ajax({
-                        url: "/api/project/save", // Replace with the actual URL for your project registration endpoint
+                        url: "/api/project/save", 
                         type: "POST",
                         data: JSON.stringify(project),
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: async function (data) {
-                            alert("Project registered successfully");
-                            // Reset the form if needed
-                            $("#validation-form")[0].reset();
                             const newProject = createProjectList(data);
                             motherContainer.insertBefore(newProject, motherContainer.childNodes[0])
+                            $("#alert-text").text("New Project Created Successfully...");
+                            $("#alert-modal").modal("show")
+                            $("#add-department-modal").modal("hide");
                         },
                         error: function (data) {
                             alert("Error registering project");
@@ -2905,7 +2899,7 @@
                                             class="form-control"
                                             id="architectures"
                                             name="architectures"
-                                            placeholder="enter to add your own architecture"
+                                            placeholder="add some value"
                                             required
                                         />
 

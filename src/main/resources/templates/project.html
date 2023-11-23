@@ -451,10 +451,10 @@
     <div class="modal fade" id="actual-hours-input-modal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">Enter Actual Hours</div>
+                <div class="modal-header">Enter Actual Working Hours</div>
                 <div class="modal-body">
                     <label for="actual-hours-input" class="col-form-label"></label>
-                    <input type="number" class="form-control" id="actual-hours-input">
+                    <input type="number" class="form-control" id="actual-hours-input" oninput="validity.valid||(value='');" min="1" >
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" id="actual-hours-input-btn">Submit</button>
@@ -1248,6 +1248,24 @@
                 }
             });
 
+            document.getElementById('actual-hours-input').addEventListener("input", function() {
+
+                console.log(this.value)
+
+                console.log(validateActualWorkingHour(parseInt(this.value)))
+
+                if(validateActualWorkingHour(parseInt(this.value))) {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                } else {
+                    this.classList.add('is-invalid');
+                }
+
+            })
+
+            function validateActualWorkingHour (x) {
+                return !isNaN(x)
+            }
             taskDiv.addEventListener("dragend", async () => {
                 taskDiv.classList.remove("is-dragging");
                 currentTaskData =
@@ -1272,11 +1290,20 @@
                                 const actualHoursInput = document.getElementById('actual-hours-input');
                                 const actualHoursSubmitBtn = document.getElementById('actual-hours-input-btn');
 
-                                actualHoursSubmitBtn.addEventListener('click', function () {
+                                const clickHandler = function () {
                                     currentTaskData.actual_hours = actualHoursInput.value;
-                                    $('#actual-hours-input-modal').modal('hide');
-                                    resolve(); // Resolve the Promise when actual hours are set
-                                });
+                                    if (validateActualWorkingHour(parseInt(actualHoursInput.value))) {
+                                        $('#actual-hours-input-modal').modal('hide');
+                                        actualHoursInput.value = '';
+                                        actualHoursInput.classList.remove('is-valid');
+                                        actualHoursSubmitBtn.removeEventListener('click', clickHandler); // Remove the event listener
+                                        resolve();
+                                    } else {
+                                        actualHoursInput.classList.add('is-invalid');
+                                    }
+                                };
+
+                                actualHoursSubmitBtn.addEventListener('click', clickHandler);
                             });
 
                             // Wait for the Promise to be resolved before proceeding
