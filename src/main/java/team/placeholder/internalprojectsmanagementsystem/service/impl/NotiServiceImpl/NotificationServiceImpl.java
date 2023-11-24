@@ -43,11 +43,14 @@ public class NotificationServiceImpl implements NotificationService {
 
             Notification notification1 = notiRepo.save(notification);
 
+
+
             NotiDto notiDto = modelMapper.map(notification, NotiDto.class);
 
             if(objects.length > 0) {
                 for (Object object : objects) {
                     sendNotification(notiDto, userId, eventName, object);
+
                 }
             }
             else {
@@ -101,6 +104,8 @@ public class NotificationServiceImpl implements NotificationService {
         }
         log.info("Notification is sent");
     }
+
+
 
     @Override
     public List<NotiDto> getAllNotificationByUserId(long id) {
