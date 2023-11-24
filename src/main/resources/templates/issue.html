@@ -32,14 +32,7 @@
 <div class="container-fluid position-relative d-flex p-0">
 
     <!-- Content Start -->
-    <div class="content" style="
-                    background-color: #e5e5f7;
-                    opacity: 1;
-                    background-image: radial-gradient(
-                        #444cf7 0.6000000000000001px,
-                        #e5e5f7 0.6000000000000001px
-                    );
-                    background-size: 12px 12px;">
+    <div class="content" >
 
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
@@ -1392,6 +1385,14 @@
             });
         }
 
+        $("#reset-btn").on("click", function () {
+            $("#status-filter").val('');
+            $("#solved-filter").val('');
+            $("#category-filter").val('');
+            document.querySelector("#sort-container").innerHTML = ''
+            loadData();
+        });
+
         loadData();
 
         $('.tab-content').on('click', '.see-more-button', function () {
@@ -1876,14 +1877,6 @@
             // Hide the "solve-btn" regardless of user choice
             $("#solveBtn").hide();
         }
-    });
-
-
-    $("#reset-btn").on("click", function () {
-        $("#status-filter").val('');
-        $("#solved-filter").val('');
-        $("#category-filter").val('');
-        loadData();
     });
 
 
