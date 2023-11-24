@@ -9,17 +9,22 @@ import org.modelmapper.ModelMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
-import team.placeholder.internalprojectsmanagementsystem.service.project.ArchitectureService;
+import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -31,37 +36,7 @@ class ProjectServiceImplTest {
     private ProjectRepository projectRepository;
 
     @Mock
-    private ArchitectureServiceImpl architectureService;
-
-    @Mock
-    private ArchitectureRepository architectureRepository;
-
-    @Mock
-    private DeliverableTypeServiceImpl deliverableTypeService;
-
-    @Mock
-    private DeliverableTypeRepo deliverableR;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private DepartmentRepository departmentRepository;
-
-    @Mock
-    private DeliverableRepository deliverableRepository;
-
-    @Mock
-    private ReviewRepo reviewRepo;
-
-    @Mock
     private ModelMapper modelMapper;
-
-    @Mock
-    private TaskRepository taskRepository;
-
-    @Mock
-    private AESImpl aes;
 
 
     @InjectMocks
@@ -75,7 +50,6 @@ class ProjectServiceImplTest {
 
     @Test
     void save() {
-
 
     }
 
@@ -193,6 +167,62 @@ class ProjectServiceImplTest {
 
     @Test
     void getAllProjectsByDepartmentId() {
+        long departmentId = 1L; // Set up your test data
+        List<Project> projectList = createSampleProjectList(); // Create sample project data
+
+        // Mock the behavior of dependencies
+        when(projectRepository.findByDepartmentId(anyLong())).thenReturn(projectList);
+        when(modelMapper.map(any(), eq(ProjectDto.class))).thenReturn(new ProjectDto());
+        when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(), eq(DeliverableDto.class))).thenReturn(new DeliverableDto());
+        when(modelMapper.map(any(), eq(DeliverableTypeDto.class))).thenReturn(new DeliverableTypeDto());
+        when(modelMapper.map(any(), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());
+        // Mock other dependencies as needed
+
+        // Act
+        List<ProjectDto> projectDtos = projectService.getAllProjectsByDepartmentId(departmentId);
+
+        // Assert
+        // Verify that the repository's findByDepartmentId method was called with the expected argument
+        verify(projectRepository, times(1)).findByDepartmentId(departmentId);
+
+        // Verify that the modelMapper's map methods were called with the expected arguments
+        verify(modelMapper, atLeastOnce()).map(any(Project.class), eq(ProjectDto.class));
+        verify(modelMapper, atLeastOnce()).map(any(User.class), eq(UserDto.class));
+        verify(modelMapper, atLeastOnce()).map(any(Deliverable.class), eq(DeliverableDto.class));
+        verify(modelMapper, atLeastOnce()).map(any(DeliverableType.class), eq(DeliverableTypeDto.class));
+        verify(modelMapper, atLeastOnce()).map(any(Department.class), eq(DepartmentDto.class));
+
+        // Verify that the returned projectDtos list is not null and has the expected size
+        assertEquals(projectList.size(), projectDtos.size());
+    }
+    public static List<Project> createSampleProjectList() {
+        List<Project> projects = new ArrayList<>();
+
+        Project project1 = new Project();
+        project1.setId(1L);
+        project1.setName("Project 1");
+        project1.setClosed(false);
+
+        User projectManager1 = new User();
+        projectManager1.setId(1L);
+        projectManager1.setName("Project Manager 1");
+        project1.setProjectManager(projectManager1);
+
+        Set<User> users1 = new HashSet<>();
+        User user1 = new User();
+        user1.setId(2L);
+        user1.setName("User 1");
+        users1.add(user1);
+        project1.setUsers(users1);
+
+        // Add more details to project1 as needed...
+
+        projects.add(project1);
+
+        // Create and add more projects as needed...
+
+        return projects;
     }
 
     @Test
@@ -218,6 +248,7 @@ class ProjectServiceImplTest {
 
     @Test
     void calculateEndDateMillis() {
+
 
     }
 

@@ -1,99 +1,80 @@
-//package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
-//
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import team.placeholder.internalprojectsmanagementsystem.dto.mapper.project.ArchitectureMapper;
-//import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
-//import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
-//import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
-//
-//import java.util.Arrays;
-//import java.util.List;
-//import java.util.Optional;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.*;
-//
-//
-//class ArchitectureServiceImplTest {
-//
-//    @Mock
-//    ArchitectureRepository architectureRepository;
-//
-//    @InjectMocks
-//    private ArchitectureServiceImpl architectureService;
-//
-//    @BeforeEach
-//    public void setUp(){
-//        MockitoAnnotations.openMocks(this);
-//    }
-//
-//    @Test
-//    public void testGetAllArchitecture(){
-//        Architecture architecture1 = new Architecture();
-//        architecture1.setId(1L);
-//        architecture1.setTech_name("Architecture 1");
-//
-//        Architecture architecture2 = new Architecture();
-//        architecture2.setId(2L);
-//        architecture2.setTech_name("Architecture 2");
-//
-//        when(architectureRepository.findAll()).thenReturn(Arrays.asList(architecture1, architecture2));
-//
-//        ArchitectureServiceImpl architectureService = new ArchitectureServiceImpl(architectureRepository);
-//
-//        List<ArchitectureDto> architectureDtoList = architectureService.getAllArchitecture();
-//
-//        assertEquals(2, architectureDtoList.size());
-//        assertEquals("Architecture 1", architectureDtoList.get(0).getTech_name());
-//        assertEquals(1L, architectureDtoList.get(0).getId());
-//        assertEquals("Architecture 2", architectureDtoList.get(1).getTech_name());
-//        assertEquals(2L, architectureDtoList.get(1).getId());
-//    }
-//
-//    @Test
-//    public void testFindById() {
-//        Architecture architecture = new Architecture();
-//        architecture.setId(1L);
-//        architecture.setTech_name("Test Architecture");
-//
-//        when(architectureRepository.findById(1L)).thenReturn(Optional.of(architecture));
-//        when(architectureRepository.findById(2L)).thenReturn(Optional.empty());
-//
-//        ArchitectureServiceImpl architectureService = new ArchitectureServiceImpl(architectureRepository);
-//
-//        Architecture foundArchitecture = architectureService.findById(1L);
-//        Architecture nonExistentArchitecture = architectureService.findById(2L);
-//
-//        assertNotNull(foundArchitecture);
-//        assertEquals(1L, foundArchitecture.getId());
-//        assertEquals("Test Architecture", foundArchitecture.getTech_name());
-//
-//        assertNull(nonExistentArchitecture);
-//    }
-//
-//    @Test
-//    public void testSave(){
-//        ArchitectureDto architectureDto = new ArchitectureDto();
-//        architectureDto.setTech_name("HTML");
-//
-//        Architecture expectedArchitecture = ArchitectureMapper.toArchitecture(architectureDto);
-//
-//        when(architectureRepository.save(any())).thenReturn(expectedArchitecture);
-//
-//        // Act
-//        Architecture result = architectureService.save(architectureDto);
-//
-//        // Assert
-//        verify(architectureRepository, times(1)).save(any());
-//        assertEquals(expectedArchitecture, result);
-//    }
-//
-//
-//
-//
-//}
+package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
+
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+class ArchitectureServiceImplTest {
+
+    @Mock
+    private ArchitectureRepository architectureRepository;
+
+    @Mock
+    private ModelMapper modelMapper;
+
+    @InjectMocks
+    private ArchitectureServiceImpl architectureService;
+
+    @Test
+    void getAllArchitectures() {
+        // Arrange
+        // Mock the behavior of the repository
+        when(architectureRepository.findAll()).thenReturn(List.of(new Architecture(), new Architecture()));
+
+        // Act
+        List<ArchitectureDto> architectureDtos = architectureService.getAllArchitecture();
+
+        // Assert
+        assertEquals(2, architectureDtos.size());
+        // Add more assertions if needed
+    }
+
+    @Test
+    void save() {
+        // Arrange
+        ArchitectureDto architectureDto = new ArchitectureDto();
+        Architecture mappedArchitecture = new Architecture();
+
+        // Mock the behavior of the modelMapper
+        when(modelMapper.map(architectureDto, Architecture.class)).thenReturn(mappedArchitecture);
+        // Mock the behavior of the repository
+        when(architectureRepository.save(mappedArchitecture)).thenReturn(mappedArchitecture);
+
+        // Act
+        Architecture savedArchitecture = architectureService.save(architectureDto);
+
+        // Assert
+        assertNotNull(savedArchitecture);
+        // Add more assertions if needed
+    }
+
+    @Test
+    void findById() {
+        // Arrange
+        long architectureId = 1L;
+        Architecture existingArchitecture = new Architecture();
+
+        // Mock the behavior of the repository
+        when(architectureRepository.findById(architectureId)).thenReturn(java.util.Optional.of(existingArchitecture));
+
+        // Act
+        Architecture foundArchitecture = architectureService.findById(architectureId);
+
+        // Assert
+        assertNotNull(foundArchitecture);
+        // Add more assertions if needed
+    }
+}
