@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface TasksService {
 
+    TasksDto getTaskById(long id);
+
     TasksDto save(TaskRequestDto taskRequestDto);
 
     List<TasksDto> getAllTasks();

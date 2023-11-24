@@ -12,7 +12,7 @@ public interface ReviewService {
 
     List<ReviewDto> getAllReviews();
 
-    ReviewDto getRevieweById(long id);
+
 
     ReviewDto updateReview(ReviewDto reviewDto);
 

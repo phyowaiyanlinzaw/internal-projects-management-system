@@ -289,6 +289,7 @@ public class IssueServiceImpl implements IssueService {
             }
 
             issueDto.setUser_uploader(modelMapper.map(issue.getUser_uploader(), UserDto.class));
+            issueDto.setUser_pic(modelMapper.map(issue.getPic(), UserDto.class));
 
             ProjectDto projectDto = new ProjectDto();
 

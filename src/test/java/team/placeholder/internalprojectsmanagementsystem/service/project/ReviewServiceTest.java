@@ -64,24 +64,6 @@ public class ReviewServiceTest {
         assertEquals(reviewList, allReview);
     }
 
-    @Test
-    void testGetReviewById() {
-        ReviewService reviewService = mock(ReviewService.class);
-
-        ReviewDto expectedReviewDto = new ReviewDto();
-        expectedReviewDto.setId(1L);
-        expectedReviewDto.setInternal_review_count(5);
-        expectedReviewDto.setExternal_review_count(3);
-
-        // Mock the behavior of the getRevieweById method
-        when(reviewService.getRevieweById(1L)).thenReturn(expectedReviewDto);
-
-        // Call the method being tested
-        ReviewDto actualReviewDto = reviewService.getRevieweById(1L);
-
-        // Verify the result
-        assertEquals(expectedReviewDto, actualReviewDto);
-    }
 
     @Test
     void testUpdateReview() {

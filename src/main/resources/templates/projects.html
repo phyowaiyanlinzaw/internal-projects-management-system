@@ -1219,7 +1219,7 @@
                             // Handle the case where the language is not found in the map
                             image.setAttribute(
                                 "src",
-                                "/images/languages/default.png"
+                                "/images/languages/default-min.png"
                             );
                         }
 
@@ -2515,8 +2515,8 @@
             let sysSelect = VirtualSelect.init({
                 ele: "#systemOutlines",
                 options: myOptions,
+                search: false,
                 multiple: true,
-                search: true,
                 searchByStartsWith: false,
                 popupPosition: null,
                 maxWidth: "100%",
