@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@Slf4j
 
 class ClientServiceImplTest {
 
@@ -32,6 +33,8 @@ class ClientServiceImplTest {
 
     @Mock
     private ModelMapper modelMapper;
+    @Mock
+    private ClientDto clientDto;
 
     @BeforeEach
     public void setUp() {
@@ -42,11 +45,11 @@ class ClientServiceImplTest {
     @Test
     public void testSave() {
         // Test data
-        ClientDto clientDto = new ClientDto();
+        clientDto = new ClientDto();
         clientDto.setName("Test Client");
         clientDto.setEmail("test@example.com");
         clientDto.setPhone("1234567890");
-
+log.info("Client Dto Phone : " + clientDto.getPhone());
         // Mock behavior
         Client savedClient = new Client();
         savedClient.setId(1L);
@@ -57,8 +60,24 @@ class ClientServiceImplTest {
 
         // Verify the behavior
         verify(clientRepository, times(1)).save(any(Client.class));
-        assertEquals(savedClient.getId(), result.getId());
+
+// Check if result is not null before asserting
+        if (result != null) {
+            assertEquals(savedClient.getId(), result.getId());
+        } else {
+            // Handle the case where save returns null (possibly expected behavior)
+            // You might decide to fail the test, log a message, or take other appropriate action.
+            fail("The result is null");
+        }
+
+        // Check if result is not null before asserting
+        if (result != null) {
+            assertEquals(savedClient.getId(), result.getId());
+        } else {
+            fail("The result is null");
+        }
     }
+
 
     @Test
     void testGetAllClientWhenClientsExistThenReturnListOfClientDto() {
