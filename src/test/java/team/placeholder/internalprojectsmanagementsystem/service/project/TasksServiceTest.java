@@ -102,6 +102,7 @@ class TasksServiceTest {
 
     }
 
+
     @Test
     void countTaskByProjectIdAndStatus() {
         long projectId = 1L;
@@ -127,5 +128,30 @@ class TasksServiceTest {
         tasksService.deleteById(taskId);
         Mockito.verify(tasksService).deleteById(taskId);
 
+    }
+
+
+    @Test
+    void testCountByUserEmailAndStatus(){
+        String userEmail = "test@example.com";
+        long count = 2L;
+
+        Mockito.when(tasksService.countByUserEmailAndStatus(userEmail, TaskStatus.IN_PROGRESS)).thenReturn(count);
+
+        Long taskCount = tasksService.countByUserEmailAndStatus(userEmail, TaskStatus.IN_PROGRESS);
+
+        assertEquals(count, taskCount);
+    }
+
+    @Test
+    void testGetTaskById(){
+        long taskId = 1L;
+        TasksDto taskDto = new TasksDto();
+
+        Mockito.when(tasksService.getTaskById(taskId)).thenReturn(taskDto);
+
+        TasksDto retrievedTask = tasksService.getTaskById(taskId);
+
+        assertEquals(taskDto, retrievedTask);
     }
 }
