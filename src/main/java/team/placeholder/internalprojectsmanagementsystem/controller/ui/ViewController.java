@@ -39,9 +39,9 @@ public class ViewController {
     @GetMapping("/login")
     public String loginFormView(){
 
-        if(authentication != null && authentication.isAuthenticated()) {
-            return "/dashboard";
-        }
+//        if(authentication != null && authentication.isAuthenticated()) {
+//            return "/dashboard";
+//        }
 
         return "login";
     }
