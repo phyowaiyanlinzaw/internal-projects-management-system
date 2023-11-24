@@ -11,6 +11,7 @@ public class TaskRequestDto {
     private String title;
     private String description;
     private long projectId;
+    private Double actual_hours;
     private long userId;
     private String tasksGroup;
     private long plan_start_time;
