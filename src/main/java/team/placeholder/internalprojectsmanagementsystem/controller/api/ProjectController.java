@@ -256,9 +256,16 @@ public class ProjectController {
 
         Long currentProjectId = null;
 
+        log.info("project : {}" , (Object)project);
+
         Map<String, Object> projectMap = new HashMap<>();
         for(ProjectDto projectDto : project){
+
+            log.info("porject close or not : {}", projectDto.isClosed());
+
             if(projectDto.isClosed() == Boolean.parseBoolean(status)){
+
+                log.info("closed proejct : {}" , projectDto);
 
                 currentProjectId = projectDto.getId();
 
@@ -276,6 +283,8 @@ public class ProjectController {
         if (currentProjectId == null) {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
+
+        log.info( "project map : {}", projectMap);
 
         return new ResponseEntity<>(projectMap, HttpStatus.OK);
     }

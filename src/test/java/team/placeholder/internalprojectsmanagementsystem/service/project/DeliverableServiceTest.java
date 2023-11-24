@@ -48,16 +48,7 @@ public class DeliverableServiceTest {
         assertEquals(deliverableDto, savedDeliverable);
     }
 
-    @Test
-    void testGetAllDeliverables() {
 
-        List<DeliverableDto> deliverableDto = new ArrayList<>();
-        Mockito.when(deliverableService.getAll()).thenReturn(deliverableDto);
-        List<DeliverableDto> allDeliverables = deliverableService.getAll();
-        assertEquals(deliverableDto, allDeliverables);
-        // Assert
-
-    }
 
     @Test
     void testUpdateDeliverable() {

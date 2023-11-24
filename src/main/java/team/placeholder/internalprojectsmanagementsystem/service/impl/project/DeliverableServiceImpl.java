@@ -22,10 +22,7 @@ public class DeliverableServiceImpl implements DeliverableService {
         return modelMapper.map(deliverableRepository.save(modelMapper.map(deliverableDto, Deliverable.class)), DeliverableDto.class);
     }
 
-    @Override
-    public List<DeliverableDto> getAll() {
-        return null;
-    }
+
 
     @Override
     public DeliverableDto updateDeliverable(DeliverableDto deliverableDto) {

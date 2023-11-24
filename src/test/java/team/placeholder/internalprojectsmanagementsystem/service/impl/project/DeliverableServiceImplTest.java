@@ -64,26 +64,7 @@ class DeliverableServiceImplTest {
 
     }
 
-    @Test
-    void getAll() {
-        Deliverable deliverable1 = new Deliverable();
-        deliverable1.setId(1L);
 
-        Deliverable deliverable2 = new Deliverable();
-        deliverable2.setId(2L);
-
-        List<Deliverable> deliverables = Arrays.asList(deliverable1, deliverable2);
-
-        when(deliverableRepository.findAll()).thenReturn(deliverables);
-
-        // Act
-        List<DeliverableDto> result = deliverableService.getAll();
-
-        // Assert
-        assertEquals(deliverables.size(), result.size());
-        assertEquals(deliverable1.getId(), result.get(0).getId());
-        assertEquals(deliverable2.getId(), result.get(1).getId());
-    }
 
     @Test
     void updateDeliverable() {
@@ -106,5 +87,22 @@ class DeliverableServiceImplTest {
         // Assert
         assertEquals(deliverableDto, result);
         assertEquals(true, result.isStatus());
+    }
+    @Test
+    void updateDeliverableWhenNotFound() {
+        // Arrange
+        long deliverableId = 1L;
+        DeliverableDto deliverableDto = new DeliverableDto();
+        deliverableDto.setId(deliverableId);
+
+        // Mock the behavior of the repository
+        when(deliverableRepository.findById(deliverableId)).thenReturn(null);
+
+        // Act
+        DeliverableDto updatedDeliverable = deliverableService.updateDeliverable(deliverableDto);
+
+        // Assert
+        assertNull(updatedDeliverable);
+        // Add more assertions if needed
     }
 }
