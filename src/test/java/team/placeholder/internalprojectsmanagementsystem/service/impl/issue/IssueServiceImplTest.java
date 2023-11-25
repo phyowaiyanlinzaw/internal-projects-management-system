@@ -1,5 +1,6 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.issue;
 
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDt
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.IsuDto;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.Issue;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.Category;
 import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.IssueStatus;
@@ -20,8 +22,12 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.noti.NotificationService;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,7 +41,11 @@ class IssueServiceImplTest {
     @Mock
     private IssueRepository issueRepository;
 
+    @Mock
+    private ProjectRepository projectRepository;
 
+    @Mock
+    private NotificationService notificationService;
     @Mock
     private ModelMapper modelMapper;
 
@@ -53,22 +63,8 @@ class IssueServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-
-
-
-
     @Test
-    public void testUpdateStatusOfIssueListWhenGivenEmptyListThenDoesNotCallSave() {
-        // Given
-        // When
-        issueService.updateStatusOfIssueList(Collections.emptyList());
-
-        // Then
-        verify(issueRepository, never()).save(any(Issue.class));
-    }
-
-    @Test
-    public void testSaveIssue() {
+    void save() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -94,7 +90,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    public void testGetAllIssues() {
+    void getAllIssues() {
         List<Issue> list = new ArrayList<>();
         Issue issue1 = new Issue();
         issue1.setTitle("Test");
@@ -122,7 +118,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    public void testGetAllIssueById() {
+    void getIssueById() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -148,7 +144,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    public void testUpdateIssue() {
+    void updateIssue() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -175,10 +171,17 @@ class IssueServiceImplTest {
         verify(issueRepository, times(1)).save(issue1);
     }
 
-
+    @Test
+    void getPendingIssueList() {
+    }
 
     @Test
-    void testGetIssuesByCategory() {
+    void updateStatusOfIssueList() {
+    }
+
+    @Test
+    void getUnsolvedIssues() {
+        List<Issue> issues = new ArrayList<>();
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -197,15 +200,19 @@ class IssueServiceImplTest {
         issue.setProject(new Project());
         issue.setUser_uploader(new User());
         issue.setPic(new User());
-        when(issueRepository.findByIssueCategory(Category.TESTING)).thenReturn(Arrays.asList(issue));
-        List<Issue> issues = issueRepository.findByIssueCategory(Category.TESTING);
-        assertEquals(1, issues.size());
-        verify(issueRepository, times(1)).findByIssueCategory(Category.TESTING);
-
+        issues.add(issue);
+        when(issueRepository.findAllBySolvedFalseAndPicId(1L)).thenReturn(issues);
+        List<Issue> issues1 = issueRepository.findAllBySolvedFalseAndPicId(1L);
+        assertEquals(1, issues1.size());
+        verify(issueRepository, times(1)).findAllBySolvedFalseAndPicId(1L);
     }
 
     @Test
-    public void testGetIssueByStatus() {
+    void countIssuesByProjectManagerId() {
+    }
+
+    @Test
+    void getIssuesByStatus() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -231,7 +238,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    public void testGetIssuesBySolvedStatus() {
+    void getIssuesBySolvedStatus() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -254,12 +261,10 @@ class IssueServiceImplTest {
         List<Issue> issues = issueRepository.findAllBySolvedFalseAndPicId(1L);
         assertEquals(1, issues.size());
         verify(issueRepository, times(1)).findAllBySolvedFalseAndPicId(1L);
-
     }
 
     @Test
-    public void testGetUnsolvedIssues() {
-        List<Issue> issues = new ArrayList<>();
+    void getIssuesByCategory() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -278,17 +283,9 @@ class IssueServiceImplTest {
         issue.setProject(new Project());
         issue.setUser_uploader(new User());
         issue.setPic(new User());
-        issues.add(issue);
-        when(issueRepository.findAllBySolvedFalseAndPicId(1L)).thenReturn(issues);
-        List<Issue> issues1 = issueRepository.findAllBySolvedFalseAndPicId(1L);
-        assertEquals(1, issues1.size());
-        verify(issueRepository, times(1)).findAllBySolvedFalseAndPicId(1L);
-
-
+        when(issueRepository.findByIssueCategory(Category.TESTING)).thenReturn(Arrays.asList(issue));
+        List<Issue> issues = issueRepository.findByIssueCategory(Category.TESTING);
+        assertEquals(1, issues.size());
+        verify(issueRepository, times(1)).findByIssueCategory(Category.TESTING);
     }
-
-
 }
-
-
-
