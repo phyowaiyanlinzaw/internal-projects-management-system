@@ -49,15 +49,10 @@ public class ProjectController {
         return ResponseEntity.ok("Projects generated successfully");
     }
 
-
-
     @PostMapping(value = "/save")
     public ResponseEntity<ProListDto> save(@RequestBody ProjectDto project){
-        log.info("Project: {}", (Object) project);
         ProjectDto savedProject = projectService.save(project);
-
         ProListDto proListDto = new ProListDto();
-
         if (savedProject!=null){
 
             proListDto.setId(savedProject.getId());
@@ -66,11 +61,11 @@ public class ProjectController {
             proListDto.setStartDate(savedProject.getStart_date());
             proListDto.setPercentage(0);
             proListDto.setUser(savedProject.getProjectManagerUserDto());
-
             return new ResponseEntity<>(proListDto, HttpStatus.OK);
         }else {
         return new ResponseEntity<>(proListDto, HttpStatus.BAD_REQUEST);
-    }}
+    }
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<ProjectDto>> getAllProjects(){
@@ -256,16 +251,15 @@ public class ProjectController {
 
         Long currentProjectId = null;
 
-        log.info("project : {}" , (Object)project);
+//        log.info("project : {}" , (Object)project);
 
         Map<String, Object> projectMap = new HashMap<>();
         for(ProjectDto projectDto : project){
 
-            log.info("porject close or not : {}", projectDto.isClosed());
+//            log.info("porject close or not : {}", projectDto.isClosed());
 
             if(projectDto.isClosed() == Boolean.parseBoolean(status)){
-
-                log.info("closed proejct : {}" , projectDto);
+//                log.info("closed proejct : {}" , projectDto);
 
                 currentProjectId = projectDto.getId();
 
@@ -275,7 +269,7 @@ public class ProjectController {
                 projectMap.put("client", clientDto);
                 projectMap.put("userList", userDtos);
 
-            } 
+            }
         }
 
         projectMap.put("projectId", currentProjectId);
@@ -284,7 +278,7 @@ public class ProjectController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
 
-        log.info( "project map : {}", projectMap);
+//        log.info( "project map : {}", projectMap);
 
         return new ResponseEntity<>(projectMap, HttpStatus.OK);
     }
@@ -335,9 +329,7 @@ public class ProjectController {
     @GetMapping(value = "new/list/role/{role}/id/{id}")
     public ResponseEntity<List<ProListDto>> newListView(@PathVariable String role, @PathVariable Long id){
 
-        //store the project list from the 
-
-        log.info("current login user role " + role);
+//        log.info("current login user role " + role);
 
         return new ResponseEntity<>(projectService.newProjectLook(Role.valueOf(role), id), HttpStatus.OK);
     }
