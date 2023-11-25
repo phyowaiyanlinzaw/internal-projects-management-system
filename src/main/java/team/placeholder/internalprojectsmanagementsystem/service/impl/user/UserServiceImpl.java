@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     private final JavaMailSender mailSender;
     private final ModelMapper modelmapper;
     private final AESImpl aes;
-    private Map<String,String> otpMap;
+    private final Map<String,String> otpMap = new HashMap<>();
     private final NotificationServiceImpl   notificationService;
 
     @Override
