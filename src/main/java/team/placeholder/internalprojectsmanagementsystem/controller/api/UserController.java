@@ -240,7 +240,7 @@ public class UserController {
             System.out.println("User Update Successfully");
             return ResponseEntity.ok(user);
         }else{
-            System.out.println("Failed to update user");
+
             return ResponseEntity.badRequest().body(null);
         }
     }
