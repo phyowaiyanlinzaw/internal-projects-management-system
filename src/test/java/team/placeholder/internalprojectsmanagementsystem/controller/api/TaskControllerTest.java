@@ -8,6 +8,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
@@ -187,18 +190,28 @@ class TaskControllerTest {
 
     @Test
     void countTaskByUserIdAndStatus() {
-        // Arrange
         TaskStatus status = TaskStatus.TODO;
         long expectedCount = 5L;
+
+        // Mock the behavior of taskService.countByUserEmailAndStatus
         when(taskService.countByUserEmailAndStatus(anyString(), eq(status)))
                 .thenReturn(expectedCount);
+
+        // Set up a mock Authentication object
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", null);
+
+        // Set the mock Authentication object in the SecurityContextHolder
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Act
         ResponseEntity<Long> result = taskController.countTaskByUserIdAndStatus(status.name());
 
         // Assert
-        verify(taskService).countByUserEmailAndStatus(anyString(), eq(status));
         assertEquals(200, result.getStatusCodeValue(), "Should return OK status code");
         assertEquals(expectedCount, result.getBody(), "Returned count should match the expected count");
+
+        // Verify that taskService.countByUserEmailAndStatus was called with the correct arguments
+        verify(taskService).countByUserEmailAndStatus("testUser", status);
+
     }
 }
