@@ -32,7 +32,15 @@
 <div class="container-fluid position-relative d-flex p-0">
 
     <!-- Content Start -->
-    <div class="content" >
+    <div class="content" style="
+                    background-color: #e5e5f7;
+                    opacity: 1;
+                    background-image: radial-gradient(
+                        #444cf7 0.6000000000000001px,
+                        #e5e5f7 0.6000000000000001px
+                    );
+                    background-size: 12px 12px;
+                ">
 
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
@@ -79,7 +87,7 @@
                     <input
                             class="form-control border-0"
                             type="search"
-                            placeholder="Search project "
+                            placeholder="Search issue"
                     />
                 </form>
                 <!-- modal toggle button start -->
@@ -507,9 +515,10 @@
                                 </div>
                             </div>
                             <div class="accordion-body" id="descriptionDetails"></div>
-                            <div class="col mb-3 d-none" id="issue-description-save-btn-container">
-                                <button class="btn btn-success" id="issue-description-save-btn">Save</button>
-                            </div>
+                            
+                        </div>
+                        <div class="col mb-3 d-none" id="issue-description-save-btn-container">
+                            <button class="btn btn-success" id="issue-description-save-btn">Save</button>
                         </div>
                     </div>
                 </div>
@@ -1248,7 +1257,7 @@
     function createIssueCard(issue) {
         console.log(issue)
         const main = document.createElement("div");
-        main.classList.add("card", "p-0");
+        main.classList.add("card", "p-0", 'issue-card');
         main.style.minWidth = "320px";
 
         const cardHeader = `<div class="card-header justify-content-between">
