@@ -32,14 +32,7 @@
 <div class="container-fluid position-relative d-flex p-0">
 
     <!-- Content Start -->
-    <div class="content" style="
-                    background-color: #e5e5f7;
-                    opacity: 1;
-                    background-image: radial-gradient(
-                        #444cf7 0.6000000000000001px,
-                        #e5e5f7 0.6000000000000001px
-                    );
-                    background-size: 12px 12px;">
+    <div class="content" >
 
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
 
@@ -734,11 +727,7 @@
     console.log(currentLoginUserRole)
     console.log(currentLoginUserRole === "FOC")
 
-    if (currentLoginUserRole === "EMPLOYEE" || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
-        document.querySelector('[data-bs-target="#add-issue"]').classList.remove("d-none");
-    }
-
-    if (currentLoginUserRole === 'PROJECT_MANAGER') {
+    if (currentLoginUserRole === 'PROJECT_MANAGER' || currentLoginUserRole === 'SDQC' || currentLoginUserRole === 'PMO') {
         document.querySelector("#issue-link").classList.remove("d-none")
     }
 
@@ -810,9 +799,10 @@
                 clientData = data;
                 console.log("Client Data: " + JSON.stringify(clientData));
                 // Check the "Client" checkbox initially
-                if(clientData !== '' ) {
+                if(typeof clientData === 'object' && clientData !== null) {
                     $('#responsible_type').prop('checked', true);
                     populateClientName();
+                    document.querySelector("button[data-bs-target='#add-issue']").classList.remove('d-none')
                 } else {
                     document.querySelector("button[data-bs-target='#add-issue']").classList.add('d-none')
                 }
@@ -1278,7 +1268,7 @@
                             </span>
                         </div>
                         ${getLoginUser.currentUser.id === issue.user_pic.id ?
-                        '<button type="button" class="btn btn-info see-more-button text-white" data-id="${issue.id}">' +
+                        `<button type="button" class="btn btn-info see-more-button text-white" data-id="${issue.id}">` +
                             '<i class="fa-solid fa-pen-to-square"></i>' +
                         '</button>'
                         :''}
@@ -1395,15 +1385,23 @@
             });
         }
 
+        $("#reset-btn").on("click", function () {
+            $("#status-filter").val('');
+            $("#solved-filter").val('');
+            $("#category-filter").val('');
+            document.querySelector("#sort-container").innerHTML = ''
+            loadData();
+        });
+
         loadData();
 
         $('.tab-content').on('click', '.see-more-button', function () {
             // Get the issue ID directly from the button's data-id attribute
-            const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
+            const issueId = $(this).attr('data-id'); // Use $(this) instead of $('#issue-edit-btn')
             console.log('Clicked button with data-iD:', issueId);
 
             $.ajax({
-                url: 'api/issue/list/byId/' + issueId,
+                url: '/api/issue/list/byId/' + issueId,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -1879,14 +1877,6 @@
             // Hide the "solve-btn" regardless of user choice
             $("#solveBtn").hide();
         }
-    });
-
-
-    $("#reset-btn").on("click", function () {
-        $("#status-filter").val('');
-        $("#solved-filter").val('');
-        $("#category-filter").val('');
-        loadData();
     });
 
 
