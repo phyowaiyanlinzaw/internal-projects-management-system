@@ -23,7 +23,10 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
     @Mock
     private UserRepository userRepository; // Assuming UserRepository is a repository for User entities
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @Mock
+
+
+
+    @Mock
     UserService userService;
 
     @BeforeEach
@@ -102,7 +105,18 @@ class UserServiceTest {
     }
     @Test
     void registerUser() {
+        RegisterEmployeeDto registerEmployeeDto = new RegisterEmployeeDto();
+        UserDto registeredUser = new UserDto();
 
+        // Assuming the save method in the repository returns the saved user
+        when(userRepository.save(any())).thenReturn(registeredUser);
+
+        // When
+        UserDto result = userService.registerUser(registerEmployeeDto);
+
+        // Then
+
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
