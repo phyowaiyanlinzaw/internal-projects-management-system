@@ -60,7 +60,6 @@ class DepartmentServiceImplTest {
 
 
 
-
     @Test
     public void testSaveWhenDepartmentDtoPassedThenReturnDepartmentDto() {
         // Arrange
@@ -109,7 +108,7 @@ class DepartmentServiceImplTest {
 
     @Test
     public void testGetAllDepartments() {
-        // Create mock data
+
         Department department1 = new Department();
         department1.setId(1L);
         department1.setName("Department 1");
