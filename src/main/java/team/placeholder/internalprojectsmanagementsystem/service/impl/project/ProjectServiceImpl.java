@@ -524,10 +524,7 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDtoList;
     }
 
-    @Override
-    public long countTaskById(long id) {
-        return 0;
-    }
+
 
     @Override
     public ProjectDto getProjectByUsersIdAndStatus(long users, boolean status) {
