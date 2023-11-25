@@ -360,7 +360,7 @@
                 <div class="modal-body d-flex align-items-center justify-content-center">
                     <div class="container-fluid">
                         <div class="row row-cols-1">
-                            <div class="card align-items-center">
+                            <div class="card align-items-center" >
                                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                                     <div class="profile-card-icon">
                                         <img src="/images/avatars/departmenthead_avatar.svg" class="rounded-circle" style="height: 100px; width: 100px" alt="department head avatar"/>
@@ -369,31 +369,36 @@
                                     <h5 id="department-head"></h5>
                                 </div>
                             </div>
-                            <div class="pt-3">
+                            <div class=" pt-3">
                                 <ul class="nav nav-tabs nav-tabs-bordered">
                                     <li class="nav-item">
-                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                                        <button class="nav-link active" data-bs-toggle="tab"
+                                                data-bs-target="#profile-overview">Overview
+                                        </button>
                                     </li>
+
                                     <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit</button>
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" >
+                                            Edit
+                                        </button>
                                     </li>
                                 </ul>
                                 <div class="tab-content pt-3">
                                     <div class="tab-pane fade show active profile-overview" id="profile-overview">
                                         <div class="row row-cols-lg-1 row-cols-lg-1 row-cols-md-1 row-cols-xl-2">
-                                            <div class="col">
-                                                <ul class="list-group" style="padding: 0;">
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center w-100">
-                                                        Total Project<span class="badge bg-primary rounded-pill text-sm" id="total-project"></span>
-                                                    </li>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center w-100">
-                                                        Total Member<span class="badge bg-primary rounded-pill text-sm" id="total-member"></span>
-                                                    </li>
-                                                </ul>
+
+<!--                                            <ul class="list-group row" style="padding: 0;">-->
+<!--                                                -->
+<!--                                            </ul>-->
+
+                                            <div class="list-group-item d-flex justify-content-between align-items-center col-6">
+                                                Total Project<span class="badge bg-primary rounded-pill text-sm" id="total-project"></span>
+                                            </div> <br/>
+                                            <div class="list-group-item d-flex justify-content-between align-items-center col-6">
+                                                Total Member<span class="badge bg-primary rounded-pill text-sm" id="total-member"></span>
                                             </div>
-                                            <div class="col align-self-center">
-                                                <canvas style="max-width: 960px; padding: 0; min-width: 200px" id="department-projects-chart" height="200"></canvas>
-                                            </div>
+
+
                                         </div>
                                     </div>
                                     <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
