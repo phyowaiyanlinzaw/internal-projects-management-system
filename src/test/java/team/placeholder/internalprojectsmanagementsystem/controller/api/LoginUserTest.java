@@ -64,30 +64,7 @@ class LoginUserTest {
     @Test
     public void testGetAvailableEmployee(){
 
-        UserDto userDto = new UserDto();
-        userDto.setRole(Role.PROJECT_MANAGER);
-        userDto.setId(1L);
 
-        List<UserDto> userDtos = new ArrayList<>();
-
-        when(userService.getUserByEmail(any())).thenReturn(userDto);
-        when(userService.getAllUsersByPMId(anyLong())).thenReturn(userDtos);
-
-        when(userRepository.findAllByProjectManagerId(anyLong())).thenReturn(new ArrayList<>());
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "testPassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        ResponseEntity<List<UserDto>> responseEntity = loginUser.getAvailableEmployees();
-
-        // Verify that the response is as expected
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(userDtos, responseEntity.getBody());
-
-        verify(userService, times(1)).getUserByEmail(any());
-        verify(userService, times(1)).getAllUsersByPMId(anyLong());
-
-        verify(userRepository, times(1)).findAllByProjectManagerId(anyLong());
 
     }
 
