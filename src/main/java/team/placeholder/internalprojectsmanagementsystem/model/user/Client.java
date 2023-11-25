@@ -21,6 +21,11 @@ public class Client implements Serializable {
     @Column(unique = true)
     private String email;
 
+    public static AssociationOverride builder() {
+
+        return null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
