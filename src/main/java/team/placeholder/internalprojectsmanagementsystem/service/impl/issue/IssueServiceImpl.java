@@ -43,6 +43,9 @@ public class IssueServiceImpl implements IssueService {
     private final ClientRepository clientRepository;
     private final NotificationServiceImpl notificationService;
 
+
+
+
     @Override
     public IssueDto save(IsuDto isuDto) {
         Issue issue = new Issue();
@@ -69,13 +72,15 @@ public class IssueServiceImpl implements IssueService {
         issue.setResponsible_party(isuDto.getResponsible_party());
         issue.setProject(projectRepository.findById(isuDto.getProject_id()));
 
-        issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
+        if (isuDto.getStatus() != null) {
+            issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
+        }
 
         Issue issue1 = issueRepository.save(issue);
 
         IssueDto issueDto = new IssueDto();
 
-        issueDto.setId(issue1.getId());
+
         issueDto.setTitle(issue1.getTitle());
         issueDto.setDescription(issue1.getDescription());
         issueDto.setPlace(issue1.getPlace());
@@ -363,6 +368,8 @@ public class IssueServiceImpl implements IssueService {
 
         return issueDtos;
     }
+
+
 }
 
 

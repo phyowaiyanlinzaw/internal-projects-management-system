@@ -47,7 +47,6 @@ public class SecurityConfig {
                                         "/api/user/confirm-otp/**",
                                         "/api/user/reset-password/**"
                                 ).permitAll()
-                                .requestMatchers("/").authenticated()
                                 .anyRequest().authenticated()
                 ).exceptionHandling(
                 (exceptionHandling) -> exceptionHandling

@@ -7,17 +7,20 @@ import org.mockito.Mock;
 
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Amount;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
@@ -28,6 +31,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserS
 
 import team.placeholder.internalprojectsmanagementsystem.service.project.TasksService;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,30 +95,34 @@ class ProjectControllerTest {
 
         }
 
-//    @Test
-//    void save() {
-//        ProjectDto projectDto = new ProjectDto();
-//        when(projectService.save(projectDto)).thenReturn(projectDto);
-//        ResponseEntity<ProjectDto> result = projectController.save(projectDto);
-//        assertEquals(HttpStatus.OK, result.getStatusCode());
-//        assertEquals(projectDto, result.getBody());
-//        verify(projectService, times(1)).save(projectDto);
-//    }
-//
-//    @Test
-//    void saveIsNull() {
-//        ProjectDto projectDto = new ProjectDto();
-//
-//        when(projectService.save(projectDto)).thenReturn(null);
-//
-//        ResponseEntity<ProjectDto> result = projectController.save(projectDto);
-//
-//        verify(projectService, times(1)).save(projectDto);
-//
-//        // Assertions
-//        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
-//        assertNull(result.getBody());
-//    }
+    @Test
+    public void testSaveWithNonNullSavedProject() {
+
+        ProjectDto projectDto = new ProjectDto();
+        when(projectService.save(any(ProjectDto.class))).thenReturn(new ProjectDto(/* provide necessary data */));
+
+        ResponseEntity<ProListDto> responseEntity = projectController.save(projectDto);
+
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        ProListDto proListDto = responseEntity.getBody();
+        assertNotNull(proListDto);
+
+    }
+
+    @Test
+    public void testSaveWithNullSavedProject() {
+        ProjectDto projectDto = new ProjectDto();
+        when(projectService.save(any(ProjectDto.class))).thenReturn(null);
+
+
+        ResponseEntity<ProListDto> responseEntity = projectController.save(projectDto);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        ProListDto proListDto = responseEntity.getBody();
+        assertNotNull(proListDto);
+
+    }
 
 
     @Test
@@ -128,7 +136,32 @@ class ProjectControllerTest {
         verify(projectService, times(1)).getAllProjects();
         ResponseEntity<List<ProjectDto>> result2 = ResponseEntity.ok(projectDtos);
         assertEquals(result1, result2);
+    }
 
+    @Test
+    public void testGetProjectByIdWithExistingProject() {
+        long projectId = 1L;
+        ProjectDto expectedProject = new ProjectDto();
+        when(projectService.getProjectById(eq(projectId))).thenReturn(expectedProject);
+
+
+        ResponseEntity<ProjectDto> responseEntity = projectController.getProjectById(projectId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        ProjectDto actualProject = responseEntity.getBody();
+        assertNotNull(actualProject);
+
+    }
+
+    @Test
+    public void testGetProjectByIdWithNonExistingProject() {
+
+        long projectId = 2L;
+        when(projectService.getProjectById(eq(projectId))).thenReturn(null);
+
+        ResponseEntity<ProjectDto> responseEntity = projectController.getProjectById(projectId);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
     @Test
@@ -168,6 +201,39 @@ class ProjectControllerTest {
         verify(projectService, times(1)).getProjectById(nonExistentId);
     }
 
+    @Test
+    public void testGetProjectByIdAndStatusWithMatchingProject() {
+        long userId = 1L;
+        String status = "false";
+        List<ProjectDto> projects = Arrays.asList(
+                new ProjectDto(),
+                new ProjectDto()
+        );
+        when(projectService.findAllByUserId(eq(userId))).thenReturn(projects);
+
+        ResponseEntity<Map<String, Object>> responseEntity = projectController.getProjectByIdAndStatus(userId, status);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Map<String, Object> projectMap = responseEntity.getBody();
+        assertNotNull(projectMap);
+
+    }
+
+    @Test
+    public void testGetProjectByIdAndStatusWithNoMatchingProject() {
+         long userId = 2L;
+        String status = "true";
+        List<ProjectDto> projects = Arrays.asList(
+                new ProjectDto(),
+                new ProjectDto()
+        );
+        when(projectService.findAllByUserId(eq(userId))).thenReturn(projects);
+
+        ResponseEntity<Map<String, Object>> responseEntity = projectController.getProjectByIdAndStatus(userId, status);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+    }
 
     @Test
     void testUpdateAmountById() {
@@ -348,80 +414,6 @@ class ProjectControllerTest {
     }
 
 
-//    @Test
-//    public void testGetProjectByIdAndStatus() {
-//        ProjectDto projectDto = new ProjectDto();
-//        projectDto.setId(1L);
-//        projectDto.setStatus("IN_PROGRESS");
-//
-//        ClientDto clientDto = new ClientDto();
-//
-//        List<UserDto> userDtos = new ArrayList<>();
-//
-//        projectDto.setClientDto(clientDto);
-//        projectDto.setMembersUserDto(userDtos);
-//
-//        List<ProjectDto> projectList = new ArrayList<>();
-//        projectList.add(projectDto);
-//
-//        when(projectService.findAllByUserId(anyLong())).thenReturn(projectList);
-//
-//        ResponseEntity<Map<String, Object>> responseEntity = projectController.getProjectByIdAndStatus(1L, "IN_PROGRESS");
-//
-//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//
-//        Map<String, Object> responseBody = responseEntity.getBody();
-//        assertNotNull(responseBody);
-//
-//        assertEquals(1L, responseBody.get("projectId"));
-//        assertEquals(clientDto, responseBody.get("client"));
-//        assertEquals(userDtos, responseBody.get("userList"));
-//
-//        ResponseEntity<Map<String, Object>> invalidStatusResponse = projectController.getProjectByIdAndStatus(1L, "invalidStatus");
-//
-//        assertEquals(HttpStatus.OK, invalidStatusResponse.getStatusCode());
-//        Map<String, Object> invalidStatusResponseBody = invalidStatusResponse.getBody();
-//        assertNotNull(invalidStatusResponseBody);
-//        assertEquals(null, invalidStatusResponseBody.get("projectId"));
-//    }
-
-    @Test
-    public void testGetAllProjectsByRole_ProjectManager() {
-        // Mock data
-        List<ProjectDto> projects = new ArrayList<>();
-
-        when(projectService.getAllProjectsByProjectManagerId(anyLong())).thenReturn(projects);
-
-        String role = "PROJECT_MANAGER";
-        Long id = 123L;
-        ResponseEntity<List<ProjectDto>> responseEntity = projectController.getAllProjectsByRole(role, id);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(projects, responseEntity.getBody());
-    }
-
-    @Test
-    public void testGetAllProjectsByRole_DepartmentHead() {
-
-        List<ProjectDto> projects = new ArrayList<>();
-
-        when(projectService.getAllProjectsByDepartmentId(anyLong())).thenReturn(projects);
-
-        String role = "DEPARTMENT_HEAD";
-        Long id = 4L;
-
-        UserDto userDto = new UserDto();
-        DepartmentDto departmentDto = new DepartmentDto();
-        departmentDto.setId(7L);
-        userDto.setDepartmentdto(departmentDto);
-        when(userService.getUserById(anyLong())).thenReturn(userDto);
-
-        ResponseEntity<List<ProjectDto>> responseEntity = projectController.getAllProjectsByRole(role, id);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(projects, responseEntity.getBody());
-    }
-
     @Test
     void testGetAllProjectsByRoleForMember() {
         List<ProjectDto> projects = new ArrayList<>();
@@ -526,6 +518,102 @@ class ProjectControllerTest {
         assertEquals(0, emptyResponseBody.size());
     }
 
+    @Test
+    public void testGetListResponseEntity() {
+        List<ProjectDto> projects = new ArrayList<>();
+        ProjectDto project1 = new ProjectDto();
+        ProjectDto project2 = new ProjectDto();
+        projects.add(project1);
+        projects.add(project2);
+
+        // Mocking taskService.countByProjectId to return a specific count
+        when(taskService.countByProjectId(anyLong())).thenReturn(5L);
+
+        // Mocking taskService.countTaskByProjectIdAndStatus to return a specific count
+        when(taskService.countTaskByProjectIdAndStatus(anyLong(), eq(TaskStatus.FINISHED))).thenReturn(3L);
+
+        // Call the getListResponseEntity method
+        ResponseEntity<List<ProjectDto>> responseEntity = projectController.getListResponseEntity(projects);
+
+        // Check if the method returned OK status
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        // Check modifications in each ProjectDto in the list
+        for (ProjectDto projectDto : responseEntity.getBody()) {
+            assertEquals(5, projectDto.getTotalTaskCount());
+            assertEquals(3, projectDto.getCompleteTaskCount());
+
+            // Check if tasksDto and issueDto are cleared
+            assertNull(projectDto.getTasksDto());
+            assertNull(projectDto.getIssueDto());
+
+
+        }
+    }
+
+    @Test
+    public void testNewListView() {
+        // Sample role and ID for testing
+        String role = "PROJECT_MANAGER";
+        Long id = 1L;
+
+        List<ProListDto> proListDtoList = new ArrayList<>();
+
+        when(projectService.newProjectLook(any(Role.class), anyLong())).thenReturn(proListDtoList);
+
+        // Call the newListView method
+        ResponseEntity<List<ProListDto>> responseEntity = projectController.newListView(role, id);
+
+        // Verify that the method returned OK status
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        // Verify that the projectService.newProjectLook method was called with the expected parameters
+        verify(projectService).newProjectLook(Role.valueOf(role), id);
+
+        // You can further validate the contents of the returned list if needed
+        assertEquals(proListDtoList, responseEntity.getBody());
+    }
+
+    @Test
+    public void testUpdateProjectStatus() {
+        // Sample project ID and condition for testing
+        long projectId = 1L;
+        boolean condition = true;
+
+        // Call the updateProjectStatus method
+        ResponseEntity<String> responseEntity = projectController.updateProjectStatus(projectId, condition);
+
+        // Verify that the method returned OK status
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        // Verify that the projectService.updateProjectClosed method was called with the expected parameters
+        verify(projectService).updateProjectClosed(projectId, condition);
+
+        // You can further validate the content of the response if needed
+        assertEquals(" i don't know", responseEntity.getBody());
+    }
+
+    @Test
+    public void testUpdateUserListInProejct() {
+        long projectId = 1L;
+        List<UserDto> userDtos = Arrays.asList(
+                new UserDto(),
+                new UserDto()
+        );
+
+        // Call the updateUserListInProejct method
+        ResponseEntity<String> responseEntity = projectController.updateUserListInProejct(projectId, userDtos);
+
+        // Verify that the method returned OK status
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        // Verify that the projectService.updateUserListInProject method was called with the expected parameters
+        verify(projectService).updateUserListInProject(eq(projectId), any(List.class));
+
+        // You can further validate the content of the response if needed
+        assertEquals("User list updated successfully", responseEntity.getBody());
+    }
+
 
 
 
@@ -559,7 +647,6 @@ class ProjectControllerTest {
         }
 
 
-
     @Test
     void countAllByDepartmentId() {
 
@@ -575,35 +662,127 @@ class ProjectControllerTest {
             assertEquals(mockCount, responseEntity.getBody());
         }
 
+
     @Test
-    public void testGetListResponseEntity() {
-        // Mock data
-        List<ProjectDto> projects = new ArrayList<>();
+    public void testCountByProjectManagerIdAndStatus() {
+        long managerId = 1L;
+        String status = "true"; // or "false" depending on your implementation
+        boolean parsedStatus = Boolean.parseBoolean(status);
+        long expectedCount = 10L;
 
-        // Mocking the service methods
-        when(taskService.countByProjectId(anyLong())).thenReturn(5L);
-        when(taskService.countTaskByProjectIdAndStatus(anyLong(), any())).thenReturn(2L);
 
-        // Test the method
-        ResponseEntity<List<ProjectDto>> responseEntity = projectController.getListResponseEntity(projects);
+        when(projectService.countAllProjectsByProjectManagerIdAndClosed(managerId, parsedStatus)).thenReturn(expectedCount);
+
+
+        ResponseEntity<Long> responseEntity = projectController.countByProjectManagerIdAndStatus(managerId, status);
+
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(projects, responseEntity.getBody());
-
-         for (ProjectDto projectDto : projects) {
-            verify(taskService, times(1)).countByProjectId(projectDto.getId());
-            verify(taskService, times(1)).countTaskByProjectIdAndStatus(projectDto.getId(), TaskStatus.FINISHED);
 
 
-            if (projectDto.getTasksDto() != null) {
-                verify(projectDto.getTasksDto(), times(1)).clear();
-            }
-            if (projectDto.getIssueDto() != null) {
-                verify(projectDto.getIssueDto(), times(1)).clear();
-            }
+        verify(projectService).countAllProjectsByProjectManagerIdAndClosed(managerId, parsedStatus);
 
-        }
+        assertEquals(expectedCount, responseEntity.getBody().longValue());
     }
+
+    @Test
+    public void testCountByProjectManagerId() {
+        long managerId = 1L;
+        long expectedCount = 5L;
+
+        when(projectService.countAllProjectsByProjectManagerId(managerId)).thenReturn(expectedCount);
+
+        ResponseEntity<Long> responseEntity = projectController.countByProjectManagerId(managerId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        verify(projectService).countAllProjectsByProjectManagerId(managerId);
+
+
+        assertEquals(expectedCount, responseEntity.getBody().longValue());
+    }
+
+
+    @Test
+    public void testGetAllProjectsByRole_ProjectManager() {
+        // Mocking necessary data
+        String role = "PROJECT_MANAGER";
+        Long id = 1L;
+        List<ProjectDto> projects = Collections.singletonList(new ProjectDto(/* provide necessary data */));
+
+        // Mocking behavior for projectService
+        when(projectService.getAllProjectsByProjectManagerId(id)).thenReturn(projects);
+
+        // Calling the method under test
+        ResponseEntity<List<ProjectDto>> response = projectController.getAllProjectsByRole(role, id);
+
+        // Verifying interactions and assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(projectService, times(1)).getAllProjectsByProjectManagerId(id);
+        assertEquals(projects, response.getBody());
+    }
+
+    @Test
+    public void testGetAllProjectsByRole_DepartmentHead() {
+        // Mocking necessary data
+        String role = "DEPARTMENT_HEAD";
+        Long id = 1L;
+        Long departmentId = 2L;
+        List<ProjectDto> projects = Collections.singletonList(new ProjectDto(/* provide necessary data */));
+
+        // Mocking behavior for userService and projectService
+        when(userService.getUserById(id)).thenReturn(new UserDto(/* provide necessary data */));
+        when(userService.getUserById(id).getDepartmentdto().getId()).thenReturn(departmentId);
+        when(projectService.getAllProjectsByDepartmentId(departmentId)).thenReturn(projects);
+
+        // Calling the method under test
+        ResponseEntity<List<ProjectDto>> response = projectController.getAllProjectsByRole(role, id);
+
+        // Verifying interactions and assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(userService, times(1)).getUserById(id);
+        verify(userService.getUserById(id), times(1)).getDepartmentdto();
+        verify(projectService, times(1)).getAllProjectsByDepartmentId(departmentId);
+        assertEquals(projects, response.getBody());
+    }
+
+    @Test
+    public void testGetAllProjectsByRole_Member() {
+        // Mocking necessary data
+        String role = "MEMBER";
+        Long id = 1L;
+        List<ProjectDto> projects = Collections.singletonList(new ProjectDto());
+
+        // Mocking behavior for projectService
+        when(projectService.findAllByUserId(id)).thenReturn(projects);
+
+        // Calling the method under test
+        ResponseEntity<List<ProjectDto>> response = projectController.getAllProjectsByRole(role, id);
+
+        // Verifying interactions and assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(projectService, times(1)).findAllByUserId(id);
+        assertEquals(projects, response.getBody());
+    }
+
+    @Test
+    public void testGetAllProjectsByRole_Default() {
+        // Mocking necessary data
+        String role = "SOME_OTHER_ROLE";
+        List<ProjectDto> projects = Collections.singletonList(new ProjectDto());
+
+        // Mocking behavior for projectService
+        when(projectService.getAllProjects()).thenReturn(projects);
+
+        // Calling the method under test
+        ResponseEntity<List<ProjectDto>> response = projectController.getAllProjectsByRole(role, null);
+
+        // Verifying interactions and assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(projectService, times(1)).getAllProjects();
+        assertEquals(projects, response.getBody());
+    }
+
 
 
 

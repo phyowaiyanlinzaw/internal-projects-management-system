@@ -23,6 +23,8 @@ public class DepartmentDto implements Serializable {
     }
 
 
+
+
     public DepartmentDto(long id) {
         this.id = id;
     }
