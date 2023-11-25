@@ -48,10 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     }
 
-    @Override
-    public ReviewDto getRevieweById(long id) {
-        return null;
-    }
+
 
     @Override
     public ReviewDto updateReview(ReviewDto reviewDto) {

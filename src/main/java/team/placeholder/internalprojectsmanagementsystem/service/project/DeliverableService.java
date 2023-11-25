@@ -10,7 +10,7 @@ public interface DeliverableService {
 
     DeliverableDto save(DeliverableDto deliverableDto);
 
-    public List<DeliverableDto> getAll();
+
 
     DeliverableDto updateDeliverable(DeliverableDto deliverableDto);
 
