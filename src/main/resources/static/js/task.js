@@ -242,7 +242,7 @@ var userId;
 
 //initialize jqeury ui datepicker
 $(
-    
+
     function () {
         const projectStartDateElement = document.getElementById("projectStartDate");
         const projectEndDateElement = document.getElementById("projectEndDate");
@@ -251,6 +251,18 @@ $(
             maxDate: new Date(parseInt(projectEndDateElement.innerText)),
             dateFormat: 'yy-mm-dd',
             onSelect: function (dateText, inst) {
+
+
+                const startDate = $('#start_date').val();
+                const endDate = $("#end_date").val();
+
+                const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
+
+                $("#plan-hours").val(duration * 7)
+
+                validatePlanEndTime();
+
+                validatePlanStartTime()
                 if (dateText !== "") {
                     var dateObject = $(this).datepicker('getDate');
                     $("#end_date").datepicker('option', 'minDate', dateObject);
@@ -657,16 +669,16 @@ console.log("MEMBERS LIST", membersList);
 
 
 // bind events
-originalTagify.on('add', onAddTag)
+originalTagify.on('add', validateMember)
 originalTagify.DOM.input.addEventListener('focus', onSelectFocus)
 
 // when add value to the employee add to the tagify
-function onAddTag(e) {
+// function onAddTag(e) {
 
-    console.log(e);
-    originalTagify.DOM.scope.classList.add('border', 'border-success', 'is-valid');
+//     console.log(e);
+//     originalTagify.DOM.scope.classList.add('border', 'border-success', 'is-valid');
 
-}
+// }
 
 // when focus to the employee add tagify
 function onSelectFocus(e) {
@@ -1171,13 +1183,10 @@ console.log("TASK LIST", taskList)
 //call api/tasks/save when click add button and send data as JSON.stringify to api
 //use jquery ajax
 
-let validatedForm = false;
-
 function validateTitle() {
     const title = $('#title').val();
     const errorContainer = $('#title').siblings('.error-container');
     if (title.length < 1) {
-        validatedForm = false;
         if (errorContainer.length === 0) {
             let p = $("<p>")
                 .addClass("text-danger fs-6")
@@ -1191,11 +1200,13 @@ function validateTitle() {
 
         $('#title').addClass('is-invalid');
         $('#title').removeClass('is-valid');
+        return false;
     } else {
-        validatedForm = true;
+        
         errorContainer.remove();
         $('#title').addClass('is-valid');
         $('#title').removeClass('is-invalid');
+        return true
     }
 }
 
@@ -1203,7 +1214,6 @@ function validateDescription() {
     const description = $('#description').val();
     const errorContainer = $('#description').siblings('.error-container');
     if (description.length < 1) {
-        validatedForm = false;
         if (errorContainer.length === 0) {
             let p = $("<p>")
                 .addClass("text-danger fs-6")
@@ -1217,19 +1227,21 @@ function validateDescription() {
 
         $('#description').addClass('is-invalid');
         $('#description').removeClass('is-valid');
+        return false;
     } else {
-        validatedForm = true;
         errorContainer.remove();
         $('#description').addClass('is-valid');
         $('#description').removeClass('is-invalid');
+        return true;
     }
 }
 
 function validatePlanStartTime() {
     const start_date = $('#start_date').val();
     const errorContainer = $('#start_date').siblings('.error-container');
+    console.log(start_date)
     if (start_date === "") {
-        validatedForm = false;
+        
         if (errorContainer.length === 0) {
             let p = $("<p>")
                 .addClass("text-danger fs-6")
@@ -1243,11 +1255,12 @@ function validatePlanStartTime() {
 
         $('#start_date').addClass('is-invalid');
         $('#start_date').removeClass('is-valid');
+        return false;
     } else {
-        validatedForm = true;
         errorContainer.remove();
         $('#start_date').addClass('is-valid');
         $('#start_date').removeClass('is-invalid');
+        return true;
     }
 }
 
@@ -1257,7 +1270,6 @@ function validatePlanEndTime() {
     const end_date = $('#end_date').val();
     const errorContainer = $('#end_date').siblings('.error-container');
     if (end_date === "") {
-        validatedForm = false;
         if (errorContainer.length === 0) {
             let p = $("<p>")
                 .addClass("text-danger fs-6")
@@ -1271,49 +1283,79 @@ function validatePlanEndTime() {
 
         $('#end_date').addClass('is-invalid');
         $('#end_date').removeClass('is-valid');
+        return false;
+
     } else {
-        validatedForm = true;
         errorContainer.remove();
         $('#end_date').addClass('is-valid');
         $('#end_date').removeClass('is-invalid');
+        return true;
     }
 }
 
 function validatePlanHour() {
-    const plan_hours = $('#plan_hours').val();
-    const errorContainer = $('#plan_hours').siblings('.error-container');
-    if (plan_hours === "" || plan_hours < 1) {
+    const plan_hours = $('#plan-hours').val();
+    const errorContainer = $('#plan-hours').siblings('.error-container');
 
-        validatedForm = false;
+    const startDate = document.querySelector("#start_date").value;
+
+    const endDate = document.querySelector("#end_date").value;
+
+    const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
+
+    const durationInHour = duration * 24;
+
+    console.log(duration)
+
+    console.log(plan_hours)
+
+    console.log(plan_hours, durationInHour)
+
+    if (plan_hours > durationInHour || plan_hours == '')  {
+
+        let text
+
+        if (plan_hours === '' || isNaN(plan_hours)) {
+
+            text =  `put some number`
+
+        } else {
+            text = `plan hour is greater than ${durationInHour} hours`
+        }
+
+        console.log('plan hours is greater than duration', duration)
+
         if (errorContainer.length === 0) {
             let p = $("<p>")
                 .addClass("text-danger fs-6")
                 .text(
-                    "Plan Hour is required"
+                    text
                 )
                 .css("margin", "0");
-            $('#plan_hours').after('<div class="error-container"></div>');
-            $('#plan_hours').siblings('.error-container').append(p);
+            $('#plan-hours').after('<div class="error-container"></div>');
+            $('#plan-hours').siblings('.error-container').append(p);
         }
 
-        $('#plan_hours').addClass('is-invalid');
-        $('#plan_hours').removeClass('is-valid');
+        $('#plan-hours').addClass('is-invalid');
+        $('#plan-hours').removeClass('is-valid');
+        return false;
     } else {
-        validatedForm = true;
         errorContainer.remove();
-        $('#plan_hours').addClass('is-valid');
-        $('#plan_hours').removeClass('is-invalid');
+        $('#plan-hours').addClass('is-valid');
+        $('#plan-hours').removeClass('is-invalid');
+        return true;
+
     }
 }
 
 
 
-function validateMember() {
+function validateMember(e) {
     const member = $('#select-member').val();
     const errorContainer = $('#select-member').siblings('.error-container');
-    if (!member || member.length < 1 || member === "") {
+    console.log(e)
+    if (!e.detail.data) {
         console.log("member is required")
-        validatedForm = false;
         originalTagify.DOM.scope.classList.add(
             "border",
             "border-danger",
@@ -1330,13 +1372,15 @@ function validateMember() {
             $('#select-member').siblings('.error-container').append(p);
         }
 
-        $('#select-member').addClass('is-invalid');
-        $('#select-member').removeClass('is-valid');
+        originalTagify.DOM.scope.classList.add('border', 'border-danger', 'is-invalid');
+        originalTagify.DOM.scope.classList.remove('border', 'border-success', 'is-valid');
+        return false;
+
     } else {
-        validatedForm = true;
         errorContainer.remove();
-        $('#select-member').addClass('is-valid');
-        $('#select-member').removeClass('is-invalid');
+        originalTagify.DOM.scope.classList.add('border', 'border-success', 'is-valid');
+        originalTagify.DOM.scope.classList.remove('border', 'border-danger', 'is-invalid');
+        return true;
     }
 }
 
@@ -1344,7 +1388,6 @@ function validateTakGroup() {
     const group = $('#group').val();
     const errorContainer = $('#group').siblings('.error-container');
     if (!group || group.length < 1 || group === "") {
-        validatedForm = false;
         if (errorContainer.length === 0) {
             let p = $("<p>")
                 .addClass("text-danger fs-6")
@@ -1358,23 +1401,26 @@ function validateTakGroup() {
 
         $('#group').addClass('is-invalid');
         $('#group').removeClass('is-valid');
+        return false;
     } else {
-        validatedForm = true;
         errorContainer.remove();
         $('#group').addClass('is-valid');
         $('#group').removeClass('is-invalid');
+        return true;
+
     }
 }
 
 function validateAddTask() {
-    validateTitle();
-    validateDescription();
-    validatePlanStartTime();
-    validatePlanEndTime();
-    validatePlanHour();
-    validateTakGroup();
-    validateMember();
-    return validatedForm;
+
+    
+    return validateTitle() &&
+    validateDescription() &&
+    validateTakGroup() &&
+    validatePlanStartTime() &&
+    validatePlanEndTime() &&
+    validatePlanHour()
+
 }
 
 $('#title').on('input', function () {
@@ -1385,21 +1431,26 @@ $('#description').on('input', function () {
     validateDescription();
 });
 
-
-$('#start_date').on('input', function () {
-    validatePlanStartTime();
-});
-
 $('#end_date').on('change', function () {
+    console.log('end-input')
     validatePlanEndTime();
+
+    const startDate = $('#start_date').val();
+    const endDate = $(this).val();
+
+    const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
+
+    $("#plan-hours").val(duration * 7)
+
+    validatePlanHour()
+
 });
 
-$('#plan_hours').on('input', function () {
+console.log('llllllllllllllllllll',$('#end_date'))
+
+document.querySelector('#plan-hours').addEventListener('input', function () {
     validatePlanHour();
-});
-
-$('#select-member').on('input', function () {
-    validateMember();
+    console.log('leelr')
 });
 
 
@@ -1414,10 +1465,43 @@ $("#task-add-btn").on("click", function () {
     console.log(document.querySelector("#select-member").value)
 
     if (!validateAddTask()) {
-        return;
+        return
     }
 
-    const tagData = originalTagify.value[0].id
+    const member = $('#select-member').val();
+    const errorContainer = $('#select-member').siblings('.error-container');
+
+    let tagData 
+    if (originalTagify.value[0]) {
+        tagData = originalTagify.value[0].id
+        errorContainer.remove();
+        originalTagify.DOM.scope.classList.add('border', 'border-success', 'is-valid');
+        originalTagify.DOM.scope.classList.remove('border', 'border-danger', 'is-invalid');
+    } else {
+        console.log("member is required")
+        originalTagify.DOM.scope.classList.add(
+            "border",
+            "border-danger",
+            "is-invalid"
+        );
+        if (errorContainer.length === 0) {
+            let p = $("<p>")
+                .addClass("text-danger fs-6")
+                .text(
+                    "Member is required"
+                )
+                .css("margin", "0");
+            $('#select-member').after('<div class="error-container"></div>');
+            $('#select-member').siblings('.error-container').append(p);
+        }
+
+        originalTagify.DOM.scope.classList.add('border', 'border-danger', 'is-invalid');
+        originalTagify.DOM.scope.classList.remove('border', 'border-success', 'is-valid');
+        return
+    }
+
+    console.log(tagData)
+
 
     const startDate = new Date($("#start_date").val());
     const dueDate = new Date($("#end_date").val());
