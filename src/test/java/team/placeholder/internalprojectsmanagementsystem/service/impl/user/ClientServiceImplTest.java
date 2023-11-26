@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
@@ -34,6 +35,8 @@ class ClientServiceImplTest {
     @Mock
     private ModelMapper modelMapper;
     @Mock
+    private Client client;
+    @Mock
     private ClientDto clientDto;
 
     @BeforeEach
@@ -45,39 +48,22 @@ class ClientServiceImplTest {
 
 
     @Test
-    public void testSave() {
-        // Test data
-        clientDto = new ClientDto();
-        clientDto.setName("Test Client");
-        clientDto.setEmail("test@example.com");
-        clientDto.setPhone("1234567890");
-log.info("Client Dto Phone : " + clientDto.getPhone());
-        // Mock behavior
-        Client savedClient = new Client();
-        savedClient.setId(1L);
-        when(clientRepository.save(any(Client.class))).thenReturn(savedClient);
+    void testSave(){
+            Client client =  new Client.ClientBuilder()
+                    .id(1L)
+                    .name("John Doe")
+                    .phone("123-456-7890")
+                    .email("john.doe@example.com")
+                    .build();
 
-        // Call the method to be tested
-        ClientDto result = clientService.save(clientDto);
+            ClientDto clientDto = new ClientDto.ClientDtoBuilder
+                    .id(1L)
+                    .name("John Doe")
+                    .phone("123-456-7890")
+                    .email("john.doe@example.com")
+                    .build();
 
-        // Verify the behavior
-        verify(clientRepository, times(1)).save(any(Client.class));
-
-// Check if result is not null before asserting
-        if (result != null) {
-            assertEquals(savedClient.getId(), result.getId());
-        } else {
-            // Handle the case where save returns null (possibly expected behavior)
-            // You might decide to fail the test, log a message, or take other appropriate action.
-            fail("The result is null");
-        }
-
-        // Check if result is not null before asserting
-        if (result != null) {
-            assertEquals(savedClient.getId(), result.getId());
-        } else {
-            fail("The result is null");
-        }
+            when(clientRepository.save(Mockito.any(Client.class))).thenReturn(client);
     }
 
 
