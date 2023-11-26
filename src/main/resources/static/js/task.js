@@ -393,7 +393,7 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
     document.getElementById("member-task-detail-due-date").value = endDateString
 
     document.getElementById('pm-plan-edit-hours').value = currentTask.plan_hours;
-    document.getElementById('member-task-plan-hours').innerText = currentTask.plan_hours.toString() + " hours"
+    document.getElementById('member-task-plan-hours').innerText = currentTask.actual_hours === null ? 0 : currentTask.plan_hours.toString() + " hours"
 
     const duration = calculateWeekdayDuration(startDate, endDate);
     document.getElementById("member-task-duration").innerText = duration.toString() + " days ";
@@ -694,17 +694,22 @@ function createTaskDiv(task) {
         "rounded-2",
         "text-white"
     );
-    switch (task.status) {
-        case "TODO":
-            taskDiv.classList.add("bg-primary");
-            break;
-        case "IN_PROGRESS":
-            taskDiv.classList.add("bg-info");
-            break;
-        case "FINISHED":
-            taskDiv.classList.add("bg-success");
-            break;
+    if (!task.due){
+        switch (task.status) {
+            case "TODO":
+                taskDiv.classList.add("bg-primary");
+                break;
+            case "IN_PROGRESS":
+                taskDiv.classList.add("bg-info");
+                break;
+            case "FINISHED":
+                taskDiv.classList.add("bg-success");
+                break;
+        }
+    }else{
+        taskDiv.classList.add("bg-danger")
     }
+
     if (!project.closed) {
         taskDiv.draggable = true;
     }

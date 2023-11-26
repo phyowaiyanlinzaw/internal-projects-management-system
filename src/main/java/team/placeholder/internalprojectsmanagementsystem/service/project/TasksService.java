@@ -32,4 +32,6 @@ public interface TasksService {
 
     void deleteById(long id);
 
+    void updateTasksDueStatus();
+
 }
