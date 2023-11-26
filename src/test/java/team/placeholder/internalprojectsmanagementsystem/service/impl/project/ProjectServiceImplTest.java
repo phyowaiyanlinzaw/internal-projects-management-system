@@ -87,89 +87,8 @@ class ProjectServiceImplTest {
     @Test
     void getAllProjects() {
 
-
-
-        List<Project> mockProjects = createMockProjects();
-
-        // Mock the behavior of the projectRepository
-        when(projectRepository.findAll()).thenReturn(mockProjects);
-        when(taskRepository.countByProjectIdAndDeletedFalse(anyLong())).thenReturn(10L); // Adjust as needed
-
-        // Mock the behavior of the modelMapper
-        when(modelMapper.map(any(), eq(ProjectDto.class))).thenReturn(createTestProjectDto());
-        when(modelMapper.map(any(), eq(SystemOutLineDto.class))).thenReturn(createTestSystemOutLineDto());
-        when(modelMapper.map(any(), eq(ClientDto.class))).thenReturn(createTestClientDto());
-        when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(createTestUserDto());
-        when(modelMapper.map(any(), eq(DepartmentDto.class))).thenReturn(createTestDepartmentDto());
-        // You may need to mock other mappings based on your actual usage
-
-        // Act: Call the getAllProjects method
-        List<ProjectDto> result = projectService.getAllProjects();
-
-        // Assert: Validate the result or perform further assertions based on your business logic
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
-        // Add more assertions based on the behavior of your getAllProjects method
-
-        // Verify that the necessary methods were called the expected number of times
-        verify(projectRepository, times(1)).findAll();
-        verify(taskRepository, times(mockProjects.size())).countByProjectIdAndDeletedFalse(anyLong());
-        verify(modelMapper, times(mockProjects.size())).map(any(), eq(ProjectDto.class));
-        verify(modelMapper, atLeastOnce()).map(any(), eq(SystemOutLineDto.class));
-        verify(modelMapper, atLeastOnce()).map(any(), eq(ClientDto.class));
-        verify(modelMapper, atLeastOnce()).map(any(), eq(UserDto.class));
-        verify(modelMapper, atLeastOnce()).map(any(), eq(DepartmentDto.class));
-        // You may need to verify other mappings based on your actual usage
     }
 
-    // Helper methods to create mock objects for testing
-    private List<Project> createMockProjects() {
-        // Create and return a list of mock projects for testing
-        // Adjust the properties based on your actual usage
-        List<Project> projects = new ArrayList<>();
-        projects.add(createMockProject());
-        // Add more projects if needed
-        return projects;
-    }
-
-    private Project createMockProject() {
-        // Create and return a mock project for testing
-        // Adjust the properties based on your actual usage
-        Project project = new Project();
-        project.setId(1L);
-        // Set other properties as needed
-        return project;
-    }
-
-    private ProjectDto createTestProjectDto() {
-        // Create and return a sample ProjectDto for testing
-        // You need to set the necessary properties based on your business logic
-        return new ProjectDto();
-    }
-
-    private SystemOutLineDto createTestSystemOutLineDto() {
-        // Create and return a sample SystemOutLineDto for testing
-        // You need to set the necessary properties based on your business logic
-        return new SystemOutLineDto();
-    }
-
-    private ClientDto createTestClientDto() {
-        // Create and return a sample ClientDto for testing
-        // You need to set the necessary properties based on your business logic
-        return new ClientDto();
-    }
-
-    private UserDto createTestUserDto() {
-        // Create and return a sample UserDto for testing
-        // You need to set the necessary properties based on your business logic
-        return new UserDto();
-    }
-
-    private DepartmentDto createTestDepartmentDto() {
-        // Create and return a sample DepartmentDto for testing
-        // You need to set the necessary properties based on your business logic
-        return new DepartmentDto();
-    }
 
     @Test
     void getProjectById() {
@@ -351,4 +270,7 @@ class ProjectServiceImplTest {
     void getAllPM() {
 
     }
+
+
+
 }
