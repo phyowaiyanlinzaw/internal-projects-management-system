@@ -646,8 +646,8 @@ public class ProjectServiceImpl implements ProjectService {
 
                     tasksDto.setId(task.getId());
                     tasksDto.setTitle(task.getTitle());
-                    tasksDto.setPlan_start_time(task.getPlanStartTime());
-                    tasksDto.setPlan_end_time(task.getPlanEndTime());
+                    tasksDto.setPlanStartTime(task.getPlanStartTime());
+                    tasksDto.setPlanEndTime(task.getPlanEndTime());
                     tasksDto.setUserDto(modelMapper.map(task.getUser(), UserDto.class));
                     tasksDto.setStatus(task.getStatus());
                     tasksDtoList.add(tasksDto);

@@ -136,7 +136,7 @@ document.querySelector("#add-new-employee-to-project").addEventListener('click',
     
     console.log(e.target.innerText)
 
-    if (e.target.innerText == 'Select all') {
+    if (e.target.innerText === 'Select all') {
         e.target.innerText = 'Deselect all'
         console.log($('.pickme').prop('checked'))
         $('.pickme').bootstrapToggle('on');
@@ -378,8 +378,8 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
     }
 
     // Convert timestamp to Date objects
-    const startDate = new Date(currentTask.plan_start_time);
-    const endDate = new Date(currentTask.plan_end_time);
+    const startDate = new Date(currentTask.planStartTime);
+    const endDate = new Date(currentTask.planEndTime);
 
     // Get the date strings in 'yyyy-mm-dd' format
     const startDateString = startDate.toISOString().split('T')[0];
@@ -392,14 +392,14 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
     document.getElementById("member-task-detail-start-date").value = startDateString
     document.getElementById("member-task-detail-due-date").value = endDateString
 
-    document.getElementById('pm-plan-edit-hours').value = currentTask.plan_hours;
-    document.getElementById('member-task-plan-hours').innerText = currentTask.actual_hours === null ? 0 : currentTask.plan_hours.toString() + " hours"
+    document.getElementById('pm-plan-edit-hours').value = currentTask.planHours;
+    document.getElementById('member-task-plan-hours').innerText = currentTask.planHours === null ? 0 : currentTask.planHours.toString() + " hours"
 
     const duration = calculateWeekdayDuration(startDate, endDate);
     document.getElementById("member-task-duration").innerText = duration.toString() + " days ";
     document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
 
-    document.getElementById("pm-actual-edit-hours").value = currentTask.actual_hours === null ? 0 : currentTask.actual_hours;
+    document.getElementById("pm-actual-edit-hours").value = currentTask.actualHours === null ? 0 : currentTask.actualHours;
 
     // Get all elements with the common class name
     const editableInputs = document.querySelectorAll(".editable-input");
@@ -600,11 +600,11 @@ saveBtn.addEventListener("click", function (event) {
         title: $("#pm-task-title-input").val(),
         description: $("#pm-description-editor").val(),
         // Convert to Unix timestamp
-        plan_start_time: startDate.getTime(),
-        plan_end_time: dueDate.getTime(),
-        plan_hours: $("#pm-plan-edit-hours").val(),
+        planStartTime: startDate.getTime(),
+        planEndTime: dueDate.getTime(),
+        planHours: $("#pm-plan-edit-hours").val(),
         tasksGroup: $("#pm-task-group").val(),
-        actual_hours: parseInt($("#pm-actual-edit-hours").val()),
+        actualHours: parseInt($("#pm-actual-edit-hours").val()),
         userId: userId,
     };
 
@@ -627,12 +627,12 @@ saveBtn.addEventListener("click", function (event) {
             assignedMemberSpan.innerText = response.userDto.name + " | " + response.userDto.role
             assignedMemberTagify.value = response.userDto.name + " | " + response.userDto.role
             description.value = response.description
-            document.getElementById('pm-task-detail-start-date').value = new Date(response.plan_start_time).toISOString().split('T')[0];
-            document.getElementById("pm-task-detail-due-date").value = new Date(response.plan_end_time).toISOString().split('T')[0];
+            document.getElementById('pm-task-detail-start-date').value = new Date(response.planStartTime).toISOString().split('T')[0];
+            document.getElementById("pm-task-detail-due-date").value = new Date(response.planEndTime).toISOString().split('T')[0];
             const duration = calculateWeekdayDuration(startDate, dueDate);
             document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
-            document.getElementById("pm-plan-edit-hours").value = response.plan_hours
-            document.getElementById("pm-actual-edit-hours").value = response.actual_hours
+            document.getElementById("pm-plan-edit-hours").value = response.planHours
+            document.getElementById("pm-actual-edit-hours").value = response.actualHours
             $('#task-details').modal('hide')
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -871,7 +871,7 @@ for (let i = 0; i < taskList.length; i++) {
                 currentTaskData.status = currentZone.getAttribute("id")
 
                 if (currentTaskData.status === 'IN_PROGRESS') {
-                    currentTaskData.actual_start_time = new Date().getTime()
+                    currentTaskData.actualStartTime = new Date().getTime()
                 }
 
                 if (currentTaskData.status === 'FINISHED') {
@@ -883,7 +883,7 @@ for (let i = 0; i < taskList.length; i++) {
                         const actualHoursSubmitBtn = document.getElementById('actual-hours-input-btn');
 
                         const clickHandler = function () {
-                            currentTaskData.actual_hours = actualHoursInput.value;
+                            currentTaskData.actualHours = actualHoursInput.value;
                             if (validateActualWorkingHour(parseInt(actualHoursInput.value))) {
                                 $('#actual-hours-input-modal').modal('hide');
                                 actualHoursInput.value = '';
@@ -901,7 +901,7 @@ for (let i = 0; i < taskList.length; i++) {
                     // Wait for the Promise to be resolved before proceeding
                     await actualHoursInputPromise;
 
-                    currentTaskData.actual_end_time = new Date().getTime()
+                    currentTaskData.actualEndTime = new Date().getTime()
                 }
 
                 $.ajax({
@@ -910,9 +910,9 @@ for (let i = 0; i < taskList.length; i++) {
                     data: {
                         id: currentTaskData.id,
                         status: currentTaskData.status,
-                        actual_start_time: currentTaskData.actual_start_time,
-                        actual_end_time: currentTaskData.actual_end_time,
-                        actual_hours: currentTaskData.actual_hours === null ? 0 : currentTaskData.actual_hours
+                        actualStartTime: currentTaskData.actualStartTime,
+                        actualEndTime: currentTaskData.actualEndTime,
+                        actualHours: currentTaskData.actualHours === null ? 0 : currentTaskData.actualHours
                     },
                 })
                     .then(response => {
@@ -1426,9 +1426,9 @@ $("#task-add-btn").on("click", function () {
         title: $("#title").val(),
         description: $("#description").val(),
         // Convert to Unix timestamp
-        plan_start_time: startDate.getTime(),
-        plan_end_time: dueDate.getTime(),
-        plan_hours: $("#plan-hours").val(),
+        planStartTime: startDate.getTime(),
+        planEndTime: dueDate.getTime(),
+        planHours: $("#plan-hours").val(),
         tasksGroup: $("#group").val(),
         projectId:
             parseInt(projectId)
@@ -1483,8 +1483,8 @@ $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
         events: taskList.map((task) => {
             return {
                 title: task.title,
-                start: new Date(task.plan_start_time),
-                end: new Date(task.plan_end_time + 86400000),
+                start: new Date(task.planStartTime),
+                end: new Date(task.planEndTime + 86400000),
                 color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#f74444",
                 textColor: "white",
                 allDay: true,
@@ -1516,7 +1516,7 @@ $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
             //get plan_end_time and convert to date and do some math to show remaining days
             const planEndTime = taskList.find((task) => {
                 return task.title === eventTitle;
-            }).plan_end_time;
+            }).planEndTime;
             //only show date and month
             const planEndTimeDate = new Date(planEndTime).toLocaleDateString('en-US', {
                 day: 'numeric',

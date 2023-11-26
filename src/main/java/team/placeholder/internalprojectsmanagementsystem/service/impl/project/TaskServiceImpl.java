@@ -40,9 +40,9 @@ public class TaskServiceImpl implements TasksService {
         task.setTitle(taskRequestDto.getTitle());
         task.setDescription(taskRequestDto.getDescription());
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
-        task.setPlanStartTime(taskRequestDto.getPlan_start_time());
-        task.setPlanEndTime(taskRequestDto.getPlan_end_time());
-        task.setPlanHours(taskRequestDto.getPlan_hours());
+        task.setPlanStartTime(taskRequestDto.getPlanStartTime());
+        task.setPlanEndTime(taskRequestDto.getPlanEndTime());
+        task.setPlanHours(taskRequestDto.getPlanHours());
         task.setDue(false);
         task.setStatus(TaskStatus.TODO);
         User user = userRepository.findById(taskRequestDto.getUserId());
@@ -108,13 +108,13 @@ public class TaskServiceImpl implements TasksService {
             return null;
         }
         task.setTitle(taskRequestDto.getTitle());
-        task.setActualHours(taskRequestDto.getActual_hours());
+        task.setActualHours(taskRequestDto.getActualHours());
         task.setDescription(taskRequestDto.getDescription());
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
         task.setUser(userRepository.findById(taskRequestDto.getUserId()));
-        task.setPlanStartTime(taskRequestDto.getPlan_start_time());
-        task.setPlanEndTime(taskRequestDto.getPlan_end_time());
-        task.setPlanHours(taskRequestDto.getPlan_hours());
+        task.setPlanStartTime(taskRequestDto.getPlanStartTime());
+        task.setPlanEndTime(taskRequestDto.getPlanEndTime());
+        task.setPlanHours(taskRequestDto.getPlanHours());
 
         taskRepository.save(task);
 
