@@ -897,15 +897,16 @@
                     : "";
 
                 const newProject = document.createElement("div");
-                newProject.classList.add("accordion", "container-fluid", 'project-card');
+                newProject.classList.add("accordion", "container-fluid", 'project-card', 'p-0');
                 newProject.id = `outer-project-${project.id}`;
 
-                newProject.innerHTML += `<div style="cursor:pointer;" class="row d-flex align-items-center col-rols-5 border border-${
+                newProject.innerHTML += `
+                    <div style="cursor:pointer;" class="row flex-grow-1 d-flex align-items-center col-rols-5 border border-${
                     project.closed ? "danger" : "dark"
                 }" id="project-${
                     project.id
                 }" data-bs-toggle="modal" data-bs-target="#project-details">
-                                <div class="col p-2">
+                                <div class="col ps-2 pt-2 pe-2 pb-2">
                                     <div class="progress bg-light border border-${
                                         project.closed ? "danger" : "primary"
                                     }">
@@ -951,13 +952,15 @@
                                 ${taskListHtml}
                             </div>
                             <div
-                            class="d-flex justify-content-end rounded-1 text-white"
+                            class="d-flex justify-content-end rounded-1 text-white gap-2"
                             >
+                            <input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>
                                 <i class="fa-solid fa-angle-down bg-primary p-1 rounded-bottom" data-bs-toggle="collapse"
                             data-bs-target="#collapse-project-${project.id}"
                             aria-expanded="true"
                             aria-controls="collapse-project-${project.id}"
                             style="cursor: pointer;"></i>
+                            
                             </div>`;
 
                 return newProject;
@@ -2233,6 +2236,40 @@
                 }
             });
 
+            async function getAllProjectInfo() {
+
+                const projectList = await getData('/api/project/list');
+
+                console.log(projectList)
+
+            }
+
+            async function getAllSelectedProjectInfo() {
+
+                const selectedProjectInput = document.querySelector("#sort-container").querySelectorAll("input[type='checkbox']:checked")
+
+                const selectedProject = [];
+
+                for (const checkbox of selectedProjectInput) {
+
+                    const id = checkbox.value.split("-").pop()
+
+                    try {
+                        const projectData = await getData(`/api/project/list/${id}`);
+                        selectedProject.push(projectData);
+                    } catch (error) {
+                        console.log(`Error fetching data for project with id ${id}:`, error);
+                    }
+
+                }
+
+                console.log(selectedProject)
+            }
+
+            window.getAllSelectedProjectInfo = getAllSelectedProjectInfo // don't delete this 
+
+            window.getAllProjectInfo = getAllProjectInfo; // don't delete this 
+
             //list project end
             if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
                 $('button[data-bs-target="#project-edit"]').remove();
@@ -2261,7 +2298,7 @@
                     style="width: 3rem; height: 3rem"
                     role="status"
                 >
-                    <span class="sr-only">Loading...</span>
+                    <span class="sr-only"></span>
                 </div>
             </div>
             <!-- Spinner End -->
@@ -2374,8 +2411,14 @@
                             <div class="col p-0 text-center">Name</div>
                             <div class="col p-0 text-center">Role</div>
                         </div>
+                        <div class="text-end mt-2">
+                            <button onclick="getAllSelectedProjectInfo()" type="button" class="btn btn-primary">onlyselected</button>
+                            <button onclick="getAllProjectInfo()" type="button" class="btn btn-primary ">
+                                Export all
+                            </button>
+                        </div>
                         <div
-                            class="p-3 d-flex flex-column gap-2"
+                            class="d-flex pt-2 flex-column gap-2"
                             style="background-color: #e5e5f7"
                             id="sort-container"
                         >

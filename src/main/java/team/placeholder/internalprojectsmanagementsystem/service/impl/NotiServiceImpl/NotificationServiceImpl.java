@@ -43,11 +43,14 @@ public class NotificationServiceImpl implements NotificationService {
 
             Notification notification1 = notiRepo.save(notification);
 
+
+
             NotiDto notiDto = modelMapper.map(notification, NotiDto.class);
 
             if(objects.length > 0) {
                 for (Object object : objects) {
                     sendNotification(notiDto, userId, eventName, object);
+
                 }
             }
             else {
@@ -55,10 +58,11 @@ public class NotificationServiceImpl implements NotificationService {
             }
 
         } catch (Exception e) {
-            log.error("Error while sending notification: {}", e.getMessage());
-            log.error("Stack Trace: ", e); // This will automatically print the stack trace
-            log.error("Cause: {}", e.getCause());
-            log.error("Filled Stack Trace: ", e.fillInStackTrace());
+//            log.error("Error while sending notification: {}", e.getMessage());
+//            log.error("Stack Trace: ", e); // This will automatically print the stack trace
+//            log.error("Cause: {}", e.getCause());
+//            log.error("Filled Stack Trace: ", e.fillInStackTrace());\
+         System.out.println("error");
         }
         log.info("Notification is saved");
     }
@@ -94,13 +98,16 @@ public class NotificationServiceImpl implements NotificationService {
             log.info("Pusher is triggered");
 
         } catch (Exception e) {
-            log.error("Error while sending notification: {}", e.getMessage());
-            log.error("Stack Trace: ", e);
-            log.error("Cause: {}", e.getCause());
-            log.error("Filled Stack Trace: ", e.fillInStackTrace());
+//            log.error("Error while sending notification: {}", e.getMessage());
+//            log.error("Stack Trace: ", e);
+//            log.error("Cause: {}", e.getCause());
+//            log.error("Filled Stack Trace: ", e.fillInStackTrace());
+            System.out.println(e);
         }
         log.info("Notification is sent");
     }
+
+
 
     @Override
     public List<NotiDto> getAllNotificationByUserId(long id) {
@@ -119,10 +126,11 @@ public class NotificationServiceImpl implements NotificationService {
             log.info("In try statement");
             notiRepo.deleteById(id);
         } catch (Exception e) {
-            log.error("Error while deleting notification: {}", e.getMessage());
-            log.error("Stack Trace: ", e);
-            log.error("Cause: {}", e.getCause());
-            log.error("Filled Stack Trace: ", e.fillInStackTrace());
+//            log.error("Error while deleting notification: {}", e.getMessage());
+//            log.error("Stack Trace: ", e);
+//            log.error("Cause: {}", e.getCause());
+//            log.error("Filled Stack Trace: ", e.fillInStackTrace());
+            System.out.println("error");
         }
 
         log.info("Notification is deleted");
