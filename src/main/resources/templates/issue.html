@@ -116,42 +116,8 @@
                         Issue List
                     </button>
                 </li>
-                <script type="module">
-
-                    import {getUser} from "/js/currentLoginUser.js";
-
-                    const user = await getUser();
-
-                    console.log(user)
-
-                    if(user.currentUser.role === 'PROJECT_MANAGER') {
-
-                        const linkContainer = document.querySelector("#issue-link")
-
-                        const liList = []
-
-                        const unsolveLi = document.createElement("li")
-                        unsolveLi.classList.add("nav-item")
-                        unsolveLi.innerHTML = `<button class="nav-link position-relative" data-bs-toggle="tab" data-bs-target="#unsolved-issues">Unsolved Issues</button>`
-
-                        liList.push(unsolveLi)
-
-                        const newIssueList = document.createElement("li")
-                        newIssueList.classList.add("nav-item")
-                        newIssueList.innerHTML = `<button class="nav-link position-relative" data-bs-toggle="tab" data-bs-target="#new-issue-list"><span class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle" id="notification-light-for-new-issue" style="padding: 7px;"></span>New Issues</button>`
-
-                        liList.push(newIssueList)
-
-                        console.log('li link', linkContainer.children[linkContainer.children.length - 1])
-
-                        liList.forEach(li => {
-                            linkContainer.insertBefore(li, linkContainer.children[linkContainer.children.length - 1])
-                        })
-
-                    }
-
-                </script>
-                <!-- <li class="nav-item">
+                
+                <li class="nav-item">
                     <button
                             class="nav-link position-relative"
                             data-bs-toggle="tab"
@@ -173,7 +139,21 @@
                     </span>
                         New Issues
                     </button>
-                </li> -->
+                </li>
+                <script type="module">
+
+                    import {getUser} from "/js/currentLoginUser.js";
+
+                    const user = await getUser();
+
+                    if(user.currentUser.role === 'SDQC' || user.currentUser.role === 'PMO') {
+
+                        document.querySelector("button[data-bs-target='#unsolved-issues']").remove()
+                        document.querySelector("button[data-bs-target='#new-issue-list']").remove()
+
+                    }
+
+                </script>
                 <li>
                     <div class="inline-block">
                         <a href="issue-table"><i class="fa-solid fa-table"></i></a>
@@ -694,6 +674,8 @@
 
     if(document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
 
+        console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
         document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function (e) {
 
             const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
@@ -709,6 +691,10 @@
             }
 
         })
+    } else {
+    
+        console.log("why!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
     }
 
     // Author: Habib Mhamadi
@@ -1316,7 +1302,7 @@
     });
 
     function createIssueCard(issue) {
-        console.log(issue)
+        
         const main = document.createElement("div");
         main.classList.add("card", "p-0", 'issue-card');
         main.style.minWidth = "320px";
@@ -1391,9 +1377,7 @@
         accordionBody.classList.add("accordion-body");
 
         function initializeQuill() {
-            console.log("Before Quill initialization");
             const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
-            console.log(quillContainer);
 
             let quill;
 
@@ -1408,9 +1392,6 @@
                 quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                 quill.enable(false);
             }
-
-            console.log("After Quill initialization");
-            console.log("this feels suck man", quill);
         }
 
         cardBody.innerHTML = h2;
@@ -1420,8 +1401,6 @@
 
         main.innerHTML = cardHeader;
         main.appendChild(cardBody);
-
-        console.log(main)
 
         setTimeout(initializeQuill, 1000);
 
@@ -1438,12 +1417,9 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    console.log("Data" + data);
                     const sortContainer = $('#sort-container');
 
                     data.forEach(item => {
-
-                        console.log("item : ", item)
 
                         const issueDiv = createIssueCard(item);
                         sortContainer.prepend(issueDiv);
@@ -1622,7 +1598,7 @@
         });
 
         function createPendingIssueCard(issue) {
-            console.log(issue)
+            
             const outerDiv = document.createElement("div");
             outerDiv.classList.add("item-issue-approval", 'issue-card');
             outerDiv.id = `issueapprovalitem-${issue.id}`;
@@ -1724,10 +1700,8 @@
             accordionBody.classList.add("accordion-body");
 
             function initializeQuill() {
-                console.log("Before Quill initialization");
                 const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
-                console.log(quillContainer);
-
+                
                 let quill;
 
                 if (quillContainer) {
@@ -1741,9 +1715,6 @@
                     quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                     quill.enable(false);
                 }
-
-                console.log("After Quill initialization");
-                console.log("this feels suck man", quill);
             }
 
             cardBody.innerHTML = h2;
@@ -1753,8 +1724,6 @@
 
             main.innerHTML = cardHeader;
             main.appendChild(cardBody);
-
-            console.log(main)
 
             setTimeout(initializeQuill, 1000);
 
