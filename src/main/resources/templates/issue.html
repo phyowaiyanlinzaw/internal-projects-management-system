@@ -116,7 +116,42 @@
                         Issue List
                     </button>
                 </li>
-                <li class="nav-item">
+                <script type="module">
+
+                    import {getUser} from "/js/currentLoginUser.js";
+
+                    const user = await getUser();
+
+                    console.log(user)
+
+                    if(user.currentUser.role === 'PROJECT_MANAGER') {
+
+                        const linkContainer = document.querySelector("#issue-link")
+
+                        const liList = []
+
+                        const unsolveLi = document.createElement("li")
+                        unsolveLi.classList.add("nav-item")
+                        unsolveLi.innerHTML = `<button class="nav-link position-relative" data-bs-toggle="tab" data-bs-target="#unsolved-issues">Unsolved Issues</button>`
+
+                        liList.push(unsolveLi)
+
+                        const newIssueList = document.createElement("li")
+                        newIssueList.classList.add("nav-item")
+                        newIssueList.innerHTML = `<button class="nav-link position-relative" data-bs-toggle="tab" data-bs-target="#new-issue-list"><span class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle" id="notification-light-for-new-issue" style="padding: 7px;"></span>New Issues</button>`
+
+                        liList.push(newIssueList)
+
+                        console.log('li link', linkContainer.children[linkContainer.children.length - 1])
+
+                        liList.forEach(li => {
+                            linkContainer.insertBefore(li, linkContainer.children[linkContainer.children.length - 1])
+                        })
+
+                    }
+
+                </script>
+                <!-- <li class="nav-item">
                     <button
                             class="nav-link position-relative"
                             data-bs-toggle="tab"
@@ -138,7 +173,7 @@
                     </span>
                         New Issues
                     </button>
-                </li>
+                </li> -->
                 <li>
                     <div class="inline-block">
                         <a href="issue-table"><i class="fa-solid fa-table"></i></a>
@@ -533,6 +568,14 @@
 </div>
 </div>
 
+<div class="modal fade" id="alert-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="alert alert-success text-center" role="alert" id="alert-text">
+            
+        </div>
+    </div>
+</div>
+
 <!--    for select drop-drown-->
 <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>-->
 
@@ -649,21 +692,24 @@
 
     })
 
-    document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function (e) {
+    if(document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
 
-        const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
+        document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function (e) {
 
-        const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
+            const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
 
-        unsolvedIssueListContainer.innerHTML = '';
+            const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
 
-        for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+            unsolvedIssueListContainer.innerHTML = '';
 
-            unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
+            for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
-        }
+                unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
 
-    })
+            }
+
+        })
+    }
 
     // Author: Habib Mhamadi
     // Email: habibmhamadi@gmail.comd
@@ -736,7 +782,7 @@
     console.log(currentLoginUserRole)
     console.log(currentLoginUserRole === "FOC")
 
-    if (currentLoginUserRole === 'PROJECT_MANAGER') {
+    if (currentLoginUserRole === 'PROJECT_MANAGER' || currentLoginUserRole === 'SDQC' || currentLoginUserRole === 'PMO') {
         document.querySelector("#issue-link").classList.remove("d-none")
     }
 
@@ -1214,7 +1260,19 @@
                     dataType: 'json',
                     success: function (data) {
                         console.log(data);
-                        showsuccess('Issue Created Successfully');  
+                        $("#alert-text").text(
+                            "Issue Created Successfully"
+                        );
+                        $("#alert-modal").modal("show");
+
+                        const title = $('#title').val('');
+                        const description = descriptionEditor.root.innerHTML = '';
+                        const place = $('#place').val('');
+                        const impact = $('#impact').val('');
+                        const root_cause = $('#root_cause').val('');
+                        const direct_cause = $('#direct_cause').val('');
+
+                        $("#add-issue").modal("hide")
 
                         // $('#title').val('');
                         // $('#description').val('');
