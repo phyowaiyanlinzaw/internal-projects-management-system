@@ -147,24 +147,18 @@
                     const user = await getUser();
 
                     if(user.currentUser.role === 'SDQC' || user.currentUser.role === 'PMO') {
-
+                        document.querySelector("button[data-bs-target='#all-issue-list']").remove()
                         document.querySelector("button[data-bs-target='#unsolved-issues']").remove()
                         document.querySelector("button[data-bs-target='#new-issue-list']").remove()
 
                     }
 
                 </script>
-                <li>
-                    <div class="inline-block">
-                        <a href="issue-table"><i class="fa-solid fa-table"></i></a>
-                    </div>
-
-                </li>
             </ul>
-            <ul class="nav nav-tabs nav-tabs-bordered d-none" id="issueTableNav">
+            <ul class="nav nav-tabs nav-tabs-bordered" id="issueTableNav">
                 <li class="nav-item">
                     <button
-                            class="nav-link position-relative btn-light"
+                            class="nav-link position-relative btn-light active"
                             data-bs-toggle="tab"
                             data-bs-target="#all-issue-list"
                     >
@@ -217,7 +211,7 @@
 
 
                             <table
-
+                                    class="border border-primary bg-white text-secondary"
                                     id="table"
                                     data-toggle="table"
                                     data-pagination="true"
@@ -233,7 +227,7 @@
                                     data-url="users"
 
                             >
-                                <thead>
+                                <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5 border-white">
                                 <tr>
                                     <th data-field="state" data-checkbox="true"></th>
                                     <th data-field="id" data-sortable="true">ID</th>
@@ -676,6 +670,11 @@
 <script src="/js/currentLoginUser.js" type="module" async></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+
 <link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
@@ -763,52 +762,57 @@
 
     })
 
+    $("button[data-bs-target=\"#issue-table\"]").on("show.bs.tab",function (e) {
+        $("#issue-table-container").removeClass("d-none");
+    })
+
     if(document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
 
         console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 
         document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function (e) {
 
-        const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
+            const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
 
-        const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
+            const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
 
-        unsolvedIssueListContainer.innerHTML = '';
+            unsolvedIssueListContainer.innerHTML = '';
 
-        for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+            for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
-            unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
+                unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
 
-        }
+            }
 
         })
 
-    // Author: Habib Mhamadi
-    // Email: habibmhamadi@gmail.comd
-    function getTimeAgo(timestamp) {
-        const date = new Date(timestamp);
-        const currentDate = new Date();
-        const timeDifference = currentDate - date;
-        const seconds = Math.floor(timeDifference / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
+        // Author: Habib Mhamadi
+        // Email: habibmhamadi@gmail.comd
+        function getTimeAgo(timestamp) {
+            const date = new Date(timestamp);
+            const currentDate = new Date();
+            const timeDifference = currentDate - date;
+            const seconds = Math.floor(timeDifference / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
 
-        if (days < 1) {
-            if (hours < 1) {
-                if (minutes < 1) {
-                    return "Just now";
+            if (days < 1) {
+                if (hours < 1) {
+                    if (minutes < 1) {
+                        return "Just now";
+                    } else {
+                        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+                    }
                 } else {
-                    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+                    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
                 }
+            } else if (days < 30) {
+                return `${days} day${days > 1 ? 's' : ''} ago`;
             } else {
-                return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+                const months = Math.floor(days / 30);
+                return `${months} month${months > 1 ? 's' : ''} ago`;
             }
-        } else if (days < 30) {
-            return `${days} day${days > 1 ? 's' : ''} ago`;
-        } else {
-            const months = Math.floor(days / 30);
-            return `${months} month${months > 1 ? 's' : ''} ago`;
         }
     }
 
@@ -1492,6 +1496,203 @@
 
         return main;
 
+    }
+
+    $("#table").bootstrapTable()
+    // Function to load data into the Bootstrap Table
+    function loadTable() {
+        $.ajax({
+            url: '/api/issue/list',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                data.forEach(function (issue) {
+                    const formattedCreatedDate = formatDate(issue.created_date);
+
+                    $('#table').bootstrapTable('append', {
+                        id: issue.id,
+                        title: issue.title,
+                        issue_category: issue.issueCategory,
+                        project_name: issue.projectDto.name,
+                        // place: issue.place,
+                        // impact: issue.impact,
+                        // root_cause: issue.root_cause,
+                        // direct_cause: issue.direct_cause,
+                        // corrective_action: issue.corrective_action,
+                        // preventive_action: issue.preventive_action,
+                        responsible_party: issue.responsible_party.name,
+                        user_pic: issue.user_pic.name,
+                        status: issue.status,
+                        solved: issue.solved,
+                        created_date: formattedCreatedDate,
+                    });
+                });
+            }
+        });
+    }
+
+    loadTable()
+
+    const exportDropdown = document.getElementById("exportSelect");
+
+    exportDropdown.addEventListener("change", function () {
+        const exportOption = this.value;
+        if (exportOption === "all") {
+            exportAllRows();
+        } else if (exportOption === "selected") {
+            const selectedRows = $("#table").bootstrapTable("getSelections");
+            exportSelectedRows(selectedRows);
+        }
+    });
+
+    const exportExcelDropdown = document.getElementById("exportExcelSelect");
+
+    exportExcelDropdown.addEventListener("change", function () {
+        const exportOption = this.value;
+        if (exportOption === "all") {
+            exportAllRowsToExcel();
+        } else if (exportOption === "selected") {
+            const selectedRows = $("#table").bootstrapTable("getSelections");
+            exportSelectedRowsToExcel(selectedRows);
+        }
+    });
+
+
+    function exportAllRows() {
+        const docDefinition = {
+            pageOrientation: 'landscape',
+            content: [
+                { text: "Issue List Report", style: "header" },
+                {
+                    table: {
+                        headerRows: 1,
+                        widths: "auto",
+                        body: [
+                            ["ID", "Title", "Category", "Project Name", "Status", "Personal In Charge", "Responsible Party", "Solved", "Created Date"],
+                            ...$("#table").bootstrapTable("getData").map((row) => [
+                                row.id,
+                                row.title,
+                                row.issue_category,
+                                row.project_name,
+                                row.status,
+                                row.user_pic,
+                                row.responsible_party,
+                                row.solved,
+                                row.created_date
+                            ])
+                        ]
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 0, 0, 10]
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).open();
+    }
+
+
+    function exportSelectedRows(selectedRows) {
+
+
+        const docDefinition = {
+            pageOrientation: 'landscape',
+            content: [
+                {
+                    text: "Selected Issues",
+                    style: "header"
+                },
+                {
+                    table: {
+                        widths: "auto",
+
+                        body: [
+                            [
+                                "ID",
+                                "Title",
+                                "Category",
+                                "Project Name",
+                                "Status",
+                                "Personal In Charge",
+                                "Responsible Party",
+                                "Solved",
+                                "Created Date"
+                            ],
+                            ...selectedRows.map((row) => [
+                                row.id,
+                                row.title,
+                                row.issue_category,
+                                row.project_name,
+                                row.status,
+                                row.user_pic,
+                                row.responsible_party,
+                                row.solved,
+                                row.created_date
+                            ])
+                        ],
+                        layout: 'lightHorizontalLines'
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 0, 0, 10]
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).open();
+
+    }
+
+    function exportAllRowsToExcel() {
+        fetch('/api/issue/list')
+            .then(response => response.json())
+            .then(data => {
+                const headers = ['ID', 'Title', 'Category', 'Project Name', 'Status', 'Personal In Charge', 'Responsible Party', 'Solved', 'Created Date'];
+                const rows = data.map(issue => [
+                    issue.id,
+                    issue.title,
+                    issue.issue_category,
+                    issue.project_name,
+                    issue.status,
+                    issue.user_pic,
+                    issue.responsible_party,
+                    issue.solved,
+                    issue.created_date
+                ]);
+
+                const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+                XLSX.writeFile(workbook, 'IssueList.xlsx');
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    function exportSelectedRowsToExcel(selectedRows) {
+        const headers = ['ID', 'Title', 'Category', 'Project Name', 'Status', 'Personal In Charge', 'Responsible Party', 'Solved', 'Created Date'];
+        const rows = selectedRows.map(row => [
+            row.id,
+            row.title,
+            row.issue_category,
+            row.project_name,
+            row.status,
+            row.user_pic,
+            row.responsible_party,
+            row.solved,
+            row.created_date
+        ]);
+
+        const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+        XLSX.writeFile(workbook, 'SelectedIssues.xlsx');
     }
 
     let currentIssueId;
