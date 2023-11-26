@@ -1,20 +1,21 @@
 package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.parameters.P;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
+import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
@@ -38,6 +39,28 @@ class ProjectServiceImplTest {
     @Mock
     private ModelMapper modelMapper;
 
+    @Mock
+    private DeliverableRepository deliverableRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private DepartmentRepository departmentRepository;
+
+    @Mock
+    private ArchitectureRepository architectureRepository;
+
+    @Mock
+    private DeliverableTypeServiceImpl deliverableTypeService;
+
+    @Mock
+    private ArchitectureServiceImpl architectureService;
+
+    @Mock
+    private AESImpl aes;
+
+
 
     @InjectMocks
     private ProjectServiceImpl projectService;
@@ -48,18 +71,119 @@ class ProjectServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    void save() {
 
+
+    @Test
+    public void testGetAllProjects() {
+        // Arrange
+        List<Project> mockProjects = createMockProjects();
+        when(projectRepository.findAll()).thenReturn(mockProjects);
+
+        // Act
+        List<ProjectDto> result = projectService.getAllProjects();
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size());
+
+        // Example: Check that the first project's ID is correctly mapped
+        assertEquals(mockProjects.get(0).getId(), result.get(0).getId());
+
+        // Verify interactions
+        verify(projectRepository, times(1)).findAll();
+        // Verify other interactions as needed
     }
 
     @Test
-    void getAllProjects() {
+    public void testGetAllProjectsEmptyList() {
+        // Arrange
+        when(projectRepository.findAll()).thenReturn(Collections.emptyList());
 
+        // Act
+        List<ProjectDto> result = projectService.getAllProjects();
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        // Verify interactions
+        verify(projectRepository, times(1)).findAll();
+        // Verify other interactions as needed
     }
 
+    // Other test cases as needed
+
+    private List<Project> createMockProjects() {
+        List<Project> projects = new ArrayList<>();
+
+        // Create projects and add them to the list
+
+        Project project1 = new Project();
+        // Set project1 details
+
+        // ...
+
+        // Create and set properties for ProjectDto for project1
+        ProjectDto projectDto1 = new ProjectDto();
+        projectDto1.setId(project1.getId());
+        // Set other properties for projectDto1 based on project1
+
+        // Set ClientDto for projectDto1
+        ClientDto clientDto1 = new ClientDto();
+        // Set properties for clientDto1
+
+        projectDto1.setClientDto(clientDto1);
+
+        // Add projectDto1 to the result list
+        projects.add(project1);
+
+        // Add more projects and their corresponding ProjectDto instances
+
+        return projects;
+    }
+
+
+
+
     @Test
-    void getProjectById() {
+    public void testGetProjectById() {
+        // Arrange
+        long projectId = 1L;
+        Project mockProject = createMockProject(projectId);
+        when(projectRepository.findById(projectId)).thenReturn(mockProject);
+
+        // Mocking modelMapper mappings
+        when(modelMapper.map(any(), eq(ProjectDto.class))).thenReturn(new ProjectDto());
+        when(modelMapper.map(any(), eq(SystemOutLineDto.class))).thenReturn(new SystemOutLineDto());
+        when(modelMapper.map(any(), eq(ClientDto.class))).thenReturn(new ClientDto());
+        when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());
+        when(modelMapper.map(any(), eq(AmountDto.class))).thenReturn(new AmountDto());
+        when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(), eq(ReviewDto.class))).thenReturn(new ReviewDto());
+        when(modelMapper.map(any(), eq(ArchitectureDto.class))).thenReturn(new ArchitectureDto());
+        when(modelMapper.map(any(), eq(DeliverableDto.class))).thenReturn(new DeliverableDto());
+
+        // Act
+        ProjectDto result = projectService.getProjectById(projectId);
+
+        // Assert
+        assertNotNull(result);
+        // Add more specific assertions based on your business logic and mappings
+
+        // Verify interactions
+        verify(projectRepository, times(1)).findById(projectId);
+        // Verify other interactions as needed
+    }
+
+    private Project createMockProject(long projectId) {
+        Project project = new Project();
+        // Set properties for the mock project
+        project.setId(projectId);
+        // Set other properties...
+
+        // Return the mock project
+        return project;
     }
 
     @Test

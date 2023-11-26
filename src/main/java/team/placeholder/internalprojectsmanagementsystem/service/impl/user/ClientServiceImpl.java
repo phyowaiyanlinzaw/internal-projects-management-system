@@ -65,6 +65,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDto findByProjectName(String projectName) {
+//        Client client = clientRepository.findByProjectName(projectName);
+//        return modelMapper.map(client, ClientDto.class);
         return null;
     }
 }

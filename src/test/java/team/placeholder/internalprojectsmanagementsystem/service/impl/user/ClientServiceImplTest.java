@@ -48,22 +48,21 @@ class ClientServiceImplTest {
 
 
     @Test
-    void testSave(){
-            Client client =  new Client.ClientBuilder()
-                    .id(1L)
-                    .name("John Doe")
-                    .phone("123-456-7890")
-                    .email("john.doe@example.com")
-                    .build();
+    public void testSave() {
 
-            ClientDto clientDto = new ClientDto.ClientDtoBuilder
-                    .id(1L)
-                    .name("John Doe")
-                    .phone("123-456-7890")
-                    .email("john.doe@example.com")
-                    .build();
+        ClientDto clientDto = new ClientDto();
+        Client client = new Client();
+        Client savedClient = new Client();
+        when(modelMapper.map(savedClient, ClientDto.class)).thenReturn(clientDto);
+        when(clientRepository.save(client)).thenReturn(savedClient);
 
-            when(clientRepository.save(Mockito.any(Client.class))).thenReturn(client);
+        // Calling the method under test
+        ClientDto result = clientService.save(clientDto);
+
+        // Verifying interactions and assertions
+        verify(clientRepository, times(1)).save(client);
+        verify(modelMapper, times(1)).map(savedClient, ClientDto.class);
+        assertEquals(clientDto, result);
     }
 
 
@@ -134,6 +133,24 @@ class ClientServiceImplTest {
         // Verify the behavior
         verify(clientRepository, times(1)).count();
         assertEquals(expectedCount, result);
+    }
+
+    @Test
+    public void testFindByProjectName() {
+
+        String projectName = "TestProject";
+        Client client = new Client();
+        ClientDto clientDto = new ClientDto();
+        when(clientRepository.findByProjectName(projectName)).thenReturn(client);
+        when(modelMapper.map(client, ClientDto.class)).thenReturn(clientDto);
+
+        // Calling the method under test
+        ClientDto result = clientService.findByProjectName(projectName);
+
+        // Verifying interactions and assertions
+        verify(clientRepository, times(1)).findByProjectName(projectName);
+        verify(modelMapper, times(1)).map(client, ClientDto.class);
+        assertEquals(clientDto, result);
     }
 
 
