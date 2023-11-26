@@ -105,7 +105,18 @@ class UserServiceTest {
     }
     @Test
     void registerUser() {
+        RegisterEmployeeDto registerEmployeeDto = new RegisterEmployeeDto();
+        UserDto registeredUser = new UserDto();
 
+        // Assuming the save method in the repository returns the saved user
+        when(userRepository.save(any())).thenReturn(registeredUser);
+
+        // When
+        UserDto result = userService.registerUser(registerEmployeeDto);
+
+        // Then
+
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test

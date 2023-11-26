@@ -39,9 +39,9 @@ public class ViewController {
     @GetMapping("/login")
     public String loginFormView(){
 
-        if(authentication != null && authentication.isAuthenticated()) {
-            return "/dashboard";
-        }
+//        if(authentication != null && authentication.isAuthenticated()) {
+//            return "/dashboard";
+//        }
 
         return "login";
     }
@@ -109,6 +109,6 @@ public class ViewController {
 
     @GetMapping("/issue-table")
     public String reportDepartment() {
-        return "/layout/issueTable";
+        return "issueTable";
     }
 }

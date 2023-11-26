@@ -42,7 +42,7 @@
                         <button class="nav-link active border-primary border border-bottom-0"
                                 id="tasks-tab" data-bs-toggle="tab" data-bs-target="#task"
                                 type="button" role="tab" aria-controls="task" aria-selected="false">
-                            Tasks
+                            <i class="fa-solid fa-list-check"></i>
                             <p style="display:none;" th:text="${projectId}" id="projectId"></p>
                             <p style="display:none;" th:text="${project.getStart_date()}" id="projectStartDate"></p>
                             <p style="display:none;" th:text="${project.getEnd_date()}" id="projectEndDate"></p>
@@ -52,7 +52,7 @@
                         <button class="nav-link border-primary border border-bottom-0 rounded-top"
                                 id="gantt-chart-tab" data-bs-toggle="tab" data-bs-target="#gantt-chart" type="button"
                                 role="tab" aria-controls="gantt-chart" aria-selected="false">
-                            Calendar
+                            <i class="fa-solid fa-calendar-days"></i>
                         </button>
                     </li>
                     <script type="module">
@@ -111,9 +111,27 @@
             <!-- nav for task and gantt chart end -->
             <div class="tab-content position-relative" style="height: 600px" id="myTabContent">
                 <div class="tab-pane fade show active" id="task" role="tabpanel" aria-labelledby="tasks-tab">
-                    <div class="d-flex justify-content-end trash-can-container dummy-trash position-absolute" style="bottom: 100px; right: -20px; width: 60px">
+                    
+                    <!-- <div class="d-flex justify-content-end trash-can-container dummy-trash position-absolute" id="trash-bin" style="bottom: 100px; right: -20px; width: 60px">
                             <span class="trash align-self-end dummy-trash"><span class="dummy-trash"></span></span>
-                    </div>
+                    </div> -->
+                    <script type="module">
+                        import { getUser } from "/js/currentLoginUser.js";
+
+                        const user = await getUser();
+
+                        if(user.currentUser.role === 'PROJECT_MANAGER') {
+                            const trashCanContainer = document.createElement("div")
+                            trashCanContainer.classList = 'd-flex justify-content-end trash-can-container position-absolute dummy-trash'
+                            trashCanContainer.id = 'trash-bin'
+                            trashCanContainer.style = 'bottom: 100px; right: -20px; width: 60px'
+                            trashCanContainer.innerHTML = `
+                            <span class="trash align-self-end dummy-trash"><span class="dummy-trash"></span></span>
+                            `
+                            document.querySelector("#task").appendChild(trashCanContainer)
+                        }
+
+                    </script>
                     <div class="board">
                         <!-- add task form start -->
                         <!-- add task form end -->

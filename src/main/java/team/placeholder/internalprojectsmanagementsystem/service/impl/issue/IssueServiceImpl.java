@@ -43,6 +43,9 @@ public class IssueServiceImpl implements IssueService {
     private final ClientRepository clientRepository;
     private final NotificationServiceImpl notificationService;
 
+
+
+
     @Override
     public IssueDto save(IsuDto isuDto) {
         Issue issue = new Issue();
@@ -69,17 +72,20 @@ public class IssueServiceImpl implements IssueService {
         issue.setResponsible_party(isuDto.getResponsible_party());
         issue.setProject(projectRepository.findById(isuDto.getProject_id()));
 
-        issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
+        if (isuDto.getStatus() != null) {
+            issue.setIssueStatus(IssueStatus.valueOf(isuDto.getStatus()));
+        }
 
         Issue issue1 = issueRepository.save(issue);
 
         IssueDto issueDto = new IssueDto();
 
-        issueDto.setId(issue1.getId());
+
         issueDto.setTitle(issue1.getTitle());
         issueDto.setDescription(issue1.getDescription());
         issueDto.setPlace(issue1.getPlace());
         issueDto.setImpact(issue1.getImpact());
+        issueDto.setUser_pic(modelMapper.map(issue1.getPic(), UserDto.class));
         issueDto.setRoot_cause(issue1.getRoot_cause());
         issueDto.setDirect_cause(issue1.getDirect_cause());
         issueDto.setCorrective_action(issue1.getCorrective_action());
@@ -97,6 +103,7 @@ public class IssueServiceImpl implements IssueService {
         issueDto.setStatus(issue1.getIssueStatus().toString());
         issueDto.setIssueCategory(issue1.getIssueCategory().toString());
         issueDto.setResponsible_type(issue1.getResponsible_type().toString());
+        issueDto.setUser_uploader(modelMapper.map(issue1.getUser_uploader(), UserDto.class));
 
         notificationService.save("New issue has been created", isuDto.getUser_pic(), "issue-noti-event", issueDto);
 
@@ -363,6 +370,8 @@ public class IssueServiceImpl implements IssueService {
 
         return issueDtos;
     }
+
+
 }
 
 

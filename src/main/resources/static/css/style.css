@@ -1290,3 +1290,25 @@
     border: 0.5mm dashed red;
     color: red;
 }
+
+#edit-project-objective {
+    height: 100%;
+    /* added these styles */
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+}
+
+.issue-card, .project-card {
+    transition: all 0.2s ease-in-out;
+}
+
+.issue-card:hover, .project-card:hover {
+    box-shadow: 0px 30px 18px -8px rgba(0, 0, 0, 0.1);
+    transform: scale(1.02, 1.02);
+}
+
+.issue-card:hover .card-header {
+    background-color: tomato;
+    color: white;
+}
