@@ -919,28 +919,37 @@ for (let i = 0; i < taskList.length; i++) {
                         currentTaskData.status = currentZone.getAttribute('id');
                         console.log('Success for URL /api/task/update', response);
                         //change the color of the task
-                        switch (currentTaskData.status) {
-                            case "TODO":
-                                currentTask.classList.add("bg-primary");
-                                currentTask.classList.remove(
-                                    "bg-info",
-                                    "bg-success"
-                                );
-                                break;
-                            case "IN_PROGRESS":
-                                currentTask.classList.add("bg-info");
-                                currentTask.classList.remove(
-                                    "bg-primary",
-                                    "bg-success"
-                                );
-                                break;
-                            case "FINISHED":
-                                currentTask.classList.add("bg-success");
-                                currentTask.classList.remove(
-                                    "bg-primary",
-                                    "bg-info"
-                                );
-                                break;
+                        if(!currentTaskData.due){
+                            switch (currentTaskData.status) {
+                                case "TODO":
+                                    currentTask.classList.add("bg-primary");
+                                    currentTask.classList.remove(
+                                        "bg-info",
+                                        "bg-success"
+                                    );
+                                    break;
+                                case "IN_PROGRESS":
+                                    currentTask.classList.add("bg-info");
+                                    currentTask.classList.remove(
+                                        "bg-primary",
+                                        "bg-success"
+                                    );
+                                    break;
+                                case "FINISHED":
+                                    currentTask.classList.add("bg-success");
+                                    currentTask.classList.remove(
+                                        "bg-primary",
+                                        "bg-info"
+                                    );
+                                    break;
+                            }
+                        }else{
+                            currentTask.classList.add("bg-danger");
+                            currentTask.classList.remove(
+                                "bg-primary",
+                                "bg-info",
+                                "bg-success"
+                            );
                         }
                     })
                     .catch(error => {
