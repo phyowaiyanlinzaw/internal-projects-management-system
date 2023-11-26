@@ -51,7 +51,7 @@ export function getTimeElapsed(selectedMillisecond) {
         prefix = result > 1 ? " years ago" : " year ago";
     }
 
-    return result + prefix;
+    return Math.floor(result) + prefix;
 }
 
 export function formatDateFromMilliseconds(milliseconds) {

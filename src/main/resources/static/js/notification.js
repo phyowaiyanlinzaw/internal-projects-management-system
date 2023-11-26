@@ -326,8 +326,31 @@ channel.bind("issue-noti-event", function(response) {
         const issue = createPendingIssueCard(newIssue)
 
         document.querySelector("#new-issue-list").insertBefore(issue, document.querySelector("#new-issue-list").children[1])
+
     } 
-    
+
+    const toast = document.createElement('div')
+
+    toast.classList = 'toast show'
+    toast.setAttribute('role', 'alert')
+    toast.setAttribute('aria-live', 'assertive')
+    toast.setAttribute('aria-atomic', 'true')
+
+    toast.innerHTML = `<div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <small class="text-muted">${getTimeElapsed(Date.now())}</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                there is new issue
+            </div>`
+
+    const btoawe  = new bootstrap.Toast(toast)
+
+    btoawe.show();
+
+    document.querySelector('#toasts-noti-container').appendChild(toast)
+
 });
 
 channel.bind("logout", function() {

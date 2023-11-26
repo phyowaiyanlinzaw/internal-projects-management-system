@@ -2283,10 +2283,13 @@
             if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO") {
                 $("#navigate-task").remove();
             }
+            
+
         </script>
     </head>
 
     <body>
+        
         <div class="container-fluid position-relative bg-white d-flex p-0">
             <!-- Spinner Start -->
             <div
@@ -2316,12 +2319,15 @@
                         #e5e5f7 0.6000000000000001px
                     );
                     background-size: 12px 12px;
+                    position: relative;
                 "
             >
+
                 <div th:replace="~{fragments/navigation :: navigation-without-search}"></div>
                 <!-- Search Start -->
                 <div class="container-fluid pt-2 ps-s pe-2" id="dropdrown-search-bar">
                     <div class="d-flex flex-row justify-content-end gap-2">
+
                         <button
                             class="btn btn-info"
                             id="reset-btn"

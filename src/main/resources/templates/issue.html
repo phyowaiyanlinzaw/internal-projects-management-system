@@ -32,6 +32,8 @@
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
 
+    
+
     <!-- Content Start -->
     <div class="content" style="
                     background-color: #e5e5f7;
@@ -43,12 +45,22 @@
                     background-size: 12px 12px;
                 ">
 
+                
+
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
+
+        <div class="toast-container position-fixed p-3 end-0 bottom-0 " id="toasts-noti-container" style="z-index: 99;">
+            <!-- Then put toasts within -->
+            
+            
+        </div>
 
         <div
                 class="container-fluid pt-2 ps-s pe-2"
                 id="dropdrown-search-bar"
         >
+
+
             <div class="d-flex flex-row justify-content-end gap-2">
                 <button class="btn btn-info" id="reset-btn" style="color: #ffffff !important;">
                     reset
@@ -489,8 +501,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4>Issue Details</h4>
-                <div class="d-flex justify-content-center align-items-center gap-3">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="d-flex justify-content-end align-items-center gap-2">
+                   <h6 class="fw-bold">Created at</h6>
+                    <span id="solveDateDetails" class="py-1 px-2 rounded bg-primary text-white"></span>
                 </div>
             </div>
             <div class="modal-body">
@@ -498,51 +511,63 @@
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
 
                         <!-- <h6 data-toggle="collapse" href="#peoples" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i> People</h6> -->
-                        <div class="col mb-3 d-flex gap-2">
-                            <h6>Created at</h6>
-                            <span id="solveDateDetails"></span>
-                        </div>
                         <div id="peoples" class="row row-cols-2">
                             <div class="col mb-3 ">
                                 <div>
                                     <div>
                                         <i class="fa-solid fa-user-pen"></i>
-                                        <span>Person In Charge</span>
+                                        <span class="fw-bold">Person In Charge</span>
                                     </div>
                                 </div>
-                                <p class="" id="picDetails"></p>
+                                <div class="d-flex mt-3"><div style="width:22px;"></div><span class="py-1 px-2 text-center bg-primary text-white rounded " id="picDetails"></span></div>
 
                             </div>
                             <div class="col mb-3 ">
                                 <div>
                                     <div>
                                         <i class="fa-solid fa-users-gear"></i>
-                                        <span>Responsible Party</span>
+                                        <span class="fw-bold">Responsible Party</span>
                                     </div>
                                 </div>
-                                <p class="" id="rpDetails"></p>
+                                <div class="d-flex mt-3"><div style="width:22px;"></div><span class="py-1 px-2 text-center bg-primary text-white rounded " id="rpDetails"></span></div>
                             </div>
                         </div>
 
                         <!-- <h6 data-toggle="collapse" href="#solution-detail" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Solution</h6> -->
 
                         <!-- <h6 data-toggle="collapse" href="#details" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Details</h6> -->
-                        <div id="details" class="">
+                        
+                        <div id="issue-detail-description" class="">
+                            <div>
+                                <div>
+                                    <i class="fa-solid fa-minus"></i>
+                                    <span class="fw-bold ">Description</span>
+                                </div>
+                            </div>
+                            <div class="accordion-body border-top" id="descriptionDetails"></div>
+
+                        </div>
+                        <div class="col mb-3 d-none" id="issue-description-save-btn-container">
+                            <button class="btn btn-success" id="issue-description-save-btn">Save</button>
+                        </div>
+                        
+                        <div id="details" class="border-top border-bottom pt-1">
+                            
                             <div>
                                 <div>
                                     <i class="fa-solid fa-info"></i>
-                                    <span>Details</span>
+                                    <span class="fw-bold">Details</span>
                                 </div>
                             </div>
                             <div class="row row-cols-2">
                                 <div class=" mb-3">
 
-                                    <label for="issueTitleDetails">Title:</label>
+                                    <label for="issueTitleDetails" calss=" fw-bold">Title:</label>
                                     <input type="text" class="form-control" id="issueTitleDetails"/>
 
                                 </div>
                                 <div class=" mb-3 ">
-                                    <label for="issue_categoryDetails">Category:</label>
+                                    <label for="issue_categoryDetails" class=" fw-bold">Category:</label>
                                     <select id="issue_categoryDetails" class="form-control me-2">
                                         <option value="ERROR">ERROR</option>
                                         <option value="BUG">BUG</option>
@@ -556,26 +581,26 @@
                             </div>
 
                                 <div class="col mb-3 ">
-                                    <label for="direct_causeDetails">Direct Cause:</label>
+                                    <label for="direct_causeDetails" class=" fw-bold">Direct Cause:</label>
                                     <textarea class="form-control" id="direct_causeDetails"></textarea>
 
                                 </div>
 
                                 <div class="col mb-3">
-                                    <label for="root_causeDetails">Root Cause:</label>
+                                    <label for="root_causeDetails" class=" fw-bold">Root Cause:</label>
                                     <textarea class="form-control" id="root_causeDetails"></textarea>
 
                                 </div>
 
                                 <div class="col mb-3 ">
-                                    <label for="placeDetails">Place:</label>
+                                    <label for="placeDetails" class=" fw-bold">Place:</label>
                                     <textarea class="form-control" id="placeDetails"></textarea>
 
                                 </div>
 
                                 <div class="col mb-3 ">
 
-                                    <label for="impactDetails">Impact:</label>
+                                    <label for="impactDetails" class="fw-bold">Impact:</label>
                                     <textarea class="form-control" id="impactDetails"></textarea>
 
                             </div>
@@ -611,19 +636,8 @@
                         </div>
 
                         <!-- <h6 data-toggle="collapse" href="#issue-detail-description" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>Description</h6> -->
-                        <div id="issue-detail-description" class="">
-                            <div>
-                                <div>
-                                    <i class="fa-solid fa-minus"></i>
-                                    <span>Description</span>
-                                </div>
-                            </div>
-                            <div class="accordion-body" id="descriptionDetails"></div>
-
-                        </div>
-                        <div class="col mb-3 d-none" id="issue-description-save-btn-container">
-                            <button class="btn btn-success" id="issue-description-save-btn">Save</button>
-                        </div>
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -726,6 +740,13 @@
                     console.log('Ajax request successful:', response);
                     // Handle success response
                     saveButton.classList.add('d-none')
+
+                    const issue = createIssueCard(response);
+
+                    const oldIssue = $(`#issue-${response.id}`)
+
+                    oldIssue.replaceWith(issue)
+
                 },
                 error: function (xhr, status, error) {
                     console.log('Ajax request error:', error);
@@ -1395,6 +1416,7 @@
 
         const main = document.createElement("div");
         main.classList.add("card", "p-0", 'issue-card');
+        main.id = `issue-${issue.id}`
         main.style.minWidth = "320px";
 
             const cardHeader = `<div class="card-header justify-content-between">
@@ -1820,6 +1842,13 @@
                                     console.log('Ajax request successful:', response);
                                     // Handle success response
                                     $("#issue-description-save-btn-container").addClass('d-none')
+
+                                    const issue = createIssueCard(response);
+
+                                    const oldIssue = document.querySelector(`issue-${response.id}`)
+
+                                    oldIssue.replaceWith(issue)
+
                                 },
                                 error: function (xhr, status, error) {
                                     console.log('Ajax request error:', error);
