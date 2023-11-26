@@ -252,6 +252,16 @@ $(
             dateFormat: 'yy-mm-dd',
             onSelect: function (dateText, inst) {
 
+
+                const startDate = $('#start_date').val();
+                const endDate = $("#end_date").val();
+
+                const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
+
+                $("#plan-hours").val(duration * 7)
+
+                validatePlanEndTime();
+
                 validatePlanStartTime()
                 if (dateText !== "") {
                     var dateObject = $(this).datepicker('getDate');
@@ -1283,11 +1293,21 @@ function validatePlanHour() {
 
     console.log(duration)
 
+    console.log(plan_hours)
+
     console.log(plan_hours, durationInHour)
 
     if (plan_hours > durationInHour || plan_hours == '')  {
 
-        const text = duration > 0 ? `plan hour is greater than ${durationInHour} hours` : ``
+        let text
+
+        if (plan_hours === '' || isNaN(plan_hours)) {
+
+            text =  `put some number`
+
+        } else {
+            text = `plan hour is greater than ${durationInHour} hours`
+        }
 
         console.log('plan hours is greater than duration', duration)
 
@@ -1406,7 +1426,7 @@ $('#end_date').on('change', function () {
 
     const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
 
-    $("#plan-hours").val(duration * 24)
+    $("#plan-hours").val(duration * 7)
 
     validatePlanHour()
 
