@@ -112,3 +112,13 @@ export function calculateEndDate(startDate, months) {
 
     return date;
 }
+
+export function formatDate(timestamp) {
+    // Assuming data.solved_date is a timestamp in milliseconds
+    const date = new Date(timestamp);
+
+    // Format the date as a string (adjust the format as needed)
+    const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+    return formattedDate;
+}

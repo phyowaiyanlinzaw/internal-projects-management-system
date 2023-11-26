@@ -80,6 +80,7 @@ public class IssueServiceImpl implements IssueService {
         issueDto.setDescription(issue1.getDescription());
         issueDto.setPlace(issue1.getPlace());
         issueDto.setImpact(issue1.getImpact());
+        issueDto.setUser_pic(modelMapper.map(issue1.getPic(), UserDto.class));
         issueDto.setRoot_cause(issue1.getRoot_cause());
         issueDto.setDirect_cause(issue1.getDirect_cause());
         issueDto.setCorrective_action(issue1.getCorrective_action());
@@ -97,6 +98,7 @@ public class IssueServiceImpl implements IssueService {
         issueDto.setStatus(issue1.getIssueStatus().toString());
         issueDto.setIssueCategory(issue1.getIssueCategory().toString());
         issueDto.setResponsible_type(issue1.getResponsible_type().toString());
+        issueDto.setUser_uploader(modelMapper.map(issue1.getUser_uploader(), UserDto.class));
 
         notificationService.save("New issue has been created", isuDto.getUser_pic(), "issue-noti-event", issueDto);
 

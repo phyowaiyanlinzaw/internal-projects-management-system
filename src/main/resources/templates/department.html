@@ -457,7 +457,7 @@
 <script src="/lib/quill/quill.min.js"></script>
 
 <!-- Template Javascript -->
-<script src="/js/main.js">
+<script src="/js/main.js"></script>
 
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
@@ -468,95 +468,7 @@
         confirmLogout();
     });
 
-    const ctx = document.getElementById("department-projects-chart");
-
-    const firstChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-            ],
-
-            datasets: [
-                {
-                    label: "project one",
-                    backgroundColor: "rgba(255, 111, 200, 0.5)",
-                    data: [0, 0, 3, 5, 2, 3],
-                    fill: true,
-                    borderColor: "rgb(255, 111, 200)",
-                    pointRadius: 0,
-                    borderWidth: 1,
-                },
-                {
-                    label: "project two",
-                    backgroundColor: "rgba(100, 111, 200, 0.5)",
-                    data: [20, 10, 58, 12],
-                    fill: true,
-                    borderColor: "rgb(100, 111, 200)",
-                    pointRadius: 0,
-                    borderWidth: 1,
-                },
-                {
-                    label: "project one",
-                    backgroundColor: "rgba(255, 0, 0, 0.5)",
-                    data: [23, 85, 10, 5, 25, 7, 65, 77, 10],
-                    fill: true,
-                    borderColor: "rgb(255, 0, 0)",
-                    pointRadius: 0,
-                    borderWidth: 1,
-                },
-                {
-                    label: "project one",
-                    backgroundColor: "rgba(0, 255, 0, 0.5)",
-                    data: [5, 50, 10, 5, 54, 3, 65],
-                    fill: true,
-                    borderColor: "rgb(0, 255, 0)",
-                    pointRadius: 0,
-                    borderWidth: 1,
-                },
-                {
-                    label: "project one",
-                    backgroundColor: "rgba(0, 0, 255, 0.5)",
-                    data: [
-                        89, 45, 33, 15, 25, 3, 34, 44, 58, 89, 45, 33,
-                    ],
-                    fill: true,
-                    borderColor: "rgb(0, 0, 255)",
-                    pointRadius: 0,
-                    borderWidth: 1,
-                },
-            ],
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                },
-            },
-            animation: {
-                duration: 2000,
-            },
-            legend: {
-                display: true,
-            },
-            responsive: true
-        },
-    });
-
-
-    firstChart.config.options.animation.duration = 5000;
-
+    
 </script>
 <script src="/js/notification.js" type="module"></script>
 </body>

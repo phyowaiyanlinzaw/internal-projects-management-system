@@ -10,7 +10,7 @@
 <div id="spinner"
      class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only">Loading...</span>
+        <span class="sr-only"></span>
     </div>
 </div>
 <!-- Spinner End -->
@@ -302,8 +302,17 @@
         const exportOption = exportDropdown.value;
         if (exportOption === "all") {
             exportAllRows();
+            console.log(...$("#table").bootstrapTable("getData").map((row,index) => [
+                                index + 1,
+                                row.email,
+                                row.name,
+                                row.department ? row.department.name : "-",
+                                row.role,
+                                row.enabled ? 'Active' : 'Inactive'
+                            ]))
         } else if (exportOption === "selected") {
             const selectedRows = $("#table").bootstrapTable("getSelections");
+            console.log(selectedRows)
             exportSelectedRows(selectedRows);
         }
     });
