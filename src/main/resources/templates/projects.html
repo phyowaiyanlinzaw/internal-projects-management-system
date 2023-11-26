@@ -106,6 +106,8 @@
 
         <!-- Template Javascript -->
         <script src="/js/main.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
             defer
@@ -123,22 +125,13 @@
                 setupLogoutConfirmation();
             });
 
-            import {
-                formatDateFromMilliseconds,
-                MONTH_NAMES,
-                calculateDuration,
-                calculateEndDate,
-            } from "/js/time.js";
+            import {calculateDuration, calculateEndDate, formatDateFromMilliseconds, MONTH_NAMES,} from "/js/time.js";
 
-            import { sendData, getData } from "/js/api-function.js";
+            import {getData} from "/js/api-function.js";
 
-            import {
-                getArchitecturelist,
-                getClientList,
-                getDeliverableTypeList,
-            } from "/js/getDataForProject.js";
+            import {getArchitecturelist, getClientList, getDeliverableTypeList,} from "/js/getDataForProject.js";
 
-            import { getUser } from "/js/currentLoginUser.js";
+            import {getUser} from "/js/currentLoginUser.js";
 
             const languageList = {
                 "c#": "/images/languages/c#-min.png",
@@ -2238,9 +2231,7 @@
 
             async function getAllProjectInfo() {
 
-                const projectList = await getData('/api/project/list');
-
-                console.log(projectList)
+                return await getData('/api/project/list');
 
             }
 
@@ -2263,12 +2254,122 @@
 
                 }
 
-                console.log(selectedProject)
+                return selectedProject;
             }
 
             window.getAllSelectedProjectInfo = getAllSelectedProjectInfo // don't delete this 
 
-            window.getAllProjectInfo = getAllProjectInfo; // don't delete this 
+            window.getAllProjectInfo = getAllProjectInfo; // don't delete this
+
+            //export all projects from getAllProjectInfo function with pdfMake
+            $("#exportAllBtn").on("click", async function () {
+                try {
+                    const allProjects = await getAllProjectInfo()
+                    console.log(allProjects);
+                    console.log(typeof  allProjects)
+                    const docDefinition = {
+                        content: [
+                            {
+                                text: 'Project List',
+                                style: 'header'
+                            },
+                            {
+                                style: 'tableExample',
+                                table: {
+                                    widths: ['*', '*', '*', '*', '*', '*'],
+                                    body: [
+                                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                                        ...allProjects.map(project => {
+                                            return [
+                                                project.name,
+                                                project.clientDto.name,
+                                                formatDateFromMilliseconds(project.start_date),
+                                                formatDateFromMilliseconds(project.end_date),
+                                                project.duration,
+                                                project.current_phase
+                                            ]
+                                        })
+                                    ]
+                                }
+                            }
+                        ],
+                        styles: {
+                            header: {
+                                fontSize: 18,
+                                bold: true,
+                                alignment: 'center',
+                                margin: [0, 0, 0, 10]
+                            },
+                            tableExample: {
+                                margin: [0, 5, 0, 15]
+                            },
+                            tableHeader: {
+                                bold: true,
+                                fontSize: 13,
+                                color: 'black'
+                            }
+                        }
+                    };
+                    pdfMake.createPdf(docDefinition).open();
+                } catch (error) {
+                    console.log(error);
+                }
+            });
+
+            //export selected projects from getAllSelectedProjectInfo function with pdfMake
+            $("#exportSelectedBtn").on("click", async function () {
+                try {
+                    const selectedProjects = await getAllSelectedProjectInfo()
+                    console.log(selectedProjects);
+                    console.log(typeof  selectedProjects)
+                    const docDefinition = {
+                        content: [
+                            {
+                                text: 'Project List',
+                                style: 'header'
+                            },
+                            {
+                                style: 'tableExample',
+                                table: {
+                                    widths: ['*', '*', '*', '*', '*', '*'],
+                                    body: [
+                                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                                        ...selectedProjects.map(project => {
+                                            return [
+                                                project.name,
+                                                project.clientDto.name,
+                                                formatDateFromMilliseconds(project.start_date),
+                                                formatDateFromMilliseconds(project.end_date),
+                                                project.duration,
+                                                project.current_phase
+                                            ]
+                                        })
+                                    ]
+                                }
+                            }
+                        ],
+                        styles: {
+                            header: {
+                                fontSize: 18,
+                                bold: true,
+                                alignment: 'center',
+                                margin: [0, 0, 0, 10]
+                            },
+                            tableExample: {
+                                margin: [0, 5, 0, 15]
+                            },
+                            tableHeader: {
+                                bold: true,
+                                fontSize: 13,
+                                color: 'black'
+                            }
+                        }
+                    };
+                    pdfMake.createPdf(docDefinition).open();
+                } catch (error) {
+                    console.log(error);
+                }
+            });
 
             //list project end
             if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
@@ -2412,8 +2513,8 @@
                             <div class="col p-0 text-center">Role</div>
                         </div>
                         <div class="text-end mt-2">
-                            <button onclick="getAllSelectedProjectInfo()" type="button" class="btn btn-primary">onlyselected</button>
-                            <button onclick="getAllProjectInfo()" type="button" class="btn btn-primary ">
+                            <button type="button" class="btn btn-primary" id="eportSelectedBtn">Export Selected</button>
+                            <button type="button" class="btn btn-primary " id="exportAllBtn">
                                 Export all
                             </button>
                         </div>
