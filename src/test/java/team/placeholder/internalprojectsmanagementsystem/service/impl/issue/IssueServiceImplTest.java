@@ -29,6 +29,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.noti.Notificati
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,33 +90,137 @@ class IssueServiceImplTest {
         verify(issueRepository, times(1)).save(issue);
     }
 
+//    @Test
+//    void testSave() {
+//        // Arrange
+//        IsuDto isuDto = createSampleIsuDto();
+//        Issue savedIssue = createSampleSavedIssue();
+//        IssueDto expectedIssueDto = createSampleIssueDto();
+//
+//        // Mocking the necessary interactions
+//        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
+//        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
+//        when(modelMapper.map(any(Issue.class), eq(IssueDto.class))).thenReturn(expectedIssueDto);
+//        when(userRepository.findById(any())).thenReturn(Optional.of(new User()));
+//        when(projectRepository.findById(any())).thenReturn(Optional.of(new Project()));
+//        when(clientRepository.findById(any())).thenReturn(Optional.of(new Client()));
+//        when(issueRepository.save(any(Issue.class))).thenReturn(savedIssue);
+//
+//        // Act
+//        IssueDto result = issueService.save(isuDto);
+//
+//        // Assert
+//        assertNull(result);
+//        assertEquals(expectedIssueDto.getId(), result.getId());
+//        assertEquals("Titles should match", expectedIssueDto.getTitle(), result.getTitle());
+//        // Add similar assertions for other properties...
+//
+//        // Verify interactions
+//        verify(issueRepository, times(1)).save(any(Issue.class));
+//        verify(notificationService, times(1)).save(anyString(), any(), anyString(), any());
+//    }
+//
+//
+//
+//    private IssueDto createSampleIssueDto() {
+//        IssueDto issueDto = new IssueDto();
+//        issueDto.setId(1L);
+//        issueDto.setTitle("Test");
+//        issueDto.setDescription("Test");
+//        issueDto.setPlace("Test");
+//        issueDto.setImpact("Test");
+//        issueDto.setRoot_cause("Test");
+//        issueDto.setDirect_cause("Test");
+//        issueDto.setCorrective_action("Test");
+//        issueDto.setPreventive_action("Test");
+//        issueDto.setSolved(true);
+//        issueDto.setCreated_date(new Date().getTime());
+//        issueDto.setUpdated_date(new Date().getTime());
+//        issueDto.setIssueCategory(String.valueOf(Category.TESTING));
+//        issueDto.setProjectDto(new ProjectDto());
+//        issueDto.setUser_uploader(new UserDto());
+//        issueDto.setUser_pic(new UserDto());
+//        return issueDto;
+//    }
+//
+//    private Issue createSampleSavedIssue() {
+//        Issue issue = new Issue();
+//        issue.setId(1L);
+//        issue.setTitle("Test");
+//        issue.setDescription("Test");
+//        issue.setPlace("Test");
+//        issue.setImpact("Test");
+//        issue.setRoot_cause("Test");
+//        issue.setDirect_cause("Test");
+//        issue.setCorrective_action("Test");
+//        issue.setPreventive_action("Test");
+//        issue.setSolved(true);
+//        issue.setCreated_date(new Date().getTime());
+//        issue.setUpdated_date(new Date().getTime());
+//        issue.setIssueCategory(Category.TESTING);
+//        issue.setProject(new Project());
+//        issue.setUser_uploader(new User());
+//        issue.setPic(new User());
+//        return issue;
+//    }
+//
+//    private IsuDto createSampleIsuDto() {
+//        IsuDto isuDto = new IsuDto();
+//        isuDto.setTitle("Test");
+//        isuDto.setDescription("Test");
+//        isuDto.setPlace("Test");
+//        isuDto.setImpact("Test");
+//        isuDto.setRoot_cause("Test");
+//        isuDto.setDirect_cause("Test");
+//        isuDto.setCorrective_action("Test");
+//        isuDto.setPreventive_action("Test");
+//        isuDto.setSolved(true);
+//        isuDto.setCreated_date(new Date().getTime());
+//        isuDto.setUpdated_date(new Date().getTime());
+//        isuDto.setIssueCategory(String.valueOf(Category.TESTING));
+//        isuDto.setProject_id(new ProjectDto().getId());
+//        isuDto.setUser_uploader(new UserDto().getId());
+//        isuDto.setUser_pic(new UserDto().getId());
+//        isuDto.setResponsible_type(String.valueOf(ResponsibleType.CLIENT));
+//        isuDto.setResponsible_party(1L);
+//        return isuDto;
+//    }
+
     @Test
     void getAllIssues() {
-        List<Issue> list = new ArrayList<>();
-        Issue issue1 = new Issue();
-        issue1.setTitle("Test");
-        issue1.setDescription("Test");
-        issue1.setPlace("Test");
-        issue1.setImpact("Test");
-        issue1.setRoot_cause("Test");
-        issue1.setDirect_cause("Test");
-        issue1.setCorrective_action("Test");
-        issue1.setPreventive_action("Test");
-        issue1.setSolved(true);
-        Date createdDate = new Date(System.currentTimeMillis());
-        Date updatedDate = new Date(System.currentTimeMillis());
-        issue1.setCreated_date(createdDate.getTime());
-        issue1.setUpdated_date(updatedDate.getTime());
-        issue1.setIssueCategory(Category.TESTING);
-        issue1.setProject(new Project());
-        issue1.setUser_uploader(new User());
-        issue1.setPic(new User());
-        list.add(issue1);
-        when(issueRepository.findAll()).thenReturn(list);
-        List<Issue> issues = issueRepository.findAll();
-        assertEquals(1, issues.size());
+        // Arrange
+        List<Issue> sampleIssues = Collections.singletonList(createSampleIssue());
+        when(issueRepository.findAll()).thenReturn(sampleIssues);
+
+        // Act
+        List<IssueDto> issues = issueService.getAllIssues();
+
+        // Assert
+        assertEquals(sampleIssues.size(), issues.size());
         verify(issueRepository, times(1)).findAll();
     }
+
+    private Issue createSampleIssue() {
+        Issue issue = new Issue();
+        issue.setId(1L);
+        issue.setTitle("Test");
+        issue.setDescription("Test");
+        issue.setPlace("Test");
+        issue.setImpact("Test");
+        issue.setRoot_cause("Test");
+        issue.setDirect_cause("Test");
+        issue.setCorrective_action("Test");
+        issue.setPreventive_action("Test");
+        issue.setSolved(true);
+        issue.setCreated_date(new Date().getTime());
+        issue.setUpdated_date(new Date().getTime());
+        issue.setIssueCategory(Category.TESTING);
+        issue.setProject(new Project());
+        issue.setUser_uploader(new User());
+        issue.setPic(new User());
+        return issue;
+    }
+
 
     @Test
     void getIssueById() {
