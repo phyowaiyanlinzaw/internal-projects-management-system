@@ -21,6 +21,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Ro
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.*;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
@@ -50,6 +51,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final TaskRepository taskRepository;
     private final AESImpl aes;
     private final UserService userService;
+    private final NotificationServiceImpl notificationService;
 
     @Transactional
     @Override
@@ -136,6 +138,10 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         projectDto.setDeliverableDto(deliverableDtos);
+
+        for(User user : users) {
+            notificationService.save("You have been assigned to new project", user.getId(), "project-save-event");
+        }
 
         return projectDto;
     }

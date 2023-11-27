@@ -188,7 +188,6 @@ $(document).ready(function () {
 
     if (dDSBtn) {
 
-        console.log("lee")
         // toggle search bar when click the search button
         dDSBtn.addEventListener("click", function () {
             if (dDSbar.classList.contains("d-none", "d-sm-none")) {
@@ -209,6 +208,8 @@ $(document).ready(function () {
             
             if (target.getAttribute('type') === 'search') {
 
+                let projectCount = 0;
+
                 let inputText = target.value.toLowerCase();
                 let allData = sortableContainer.children;
 
@@ -217,9 +218,15 @@ $(document).ready(function () {
                     let users = allData[i].querySelector('.card-text').textContent.toLowerCase();
                     if (proectTitle.includes(inputText) || users.includes(inputText)) {
                         allData[i].style.display = 'block';
+                        projectCount++;
                     } else {
                         allData[i].style.display = 'none';
                     }
+                }
+                if(projectCount === 0){
+                    document.getElementById('no-result').classList.remove('d-none')
+                } else {
+                    document.getElementById('no-result').classList.add('d-none')
                 }
             }
         });
