@@ -142,7 +142,7 @@
                     <button
                             class="nav-link position-relative"
                             data-bs-toggle="tab"
-                            data-bs-target="#new-issue-list"
+                            data-bs-target="#new-issue-list-container"
                     >
                     <span
                             class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle"
@@ -195,10 +195,18 @@
 
                     <div class="tab-pane fade show active row row-cols-1 p-2" id="all-issue-list">
                         <div class="d-flex flex-column gap-2" id="sort-container"></div>
+                        <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-result">
+                            <div class="d-flex justify-content-center align-items-center flex-column">
+                                <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
+                                <h1 class="text-white">No Issue Found!</h1>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="tab-pane fade show row row-cols-1" id="unsolved-issues">
-                        <div class="d-flex flex-column gap-2" id="unsolved-issues-container"></div>
+                        <div class="d-flex flex-column gap-2" id="unsolved-issues-container">
+                            
+                        </div>
                     </div>
 
                     <div class="tab-pane fade show row row-cols-1" id="issue-table">
@@ -275,7 +283,7 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade row row-cols-1" id="new-issue-list">
+                    <div class="tab-pane fade row row-cols-1" id="new-issue-list-container">
                         <div class="d-flex justify-content-between">
                             <div id="all-approval-input">
                                 <input type="radio" id="all-duplicate" name="approval" value="DUPLICATE"
@@ -288,11 +296,14 @@
                                        class="all-approval-input"/>
                                 <label for="all-decline">All Decline</label>
                             </div>
-
+                            
                             <div>
                                 <button type="button" class="btn btn-primary" id="all-approval-btn">Submit</button>
                             </div>
                         </div>
+                        <div id="new-issue-list">
+                        </div>
+                        
                     </div>
 
             </div>
@@ -553,21 +564,20 @@
                         
                         <div id="details" class="border-top border-bottom pt-1">
                             
-                            <div>
-                                <div>
-                                    <i class="fa-solid fa-info"></i>
-                                    <span class="fw-bold">Details</span>
+                            <div class="mb-3s">
+                                <div class="text-center">
+                                    <h3 class="fw-bold">Details</h3>
                                 </div>
                             </div>
                             <div class="row row-cols-2">
                                 <div class=" mb-3">
 
-                                    <label for="issueTitleDetails" calss=" fw-bold">Title:</label>
+                                    <label for="issueTitleDetails" class="fw-bold">Title:</label>
                                     <input type="text" class="form-control" id="issueTitleDetails"/>
 
                                 </div>
                                 <div class=" mb-3 ">
-                                    <label for="issue_categoryDetails" class=" fw-bold">Category:</label>
+                                    <label for="issue_categoryDetails" class="fw-bold">Category:</label>
                                     <select id="issue_categoryDetails" class="form-control me-2">
                                         <option value="ERROR">ERROR</option>
                                         <option value="BUG">BUG</option>
@@ -612,25 +622,26 @@
 
                         <div id="solution-detail" class="">
                             <div>
-                                <div>
-                                    <i class="fa-brands fa-rocketchat"></i>
-                                    <span>Solution</span>
+                                <div class="d-flex gap-2">
+                                    <i class="fa-brands fa-rocketchat text-warning fs-3"></i>
+                                    <h3 >Solution</h3>
                                 </div>
                             </div>
-                            <div class="col mb-3">
+                            <div class="col mb-3 mt-4">
                                 <div>
-                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    <i class="fa-solid fa-screwdriver-wrench text-success"></i>
                                     <span>Corrective Action</span>
                                 </div>
-                                <p class="" id="correctiveDetails"></p>
+                                <p class="mt-3" id="correctiveDetails"></p>
 
                             </div>
-                            <div class="col mb-3">
+                            <hr>
+                            <div class="col mb-3 mt-4">
                                 <div>
-                                    <i class="fa-solid fa-shield"></i>
+                                    <i class="fa-solid fa-shield text-success"></i>
                                     <span>Preventive Action</span>
                                 </div>
-                                <p class="" id="preventiveDetails"></p>
+                                <p class="mt-3" id="preventiveDetails"></p>
 
                             </div>
                         </div>
@@ -777,9 +788,7 @@
 
         const issueListContainer = document.querySelector("#sort-container")
 
-        const issueList = await getData("/api/issue/list");
-
-        issueListContainer.innerHTML = '';
+        const issueList = await getData('/api/issue/list')
 
         for (let i = issueList.length - 1; i >= 0; i--) {
 
@@ -794,15 +803,11 @@
 
     if(document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
 
-        console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-
         document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function (e) {
 
             const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
 
             const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
-
-            unsolvedIssueListContainer.innerHTML = '';
 
             for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
@@ -1731,13 +1736,12 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    const sortContainer = $('#sort-container');
+                    const sortContainer = document.querySelector('#sort-container');
 
-                        data.forEach(item => {
-
-                        const issueDiv = createIssueCard(item);
-                        sortContainer.prepend(issueDiv);
-                    });
+                    for(let i = data.length - 1; i > 0; i--) {
+                        const issueDiv = createIssueCard(data[i]);
+                        sortContainer.appendChild(issueDiv)
+                    }
                 },
                 error: function (error) {
                     console.log('Error fetching data:', error);
@@ -2068,12 +2072,19 @@
             document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
         }
 
-        for (let i = pendingIssueList.length - 1; i >= 0; i--) {
+        document.querySelector("button[data-bs-target='#new-issue-list-container']").addEventListener('show.bs.tab', async () => {
+            const newIssueContainer = document.querySelector("#new-issue-list")
 
-            const currentIssue = pendingIssueList[i];
+            const aaa = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
 
-            document.getElementById("new-issue-list").appendChild(createPendingIssueCard(currentIssue))
-        }
+            for (let i = aaa.length - 1; i >= 0; i--) {
+
+                const currentIssue = aaa[i];
+
+                newIssueContainer.appendChild(createPendingIssueCard(currentIssue))
+            }
+        })
+
         const allApprovalRadios = document.querySelectorAll('.all-approval-input');
 
         console.log("all radiio button", allApprovalRadios)
