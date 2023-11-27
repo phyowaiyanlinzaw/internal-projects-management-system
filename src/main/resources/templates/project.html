@@ -75,6 +75,13 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link border-primary border border-bottom-0 rounded-top"
+                                id="project-etails-tab" data-bs-toggle="tab" data-bs-target="#project-detials-view" type="button"
+                                role="tab" aria-controls="project-detials-view" aria-selected="false">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link border-primary border border-bottom-0 rounded-top"
                                 id="gantt-chart-tab" data-bs-toggle="tab" data-bs-target="#gantt-chart" type="button"
                                 role="tab" aria-controls="gantt-chart" aria-selected="false">
                             <i class="fa-solid fa-calendar-days"></i>
@@ -84,7 +91,11 @@
 
                         import {getCurrentLoginUser} from '/js/currentLoginUser.js'
 
+                        import {getData} from '/js/api-function.js'
+
                         const dog = await getCurrentLoginUser();
+
+                        const lol = await getData('/api/project/list/' + document.getElementById("projectId").innerText)
 
                         console.log("dog", dog.currentUser.role)
 
@@ -94,6 +105,10 @@
                             li.classList = 'nav-item'
                             li.role = 'presentation'
                             li.id = 'add-employee-list-button-container'
+
+                            if(lol.closed) {
+                                li.classList.add('d-none')
+                            }
 
                             const addEmpButton = document.createElement('button')
                             addEmpButton.classList = 'nav-link border-primary border border-bottom-0 rounded-top'
@@ -134,7 +149,103 @@
                 </script>
             </nav>
             <!-- nav for task and gantt chart end -->
-            <div class="tab-content position-relative" style="height: 600px" id="myTabContent">
+            <div class="tab-content " style="height: 600px" id="myTabContent">
+
+                <div class="tab-pane fade position-relative" id="project-detials-view" role="tabpanel" aria-labelledby="project-detail-tab">
+
+                    <div class="mx-auto mt-2" style=" background-color: white;">
+
+                        <div class="card" style="overflow-x: hidden;">
+                            <div class="card-header d-flex justify-content-between ">
+                                <div class="header-title">
+                                    <h4 class="card-title text-primary fw-bold fs-2">Project Details</h4>
+                                </div>
+                            </div>
+                            <div class="card-body bg-white " style="overflow-y: auto; max-height: 66vh;">
+                                
+                                <div class="d-flex gap-3 mb-2">
+                                    <div class="d-flex gap-1 align-items-center">
+                                        <p class="m-0 fw-bold text-primary">Name : </p>
+                                        <div id="project-detail-name"></div>
+                                    </div>
+                                    <div class="d-flex gap-1 align-items-center">
+                                        <p class="m-0 fw-bold text-primary">Start date : </p>
+                                        <div id="project-detail-start-date"></div>
+                                    </div>
+
+                                    <div class="d-flex gap-1 align-items-center">
+                                        <p class="m-0 fw-bold text-primary">End date : </p>
+                                        <div id="project-detail-end-date"></div>
+                                    </div>
+
+                                     <div class="d-flex gap-1 align-items-center">
+                                        <p class="m-0 fw-bold text-primary">Duration : </p>
+                                        <div id="project-detail-duration"></div>
+                                    </div>
+                                
+                                </div>
+                                <hr>
+                                
+                                <div>
+                                    <p class="d-flex gap-1 align-items-center fw-bold text-primary">Background</p>
+                                    <div id="project-detail-background"></div>
+                                </div>
+                                <hr>
+
+                                <div>
+                                    <h4 class="text-primary">Objective</h4>
+                                    <div id="project-detail-objective"></div>
+                                </div>
+
+                                <hr>
+
+                                <div class="row row-cols-2">
+                                    <div class="">
+                                        <div class="d-flex gap-2">
+                                            <h4 class="text-primary">Deliverable List</h4>
+                                            <button type="button" class="mb-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-deliverable-modal">
+
+                                                <i class="fa-solid fa-plus"></i>
+                                                Add deliverable
+                                            </button>
+                                        </div>
+                                        <div
+                                            id="project-detail-deliverable"
+                                            class="d-flex flex-column gap-2"
+                                        ></div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex gap-2">
+                                            <h4 class="text-primary">Architecture List</h4>
+                                            <button type="button" class="mb-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-architecture-modal">
+
+                                                <i class="fa-solid fa-plus"></i>
+                                                Add architecture
+                                            </button>
+                                        </div>
+                                        
+                                        <div
+                                            id="project-detial-architecture"
+                                            class="d-flex gap-2 flex-wrap"
+                                        ></div>
+                                        
+                                    </div>
+                                </div>
+
+                                
+                                
+                            </div>
+                            <div class="card-footer">
+
+                            </div>
+                        </div>
+
+                        
+
+                    </div>
+
+                </div>
+
                 <div class="tab-pane fade show active" id="task" role="tabpanel" aria-labelledby="tasks-tab">
                     
                     <!-- <div class="d-flex justify-content-end trash-can-container dummy-trash position-absolute" id="trash-bin" style="bottom: 100px; right: -20px; width: 60px">
@@ -222,9 +333,65 @@
                     <div class="d-flex flex-column gap-2" id="list-of-employee-to-add-in-project">
                         
                     </div>
-                    <div>
-                        <button class="btn btn-primary" id="save-new-employee-list">save</button>
+                    <div style="width: 100%;" class="d-flex justify-content-center align-items-center d-none" id="no-result-emp">
+                    <div class="d-flex justify-content-center align-items-center flex-column">
+                        <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                        <h3>Nothing to show!</h3>
                     </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="save-new-employee-list">save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-bs-backdrop="static" id="add-deliverable-modal" tabindex="-1" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content ">
+                <div class="modal-header ">
+                    <input type="text" placeholder="Search" id="deli-search" class="form-control">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2" id="list-of-deliverable-to-add-in-project" style="max-height: 200px; overflow-y:auto;">
+                        
+                    </div>
+                </div>
+                <div style="width: 100%;" class="d-flex justify-content-center align-items-center d-none" id="no-result-deli">
+                    <div class="d-flex justify-content-center align-items-center flex-column">
+                        <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                        <h3>Nothing to show!</h3>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="save-new-deliverable">save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-bs-backdrop="static" id="add-architecture-modal" tabindex="-1" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content ">
+                <div class="modal-header ">
+                    <input type="text" placeholder="Search" id="arch-search" class="form-control">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2" id="list-of-architecture-to-add-in-project">
+                        
+                    </div>
+                </div>
+                <div style="width: 100%;" class="d-flex justify-content-center align-items-center d-none" id="no-result-arch">
+                    <div class="d-flex justify-content-center align-items-center flex-column">
+                        <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                        <h3>Nothing to show!</h3>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="save-new-architecture">save</button>
                 </div>
             </div>
         </div>
@@ -548,6 +715,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/js/bootstrap5-toggle.min.js"></script>
     <script src="/js/task.js" type="module"></script>
     <script src="/js/notification.js" type="module"></script>
+    <script src="/js/ProjectDetail.js" type="module"></script>
+    
 </div>
 </body>
 </html>

@@ -686,6 +686,8 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         for(User user : users2) {
+            user.setEnabled(true);
+            userRepository.save(user);
             AvailableUser avu = aes.getAvailableUserByUserId(user.getId());
             avu.setAvaliable(false);
             aes.save(avu);

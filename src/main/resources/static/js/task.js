@@ -86,6 +86,14 @@ addEmployeeModal.addEventListener("show.bs.modal", async () => {
         })
     });
 
+    console.log(empList.length)
+
+    if (empToProject.length === 0) {
+        document.querySelector("#no-result-emp").classList.remove("d-none")
+    } else {
+        document.querySelector("#no-result-emp").classList.add("d-none")
+    }
+
     $('.pickme').change(function () {
         const value = $(this).val();
         if ($(this).prop('checked')) {
@@ -105,16 +113,28 @@ addEmployeeModal.addEventListener("show.bs.modal", async () => {
 
     document.querySelector("#save-new-employee-list").addEventListener("click", function () {
 
+        console.log(empList)
+
+        console.log(empList.length)
+
+        if(empList.length === 0) {
+            return;
+        }
+
         const empObjectList = empList.map(a => ({ id: parseInt(a) }))
 
         console.log(empObjectList)
 
         parseInt(document.getElementById("projectId").innerText)
 
+        console.log(empObjectList.length)
+
+        console.log(empObjectList)
+
         $.ajax({
             url: `/api/project/update/userlist/${document.getElementById("projectId").innerText}`,
             type: "PUT",
-            data: JSON.stringify(empList),
+            data: JSON.stringify(empObjectList),
             contentType: "application/json",
             success: function (data) {
                 console.log(data)
@@ -124,6 +144,8 @@ addEmployeeModal.addEventListener("show.bs.modal", async () => {
                 );
                 $('#alert-modal').modal('show');
                 $("#add-employee-modal").modal('hide')
+                empList.length = 0;
+
             }, error: function () {
                 console.log("error")
             },
@@ -165,6 +187,8 @@ $('#project-open-close').change(function () {
     const id = parseInt(document.getElementById("projectId").innerText)
 
     if (!condition) {
+
+        document.querySelector("#add-employee-list-button-container").classList.add("d-none")
 
         const taskInTodo = $("#TODO").children().find("*").length
         const taskInProgress = $("#IN_PROGRESS").children().find("*").length
@@ -221,6 +245,8 @@ $('#project-open-close').change(function () {
         }
 
     } else {
+
+        document.querySelector("#add-employee-list-button-container").classList.remove("d-none")
 
         $.ajax({
             url: `/api/project/update/status/${id}/${!condition}`,

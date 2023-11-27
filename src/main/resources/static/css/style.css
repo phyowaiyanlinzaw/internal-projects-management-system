@@ -1312,3 +1312,20 @@
     background-color: tomato;
     color: white;
 }
+
+.delitype {
+    transition: all 0.2s ease-in-out;
+}
+
+.delitype:hover {
+    transform: scale(1.2, 1.2);
+    opacity: .8;
+}
+
+.delitype:active {
+    transform: scale(.7, 0.7);
+}
+
+.modal-body {
+    overflow-y: auto;
+}

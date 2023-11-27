@@ -3,23 +3,27 @@ package team.placeholder.internalprojectsmanagementsystem.controller.api;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.commons.lang3.arch.Processor.Arch;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import groovyjarjarantlr4.v4.parse.ANTLRParser.finallyClause_return;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.AmountDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ArchitectureDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.DeliverableTypeDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Amount;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Deliverable;
+import team.placeholder.internalprojectsmanagementsystem.model.project.DeliverableType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.DeliverableRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.DeliverableTypeRepo;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ArchitectureServiceImpl;
@@ -42,6 +46,9 @@ public class ProjectController {
     private final TaskServiceImpl taskService;
     private final FakerService fakerService;
     private final ProjectRepository projectRepository;
+    private final DeliverableRepository deliverableTypeServiceImpl;
+    private final DeliverableTypeRepo deliverableTypeRe;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/generate-fake-project/{count}")
     public ResponseEntity<String> generateFakeProjects(@PathVariable int count) {
@@ -350,6 +357,114 @@ public class ProjectController {
 
         return ResponseEntity.ok("User list updated successfully");
 
+    }
+
+    @PutMapping("/delete/{id}/deliveralbeList")
+    public ResponseEntity<List<DeliverableDto>> updateDeliverableList(@PathVariable long id, @RequestBody Map<String, Long> requestBody) {
+
+        long deliID = requestBody.get("deliID");
+        
+        Deliverable deliverable = deliverableTypeServiceImpl.findById(deliID);
+
+        Project project = projectRepository.getReferenceById(id);
+
+        project.getDeliverables().remove(deliverable);
+
+        projectRepository.save(project);
+
+        deliverable.setDeliverableTypes(null);
+
+        deliverableTypeServiceImpl.delete(deliverable);
+
+        ProjectDto projectDto = projectService.getProjectById(id);
+
+        return ResponseEntity.ok(projectDto.getDeliverableDto());
+    }
+
+    @PutMapping("/save/{id}/deliveralbeList")
+    public ResponseEntity<List<DeliverableDto>> saveDeliverableList(@PathVariable long id, @RequestBody List<DeliverableDto> requestBody) {
+
+        List<DeliverableType> deliverableTypes = new ArrayList<>();
+
+        for(DeliverableDto deliverableDto : requestBody) {
+            DeliverableType deliverableType = deliverableTypeRe.getReferenceById(deliverableDto.getDeliverableType().getId());
+            deliverableTypes.add(deliverableType);
+        }
+
+        Project project = projectRepository.getReferenceById(id);
+
+        List<Deliverable> deliverable = new ArrayList<>();
+
+        for(DeliverableType deliTpye : deliverableTypes) {
+            Deliverable deliverable1 = new Deliverable();
+            deliverable1.setDeliverableTypes(deliTpye);
+            deliverable.add(deliverable1);
+        }
+
+        project.getDeliverables().addAll(deliverable);
+
+        projectRepository.save(project);
+
+        ProjectDto projectDto = projectService.getProjectById(id);
+
+        return ResponseEntity.ok(projectDto.getDeliverableDto());
+    }
+
+    @PutMapping("/update/{id}/architectureList")
+    public ResponseEntity<List<ArchitectureDto>> updateArchitectureList(@PathVariable long id, @RequestBody Map<String, Long> requestBody) {
+
+        Project project = projectRepository.getReferenceById(id);
+
+        Architecture architecture = architectureService.findById(requestBody.get("arcid"));
+
+        project.getArchitectures().remove(architecture);
+
+        projectRepository.save(project);
+
+        List<ArchitectureDto> architectureDtos = new ArrayList<>();
+
+        for(Architecture architecture1 : project.getArchitectures()) {
+            ArchitectureDto architectureDto = modelMapper.map(architecture1, ArchitectureDto.class);
+            architectureDtos.add(architectureDto);
+        }
+
+        return new ResponseEntity<>(architectureDtos, HttpStatus.OK);
+        
+    }
+
+    @GetMapping("/architecturelist/{id}")
+    public ResponseEntity<List<ArchitectureDto>> getArchitectureList(@PathVariable long id) {
+
+        Project project = projectRepository.getReferenceById(id);
+
+        List<ArchitectureDto> architectureDtos = architectureService.getAllArchitecture();
+
+        List<ArchitectureDto> architectureDtoList = new ArrayList<>();
+
+        for(ArchitectureDto architectureDto : architectureDtos) {
+            if(!project.getArchitectures().contains(architectureService.findById(architectureDto.getId()))) {
+                architectureDtoList.add(architectureDto);
+            }
+        }
+
+        return new ResponseEntity<>(architectureDtoList, HttpStatus.OK);
+    }
+
+    @PutMapping("/save/{id}/architectureList")
+    public ResponseEntity<Set<ArchitectureDto>> saveArchitectureList(@PathVariable long id, @RequestBody Set<ArchitectureDto> requestBody) {
+
+        Project project = projectRepository.getReferenceById(id);
+
+        List<Architecture> architectures = new ArrayList<>();
+        for(ArchitectureDto architectureDto : requestBody) {
+            Architecture architecture = architectureService.findById(architectureDto.getId());
+            architectures.add(architecture);
+        }
+
+        project.getArchitectures().addAll(architectures);
+        projectRepository.save(project);
+
+        return ResponseEntity.ok(projectService.getProjectById(id).getArchitectureDto());
     }
 
 }
