@@ -209,7 +209,18 @@ public class IssueServiceImpl implements IssueService {
             issue.setSolved_date(issueDto.getSolved_date() != 0 ? issueDto.getSolved_date() : issue.getSolved_date());
 
             issueRepository.save(issue);
-            return modelMapper.map(issue, IssueDto.class);
+
+            issueDto = modelMapper.map(issue, IssueDto.class);
+
+            if(issue.getResponsible_type().equals(ResponsibleType.CLIENT)) {
+                issueDto.setResponsible_party(modelMapper.map(clientRepository.findById(issue.getResponsible_party()), ClientDto.class));
+            } else if(issue.getResponsible_type().equals(ResponsibleType.EMPLOYEE)) {
+                issueDto.setResponsible_party(modelMapper.map(userRepository.findById(issue.getResponsible_party()), UserDto.class));
+            }
+
+            issueDto.setUser_pic(modelMapper.map(issue.getPic(), UserDto.class));
+
+            return issueDto;
         } else {
             return null;
         }
