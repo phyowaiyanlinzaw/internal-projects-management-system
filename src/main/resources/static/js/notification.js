@@ -142,23 +142,7 @@ channel.bind('task-noti-event', async function(response) {
     notificationContainer.appendChild(anchor);
     notificationContainer.appendChild(hr);
 
-    const toast = document.createElement('div')
-
-    toast.classList = 'toast show'
-    toast.setAttribute('role', 'alert')
-    toast.setAttribute('aria-live', 'assertive')
-    toast.setAttribute('aria-atomic', 'true')
-
-    toast.innerHTML = `<div class="toast-header">
-                <strong class="me-auto">Bootstrap</strong>
-                <small class="text-muted">${getTimeElapsed(Date.now())}</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ${notification.description}
-            </div>`
-
-    const btoawe = new bootstrap.Toast(toast)
+    const btoawe = new bootstrap.Toast(createToast({ notification: notification }))
 
     btoawe.show();
 
@@ -374,23 +358,7 @@ channel.bind("issue-noti-event", async function(response) {
 
     } 
 
-    const toast = document.createElement('div')
-
-    toast.classList = 'toast show'
-    toast.setAttribute('role', 'alert')
-    toast.setAttribute('aria-live', 'assertive')
-    toast.setAttribute('aria-atomic', 'true')
-
-    toast.innerHTML = `<div class="toast-header">
-                <strong class="me-auto">Bootstrap</strong>
-                <small class="text-muted">${getTimeElapsed(Date.now())}</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                there is new issue
-            </div>`
-
-    const btoawe  = new bootstrap.Toast(toast)
+    const btoawe = new bootstrap.Toast(createToast({ notification: notification }))
 
     btoawe.show();
 
@@ -462,6 +430,17 @@ channel.bind("project-save-event", async function (response) {
     notificationContainer.appendChild(anchor);
     notificationContainer.appendChild(hr);
 
+    
+    const btoawe = new bootstrap.Toast(createToast({notification : notification}))
+
+    btoawe.show();
+
+    document.querySelector('#toasts-noti-container').appendChild(toast)
+
+})
+
+
+function createToast ({notification}) {
     const toast = document.createElement('div')
 
     toast.classList = 'toast show'
@@ -477,11 +456,5 @@ channel.bind("project-save-event", async function (response) {
             <div class="toast-body">
                 ${notification.description}
             </div>`
-
-    const btoawe = new bootstrap.Toast(toast)
-
-    btoawe.show();
-
-    document.querySelector('#toasts-noti-container').appendChild(toast)
-
-})
+    return toast
+}

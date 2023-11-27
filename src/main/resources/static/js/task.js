@@ -40,7 +40,9 @@ if (tabEl) {
 }
 
 // when the add task modal is shown get the employee list and add the event listener to handle to add employee to the project
-document.querySelector("#add-employee-modal").addEventListener("show.bs.modal", async () => {
+const addEmployeeModal = document.querySelector("#add-employee-modal")
+
+addEmployeeModal.addEventListener("show.bs.modal", async () => {
 
     const empList = [];
 
@@ -128,6 +130,12 @@ document.querySelector("#add-employee-modal").addEventListener("show.bs.modal", 
         });
 
     })
+
+})
+
+addEmployeeModal.addEventListener("hidden.bs.modal", function () {
+
+    this.querySelector("#add-new-employee-to-project").innerText = "Select all"
 
 })
 
