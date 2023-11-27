@@ -43,9 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
 
             Notification notification1 = notiRepo.save(notification);
 
-
-
-            NotiDto notiDto = modelMapper.map(notification, NotiDto.class);
+            NotiDto notiDto = modelMapper.map(notification1, NotiDto.class);
 
             if(objects.length > 0) {
                 for (Object object : objects) {

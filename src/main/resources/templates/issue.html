@@ -747,6 +747,11 @@
 
                     oldIssue.replaceWith(issue)
 
+                    $("#alert-text").text(
+                        "Issue Updaed Successfully"
+                    );
+                    $("#alert-modal").modal("show");
+
                 },
                 error: function (xhr, status, error) {
                     console.log('Ajax request error:', error);
@@ -1845,9 +1850,14 @@
 
                                     const issue = createIssueCard(response);
 
-                                    const oldIssue = document.querySelector(`issue-${response.id}`)
+                                    const oldIssue = $(`#issue-${response.id}`)
 
                                     oldIssue.replaceWith(issue)
+
+                                    $("#alert-text").text(
+                                        "Issue Updated Successfully"
+                                    );
+                                    $("#alert-modal").modal("show");
 
                                 },
                                 error: function (xhr, status, error) {

@@ -335,6 +335,76 @@ document.querySelector("#add-task").addEventListener("show.bs.modal", function (
 
 let currentTaskId;
 
+document.querySelector('#member-task-details').addEventListener("shown.bs.modal", async function () {
+
+    currentTaskId = this.getAttribute("current-task-id")
+    console.log("current target task id : ", currentTaskId);
+
+    currentTask = await getData("/api/task/get/" + currentTaskId)
+
+    console.log("current target task : ", currentTask);
+
+    document.getElementById('member-task-title').innerText = currentTask.title
+    document.getElementById("member-task-description").value = currentTask.description
+
+    if (currentTask.status === 'TODO') {
+
+        document.getElementById('member-task-status').innerText = "TODO"
+        document.getElementById('member-task-status').classList.add('bg-primary')
+    } else if (currentTask.status === 'IN_PROGRESS') {
+
+        document.getElementById('member-task-status').innerText = "IN PROGRESS"
+        document.getElementById('member-task-status').classList.add('bg-info')
+    } else {
+
+        document.getElementById('member-task-status').innerText = "FINISHED"
+        document.getElementById('member-task-status').classList.add('bg-success')
+    }
+
+
+    document.getElementById("member-assigned-member-span").innerText = currentTask.userDto.name + " | " + currentTask.userDto.role
+
+    if (currentTask.tasksGroup === 'A') {
+
+        document.getElementById('member-task-group-span').innerText = "A - Related With Project Development"
+    } else if (currentTask.tasksGroup === 'B') {
+
+        document.getElementById('member-task-group-span').innerText = "B - Training"
+    } else {
+
+        document.getElementById('member-task-group-span').innerText = "C - Idling"
+    }
+
+
+    // Convert timestamp to Date objects
+    const startDate = new Date(currentTask.plan_start_time);
+    const endDate = new Date(currentTask.plan_end_time);
+
+    // Get the date strings in 'yyyy-mm-dd' format
+    const startDateString = startDate.toISOString().split('T')[0];
+    const endDateString = endDate.toISOString().split('T')[0];
+
+    document.getElementById("member-task-detail-start-date").value = startDateString
+    document.getElementById("member-task-detail-due-date").value = endDateString
+
+
+    document.getElementById('member-task-plan-hours').innerText = currentTask.plan_hours.toString() + " hours"
+
+    const duration = calculateWeekdayDuration(startDate, endDate);
+    document.getElementById("member-task-duration").innerText = duration.toString() + " days ";
+
+    const assignedMemberSpan = document.getElementById('assigned-member-span')
+    //to check if that element exists
+    if (assignedMemberSpan) {
+        // Check if the user has any of the specified roles
+        if (currentTaskData.userDto.role === 'FOC' || currentTaskData.userDto.role === 'EMPLOYEE' || currentTaskData.userDto.role === 'CONTRACT' || currentTaskData.userDto.role === 'PMO' || currentTaskData.userDto.role === 'DEPARTMENT_HEAD' || currentTaskData.userDto.role === 'SDQC') {
+            assignedMemberSpan.innerText = currentTaskData.userDto.name + " | " + currentTaskData.userDto.role
+        }
+    }
+
+
+})
+
 document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", async function () {
 
     currentTaskId = this.getAttribute("current-task-id")
@@ -842,8 +912,11 @@ for (let i = 0; i < taskList.length; i++) {
 
         const taskId = taskDiv.getAttribute('id').split('-').pop();
 
-        document.querySelector("#pm-task-details").setAttribute("current-task-id", taskId)
-
+        if (currentUser.currentUser.role === 'PROJECT_MANAGER') {
+            document.querySelector("#pm-task-details").setAttribute("current-task-id", taskId)
+        } else {
+            document.querySelector("#member-task-details").setAttribute("current-task-id", taskId)
+        }
         
     });
 
