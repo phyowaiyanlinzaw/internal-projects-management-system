@@ -17,7 +17,7 @@
 <!-- Spinner Start -->
 <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
-        <span class="sr-only">Loading...</span>
+        <span class="sr-only"></span>
     </div>
 </div>
 <!-- Spinner End -->
@@ -41,6 +41,25 @@
         </div>
 
         <div class="container-fluid mt-2">
+            <p style="display:none;" th:text="${projectId}" id="projectId"></p>
+            <nav class="py-3 px-2">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/project/all">Project List</a></li>
+                    <li class="breadcrumb-item active">
+
+                        <script type="module">
+
+                            import { getData } from "/js/api-function.js";
+
+                            const currentProject = await getData('/api/project/list/' + document.getElementById("projectId").innerText)
+
+                            document.querySelector(".breadcrumb-item.active").innerText = currentProject.name
+
+                        </script>
+
+                    </li>
+                </ol>
+            </nav>
             <!-- nav for task and gantt chart start -->
             <nav class="d-flex justify-content-between align-items-center" id="nav-container">
                 <ul class="nav nav-tabs d-flex  rounded-top" id="myTab" role="tablist">
@@ -49,7 +68,7 @@
                                 id="tasks-tab" data-bs-toggle="tab" data-bs-target="#task"
                                 type="button" role="tab" aria-controls="task" aria-selected="false">
                             <i class="fa-solid fa-list-check"></i>
-                            <p style="display:none;" th:text="${projectId}" id="projectId"></p>
+                            
                             <p style="display:none;" th:text="${project.getStart_date()}" id="projectStartDate"></p>
                             <p style="display:none;" th:text="${project.getEnd_date()}" id="projectEndDate"></p>
                         </button>
