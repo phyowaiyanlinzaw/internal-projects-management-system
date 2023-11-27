@@ -313,7 +313,12 @@
                         </div>
                         <div id="new-issue-list">
                         </div>
-                        
+                        <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-new-issue">
+                            <div class="d-flex justify-content-center align-items-center flex-column">
+                                <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
+                                <h1 class="text-white">No New Issue</h1>
+                            </div>
+                        </div>
                     </div>
 
             </div>
@@ -794,17 +799,23 @@
         setupLogoutConfirmation();
     });
 
-    document.querySelector("button[data-bs-target=\"#all-issue-list\"]").addEventListener("show.bs.tab", async function (e) {
+    document.querySelectorAll("button[data-bs-target=\"#all-issue-list\"]").forEach(button =>
+        
+        {
+            button.addEventListener("show.bs.tab", async function (e) {
 
-        const issueListContainer = document.querySelector("#sort-container")
+            const issueListContainer = document.querySelector("#sort-container")
 
-        const issueList = await getData('/api/issue/list')
+            const issueList = await getData('/api/issue/list')
 
-        for (let i = issueList.length - 1; i >= 0; i--) {
+            issueListContainer.innerHTML = ''
 
-            issueListContainer.appendChild(createIssueCard(issueList[i]));
-        }
+            for (let i = issueList.length - 1; i >= 0; i--) {
 
+                issueListContainer.appendChild(createIssueCard(issueList[i]));
+            }
+
+        })
     })
 
     $("button[data-bs-target=\"#issue-table\"]").on("show.bs.tab",function (e) {
@@ -2083,15 +2094,24 @@
         }
 
         document.querySelector("button[data-bs-target='#new-issue-list-container']").addEventListener('show.bs.tab', async () => {
+
+            document.querySelector("#notification-light-for-new-issue").classList.add('d-none')
+
             const newIssueContainer = document.querySelector("#new-issue-list")
+
+            newIssueContainer.innerHTML = ''
 
             const aaa = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
 
-            for (let i = aaa.length - 1; i >= 0; i--) {
+            if(aaa.length === 0) {
+                document.querySelector('#no-new-issue').classList.remove('d-none')
+            } else {
+                for (let i = aaa.length - 1; i >= 0; i--) {
 
                 const currentIssue = aaa[i];
 
                 newIssueContainer.appendChild(createPendingIssueCard(currentIssue))
+            }
             }
         })
 
@@ -2158,16 +2178,11 @@
                             type: 'GET',
                             success: function (data) {
                                 console.log(data);
-                                console.log("Issue Updated Successfully");
-                                // alert("Issue Updated Successfully");
-                                showSuccess("Issue Updated Successfuly.");
                                 const newIssueList = document.getElementById("new-issue-list")
-                                while (document.getElementById("new-issue-list").children.length > 1) {
-                                    newIssueList.removeChild(newIssueList.lastChild);
-                                }
+                                newIssueList.innerHTML = ''
                                 for (let i = data.length - 1; i >= 0; i--) {
 
-                                    const currentIssue = pendingIssueList[i];
+                                    const currentIssue = data[i];
 
                                     newIssueList.appendChild(createPendingIssueCard(currentIssue))
                                 }

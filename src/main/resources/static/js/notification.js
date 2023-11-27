@@ -90,21 +90,15 @@ const pusher = new Pusher('3c0b3426bd0875be392f', {
 const channel = pusher.subscribe(`my-channel-${loginUser.currentUser.id}`);
 channel.bind('task-noti-event', async function(response) {
 
-    try {
-        const hiddenElement = document.createElement('div');
-        hiddenElement.style.display = 'none';
-        document.body.appendChild(hiddenElement);
-
-        hiddenElement.addEventListener('click', () => {
-            notiSound();
-            hiddenElement.remove();
-        });
-
-        const clickEvent = new Event('click');
-        hiddenElement.dispatchEvent(clickEvent);
-    } catch (error) {
-        console.error('Error:', error);
-    }
+    const hiddenElement = document.createElement('div');
+    hiddenElement.style.display = 'none';
+    document.body.appendChild(hiddenElement);
+    hiddenElement.addEventListener('click', () => {
+        notiSound();
+        hiddenElement.remove();
+    });
+    const clickEvent = new Event('click');
+    hiddenElement.dispatchEvent(clickEvent);
     document.querySelector("#notification-light").classList.remove("d-none");
 
     const data = JSON.parse(response);
@@ -142,11 +136,16 @@ channel.bind('task-noti-event', async function(response) {
     notificationContainer.appendChild(anchor);
     notificationContainer.appendChild(hr);
 
-    const btoawe = new bootstrap.Toast(createToast({ notification: notification }))
+    const toast = createToast({ notification: notification })
 
-    btoawe.show();
+    const btoawe = new bootstrap.Toast(toast)
+
+
+    console.log(btoawe)
 
     document.querySelector('#toasts-noti-container').appendChild(toast)
+
+    btoawe.show();
 });
 
 function createPendingIssueCard(issue) {
@@ -295,21 +294,16 @@ function createPendingIssueCard(issue) {
 
 channel.bind("issue-noti-event", async function(response) {
 
-    try {
-        const hiddenElement = document.createElement('div');
-        hiddenElement.style.display = 'none';
-        document.body.appendChild(hiddenElement);
+    
+    const hiddenElement = document.createElement('div');
+    hiddenElement.style.display = 'none';
+    document.body.appendChild(hiddenElement);
+    hiddenElement.addEventListener('click', () => {
+        notiSound();
+    });
 
-        hiddenElement.addEventListener('click', () => {
-            notiSound();
-            hiddenElement.remove();
-        });
-
-        const clickEvent = new Event('click');
-        hiddenElement.dispatchEvent(clickEvent);
-    } catch (error) {
-        console.error('Error:', error);
-    }
+    const clickEvent = new Event('click');
+    hiddenElement.dispatchEvent(clickEvent);
 
     console.log("in issue noti event function");
     console.log(response);
@@ -358,11 +352,17 @@ channel.bind("issue-noti-event", async function(response) {
 
     } 
 
-    const btoawe = new bootstrap.Toast(createToast({ notification: notification }))
+    const toast = createToast({ notification: notification })
+
+    const btoawe = new bootstrap.Toast(toast)
+
+    
+    console.log(btoawe)
+
+    document.querySelector('#toasts-noti-container').appendChild(toast)
 
     btoawe.show();
 
-    document.querySelector('#toasts-noti-container').appendChild(toast)
 
 });
 
@@ -378,21 +378,15 @@ document.querySelector("#notification-light-container").addEventListener("shown.
 
 channel.bind("project-save-event", async function (response) {
 
-    try {
-        const hiddenElement = document.createElement('div');
-        hiddenElement.style.display = 'none';
-        document.body.appendChild(hiddenElement);
-
-        hiddenElement.addEventListener('click', () => {
-            notiSound();
-            hiddenElement.remove();
-        });
-
-        const clickEvent = new Event('click');
-        hiddenElement.dispatchEvent(clickEvent);
-    } catch (error) {
-        console.error('Error:', error);
-    }
+    const hiddenElement = document.createElement('div');
+    hiddenElement.style.display = 'none';
+    document.body.appendChild(hiddenElement);
+    hiddenElement.addEventListener('click', () => {
+        notiSound();
+        hiddenElement.remove();
+    });
+    const clickEvent = new Event('click');
+    hiddenElement.dispatchEvent(clickEvent);
 
     const notificationContainer = document.querySelector("#notification-container");
 
@@ -431,11 +425,16 @@ channel.bind("project-save-event", async function (response) {
     notificationContainer.appendChild(hr);
 
     
-    const btoawe = new bootstrap.Toast(createToast({notification : notification}))
+    const toast = createToast({ notification: notification })
 
-    btoawe.show();
+    const btoawe = new bootstrap.Toast(toast)
+
+
+    console.log(btoawe)
 
     document.querySelector('#toasts-noti-container').appendChild(toast)
+
+    btoawe.show();
 
 })
 
@@ -449,7 +448,7 @@ function createToast ({notification}) {
     toast.setAttribute('aria-atomic', 'true')
 
     toast.innerHTML = `<div class="toast-header">
-                <strong class="me-auto">Bootstrap</strong>
+                <strong class="me-auto"><i class="fa-solid fa-bell fs-3" style="transform: rotate(45deg);"></i></strong>
                 <small class="text-muted">${getTimeElapsed(Date.now())}</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
