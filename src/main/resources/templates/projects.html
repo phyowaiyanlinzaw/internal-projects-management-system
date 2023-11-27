@@ -108,6 +108,7 @@
         <script src="/js/main.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
             defer
@@ -2261,12 +2262,22 @@
 
             window.getAllProjectInfo = getAllProjectInfo; // don't delete this
 
-            //export all projects from getAllProjectInfo function with pdfMake
-            $("#exportAllBtn").on("click", async function () {
+            const exportPdfDropdown = document.querySelector("#exportPdfSelect");
+
+            exportPdfDropdown.addEventListener("change", function () {
+                const exportOption = exportPdfDropdown.value;
+                if (exportOption === "all") {
+                    exportAllRows();
+                } else if (exportOption === "selected") {
+
+                    exportSelectedRows();
+                }
+            }   );
+
+            // export all projects from getAllProjectInfo function with pdfMake
+            async function exportAllRows() {
                 try {
                     const allProjects = await getAllProjectInfo()
-                    console.log(allProjects);
-                    console.log(typeof  allProjects)
                     const docDefinition = {
                         content: [
                             {
@@ -2314,14 +2325,11 @@
                 } catch (error) {
                     console.log(error);
                 }
-            });
+            }
 
-            //export selected projects from getAllSelectedProjectInfo function with pdfMake
-            $("#exportSelectedBtn").on("click", async function () {
+            async function exportSelectedRows() {
                 try {
-                    const selectedProjects = await getAllSelectedProjectInfo()
-                    console.log(selectedProjects);
-                    console.log(typeof  selectedProjects)
+                    const selectedRows = await getAllSelectedProjectInfo()
                     const docDefinition = {
                         content: [
                             {
@@ -2334,7 +2342,7 @@
                                     widths: ['*', '*', '*', '*', '*', '*'],
                                     body: [
                                         ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
-                                        ...selectedProjects.map(project => {
+                                        ...selectedRows.map(project => {
                                             return [
                                                 project.name,
                                                 project.clientDto.name,
@@ -2369,7 +2377,68 @@
                 } catch (error) {
                     console.log(error);
                 }
-            });
+            }
+
+            const exportExcelDropdown = document.querySelector("#exportExcelSelect");
+
+            exportExcelDropdown.addEventListener("change", function () {
+                const exportOption = exportExcelDropdown.value;
+                if (exportOption === "all") {
+                    exportAllRowsExcel();
+                } else if (exportOption === "selected") {
+                    exportSelectedRowsExcel();
+                }
+            }   );
+
+            async function exportAllRowsExcel() {
+                try {
+                    const allProjects = await getAllProjectInfo()
+                    const data = [
+                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                        ...allProjects.map(project => {
+                            return [
+                                project.name,
+                                project.clientDto.name,
+                                formatDateFromMilliseconds(project.start_date),
+                                formatDateFromMilliseconds(project.end_date),
+                                project.duration,
+                                project.current_phase
+                            ]
+                        })
+                    ];
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Project List");
+                    XLSX.writeFile(wb, "Project List.xlsx");
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            async function exportSelectedRowsExcel() {
+                try {
+                    const selectedRows = await getAllSelectedProjectInfo()
+                    const data = [
+                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                        ...selectedRows.map(project => {
+                            return [
+                                project.name,
+                                project.clientDto.name,
+                                formatDateFromMilliseconds(project.start_date),
+                                formatDateFromMilliseconds(project.end_date),
+                                project.duration,
+                                project.current_phase
+                            ]
+                        })
+                    ];
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Project List");
+                    XLSX.writeFile(wb, "Project List.xlsx");
+                } catch (error) {
+                    console.log(error);
+                }
+            }
 
             //list project end
             if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
@@ -2535,10 +2604,20 @@
                             <div class="col p-0 text-center">Role</div>
                         </div>
                         <div class="text-end mt-2">
-                            <button type="button" class="btn btn-primary" id="eportSelectedBtn">Export Selected</button>
-                            <button type="button" class="btn btn-primary " id="exportAllBtn">
-                                Export all
-                            </button>
+                            <div class="btn-group" role="group">
+                                <select class="form-control btn btn-primary" name="dropdown" id="exportPdfSelect" style="width: 30%;">
+                                    <option value="" selected disabled>Export PDF</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <select class="form-control btn btn-primary" name="dropdown" id="exportExcelSelect" style="width: 30%;">
+                                    <option value="" selected disabled>Export Excel</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
                         </div>
                         <div
                             class="d-flex pt-2 flex-column gap-2"
