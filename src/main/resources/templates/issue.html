@@ -7,6 +7,7 @@
         .ql-toolbar {
             color: white;
         }
+
         .ql-editor {
 
         }
@@ -31,6 +32,8 @@
 <div th:replace="fragments/sidebar :: sidebar"></div>
 <div class="container-fluid position-relative d-flex p-0">
 
+    
+
     <!-- Content Start -->
     <div class="content" style="
                     background-color: #e5e5f7;
@@ -42,12 +45,22 @@
                     background-size: 12px 12px;
                 ">
 
+                
+
         <div th:replace="fragments/navigation :: navigation-without-search"></div>
+
+        <div class="toast-container position-fixed p-3 end-0 bottom-0 " id="toasts-noti-container" style="z-index: 99;">
+            <!-- Then put toasts within -->
+            
+            
+        </div>
 
         <div
                 class="container-fluid pt-2 ps-s pe-2"
                 id="dropdrown-search-bar"
         >
+
+
             <div class="d-flex flex-row justify-content-end gap-2">
                 <button class="btn btn-info" id="reset-btn" style="color: #ffffff !important;">
                     reset
@@ -99,11 +112,10 @@
                 <!-- sortting button -->
                 <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
 
+                </div>
 
+                <!-- Modal -->
             </div>
-
-            <!-- Modal -->
-        </div>
 
         <div class="container-fluid mt-2">
             <ul class="nav nav-tabs nav-tabs-bordered d-none" id="issue-link">
@@ -116,42 +128,8 @@
                         Issue List
                     </button>
                 </li>
-                <script type="module">
 
-                    import {getUser} from "/js/currentLoginUser.js";
-
-                    const user = await getUser();
-
-                    console.log(user)
-
-                    if(user.currentUser.role === 'PROJECT_MANAGER') {
-
-                        const linkContainer = document.querySelector("#issue-link")
-
-                        const liList = []
-
-                        const unsolveLi = document.createElement("li")
-                        unsolveLi.classList.add("nav-item")
-                        unsolveLi.innerHTML = `<button class="nav-link position-relative" data-bs-toggle="tab" data-bs-target="#unsolved-issues">Unsolved Issues</button>`
-
-                        liList.push(unsolveLi)
-
-                        const newIssueList = document.createElement("li")
-                        newIssueList.classList.add("nav-item")
-                        newIssueList.innerHTML = `<button class="nav-link position-relative" data-bs-toggle="tab" data-bs-target="#new-issue-list"><span class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle" id="notification-light-for-new-issue" style="padding: 7px;"></span>New Issues</button>`
-
-                        liList.push(newIssueList)
-
-                        console.log('li link', linkContainer.children[linkContainer.children.length - 1])
-
-                        liList.forEach(li => {
-                            linkContainer.insertBefore(li, linkContainer.children[linkContainer.children.length - 1])
-                        })
-
-                    }
-
-                </script>
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <button
                             class="nav-link position-relative"
                             data-bs-toggle="tab"
@@ -164,7 +142,7 @@
                     <button
                             class="nav-link position-relative"
                             data-bs-toggle="tab"
-                            data-bs-target="#new-issue-list"
+                            data-bs-target="#new-issue-list-container"
                     >
                     <span
                             class="position-absolute d-none top-0 end-0 translate-middle bg-danger border border-light rounded-circle"
@@ -173,46 +151,160 @@
                     </span>
                         New Issues
                     </button>
-                </li> -->
-                <li>
-                    <div class="inline-block">
-                        <a href="issue-table"><i class="fa-solid fa-table"></i></a>
-                    </div>
+                </li>
+                <script type="module">
 
+                    import {getUser} from "/js/currentLoginUser.js";
+
+                    const user = await getUser();
+
+                    if(user.currentUser.role === 'SDQC' || user.currentUser.role === 'PMO') {
+                        document.querySelector("button[data-bs-target='#all-issue-list']").remove()
+                        document.querySelector("button[data-bs-target='#unsolved-issues']").remove()
+                        document.querySelector("button[data-bs-target='#new-issue-list']").remove()
+
+                    }
+
+                </script>
+            </ul>
+            <ul class="nav nav-tabs nav-tabs-bordered" id="issueTableNav">
+                <li class="nav-item">
+                    <button
+                            class="nav-link position-relative btn-light active"
+                            data-bs-toggle="tab"
+                            data-bs-target="#all-issue-list"
+                    >
+                        Feeds View
+                        <i class="bi bi-rss"></i>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button
+                            class="nav-link position-relative btn-light"
+                            data-bs-toggle="tab"
+                            data-bs-target="#issue-table"
+                    >
+                        Table View
+                        <i class="bi bi-table"></i>
+                    </button>
                 </li>
             </ul>
 
 
+                <div class="tab-content pt-2">
 
-            <div class="tab-content pt-2">
-
-                <div class="tab-pane fade show active row row-cols-1 p-2" id="all-issue-list">
-                    <div class="d-flex flex-column gap-2" id="sort-container"></div>
-                </div>
-
-                <div class="tab-pane fade show row row-cols-1" id="unsolved-issues">
-                    <div class="d-flex flex-column gap-2" id="unsolved-issues-container"></div>
-                </div>
-
-                <div class="tab-pane fade row row-cols-1" id="new-issue-list">
-                    <div class="d-flex justify-content-between">
-                        <div id="all-approval-input">
-                            <input type="radio" id="all-duplicate" name="approval" value="DUPLICATE"
-                                   class="all-approval-input"/>
-                            <label for="all-duplicate">All Duplicate</label>
-                            <input type="radio" id="all-approve" name="approval" value="APPROVE"
-                                   class="all-approval-input"/>
-                            <label for="all-approve">All Approve</label>
-                            <input type="radio" id="all-decline" name="approval" value="DECLINE"
-                                   class="all-approval-input"/>
-                            <label for="all-decline">All Decline</label>
-                        </div>
-
-                        <div>
-                            <button type="button" class="btn btn-primary" id="all-approval-btn">Submit</button>
+                    <div class="tab-pane fade show active row row-cols-1 p-2" id="all-issue-list">
+                        <div class="d-flex flex-column gap-2" id="sort-container"></div>
+                        <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-result">
+                            <div class="d-flex justify-content-center align-items-center flex-column">
+                                <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
+                                <h1 class="text-white">No Issue Found!</h1>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="tab-pane fade show row row-cols-1" id="unsolved-issues">
+                        <div class="d-flex flex-column gap-2" id="unsolved-issues-container">
+                            
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade show row row-cols-1" id="issue-table">
+                        <div class="d-flex flex-column gap-2 d-none" id="issue-table-container">
+                            <div id="toolbar" class="ms-3">
+                                <div class="btn-group" role="group">
+                                    <select class="form-control btn btn-primary" name="dropdown" id="exportSelect" style="width: 30%;">
+                                        <option value="" selected disabled>Export PDF</option>
+                                        <option value="all">Export All</option>
+                                        <option value="selected">Export Selected</option>
+                                    </select>
+                                </div>
+
+                                <div class="btn-group" role="group">
+                                    <select class="form-control btn btn-primary" name="dropdown" id="exportExcelSelect" style="width: 30%;">
+                                        <option value="" selected disabled>Export Excel</option>
+                                        <option value="all">Export All</option>
+                                        <option value="selected">Export Selected</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <table
+                                    class="border border-primary bg-white text-secondary"
+                                    id="table"
+                                    data-toggle="table"
+                                    data-pagination="true"
+                                    data-page-size="5"
+                                    data-page-list="[5, 10, 20, 50, 100, 200]"
+                                    data-sort-priority='[{"sortName": "project_name","sortOrder":"asc"},{"sortName":"title","sortOrder":"asc"}]'
+                                    data-toolbar="#toolbar"
+                                    data-toolbar-align="right"
+                                    data-search="true"
+                                    data-export-types="['csv', 'excel', 'pdf']"
+                                    data-click-to-select="true"
+                                    data-header-style="headerStyle"
+                                    data-url="users"
+
+                            >
+                                <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5 border-white">
+                                <tr>
+                                    <th data-field="state" data-checkbox="true"></th>
+                                    <th data-field="id" data-sortable="true">ID</th>
+                                    <th data-field="title" data-sortable="true">Title</th>
+                                    <th data-field="issue_category" data-sortable="true">Category</th>
+                                    <th data-field="project_name" data-sortable="true">Project Name</th>
+                                    <th data-field="place" data-sortable="true">Place
+                                        <span style="visibility: hidden;">In this modification,</span>
+                                    </th>
+                                    <th data-field="impact" data-sortable="true">Impact
+                                        <span style="visibility: hidden;">In this modification, </span>
+                                    </th>
+                                    <th data-field="root_cause" data-sortable="true">Root Cause
+                                        <span style="visibility: hidden;">In this modification,</span></th>
+                                    <th data-field="direct_cause" data-sortable="true">Direct Cause
+                                        <span style="visibility: hidden;">In this modification,</span></th>
+                                    <th data-field="corrective_action" data-sortable="true">Corrective Action
+                                        <span style="visibility: hidden;">In this modification, </span></th>
+                                    <th data-field="preventive_action" data-sortable="true">Preventive Action
+                                        <span style="visibility: hidden;">In this modification, </span></th>
+                                    <th data-field="responsible_party" data-sortable="true">Responsible Party</th>
+                                    <th data-field="user_pic" data-sortable="true">Personal In Charge</th>
+                                    <th data-field="status" data-sortable="true">Status</th>
+                                    <th data-field="solved" data-sortable="true">Solved</th>
+                                    <th data-field="created_date" data-sortable="true">Created Date</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Data will be dynamically loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade row row-cols-1" id="new-issue-list-container">
+                        <div class="d-flex justify-content-between">
+                            <div id="all-approval-input">
+                                <input type="radio" id="all-duplicate" name="approval" value="DUPLICATE"
+                                       class="all-approval-input"/>
+                                <label for="all-duplicate">All Duplicate</label>
+                                <input type="radio" id="all-approve" name="approval" value="APPROVE"
+                                       class="all-approval-input"/>
+                                <label for="all-approve">All Approve</label>
+                                <input type="radio" id="all-decline" name="approval" value="DECLINE"
+                                       class="all-approval-input"/>
+                                <label for="all-decline">All Decline</label>
+                            </div>
+                            
+                            <div>
+                                <button type="button" class="btn btn-primary" id="all-approval-btn">Submit</button>
+                            </div>
+                        </div>
+                        <div id="new-issue-list">
+                        </div>
+                        
+                    </div>
 
             </div>
         </div>
@@ -420,8 +512,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4>Issue Details</h4>
-                <div class="d-flex justify-content-center align-items-center gap-3">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="d-flex justify-content-end align-items-center gap-2">
+                   <h6 class="fw-bold">Created at</h6>
+                    <span id="solveDateDetails" class="py-1 px-2 rounded bg-primary text-white"></span>
                 </div>
             </div>
             <div class="modal-body">
@@ -429,51 +522,62 @@
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-1 row-cols-xxl-1 gap-2">
 
                         <!-- <h6 data-toggle="collapse" href="#peoples" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i> People</h6> -->
-                        <div class="col mb-3 d-flex gap-2">
-                            <h6>Created at</h6>
-                            <span id="solveDateDetails"></span>
-                        </div>
                         <div id="peoples" class="row row-cols-2">
                             <div class="col mb-3 ">
                                 <div>
                                     <div>
                                         <i class="fa-solid fa-user-pen"></i>
-                                        <span>Person In Charge</span>
+                                        <span class="fw-bold">Person In Charge</span>
                                     </div>
                                 </div>
-                                <p class="" id="picDetails"></p>
+                                <div class="d-flex mt-3"><div style="width:22px;"></div><span class="py-1 px-2 text-center bg-primary text-white rounded " id="picDetails"></span></div>
 
                             </div>
                             <div class="col mb-3 ">
                                 <div>
                                     <div>
                                         <i class="fa-solid fa-users-gear"></i>
-                                        <span>Responsible Party</span>
+                                        <span class="fw-bold">Responsible Party</span>
                                     </div>
                                 </div>
-                                <p class="" id="rpDetails"></p>
+                                <div class="d-flex mt-3"><div style="width:22px;"></div><span class="py-1 px-2 text-center bg-primary text-white rounded " id="rpDetails"></span></div>
                             </div>
                         </div>
 
                         <!-- <h6 data-toggle="collapse" href="#solution-detail" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Solution</h6> -->
 
                         <!-- <h6 data-toggle="collapse" href="#details" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>  Details</h6> -->
-                        <div id="details" class="">
+                        
+                        <div id="issue-detail-description" class="">
                             <div>
                                 <div>
-                                    <i class="fa-solid fa-info"></i>
-                                    <span>Details</span>
+                                    <i class="fa-solid fa-minus"></i>
+                                    <span class="fw-bold ">Description</span>
+                                </div>
+                            </div>
+                            <div class="accordion-body border-top" id="descriptionDetails"></div>
+
+                        </div>
+                        <div class="col mb-3 d-none" id="issue-description-save-btn-container">
+                            <button class="btn btn-success" id="issue-description-save-btn">Save</button>
+                        </div>
+                        
+                        <div id="details" class="border-top border-bottom pt-1">
+                            
+                            <div class="mb-3s">
+                                <div class="text-center">
+                                    <h3 class="fw-bold">Details</h3>
                                 </div>
                             </div>
                             <div class="row row-cols-2">
                                 <div class=" mb-3">
 
-                                    <label for="issueTitleDetails">Title:</label>
+                                    <label for="issueTitleDetails" class="fw-bold">Title:</label>
                                     <input type="text" class="form-control" id="issueTitleDetails"/>
 
                                 </div>
                                 <div class=" mb-3 ">
-                                    <label for="issue_categoryDetails">Category:</label>
+                                    <label for="issue_categoryDetails" class="fw-bold">Category:</label>
                                     <select id="issue_categoryDetails" class="form-control me-2">
                                         <option value="ERROR">ERROR</option>
                                         <option value="BUG">BUG</option>
@@ -486,28 +590,28 @@
                                 </div>
                             </div>
 
-                            <div class="col mb-3 ">
-                                <label for="direct_causeDetails">Direct Cause:</label>
-                                <textarea class="form-control" id="direct_causeDetails"></textarea>
+                                <div class="col mb-3 ">
+                                    <label for="direct_causeDetails" class=" fw-bold">Direct Cause:</label>
+                                    <textarea class="form-control" id="direct_causeDetails"></textarea>
 
-                            </div>
+                                </div>
 
-                            <div class="col mb-3">
-                                <label for="root_causeDetails">Root Cause:</label>
-                                <textarea class="form-control" id="root_causeDetails"></textarea>
+                                <div class="col mb-3">
+                                    <label for="root_causeDetails" class=" fw-bold">Root Cause:</label>
+                                    <textarea class="form-control" id="root_causeDetails"></textarea>
 
-                            </div>
+                                </div>
 
-                            <div class="col mb-3 ">
-                                <label for="placeDetails">Place:</label>
-                                <textarea class="form-control" id="placeDetails"></textarea>
+                                <div class="col mb-3 ">
+                                    <label for="placeDetails" class=" fw-bold">Place:</label>
+                                    <textarea class="form-control" id="placeDetails"></textarea>
 
-                            </div>
+                                </div>
 
-                            <div class="col mb-3 ">
+                                <div class="col mb-3 ">
 
-                                <label for="impactDetails">Impact:</label>
-                                <textarea class="form-control" id="impactDetails"></textarea>
+                                    <label for="impactDetails" class="fw-bold">Impact:</label>
+                                    <textarea class="form-control" id="impactDetails"></textarea>
 
                             </div>
 
@@ -518,60 +622,46 @@
 
                         <div id="solution-detail" class="">
                             <div>
-                                <div>
-                                    <i class="fa-brands fa-rocketchat"></i>
-                                    <span>Solution</span>
+                                <div class="d-flex gap-2">
+                                    <i class="fa-brands fa-rocketchat text-warning fs-3"></i>
+                                    <h3 >Solution</h3>
                                 </div>
                             </div>
-                            <div class="col mb-3">
+                            <div class="col mb-3 mt-4">
                                 <div>
-                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    <i class="fa-solid fa-screwdriver-wrench text-success"></i>
                                     <span>Corrective Action</span>
                                 </div>
-                                <p class="" id="correctiveDetails"></p>
+                                <p class="mt-3" id="correctiveDetails"></p>
 
                             </div>
-                            <div class="col mb-3">
+                            <hr>
+                            <div class="col mb-3 mt-4">
                                 <div>
-                                    <i class="fa-solid fa-shield"></i>
+                                    <i class="fa-solid fa-shield text-success"></i>
                                     <span>Preventive Action</span>
                                 </div>
-                                <p class="" id="preventiveDetails"></p>
+                                <p class="mt-3" id="preventiveDetails"></p>
 
                             </div>
                         </div>
 
                         <!-- <h6 data-toggle="collapse" href="#issue-detail-description" onclick="rotateIcon(this)"><i class="fas fa-chevron-circle-down rotate-icon"></i>Description</h6> -->
-                        <div id="issue-detail-description" class="">
-                            <div>
-                                <div>
-                                    <i class="fa-solid fa-minus"></i>
-                                    <span>Description</span>
-                                </div>
-                            </div>
-                            <div class="accordion-body" id="descriptionDetails"></div>
-                            
-                        </div>
-                        <div class="col mb-3 d-none" id="issue-description-save-btn-container">
-                            <button class="btn btn-success" id="issue-description-save-btn">Save</button>
-                        </div>
+                        
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Back to Top -->
-<!--    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"-->
-<!--    ><i class="bi bi-arrow-up"></i-->
-<!--    ></a>-->
 </div>
 </div>
 
 <div class="modal fade" id="alert-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="alert alert-success text-center" role="alert" id="alert-text">
-            
+
         </div>
     </div>
 </div>
@@ -604,6 +694,11 @@
 
 <script src="/js/currentLoginUser.js" type="module" async></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
 
 <link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
@@ -656,6 +751,18 @@
                     console.log('Ajax request successful:', response);
                     // Handle success response
                     saveButton.classList.add('d-none')
+
+                    const issue = createIssueCard(response);
+
+                    const oldIssue = $(`#issue-${response.id}`)
+
+                    oldIssue.replaceWith(issue)
+
+                    $("#alert-text").text(
+                        "Issue Updaed Successfully"
+                    );
+                    $("#alert-modal").modal("show");
+
                 },
                 error: function (xhr, status, error) {
                     console.log('Ajax request error:', error);
@@ -681,15 +788,17 @@
 
         const issueListContainer = document.querySelector("#sort-container")
 
-        const issueList = await getData("/api/issue/list");
-
-        issueListContainer.innerHTML = '';
+        const issueList = await getData('/api/issue/list')
 
         for (let i = issueList.length - 1; i >= 0; i--) {
 
             issueListContainer.appendChild(createIssueCard(issueList[i]));
         }
 
+    })
+
+    $("button[data-bs-target=\"#issue-table\"]").on("show.bs.tab",function (e) {
+        $("#issue-table-container").removeClass("d-none");
     })
 
     if(document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
@@ -700,8 +809,6 @@
 
             const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
 
-            unsolvedIssueListContainer.innerHTML = '';
-
             for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
                 unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
@@ -709,34 +816,34 @@
             }
 
         })
-    }
 
-    // Author: Habib Mhamadi
-    // Email: habibmhamadi@gmail.comd
-    function getTimeAgo(timestamp) {
-        const date = new Date(timestamp);
-        const currentDate = new Date();
-        const timeDifference = currentDate - date;
-        const seconds = Math.floor(timeDifference / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
+        // Author: Habib Mhamadi
+        // Email: habibmhamadi@gmail.comd
+        function getTimeAgo(timestamp) {
+            const date = new Date(timestamp);
+            const currentDate = new Date();
+            const timeDifference = currentDate - date;
+            const seconds = Math.floor(timeDifference / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
 
-        if (days < 1) {
-            if (hours < 1) {
-                if (minutes < 1) {
-                    return "Just now";
+            if (days < 1) {
+                if (hours < 1) {
+                    if (minutes < 1) {
+                        return "Just now";
+                    } else {
+                        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+                    }
                 } else {
-                    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+                    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
                 }
+            } else if (days < 30) {
+                return `${days} day${days > 1 ? 's' : ''} ago`;
             } else {
-                return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+                const months = Math.floor(days / 30);
+                return `${months} month${months > 1 ? 's' : ''} ago`;
             }
-        } else if (days < 30) {
-            return `${days} day${days > 1 ? 's' : ''} ago`;
-        } else {
-            const months = Math.floor(days / 30);
-            return `${months} month${months > 1 ? 's' : ''} ago`;
         }
     }
 
@@ -1316,12 +1423,13 @@
     });
 
     function createIssueCard(issue) {
-        console.log(issue)
+
         const main = document.createElement("div");
         main.classList.add("card", "p-0", 'issue-card');
+        main.id = `issue-${issue.id}`
         main.style.minWidth = "320px";
 
-        const cardHeader = `<div class="card-header justify-content-between">
+            const cardHeader = `<div class="card-header justify-content-between">
                 <div
                     class="d-flex justify-content-between align-items-center flex-wrap"
                 >
@@ -1391,9 +1499,7 @@
         accordionBody.classList.add("accordion-body");
 
         function initializeQuill() {
-            console.log("Before Quill initialization");
             const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
-            console.log(quillContainer);
 
             let quill;
 
@@ -1408,9 +1514,6 @@
                 quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                 quill.enable(false);
             }
-
-            console.log("After Quill initialization");
-            console.log("this feels suck man", quill);
         }
 
         cardBody.innerHTML = h2;
@@ -1421,12 +1524,207 @@
         main.innerHTML = cardHeader;
         main.appendChild(cardBody);
 
-        console.log(main)
-
         setTimeout(initializeQuill, 1000);
 
         return main;
 
+    }
+
+    $("#table").bootstrapTable()
+    // Function to load data into the Bootstrap Table
+    function loadTable() {
+        $.ajax({
+            url: '/api/issue/list',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                data.forEach(function (issue) {
+                    const formattedCreatedDate = formatDate(issue.created_date);
+
+                    $('#table').bootstrapTable('append', {
+                        id: issue.id,
+                        title: issue.title,
+                        issue_category: issue.issueCategory,
+                        project_name: issue.projectDto.name,
+                        // place: issue.place,
+                        // impact: issue.impact,
+                        // root_cause: issue.root_cause,
+                        // direct_cause: issue.direct_cause,
+                        // corrective_action: issue.corrective_action,
+                        // preventive_action: issue.preventive_action,
+                        responsible_party: issue.responsible_party.name,
+                        user_pic: issue.user_pic.name,
+                        status: issue.status,
+                        solved: issue.solved,
+                        created_date: formattedCreatedDate,
+                    });
+                });
+            }
+        });
+    }
+
+    loadTable()
+
+    const exportDropdown = document.getElementById("exportSelect");
+
+    exportDropdown.addEventListener("change", function () {
+        const exportOption = this.value;
+        if (exportOption === "all") {
+            exportAllRows();
+        } else if (exportOption === "selected") {
+            const selectedRows = $("#table").bootstrapTable("getSelections");
+            exportSelectedRows(selectedRows);
+        }
+    });
+
+    const exportExcelDropdown = document.getElementById("exportExcelSelect");
+
+    exportExcelDropdown.addEventListener("change", function () {
+        const exportOption = this.value;
+        if (exportOption === "all") {
+            exportAllRowsToExcel();
+        } else if (exportOption === "selected") {
+            const selectedRows = $("#table").bootstrapTable("getSelections");
+            exportSelectedRowsToExcel(selectedRows);
+        }
+    });
+
+
+    function exportAllRows() {
+        const docDefinition = {
+            pageOrientation: 'landscape',
+            content: [
+                { text: "Issue List Report", style: "header" },
+                {
+                    table: {
+                        headerRows: 1,
+                        widths: "auto",
+                        body: [
+                            ["ID", "Title", "Category", "Project Name", "Status", "Personal In Charge", "Responsible Party", "Solved", "Created Date"],
+                            ...$("#table").bootstrapTable("getData").map((row) => [
+                                row.id,
+                                row.title,
+                                row.issue_category,
+                                row.project_name,
+                                row.status,
+                                row.user_pic,
+                                row.responsible_party,
+                                row.solved,
+                                row.created_date
+                            ])
+                        ]
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 0, 0, 10]
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).open();
+    }
+
+
+    function exportSelectedRows(selectedRows) {
+
+
+        const docDefinition = {
+            pageOrientation: 'landscape',
+            content: [
+                {
+                    text: "Selected Issues",
+                    style: "header"
+                },
+                {
+                    table: {
+                        widths: "auto",
+
+                        body: [
+                            [
+                                "ID",
+                                "Title",
+                                "Category",
+                                "Project Name",
+                                "Status",
+                                "Personal In Charge",
+                                "Responsible Party",
+                                "Solved",
+                                "Created Date"
+                            ],
+                            ...selectedRows.map((row) => [
+                                row.id,
+                                row.title,
+                                row.issue_category,
+                                row.project_name,
+                                row.status,
+                                row.user_pic,
+                                row.responsible_party,
+                                row.solved,
+                                row.created_date
+                            ])
+                        ],
+                        layout: 'lightHorizontalLines'
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 0, 0, 10]
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).open();
+
+    }
+
+    function exportAllRowsToExcel() {
+        fetch('/api/issue/list')
+            .then(response => response.json())
+            .then(data => {
+                const headers = ['ID', 'Title', 'Category', 'Project Name', 'Status', 'Personal In Charge', 'Responsible Party', 'Solved', 'Created Date'];
+                const rows = data.map(issue => [
+                    issue.id,
+                    issue.title,
+                    issue.issue_category,
+                    issue.project_name,
+                    issue.status,
+                    issue.user_pic,
+                    issue.responsible_party,
+                    issue.solved,
+                    issue.created_date
+                ]);
+
+                const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+                XLSX.writeFile(workbook, 'IssueList.xlsx');
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    function exportSelectedRowsToExcel(selectedRows) {
+        const headers = ['ID', 'Title', 'Category', 'Project Name', 'Status', 'Personal In Charge', 'Responsible Party', 'Solved', 'Created Date'];
+        const rows = selectedRows.map(row => [
+            row.id,
+            row.title,
+            row.issue_category,
+            row.project_name,
+            row.status,
+            row.user_pic,
+            row.responsible_party,
+            row.solved,
+            row.created_date
+        ]);
+
+        const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+        XLSX.writeFile(workbook, 'SelectedIssues.xlsx');
     }
 
     let currentIssueId;
@@ -1438,16 +1736,12 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    console.log("Data" + data);
-                    const sortContainer = $('#sort-container');
+                    const sortContainer = document.querySelector('#sort-container');
 
-                    data.forEach(item => {
-
-                        console.log("item : ", item)
-
-                        const issueDiv = createIssueCard(item);
-                        sortContainer.prepend(issueDiv);
-                    });
+                    for(let i = data.length - 1; i > 0; i--) {
+                        const issueDiv = createIssueCard(data[i]);
+                        sortContainer.appendChild(issueDiv)
+                    }
                 },
                 error: function (error) {
                     console.log('Error fetching data:', error);
@@ -1557,6 +1851,18 @@
                                     console.log('Ajax request successful:', response);
                                     // Handle success response
                                     $("#issue-description-save-btn-container").addClass('d-none')
+
+                                    const issue = createIssueCard(response);
+
+                                    const oldIssue = $(`#issue-${response.id}`)
+
+                                    oldIssue.replaceWith(issue)
+
+                                    $("#alert-text").text(
+                                        "Issue Updated Successfully"
+                                    );
+                                    $("#alert-modal").modal("show");
+
                                 },
                                 error: function (xhr, status, error) {
                                     console.log('Ajax request error:', error);
@@ -1622,7 +1928,7 @@
         });
 
         function createPendingIssueCard(issue) {
-            console.log(issue)
+
             const outerDiv = document.createElement("div");
             outerDiv.classList.add("item-issue-approval", 'issue-card');
             outerDiv.id = `issueapprovalitem-${issue.id}`;
@@ -1724,9 +2030,7 @@
             accordionBody.classList.add("accordion-body");
 
             function initializeQuill() {
-                console.log("Before Quill initialization");
                 const quillContainer = document.querySelector(`#quill-editor-${issue.id}`);
-                console.log(quillContainer);
 
                 let quill;
 
@@ -1741,9 +2045,6 @@
                     quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                     quill.enable(false);
                 }
-
-                console.log("After Quill initialization");
-                console.log("this feels suck man", quill);
             }
 
             cardBody.innerHTML = h2;
@@ -1753,8 +2054,6 @@
 
             main.innerHTML = cardHeader;
             main.appendChild(cardBody);
-
-            console.log(main)
 
             setTimeout(initializeQuill, 1000);
 
@@ -1773,12 +2072,19 @@
             document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
         }
 
-        for (let i = pendingIssueList.length - 1; i >= 0; i--) {
+        document.querySelector("button[data-bs-target='#new-issue-list-container']").addEventListener('show.bs.tab', async () => {
+            const newIssueContainer = document.querySelector("#new-issue-list")
 
-            const currentIssue = pendingIssueList[i];
+            const aaa = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
 
-            document.getElementById("new-issue-list").appendChild(createPendingIssueCard(currentIssue))
-        }
+            for (let i = aaa.length - 1; i >= 0; i--) {
+
+                const currentIssue = aaa[i];
+
+                newIssueContainer.appendChild(createPendingIssueCard(currentIssue))
+            }
+        })
+
         const allApprovalRadios = document.querySelectorAll('.all-approval-input');
 
         console.log("all radiio button", allApprovalRadios)

@@ -5,11 +5,11 @@ import notiSound from '/js/notisound.js';
 
 const loginUser = await getData("/api/currentuser");
 
-const currentlyWorkingProject = await getData(`/api/project/list/ID/${loginUser.currentUser.id}/false`);
+
 
 // function for creating anchor element
-const createA = ({id, description, time}) => {
-
+const createA = async ({id, description, time}) => {
+    const currentlyWorkingProject = await getData(`/api/project/list/ID/${loginUser.currentUser.id}/false`);
     const anchor = document.createElement("a");
     if(loginUser.currentUser.role === "PROJECT_MANAGER") {
         anchor.href = "/issue";
@@ -49,7 +49,7 @@ if(notiList.length === 0) {
     for (let i = notiList.length - 1; i >= 0; i--) {
         const noti = notiList[i];
 
-        const anchor = createA({
+        const anchor = await createA({
             id: noti.id,
             description: noti.description,
             time: noti.noti_time
@@ -88,10 +88,23 @@ const pusher = new Pusher('3c0b3426bd0875be392f', {
 });
 
 const channel = pusher.subscribe(`my-channel-${loginUser.currentUser.id}`);
-channel.bind('task-noti-event', function(response) {
+channel.bind('task-noti-event', async function(response) {
 
-    document.querySelector("#notification-container").innerHTML = "";
+    try {
+        const hiddenElement = document.createElement('div');
+        hiddenElement.style.display = 'none';
+        document.body.appendChild(hiddenElement);
 
+        hiddenElement.addEventListener('click', () => {
+            notiSound();
+            hiddenElement.remove();
+        });
+
+        const clickEvent = new Event('click');
+        hiddenElement.dispatchEvent(clickEvent);
+    } catch (error) {
+        console.error('Error:', error);
+    }
     document.querySelector("#notification-light").classList.remove("d-none");
 
     const data = JSON.parse(response);
@@ -109,18 +122,31 @@ channel.bind('task-noti-event', function(response) {
         console.log("Notification description is undefined or does not exist");
     }
 
-    const anchor = createA({
+    const anchor = await createA({
         id: notification.id,
         description: notification.description,
         time: notification.noti_time
     })
 
+    console.log(anchor)
+
     const hr = document.createElement("hr");
     hr.className = "dropdown-divider";
 
     const notificationContainer = document.querySelector("#notification-container");
+
+    if (notificationContainer.querySelector('p')) {
+        notificationContainer.innerHTML = "";
+    }
+
     notificationContainer.appendChild(anchor);
     notificationContainer.appendChild(hr);
+
+    const btoawe = new bootstrap.Toast(createToast({ notification: notification }))
+
+    btoawe.show();
+
+    document.querySelector('#toasts-noti-container').appendChild(toast)
 });
 
 function createPendingIssueCard(issue) {
@@ -267,20 +293,23 @@ function createPendingIssueCard(issue) {
 
 }
 
-channel.bind("issue-noti-event", function(response) {
+channel.bind("issue-noti-event", async function(response) {
 
-    const hiddenElement = document.createElement('div');
-    hiddenElement.style.display = 'none';
-    document.body.appendChild(hiddenElement);
+    try {
+        const hiddenElement = document.createElement('div');
+        hiddenElement.style.display = 'none';
+        document.body.appendChild(hiddenElement);
 
-    hiddenElement.addEventListener('click', () => {
-        
-        notiSound();
-        hiddenElement.remove()
-    });
+        hiddenElement.addEventListener('click', () => {
+            notiSound();
+            hiddenElement.remove();
+        });
 
-    const clickEvent = new Event('click');
-    hiddenElement.dispatchEvent(clickEvent);
+        const clickEvent = new Event('click');
+        hiddenElement.dispatchEvent(clickEvent);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 
     console.log("in issue noti event function");
     console.log(response);
@@ -309,7 +338,7 @@ channel.bind("issue-noti-event", function(response) {
         console.log("Notification description is undefined or does not exist");
     }
 
-    const anchor = createA({
+    const anchor = await createA({
         id: notification.id,
         description: notification.description,
         time: notification.noti_time
@@ -326,8 +355,15 @@ channel.bind("issue-noti-event", function(response) {
         const issue = createPendingIssueCard(newIssue)
 
         document.querySelector("#new-issue-list").insertBefore(issue, document.querySelector("#new-issue-list").children[1])
+
     } 
-    
+
+    const btoawe = new bootstrap.Toast(createToast({ notification: notification }))
+
+    btoawe.show();
+
+    document.querySelector('#toasts-noti-container').appendChild(toast)
+
 });
 
 channel.bind("logout", function() {
@@ -339,3 +375,86 @@ document.querySelector("#notification-light-container").addEventListener("shown.
     document.querySelector("#notification-light").classList.add("d-none");
 
 });
+
+channel.bind("project-save-event", async function (response) {
+
+    try {
+        const hiddenElement = document.createElement('div');
+        hiddenElement.style.display = 'none';
+        document.body.appendChild(hiddenElement);
+
+        hiddenElement.addEventListener('click', () => {
+            notiSound();
+            hiddenElement.remove();
+        });
+
+        const clickEvent = new Event('click');
+        hiddenElement.dispatchEvent(clickEvent);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+    const notificationContainer = document.querySelector("#notification-container");
+
+    if (notificationContainer.querySelector('p')) {
+        notificationContainer.innerHTML = "";
+    }
+
+    document.querySelector("#notification-light").classList.remove("d-none");
+
+    const data = JSON.parse(response);
+
+    const notification = data.notification;
+
+    console.log(notification);
+
+    console.log(notification.description);
+    console.log(notification.noti_time);
+
+    if ('description' in notification) {
+        console.log("Notification description:", notification.description);
+    } else {
+        console.log("Notification description is undefined or does not exist");
+    }
+
+    const anchor = await createA({
+        id: notification.id,
+        description: notification.description,
+        time: notification.noti_time
+    })
+
+    const hr = document.createElement("hr");
+    hr.className = "dropdown-divider";
+
+
+    notificationContainer.appendChild(anchor);
+    notificationContainer.appendChild(hr);
+
+    
+    const btoawe = new bootstrap.Toast(createToast({notification : notification}))
+
+    btoawe.show();
+
+    document.querySelector('#toasts-noti-container').appendChild(toast)
+
+})
+
+
+function createToast ({notification}) {
+    const toast = document.createElement('div')
+
+    toast.classList = 'toast show'
+    toast.setAttribute('role', 'alert')
+    toast.setAttribute('aria-live', 'assertive')
+    toast.setAttribute('aria-atomic', 'true')
+
+    toast.innerHTML = `<div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <small class="text-muted">${getTimeElapsed(Date.now())}</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${notification.description}
+            </div>`
+    return toast
+}
