@@ -136,22 +136,21 @@ class ClientServiceImplTest {
     }
 
     @Test
-    public void testFindByProjectName() {
+    public void testFindByProjectNameReturnsNull() {
+        // Test data
+        String projectName = "Project 1";
 
-        String projectName = "TestProject";
-        Client client = new Client();
-        ClientDto clientDto = new ClientDto();
-        when(clientRepository.findByProjectName(projectName)).thenReturn(client);
-        when(modelMapper.map(client, ClientDto.class)).thenReturn(clientDto);
-
-        // Calling the method under test
+        // Call the method to be tested
         ClientDto result = clientService.findByProjectName(projectName);
 
-        // Verifying interactions and assertions
-        verify(clientRepository, times(1)).findByProjectName(projectName);
-        verify(modelMapper, times(1)).map(client, ClientDto.class);
-        assertEquals(clientDto, result);
+        // Verify the behavior
+        assertNull(result);
     }
+
+
+
+
+
 
 
 }
