@@ -106,6 +106,9 @@
 
         <!-- Template Javascript -->
         <script src="/js/main.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
             defer
@@ -123,22 +126,13 @@
                 setupLogoutConfirmation();
             });
 
-            import {
-                formatDateFromMilliseconds,
-                MONTH_NAMES,
-                calculateDuration,
-                calculateEndDate,
-            } from "/js/time.js";
+            import {calculateDuration, calculateEndDate, formatDateFromMilliseconds, MONTH_NAMES,} from "/js/time.js";
 
-            import { sendData, getData } from "/js/api-function.js";
+            import {getData} from "/js/api-function.js";
 
-            import {
-                getArchitecturelist,
-                getClientList,
-                getDeliverableTypeList,
-            } from "/js/getDataForProject.js";
+            import {getArchitecturelist, getClientList, getDeliverableTypeList,} from "/js/getDataForProject.js";
 
-            import { getUser } from "/js/currentLoginUser.js";
+            import {getUser} from "/js/currentLoginUser.js";
 
             const languageList = {
                 "c#": "/images/languages/c#-min.png",
@@ -2238,9 +2232,7 @@
 
             async function getAllProjectInfo() {
 
-                const projectList = await getData('/api/project/list');
-
-                console.log(projectList)
+                return await getData('/api/project/list');
 
             }
 
@@ -2263,12 +2255,190 @@
 
                 }
 
-                console.log(selectedProject)
+                return selectedProject;
             }
 
             window.getAllSelectedProjectInfo = getAllSelectedProjectInfo // don't delete this 
 
-            window.getAllProjectInfo = getAllProjectInfo; // don't delete this 
+            window.getAllProjectInfo = getAllProjectInfo; // don't delete this
+
+            const exportPdfDropdown = document.querySelector("#exportPdfSelect");
+
+            exportPdfDropdown.addEventListener("change", function () {
+                const exportOption = exportPdfDropdown.value;
+                if (exportOption === "all") {
+                    exportAllRows();
+                } else if (exportOption === "selected") {
+
+                    exportSelectedRows();
+                }
+            }   );
+
+            // export all projects from getAllProjectInfo function with pdfMake
+            async function exportAllRows() {
+                try {
+                    const allProjects = await getAllProjectInfo()
+                    const docDefinition = {
+                        content: [
+                            {
+                                text: 'Project List',
+                                style: 'header'
+                            },
+                            {
+                                style: 'tableExample',
+                                table: {
+                                    widths: ['*', '*', '*', '*', '*', '*'],
+                                    body: [
+                                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                                        ...allProjects.map(project => {
+                                            return [
+                                                project.name,
+                                                project.clientDto.name,
+                                                formatDateFromMilliseconds(project.start_date),
+                                                formatDateFromMilliseconds(project.end_date),
+                                                project.duration,
+                                                project.current_phase
+                                            ]
+                                        })
+                                    ]
+                                }
+                            }
+                        ],
+                        styles: {
+                            header: {
+                                fontSize: 18,
+                                bold: true,
+                                alignment: 'center',
+                                margin: [0, 0, 0, 10]
+                            },
+                            tableExample: {
+                                margin: [0, 5, 0, 15]
+                            },
+                            tableHeader: {
+                                bold: true,
+                                fontSize: 13,
+                                color: 'black'
+                            }
+                        }
+                    };
+                    pdfMake.createPdf(docDefinition).open();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            async function exportSelectedRows() {
+                try {
+                    const selectedRows = await getAllSelectedProjectInfo()
+                    const docDefinition = {
+                        content: [
+                            {
+                                text: 'Project List',
+                                style: 'header'
+                            },
+                            {
+                                style: 'tableExample',
+                                table: {
+                                    widths: ['*', '*', '*', '*', '*', '*'],
+                                    body: [
+                                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                                        ...selectedRows.map(project => {
+                                            return [
+                                                project.name,
+                                                project.clientDto.name,
+                                                formatDateFromMilliseconds(project.start_date),
+                                                formatDateFromMilliseconds(project.end_date),
+                                                project.duration,
+                                                project.current_phase
+                                            ]
+                                        })
+                                    ]
+                                }
+                            }
+                        ],
+                        styles: {
+                            header: {
+                                fontSize: 18,
+                                bold: true,
+                                alignment: 'center',
+                                margin: [0, 0, 0, 10]
+                            },
+                            tableExample: {
+                                margin: [0, 5, 0, 15]
+                            },
+                            tableHeader: {
+                                bold: true,
+                                fontSize: 13,
+                                color: 'black'
+                            }
+                        }
+                    };
+                    pdfMake.createPdf(docDefinition).open();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            const exportExcelDropdown = document.querySelector("#exportExcelSelect");
+
+            exportExcelDropdown.addEventListener("change", function () {
+                const exportOption = exportExcelDropdown.value;
+                if (exportOption === "all") {
+                    exportAllRowsExcel();
+                } else if (exportOption === "selected") {
+                    exportSelectedRowsExcel();
+                }
+            }   );
+
+            async function exportAllRowsExcel() {
+                try {
+                    const allProjects = await getAllProjectInfo()
+                    const data = [
+                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                        ...allProjects.map(project => {
+                            return [
+                                project.name,
+                                project.clientDto.name,
+                                formatDateFromMilliseconds(project.start_date),
+                                formatDateFromMilliseconds(project.end_date),
+                                project.duration,
+                                project.current_phase
+                            ]
+                        })
+                    ];
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Project List");
+                    XLSX.writeFile(wb, "Project List.xlsx");
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            async function exportSelectedRowsExcel() {
+                try {
+                    const selectedRows = await getAllSelectedProjectInfo()
+                    const data = [
+                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                        ...selectedRows.map(project => {
+                            return [
+                                project.name,
+                                project.clientDto.name,
+                                formatDateFromMilliseconds(project.start_date),
+                                formatDateFromMilliseconds(project.end_date),
+                                project.duration,
+                                project.current_phase
+                            ]
+                        })
+                    ];
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Project List");
+                    XLSX.writeFile(wb, "Project List.xlsx");
+                } catch (error) {
+                    console.log(error);
+                }
+            }
 
             //list project end
             if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
@@ -2434,10 +2604,20 @@
                             <div class="col p-0 text-center">Role</div>
                         </div>
                         <div class="text-end mt-2">
-                            <button onclick="getAllSelectedProjectInfo()" type="button" class="btn btn-primary">onlyselected</button>
-                            <button onclick="getAllProjectInfo()" type="button" class="btn btn-primary ">
-                                Export all
-                            </button>
+                            <div class="btn-group" role="group">
+                                <select class="form-control btn btn-primary" name="dropdown" id="exportPdfSelect" style="width: 30%;">
+                                    <option value="" selected disabled>Export PDF</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <select class="form-control btn btn-primary" name="dropdown" id="exportExcelSelect" style="width: 30%;">
+                                    <option value="" selected disabled>Export Excel</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
                         </div>
                         <div
                             class="d-flex pt-2 flex-column gap-2"

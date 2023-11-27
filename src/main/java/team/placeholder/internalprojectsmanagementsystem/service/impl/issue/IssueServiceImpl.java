@@ -77,10 +77,8 @@ public class IssueServiceImpl implements IssueService {
         }
 
         Issue issue1 = issueRepository.save(issue);
-
+        if(issue1 != null) {
         IssueDto issueDto = new IssueDto();
-
-
         issueDto.setTitle(issue1.getTitle());
         issueDto.setDescription(issue1.getDescription());
         issueDto.setPlace(issue1.getPlace());
@@ -108,6 +106,10 @@ public class IssueServiceImpl implements IssueService {
         notificationService.save("New issue has been created", isuDto.getUser_pic(), "issue-noti-event", issueDto);
 
         return issueDto;
+    } else {
+
+        return null;
+    }
 
     }
 

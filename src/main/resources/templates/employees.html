@@ -39,12 +39,20 @@
                  class="ms-3">
                 <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add
                     Employee</a>
-                <select id="exportType">
-                    <option value="" disabled selected>Select Data Amount</option>
-                    <option value="all">Export All</option>
-                    <option value="selected">Export Selected</option>
-                </select>
-                <button class="btn btn-success" id="exportBtn">Export</button>
+                <div class="btn-group" role="group">
+                    <select class="form-control btn btn-primary" name="dropdown" id="exportPdfSelect" style="width: 30%;">
+                        <option value="" selected disabled>Export PDF</option>
+                        <option value="all">Export All</option>
+                        <option value="selected">Export Selected</option>
+                    </select>
+                </div>
+                <div class="btn-group" role="group">
+                    <select class="form-control btn btn-primary" name="dropdown" id="exportExcelSelect" style="width: 30%;">
+                        <option value="" selected disabled>Export Excel</option>
+                        <option value="all">Export All</option>
+                        <option value="selected">Export Selected</option>
+                    </select>
+                </div>
                 <!--open modal to register employee account-->
             </div>
             <table
@@ -236,6 +244,7 @@
 <!-- Include pdfmake library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
@@ -299,28 +308,17 @@
         return value.name;
     }
 
-    const exportDropdown    = document.getElementById("exportType");
-    const exportBtn        = document.getElementById("exportBtn");
+    const exportDropdown    = document.getElementById("exportPdfSelect");
 
-    exportBtn.addEventListener("click", function () {
+    exportDropdown.addEventListener("change", function () {
         const exportOption = exportDropdown.value;
         if (exportOption === "all") {
             exportAllRows();
-            console.log(...$("#table").bootstrapTable("getData").map((row,index) => [
-                                index + 1,
-                                row.email,
-                                row.name,
-                                row.department ? row.department.name : "-",
-                                row.role,
-                                row.enabled ? 'Active' : 'Inactive'
-                            ]))
         } else if (exportOption === "selected") {
             const selectedRows = $("#table").bootstrapTable("getSelections");
-            console.log(selectedRows)
             exportSelectedRows(selectedRows);
         }
     });
-
     function exportAllRows() {
         const docDefinition = {
             content: [
@@ -403,6 +401,47 @@
             }
         };
         pdfMake.createPdf(docDefinition).open()
+    }
+
+    const exportExcelDropdown = document.getElementById("exportExcelSelect");
+
+    exportExcelDropdown.addEventListener("change", function () {
+        const exportOption = this.value;
+        if (exportOption === "all") {
+            exportAllRowsToExcel();
+        } else if (exportOption === "selected") {
+            const selectedRows = $("#table").bootstrapTable("getSelections");
+            exportSelectedRowsToExcel(selectedRows);
+        }
+    });
+
+    function exportAllRowsToExcel() {
+        const rows = $("#table").bootstrapTable("getData");
+        const data = rows.map(row => [
+            row.email,
+            row.name,
+            row.department ? row.department.name : "-",
+            row.role,
+            row.enabled ? 'Active' : 'Inactive'
+        ]);
+        const workSheet = XLSX.utils.aoa_to_sheet([["Email", "Name", "Department", "Role", "Status"], ...data]);
+        const workBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workBook, workSheet, "Employees");
+        XLSX.writeFile(workBook, "employees.xlsx");
+    }
+
+    function exportSelectedRowsToExcel(selectedRows) {
+        const data = selectedRows.map(row => [
+            row.email,
+            row.name,
+            row.department ? row.department.name : "-",
+            row.role,
+            row.enabled ? 'Active' : 'Inactive'
+        ]);
+        const workSheet = XLSX.utils.aoa_to_sheet([["Email", "Name", "Department", "Role", "Status"], ...data]);
+        const workBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workBook, workSheet, "Employees");
+        XLSX.writeFile(workBook, "employees.xlsx");
     }
 
     $(function () {

@@ -12,15 +12,15 @@ public class TasksDto {
     private Long id;
     private TaskStatus status;
     private String title,description;
-    private long plan_start_time;
-    private long plan_end_time;
+    private long planStartTime;
+    private long planEndTime;
 
-    private long actual_start_time;
-    private long actual_end_time;
+    private long actualStartTime;
+    private long actualEndTime;
 
 
-    private Double plan_hours;
-    private Double actual_hours;
+    private Double planHours;
+    private Double actualHours;
 
     private boolean due;
 
