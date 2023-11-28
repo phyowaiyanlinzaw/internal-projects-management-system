@@ -872,7 +872,15 @@ saveBtn.addEventListener("click", function (event) {
             $(`#assigned-member-span-${response.id}`).text(response.userDto.name)
             title.textContent = response.title
             titleInput.value = response.title
-            taskGroupSpan.innerText = response.tasksGroup
+
+            if(response.tasksGroup === 'A') {
+                taskGroupSpan.innerText = "A - Related With Project Development"
+            } else if(response.tasksGroup === 'B') {
+                taskGroupSpan.innerText = "B - Training"
+            } else {
+                taskGroupSpan.innerText = "C - Idling"
+            }
+
             assignedMemberSpan.innerText = response.userDto.name + " | " + response.userDto.role
             assignedMemberTagify.value = response.userDto.name + " | " + response.userDto.role
             description.value = response.description
