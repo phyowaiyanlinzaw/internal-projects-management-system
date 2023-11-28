@@ -246,7 +246,24 @@ class ProjectServiceTest {
 
     @Test
     void countAllProjectsByDepartmentId() {
+        // Given
+        long departmentId = 1L; // Replace with the actual department ID
+        long expectedCount = 3L; // Replace with the expected count
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.countAllProjectsByDepartmentId(anyLong())).thenReturn(expectedCount);
+
+        // When
+        long result = projectServiceMock.countAllProjectsByDepartmentId(departmentId);
+
+        // Then
+        // Verify that the countAllProjectsByDepartmentId method was called with the correct parameter
+        verify(projectServiceMock, times(1)).countAllProjectsByDepartmentId(departmentId);
+
+        // Verify that the returned count is as expected
+        assertEquals(expectedCount, result);
     }
+
 
     @Test
     void findAllByUserId() {
