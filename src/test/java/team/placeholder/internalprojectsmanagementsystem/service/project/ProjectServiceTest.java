@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 
 import java.util.Arrays;
@@ -287,13 +288,57 @@ class ProjectServiceTest {
 
     @Test
     void getAllProjectsByDepartmentName() {
+        // Given
+        String departmentName = "ExampleDepartment"; // Replace with the actual department name
+        List<ProjectDto> expectedProjects = Arrays.asList(new ProjectDto(/* fill in with project details */));
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.getAllProjectsByDepartmentName(anyString())).thenReturn(expectedProjects);
+
+        // When
+        List<ProjectDto> result = projectServiceMock.getAllProjectsByDepartmentName(departmentName);
+
+        // Then
+        // Verify that the getAllProjectsByDepartmentName method was called with the correct parameter
+        verify(projectServiceMock, times(1)).getAllProjectsByDepartmentName(departmentName);
+
+        // Verify that the returned list of projects is the same as the expected list
+        assertEquals(expectedProjects, result);
     }
+
 
     @Test
     void updateProjectClosed() {
+        // Given
+        long projectId = 1L; // Replace with the actual project ID
+        boolean newClosedCondition = true; // Replace with the expected new closed condition
+
+        // Mock the behavior of the service method
+        doNothing().when(projectServiceMock).updateProjectClosed(anyLong(), anyBoolean());
+
+        // When
+        projectServiceMock.updateProjectClosed(projectId, newClosedCondition);
+
+        // Then
+        // Verify that the updateProjectClosed method was called with the correct parameters
+        verify(projectServiceMock, times(1)).updateProjectClosed(projectId, newClosedCondition);
     }
 
     @Test
     void updateUserListInProject() {
+        // Given
+        long projectId = 1L; // Replace with the actual project ID
+        List<UserDto> newUsers = Arrays.asList(new UserDto(/* fill in with user details */));
+
+        // Mock the behavior of the service method
+        doNothing().when(projectServiceMock).updateUserListInProject(anyLong(), anyList());
+
+        // When
+        projectServiceMock.updateUserListInProject(projectId, newUsers);
+
+        // Then
+        // Verify that the updateUserListInProject method was called with the correct parameters
+        verify(projectServiceMock, times(1)).updateUserListInProject(projectId, newUsers);
     }
+
 }
