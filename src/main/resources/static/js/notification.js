@@ -346,6 +346,7 @@ channel.bind("issue-noti-event", async function(response) {
     notificationContainer.appendChild(hr);
 
     if (document.querySelector("#new-issue-list")) {
+        console.log(newIssue)
         const issue = createPendingIssueCard(newIssue)
 
         document.querySelector("#new-issue-list").insertBefore(issue, document.querySelector("#new-issue-list").children[1])

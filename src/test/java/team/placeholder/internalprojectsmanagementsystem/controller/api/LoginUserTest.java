@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class LoginUserTest {
@@ -36,7 +37,7 @@ class LoginUserTest {
     private UserRepository userRepository;
 
     @Mock
-    private AvailableUserRepo availableUserRepo;
+    private AvailableUserRepo availableUserRepository;
 
     @InjectMocks
     private LoginUser loginUser;
@@ -70,30 +71,42 @@ class LoginUserTest {
     @Test
     public void testGetAvailableEmployee(){
 
-        String userEmail = "pm@example.com"; // Replace with the expected project manager's email
-        UserDto mockUserDto = new UserDto(); // Create a mock UserDto with test data
-        mockUserDto.setRole(Role.PROJECT_MANAGER); // Set the role to PROJECT_MANAGER
-
-        // Mock the behavior of userService.getUserByEmail
-        when(userService.getUserByEmail(userEmail)).thenReturn(mockUserDto);
-
-        // Mock the behavior of userRepository.findAllByProjectManagerId
-        List<User> mockEmployees = new ArrayList<>(); // Create a list of mock employees with test data
-        when(userRepository.findAllByProjectManagerId(mockUserDto.getId())).thenReturn(mockEmployees);
-
-        // Mock the behavior of availableUserRepo.findByUserIdIn
-        List<AvailableUser> mockUserAvailabilities = new ArrayList<>(); // Create a list of mock availabilities with test data
-        when(availableUserRepo.findByUserIdIn(mockEmployees.stream().map(User::getId).toList())).thenReturn(mockUserAvailabilities);
-
-        // Simulate a logged-in user in the SecurityContextHolder
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userEmail, null);
+        Authentication authentication = mock(Authentication.class);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        when(authentication.getName()).thenReturn("example@example.com");
 
-        // Act
-        ResponseEntity<List<UserDto>> result = loginUser.getAvailableEmployees();
+        UserDto userDto = new UserDto();
+        userDto.setId(1L);
+        userDto.setRole(Role.PROJECT_MANAGER);
+        when(userService.getUserByEmail("example@example.com")).thenReturn(userDto);
 
-        // Assert
-        assertEquals(200, result.getStatusCodeValue());
+        // Mock employees working under the project manager
+        User employee1 = new User();
+        employee1.setId(2L);
+        User employee2 = new User();
+        employee2.setId(3L);
+        List<User> employeeList = List.of(employee1, employee2);
+        when(userRepository.findAllByProjectManagerId(1L)).thenReturn(employeeList);
+
+        // Mock available users
+        AvailableUser availableUser1 = new AvailableUser();
+        availableUser1.setUser(employee1);
+        availableUser1.setAvaliable(true);
+        AvailableUser availableUser2 = new AvailableUser();
+        availableUser2.setUser(employee2);
+        availableUser2.setAvaliable(false);
+        List<AvailableUser> availableUserList = List.of(availableUser1, availableUser2);
+        when(availableUserRepository.findByUserIdIn(List.of(2L, 3L))).thenReturn(availableUserList);
+
+        // Call the controller method
+        ResponseEntity<List<UserDto>> responseEntity = loginUser.getAvailableEmployees();
+
+        // Assert the response
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        List<UserDto> result = responseEntity.getBody();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(2L, result.get(0).getId());
 
 
     }

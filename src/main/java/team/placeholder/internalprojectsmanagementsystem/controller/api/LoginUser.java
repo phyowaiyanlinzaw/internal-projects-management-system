@@ -39,6 +39,7 @@ public class LoginUser {
     AvailableUserRepo availableUserRepo;
     ModelMapper modelMapper;
 
+
     @GetMapping
     public ResponseEntity<Map<String, Object>> loginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

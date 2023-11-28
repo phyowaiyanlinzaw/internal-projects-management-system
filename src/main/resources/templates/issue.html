@@ -1796,8 +1796,8 @@
                 success: function (data) {
                     console.log('Data received:', data);
                     if (data) {
-                        $('#corrective_actionInput').text(data.corrective_action);
-                        $('#preventive_actionInput').text(data.preventive_action);
+                        $('#corrective_actionInput').val(data.corrective_action);
+                        $('#preventive_actionInput').val(data.preventive_action);
                         if (data.solved === false) {
                             $('#solve-btn').hide();
                             $('#issue-edit-btn').show();
@@ -1806,7 +1806,8 @@
                             $('#issue-edit-btn').hide();
                         }
 
-                        $('#issue-edit-btn').data('issueId', issueId); // Set the issueId
+                        $('#issue-edit-btn').data('issueId', issueId); 
+                        $('#solve-btn').data('issueId', issueId);// Set the issueId
 
                         $('#issueEditModal').modal('show');
 
@@ -2206,7 +2207,68 @@
 
     solveBtn.addEventListener('click', function (e) {
         //alert("Your issue solved");
-        showSuccess("Your Issue Solved.");
+        console.log($(this).data('issueId'))
+
+        const corrective_action = $('#corrective_actionInput').val();
+        const preventive_action = $('#preventive_actionInput').val();
+        const issueId = $(this).data('issueId');
+        console.log(issueId)
+        console.log(solved + " solveddddddd");
+        if (corrective_action === "" || preventive_action === "") {
+            // alert('Please fill in all the required fields.');
+            showError('Please fill in all the required fields.');
+            return;
+        }
+        
+        const updatedDetails = {
+            corrective_action: corrective_action,
+            preventive_action: preventive_action,
+            updated_date: new Date().getTime(),
+        };
+        console.log("UpdateDetails", updatedDetails);
+        $.ajax({
+            url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(updatedDetails),
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                console.log("Issue Updated Successfully");
+                // Update 'solved' to true after a successful AJAX request
+                Swal.fire({
+                    title: "Success!",
+                    text: "You have successfully solved the issue.",
+                    icon: "success"
+                });
+                console.log("Success")
+                $("#issue-edit-btn").hide();
+                $("#solve-btn").show();
+            },
+        error: function (xhr, status, error) {
+            console.log('Status:', status);
+            console.log('Error:', error);
+            console.log('Server response:', xhr.responseText);
+            if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                // Handle JSON response
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                        console.log('JSON Response:', response);
+                    } catch (e) {
+                        console.log('JSON parsing error:', e);
+                    }
+                } else {
+                    // Handle non-JSON response
+                    console.log('Non-JSON Response:', xhr.responseText);
+                }
+                alert("Error updating issue: " + xhr.responseText);
+                console.log("Error updating issue");
+            },
+            complete: function () {
+                // Optionally, close the modal or perform other actions upon completion
+                $('#issueDetailModal').modal('hide');
+            }
+        });
     });
 
     issueEditBtn.addEventListener('click', function (e) {
@@ -2214,6 +2276,7 @@
         const preventive_action = $('#preventive_actionInput').val();
         const solved = $('#solve-btn').val();
         const issueId = $(this).data('issueId');
+        console.log(issueId)
         console.log(solved + " solveddddddd");
         if (corrective_action === "" || preventive_action === "") {
             // alert('Please fill in all the required fields.');

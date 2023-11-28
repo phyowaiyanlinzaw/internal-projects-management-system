@@ -79,6 +79,7 @@ public class IssueServiceImpl implements IssueService {
         Issue issue1 = issueRepository.save(issue);
         if(issue1 != null) {
         IssueDto issueDto = new IssueDto();
+        issueDto.setId(issue1.getId());
         issueDto.setTitle(issue1.getTitle());
         issueDto.setDescription(issue1.getDescription());
         issueDto.setPlace(issue1.getPlace());

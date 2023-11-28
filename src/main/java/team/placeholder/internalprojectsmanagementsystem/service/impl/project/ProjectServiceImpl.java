@@ -7,10 +7,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import groovyjarjarantlr4.v4.parse.ANTLRParser.finallyClause_return;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.KPIDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
@@ -57,9 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         Set<Architecture> architecture = new HashSet<>();
 
-        if(projectDto.getDeliverableDto() == null) {
-            projectDto.setDeliverableDto(new ArrayList<>());
-        }
+
 
         projectDto.getDeliverableDto().forEach(System.out::println);
 
@@ -94,10 +94,6 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         Set<User> users = new HashSet<>();
-
-//        if(projectDto.getMembersUserDto() == null) {
-            projectDto.setMembersUserDto(new ArrayList<>());
-//        }
 
        for(UserDto user : projectDto.getMembersUserDto()) {
             users.add(userRepository.getReferenceById(user.getId()));
@@ -206,8 +202,8 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
 
-            return projectDtos;
-        }
+        return projectDtos;
+    }
 
 
     @Override
@@ -351,11 +347,11 @@ public class ProjectServiceImpl implements ProjectService {
 
             if(project.getDeliverables() != null) {
 
-            for(Deliverable deliverable : project.getDeliverables()) {
-                DeliverableDto deliverableDto = modelMapper.map(deliverable, DeliverableDto.class);
-                deliverableDto.setDeliverableType(modelMapper.map(deliverable.getDeliverableTypes(), DeliverableTypeDto.class));
-                deliverableList.add(deliverableDto);
-            }
+                for(Deliverable deliverable : project.getDeliverables()) {
+                    DeliverableDto deliverableDto = modelMapper.map(deliverable, DeliverableDto.class);
+                    deliverableDto.setDeliverableType(modelMapper.map(deliverable.getDeliverableTypes(), DeliverableTypeDto.class));
+                    deliverableList.add(deliverableDto);
+                }
 
             }
 
@@ -556,11 +552,16 @@ public class ProjectServiceImpl implements ProjectService {
 
             List<DeliverableDto> deliverableList = new ArrayList<>();
 
-            for(Deliverable deliverable : project.getDeliverables()) {
-                DeliverableDto deliverableDto = modelMapper.map(deliverable, DeliverableDto.class);
-                deliverableDto.setDeliverableType(modelMapper.map(deliverable.getDeliverableTypes(), DeliverableTypeDto.class));
-                deliverableList.add(deliverableDto);
+            if (project.getDeliverables() != null) {
+
+                for (Deliverable deliverable : project.getDeliverables()) {
+                    DeliverableDto deliverableDto = modelMapper.map(deliverable, DeliverableDto.class);
+                    deliverableDto.setDeliverableType(modelMapper.map(deliverable.getDeliverableTypes(), DeliverableTypeDto.class));
+                    deliverableList.add(deliverableDto);
+                }
+
             }
+
 
             projectDto.setDeliverableDto(deliverableList);
             if(project.getUsers() != null) {
@@ -571,12 +572,27 @@ public class ProjectServiceImpl implements ProjectService {
                 }
                 projectDto.setMembersUserDto(userDtos);
             }
-            projectDto.setCompleteTaskCount(
-                        project.getTasks().stream()
-                                .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
-                                .count()
-                );
-            projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
+
+            long completeTaskCount = 0;
+            if (project.getTasks() != null) {
+                completeTaskCount = project.getTasks().stream()
+                        .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                        .count();
+
+                // Check if project.getId() is not null before using it
+                if (project.getId() != null) {
+                    projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
+                    log.info("total taks count in project : " + projectDto.getTotalTaskCount());
+                    log.info("total task count : " + taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
+                }
+            }
+            projectDto.setCompleteTaskCount(completeTaskCount);
+//            projectDto.setCompleteTaskCount(
+//                    project.getTasks().stream()
+//                            .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+//                            .count()
+//            );
+//            projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
             projectDto.setDepartmentDto(modelMapper.map(project.getDepartment(), DepartmentDto.class));
             projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
             projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
@@ -592,33 +608,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 
-
-    @Override
-    public ProjectDto getProjectByUsersIdAndStatus(long users, boolean status) {
-
-        Project project = projectRepository.findByUsersId(users);
-        return modelMapper.map(project, ProjectDto.class);
-    }
-
-
-
-    public static long calculateEndDateMillis(long startDateMillis, int durationInMonths) {
-        Instant startInstant = Instant.ofEpochMilli(startDateMillis);
-        LocalDate startDate = startInstant.atZone(ZoneId.systemDefault()).toLocalDate();
-
-        int yearsToAdd = durationInMonths / 12;
-        int monthsToAdd = durationInMonths % 12;
-
-        LocalDate endDate = startDate.plusYears(yearsToAdd).plusMonths(monthsToAdd);
-
-        // Adjust for end-of-month cases
-        if (startDate.getDayOfMonth() != endDate.getDayOfMonth()) {
-            endDate = endDate.withDayOfMonth(Math.min(startDate.getDayOfMonth(), endDate.lengthOfMonth()));
-        }
-
-        Instant endInstant = endDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-        return endInstant.toEpochMilli();
-    }
 
     public static LocalDate convertMillisToLocalDate(long millis) {
         Instant instant = Instant.ofEpochMilli(millis);
