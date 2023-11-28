@@ -106,6 +106,9 @@
 
         <!-- Template Javascript -->
         <script src="/js/main.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
             defer
@@ -123,22 +126,13 @@
                 setupLogoutConfirmation();
             });
 
-            import {
-                formatDateFromMilliseconds,
-                MONTH_NAMES,
-                calculateDuration,
-                calculateEndDate,
-            } from "/js/time.js";
+            import {calculateDuration, calculateEndDate, formatDateFromMilliseconds, MONTH_NAMES,} from "/js/time.js";
 
-            import { sendData, getData } from "/js/api-function.js";
+            import {getData} from "/js/api-function.js";
 
-            import {
-                getArchitecturelist,
-                getClientList,
-                getDeliverableTypeList,
-            } from "/js/getDataForProject.js";
+            import {getArchitecturelist, getClientList, getDeliverableTypeList,} from "/js/getDataForProject.js";
 
-            import { getUser } from "/js/currentLoginUser.js";
+            import {getUser} from "/js/currentLoginUser.js";
 
             const languageList = {
                 "c#": "/images/languages/c#-min.png",
@@ -1010,6 +1004,42 @@
                     console.log("target id", id);
 
                     const currentProejctDetail = await getData(`/api/project/list/${id}`);
+                    
+                    const showDeliContainer = document.querySelector('#show-project-deliverable')
+                    
+                    showDeliContainer.innerHTML = ''
+                    
+                    currentProejctDetail.deliverableDto.forEach(a => {
+
+                        console.log(a)
+
+                        showDeliContainer.innerHTML += `
+                            <li
+                                class="list-group-item d-flex justify-content-between"
+                            >
+                                ${a.deliverableType.type}<i
+                                    class="bi fw-bold bi-check2-all text-${a.status ? 'success' : 'danger'} fs-4"
+                                ></i>
+                            </li>`
+
+                    })
+
+                    const showAmountContainer = document.querySelector('#show-project-amount')
+
+                    showAmountContainer.innerHTML = ''
+
+                    for (const key in currentProejctDetail.amountDto) {
+                        if (key === 'id') continue
+                        if (currentProejctDetail.amountDto.hasOwnProperty(key)) {
+                            const value = currentProejctDetail.amountDto[key];
+                            showAmountContainer.innerHTML += `
+                            <li
+                                class="list-group-item d-flex justify-content-between"
+                            >
+                                ${key.replace(/_/g, ' ')}<span class="badge bg-primary rounded-pill">${value}</span>
+                            </li>`
+                        }
+                    }
 
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
                         document
@@ -1226,6 +1256,10 @@
                         document.querySelector(
                             "#navigate-task"
                         ).href = `/project/${currentProejctDetail.id}`;
+                        document.querySelectorAll('.optional-view').forEach(a => {
+                            console.log(a)
+                            a.style.display = 'none'
+                        })
                     }
 
                     objectiveQuill.enable(false);
@@ -1284,6 +1318,10 @@
                         formatDateFromMilliseconds(currentProejctDetail.end_date);
                     detailMoal.querySelector("#project-current-phase").innerText =
                         currentProejctDetail.current_phase;
+                    detailMoal.querySelector("#project-current-external-review-count").innerText =
+                        currentProejctDetail.reviewDto.external_review_count;
+                    detailMoal.querySelector("#project-current-internal-review-count").innerText =
+                        currentProejctDetail.reviewDto.internal_review_count;
                     detailMoal.querySelector("#client-email-address").innerHTML =
                         currentProejctDetail.clientDto.email;
                     detailMoal.querySelector("#client-phone-contect").innerHTML =
@@ -2238,9 +2276,7 @@
 
             async function getAllProjectInfo() {
 
-                const projectList = await getData('/api/project/list');
-
-                console.log(projectList)
+                return await getData('/api/project/list');
 
             }
 
@@ -2263,12 +2299,190 @@
 
                 }
 
-                console.log(selectedProject)
+                return selectedProject;
             }
 
             window.getAllSelectedProjectInfo = getAllSelectedProjectInfo // don't delete this 
 
-            window.getAllProjectInfo = getAllProjectInfo; // don't delete this 
+            window.getAllProjectInfo = getAllProjectInfo; // don't delete this
+
+            const exportPdfDropdown = document.querySelector("#exportPdfSelect");
+
+            exportPdfDropdown.addEventListener("change", function () {
+                const exportOption = exportPdfDropdown.value;
+                if (exportOption === "all") {
+                    exportAllRows();
+                } else if (exportOption === "selected") {
+
+                    exportSelectedRows();
+                }
+            }   );
+
+            // export all projects from getAllProjectInfo function with pdfMake
+            async function exportAllRows() {
+                try {
+                    const allProjects = await getAllProjectInfo()
+                    const docDefinition = {
+                        content: [
+                            {
+                                text: 'Project List',
+                                style: 'header'
+                            },
+                            {
+                                style: 'tableExample',
+                                table: {
+                                    widths: ['*', '*', '*', '*', '*', '*'],
+                                    body: [
+                                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                                        ...allProjects.map(project => {
+                                            return [
+                                                project.name,
+                                                project.clientDto.name,
+                                                formatDateFromMilliseconds(project.start_date),
+                                                formatDateFromMilliseconds(project.end_date),
+                                                project.duration,
+                                                project.current_phase
+                                            ]
+                                        })
+                                    ]
+                                }
+                            }
+                        ],
+                        styles: {
+                            header: {
+                                fontSize: 18,
+                                bold: true,
+                                alignment: 'center',
+                                margin: [0, 0, 0, 10]
+                            },
+                            tableExample: {
+                                margin: [0, 5, 0, 15]
+                            },
+                            tableHeader: {
+                                bold: true,
+                                fontSize: 13,
+                                color: 'black'
+                            }
+                        }
+                    };
+                    pdfMake.createPdf(docDefinition).open();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            async function exportSelectedRows() {
+                try {
+                    const selectedRows = await getAllSelectedProjectInfo()
+                    const docDefinition = {
+                        content: [
+                            {
+                                text: 'Project List',
+                                style: 'header'
+                            },
+                            {
+                                style: 'tableExample',
+                                table: {
+                                    widths: ['*', '*', '*', '*', '*', '*'],
+                                    body: [
+                                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                                        ...selectedRows.map(project => {
+                                            return [
+                                                project.name,
+                                                project.clientDto.name,
+                                                formatDateFromMilliseconds(project.start_date),
+                                                formatDateFromMilliseconds(project.end_date),
+                                                project.duration,
+                                                project.current_phase
+                                            ]
+                                        })
+                                    ]
+                                }
+                            }
+                        ],
+                        styles: {
+                            header: {
+                                fontSize: 18,
+                                bold: true,
+                                alignment: 'center',
+                                margin: [0, 0, 0, 10]
+                            },
+                            tableExample: {
+                                margin: [0, 5, 0, 15]
+                            },
+                            tableHeader: {
+                                bold: true,
+                                fontSize: 13,
+                                color: 'black'
+                            }
+                        }
+                    };
+                    pdfMake.createPdf(docDefinition).open();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            const exportExcelDropdown = document.querySelector("#exportExcelSelect");
+
+            exportExcelDropdown.addEventListener("change", function () {
+                const exportOption = exportExcelDropdown.value;
+                if (exportOption === "all") {
+                    exportAllRowsExcel();
+                } else if (exportOption === "selected") {
+                    exportSelectedRowsExcel();
+                }
+            }   );
+
+            async function exportAllRowsExcel() {
+                try {
+                    const allProjects = await getAllProjectInfo()
+                    const data = [
+                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                        ...allProjects.map(project => {
+                            return [
+                                project.name,
+                                project.clientDto.name,
+                                formatDateFromMilliseconds(project.start_date),
+                                formatDateFromMilliseconds(project.end_date),
+                                project.duration,
+                                project.current_phase
+                            ]
+                        })
+                    ];
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Project List");
+                    XLSX.writeFile(wb, "Project List.xlsx");
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            async function exportSelectedRowsExcel() {
+                try {
+                    const selectedRows = await getAllSelectedProjectInfo()
+                    const data = [
+                        ['Project Name', 'Client', 'Start Date', 'End Date', 'Duration', 'Status'],
+                        ...selectedRows.map(project => {
+                            return [
+                                project.name,
+                                project.clientDto.name,
+                                formatDateFromMilliseconds(project.start_date),
+                                formatDateFromMilliseconds(project.end_date),
+                                project.duration,
+                                project.current_phase
+                            ]
+                        })
+                    ];
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Project List");
+                    XLSX.writeFile(wb, "Project List.xlsx");
+                } catch (error) {
+                    console.log(error);
+                }
+            }
 
             //list project end
             if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
@@ -2434,10 +2648,20 @@
                             <div class="col p-0 text-center">Role</div>
                         </div>
                         <div class="text-end mt-2">
-                            <button onclick="getAllSelectedProjectInfo()" type="button" class="btn btn-primary">onlyselected</button>
-                            <button onclick="getAllProjectInfo()" type="button" class="btn btn-primary ">
-                                Export all
-                            </button>
+                            <div class="btn-group" role="group">
+                                <select class="form-control btn btn-primary" name="dropdown" id="exportPdfSelect" style="width: 30%;">
+                                    <option value="" selected disabled>Export PDF</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <select class="form-control btn btn-primary" name="dropdown" id="exportExcelSelect" style="width: 30%;">
+                                    <option value="" selected disabled>Export Excel</option>
+                                    <option value="all">Export All</option>
+                                    <option value="selected">Export Selected</option>
+                                </select>
+                            </div>
                         </div>
                         <div
                             class="d-flex pt-2 flex-column gap-2"
@@ -2899,6 +3123,12 @@
                                                     3 Months
                                                 </div>
                                             </div>
+                                             <div class="optional-view">
+                                                <div class="col fs-6 fw-bold">internal review</div>
+                                                <div class="col" id="project-current-internal-review-count">
+                                                    Basic design
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row row-cols-1 gap-2">
                                             <div class="">
@@ -2913,12 +3143,19 @@
                                                     25 december 2022
                                                 </div>
                                             </div>
-                                            <div class="">
+                                            <div class="" >
                                                 <div class="col fs-6 fw-bold">current phase</div>
                                                 <div class="col" id="project-current-phase">
                                                     Basic design
                                                 </div>
                                             </div>
+                                            <div class="optional-view">
+                                                <div class="col fs-6 fw-bold">external review</div>
+                                                <div class="col" id="project-current-external-review-count">
+                                                    Basic design
+                                                </div>
+                                            </div>
+                                           
                                         </div>
                                     </div>
                                     <div>
@@ -3020,6 +3257,62 @@
                                                     class="accordion-body position-relative"
                                                     id="show-project-objective"
                                                 ></div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item optional-view">
+                                            <h2 class="accordion-header" id="headingFour">
+                                                <button
+                                                    class="accordion-button collapsed"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseFour"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseFour"
+                                                >
+                                                    Amount
+                                                </button>
+                                            </h2>
+                                            <div
+                                                id="collapseFour"
+                                                class="accordion-collapse collapse"
+                                                aria-labelledby="headingFour"
+                                                data-bs-parent="#accordionExample"
+                                            >
+                                                <div
+                                                    class="accordion-body position-relative"
+                                                    id="show-project-amount"
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item optional-view">
+                                            <h2 class="accordion-header" id="headingFive">
+                                                <button
+                                                    class="accordion-button collapsed"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseFive"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseFive"
+                                                >
+                                                    Deliverable
+                                                </button>
+                                            </h2>
+                                            <div
+                                                id="collapseFive"
+                                                class="accordion-collapse collapse"
+                                                aria-labelledby="headingFive"
+                                                data-bs-parent="#accordionExample"
+                                            >
+                                                <div
+                                                    class="accordion-body position-relative"
+                                                    
+                                                >
+                                                    <ul
+                                                        class="list-group accordion-body p-2 rounded-end"
+                                                        id="show-project-deliverable"
+                                                    >
+                                                    </ul>   
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

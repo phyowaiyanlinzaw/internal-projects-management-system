@@ -7,12 +7,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import groovyjarjarantlr4.v4.parse.ANTLRParser.finallyClause_return;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.uidto.KPIDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
@@ -717,8 +715,8 @@ public class ProjectServiceImpl implements ProjectService {
 
                     tasksDto.setId(task.getId());
                     tasksDto.setTitle(task.getTitle());
-                    tasksDto.setPlan_start_time(task.getPlan_start_time());
-                    tasksDto.setPlan_end_time(task.getPlan_end_time());
+                    tasksDto.setPlanStartTime(task.getPlanStartTime());
+                    tasksDto.setPlanEndTime(task.getPlanEndTime());
                     tasksDto.setUserDto(modelMapper.map(task.getUser(), UserDto.class));
                     tasksDto.setStatus(task.getStatus());
                     tasksDtoList.add(tasksDto);
@@ -749,6 +747,8 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         for(User user : users2) {
+            user.setEnabled(true);
+            userRepository.save(user);
             AvailableUser avu = aes.getAvailableUserByUserId(user.getId());
             avu.setAvaliable(false);
             aes.save(avu);

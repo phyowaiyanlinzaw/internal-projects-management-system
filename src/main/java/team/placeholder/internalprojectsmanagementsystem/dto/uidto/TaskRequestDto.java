@@ -11,11 +11,11 @@ public class TaskRequestDto {
     private String title;
     private String description;
     private long projectId;
-    private Double actual_hours;
+    private Double actualHours;
     private long userId;
     private String tasksGroup;
-    private long plan_start_time;
-    private long plan_end_time;
-    private Double plan_hours;
+    private long planStartTime;
+    private long planEndTime;
+    private Double planHours;
     private String status;
 }

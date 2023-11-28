@@ -9,7 +9,7 @@ const project = await getData("/api/project/list/" + document.getElementById("pr
 
 // get the project close button
 console.log(project)
-const projectCloseBtn = document.querySelector('#project-open-close') 
+const projectCloseBtn = document.querySelector('#project-open-close')
 
 if (projectCloseBtn) {
     if (project.closed) {
@@ -86,6 +86,14 @@ addEmployeeModal.addEventListener("show.bs.modal", async () => {
         })
     });
 
+    console.log(empList.length)
+
+    if (empToProject.length === 0) {
+        document.querySelector("#no-result-emp").classList.remove("d-none")
+    } else {
+        document.querySelector("#no-result-emp").classList.add("d-none")
+    }
+
     $('.pickme').change(function () {
         const value = $(this).val();
         if ($(this).prop('checked')) {
@@ -105,16 +113,28 @@ addEmployeeModal.addEventListener("show.bs.modal", async () => {
 
     document.querySelector("#save-new-employee-list").addEventListener("click", function () {
 
+        console.log(empList)
+
+        console.log(empList.length)
+
+        if (empList.length === 0) {
+            return;
+        }
+
         const empObjectList = empList.map(a => ({ id: parseInt(a) }))
 
         console.log(empObjectList)
 
         parseInt(document.getElementById("projectId").innerText)
 
+        console.log(empObjectList.length)
+
+        console.log(empObjectList)
+
         $.ajax({
             url: `/api/project/update/userlist/${document.getElementById("projectId").innerText}`,
             type: "PUT",
-            data: JSON.stringify(empList),
+            data: JSON.stringify(empObjectList),
             contentType: "application/json",
             success: function (data) {
                 console.log(data)
@@ -124,6 +144,8 @@ addEmployeeModal.addEventListener("show.bs.modal", async () => {
                 );
                 $('#alert-modal').modal('show');
                 $("#add-employee-modal").modal('hide')
+                empList.length = 0;
+
             }, error: function () {
                 console.log("error")
             },
@@ -141,15 +163,15 @@ addEmployeeModal.addEventListener("hidden.bs.modal", function () {
 
 // select all the employee to add to the project
 document.querySelector("#add-new-employee-to-project").addEventListener('click', (e) => {
-    
+
     console.log(e.target.innerText)
 
-    if (e.target.innerText == 'Select all') {
+    if (e.target.innerText === 'Select all') {
         e.target.innerText = 'Deselect all'
         console.log($('.pickme').prop('checked'))
         $('.pickme').bootstrapToggle('on');
 
-    } else { 
+    } else {
         e.target.innerText = 'Select all'
         console.log($('.pickme').prop('checked'))
         $('.pickme').bootstrapToggle('off');
@@ -165,6 +187,8 @@ $('#project-open-close').change(function () {
     const id = parseInt(document.getElementById("projectId").innerText)
 
     if (!condition) {
+
+        document.querySelector("#add-employee-list-button-container").classList.add("d-none")
 
         const taskInTodo = $("#TODO").children().find("*").length
         const taskInProgress = $("#IN_PROGRESS").children().find("*").length
@@ -221,6 +245,8 @@ $('#project-open-close').change(function () {
         }
 
     } else {
+
+        document.querySelector("#add-employee-list-button-container").classList.remove("d-none")
 
         $.ajax({
             url: `/api/project/update/status/${id}/${!condition}`,
@@ -332,7 +358,7 @@ document.querySelector("#add-task").addEventListener("show.bs.modal", function (
     originalTagify.whitelist = null
 
     let newWhitelist = thisSuck.map((member) => {
-        return {id: member.id, value : member.name + " | " + member.role};
+        return { id: member.id, value: member.name + " | " + member.role };
     });
 
     console.log("this suck", thisSuck)
@@ -421,7 +447,7 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
     currentTask = await getData("/api/task/get/" + currentTaskId)
 
     console.log("current target task : ", currentTask);
-    
+
 
     //change input value from that taskdata
     document.getElementById('pm-task-title').innerText = currentTask.title
@@ -468,8 +494,8 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
     }
 
     // Convert timestamp to Date objects
-    const startDate = new Date(currentTask.plan_start_time);
-    const endDate = new Date(currentTask.plan_end_time);
+    const startDate = new Date(currentTask.planStartTime);
+    const endDate = new Date(currentTask.planEndTime);
 
     // Get the date strings in 'yyyy-mm-dd' format
     const startDateString = startDate.toISOString().split('T')[0];
@@ -482,20 +508,20 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
     document.getElementById("member-task-detail-start-date").value = startDateString
     document.getElementById("member-task-detail-due-date").value = endDateString
 
-    document.getElementById('pm-plan-edit-hours').value = currentTask.plan_hours;
-    document.getElementById('member-task-plan-hours').innerText = currentTask.plan_hours.toString() + " hours"
+    document.getElementById('pm-plan-edit-hours').value = currentTask.planHours;
+    document.getElementById('member-task-plan-hours').innerText = currentTask.planHours === null ? 0 : currentTask.planHours.toString() + " hours"
 
     const duration = calculateWeekdayDuration(startDate, endDate);
     document.getElementById("member-task-duration").innerText = duration.toString() + " days ";
     document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
 
-    document.getElementById("pm-actual-edit-hours").value = currentTask.actual_hours === null ? 0 : currentTask.actual_hours;
+    document.getElementById("pm-actual-edit-hours").value = currentTask.actualHours === null ? 0 : currentTask.actualHours;
 
     // Get all elements with the common class name
     const editableInputs = document.querySelectorAll(".editable-input");
     const editBtn = document.getElementById("task-edit-btn");
     const cancelEditBtn = document.getElementById("cancel-edit-btn");
-    
+
     const closeTaskModalBtn = document.querySelectorAll(".btn-close-task-details");
 
 
@@ -570,6 +596,43 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
 
 const saveBtn = document.getElementById("save-edit-btn");
 
+const assignedMemberTagify = document.getElementById("pm-assigned-member-tagify");
+
+let tagify = new Tagify(assignedMemberTagify, {
+    enforceWhitelist: true,
+    mode: "select",
+    whitelist: membersList.map((member) => {
+        return { id: member.id, value: member.name + " | " + member.role };
+    }),
+    originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
+});
+
+document.querySelector("#pm-task-details").addEventListener("show.bs.modal", function () {
+
+    tagify.DOM.scope.classList.add('d-none');
+
+    let thisSuck;
+    $.ajax({
+        url: "/api/user/list/projectId/" + projectId,
+        type: "GET",
+        async: false,
+        success: function (data) {
+            thisSuck = data;
+        },
+    });
+    tagify.whitelist = null
+
+    let newWhitelist = thisSuck.map((member) => {
+        return { id: member.id, value: member.name + " | " + member.role };
+    });
+
+    console.log("this suck", thisSuck)
+    console.log(tagify)
+    tagify.settings.whitelist = newWhitelist;
+
+});
+
+
 document.getElementById("task-edit-btn").addEventListener("click", function () {
 
     document.querySelectorAll(".editable-input").forEach((input) => {
@@ -595,15 +658,15 @@ document.getElementById("task-edit-btn").addEventListener("click", function () {
     }
     document.getElementById("pm-assigned-member-span").classList.add("d-none")
 
-    var assignedMemberTagify = document.getElementById("pm-assigned-member-tagify"),
-        tagify = new Tagify(assignedMemberTagify, {
-            enforceWhitelist: true,
-            mode: "select",
-            whitelist: membersList.map((member) => {
-                return { id: member.id, value: member.name + " | " + member.role };
-            }),
-            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
-        });
+
+    tagify = new Tagify(assignedMemberTagify, {
+        enforceWhitelist: true,
+        mode: "select",
+        whitelist: membersList.map((member) => {
+            return { id: member.id, value: member.name + " | " + member.role };
+        }),
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
+    });
 
     const currentAssignedUser = { id: currentTask.userDto.id, value: currentTask.userDto.name + " | " + currentTask.userDto.role }
 
@@ -614,7 +677,7 @@ document.getElementById("task-edit-btn").addEventListener("click", function () {
     // Function to handle the change event
     function handleTagifyChange(e) {
         // Get the member id for the added/updated tag, don't return an array, only id please
-        if(tagify.value.length !== 0) {
+        if (tagify.value.length !== 0) {
             let tagData = tagify.value[0].id
 
             console.log(tagify.value)
@@ -639,6 +702,7 @@ document.getElementById("task-edit-btn").addEventListener("click", function () {
 
 saveBtn.addEventListener("click", function (event) {
 
+    document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
     console.log("what the problem", currentTaskId)
 
     const title = document.getElementById("pm-task-title")
@@ -648,7 +712,41 @@ saveBtn.addEventListener("click", function (event) {
     const assignedMemberSpan = document.getElementById("pm-assigned-member-span")
     const assignedMemberTagify = document.getElementById("pm-assigned-member-tagify")
     const description = document.getElementById("pm-description-editor")
-    
+
+    console.log($("#pm-task-title-input").val(),
+        $("#pm-description-editor").val(),
+        $("#pm-task-detail-start-date").val(),
+        $("#pm-task-detail-due-date").val(),
+        $("#pm-plan-edit-hours").val(),
+        $("#pm-task-group").val(),
+        $("#pm-actual-edit-hours").val(),
+        userId)
+
+    if ($("#pm-task-title-input").val() === "") {
+        return
+    }
+    if ($("#pm-description-editor").val() === "") {
+        return
+    }
+    if ($("#pm-task-detail-start-date").val() === "") {
+        return
+    }
+    if ($("#pm-task-detail-due-date").val() === "") {
+        return
+    }
+    if ($("#pm-plan-edit-hours").val() === "") {
+        return
+    }
+    if ($("#pm-task-group").val() === "") {
+        return
+    }
+    if ($("#pm-actual-edit-hours").val() === "") {
+        return
+    }
+    if (!userId) {
+        return
+    }
+
     //hide title
     document.getElementById("pm-task-title").classList.remove("d-none");
     //show input
@@ -661,7 +759,6 @@ saveBtn.addEventListener("click", function (event) {
     document.getElementById("pm-task-group-span").classList.remove("d-none")
     document.getElementById("pm-task-group").classList.add("d-none")
 
-    document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
     document.querySelector('.tagify.editable-input').classList.add("d-none")
     document.getElementById("pm-assigned-member-span").classList.remove("d-none")
 
@@ -690,11 +787,11 @@ saveBtn.addEventListener("click", function (event) {
         title: $("#pm-task-title-input").val(),
         description: $("#pm-description-editor").val(),
         // Convert to Unix timestamp
-        plan_start_time: startDate.getTime(),
-        plan_end_time: dueDate.getTime(),
-        plan_hours: $("#pm-plan-edit-hours").val(),
+        planStartTime: startDate.getTime(),
+        planEndTime: dueDate.getTime(),
+        planHours: $("#pm-plan-edit-hours").val(),
         tasksGroup: $("#pm-task-group").val(),
-        actual_hours: parseInt($("#pm-actual-edit-hours").val()),
+        actualHours: parseInt($("#pm-actual-edit-hours").val()),
         userId: userId,
     };
 
@@ -710,19 +807,19 @@ saveBtn.addEventListener("click", function (event) {
             console.log(response)
             console.log(response.userDto.id)
             $(`#task-${response.id} > .modal-detail-title`).text(response.title)
-            $(`#assigned-member-span-${response.id}`).text(response.userDto.name) 
+            $(`#assigned-member-span-${response.id}`).text(response.userDto.name)
             title.textContent = response.title
             titleInput.value = response.title
             taskGroupSpan.innerText = response.tasksGroup
             assignedMemberSpan.innerText = response.userDto.name + " | " + response.userDto.role
             assignedMemberTagify.value = response.userDto.name + " | " + response.userDto.role
             description.value = response.description
-            document.getElementById('pm-task-detail-start-date').value = new Date(response.plan_start_time).toISOString().split('T')[0];
-            document.getElementById("pm-task-detail-due-date").value = new Date(response.plan_end_time).toISOString().split('T')[0];
+            document.getElementById('pm-task-detail-start-date').value = new Date(response.planStartTime).toISOString().split('T')[0];
+            document.getElementById("pm-task-detail-due-date").value = new Date(response.planEndTime).toISOString().split('T')[0];
             const duration = calculateWeekdayDuration(startDate, dueDate);
             document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
-            document.getElementById("pm-plan-edit-hours").value = response.plan_hours
-            document.getElementById("pm-actual-edit-hours").value = response.actual_hours
+            document.getElementById("pm-plan-edit-hours").value = response.planHours
+            document.getElementById("pm-actual-edit-hours").value = response.actualHours
             $('#task-details').modal('hide')
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -784,17 +881,22 @@ function createTaskDiv(task) {
         "rounded-2",
         "text-white"
     );
-    switch (task.status) {
-        case "TODO":
-            taskDiv.classList.add("bg-primary");
-            break;
-        case "IN_PROGRESS":
-            taskDiv.classList.add("bg-info");
-            break;
-        case "FINISHED":
-            taskDiv.classList.add("bg-success");
-            break;
+    if (!task.due) {
+        switch (task.status) {
+            case "TODO":
+                taskDiv.classList.add("bg-primary");
+                break;
+            case "IN_PROGRESS":
+                taskDiv.classList.add("bg-info");
+                break;
+            case "FINISHED":
+                taskDiv.classList.add("bg-success");
+                break;
+        }
+    } else {
+        taskDiv.classList.add("bg-danger")
     }
+
     if (!project.closed) {
         taskDiv.draggable = true;
     }
@@ -925,7 +1027,7 @@ for (let i = 0; i < taskList.length; i++) {
         } else {
             document.querySelector("#member-task-details").setAttribute("current-task-id", taskId)
         }
-        
+
     });
 
     document.getElementById('actual-hours-input').addEventListener("input", function () {
@@ -953,13 +1055,40 @@ for (let i = 0; i < taskList.length; i++) {
             parseInt(currentTask.getAttribute("index"))
             ];
         if (currentZone.classList.contains("dummy-trash")) {
-            bModal.show();
+            // bModal.show();
+
+            Swal.fire({
+                title: "Are you sure want to delete this task?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/api/task/delete`,
+                        type: "DELETE",
+                        data: JSON.stringify(currentTaskData.id),
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log(response);
+
+                            document.querySelector('#task-' + currentTaskData.id).remove()
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        },
+                    });
+                }
+            })
+
         } else if (status.some(a => currentZone.getAttribute("id") === a)) {
             if (currentTaskData.status !== currentZone.getAttribute("id")) {
                 currentTaskData.status = currentZone.getAttribute("id")
 
                 if (currentTaskData.status === 'IN_PROGRESS') {
-                    currentTaskData.actual_start_time = new Date().getTime()
+                    currentTaskData.actualStartTime = new Date().getTime()
                 }
 
                 if (currentTaskData.status === 'FINISHED') {
@@ -971,7 +1100,7 @@ for (let i = 0; i < taskList.length; i++) {
                         const actualHoursSubmitBtn = document.getElementById('actual-hours-input-btn');
 
                         const clickHandler = function () {
-                            currentTaskData.actual_hours = actualHoursInput.value;
+                            currentTaskData.actualHours = actualHoursInput.value;
                             if (validateActualWorkingHour(parseInt(actualHoursInput.value))) {
                                 $('#actual-hours-input-modal').modal('hide');
                                 actualHoursInput.value = '';
@@ -989,7 +1118,7 @@ for (let i = 0; i < taskList.length; i++) {
                     // Wait for the Promise to be resolved before proceeding
                     await actualHoursInputPromise;
 
-                    currentTaskData.actual_end_time = new Date().getTime()
+                    currentTaskData.actualEndTime = new Date().getTime()
                 }
 
                 $.ajax({
@@ -998,37 +1127,46 @@ for (let i = 0; i < taskList.length; i++) {
                     data: {
                         id: currentTaskData.id,
                         status: currentTaskData.status,
-                        actual_start_time: currentTaskData.actual_start_time,
-                        actual_end_time: currentTaskData.actual_end_time,
-                        actual_hours: currentTaskData.actual_hours === null ? 0 : currentTaskData.actual_hours
+                        actualStartTime: currentTaskData.actualStartTime,
+                        actualEndTime: currentTaskData.actualEndTime,
+                        actualHours: currentTaskData.actualHours === null ? 0 : currentTaskData.actualHours
                     },
                 })
                     .then(response => {
                         currentTaskData.status = currentZone.getAttribute('id');
                         console.log('Success for URL /api/task/update', response);
                         //change the color of the task
-                        switch (currentTaskData.status) {
-                            case "TODO":
-                                currentTask.classList.add("bg-primary");
-                                currentTask.classList.remove(
-                                    "bg-info",
-                                    "bg-success"
-                                );
-                                break;
-                            case "IN_PROGRESS":
-                                currentTask.classList.add("bg-info");
-                                currentTask.classList.remove(
-                                    "bg-primary",
-                                    "bg-success"
-                                );
-                                break;
-                            case "FINISHED":
-                                currentTask.classList.add("bg-success");
-                                currentTask.classList.remove(
-                                    "bg-primary",
-                                    "bg-info"
-                                );
-                                break;
+                        if (!currentTaskData.due) {
+                            switch (currentTaskData.status) {
+                                case "TODO":
+                                    currentTask.classList.add("bg-primary");
+                                    currentTask.classList.remove(
+                                        "bg-info",
+                                        "bg-success"
+                                    );
+                                    break;
+                                case "IN_PROGRESS":
+                                    currentTask.classList.add("bg-info");
+                                    currentTask.classList.remove(
+                                        "bg-primary",
+                                        "bg-success"
+                                    );
+                                    break;
+                                case "FINISHED":
+                                    currentTask.classList.add("bg-success");
+                                    currentTask.classList.remove(
+                                        "bg-primary",
+                                        "bg-info"
+                                    );
+                                    break;
+                            }
+                        } else {
+                            currentTask.classList.add("bg-danger");
+                            currentTask.classList.remove(
+                                "bg-primary",
+                                "bg-info",
+                                "bg-success"
+                            );
                         }
                     })
                     .catch(error => {
@@ -1100,7 +1238,31 @@ todoForm.addEventListener("submit", (e) => {
         newTask.classList.remove("is-dragging");
         console.log(newTask);
         if (currentZone.classList.contains("dummy-trash")) {
-            bModal.show();
+            Swal.fire({
+                title: "Are you sure want to delete this task?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/api/task/delete`,
+                        type: "DELETE",
+                        data: JSON.stringify(currentTaskData.id),
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log(response);
+
+                            document.querySelector('#task-' + currentTaskData.id).remove()
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        },
+                    });
+                }
+            })
         }
         task.classList.remove("is-dragging");
     });
@@ -1269,7 +1431,7 @@ function validateTitle() {
         $('#title').removeClass('is-valid');
         return false;
     } else {
-        
+
         errorContainer.remove();
         $('#title').addClass('is-valid');
         $('#title').removeClass('is-invalid');
@@ -1308,7 +1470,7 @@ function validatePlanStartTime() {
     const errorContainer = $('#start_date').siblings('.error-container');
     console.log(start_date)
     if (start_date === "") {
-        
+
         if (errorContainer.length === 0) {
             let p = $("<p>")
                 .addClass("text-danger fs-6")
@@ -1378,13 +1540,13 @@ function validatePlanHour() {
 
     console.log(plan_hours, durationInHour)
 
-    if (plan_hours > durationInHour || plan_hours == '')  {
+    if (plan_hours > durationInHour || plan_hours == '') {
 
         let text
 
         if (plan_hours === '' || isNaN(plan_hours)) {
 
-            text =  `put some number`
+            text = `put some number`
 
         } else {
             text = `plan hour is greater than ${durationInHour} hours`
@@ -1480,13 +1642,13 @@ function validateTakGroup() {
 
 function validateAddTask() {
 
-    
+
     return validateTitle() &&
-    validateDescription() &&
-    validateTakGroup() &&
-    validatePlanStartTime() &&
-    validatePlanEndTime() &&
-    validatePlanHour()
+        validateDescription() &&
+        validateTakGroup() &&
+        validatePlanStartTime() &&
+        validatePlanEndTime() &&
+        validatePlanHour()
 
 }
 
@@ -1513,7 +1675,7 @@ $('#end_date').on('change', function () {
 
 });
 
-console.log('llllllllllllllllllll',$('#end_date'))
+console.log('llllllllllllllllllll', $('#end_date'))
 
 document.querySelector('#plan-hours').addEventListener('input', function () {
     validatePlanHour();
@@ -1538,7 +1700,7 @@ $("#task-add-btn").on("click", function () {
     const member = $('#select-member').val();
     const errorContainer = $('#select-member').siblings('.error-container');
 
-    let tagData 
+    let tagData
     if (originalTagify.value[0]) {
         tagData = originalTagify.value[0].id
         errorContainer.remove();
@@ -1586,9 +1748,9 @@ $("#task-add-btn").on("click", function () {
         title: $("#title").val(),
         description: $("#description").val(),
         // Convert to Unix timestamp
-        plan_start_time: startDate.getTime(),
-        plan_end_time: dueDate.getTime(),
-        plan_hours: $("#plan-hours").val(),
+        planStartTime: startDate.getTime(),
+        planEndTime: dueDate.getTime(),
+        planHours: $("#plan-hours").val(),
         tasksGroup: $("#group").val(),
         projectId:
             parseInt(projectId)
@@ -1613,10 +1775,11 @@ $("#task-add-btn").on("click", function () {
                 contentType: "application/json",
                 success: function (response) {
                     console.log(response);
-                    location.reload();
+                     location.reload();
+                    
                 },
                 error: function (response) {
-                    console.log(response);
+                    // console.log(response);
                 },
             });
         }
@@ -1643,8 +1806,8 @@ $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
         events: taskList.map((task) => {
             return {
                 title: task.title,
-                start: new Date(task.plan_start_time),
-                end: new Date(task.plan_end_time + 86400000),
+                start: new Date(task.planStartTime),
+                end: new Date(task.planEndTime + 86400000),
                 color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#f74444",
                 textColor: "white",
                 allDay: true,
@@ -1676,7 +1839,7 @@ $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
             //get plan_end_time and convert to date and do some math to show remaining days
             const planEndTime = taskList.find((task) => {
                 return task.title === eventTitle;
-            }).plan_end_time;
+            }).planEndTime;
             //only show date and month
             const planEndTimeDate = new Date(planEndTime).toLocaleDateString('en-US', {
                 day: 'numeric',
