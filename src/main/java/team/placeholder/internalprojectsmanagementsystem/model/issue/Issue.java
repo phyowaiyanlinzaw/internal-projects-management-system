@@ -31,7 +31,9 @@ public class Issue{
     private String impact;
     private String root_cause;
     private String direct_cause;
+    @Column(columnDefinition = "TEXT")
     private String corrective_action;
+    @Column(columnDefinition = "TEXT")
     private String preventive_action;
 
     @JsonProperty("responsible_party")

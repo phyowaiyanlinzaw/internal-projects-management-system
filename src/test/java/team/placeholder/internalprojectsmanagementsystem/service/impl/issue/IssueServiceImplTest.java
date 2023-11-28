@@ -21,18 +21,18 @@ import team.placeholder.internalprojectsmanagementsystem.model.issue.issueenum.R
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.issue.IssueRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.noti.NotificationService;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -65,6 +65,118 @@ class IssueServiceImplTest {
     }
 
     @Test
+    void testSave() {
+        // Arrange
+
+        // Create a sample IsuDto object
+        IsuDto isuDto = new IsuDto();
+        isuDto.setTitle("Test Issue");
+        isuDto.setDescription("This is a test issue");
+        // Set other properties of isuDto
+
+        // Create a sample Issue object
+        Issue issue = new Issue();
+        issue.setTitle(isuDto.getTitle());
+        issue.setDescription(isuDto.getDescription());
+        // Set other properties of issue
+
+        // Mock the necessary repository methods
+        when(userRepository.findById(anyLong())).thenReturn(createSampleUser());
+        when(projectRepository.findById(anyLong())).thenReturn(createSampleProject());
+        when(clientRepository.findById(anyLong())).thenReturn(createSampleClient());
+        when(issueRepository.save(any(Issue.class))).thenReturn(createSampleIssue());
+
+        // Mock the mapping of User and UserDto
+        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(createSampleUserDto());
+
+        // Mock the mapping of Issue and IssueDto
+        when(modelMapper.map(any(Issue.class), eq(IssueDto.class))).thenReturn(createSampleIssueDto());
+
+        // Mock the notification service
+        doNothing().when(notificationService).save(anyString(), anyLong(), anyString(), any(IssueDto.class));
+
+        // Act
+        IssueDto savedIssueDto = issueService.save(isuDto);
+
+        // Assert
+
+        // Verify that the issueRepository.save method was called with the correct argument
+        verify(issueRepository).save(any(Issue.class));
+
+        // Add more assertions based on your specific requirements
+    }
+
+    private UserDto createSampleUserDto() {
+        UserDto userDto = new UserDto();
+        userDto.setId(1L);
+        userDto.setName("john.doe");
+        // Set other properties as needed for your tests
+        return userDto;
+    }
+    // Helper methods to create sample objects for mocks
+
+
+
+
+    @Test
+    void testSaveWhenIsuDtoHasNullFieldsThenReturnsIssueDto() {
+        // Arrange
+        IsuDto isuDto = new IsuDto();
+        Issue issue = createSampleIssue();
+        IssueDto expectedIssueDto = createSampleIssueDto();
+        when(issueRepository.save(any(Issue.class))).thenReturn(issue);
+        when(modelMapper.map(issue, IssueDto.class)).thenReturn(expectedIssueDto);
+
+        // Act
+        IssueDto result = issueService.save(isuDto);
+
+        // Assert
+        assertEquals(expectedIssueDto, result);
+
+        // Verify interactions
+        verify(issueRepository, times(1)).save(any(Issue.class));
+        verify(notificationService, times(1)).save(anyString(), any(), anyString(), any());
+    }
+
+    @Test
+    void testSaveWhenRepositorySaveReturnsNullThenReturnsNull() {
+        // Arrange
+        IsuDto isuDto = createSampleIsuDto();
+        when(issueRepository.save(any(Issue.class))).thenReturn(null);
+
+        // Act
+        IssueDto result = issueService.save(isuDto);
+
+        // Assert
+        assertNull(result);
+
+        // Verify interactions
+        verify(issueRepository, times(1)).save(any(Issue.class));
+        verify(notificationService, never()).save(anyString(), any(), anyString(), any());
+    }
+
+    private IsuDto createSampleIsuDto() {
+        IsuDto isuDto = new IsuDto();
+        isuDto.setTitle("Sample Title");
+        // Set other properties as needed for your tests
+        return isuDto;
+    }
+
+    private Issue createSampleIssue() {
+        Issue issue = new Issue();
+        issue.setTitle("Sample Title");
+        // Set other properties as needed for your tests
+        return issue;
+    }
+
+    private IssueDto createSampleIssueDto() {
+        IssueDto issueDto = new IssueDto();
+        issueDto.setTitle("Sample Title");
+        // Set other properties as needed for your tests
+        return issueDto;
+    }
+
+    @Test
     void save() {
         Issue issue = new Issue();
         issue.setTitle("Test");
@@ -90,117 +202,49 @@ class IssueServiceImplTest {
         verify(issueRepository, times(1)).save(issue);
     }
 
-//    @Test
-//    void testSave() {
-//        // Arrange
-//        IsuDto isuDto = createSampleIsuDto();
-//        Issue savedIssue = createSampleSavedIssue();
-//        IssueDto expectedIssueDto = createSampleIssueDto();
-//
-//        // Mocking the necessary interactions
-//        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
-//        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
-//        when(modelMapper.map(any(Issue.class), eq(IssueDto.class))).thenReturn(expectedIssueDto);
-//        when(userRepository.findById(any())).thenReturn(Optional.of(new User()));
-//        when(projectRepository.findById(any())).thenReturn(Optional.of(new Project()));
-//        when(clientRepository.findById(any())).thenReturn(Optional.of(new Client()));
-//        when(issueRepository.save(any(Issue.class))).thenReturn(savedIssue);
-//
-//        // Act
-//        IssueDto result = issueService.save(isuDto);
-//
-//        // Assert
-//        assertNull(result);
-//        assertEquals(expectedIssueDto.getId(), result.getId());
-//        assertEquals("Titles should match", expectedIssueDto.getTitle(), result.getTitle());
-//        // Add similar assertions for other properties...
-//
-//        // Verify interactions
-//        verify(issueRepository, times(1)).save(any(Issue.class));
-//        verify(notificationService, times(1)).save(anyString(), any(), anyString(), any());
-//    }
-//
-//
-//
-//    private IssueDto createSampleIssueDto() {
-//        IssueDto issueDto = new IssueDto();
-//        issueDto.setId(1L);
-//        issueDto.setTitle("Test");
-//        issueDto.setDescription("Test");
-//        issueDto.setPlace("Test");
-//        issueDto.setImpact("Test");
-//        issueDto.setRoot_cause("Test");
-//        issueDto.setDirect_cause("Test");
-//        issueDto.setCorrective_action("Test");
-//        issueDto.setPreventive_action("Test");
-//        issueDto.setSolved(true);
-//        issueDto.setCreated_date(new Date().getTime());
-//        issueDto.setUpdated_date(new Date().getTime());
-//        issueDto.setIssueCategory(String.valueOf(Category.TESTING));
-//        issueDto.setProjectDto(new ProjectDto());
-//        issueDto.setUser_uploader(new UserDto());
-//        issueDto.setUser_pic(new UserDto());
-//        return issueDto;
-//    }
-//
-//    private Issue createSampleSavedIssue() {
-//        Issue issue = new Issue();
-//        issue.setId(1L);
-//        issue.setTitle("Test");
-//        issue.setDescription("Test");
-//        issue.setPlace("Test");
-//        issue.setImpact("Test");
-//        issue.setRoot_cause("Test");
-//        issue.setDirect_cause("Test");
-//        issue.setCorrective_action("Test");
-//        issue.setPreventive_action("Test");
-//        issue.setSolved(true);
-//        issue.setCreated_date(new Date().getTime());
-//        issue.setUpdated_date(new Date().getTime());
-//        issue.setIssueCategory(Category.TESTING);
-//        issue.setProject(new Project());
-//        issue.setUser_uploader(new User());
-//        issue.setPic(new User());
-//        return issue;
-//    }
-//
-//    private IsuDto createSampleIsuDto() {
-//        IsuDto isuDto = new IsuDto();
-//        isuDto.setTitle("Test");
-//        isuDto.setDescription("Test");
-//        isuDto.setPlace("Test");
-//        isuDto.setImpact("Test");
-//        isuDto.setRoot_cause("Test");
-//        isuDto.setDirect_cause("Test");
-//        isuDto.setCorrective_action("Test");
-//        isuDto.setPreventive_action("Test");
-//        isuDto.setSolved(true);
-//        isuDto.setCreated_date(new Date().getTime());
-//        isuDto.setUpdated_date(new Date().getTime());
-//        isuDto.setIssueCategory(String.valueOf(Category.TESTING));
-//        isuDto.setProject_id(new ProjectDto().getId());
-//        isuDto.setUser_uploader(new UserDto().getId());
-//        isuDto.setUser_pic(new UserDto().getId());
-//        isuDto.setResponsible_type(String.valueOf(ResponsibleType.CLIENT));
-//        isuDto.setResponsible_party(1L);
-//        return isuDto;
-//    }
 
     @Test
-    void getAllIssues() {
+    void testSave_NullIssue() {
         // Arrange
-        List<Issue> sampleIssues = Collections.singletonList(createSampleIssue());
-        when(issueRepository.findAll()).thenReturn(sampleIssues);
+        IsuDto isuDto = createSampleIsuDto();
+        when(issueRepository.save(any(Issue.class))).thenReturn(null);
 
         // Act
-        List<IssueDto> issues = issueService.getAllIssues();
+        IssueDto result = issueService.save(isuDto);
 
         // Assert
-        assertEquals(sampleIssues.size(), issues.size());
-        verify(issueRepository, times(1)).findAll();
+        assertNull(result);
+
+        // Verify interactions
+        verify(issueRepository, times(1)).save(any(Issue.class));
+        verify(notificationService, never()).save(anyString(), any(), anyString(), any());
     }
 
-    private Issue createSampleIssue() {
+    private User createSampleUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("john.doe");
+        // Set other properties as needed for your tests
+        return user;
+    }
+
+    private Project createSampleProject() {
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("Sample Project");
+        // Set other properties as needed for your tests
+        return project;
+    }
+
+    private Client createSampleClient() {
+        Client client = new Client();
+        client.setId(1L);
+        client.setName("Sample Client");
+        // Set other properties as needed for your tests
+        return client;
+    }
+
+    private Issue createSampleSavedIssue() {
         Issue issue = new Issue();
         issue.setId(1L);
         issue.setTitle("Test");
@@ -221,6 +265,19 @@ class IssueServiceImplTest {
         return issue;
     }
 
+    @Test
+    void getAllIssues() {
+        // Arrange
+        List<Issue> sampleIssues = Collections.singletonList(createSampleIssue());
+        when(issueRepository.findAll()).thenReturn(sampleIssues);
+
+        // Act
+        List<IssueDto> issues = issueService.getAllIssues();
+
+        // Assert
+        assertEquals(sampleIssues.size(), issues.size());
+        verify(issueRepository, times(1)).findAll();
+    }
 
     @Test
     void getIssueById() {
@@ -393,4 +450,6 @@ class IssueServiceImplTest {
         assertEquals(1, issues.size());
         verify(issueRepository, times(1)).findByIssueCategory(Category.TESTING);
     }
+
+    // Add more test cases to cover other branches and scenarios
 }

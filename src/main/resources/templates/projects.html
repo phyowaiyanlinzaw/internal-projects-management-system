@@ -1004,6 +1004,42 @@
                     console.log("target id", id);
 
                     const currentProejctDetail = await getData(`/api/project/list/${id}`);
+                    
+                    const showDeliContainer = document.querySelector('#show-project-deliverable')
+                    
+                    showDeliContainer.innerHTML = ''
+                    
+                    currentProejctDetail.deliverableDto.forEach(a => {
+
+                        console.log(a)
+
+                        showDeliContainer.innerHTML += `
+                            <li
+                                class="list-group-item d-flex justify-content-between"
+                            >
+                                ${a.deliverableType.type}<i
+                                    class="bi fw-bold bi-check2-all text-${a.status ? 'success' : 'danger'} fs-4"
+                                ></i>
+                            </li>`
+
+                    })
+
+                    const showAmountContainer = document.querySelector('#show-project-amount')
+
+                    showAmountContainer.innerHTML = ''
+
+                    for (const key in currentProejctDetail.amountDto) {
+                        if (key === 'id') continue
+                        if (currentProejctDetail.amountDto.hasOwnProperty(key)) {
+                            const value = currentProejctDetail.amountDto[key];
+                            showAmountContainer.innerHTML += `
+                            <li
+                                class="list-group-item d-flex justify-content-between"
+                            >
+                                ${key.replace(/_/g, ' ')}<span class="badge bg-primary rounded-pill">${value}</span>
+                            </li>`
+                        }
+                    }
 
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
                         document
@@ -1220,6 +1256,10 @@
                         document.querySelector(
                             "#navigate-task"
                         ).href = `/project/${currentProejctDetail.id}`;
+                        document.querySelectorAll('.optional-view').forEach(a => {
+                            console.log(a)
+                            a.style.display = 'none'
+                        })
                     }
 
                     objectiveQuill.enable(false);
@@ -1278,6 +1318,10 @@
                         formatDateFromMilliseconds(currentProejctDetail.end_date);
                     detailMoal.querySelector("#project-current-phase").innerText =
                         currentProejctDetail.current_phase;
+                    detailMoal.querySelector("#project-current-external-review-count").innerText =
+                        currentProejctDetail.reviewDto.external_review_count;
+                    detailMoal.querySelector("#project-current-internal-review-count").innerText =
+                        currentProejctDetail.reviewDto.internal_review_count;
                     detailMoal.querySelector("#client-email-address").innerHTML =
                         currentProejctDetail.clientDto.email;
                     detailMoal.querySelector("#client-phone-contect").innerHTML =
@@ -2525,7 +2569,7 @@
                             <select id="month-filter" class="form-control" action="filter">
                                 <option value="January">January</option>
                                 <option value="February">February</option>
-                                <option value="Match">Match</option>
+                                <option value="March">March</option>
                                 <option value="April">April</option>
                                 <option value="May">May</option>
                                 <option value="June">June</option>
@@ -3079,6 +3123,12 @@
                                                     3 Months
                                                 </div>
                                             </div>
+                                             <div class="optional-view">
+                                                <div class="col fs-6 fw-bold">internal review</div>
+                                                <div class="col" id="project-current-internal-review-count">
+                                                    Basic design
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row row-cols-1 gap-2">
                                             <div class="">
@@ -3093,12 +3143,19 @@
                                                     25 december 2022
                                                 </div>
                                             </div>
-                                            <div class="">
+                                            <div class="" >
                                                 <div class="col fs-6 fw-bold">current phase</div>
                                                 <div class="col" id="project-current-phase">
                                                     Basic design
                                                 </div>
                                             </div>
+                                            <div class="optional-view">
+                                                <div class="col fs-6 fw-bold">external review</div>
+                                                <div class="col" id="project-current-external-review-count">
+                                                    Basic design
+                                                </div>
+                                            </div>
+                                           
                                         </div>
                                     </div>
                                     <div>
@@ -3200,6 +3257,62 @@
                                                     class="accordion-body position-relative"
                                                     id="show-project-objective"
                                                 ></div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item optional-view">
+                                            <h2 class="accordion-header" id="headingFour">
+                                                <button
+                                                    class="accordion-button collapsed"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseFour"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseFour"
+                                                >
+                                                    Amount
+                                                </button>
+                                            </h2>
+                                            <div
+                                                id="collapseFour"
+                                                class="accordion-collapse collapse"
+                                                aria-labelledby="headingFour"
+                                                data-bs-parent="#accordionExample"
+                                            >
+                                                <div
+                                                    class="accordion-body position-relative"
+                                                    id="show-project-amount"
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item optional-view">
+                                            <h2 class="accordion-header" id="headingFive">
+                                                <button
+                                                    class="accordion-button collapsed"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseFive"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseFive"
+                                                >
+                                                    Deliverable
+                                                </button>
+                                            </h2>
+                                            <div
+                                                id="collapseFive"
+                                                class="accordion-collapse collapse"
+                                                aria-labelledby="headingFive"
+                                                data-bs-parent="#accordionExample"
+                                            >
+                                                <div
+                                                    class="accordion-body position-relative"
+                                                    
+                                                >
+                                                    <ul
+                                                        class="list-group accordion-body p-2 rounded-end"
+                                                        id="show-project-deliverable"
+                                                    >
+                                                    </ul>   
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

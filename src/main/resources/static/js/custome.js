@@ -205,18 +205,30 @@ $(document).ready(function () {
         dDSbar.addEventListener('input', function (e) {
 
             let target = e.target
+
+            function isMatch(input, title, card) {
+                // Escape special characters in the input
+                const escapedInput = input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+                // Create a regular expression pattern
+                const pattern = new RegExp(`^.*${escapedInput.split('').join('.*')}.*$`, 'i');
+
+                // Check if the input matches either the title or card
+                return pattern.test(title) || pattern.test(card);
+            }
             
             if (target.getAttribute('type') === 'search') {
 
                 let projectCount = 0;
 
-                let inputText = target.value.toLowerCase();
+                let inputText = target.value.toLowerCase().trim();
                 let allData = sortableContainer.children;
 
+
                 for (let i = 0; i < allData.length; i++) {
-                    let proectTitle = allData[i].querySelector('.card-title').textContent.toLowerCase(); // Use .textContent to get the text
-                    let users = allData[i].querySelector('.card-text').textContent.toLowerCase();
-                    if (proectTitle.includes(inputText) || users.includes(inputText)) {
+                    let proectTitle = allData[i].querySelector('.card-title').textContent.toLowerCase().trim(); // Use .textContent to get the text
+                    let users = allData[i].querySelector('.card-text').textContent.toLowerCase().trim();
+                    if (isMatch(inputText.trim(), proectTitle, users)) {
                         allData[i].style.display = 'block';
                         projectCount++;
                     } else {
@@ -231,6 +243,7 @@ $(document).ready(function () {
             }
         });
     }
+
 
     // ======================== SEARCH BEHAVIOR END HERE ========================
 
