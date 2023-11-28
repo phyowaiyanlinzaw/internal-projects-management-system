@@ -376,6 +376,7 @@ public class IssueServiceImpl implements IssueService {
         List<IssueDto> issueDtos = new ArrayList<>();
 
         for(Issue issue : filteredIssues) {
+
             
             IssueDto issueDto = modelMapper.map(issue, IssueDto.class);
 

@@ -727,12 +727,148 @@ class IssueServiceImplTest {
     @InjectMocks
     private IssueServiceImpl issueService;
 
+    // Existing test cases...
+
+
+    private IsuDto validIsuDto;
+    private Issue validIssue;
+    private User validUser;
+    private Project validProject;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        validUser = new User();
+        validUser.setId(1L);
+        validUser.setName("John Doe");
+        validUser.setEmail("john.doe@example.com");
+
+        validProject = new Project();
+        validProject.setId(1L);
+        validProject.setName("Project Name");
+
+        validIsuDto = new IsuDto();
+        validIsuDto.setTitle("Issue Title");
+        validIsuDto.setDescription("Issue Description");
+        validIsuDto.setPlace("Issue Place");
+        validIsuDto.setImpact("Issue Impact");
+        validIsuDto.setRoot_cause("Root Cause");
+        validIsuDto.setDirect_cause("Direct Cause");
+        validIsuDto.setCorrective_action("Corrective Action");
+        validIsuDto.setPreventive_action("Preventive Action");
+        validIsuDto.setSolved(false);
+        validIsuDto.setCreated_date(System.currentTimeMillis());
+        validIsuDto.setUpdated_date(System.currentTimeMillis());
+        validIsuDto.setSolved_date(System.currentTimeMillis());
+        validIsuDto.setResponsible_type("EMPLOYEE");
+        validIsuDto.setIssueCategory("BUG");
+        validIsuDto.setStatus("PENDING");
+        validIsuDto.setUser_uploader(1L);
+        validIsuDto.setUser_pic(1L);
+        validIsuDto.setResponsible_party(1L);
+        validIsuDto.setProject_id(1L);
+
+        validIssue = new Issue();
+        validIssue.setId(1L);
+        validIssue.setTitle(validIsuDto.getTitle());
+        validIssue.setDescription(validIsuDto.getDescription());
+        validIssue.setPlace(validIsuDto.getPlace());
+        validIssue.setImpact(validIsuDto.getImpact());
+        validIssue.setRoot_cause(validIsuDto.getRoot_cause());
+        validIssue.setDirect_cause(validIsuDto.getDirect_cause());
+        validIssue.setCorrective_action(validIsuDto.getCorrective_action());
+        validIssue.setPreventive_action(validIsuDto.getPreventive_action());
+        validIssue.setSolved(validIsuDto.isSolved());
+        validIssue.setCreated_date(validIsuDto.getCreated_date());
+        validIssue.setUpdated_date(validIsuDto.getUpdated_date());
+        validIssue.setSolved_date(validIsuDto.getSolved_date());
+        validIssue.setIssueStatus(IssueStatus.valueOf(validIsuDto.getStatus()));
+        validIssue.setIssueCategory(Category.valueOf(validIsuDto.getIssueCategory()));
+        validIssue.setResponsible_type(ResponsibleType.valueOf(validIsuDto.getResponsible_type()));
+        validIssue.setUser_uploader(validUser);
+        validIssue.setPic(validUser);
+        validIssue.setResponsible_party(validUser.getId());
+        validIssue.setProject(validProject);
     }
 
-    // Existing test cases...
+
+
+    @Test
+    void testGetAllIssuesWhenInputIsEmptyThenReturnZero() {
+        // Arrange
+        when(issueRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // Act
+        List<IssueDto> result = issueService.getAllIssues();
+
+        // Assert
+        assertNotNull(result, "The result should not be null");
+        assertEquals(0, result.size(), "The result list should be empty");
+
+        // Verify interactions
+        verify(issueRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetIssueByIdWhenInputIsValidThenReturnResult() {
+        // Arrange
+        long issueId = 1L;
+        when(issueRepository.findById(issueId)).thenReturn(validIssue);
+        when(modelMapper.map(any(Issue.class), eq(IssueDto.class))).thenReturn(new IssueDto());
+
+        // Act
+        IssueDto result = issueService.getIssueById(issueId);
+
+        // Assert
+        assertNotNull(result, "The result should not be null");
+        assertEquals(validIssue.getTitle(), result.getTitle(), "The title should match the input");
+        assertEquals(validIssue.getDescription(), result.getDescription(), "The description should match the input");
+        // Add more assertions as necessary to validate the result
+
+        // Verify interactions
+        verify(issueRepository, times(1)).findById(issueId);
+        verify(modelMapper, times(1)).map(any(Issue.class), eq(IssueDto.class));
+    }
+
+    @Test
+    void testUpdateIssueWhenInputIsValidThenReturnResult() {
+        // Arrange
+        IssueDto issueDtoToUpdate = new IssueDto();
+        issueDtoToUpdate.setId(validIssue.getId());
+        issueDtoToUpdate.setTitle("Updated Title");
+        issueDtoToUpdate.setDescription("Updated Description");
+        when(issueRepository.findById(validIssue.getId())).thenReturn(validIssue);
+        when(issueRepository.save(any(Issue.class))).thenReturn(validIssue);
+        when(modelMapper.map(any(Issue.class), eq(IssueDto.class))).thenReturn(issueDtoToUpdate);
+
+        // Act
+        IssueDto result = issueService.updateIssue(issueDtoToUpdate);
+
+        // Assert
+        assertNotNull(result, "The result should not be null");
+        assertEquals(issueDtoToUpdate.getTitle(), result.getTitle(), "The title should be updated");
+        assertEquals(issueDtoToUpdate.getDescription(), result.getDescription(), "The description should be updated");
+        // Add more assertions as necessary to validate the result
+
+        // Verify interactions
+        verify(issueRepository, times(1)).findById(validIssue.getId());
+        verify(issueRepository, times(1)).save(any(Issue.class));
+        verify(modelMapper, times(1)).map(any(Issue.class), eq(IssueDto.class));
+    }
+
+
+    @Test
+    void testCalculateTotalWhenInputIsEmptyThenReturnZero() {
+        // Arrange
+        when(issueRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // Act
+        List<IssueDto> result = issueService.getAllIssues();
+
+        // Assert
+        assertNotNull(result, "The result should not be null");
+        assertEquals(0, result.size(), "The result list should be empty");
+    }
+
 
     // New test cases...
 
@@ -846,34 +982,8 @@ class IssueServiceImplTest {
         verify(issueRepository, times(1)).save(issue);
     }
 
-    private Client createSampleClient() {
-        Client client = new Client();
-        client.setId(1L);
-        client.setName("Sample Client");
-        // Set other properties as needed for your tests
-        return client;
-    }
 
-    private Issue createSampleSavedIssue() {
-        Issue issue = new Issue();
-        issue.setId(1L);
-        issue.setTitle("Test");
-        issue.setDescription("Test");
-        issue.setPlace("Test");
-        issue.setImpact("Test");
-        issue.setRoot_cause("Test");
-        issue.setDirect_cause("Test");
-        issue.setCorrective_action("Test");
-        issue.setPreventive_action("Test");
-        issue.setSolved(true);
-        issue.setCreated_date(new Date().getTime());
-        issue.setUpdated_date(new Date().getTime());
-        issue.setIssueCategory(Category.TESTING);
-        issue.setProject(new Project());
-        issue.setUser_uploader(new User());
-        issue.setPic(new User());
-        return issue;
-    }
+
 
     @Test
     void testGetAllIssues() {
@@ -903,26 +1013,6 @@ class IssueServiceImplTest {
         verify(issueRepository, times(1)).findAll();
     }
 
-    private Issue createSampleIssue() {
-        Issue issue = new Issue();
-        issue.setId(1L);
-        issue.setTitle("Test");
-        issue.setDescription("Test");
-        issue.setPlace("Test");
-        issue.setImpact("Test");
-        issue.setRoot_cause("Test");
-        issue.setDirect_cause("Test");
-        issue.setCorrective_action("Test");
-        issue.setPreventive_action("Test");
-        issue.setSolved(true);
-        issue.setCreated_date(new Date().getTime());
-        issue.setUpdated_date(new Date().getTime());
-        issue.setIssueCategory(Category.TESTING);
-        issue.setProject(new Project());
-        issue.setUser_uploader(new User());
-        issue.setPic(new User());
-        return issue;
-    }
 
     @Test
     void testGetIssueById() {
@@ -1018,6 +1108,52 @@ class IssueServiceImplTest {
 
     @Test
     void updateStatusOfIssueList() {
+        // Arrange
+        MockitoAnnotations.openMocks(this);
+
+        // Mock data
+        List<IssueDto> inputIssues = Arrays.asList(
+                createIssueDto(1L, "IN_PROGRESS"),
+                createIssueDto(2L, "IN_PROGRESS"),
+                createIssueDto(3L, "PENDING")
+        );
+
+        // Mock repository behavior
+        when(issueRepository.findById(1L)).thenReturn(createIssue(1L, "IN_PROGRESS"));
+        when(issueRepository.findById(2L)).thenReturn(createIssue(2L, "IN_PROGRESS"));
+        when(issueRepository.findById(3L)).thenReturn(createIssue(3L, "PENDING"));
+
+        // Mock mappings
+        when(modelMapper.map(any(Issue.class), eq(IssueDto.class))).thenAnswer(invocation -> {
+            Issue issue = invocation.getArgument(0);
+            IssueDto issueDto = new IssueDto();
+            issueDto.setId(issue.getId());
+            issueDto.setStatus(issue.getIssueStatus().toString());
+
+            return issueDto;
+        });
+
+        // Act
+        List<IssueDto> updatedIssues = issueService.updateStatusOfIssueList(inputIssues);
+
+        // Assert
+        assertEquals("IN_PROGRESS", updatedIssues.get(0).getStatus());
+        assertEquals("IN_PROGRESS", updatedIssues.get(1).getStatus());
+
+        IssueDto thirdIssueDto = updatedIssues.get(2);
+        assertNotNull(thirdIssueDto, "The third IssueDto should not be null");
+        assertEquals("PENDING", thirdIssueDto.getStatus());
+
+        // Alternatively, you can use the following approach
+        for (IssueDto issueDto : updatedIssues) {
+            assertNotNull(issueDto, "IssueDto should not be null");
+            assertNotNull(issueDto.getStatus(), "Status should not be null");
+        }
+
+        // Verify interactions
+        verify(issueRepository, times(3)).findById(anyLong());
+        verify(issueRepository, times(3)).save(any(Issue.class));
+        verify(modelMapper, times(3)).map(any(Issue.class), eq(IssueDto.class));
 
     }
 
@@ -1235,55 +1371,6 @@ class IssueServiceImplTest {
         // Set other fields as needed
         return issueDto;
     }
-
-//    @Test
-//    void testGetIssuesBySolvedStatus() {
-//        // Arrange
-//        MockitoAnnotations.openMocks(this);
-//
-//        // Mock data
-//        Issue issue1 = new Issue();
-//        issue1.setId(1L);
-//        issue1.setSolved(true);
-//        User pic1 = new User();
-//        pic1.setId(101L);
-//        issue1.setPic(pic1);
-//
-//        Issue issue2 = new Issue();
-//        issue2.setId(2L);
-//        issue2.setSolved(false);
-//        User pic2 = new User();
-//        pic2.setId(102L);
-//        issue2.setPic(pic2);
-//
-//        // Mock repository behavior
-//        when(issueRepository.findAll()).thenReturn(Arrays.asList(issue1, issue2));
-//
-//        // Mock modelMapper behavior
-//        when(modelMapper.map(issue1, IssueDto.class)).thenReturn(new IssueDto());
-//        when(modelMapper.map(issue1.getPic(), UserDto.class)).thenReturn(new UserDto());
-//
-//        when(modelMapper.map(issue2, IssueDto.class)).thenReturn(new IssueDto());
-//        when(modelMapper.map(issue2.getPic(), UserDto.class)).thenReturn(new UserDto());
-//
-//        // Act
-//        List<IssueDto> result1 = issueService.getIssuesBySolvedStatus(true);
-//        List<IssueDto> result2 = issueService.getIssuesBySolvedStatus(false);
-//
-//        // Logging for debugging
-//        System.out.println("Result 1: " + result1);
-//        System.out.println("Result 2: " + result2);
-//
-//        // Assert
-//        assertEquals(1, result1.size(), "Expected one issue for solved status true");
-//        assertEquals(1, result2.size(), "Expected one issue for solved status false");
-//
-//        // Verify interactions
-//        verify(issueRepository, times(1)).findByIssueCategory(Category.BUG);  // Make sure findByIssueCategory is called once
-//        verify(modelMapper, times(1)).map(any(), eq(IssueDto.class));  // Check mapping interactions
-//        verify(modelMapper, times(1)).map(any(), eq(UserDto.class));
-//        // Add any other necessary verifications based on your actual service implementation
-//    }
 
 
 //    @Test
