@@ -2,12 +2,10 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
@@ -20,25 +18,25 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.DeliverableRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.project.ArchitectureService;
+import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class ProjectServiceImplTest {
-
-    // ... Existing fields and methods ...
-
     @Mock
     private ProjectRepository projectRepository;
 
@@ -46,116 +44,76 @@ class ProjectServiceImplTest {
     private ModelMapper modelMapper;
 
     @Mock
-    private ArchitectureService architectureService;
+    private DeliverableRepository deliverableRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private TaskRepository taskRepository;
+
+    @Mock
+    private DepartmentRepository departmentRepository;
 
     @Mock
     private ArchitectureRepository architectureRepository;
 
     @Mock
-    private TaskRepository taskRepository;
+    private DeliverableTypeServiceImpl deliverableTypeService;
 
+    @Mock
+    private ArchitectureServiceImpl architectureService;
+
+    @Mock
+    private AESImpl aes;
+
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private NotificationServiceImpl notificationService;
 
     @InjectMocks
     private ProjectServiceImpl projectService;
 
-    @Test
-    public void testSaveWhenProjectDtoHasNullFields() {
-        // Arrange
-        ProjectDto projectDto = new ProjectDto();
-        projectDto.setArchitectureDto(null);
-        projectDto.setDeliverableDto(null);
-        projectDto.setMembersUserDto(null);
 
-        // Act
-        ProjectDto result = projectService.save(projectDto);
+    public static List<Project> createSampleProjectList() {
+        List<Project> projects = new ArrayList<>();
 
-        // Assert
-        assertNotNull(result);
+        Project project1 = new Project();
+        project1.setId(1L);
+        project1.setName("Project 1");
+        project1.setClosed(false);
 
-        // Verify interactions
-        verify(projectDto, times(1)).setArchitectureDto(any());
-        verify(projectDto, times(1)).setDeliverableDto(any());
-        verify(projectDto, times(1)).setMembersUserDto(any());
-    }
+        User projectManager1 = new User();
+        projectManager1.setId(1L);
+        projectManager1.setName("Project Manager 1");
+        project1.setProjectManager(projectManager1);
 
-    @Test
-    public void testSaveWhenProjectDtoHasNonNullFields() {
-        // Arrange
-        ProjectDto projectDto = new ProjectDto();
-        projectDto.setArchitectureDto(new HashSet<>());
-        projectDto.setDeliverableDto(new ArrayList<>());
-        projectDto.setMembersUserDto(new ArrayList<>());
+        Set<User> users1 = new HashSet<>();
+        User user1 = new User();
+        user1.setId(2L);
+        user1.setName("User 1");
+        users1.add(user1);
+        project1.setUsers(users1);
 
-        // Mock the behavior of your dependencies
-        Mockito.when(architectureService.save(any(ArchitectureDto.class))).thenReturn(createMockArchitecture());
-        Mockito.when(architectureRepository.getReferenceById(Mockito.anyLong())).thenReturn(createMockArchitecture());
-        // Mock other dependencies as needed
+        // Add more details to project1 as needed...
 
-        // Act
-        ProjectDto result = projectService.save(projectDto);
+        projects.add(project1);
 
-        // Assert
-        assertNotNull(result);
+        // Create and add more projects as needed...
 
-        // Verify interactions
-        Mockito.verify(architectureService, Mockito.times(1)).save(any(ArchitectureDto.class));
-        Mockito.verify(architectureRepository, Mockito.times(1)).getReferenceById(Mockito.anyLong());
-        // Verify interactions with other mocks as needed
-    }
-
-    // ... Other test methods ...
-
-    // Create helper methods to generate mock data
-    private Architecture createMockArchitecture() {
-        // Implement logic to create a mock Architecture
-        return new Architecture();
+        return projects;
     }
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testSaveProject() {
-        // Create necessary mock data
-        ProjectDto projectDto = createMockProjectDto();
-        ArchitectureDto architectureDto = createMockArchitectureDto();
-        DeliverableDto deliverableDto = createMockDeliverableDto();
-        // Create other necessary mock data
+    void testSave() {
 
-        // Mock the behavior of your dependencies
-        Mockito.when(architectureService.save(any(ArchitectureDto.class))).thenReturn(createMockArchitecture());
-        Mockito.when(architectureRepository.getReferenceById(Mockito.anyLong())).thenReturn(createMockArchitecture());
-        // Mock other dependencies as needed
-
-        // Call the actual method
-        ProjectDto result = projectService.save(projectDto);
-
-        // Verify the behavior and assertions
-        assertNotNull(result);
-        // Add more assertions based on your specific logic
-
-        // Verify interactions with mocks
-        Mockito.verify(architectureService, Mockito.times(1)).save(any(ArchitectureDto.class));
-        Mockito.verify(architectureRepository, Mockito.times(1)).getReferenceById(Mockito.anyLong());
-        // Verify interactions with other mocks as needed
-    }
-
-    // Create helper methods to generate mock data
-    private ProjectDto createMockProjectDto() {
-
-        return new ProjectDto();
-    }
-
-    private ArchitectureDto createMockArchitectureDto() {
-
-        return new ArchitectureDto();
-    }
-
-    private DeliverableDto createMockDeliverableDto() {
-        // Implement logic to create a mock DeliverableDto
-        return new DeliverableDto();
     }
 
     @Test
@@ -179,6 +137,10 @@ class ProjectServiceImplTest {
     void testGetAllProjects() {
 
     }
+
+
+
+
 
     @Test
     void getProjectByName() {
@@ -277,7 +239,6 @@ class ProjectServiceImplTest {
         // Assert the expected result
         assertEquals(expectedCount, result);
     }
-
     @Test
     void testGetAllProjectsByProjectManagerIdWhenManagerIdIsGivenThenReturnListOfProjects() {
         // Arrange
@@ -353,6 +314,8 @@ class ProjectServiceImplTest {
         verify(projectRepository, times(1)).findAllByProjectManagerId(managerId);
     }
 
+
+
     @Test
     void testGetAllProjectsByProjectManagerIdWhenCompleteTaskCountIsCalculated() {
         // Arrange
@@ -400,6 +363,7 @@ class ProjectServiceImplTest {
         }
     }
 
+
     @Test
     void testGetAllProjectsByDepartmentIdWhenDepartmentIdIsGivenThenReturnListOfProjects() {
         // Arrange
@@ -443,6 +407,8 @@ class ProjectServiceImplTest {
             System.out.println("Tasks: " + (project != null && project.getTasks() != null ? project.getTasks().size() : "null"));
         }
     }
+
+// Add more tests for other scenarios (e.g., when there are no projects, when departmentId does not exist)
 
     @Test
     void testGetAllProjectsByDepartmentIdWhenNoProjectsThenReturnEmptyList() {
@@ -500,6 +466,7 @@ class ProjectServiceImplTest {
         // Verify interactions
         verify(projectRepository, times(1)).countAllByDepartmentId(departmentId);
     }
+
 
     @Test
     void findAllByUserId() {
@@ -566,4 +533,6 @@ class ProjectServiceImplTest {
     void getAllPM() {
 
     }
+
+    // ... Other test methods ...
 }

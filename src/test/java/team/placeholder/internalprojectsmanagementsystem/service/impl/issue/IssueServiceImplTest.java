@@ -65,45 +65,43 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void testSave() {
+    public void testSaveIssue() {
         // Arrange
-
-        // Create a sample IsuDto object
         IsuDto isuDto = new IsuDto();
         isuDto.setTitle("Test Issue");
         isuDto.setDescription("This is a test issue");
         // Set other properties of isuDto
 
-        // Create a sample Issue object
         Issue issue = new Issue();
         issue.setTitle(isuDto.getTitle());
         issue.setDescription(isuDto.getDescription());
         // Set other properties of issue
 
-        // Mock the necessary repository methods
-        when(userRepository.findById(anyLong())).thenReturn(createSampleUser());
-        when(projectRepository.findById(anyLong())).thenReturn(createSampleProject());
-        when(clientRepository.findById(anyLong())).thenReturn(createSampleClient());
-        when(issueRepository.save(any(Issue.class))).thenReturn(createSampleIssue());
+        Issue savedIssue = new Issue();
+        savedIssue.setId(1L);
+        savedIssue.setTitle(isuDto.getTitle());
+        savedIssue.setDescription(isuDto.getDescription());
+        // Set other properties of savedIssue
 
-        // Mock the mapping of User and UserDto
-        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(createSampleUserDto());
+        IssueDto expectedIssueDto = new IssueDto();
+        expectedIssueDto.setId(1L);
+        expectedIssueDto.setTitle(isuDto.getTitle());
+        expectedIssueDto.setDescription(isuDto.getDescription());
+        // Set other properties of expectedIssueDto
 
-        // Mock the mapping of Issue and IssueDto
-        when(modelMapper.map(any(Issue.class), eq(IssueDto.class))).thenReturn(createSampleIssueDto());
-
-        // Mock the notification service
-        doNothing().when(notificationService).save(anyString(), anyLong(), anyString(), any(IssueDto.class));
+        when(issueRepository.save(any(Issue.class))).thenReturn(savedIssue);
 
         // Act
-        IssueDto savedIssueDto = issueService.save(isuDto);
+        IssueDto actualIssueDto = issueService.save(isuDto);
 
         // Assert
+        assertEquals(expectedIssueDto.getId(), actualIssueDto.getId());
+        assertEquals(expectedIssueDto.getTitle(), actualIssueDto.getTitle());
+        assertEquals(expectedIssueDto.getDescription(), actualIssueDto.getDescription());
+        // Assert other properties of actualIssueDto
 
-        // Verify that the issueRepository.save method was called with the correct argument
-        verify(issueRepository).save(any(Issue.class));
-
-        // Add more assertions based on your specific requirements
+        verify(issueRepository, times(1)).save(any(Issue.class));
+        verify(notificationService, times(1)).save(anyString(), any(), anyString(), any(IssueDto.class));
     }
 
     private UserDto createSampleUserDto() {
