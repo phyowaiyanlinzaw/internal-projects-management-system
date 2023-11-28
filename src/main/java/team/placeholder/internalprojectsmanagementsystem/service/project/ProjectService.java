@@ -38,7 +38,7 @@ public interface ProjectService {
 
 
 
-    ProjectDto getProjectByUsersIdAndStatus(long userId, boolean status);
+//    ProjectDto getProjectByUsersIdAndStatus(long userId, boolean status);
 
     public void updateProjectClosed(long id, boolean condition);
 
