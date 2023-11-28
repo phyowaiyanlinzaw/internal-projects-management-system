@@ -228,6 +228,17 @@
     </div>
 
 </div>
+<div
+    class="modal fade"
+    id="alert-modal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="alert alert-success text-center" role="alert" id="alert-text"></div>
+    </div>
+</div>
 <!-- Content End -->
 <!-- fontawesome -->
 <script src="/js/fontawesome.js"></script>
@@ -540,7 +551,7 @@
             const username = $('#floatingText').val();
             const errorContainer = $('#floatingText').siblings('.error-container');
             if (username.length < 1) {
-                validatedForm = false;
+                
                 if (errorContainer.length === 0) {
                     let p = $("<p>")
                         .addClass("text-danger fs-6")
@@ -554,11 +565,13 @@
 
                 $('#floatingText').addClass('is-invalid');
                 $('#floatingText').removeClass('is-valid');
+                return false;
             } else {
-                validatedForm = true;
+               
                 errorContainer.remove();
                 $('#floatingText').addClass('is-valid');
                 $('#floatingText').removeClass('is-invalid');
+                return true;
             }
         }
 
@@ -569,7 +582,7 @@
 
             const errorContainer = $('#floatingInput').siblings('.error-container');
             if (emailRegex.test(email) === false) {
-                validatedForm = false;
+                
                 if (errorContainer.length === 0) {
                     let p = $("<p>")
                         .addClass("text-danger fs-6")
@@ -583,11 +596,13 @@
 
                 $('#floatingInput').addClass('is-invalid');
                 $('#floatingInput').removeClass('is-valid');
+                return false;
             } else {
-                validatedForm = true;
+                
                 errorContainer.remove();
                 $('#floatingInput').addClass('is-valid');
                 $('#floatingInput').removeClass('is-invalid');
+                return true;
             }
         }
 
@@ -598,7 +613,7 @@
 
             const errorContainer = $('#memberSelect').siblings('.error-container');
             if (!role ||role.length === 0) {
-                validatedForm = false;
+                
                 if (errorContainer.length === 0) {
                     let p = $("<p>")
                         .addClass("text-danger fs-6")
@@ -612,6 +627,7 @@
 
                 $('#memberSelect').addClass('is-invalid');
                 $('#memberSelect').removeClass('is-valid');
+                return false;
             } else {
 
                 if(role === 'PROJECT_MANAGER'){
@@ -622,10 +638,11 @@
                     validateProjectManager();
                 }
 
-                validatedForm = true;
+                
                 errorContainer.remove();
                 $('#memberSelect').addClass('is-valid');
                 $('#memberSelect').removeClass('is-invalid');
+                return true;
             }
         }
 
@@ -640,16 +657,18 @@
             
             console.log(projectmanager)
             if (isNaN(parseInt(projectmanager)) || parseInt(projectmanager) < 1) {
-                validatedForm = false;
+                
                 errorContainer.removeClass('d-none')
 
                 $('#projectManagerSelect').addClass('is-invalid');
                 $('#projectManagerSelect').removeClass('is-valid');
+                return false;
             } else {
-                validatedForm = true;
+                
                 errorContainer.addClass('d-none')
                 $('#projectManagerSelect').addClass('is-valid');
                 $('#projectManagerSelect').removeClass('is-invalid');
+                return true;
             }
         }
 
@@ -666,17 +685,19 @@
             console.log(parseInt(department))
             console.log(errorContainer)
             if (isNaN(parseInt(department)) || parseInt(department) < 1) {
-                validatedForm = false;
+                
 
                 errorContainer.removeClass('d-none')
 
                 $('#departmentSelect').addClass('is-invalid');
                 $('#departmentSelect').removeClass('is-valid');
+                return false;
             } else {
-                validatedForm = true;
+                
                 errorContainer.addClass('d-none')
                 $('#departmentSelect').addClass('is-valid');
                 $('#departmentSelect').removeClass('is-invalid');
+                return true;
             }
         }
 
@@ -703,17 +724,13 @@
             var departmentId = $('#departmentSelect').val();
             var projectManagerId = $('#projectManagerSelect').val();
 
-            validateUsername();
-            validateEmail();
-            validateMemberRole();
+            if(!validateUsername()) return;
+            if(!validateEmail()) return;
+            if(!validateMemberRole()) return;
             if(role === 'PROJECT_MANAGER'){
-                validateDepartment();
+                if(!validateDepartment()) return;
             } else {
-                validateProjectManager();
-            }
-
-            if(!validatedForm) {
-                return
+                if(!validateProjectManager()) return;
             }
 
             console.log("department id : ",departmentId)
@@ -745,7 +762,8 @@
                         }),
                         contentType: 'application/json',
                         success: function (data) {
-                            alert('Employee registered successfully');
+                            $("#alert-text").text("Employee Registered Successfully...");
+                            $("#alert-modal").modal("show");
                             //empty the input fields
                             $('#floatingText').val('');
                             $('#floatingInput').val('');
@@ -759,7 +777,8 @@
                             showSuccess('Employee registered successfully');
                         },
                         error: function (data, xhr) {
-                            showError('Error registering employee');
+                            $("#alert-text").text("Employee Registration Failed...");
+                            $("#alert-modal").modal("show");
                             $('#register-employee-btn').html('Register').prop('disabled', false);
                             $('#alert-danger').show();
                         },
