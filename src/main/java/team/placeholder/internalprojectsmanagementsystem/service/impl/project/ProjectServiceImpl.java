@@ -627,16 +627,6 @@ public class ProjectServiceImpl implements ProjectService {
 
 
 
-    public List<UserDto> getAllPM() {
-        List<Project> projectsWithPm = projectRepository.findAllByProjectManagerIsNotNull();
-        List<UserDto> userDtos = projectsWithPm.stream()
-                .map(project -> modelMapper.map(project.getProjectManager(), UserDto.class))
-                .collect(Collectors.toList());
-        return userDtos;
-    }
-
-
-
     public List<ProListDto> newProjectLook(Role role, long id) {
 
         List<ProListDto> ProListDto = new ArrayList<>();
@@ -689,12 +679,12 @@ public class ProjectServiceImpl implements ProjectService {
                 long totalTaskCount = project.getTasks().stream().filter(task -> !task.isDeleted()).count();
                 long completeTaskCount = project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted()).count();
 
-                log.info('"' + project.getId() + '"' + " total task count : " + totalTaskCount);
-                log.info('"' + project.getId() + '"' + " complete task count : " + completeTaskCount);
+//                log.info('"' + project.getId() + '"' + " total task count : " + totalTaskCount);
+//                log.info('"' + project.getId() + '"' + " complete task count : " + completeTaskCount);
 
                 proListDto.setPercentage(totalTaskCount == 0 ? 0 : (long) (((double)completeTaskCount / totalTaskCount) * 100.0));
 
-                log.info('"' + project.getId() + '"' + " percentage : " + proListDto.getPercentage() + "%" );
+//                log.info('"' + project.getId() + '"' + " percentage : " + proListDto.getPercentage() + "%" );
 
                 List<TasksDto> tasksDtoList = new ArrayList<>();
 

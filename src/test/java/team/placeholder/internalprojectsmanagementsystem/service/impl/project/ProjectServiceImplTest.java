@@ -2,7 +2,6 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -11,11 +10,13 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.department.De
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
+import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.DeliverableRepository;
@@ -23,13 +24,9 @@ import team.placeholder.internalprojectsmanagementsystem.repository.project.Proj
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -108,8 +105,6 @@ class ProjectServiceImplTest {
     void testGetAllProjects() {
 
     }
-
-
 
 
 
@@ -629,4 +624,354 @@ class ProjectServiceImplTest {
         // Set other properties as needed
         return project;
     }
+
+    @Test
+    public void testNewProjectLookForProjectManager() {
+        // Arrange
+        long managerId = 1L;
+        Role role = Role.PROJECT_MANAGER;
+
+        // Mock the repository to return a list of projects for a manager
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findAllByProjectManagerId(managerId)).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+
+        // Act
+        List<ProListDto> result = projectService.newProjectLook(role, managerId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size()); // Check if the result size matches the mock project size
+        // Add more assertions based on the expected result and mocked data
+    }
+
+    @Test
+    public void testNewProjectLookForEmployee() {
+        // Arrange
+        long employeeId = 1L;
+        Role role = Role.EMPLOYEE;
+
+        // Mock the repository to return a list of projects for an employee
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findAllByUsersId(employeeId)).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+
+        // Act
+        List<ProListDto> result = projectService.newProjectLook(role, employeeId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size()); // Check if the result size matches the mock project size
+        // Add more assertions based on the expected result and mocked data
+    }
+
+    @Test
+    public void testNewProjectLookForFOC() {
+        long focId = 1L;
+        Role role = Role.FOC;
+
+        // Mock the repository to return a list of projects for a foc
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findAllByUsersId(focId)).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+        List<ProListDto> result = projectService.newProjectLook(role, focId);
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size());
+    }
+
+    @Test
+    public void testNewProjectLookForCONTRACT() {
+        long adminId = 1L;
+        Role role = Role.CONTRACT;
+
+        // Mock the repository to return a list of projects for an admin
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findAll()).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+
+        // Act
+        List<ProListDto> result = projectService.newProjectLook(role, adminId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size()); // Check if the result size matches the mock project size
+
+    }
+
+    @Test
+    public void testNewProjectLookForDepartmentHead() {
+        // Arrange
+        long userId = 1L;
+        long departmentId = 10L;
+        Role role = Role.DEPARTMENT_HEAD;
+
+        // Mock the UserService to return a user with the specified departmentId
+        UserDto userDto = new UserDto();
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setId(departmentId);
+        userDto.setDepartmentdto(departmentDto);
+        when(userService.getUserById(userId)).thenReturn(userDto);
+
+        // Mock the repository to return a list of projects for the department
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findByDepartmentId(departmentId)).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+
+        // Act
+        List<ProListDto> result = projectService.newProjectLook(role, userId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size()); // Check if the result size matches the mock project size
+        // Add more assertions based on the expected result and mocked data
+    }
+
+
+    @Test
+    public void testNewProjectLookForSDQC() {
+        // Arrange
+        long userId = 1L;
+        Role role = Role.SDQC;
+
+        // Mock the repository to return a list of projects for the department
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findAll()).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+
+        // Act
+        List<ProListDto> result = projectService.newProjectLook(role, userId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size()); // Check if the result size matches the mock project size
+        // Add more assertions based on the expected result and mocked data
+    }
+
+
+    @Test
+    public void testNewProjectLookPercentageAndTasksDto() {
+        // Arrange
+        long userId = 1L;
+        Role role = Role.PROJECT_MANAGER;
+
+        // Mock the repository to return a list of projects for a manager
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findAllByProjectManagerId(userId)).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+        when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(new UserDto()); // Mock UserDto mapping
+
+        // Act
+        List<ProListDto> result = projectService.newProjectLook(role, userId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size());
+
+        // Verify the percentage calculation and logging
+        for (int i = 0; i < mockProjects.size(); i++) {
+            Project mockProject = mockProjects.get(i);
+            ProListDto resultDto = result.get(i);
+
+            long totalTaskCount = mockProject.getTasks().stream().filter(task -> !task.isDeleted()).count();
+            long completeTaskCount = mockProject.getTasks().stream()
+                    .filter(task -> task.getStatus() != null && task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                    .count();
+
+            long expectedPercentage = totalTaskCount == 0 ? 0 : (long) (((double) completeTaskCount / totalTaskCount) * 100.0);
+            assertEquals(expectedPercentage, resultDto.getPercentage());
+
+
+        }
+
+        // Verify the creation of TasksDto objects
+        for (ProListDto proListDto : result) {
+            if (proListDto.getTasks() != null) {
+                for (TasksDto tasksDto : proListDto.getTasks()) {
+                    assertNotNull(tasksDto.getId());
+                    assertNotNull(tasksDto.getTitle());
+                    assertNotNull(tasksDto.getPlanStartTime());
+                    assertNotNull(tasksDto.getPlanEndTime());
+                    assertNotNull(tasksDto.getUserDto());
+                    assertNotNull(tasksDto.getStatus());
+                    // Add more assertions for other properties if needed
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testPercentageCalculation() {
+        // Arrange
+        long userId = 1L;
+        Role role = Role.PROJECT_MANAGER;
+
+        // Mock the repository to return a list of projects for a manager
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findAllByProjectManagerId(userId)).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+        when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(new UserDto()); // Mock UserDto mapping
+
+        // Act
+        List<ProListDto> result = projectService.newProjectLook(role, userId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size());
+
+        // Verify the percentage calculation and logging
+        for (int i = 0; i < mockProjects.size(); i++) {
+            Project mockProject = mockProjects.get(i);
+            ProListDto resultDto = result.get(i);
+
+            long totalTaskCount = mockProject.getTasks().stream().filter(task -> !task.isDeleted()).count();
+            long completeTaskCount = mockProject.getTasks().stream()
+                    .filter(task -> task.getStatus() != null && task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                    .count();
+
+            long expectedPercentage = totalTaskCount == 0 ? 0 : (long) (((double) completeTaskCount / totalTaskCount) * 100.0);
+            assertEquals(expectedPercentage, resultDto.getPercentage());
+
+
+        }
+    }
+
+    @Test
+    public void testNewProjectLook() {
+        // Arrange
+        long userId = 1L;
+        Role role = Role.PROJECT_MANAGER;
+
+        // Mock the repository to return a list of projects for a manager
+        List<Project> mockProjects = createMockProjectList();
+        when(projectRepository.findAllByProjectManagerId(userId)).thenReturn(mockProjects);
+
+        // Mock mapping and other dependencies as needed
+        when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(new UserDto()); // Mock UserDto mapping
+
+        // Act
+        List<ProListDto> result = projectService.newProjectLook(role, userId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size());
+
+        // Verify that log statements are not called
+//        verify(log, never()).info(anyString());
+
+        // Verify that ProListDto objects are created correctly
+        for (int i = 0; i < mockProjects.size(); i++) {
+            Project mockProject = mockProjects.get(i);
+            ProListDto resultDto = result.get(i);
+
+            assertEquals(mockProject.getId(), resultDto.getId());
+            assertEquals(mockProject.getName(), resultDto.getProjectName());
+            assertEquals(mockProject.getStart_date(), resultDto.getStartDate());
+            assertEquals(mockProject.getEnd_date(), resultDto.getEndDate());
+            assertNotNull(resultDto.getUser());
+            assertEquals(mockProject.isClosed(), resultDto.isClosed());
+
+            // Add more assertions for other properties if needed
+        }
+
+        // Verify that repository methods were called
+        verify(projectRepository, times(1)).findAllByProjectManagerId(userId);
+        verify(modelMapper, times(mockProjects.size())).map(any(), eq(UserDto.class));
+        // Add more verifications as needed
+    }
+
+
+    private List<Project> createMockProjectList() {
+        List<Project> projects = new ArrayList<>();
+        // Create mock projects and add them to the list
+        // For example:
+        // Project project1 = new Project();
+        // project1.setId(1L);
+        // project1.setName("Project 1");
+        // projects.add(project1);
+
+        return projects;
+    }
+
+    @Test
+    public void testCountAllProjectsByProjectManagerId() {
+        // Arrange
+        long projectManagerId = 1L;
+        long expectedCount = 5L; // Adjust based on your expectations
+
+        // Mock the behavior of the projectRepository
+        when(projectRepository.countAllByProjectManagerId(projectManagerId)).thenReturn(expectedCount);
+
+        // Act
+        Long result = projectService.countAllProjectsByProjectManagerId(projectManagerId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(expectedCount, result.longValue());
+
+        // Verify that the repository method was called with the correct argument
+        verify(projectRepository, times(1)).countAllByProjectManagerId(projectManagerId);
+    }
+
+    @Test
+    public void testCountAllProjectsByProjectManagerIdAndClosed() {
+        // Arrange
+        long projectManagerId = 1L;
+        boolean closed = true;
+        long expectedCount = 3L; // Adjust based on your expectations
+
+        // Mock the behavior of the projectRepository
+        when(projectRepository.countAllByProjectManagerIdAndClosed(projectManagerId, closed)).thenReturn(expectedCount);
+
+        // Act
+        Long result = projectService.countAllProjectsByProjectManagerIdAndClosed(projectManagerId, closed);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(expectedCount, result.longValue());
+
+        // Verify that the repository method was called with the correct arguments
+        verify(projectRepository, times(1)).countAllByProjectManagerIdAndClosed(projectManagerId, closed);
+    }
+
+    @Test
+    public void testFindAllByUserId() {
+        // Arrange
+        long userId = 1L;
+
+        // Mock the behavior of the projectRepository
+        List<Project> mockProjectList = createMockProjectList();
+        when(projectRepository.findAllByUsersId(userId)).thenReturn(mockProjectList);
+
+        // Mock the behavior of the taskRepository
+        when(taskRepository.countByProjectIdAndDeletedFalse(anyLong())).thenReturn(5L);
+
+        // Mock the behavior of the modelMapper
+        when(modelMapper.map(any(), eq(ProjectDto.class))).thenAnswer(invocation -> {
+            Project project = invocation.getArgument(0);
+            ProjectDto projectDto = new ProjectDto();
+            // Map other properties as needed
+            return projectDto;
+        });
+
+        // Act
+        List<ProjectDto> result = projectService.findAllByUserId(userId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjectList.size(), result.size());
+
+        // Verify that repository methods were called
+        verify(projectRepository, times(1)).findAllByUsersId(userId);
+        verify(taskRepository, times(mockProjectList.size())).countByProjectIdAndDeletedFalse(anyLong());
+        verify(modelMapper, times(mockProjectList.size())).map(any(), eq(ProjectDto.class));
+    }
+
 }

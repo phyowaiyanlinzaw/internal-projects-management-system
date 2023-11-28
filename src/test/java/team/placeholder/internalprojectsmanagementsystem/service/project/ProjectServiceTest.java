@@ -218,11 +218,7 @@ class ProjectServiceTest {
         assertEquals(expectedProjectList, result);
     }
 
-    @Test
-    public void testGetProjectByUsersIdAndStatus() {
 
-
-    }
 
     @Test
     public void testUpdateProjectClosed() {
