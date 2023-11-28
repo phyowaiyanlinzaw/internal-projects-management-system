@@ -9,7 +9,39 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProListDtoTest {
+public class ProListDtoTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Create a ProListDto using the default constructor
+        ProListDto proListDto = new ProListDto();
+
+        // Verify that the default values are set
+        assertEquals(0L, proListDto.getId());
+        assertNull(proListDto.getProjectName());
+        assertEquals(0L, proListDto.getPercentage());
+        assertEquals(0L, proListDto.getStartDate());
+        assertEquals(0L, proListDto.getEndDate());
+        assertNull(proListDto.getUser());
+        assertNull(proListDto.getTasks());
+        assertFalse(proListDto.isClosed());
+    }
+
+    @Test
+    public void testParameterizedConstructor() {
+        // Create a ProListDto using the parameterized constructor
+        ProListDto proListDto = new ProListDto(1L, "Project A", 75L, 1636600000000L, 1636700000000L, new UserDto(), new ArrayList<>());
+
+        // Verify that the values are set correctly
+        assertEquals(1L, proListDto.getId());
+        assertEquals("Project A", proListDto.getProjectName());
+        assertEquals(75L, proListDto.getPercentage());
+        assertEquals(1636600000000L, proListDto.getStartDate());
+        assertEquals(1636700000000L, proListDto.getEndDate());
+        assertNotNull(proListDto.getUser());
+        assertNotNull(proListDto.getTasks());
+        assertFalse(proListDto.isClosed());
+    }
 
     @Test
     public void testGetterAndSetter() {
@@ -59,4 +91,7 @@ class ProListDtoTest {
         assertFalse(proListDto.isClosed());
     }
 
+    // Add more tests for edge cases or specific scenarios
+
+    // ... rest of the tests
 }
