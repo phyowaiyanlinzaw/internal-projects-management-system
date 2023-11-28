@@ -2,12 +2,10 @@ package team.placeholder.internalprojectsmanagementsystem.service.impl.project;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
@@ -20,25 +18,26 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.DeliverableRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
-import team.placeholder.internalprojectsmanagementsystem.service.project.ArchitectureService;
+import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class ProjectServiceImplTest {
-
-    // ... Existing fields and methods ...
-
     @Mock
     private ProjectRepository projectRepository;
 
@@ -46,116 +45,46 @@ class ProjectServiceImplTest {
     private ModelMapper modelMapper;
 
     @Mock
-    private ArchitectureService architectureService;
+    private DeliverableRepository deliverableRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private TaskRepository taskRepository;
+
+    @Mock
+    private DepartmentRepository departmentRepository;
 
     @Mock
     private ArchitectureRepository architectureRepository;
 
     @Mock
-    private TaskRepository taskRepository;
+    private DeliverableTypeServiceImpl deliverableTypeService;
 
+    @Mock
+    private ArchitectureServiceImpl architectureService;
+
+    @Mock
+    private AESImpl aes;
+
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private NotificationServiceImpl notificationService;
 
     @InjectMocks
     private ProjectServiceImpl projectService;
 
-    @Test
-    public void testSaveWhenProjectDtoHasNullFields() {
-        // Arrange
-        ProjectDto projectDto = new ProjectDto();
-        projectDto.setArchitectureDto(null);
-        projectDto.setDeliverableDto(null);
-        projectDto.setMembersUserDto(null);
-
-        // Act
-        ProjectDto result = projectService.save(projectDto);
-
-        // Assert
-        assertNotNull(result);
-
-        // Verify interactions
-        verify(projectDto, times(1)).setArchitectureDto(any());
-        verify(projectDto, times(1)).setDeliverableDto(any());
-        verify(projectDto, times(1)).setMembersUserDto(any());
-    }
-
-    @Test
-    public void testSaveWhenProjectDtoHasNonNullFields() {
-        // Arrange
-        ProjectDto projectDto = new ProjectDto();
-        projectDto.setArchitectureDto(new HashSet<>());
-        projectDto.setDeliverableDto(new ArrayList<>());
-        projectDto.setMembersUserDto(new ArrayList<>());
-
-        // Mock the behavior of your dependencies
-        Mockito.when(architectureService.save(any(ArchitectureDto.class))).thenReturn(createMockArchitecture());
-        Mockito.when(architectureRepository.getReferenceById(Mockito.anyLong())).thenReturn(createMockArchitecture());
-        // Mock other dependencies as needed
-
-        // Act
-        ProjectDto result = projectService.save(projectDto);
-
-        // Assert
-        assertNotNull(result);
-
-        // Verify interactions
-        Mockito.verify(architectureService, Mockito.times(1)).save(any(ArchitectureDto.class));
-        Mockito.verify(architectureRepository, Mockito.times(1)).getReferenceById(Mockito.anyLong());
-        // Verify interactions with other mocks as needed
-    }
-
-    // ... Other test methods ...
-
-    // Create helper methods to generate mock data
-    private Architecture createMockArchitecture() {
-        // Implement logic to create a mock Architecture
-        return new Architecture();
-    }
-
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testSaveProject() {
-        // Create necessary mock data
-        ProjectDto projectDto = createMockProjectDto();
-        ArchitectureDto architectureDto = createMockArchitectureDto();
-        DeliverableDto deliverableDto = createMockDeliverableDto();
-        // Create other necessary mock data
+    void testSave() {
 
-        // Mock the behavior of your dependencies
-        Mockito.when(architectureService.save(any(ArchitectureDto.class))).thenReturn(createMockArchitecture());
-        Mockito.when(architectureRepository.getReferenceById(Mockito.anyLong())).thenReturn(createMockArchitecture());
-        // Mock other dependencies as needed
-
-        // Call the actual method
-        ProjectDto result = projectService.save(projectDto);
-
-        // Verify the behavior and assertions
-        assertNotNull(result);
-        // Add more assertions based on your specific logic
-
-        // Verify interactions with mocks
-        Mockito.verify(architectureService, Mockito.times(1)).save(any(ArchitectureDto.class));
-        Mockito.verify(architectureRepository, Mockito.times(1)).getReferenceById(Mockito.anyLong());
-        // Verify interactions with other mocks as needed
-    }
-
-    // Create helper methods to generate mock data
-    private ProjectDto createMockProjectDto() {
-
-        return new ProjectDto();
-    }
-
-    private ArchitectureDto createMockArchitectureDto() {
-
-        return new ArchitectureDto();
-    }
-
-    private DeliverableDto createMockDeliverableDto() {
-        // Implement logic to create a mock DeliverableDto
-        return new DeliverableDto();
     }
 
     @Test
@@ -180,8 +109,12 @@ class ProjectServiceImplTest {
 
     }
 
+
+
+
+
     @Test
-    void getProjectByName() {
+    void testGetProjectByName() {
         String projectName = "TestProject";
         Project project = new Project();
         project.setName(projectName);
@@ -206,7 +139,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void updateProject() {
+    void testUpdateProject() {
         long projectId = 1L;
         ProjectDto projectDto = new ProjectDto();
         projectDto.setId(projectId);
@@ -241,7 +174,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void countAllProjects() {
+    void testCountAllProjects() {
 
         long expectedCount = 10L; // Set the expected count based on your scenario
 
@@ -260,7 +193,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void countAllProjectsByUsersId() {
+    void testCountAllProjectsByUsersId() {
         long userId = 1L; // Set the user ID based on your scenario
         long expectedCount = 5L; // Set the expected count based on your scenario
 
@@ -277,7 +210,6 @@ class ProjectServiceImplTest {
         // Assert the expected result
         assertEquals(expectedCount, result);
     }
-
     @Test
     void testGetAllProjectsByProjectManagerIdWhenManagerIdIsGivenThenReturnListOfProjects() {
         // Arrange
@@ -353,6 +285,8 @@ class ProjectServiceImplTest {
         verify(projectRepository, times(1)).findAllByProjectManagerId(managerId);
     }
 
+
+
     @Test
     void testGetAllProjectsByProjectManagerIdWhenCompleteTaskCountIsCalculated() {
         // Arrange
@@ -400,6 +334,7 @@ class ProjectServiceImplTest {
         }
     }
 
+
     @Test
     void testGetAllProjectsByDepartmentIdWhenDepartmentIdIsGivenThenReturnListOfProjects() {
         // Arrange
@@ -443,6 +378,8 @@ class ProjectServiceImplTest {
             System.out.println("Tasks: " + (project != null && project.getTasks() != null ? project.getTasks().size() : "null"));
         }
     }
+
+// Add more tests for other scenarios (e.g., when there are no projects, when departmentId does not exist)
 
     @Test
     void testGetAllProjectsByDepartmentIdWhenNoProjectsThenReturnEmptyList() {
@@ -501,31 +438,105 @@ class ProjectServiceImplTest {
         verify(projectRepository, times(1)).countAllByDepartmentId(departmentId);
     }
 
+
     @Test
     void findAllByUserId() {
+
+    }
+
+
+
+    @Test
+    void testGetAllProjectsByDepartmentNameWhenDepartmentNameIsGivenThenReturnListOfProjects() {
+        // Arrange
+        String departmentName = "TestDepartment";
+        List<Project> mockProjectList = Arrays.asList(new Project(), new Project(), new Project());
+        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(mockProjectList);
+
+        // Mocking modelMapper mappings
+        when(modelMapper.map(any(Project.class), eq(ProjectDto.class))).thenReturn(new ProjectDto());
+        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(Deliverable.class), eq(DeliverableDto.class))).thenReturn(new DeliverableDto());
+        when(modelMapper.map(any(DeliverableType.class), eq(DeliverableTypeDto.class))).thenReturn(new DeliverableTypeDto());
+        when(modelMapper.map(any(Department.class), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());
+        when(modelMapper.map(any(Amount.class), eq(AmountDto.class))).thenReturn(new AmountDto());
+        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
+        when(modelMapper.map(any(Review.class), eq(ReviewDto.class))).thenReturn(new ReviewDto());
+        when(modelMapper.map(any(SystemOutLine.class), eq(SystemOutLineDto.class))).thenReturn(new SystemOutLineDto());
+        when(modelMapper.map(isNull(), eq(UserDto.class))).thenReturn(new UserDto());  // Handle null for UserDto
+        when(modelMapper.map(isNull(), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());  // Handle null for DepartmentDto
+        // ... add similar lines for other mappings
+
+        // Act
+        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjectList.size(), result.size());
+
+        // Log additional information for troubleshooting
+        for (Project project : mockProjectList) {
+            System.out.println("Project: " + (project != null ? project.getName() : "null"));
+
+            if (project != null && project.getProjectManager() != null) {
+                System.out.println("Project manager: " + project.getProjectManager().getName());
+            } else {
+                System.out.println("Project manager: null");
+            }
+
+            System.out.println("Deliverables: " + (project != null && project.getDeliverables() != null ? project.getDeliverables().size() : "null"));
+            System.out.println("Users: " + (project != null && project.getUsers() != null ? project.getUsers().size() : "null"));
+            System.out.println("Tasks: " + (project != null && project.getTasks() != null ? project.getTasks().size() : "null"));
+        }
     }
 
     @Test
-    void getAllProjectsByDepartmentName() {
+    void testGetAllProjectsByDepartmentNameWhenNoProjectsThenReturnEmptyList() {
+        // Arrange
+        String departmentName = "TestDepartment";
+        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        // Verify interactionsissue_ledgar
+        verify(projectRepository, times(1)).findByDepartmentName(departmentName);
+        verifyNoInteractions(modelMapper);
+        verifyNoInteractions(taskRepository);
+    }
+
+    @Test
+    void testGetAllProjectsByDepartmentNameWhenIdDoesNotExistThenReturnEmptyList() {
+        // Arrange
+        String departmentName = "TestDepartment";
+        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        // Verify interactions
+        verify(projectRepository, times(1)).findByDepartmentName(departmentName);
+        verifyNoInteractions(modelMapper);
+        verifyNoInteractions(taskRepository);
     }
 
     @Test
     void countTaskById() {
     }
 
-    @Test
-    void getProjectByUsersIdAndStatus() {
 
-    }
+
 
     @Test
-    void calculateEndDateMillis() {
-
-
-    }
-
-    @Test
-    void convertMillisToLocalDate() {
+    void testConvertMillisToLocalDate() {
         long millis = 1637347200000L; // Replace this with the millis value you want to test
         LocalDate expectedLocalDate = LocalDate.of(2021, 11, 20); // Replace this with the expected local date
 
@@ -535,7 +546,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void getAllClientsFromProjects() {
+    void testGetAllClientsFromProjects() {
         Project project1 = new Project(); // Create a sample project with a client
         // Add more sample projects as needed
 
@@ -563,7 +574,59 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void getAllPM() {
+    public void testUpdateUserListInProject() {
+        // Create mock data
+        long projectId = 1L;
 
+
+        List<UserDto> users = Arrays.asList(
+                new UserDto(),
+                new UserDto()
+
+        );
+
+
+
+        Project project = createTestProject(projectId);
+        Set<User> usersSet = users.stream().map(userDto -> createTestUser(userDto.getId())).collect(Collectors.toSet());
+
+        // Mock the behavior of projectRepository.findById()
+        when(projectRepository.findById(projectId)).thenReturn(project);
+
+        // Mock the behavior of userRepository.getReferenceById()
+        for (UserDto userDto : users) {
+            User user = createTestUser(userDto.getId());
+            when(userRepository.getReferenceById(userDto.getId())).thenReturn(user);
+        }
+
+        // Mock the behavior of aes.getAvailableUserByUserId() and aes.save()
+        for (User user : usersSet) {
+            AvailableUser avu = new AvailableUser(); // Create a mock or use a real instance if needed
+            when(aes.getAvailableUserByUserId(user.getId())).thenReturn(avu);
+        }
+
+        // Call the method you want to test
+        projectService.updateUserListInProject(projectId, users);
+
+        // Verify interactions
+        verify(projectRepository, times(1)).findById(projectId);
+        verify(userRepository, times(users.size())).getReferenceById(anyLong());
+        verify(aes, times(usersSet.size())).getAvailableUserByUserId(anyLong());
+        verify(aes, times(usersSet.size())).save(any(AvailableUser.class));
+        verify(projectRepository, times(1)).save(project);
+    }
+
+    private User createTestUser(long id) {
+        User user = new User();
+        user.setId(id);
+        // Set other properties as needed
+        return user;
+    }
+
+    private Project createTestProject(long id) {
+        Project project = new Project();
+        project.setId(id);
+        // Set other properties as needed
+        return project;
     }
 }
