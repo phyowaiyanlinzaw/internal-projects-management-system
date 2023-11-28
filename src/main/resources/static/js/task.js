@@ -275,6 +275,19 @@ $('#project-open-close').change(function () {
 // ?
 var userId;
 
+let membersList = [];
+
+const assignedMemberTagify = document.getElementById("pm-assigned-member-tagify");
+
+let tagify = new Tagify(assignedMemberTagify, {
+    enforceWhitelist: true,
+    mode: "select",
+    whitelist: membersList.map((member) => {
+        return { id: member.id, value: member.name + " | " + member.role };
+    }),
+    originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
+});
+
 // get the project start date and end date
 
 
@@ -313,6 +326,25 @@ $(
             minDate: new Date(parseInt(projectStartDateElement.innerText)),
             maxDate: new Date(parseInt(projectEndDateElement.innerText)),
             dateFormat: 'yy-mm-dd',
+            onSelect: function (dateText, inst) {
+
+
+                const startDate = $('#pm-task-detail-start-date').val();
+                const endDate = $("#pm-task-detail-due-date").val();
+
+                const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
+
+                $("#plan-hours").val(duration * 7)
+
+                validatePlanEndTime();
+
+                validatePlanStartTime()
+                if (dateText !== "") {
+                    var dateObject = $(this).datepicker('getDate');
+                    $("#pm-task-detail-due-date").datepicker('option', 'minDate', dateObject);
+
+                }
+            }
         })
 
         $("#end_date").datepicker({
@@ -333,7 +365,7 @@ $(
 const projectId = document.getElementById("projectId").innerText;
 
 // Function to fetch the members' list from the backend API
-let membersList = [];
+
 
 // fetch the member list from the backend on load 
 $.ajax({
@@ -533,6 +565,7 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
 
         //hide title
         document.getElementById("pm-task-title").classList.remove("d-none");
+        document.querySelector('#pm-task-title-input').classList.remove("is-invalid")
         //show input
         document.getElementById("pm-task-title-input").classList.add("d-none");
 
@@ -545,10 +578,19 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
 
         document.getElementById("pm-assigned-member-tagify").classList.add("d-none")
         document.querySelector('.tagify.editable-input').classList.add("d-none")
+        tagify.DOM.scope.classList.remove('is-invalid', 'border', 'border-danger');
         document.getElementById("pm-assigned-member-span").classList.remove("d-none")
 
         //show the edit button
         editBtn.classList.remove("d-none");
+
+        document.querySelector('#pm-task-detail-start-date').classList.remove("is-invalid")
+
+        document.querySelector('#pm-task-detail-due-date').classList.remove("is-invalid")
+
+        document.querySelector('#pm-plan-edit-hours').classList.remove("is-invalid")
+
+        document.querySelector('#pm-actual-edit-hours').classList.remove("is-invalid")
 
         // don't let the button close modal
         event.preventDefault();
@@ -600,17 +642,6 @@ document.querySelector("#pm-task-details").addEventListener("shown.bs.modal", as
 
 const saveBtn = document.getElementById("save-edit-btn");
 
-const assignedMemberTagify = document.getElementById("pm-assigned-member-tagify");
-
-let tagify = new Tagify(assignedMemberTagify, {
-    enforceWhitelist: true,
-    mode: "select",
-    whitelist: membersList.map((member) => {
-        return { id: member.id, value: member.name + " | " + member.role };
-    }),
-    originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
-});
-
 document.querySelector("#pm-task-details").addEventListener("show.bs.modal", function () {
 
     tagify.DOM.scope.classList.add('d-none');
@@ -633,6 +664,23 @@ document.querySelector("#pm-task-details").addEventListener("show.bs.modal", fun
     console.log("this suck", thisSuck)
     console.log(tagify)
     tagify.settings.whitelist = newWhitelist;
+
+});
+
+document.querySelector("#pm-task-details").addEventListener("hidden.bs.modal", function () {
+    tagify.DOM.scope.classList.remove('border', 'border-danger', 'is-invalid');
+
+    document.querySelector('#pm-task-title-input').classList.remove("is-invalid")
+
+    document.querySelector('#pm-description-editor').classList.remove("is-invalid")
+
+    document.querySelector('#pm-task-detail-start-date').classList.remove("is-invalid")
+
+    document.querySelector('#pm-task-detail-due-date').classList.remove("is-invalid")
+
+    document.querySelector('#pm-plan-edit-hours').classList.remove("is-invalid")
+
+    document.querySelector('#pm-actual-edit-hours').classList.remove("is-invalid")
 
 });
 
@@ -716,6 +764,9 @@ saveBtn.addEventListener("click", function (event) {
     const assignedMemberSpan = document.getElementById("pm-assigned-member-span")
     const assignedMemberTagify = document.getElementById("pm-assigned-member-tagify")
     const description = document.getElementById("pm-description-editor")
+    const sDate = document.getElementById("pm-task-detail-start-date")
+    const eDate = document.getElementById("pm-task-detail-due-date")
+    const editPlanHour = document.getElementById("pm-plan-edit-hours")
 
     console.log($("#pm-task-title-input").val(),
         $("#pm-description-editor").val(),
@@ -727,29 +778,36 @@ saveBtn.addEventListener("click", function (event) {
         userId)
 
     if ($("#pm-task-title-input").val() === "") {
+
+        titleInput.classList.add("is-invalid")
         return
     }
     if ($("#pm-description-editor").val() === "") {
-        return
-    }
-    if ($("#pm-task-detail-start-date").val() === "") {
-        return
-    }
-    if ($("#pm-task-detail-due-date").val() === "") {
-        return
-    }
-    if ($("#pm-plan-edit-hours").val() === "") {
-        return
-    }
-    if ($("#pm-task-group").val() === "") {
-        return
-    }
-    if ($("#pm-actual-edit-hours").val() === "") {
+        description.classList.add("is-invalid")
         return
     }
     if (!userId) {
+        console.log(tagify)
+        tagify.DOM.scope.classList.add('is-invalid', 'border', 'border-danger');
         return
     }
+    if ($("#pm-task-detail-start-date").val() === "") {
+        sDate.classList.add("is-invalid")
+        return
+    }
+    if ($("#pm-task-detail-due-date").val() === "") {
+        eDate.classList.add("is-invalid")
+        return
+    }
+    if ($("#pm-plan-edit-hours").val() === "") {
+        editPlanHour.classList.add("is-invalid")
+        return
+    }
+    if ($("#pm-actual-edit-hours").val() === "") {
+        document.getElementById("pm-actual-edit-hours").classList.add("is-invalid")
+        return
+    }
+    
 
     //hide title
     document.getElementById("pm-task-title").classList.remove("d-none");
@@ -814,7 +872,15 @@ saveBtn.addEventListener("click", function (event) {
             $(`#assigned-member-span-${response.id}`).text(response.userDto.name)
             title.textContent = response.title
             titleInput.value = response.title
-            taskGroupSpan.innerText = response.tasksGroup
+
+            if(response.tasksGroup === 'A') {
+                taskGroupSpan.innerText = "A - Related With Project Development"
+            } else if(response.tasksGroup === 'B') {
+                taskGroupSpan.innerText = "B - Training"
+            } else {
+                taskGroupSpan.innerText = "C - Idling"
+            }
+
             assignedMemberSpan.innerText = response.userDto.name + " | " + response.userDto.role
             assignedMemberTagify.value = response.userDto.name + " | " + response.userDto.role
             description.value = response.description

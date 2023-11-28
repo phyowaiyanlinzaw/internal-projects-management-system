@@ -2399,13 +2399,14 @@
                 // Check if data is not empty
                 if (data && data.length > 0) {
                     // Loop through the retrieved data and create content for each item
+                    document.querySelector('#no-result').classList.add('d-none')
                     data.forEach(item => {
                         const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
 
                     });
                 } else {
-                    sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                    document.querySelector('#no-result').classList.remove('d-none')
                 }
             },
 
@@ -2444,13 +2445,15 @@
                 // Check if data is not empty
                 if (data && data.length > 0) {
                     // Loop through the retrieved data and create content for each item
+                    document.querySelector('#no-result').classList.add('d-none')
                     data.forEach(item => {
                         const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
                     });
+                    
                 } else {
                     // Handle case when data is empty
-                    sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                    document.querySelector('#no-result').classList.remove('d-none')
                 }
             },
 
@@ -2490,13 +2493,15 @@
                 // Check if data is not empty
                 if (data && data.length > 0) {
                     // Loop through the retrieved data and create content for each item
+                    document.querySelector('#no-result').classList.add('d-none')
                     data.forEach(item => {
                         const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
                     });
+                    
                 } else {
                     // Handle case when data is empty
-                    sortContainer.html('<p style="text-align: center;">No results found.</p>');
+                    document.querySelector('#no-result').classList.remove('d-none')
                 }
             },
 
