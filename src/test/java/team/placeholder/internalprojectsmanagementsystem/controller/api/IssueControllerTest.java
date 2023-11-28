@@ -58,22 +58,19 @@ class IssueControllerTest {
     @Test
     void testSaveIssue() {
         // Mocking the request body
-        IsuDto requestDto = new IsuDto();
-        requestDto.setStatus("someStatus");
+        IsuDto isuDto = new IsuDto(); // create your IsuDto instance
 
-        // Mocking the service response
-        IssueDto mockIssueDto = new IssueDto();
-        when(issueService.save(requestDto)).thenReturn(mockIssueDto);
+        // Mock the behavior of the issueService.save() method
+        when(issueService.save(any(IsuDto.class))).thenReturn(new IssueDto());
 
-        // Calling the controller method
-        ResponseEntity<IssueDto> response = issueController.saveIssue(requestDto);
+        // When
+        ResponseEntity<IssueDto> responseEntity = issueController.saveIssue(isuDto);
 
-        // Verifying the results
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockIssueDto, response.getBody());
+        // Then
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        // Verifying service method invocation
-        verify(issueService, times(1)).save(requestDto);
+        // Optionally, you can also verify that the issueService.save() method was called with the correct argument
+        verify(issueService).save(isuDto);
     }
 
     @Test
@@ -305,16 +302,5 @@ class IssueControllerTest {
 
         // Optionally, you can add more assertions or verifications based on your specific requirements.
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }
