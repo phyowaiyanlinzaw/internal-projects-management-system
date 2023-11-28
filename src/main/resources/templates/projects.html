@@ -1251,7 +1251,8 @@
 
                     if (
                         loginUser.currentUser.role !== "SDQC" &&
-                        loginUser.currentUser.role !== "PMO"
+                        loginUser.currentUser.role !== "PMO" &&
+                        loginUser.currentUser.role !== "DEPARTMENT_HEAD"
                     ) {
                         document.querySelector(
                             "#navigate-task"
