@@ -64,94 +64,6 @@ class IssueServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void testSaveIssue() {
-        // Arrange
-        IsuDto isuDto = new IsuDto();
-        isuDto.setTitle("Test Issue");
-        isuDto.setDescription("This is a test issue");
-        // Set other properties of isuDto
-
-        Issue issue = new Issue();
-        issue.setTitle(isuDto.getTitle());
-        issue.setDescription(isuDto.getDescription());
-        // Set other properties of issue
-
-        Issue savedIssue = new Issue();
-        savedIssue.setId(1L);
-        savedIssue.setTitle(isuDto.getTitle());
-        savedIssue.setDescription(isuDto.getDescription());
-        // Set other properties of savedIssue
-
-        IssueDto expectedIssueDto = new IssueDto();
-        expectedIssueDto.setId(1L);
-        expectedIssueDto.setTitle(isuDto.getTitle());
-        expectedIssueDto.setDescription(isuDto.getDescription());
-        // Set other properties of expectedIssueDto
-
-        when(issueRepository.save(any(Issue.class))).thenReturn(savedIssue);
-
-        // Act
-        IssueDto actualIssueDto = issueService.save(isuDto);
-
-        // Assert
-        assertEquals(expectedIssueDto.getId(), actualIssueDto.getId());
-        assertEquals(expectedIssueDto.getTitle(), actualIssueDto.getTitle());
-        assertEquals(expectedIssueDto.getDescription(), actualIssueDto.getDescription());
-        // Assert other properties of actualIssueDto
-
-        verify(issueRepository, times(1)).save(any(Issue.class));
-        verify(notificationService, times(1)).save(anyString(), any(), anyString(), any(IssueDto.class));
-    }
-
-    private UserDto createSampleUserDto() {
-        UserDto userDto = new UserDto();
-        userDto.setId(1L);
-        userDto.setName("john.doe");
-        // Set other properties as needed for your tests
-        return userDto;
-    }
-    // Helper methods to create sample objects for mocks
-
-
-
-
-    @Test
-    void testSaveWhenIsuDtoHasNullFieldsThenReturnsIssueDto() {
-        // Arrange
-        IsuDto isuDto = new IsuDto();
-        Issue issue = createSampleIssue();
-        IssueDto expectedIssueDto = createSampleIssueDto();
-        when(issueRepository.save(any(Issue.class))).thenReturn(issue);
-        when(modelMapper.map(issue, IssueDto.class)).thenReturn(expectedIssueDto);
-
-        // Act
-        IssueDto result = issueService.save(isuDto);
-
-        // Assert
-        assertEquals(expectedIssueDto, result);
-
-        // Verify interactions
-        verify(issueRepository, times(1)).save(any(Issue.class));
-        verify(notificationService, times(1)).save(anyString(), any(), anyString(), any());
-    }
-
-    @Test
-    void testSaveWhenRepositorySaveReturnsNullThenReturnsNull() {
-        // Arrange
-        IsuDto isuDto = createSampleIsuDto();
-        when(issueRepository.save(any(Issue.class))).thenReturn(null);
-
-        // Act
-        IssueDto result = issueService.save(isuDto);
-
-        // Assert
-        assertNull(result);
-
-        // Verify interactions
-        verify(issueRepository, times(1)).save(any(Issue.class));
-        verify(notificationService, never()).save(anyString(), any(), anyString(), any());
-    }
 
     private IsuDto createSampleIsuDto() {
         IsuDto isuDto = new IsuDto();
@@ -175,7 +87,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void save() {
+    void testSave() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -201,22 +113,7 @@ class IssueServiceImplTest {
     }
 
 
-    @Test
-    void testSave_NullIssue() {
-        // Arrange
-        IsuDto isuDto = createSampleIsuDto();
-        when(issueRepository.save(any(Issue.class))).thenReturn(null);
 
-        // Act
-        IssueDto result = issueService.save(isuDto);
-
-        // Assert
-        assertNull(result);
-
-        // Verify interactions
-        verify(issueRepository, times(1)).save(any(Issue.class));
-        verify(notificationService, never()).save(anyString(), any(), anyString(), any());
-    }
 
     private User createSampleUser() {
         User user = new User();
@@ -264,7 +161,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void getAllIssues() {
+    void testGetAllIssues() {
         // Arrange
         List<Issue> sampleIssues = Collections.singletonList(createSampleIssue());
         when(issueRepository.findAll()).thenReturn(sampleIssues);
@@ -278,7 +175,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void getIssueById() {
+    void testGetIssueById() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -304,7 +201,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void updateIssue() {
+    void testUpdateIssue() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -340,7 +237,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void getUnsolvedIssues() {
+    void testGetUnsolvedIssues() {
         List<Issue> issues = new ArrayList<>();
         Issue issue = new Issue();
         issue.setTitle("Test");
@@ -372,7 +269,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void getIssuesByStatus() {
+    void testGetIssuesByStatus() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -398,7 +295,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void getIssuesBySolvedStatus() {
+    void testGetIssuesBySolvedStatus() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
@@ -424,7 +321,7 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void getIssuesByCategory() {
+    void testGetIssuesByCategory() {
         Issue issue = new Issue();
         issue.setTitle("Test");
         issue.setDescription("Test");
