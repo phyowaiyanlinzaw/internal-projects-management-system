@@ -278,8 +278,10 @@ public class IssueServiceImpl implements IssueService {
 
             Issue issue = issueRepository.findById(issueDto.getId());
 
-            issue.setIssueStatus(IssueStatus.valueOf(issueDto.getStatus()));
+            if(issue != null) {
 
+                issue.setIssueStatus(IssueStatus.valueOf(issueDto.getStatus()));
+            }
             issueRepository.save(issue);
 
             IssueDto issueDto2 = modelMapper.map(issue, IssueDto.class);
