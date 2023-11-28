@@ -17,7 +17,10 @@ import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.DeliverableTypeServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,11 +48,6 @@ public class DeliverableTypeController {
 
         Project project = projectRepository.findById(id);
 
-        if (project == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-
         Set<Long> deliverableTypeIds = project.getDeliverables().stream()
                 .map(deliverable -> deliverable.getDeliverableTypes().getId())
                 .collect(Collectors.toSet());
@@ -60,9 +58,5 @@ public class DeliverableTypeController {
 
         return new ResponseEntity<>(deliverableTypeDtos, HttpStatus.OK);
     }
-
-
-
-
 
 }

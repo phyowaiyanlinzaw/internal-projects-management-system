@@ -79,8 +79,16 @@ class DeliverableTypeControllerTest {
 
         ResponseEntity<Set<DeliverableTypeDto>> responseEntity = deliverableTypeController.getAllByProject(projectId);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity, "Response entity should not be null");
+
+        // Print information for debugging
+        System.out.println("Response Status Code: " + responseEntity.getStatusCodeValue());
+        System.out.println("Response Body: " + responseEntity.getBody());
+
+        // Use assertSame to compare HttpStatus instances
+        assertSame(HttpStatus.OK, responseEntity.getStatusCode(), "Unexpected status code");
+
         Set<DeliverableTypeDto> result = responseEntity.getBody();
-        assertNotNull(result);
+        assertNotNull(result, "Response body should not be null");
     }
 }
