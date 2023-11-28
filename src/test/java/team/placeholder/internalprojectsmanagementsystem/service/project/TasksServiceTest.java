@@ -53,9 +53,9 @@ class TasksServiceTest {
 
         TasksDto existingTask = new TasksDto();
         existingTask.setId(taskId);
-        existingTask.setPlan_start_time(startTime);
-        existingTask.setPlan_end_time(endTime);
-        existingTask.setActual_hours(actual_hours);
+        existingTask.setPlanStartTime(startTime);
+        existingTask.setPlanEndTime(endTime);
+        existingTask.setActualHours(actual_hours);
 
         Mockito.when(tasksService.updateTaskStatus(taskId,status,startTime,endTime,actual_hours)).thenReturn(existingTask);
         TasksDto updatedTask = tasksService.updateTaskStatus(taskId,status,startTime,endTime, actual_hours);

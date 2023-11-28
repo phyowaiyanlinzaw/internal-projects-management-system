@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
-import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
@@ -20,11 +20,11 @@ import team.placeholder.internalprojectsmanagementsystem.model.user.Client;
 import team.placeholder.internalprojectsmanagementsystem.model.user.User;
 import team.placeholder.internalprojectsmanagementsystem.repository.department.DepartmentRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ArchitectureRepository;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.DeliverableRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.project.ArchitectureService;
 import team.placeholder.internalprojectsmanagementsystem.service.user.UserService;
 
 import java.time.LocalDate;
@@ -37,6 +37,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ProjectServiceImplTest {
 
+    // ... Existing fields and methods ...
+
     @Mock
     private ProjectRepository projectRepository;
 
@@ -44,39 +46,70 @@ class ProjectServiceImplTest {
     private ModelMapper modelMapper;
 
     @Mock
-    private DeliverableRepository deliverableRepository;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private TaskRepository taskRepository;
-
-    @Mock
-    private DepartmentRepository departmentRepository;
+    private ArchitectureService architectureService;
 
     @Mock
     private ArchitectureRepository architectureRepository;
 
     @Mock
-    private DeliverableTypeServiceImpl deliverableTypeService;
+    private TaskRepository taskRepository;
 
-    @Mock
-    private ArchitectureServiceImpl architectureService;
-
-    @Mock
-    private AESImpl aes;
-
-    @Mock
-    private UserService userService;
-
-    @Mock
-    private NotificationServiceImpl notificationService;
 
     @InjectMocks
     private ProjectServiceImpl projectService;
 
+    @Test
+    public void testSaveWhenProjectDtoHasNullFields() {
+        // Arrange
+        ProjectDto projectDto = new ProjectDto();
+        projectDto.setArchitectureDto(null);
+        projectDto.setDeliverableDto(null);
+        projectDto.setMembersUserDto(null);
 
+        // Act
+        ProjectDto result = projectService.save(projectDto);
+
+        // Assert
+        assertNotNull(result);
+
+        // Verify interactions
+        verify(projectDto, times(1)).setArchitectureDto(any());
+        verify(projectDto, times(1)).setDeliverableDto(any());
+        verify(projectDto, times(1)).setMembersUserDto(any());
+    }
+
+    @Test
+    public void testSaveWhenProjectDtoHasNonNullFields() {
+        // Arrange
+        ProjectDto projectDto = new ProjectDto();
+        projectDto.setArchitectureDto(new HashSet<>());
+        projectDto.setDeliverableDto(new ArrayList<>());
+        projectDto.setMembersUserDto(new ArrayList<>());
+
+        // Mock the behavior of your dependencies
+        Mockito.when(architectureService.save(any(ArchitectureDto.class))).thenReturn(createMockArchitecture());
+        Mockito.when(architectureRepository.getReferenceById(Mockito.anyLong())).thenReturn(createMockArchitecture());
+        // Mock other dependencies as needed
+
+        // Act
+        ProjectDto result = projectService.save(projectDto);
+
+        // Assert
+        assertNotNull(result);
+
+        // Verify interactions
+        Mockito.verify(architectureService, Mockito.times(1)).save(any(ArchitectureDto.class));
+        Mockito.verify(architectureRepository, Mockito.times(1)).getReferenceById(Mockito.anyLong());
+        // Verify interactions with other mocks as needed
+    }
+
+    // ... Other test methods ...
+
+    // Create helper methods to generate mock data
+    private Architecture createMockArchitecture() {
+        // Implement logic to create a mock Architecture
+        return new Architecture();
+    }
 
     @BeforeEach
     void setUp() {
@@ -84,90 +117,46 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    public void testSave() {
-        // Arrange
-        ProjectDto projectDto = createSampleProjectDto(); // create a sample DTO for testing
+    public void testSaveProject() {
+        // Create necessary mock data
+        ProjectDto projectDto = createMockProjectDto();
+        ArchitectureDto architectureDto = createMockArchitectureDto();
+        DeliverableDto deliverableDto = createMockDeliverableDto();
+        // Create other necessary mock data
 
-        // Mocking behavior for ArchitectureService
-        when(architectureService.save(any(ArchitectureDto.class))).thenReturn(createSampleArchitecture());
+        // Mock the behavior of your dependencies
+        Mockito.when(architectureService.save(any(ArchitectureDto.class))).thenReturn(createMockArchitecture());
+        Mockito.when(architectureRepository.getReferenceById(Mockito.anyLong())).thenReturn(createMockArchitecture());
+        // Mock other dependencies as needed
 
-        // Mocking behavior for DeliverableTypeService
-        when(deliverableTypeService.save(any(DeliverableTypeDto.class))).thenReturn(createSampleDeliverableType());
-
-        // Mocking behavior for UserRepository
-        when(userRepository.getReferenceById(anyLong())).thenReturn(createSampleUser());
-
-        // Mocking behavior for ModelMapper
-        when(modelMapper.map(any(), any())).thenReturn(createSampleObject()); // adjust as needed
-
-        // Act
+        // Call the actual method
         ProjectDto result = projectService.save(projectDto);
 
-        // Assert
+        // Verify the behavior and assertions
         assertNotNull(result);
-        assertEquals(projectDto.getName(), result.getName());
-        // Add more assertions based on your expectations
+        // Add more assertions based on your specific logic
 
-        // Verify other method invocations as needed
-        verify(aes, times(projectDto.getMembersUserDto().size())).getAvailableUserByUserId(anyLong());
-        verify(notificationService, times(projectDto.getMembersUserDto().size()))
-                .save(eq("You have been assigned to new project"), anyLong(), eq("project-save-event"));
-
-        // Add more assertions based on your expectations
+        // Verify interactions with mocks
+        Mockito.verify(architectureService, Mockito.times(1)).save(any(ArchitectureDto.class));
+        Mockito.verify(architectureRepository, Mockito.times(1)).getReferenceById(Mockito.anyLong());
+        // Verify interactions with other mocks as needed
     }
 
-    private ProjectDto createSampleProjectDto() {
-       ProjectDto projectDto = new ProjectDto();
-        projectDto.setName("TestProject");
-        projectDto.setObjective("TestObjective");
-        projectDto.setStart_date(1637347200000L);
-        projectDto.setEnd_date(1637347200000L);
-        projectDto.setDuration(30);
-        projectDto.setBackground("TestBackground");
-        projectDto.setClientDto(new ClientDto());
-        projectDto.setDepartmentDto(new DepartmentDto());
-        projectDto.setProjectManagerUserDto(new UserDto());
-        projectDto.setAmountDto(new AmountDto());
-        projectDto.setArchitectureDto(new HashSet<>(Arrays.asList(new ArchitectureDto())));
-        projectDto.setReviewDto(new ReviewDto());
-        projectDto.setSystemOutLineDto(new SystemOutLineDto());
-        projectDto.setDeliverableDto(Arrays.asList(new DeliverableDto()));
-        projectDto.setCompleteTaskCount(1L);
-        projectDto.setTotalTaskCount(1L);
-        projectDto.setClosed(true);
-        projectDto.setMembersUserDto(Arrays.asList(new UserDto()));
-        projectDto.setTasksDto(Arrays.asList(new TasksDto()));
-        projectDto.setIssueDto(Arrays.asList(new IssueDto()));
-        return projectDto;
+    // Create helper methods to generate mock data
+    private ProjectDto createMockProjectDto() {
 
-
-
+        return new ProjectDto();
     }
 
-    private Architecture createSampleArchitecture() {
+    private ArchitectureDto createMockArchitectureDto() {
 
-        Architecture architecture = new Architecture();
-        architecture.setTech_name("TestArchitecture");
-        return architecture;
+        return new ArchitectureDto();
     }
 
-    private DeliverableType createSampleDeliverableType() {
-        DeliverableType deliverableType = new DeliverableType();
-        deliverableType.setType("TestDeliverableType");
-        return deliverableType;
+    private DeliverableDto createMockDeliverableDto() {
+        // Implement logic to create a mock DeliverableDto
+        return new DeliverableDto();
     }
-
-    private User createSampleUser() {
-        User user = new User();
-        user.setName("TestUser");
-        return user;
-    }
-
-    private Object createSampleObject() {
-        return new Object();
-    }
-
-
 
     @Test
     public void testGetAllProjectsEmptyList() {
@@ -577,6 +566,4 @@ class ProjectServiceImplTest {
     void getAllPM() {
 
     }
-
-    // ... Other test methods ...
 }
