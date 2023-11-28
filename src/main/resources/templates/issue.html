@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
-      lang="en">
+      lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
     <style>
 
@@ -171,13 +172,13 @@
                     if(user.currentUser.role === 'SDQC' || user.currentUser.role === 'PMO') {
                         document.querySelector("button[data-bs-target='#all-issue-list']").remove()
                         document.querySelector("button[data-bs-target='#unsolved-issues']").remove()
-                        document.querySelector("button[data-bs-target='#new-issue-list']").remove()
+                        document.querySelector("button[data-bs-target='#new-issue-list-container']").remove()
 
                     }
 
                 </script>
             </ul>
-            <ul class="nav nav-tabs nav-tabs-bordered" id="issueTableNav">
+            <ul class="nav nav-tabs nav-tabs-bordered" id="issueTableNav" sec:authorize="hasAnyRole('PMO','SDQC')">
                 <li class="nav-item">
                     <button
                             class="nav-link position-relative btn-light active"

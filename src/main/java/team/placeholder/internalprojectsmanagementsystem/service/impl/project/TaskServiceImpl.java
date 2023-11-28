@@ -40,9 +40,9 @@ public class TaskServiceImpl implements TasksService {
         task.setTitle(taskRequestDto.getTitle());
         task.setDescription(taskRequestDto.getDescription());
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
-        task.setPlan_start_time(taskRequestDto.getPlan_start_time());
-        task.setPlan_end_time(taskRequestDto.getPlan_end_time());
-        task.setPlan_hours(taskRequestDto.getPlan_hours());
+        task.setPlanStartTime(taskRequestDto.getPlanStartTime());
+        task.setPlanEndTime(taskRequestDto.getPlanEndTime());
+        task.setPlanHours(taskRequestDto.getPlanHours());
         task.setDue(false);
         task.setStatus(TaskStatus.TODO);
         User user = userRepository.findById(taskRequestDto.getUserId());
@@ -90,12 +90,12 @@ public class TaskServiceImpl implements TasksService {
         task.setStatus(TaskStatus.valueOf(status));
         //set only start time if status is in progress
         if (status.equals("IN_PROGRESS")) {
-            task.setActual_start_time(startTime);
+            task.setActualStartTime(startTime);
         }
         //set only end time if status is done
         if (status.equals("FINISHED")) {
-            task.setActual_end_time(endTime);
-            task.setActual_hours(actual_hours);
+            task.setActualEndTime(endTime);
+            task.setActualHours(actual_hours);
         }
         taskRepository.save(task);
         return modelMapper.map(task, TasksDto.class);
@@ -108,13 +108,13 @@ public class TaskServiceImpl implements TasksService {
             return null;
         }
         task.setTitle(taskRequestDto.getTitle());
-        task.setActual_hours(taskRequestDto.getActual_hours());
+        task.setActualHours(taskRequestDto.getActualHours());
         task.setDescription(taskRequestDto.getDescription());
         task.setTasksGroup(TasksGroup.valueOf(taskRequestDto.getTasksGroup()));
         task.setUser(userRepository.findById(taskRequestDto.getUserId()));
-        task.setPlan_start_time(taskRequestDto.getPlan_start_time());
-        task.setPlan_end_time(taskRequestDto.getPlan_end_time());
-        task.setPlan_hours(taskRequestDto.getPlan_hours());
+        task.setPlanStartTime(taskRequestDto.getPlanStartTime());
+        task.setPlanEndTime(taskRequestDto.getPlanEndTime());
+        task.setPlanHours(taskRequestDto.getPlanHours());
 
         taskRepository.save(task);
 
@@ -207,6 +207,16 @@ public class TaskServiceImpl implements TasksService {
         task.setDeleted(true);
 
         taskRepository.save(task);
+    }
+
+    @Override
+    public void updateTasksDueStatus() {
+        List<Tasks> tasks = taskRepository.findTasksByStatusInAndPlanEndTimeBefore(Arrays.asList(TaskStatus.IN_PROGRESS, TaskStatus.TODO), System.currentTimeMillis());
+        for (Tasks task : tasks) {
+            task.setDue(true);
+            taskRepository.save(task);
+        }
+
     }
 
     @Override

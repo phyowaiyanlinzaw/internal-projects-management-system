@@ -34,15 +34,15 @@ public class DashboardServiceImpl implements DashboardService {
 
         List<ManMonthDto> manMonthDtos = new ArrayList<>();
         for (TasksDto taskDto: tasks){
-            long startTime = taskDto.getPlan_start_time();
+            long startTime = taskDto.getPlanStartTime();
             String startMonthYear = ManMonthCalculator.getMonthYearFromDate(startTime);
 
             Optional<ManMonthDto> existingDto = manMonthDtos.stream()
                     .filter(dto -> dto.getMonthName().equals(startMonthYear))
                     .findFirst();
 
-            double planHours = taskDto.getPlan_hours() != null ? taskDto.getPlan_hours() : 0.0;
-            double actualHours = taskDto.getActual_hours() != null ? taskDto.getActual_hours() : 0.0;
+            double planHours = taskDto.getPlanHours() != null ? taskDto.getPlanHours() : 0.0;
+            double actualHours = taskDto.getActualHours() != null ? taskDto.getActualHours() : 0.0;
 
             if (existingDto.isPresent()){
                 double updatedPlanHours = existingDto.get().getPlanManMonthHours() + planHours;
@@ -52,8 +52,8 @@ public class DashboardServiceImpl implements DashboardService {
             }else{
                 ManMonthDto newDto = new ManMonthDto();
                 newDto.setMonthName(startMonthYear);
-                newDto.setPlanManMonthHours(taskDto.getPlan_hours());
-                newDto.setActualManMonthHours(taskDto.getActual_hours());
+                newDto.setPlanManMonthHours(taskDto.getPlanHours());
+                newDto.setActualManMonthHours(taskDto.getActualHours());
                 manMonthDtos.add(newDto);
             }
         }

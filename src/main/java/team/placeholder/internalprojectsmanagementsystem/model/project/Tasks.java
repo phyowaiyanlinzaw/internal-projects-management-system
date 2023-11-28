@@ -25,13 +25,13 @@ public class Tasks implements Serializable {
     private String description;
     private String title;
 
-    private long plan_start_time;
-    private long plan_end_time;
-    private Double plan_hours;
+    private long planStartTime;
+    private long planEndTime;
+    private Double planHours;
 
-    private long actual_start_time;
-    private long actual_end_time;
-    private Double actual_hours;
+    private long actualStartTime;
+    private long actualEndTime;
+    private Double actualHours;
 
     private boolean due;
 
