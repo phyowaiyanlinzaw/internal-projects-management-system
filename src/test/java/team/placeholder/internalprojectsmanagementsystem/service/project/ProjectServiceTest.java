@@ -80,35 +80,169 @@ class ProjectServiceTest {
 
     @Test
     void getProjectByName() {
+        // Given
+        String projectName = "ExampleProject"; // Replace with the actual project name
+        ProjectDto expectedProjectDto = new ProjectDto(/* fill in with expected project details */);
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.getProjectByName(anyString())).thenReturn(expectedProjectDto);
+
+        // When
+        ProjectDto retrievedProjectDto = projectServiceMock.getProjectByName(projectName);
+
+        // Then
+        // Verify that the getProjectByName method was called with the correct parameter
+        verify(projectServiceMock, times(1)).getProjectByName(projectName);
+
+        // Verify that the returned ProjectDto is the same as the expected one
+        assertEquals(expectedProjectDto, retrievedProjectDto);
     }
+
 
     @Test
     void updateProject() {
+        // Given
+        ProjectDto projectToUpdate = new ProjectDto(/* fill in with the details of the project to update */);
+        ProjectDto updatedProjectDto = new ProjectDto(/* fill in with the updated project details */);
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.updateProject(any(ProjectDto.class))).thenReturn(updatedProjectDto);
+
+        // When
+        ProjectDto result = projectServiceMock.updateProject(projectToUpdate);
+
+        // Then
+        // Verify that the updateProject method was called with the correct parameter
+        verify(projectServiceMock, times(1)).updateProject(projectToUpdate);
+
+        // Verify that the returned ProjectDto is the same as the expected updated one
+        assertEquals(updatedProjectDto, result);
     }
+
 
     @Test
     void countAllProjects() {
+        // Given
+        long expectedCount = 5L; // Replace with the expected count
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.countAllProjects()).thenReturn(expectedCount);
+
+        // When
+        long result = projectServiceMock.countAllProjects();
+
+        // Then
+        // Verify that the countAllProjects method was called
+        verify(projectServiceMock, times(1)).countAllProjects();
+
+        // Verify that the returned count is as expected
+        assertEquals(expectedCount, result);
     }
+
 
     @Test
     void getAllProjectsByProjectManagerId() {
+        // Given
+        long projectManagerId = 1L; // Replace with the actual project manager ID
+        List<ProjectDto> expectedProjects = Arrays.asList(new ProjectDto(/* fill in with project details */));
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.getAllProjectsByProjectManagerId(anyLong())).thenReturn(expectedProjects);
+
+        // When
+        List<ProjectDto> result = projectServiceMock.getAllProjectsByProjectManagerId(projectManagerId);
+
+        // Then
+        // Verify that the getAllProjectsByProjectManagerId method was called with the correct parameter
+        verify(projectServiceMock, times(1)).getAllProjectsByProjectManagerId(projectManagerId);
+
+        // Verify that the returned list of projects is the same as the expected list
+        assertEquals(expectedProjects, result);
     }
 
     @Test
     void countAllProjectsByUsersId() {
+        // Given
+        long userId = 1L; // Replace with the actual user ID
+        long expectedCount = 3L; // Replace with the expected count
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.countAllProjectsByUsersId(anyLong())).thenReturn(expectedCount);
+
+        // When
+        long result = projectServiceMock.countAllProjectsByUsersId(userId);
+
+        // Then
+        // Verify that the countAllProjectsByUsersId method was called with the correct parameter
+        verify(projectServiceMock, times(1)).countAllProjectsByUsersId(userId);
+
+        // Verify that the returned count is as expected
+        assertEquals(expectedCount, result);
     }
+
 
     @Test
     void countAllProjectsByProjectManagerId() {
+        // Given
+        long projectManagerId = 1L; // Replace with the actual project manager ID
+        long expectedCount = 2L; // Replace with the expected count
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.countAllProjectsByProjectManagerId(anyLong())).thenReturn(expectedCount);
+
+        // When
+        long result = projectServiceMock.countAllProjectsByProjectManagerId(projectManagerId);
+
+        // Then
+        // Verify that the countAllProjectsByProjectManagerId method was called with the correct parameter
+        verify(projectServiceMock, times(1)).countAllProjectsByProjectManagerId(projectManagerId);
+
+        // Verify that the returned count is as expected
+        assertEquals(expectedCount, result);
     }
+
 
     @Test
     void countAllProjectsByProjectManagerIdAndClosed() {
+        // Given
+        long projectManagerId = 1L; // Replace with the actual project manager ID
+        boolean closed = false; // Replace with the expected closed status
+        long expectedCount = 2L; // Replace with the expected count
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.countAllProjectsByProjectManagerIdAndClosed(anyLong(), anyBoolean())).thenReturn(expectedCount);
+
+        // When
+        long result = projectServiceMock.countAllProjectsByProjectManagerIdAndClosed(projectManagerId, closed);
+
+        // Then
+        // Verify that the countAllProjectsByProjectManagerIdAndClosed method was called with the correct parameters
+        verify(projectServiceMock, times(1)).countAllProjectsByProjectManagerIdAndClosed(projectManagerId, closed);
+
+        // Verify that the returned count is as expected
+        assertEquals(expectedCount, result);
     }
 
     @Test
     void getAllProjectsByDepartmentId() {
+        // Given
+        long departmentId = 1L; // Replace with the actual department ID
+        List<ProjectDto> expectedProjects = Arrays.asList(new ProjectDto(/* fill in with project details */));
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.getAllProjectsByDepartmentId(anyLong())).thenReturn(expectedProjects);
+
+        // When
+        List<ProjectDto> result = projectServiceMock.getAllProjectsByDepartmentId(departmentId);
+
+        // Then
+        // Verify that the getAllProjectsByDepartmentId method was called with the correct parameter
+        verify(projectServiceMock, times(1)).getAllProjectsByDepartmentId(departmentId);
+
+        // Verify that the returned list of projects is the same as the expected list
+        assertEquals(expectedProjects, result);
     }
+
 
     @Test
     void countAllProjectsByDepartmentId() {
