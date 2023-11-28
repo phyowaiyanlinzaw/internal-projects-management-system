@@ -267,6 +267,22 @@ class ProjectServiceTest {
 
     @Test
     void findAllByUserId() {
+        // Given
+        long userId = 1L; // Replace with the actual user ID
+        List<ProjectDto> expectedProjects = Arrays.asList(new ProjectDto(/* fill in with project details */));
+
+        // Mock the behavior of the service method
+        when(projectServiceMock.findAllByUserId(anyLong())).thenReturn(expectedProjects);
+
+        // When
+        List<ProjectDto> result = projectServiceMock.findAllByUserId(userId);
+
+        // Then
+        // Verify that the findAllByUserId method was called with the correct parameter
+        verify(projectServiceMock, times(1)).findAllByUserId(userId);
+
+        // Verify that the returned list of projects is the same as the expected list
+        assertEquals(expectedProjects, result);
     }
 
     @Test
