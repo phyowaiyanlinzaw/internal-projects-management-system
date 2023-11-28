@@ -15,6 +15,7 @@ public class TasksDtoTest {
 
     @Test
     void testGetterAndSetter() {
+
         // Arrange
         TasksDto tasksDto = new TasksDto();
 
@@ -23,14 +24,14 @@ public class TasksDtoTest {
         tasksDto.setStatus(TaskStatus.IN_PROGRESS);
         tasksDto.setTitle("Task1");
         tasksDto.setDescription("Description1");
-        tasksDto.setPlan_start_time(System.currentTimeMillis());
-        tasksDto.setPlan_end_time(System.currentTimeMillis() + 86400000);
+        tasksDto.setPlanStartTime(System.currentTimeMillis());
+        tasksDto.setPlanEndTime(System.currentTimeMillis() + 86400000);
 
-        tasksDto.setActual_start_time(System.currentTimeMillis());
-        tasksDto.setActual_end_time(System.currentTimeMillis() + 43200000);
+        tasksDto.setActualStartTime(System.currentTimeMillis());
+        tasksDto.setActualEndTime(System.currentTimeMillis() + 43200000);
 
-        tasksDto.setPlan_hours(8.0);
-        tasksDto.setActual_hours(6.0);
+        tasksDto.setPlanHours(8.0);
+        tasksDto.setActualHours(6.0);
 
         tasksDto.setDue(true);
 
@@ -47,12 +48,12 @@ public class TasksDtoTest {
         TaskStatus status = tasksDto.getStatus();
         String title = tasksDto.getTitle();
         String description = tasksDto.getDescription();
-        long plan_start_time = tasksDto.getPlan_start_time();
-        long plan_end_time = tasksDto.getPlan_end_time();
-        long actual_start_time = tasksDto.getActual_start_time();
-        long actual_end_time = tasksDto.getActual_end_time();
-        Double plan_hours = tasksDto.getPlan_hours();
-        Double actual_hours = tasksDto.getActual_hours();
+        long plan_start_time = tasksDto.getPlanStartTime();
+        long plan_end_time = tasksDto.getPlanEndTime();
+        long actual_start_time = tasksDto.getActualStartTime();
+        long actual_end_time = tasksDto.getActualEndTime();
+        Double plan_hours = tasksDto.getPlanHours();
+        Double actual_hours = tasksDto.getActualHours();
         boolean due = tasksDto.isDue();
         UserDto retrievedUserDto = tasksDto.getUserDto();
         TasksGroup tasksGroup = tasksDto.getTasksGroup();
