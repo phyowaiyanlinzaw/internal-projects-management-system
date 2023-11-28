@@ -265,13 +265,11 @@
 
         async function () {
 
-
-
             const user  = await getUser();
 
             console.log("CURRENT USER : ", user);
 
-            if (user.role === "PMO" || user.role === "SDQC") {
+            if (user.currentUser.role === "PMO" || user.currentUser.role === "SDQC") {
                 //remove disabled from email input
                 $("#emailInput").prop("disabled", false);
             }
@@ -402,7 +400,7 @@
                             url: "/api/user/change-username",
                             type: "POST",
                             data: JSON.stringify({
-                                id: user.id,
+                                id: user.currentUser.id,
                                 name: usernameInput,
                                 email: email
                             }),
