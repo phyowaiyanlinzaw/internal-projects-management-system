@@ -545,6 +545,17 @@ function createNewArch(a) {
 
 const deliSearchBtn = document.querySelector("#deli-search")
 
+function isMatch(input, title) {
+    // Escape special characters in the input
+    const escapedInput = input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Create a regular expression pattern
+    const pattern = new RegExp(`^.*${escapedInput.split('').join('.*')}.*$`, 'i');
+
+    // Check if the input matches either the title or card
+    return pattern.test(title);
+}
+
 deliSearchBtn.addEventListener('input', async function () {
 
     const value = deliSearchBtn.value;
@@ -555,7 +566,7 @@ deliSearchBtn.addEventListener('input', async function () {
         const a = deliverableAddContainer.children[i]
         const text = a.querySelector('.text-center').textContent;
 
-        if (text.toLowerCase().includes(value.toLowerCase())) {
+        if (isMatch(value.trim(), text.trim())) {
             a.classList.remove('d-none')
             count++;
         } else {
@@ -583,7 +594,7 @@ archSearchBtn.addEventListener('input', function () {
         const a = archListContainer.children[i]
         const text = a.querySelector('.text-center').textContent;
 
-        if (text.toLowerCase().includes(value.toLowerCase())) {
+        if (isMatch(value.trim(), text.trim())) {
             a.classList.remove('d-none')
             count++;
         } else {
