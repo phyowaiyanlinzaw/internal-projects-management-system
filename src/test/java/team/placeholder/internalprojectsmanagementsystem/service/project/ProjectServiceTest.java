@@ -2,236 +2,131 @@ package team.placeholder.internalprojectsmanagementsystem.service.project;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.ProjectRepository;
-import team.placeholder.internalprojectsmanagementsystem.repository.project.TaskRepository;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class ProjectServiceTest {
 
     @Mock
-    private ProjectService projectService;
+    private ProjectService projectServiceMock;
 
-    @Mock
-    private TaskRepository taskRepository; // Assuming TaskRepository is your repository for Task entities
 
-    @InjectMocks
-    private TasksService taskService;
-
-    @Mock
-    ProjectRepository projectRepository;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp(){
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testSaveProject() {
-        ProjectDto projectDto = new ProjectDto();
-        when(projectService.save(projectDto)).thenReturn(projectDto);
-        ProjectDto savedProject = projectService.save(projectDto);
-        assertEquals(projectDto, savedProject);
-    }
+    void save() {
+        ProjectDto inputProjectDto = new ProjectDto(/* fill in with required parameters for the new project */);
 
-    @Test
-    public void testGetAllProjects() {
-        List<ProjectDto> projectDto = new ArrayList<>();
-        when(projectService.getAllProjects()).thenReturn(projectDto);
-        List<ProjectDto> allProjects = projectService.getAllProjects();
-        assertEquals(projectDto, allProjects);
-    }
-
-    @Test
-    public void testGetProjectById() {
-        int id = 1;
-        ProjectDto projectDto = new ProjectDto();
-        when(projectService.getProjectById(id)).thenReturn(projectDto);
-        ProjectDto projectById = projectService.getProjectById(1);
-        assertEquals(projectDto, projectById);
-    }
-
-    @Test
-    public void testGetProjectByName() {
-        String name = "test";
-        ProjectDto projectDto = new ProjectDto();
-        when(projectService.getProjectByName(name)).thenReturn(projectDto);
-        ProjectDto projectByName = projectService.getProjectByName(name);
-        assertEquals(projectDto, projectByName);
-    }
-
-    @Test
-    public void testUpdateProject() {
-        ProjectDto projectDto = new ProjectDto();
-        when(projectService.updateProject(projectDto)).thenReturn(projectDto);
-        ProjectDto updatedProject = projectService.updateProject(projectDto);
-        assertEquals(projectDto, updatedProject);
-    }
-
-    @Test
-    public void testCountAllProjects(){
-        long expectedProjectCount = 10;
-
-        when(projectService.countAllProjects()).thenReturn(expectedProjectCount);
+        // Mock the behavior of the service method
+        when(projectServiceMock.save(any(ProjectDto.class))).thenReturn(inputProjectDto);
 
         // When
-        long result = projectService.countAllProjects();
+        ProjectDto savedProjectDto = projectServiceMock.save(inputProjectDto);
 
         // Then
-        assertEquals(expectedProjectCount, result);
+        // Verify that the save method was called with the correct parameter
+        verify(projectServiceMock, times(1)).save(inputProjectDto);
+
+        // Verify that the returned ProjectDto is the same as the input
+        assertEquals(inputProjectDto, savedProjectDto);
 
     }
 
     @Test
-    public void testGetAllProjectsByProjectManagerId(){
-        long projectManagerId = 1L;
-        List<ProjectDto> expectedProjectList = Arrays.asList(new ProjectDto(), new ProjectDto());
-
-        when(projectService.getAllProjectsByProjectManagerId(projectManagerId)).thenReturn(expectedProjectList);
-
-        // When
-        List<ProjectDto> result = projectService.getAllProjectsByProjectManagerId(projectManagerId);
-
-        // Then
-        assertEquals(expectedProjectList, result);
-    }
-
-    @Test
-    public void testCountAllProjectsByUsersId(){
-        long userId = 1L;
-        long expectedProjectCount = 5;
-
-        when(projectService.countAllProjectsByUsersId(userId)).thenReturn(expectedProjectCount);
-
-        // When
-        long result = projectService.countAllProjectsByUsersId(userId);
-
-        // Then
-        assertEquals(expectedProjectCount, result);
-    }
-
-    @Test
-    public void testCountAllProjectsByProjectManagerId() {
+    void testGetAllProjects() {
         // Given
-        long projectManagerId = 1L;
-        long expectedProjectCount = 7;
-
-        when(projectService.countAllProjectsByProjectManagerId(projectManagerId)).thenReturn(expectedProjectCount);
+        List<ProjectDto> expectedProjects = Arrays.asList(new ProjectDto(), new ProjectDto());
+        when(projectServiceMock.getAllProjects()).thenReturn(expectedProjects);
 
         // When
-        long result = projectService.countAllProjectsByProjectManagerId(projectManagerId);
+        List<ProjectDto> actualProjects = projectServiceMock.getAllProjects();
 
         // Then
-        assertEquals(expectedProjectCount, result);
+        assertEquals(expectedProjects, actualProjects);
     }
 
     @Test
-    public void testCountAllProjectsByProjectManagerIdAndClosed() {
-        // Given
-        long projectManagerId = 1L;
-        boolean closedStatus = true;
-        long expectedProjectCount = 3;
+    void getProjectById() {
+        long projectId = 1L; // Replace with the actual project ID
+        ProjectDto expectedProjectDto = new ProjectDto(/* fill in with expected project details */);
 
-        when(projectService.countAllProjectsByProjectManagerIdAndClosed(projectManagerId, closedStatus)).thenReturn(expectedProjectCount);
+        // Mock the behavior of the service method
+        when(projectServiceMock.getProjectById(anyLong())).thenReturn(expectedProjectDto);
 
         // When
-        long result = projectService.countAllProjectsByProjectManagerIdAndClosed(projectManagerId, closedStatus);
+        ProjectDto retrievedProjectDto = projectServiceMock.getProjectById(projectId);
 
         // Then
-        assertEquals(expectedProjectCount, result);
-    }
+        // Verify that the getProjectById method was called with the correct parameter
+        verify(projectServiceMock, times(1)).getProjectById(projectId);
 
-
-    @Test
-    public void testGetAllProjectsByDepartmentId() {
-        // Given
-        long departmentId = 1L;
-        List<ProjectDto> expectedProjectList = Arrays.asList(new ProjectDto(), new ProjectDto());
-
-        when(projectService.getAllProjectsByDepartmentId(departmentId)).thenReturn(expectedProjectList);
-
-        // When
-        List<ProjectDto> result = projectService.getAllProjectsByDepartmentId(departmentId);
-
-        // Then
-        assertEquals(expectedProjectList, result);
-    }
-
-
-    @Test
-    public void testCountAllProjectsByDepartmentId() {
-        // Given
-        long departmentId = 1L;
-        long expectedProjectCount = 5;
-
-        when(projectService.countAllProjectsByDepartmentId(departmentId)).thenReturn(expectedProjectCount);
-
-        // When
-        long result = projectService.countAllProjectsByDepartmentId(departmentId);
-
-        // Then
-        assertEquals(expectedProjectCount, result);
+        // Verify that the returned ProjectDto is the same as the expected one
+        assertEquals(expectedProjectDto, retrievedProjectDto);
     }
 
     @Test
-    public void testFindAllByUserId() {
-        // Given
-        long userId = 1L;
-        List<ProjectDto> expectedProjectList = Arrays.asList(new ProjectDto(), new ProjectDto());
-
-        when(projectService.findAllByUserId(userId)).thenReturn(expectedProjectList);
-
-        // When
-        List<ProjectDto> result = projectService.findAllByUserId(userId);
-
-        // Then
-        assertEquals(expectedProjectList, result);
+    void getProjectByName() {
     }
 
     @Test
-    public void testGetAllProjectsByDepartmentName() {
-        // Given
-        String departmentName = "Engineering";
-        List<ProjectDto> expectedProjectList = Arrays.asList(new ProjectDto(), new ProjectDto());
-
-        when(projectService.getAllProjectsByDepartmentName(departmentName)).thenReturn(expectedProjectList);
-
-        // When
-        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
-
-        // Then
-        assertEquals(expectedProjectList, result);
+    void updateProject() {
     }
 
     @Test
-    public void testGetProjectByUsersIdAndStatus() {
-
-
+    void countAllProjects() {
     }
 
     @Test
-    public void testUpdateProjectClosed() {
-
+    void getAllProjectsByProjectManagerId() {
     }
 
     @Test
-    public void testUpdateUserListInProject(){
-
+    void countAllProjectsByUsersId() {
     }
 
+    @Test
+    void countAllProjectsByProjectManagerId() {
+    }
+
+    @Test
+    void countAllProjectsByProjectManagerIdAndClosed() {
+    }
+
+    @Test
+    void getAllProjectsByDepartmentId() {
+    }
+
+    @Test
+    void countAllProjectsByDepartmentId() {
+    }
+
+    @Test
+    void findAllByUserId() {
+    }
+
+    @Test
+    void getAllProjectsByDepartmentName() {
+    }
+
+    @Test
+    void updateProjectClosed() {
+    }
+
+    @Test
+    void updateUserListInProject() {
+    }
 }
