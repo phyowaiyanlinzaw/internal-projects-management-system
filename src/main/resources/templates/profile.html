@@ -85,9 +85,15 @@
                                     <h5 class="card-title" style="margin-top: 20px">Profile Details</h5>
 
                                     <div class="row" style="margin-top: 20px">
+                                        <div class="col-lg-3 col col-md-4 label">Username</div>
+                                        <div class="col-lg-9 col col-md-8" id="username">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 20px">
                                         <div class="col-lg-3 col col-md-4 label">Email</div>
                                         <div class="col-lg-9 col col-md-8" id="email">
-
                                         </div>
                                     </div>
                                     <div sec:authorize="hasAnyRole('PROJECT_MANAGER','DEPARTMENT_HEAD','EMPLOYEE','FOC','CONTRACT')">
@@ -234,7 +240,6 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 
 <!-- javascript libraries -->
-<script src="/lib/chart/chart.min.js"></script>
 <script src="/lib/quill/quill.min.js"></script>
 
 <!-- Template Javascript -->
@@ -247,14 +252,29 @@
 <!-- sort (department, project), form validation and search bar behavior are all here -->
 <script src="/js/custome.js"></script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script>
+<script src="/js/currentLoginUser.js" type="module" async></script>
+<script type="module">
+
+    import {getUser} from "/js/currentLoginUser.js";
+
     $(document).ready(function () {
         setupLogoutConfirmation();
     });
 
     $(document).ready(
 
-        function () {
+        async function () {
+
+
+
+            const user  = await getUser();
+
+            console.log("CURRENT USER : ", user);
+
+            if (user.role === "PMO" || user.role === "SDQC") {
+                //remove disabled from email input
+                $("#emailInput").prop("disabled", false);
+            }
 
             //password eye toggle
             $(".toggle-password").on("click", function () {
@@ -382,13 +402,12 @@
                             url: "/api/user/change-username",
                             type: "POST",
                             data: JSON.stringify({
+                                id: user.id,
                                 name: usernameInput,
                                 email: email
                             }),
                             contentType: 'application/json',
                             success: function (data) {
-                                console.log(data);
-                                console.log("New Name : ", usernameInput)
                                 showSuccess("Username changed successfully");
                                 $('#navbar-username-without-search').text(usernameInput);
                                 // Re-enable button
@@ -504,7 +523,10 @@
                 $(".profile-overview .col-lg-9.col, .profile-overview .col-md-8").each(function () {
                     if ($(this).attr("id") === "email") {
                         $(this).html(data.email)
-                    } else if ($(this).attr("id") === "department") {
+                    }  else if ($(this).attr("id") === "username") {
+                        $(this).html(data.name)
+                    }
+                    else if ($(this).attr("id") === "department") {
                         $(this).html(data.department.name)
                     }
                     // Make an AJAX request to fetch project count data
@@ -528,7 +550,6 @@
                 $("#nameInput").val(data.name)
                 $("#emailInput").val(data.email)
                 $("#roleInput").val(data.role)
-                $("#departmentInput").val(data.department)
             }
 
 
