@@ -66,6 +66,110 @@ class IssueServiceImplTest {
 
     // Existing test cases...
 
+    // New test cases...
+
+    @Test
+    void testGetPendingIssueListWhenStatusIsPendingAndIdIsGivenThenReturnMatchingIssues() {
+        // Arrange
+        long picId = 1L;
+        Issue pendingIssue = createPendingIssue();
+        List<Issue> pendingIssueList = Collections.singletonList(pendingIssue);
+
+        // Mock repository behavior
+        when(issueRepository.findAllByIssueStatusAndPicId(IssueStatus.PENDING, picId)).thenReturn(pendingIssueList);
+
+        // Mock mappings
+        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
+        when(modelMapper.map(any(Project.class), eq(ProjectDto.class))).thenReturn(new ProjectDto());
+
+        // Act
+        List<IssueDto> issueDtos = issueService.getPendingIssueList(picId);
+
+        // Assert
+        assertEquals(1, issueDtos.size(), "Expected one pending issue in the result");
+
+        IssueDto resultIssueDto = issueDtos.get(0);
+        assertNotNull(resultIssueDto.getResponsible_party(), "Responsible party should not be null");
+        assertNotNull(resultIssueDto.getUser_pic(), "User pic should not be null");
+        assertNotNull(resultIssueDto.getUser_uploader(), "User uploader should not be null");
+        assertNotNull(resultIssueDto.getProjectDto(), "ProjectDto should not be null");
+        assertEquals(IssueStatus.PENDING.toString(), resultIssueDto.getStatus(), "IssueStatus should be PENDING");
+
+        // Verify interactions
+        verify(issueRepository, times(1)).findAllByIssueStatusAndPicId(IssueStatus.PENDING, picId);
+        verify(modelMapper, atLeastOnce()).map(any(Issue.class), eq(IssueDto.class));
+    }
+
+    @Test
+    void testGetPendingIssueListWhenNoMatchingIssuesThenReturnEmptyList() {
+        // Arrange
+        long picId = 1L;
+        List<Issue> emptyIssueList = Collections.emptyList();
+
+        // Mock repository behavior
+        when(issueRepository.findAllByIssueStatusAndPicId(IssueStatus.PENDING, picId)).thenReturn(emptyIssueList);
+
+        // Act
+        List<IssueDto> issueDtos = issueService.getPendingIssueList(picId);
+
+        // Assert
+        assertTrue(issueDtos.isEmpty(), "Expected empty list when no matching issues");
+
+        // Verify interactions
+        verify(issueRepository, times(1)).findAllByIssueStatusAndPicId(IssueStatus.PENDING, picId);
+    }
+
+    // Helper methods...
+
+    private Issue createPendingIssue() {
+        Issue issue = new Issue();
+        issue.setId(1L);
+        issue.setTitle("Test");
+        issue.setDescription("Test");
+        issue.setPlace("Test");
+        issue.setImpact("Test");
+        issue.setRoot_cause("Test");
+        issue.setDirect_cause("Test");
+        issue.setCorrective_action("Test");
+        issue.setPreventive_action("Test");
+        issue.setIssueStatus(IssueStatus.PENDING);
+        issue.setSolved(true);
+        issue.setCreated_date(new Date().getTime());
+        issue.setUpdated_date(new Date().getTime());
+        issue.setIssueCategory(Category.TESTING);
+        issue.setProject(createSampleProject());
+        issue.setUser_uploader(createSampleUser());
+        issue.setPic(createSampleUser());
+        issue.setResponsible_party(createSampleUser().getId());
+        issue.setResponsible_type(ResponsibleType.CLIENT);
+        return issue;
+    }
+
+    private User createSampleUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("john.doe");
+        user.setEmail("john.doe@example.com");
+        user.setPassword("password");
+        user.setEnabled(true);
+        user.setRole(Role.EMPLOYEE);
+        return user;
+    }
+
+    private Project createSampleProject() {
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("Sample Project");
+        project.setBackground("Sample Background");
+        project.setDuration(1);
+        project.setStart_date(new Date().getTime());
+        project.setEnd_date(new Date().getTime());
+        project.setObjective("Sample Objective");
+        project.setClosed(false);
+        return project;
+    }
+
     @Test
     void testSave() {
         Issue issue = new Issue();
@@ -90,22 +194,6 @@ class IssueServiceImplTest {
         issueRepository.save(issue);
 
         verify(issueRepository, times(1)).save(issue);
-    }
-
-    private User createSampleUser() {
-        User user = new User();
-        user.setId(1L);
-        user.setName("john.doe");
-        // Set other properties as needed for your tests
-        return user;
-    }
-
-    private Project createSampleProject() {
-        Project project = new Project();
-        project.setId(1L);
-        project.setName("Sample Project");
-        // Set other properties as needed for your tests
-        return project;
     }
 
     private Client createSampleClient() {
@@ -164,43 +252,6 @@ class IssueServiceImplTest {
         assertEquals(1, issues1.size());
         verify(issueRepository, times(1)).findAll();
     }
-
-//    @Test
-//    void testGetAllIssues() {
-//        // Arrange
-//        MockitoAnnotations.openMocks(this);
-//        // Initialize a list containing a single sample issue
-//        List<Issue> sampleIssues = Collections.singletonList(createSampleIssue());
-//        // Mock the behavior of the issueRepository to return the sampleIssues when findAll() is called
-//        when(issueRepository.findAll()).thenReturn(sampleIssues);
-//
-//        // Mock necessary mappings for UserDto, ClientDto, and ProjectDto
-//        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
-//        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
-//        when(modelMapper.map(any(Project.class), eq(ProjectDto.class))).thenReturn(new ProjectDto());
-//
-//        // Act
-//        // Call the getAllIssues() method to get the list of issues
-//        List<IssueDto> issues = issueService.getAllIssues();
-//
-//        // Assert
-//        // Ensure that the size of the returned issues list is 1
-//        assertEquals(1, issues.size(), "Expected one issue in the result");
-//
-//        // You can add more assertions based on your logic
-//        // Check that ProjectDto and UserUploader are not null in the first issue
-//        assertNotNull(issues.get(0).getProjectDto(), "ProjectDto should not be null");
-//        assertNotNull(issues.get(0).getUser_uploader(), "UserUploader should not be null");
-//
-//        // Verify interactions if needed
-//        // Verify that the findAll() method on issueRepository was called exactly once
-//        verify(issueRepository, times(1)).findAll();
-//        // Verify that the map method on modelMapper with UserDto as the target class was called at least once
-//        verify(modelMapper, atLeastOnce()).map(any(Issue.class), eq(IssueDto.class));
-//        // You can add more verifications as needed
-//    }
-//
-
 
     private Issue createSampleIssue() {
         Issue issue = new Issue();
@@ -278,12 +329,46 @@ class IssueServiceImplTest {
     }
 
     @Test
-    void getPendingIssueList() {
+    void testGetPendingIssueList() {
+        // Arrange
+        MockitoAnnotations.openMocks(this);
 
+        // Mock data
+        long picId = 1L;
+        Issue pendingIssue = createPendingIssue();
+        List<Issue> pendingIssueList = Collections.singletonList(pendingIssue);
+
+        // Mock repository behavior
+        when(issueRepository.findAllByIssueStatusAndPicId(IssueStatus.PENDING, picId)).thenReturn(pendingIssueList);
+
+        // Mock mappings
+        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
+        when(modelMapper.map(any(Project.class), eq(ProjectDto.class))).thenReturn(new ProjectDto());
+
+        // Act
+        List<IssueDto> issueDtos = issueService.getPendingIssueList(picId);
+
+        // Assert
+        assertEquals(1, issueDtos.size(), "Expected one pending issue in the result");
+
+        IssueDto resultIssueDto = issueDtos.get(0);
+        assertNotNull(resultIssueDto.getResponsible_party(), "Responsible party should not be null");
+        assertNotNull(resultIssueDto.getUser_pic(), "User pic should not be null");
+        assertNotNull(resultIssueDto.getUser_uploader(), "User uploader should not be null");
+        assertNotNull(resultIssueDto.getProjectDto(), "ProjectDto should not be null");
+        assertEquals(IssueStatus.PENDING.toString(), resultIssueDto.getStatus(), "IssueStatus should be PENDING");
+
+        // You can add more specific assertions based on your mapping logic
+
+        // Verify interactions
+        verify(issueRepository, times(1)).findAllByIssueStatusAndPicId(IssueStatus.PENDING, picId);
+        verify(modelMapper, atLeastOnce()).map(any(Issue.class), eq(IssueDto.class));
     }
 
     @Test
     void updateStatusOfIssueList() {
+
     }
 
     @Test
@@ -395,6 +480,4 @@ class IssueServiceImplTest {
         assertEquals(1, issues.size());
         verify(issueRepository, times(1)).findByIssueCategory(Category.TESTING);
     }
-
-    // Add more test cases to cover other branches and scenarios
 }
