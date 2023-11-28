@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 class ProjectServiceImplTest {
     @Mock
@@ -102,11 +103,127 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void testGetAllProjects() {
+    public void testGetAllProjects() {
+        // Arrange
+        List<Project> mockProjects = createMockProjects();
+        when(projectRepository.findAll()).thenReturn(mockProjects);
 
+
+        // Act
+        List<ProjectDto> result = projectService.getAllProjects();
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(mockProjects.size(), result.size()); // Check if the result size matches the mock project size
+
+        // Add more specific assertions based on the expected behavior inside the loop
+        for (int i = 0; i < mockProjects.size(); i++) {
+            Project mockProject = mockProjects.get(i);
+            ProjectDto resultDto = result.get(i);
+
+            assertEquals(mockProject.getId(), resultDto.getId());
+            // Add more assertions for other properties
+
+            // Verify that systemOutLineDto is correctly mapped
+            if (mockProject.getSystemOutLine() != null) {
+                verify(modelMapper, times(1)).map(mockProject.getSystemOutLine(), SystemOutLineDto.class);
+            }
+
+            // Verify that clientDto is correctly mapped
+            verify(modelMapper, times(1)).map(mockProject.getClient(), ClientDto.class);
+
+            // Verify that projectManagerUserDto is correctly mapped
+            verify(modelMapper, times(1)).map(mockProject.getProjectManager(), UserDto.class);
+
+            // Verify that departmentDto is correctly mapped
+            verify(modelMapper, times(1)).map(mockProject.getDepartment(), DepartmentDto.class);
+
+            // Verify that getTasks() and countByProjectIdAndDeletedFalse() are called for each project
+            verify(mockProject.getTasks(), times(1)).stream();
+            verify(taskRepository, times(1)).countByProjectIdAndDeletedFalse(mockProject.getId());
+
+            // Add more assertions for other dependencies and properties
+        }
+    }
+
+    @Test
+    public void testGetAllProjectsByProjectManagerIdEmptyList() {
+        // Arrange
+        long managerId = 1L;
+        when(projectRepository.findAllByProjectManagerId(managerId)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<ProjectDto> result = projectService.getAllProjectsByProjectManagerId(managerId);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        // Verify interactions
+        verify(projectRepository, times(1)).findAllByProjectManagerId(managerId);
+        // Verify other interactions as needed
     }
 
 
+
+    private List<Project> createMockProjects() {
+        // Create mock projects for testing
+        List<Project> projects = new ArrayList<>();
+        // Add projects with different properties
+        return projects;
+    }
+
+    @Test
+    void testGetProjectById() {
+        // Test Case 1: Project found
+        // Arrange
+        long projectId = 1L;
+        Project mockProject = createMockProject();
+
+        // Mocking the findById method on projectRepository
+        when(projectRepository.findById(projectId)).thenReturn(Optional.of(mockProject).get());
+
+        // Simulate SystemOutLineDto mapping
+        SystemOutLineDto systemOutLineDto = new SystemOutLineDto();
+        when(modelMapper.map(any(), eq(SystemOutLineDto.class))).thenReturn(systemOutLineDto);
+
+        // Simulate other mappings
+        when(modelMapper.map(any(), eq(ClientDto.class))).thenReturn(new ClientDto());
+        when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());
+        when(modelMapper.map(any(), eq(AmountDto.class))).thenReturn(new AmountDto());
+        when(modelMapper.map(any(), eq(ReviewDto.class))).thenReturn(new ReviewDto());
+        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(Architecture.class), eq(ArchitectureDto.class))).thenReturn(new ArchitectureDto());
+        when(modelMapper.map(any(Deliverable.class), eq(DeliverableDto.class))).thenReturn(new DeliverableDto());
+
+        // Simulate task count
+        when(taskRepository.countByProjectIdAndDeletedFalse(projectId)).thenReturn(5L);
+        when(mockProject.getTasks()).thenReturn(createMockTasks(10));
+
+        // Act
+        ProjectDto result = projectService.getProjectById(projectId);
+
+        // Assert
+        assertNotNull(result);
+        assertNotNull(result.getSystemOutLineDto());
+        assertNotNull(result.getClientDto());
+        assertNotNull(result.getProjectManagerUserDto());
+        assertNotNull(result.getDepartmentDto());
+        assertEquals(5L, result.getTotalTaskCount());
+        // Add more assertions based on your logic
+
+        // You can also verify interactions if needed
+        verify(projectRepository, times(1)).findById(projectId);
+        verify(modelMapper, times(1)).map(any(), any());
+        // Add more verifications as needed
+    }
+
+
+    private List<Tasks> createMockTasks(int count) {
+        // Implement your logic to create mock tasks
+        return Collections.emptyList();
+    }
 
     @Test
     void testGetProjectByName() {
@@ -890,12 +1007,16 @@ class ProjectServiceImplTest {
 
     private List<Project> createMockProjectList() {
         List<Project> projects = new ArrayList<>();
-        // Create mock projects and add them to the list
-        // For example:
-        // Project project1 = new Project();
-        // project1.setId(1L);
-        // project1.setName("Project 1");
-        // projects.add(project1);
+        for (int i = 0; i < 5; i++) {
+            Project project = new Project();
+            project.setId((long) i);
+            project.setName("Project " + i);
+            project.setStart_date(170000000000000L);
+            project.setEnd_date(180000000000000L);
+            project.setClosed(false);
+
+            projects.add(project);
+        }
 
         return projects;
     }
@@ -973,5 +1094,74 @@ class ProjectServiceImplTest {
         verify(taskRepository, times(mockProjectList.size())).countByProjectIdAndDeletedFalse(anyLong());
         verify(modelMapper, times(mockProjectList.size())).map(any(), eq(ProjectDto.class));
     }
+
+    @Test
+    public void testUpdateProjectClosed() {
+        // Arrange
+        long projectId = 1L;
+        boolean condition = true;
+
+        Project mockProject = createMockProject();
+        AvailableUser mockAvailableUser = createMockAvailableUser();
+
+        when(projectRepository.getReferenceById(projectId)).thenReturn(mockProject);
+        when(aes.getAvailableUserByUserId(anyLong())).thenReturn(mockAvailableUser);
+
+        // Act
+        projectService.updateProjectClosed(projectId, condition);
+
+        // Assert
+
+        // Verify if project is updated with the given condition
+        assertEquals(condition, mockProject.isClosed());
+
+        // Verify if the AvailableUser is updated for each project user when the condition is true
+        if (condition) {
+            verify(aes, times(mockProject.getUsers().size())).save(any(AvailableUser.class));
+        } else {
+            verify(aes, never()).save(any(AvailableUser.class)); // No update expected if condition is false
+        }
+
+        // Verify if project users are set to null when the condition is true
+        if (condition) {
+            assertNull(mockProject.getUsers());
+        } else {
+            assertNotNull(mockProject.getUsers()); // Users should not be null if condition is false
+        }
+
+        // Verify that project is saved
+        verify(projectRepository, times(1)).save(mockProject);
+    }
+
+
+    private Project createMockProject() {
+        Project project = new Project();
+        project.setId(1L);
+        project.setClosed(false);
+
+        // Initialize the users property to an empty set
+        project.setUsers(new HashSet<>());
+
+
+        // Set other properties as needed
+        // ...
+
+        return project;
+    }
+
+
+    private User createMockUser() {
+        User user = new User();
+        // Set up user properties
+        return user;
+    }
+
+    private AvailableUser createMockAvailableUser() {
+        AvailableUser availableUser = new AvailableUser();
+        // Set up availableUser properties
+        return availableUser;
+    }
+
+
 
 }
