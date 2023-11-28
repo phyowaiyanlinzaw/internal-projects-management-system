@@ -6,30 +6,49 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.AvailableUserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.uidto.UserUIDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.AvailableUser;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
+import team.placeholder.internalprojectsmanagementsystem.repository.project.AvailableUserRepo;
 import team.placeholder.internalprojectsmanagementsystem.service.FakerService;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.department.DepartmentServiceImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserControllerTest {
     @Mock
     private UserServiceImpl userService;
+
+    @Mock
+    private ModelMapper modalMapper;
     @Mock
     private DepartmentServiceImpl departmentService;
+
+    @Mock
+    private AvailableUserRepo availableEmployeeService;
     @Mock
     private DepartmentDto departmentDto;
     @Mock
@@ -514,6 +533,102 @@ public class UserControllerTest {
     }
 
 
+        @Test
+        void getAllAvailableUsersByPMId() throws Exception {
+            // Mocking data for the test
+            Long pmId = 1L;
 
+            // Mock the behavior of userService.getAllUsersByPMId
+            List<UserDto> mockUsers = new ArrayList<>();
+            // Add some mock users to the list...
+
+            when(userService.getAllUsersByPMId(pmId)).thenReturn(mockUsers);
+
+            // Mock the behavior of availableEmployeeService.findByUserIdIn
+            List<Long> userIdList = mockUsers.stream().map(UserDto::getId).toList();
+            List<AvailableUser> mockAvailableUsers = new ArrayList<>();
+            // Add some mock available users to the list...
+
+            when(availableEmployeeService.findByUserIdIn(userIdList)).thenReturn(mockAvailableUsers);
+
+            // Act
+            ResponseEntity<List<AvailableUserDto>> result = userController.getAllAvailableUsersByPMId(pmId);
+
+            // Verify
+            verify(userService).getAllUsersByPMId(pmId);
+
+        }
+    @Test
+    void testUpdateUser() {
+        // Arrange
+        long userId = 1L;
+        UserUIDto userUIDto = new UserUIDto(); // Create a UserUIDto with test data
+
+        // Mock the behavior of userService.updateUser
+        UserDto mockUpdatedUser = new UserDto(); // Create a mock UserDto with expected data
+        when(userService.updateUser(userUIDto)).thenReturn(mockUpdatedUser);
+
+        // Act
+        ResponseEntity<UserDto> result = userController.updateUser(userId, userUIDto);
+
+        // Assert
+        verify(userService).updateUser(userUIDto);
+
+        if (mockUpdatedUser != null) {
+            assertEquals(200, result.getStatusCodeValue()); // OK status code
+            assertNotNull(result.getBody()); // Make sure the response body is not null
+            // Add more assertions based on your specific requirements, e.g., comparing properties of the returned user.
+        } else {
+            assertEquals(400, result.getStatusCodeValue()); // Bad Request status code
+            assertEquals(null, result.getBody()); // Make sure the response body is null
+        }
+    }
+    @Test
+    void testGetUserById() {
+        // Arrange
+        long userId = 1L;
+
+        // Mock the behavior of userService.getUserById
+        UserDto mockUser = new UserDto(); // Create a mock UserDto with test data
+        when(userService.getUserById(userId)).thenReturn(mockUser);
+
+        // Act
+        ResponseEntity<UserDto> result = userController.getUserById(userId);
+
+        // Assert
+        verify(userService).getUserById(userId);
+
+        if (mockUser != null) {
+            assertEquals(200, result.getStatusCodeValue()); // OK status code
+            assertNotNull(result.getBody()); // Make sure the response body is not null
+            assertEquals(mockUser, result.getBody()); // Compare the returned user with the mock user
+        } else {
+            assertEquals(404, result.getStatusCodeValue()); // Not Found status code
+            assertTrue(result.getBody() == null); // Make sure the response body is null
+        }
+    }
+
+
+    @Test
+    void testGetUsers() {
+        // Arrange
+        List<UserDto> mockUsers = new ArrayList<>(); // Create a list of mock UserDto with test data
+
+        // Mock the behavior of userService.getAllUsers
+        when(userService.getAllUsers()).thenReturn(mockUsers);
+
+        // Act
+        List<UserDto> result = userController.getUsers();
+
+        // Assert
+        verify(userService).getAllUsers();
+        assertEquals(mockUsers.size(), result.size()); // Compare the size of the returned list with the mock list
+        // You may want to add more specific assertions depending on the behavior you expect.
+    }
 
 }
+
+
+
+
+

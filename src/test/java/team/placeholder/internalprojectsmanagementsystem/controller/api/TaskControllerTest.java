@@ -6,9 +6,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.TaskRequestDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 
 import java.util.Arrays;
@@ -16,6 +23,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class TaskControllerTest {
 
@@ -163,5 +173,45 @@ class TaskControllerTest {
 
         // Verifying that taskService.deleteById is called once
         verify(taskService, times(1)).deleteById(taskId);
+    }
+
+    @Test
+    void getTaskById() throws Exception {
+        long taskId = 1L;
+        TasksDto mockTaskDto = new TasksDto();
+        when(taskService.getTaskById(taskId)).thenReturn(mockTaskDto);
+
+        // Act
+        ResponseEntity<TasksDto> result = taskController.getTaskById(taskId);
+
+        // Assert
+        verify(taskService).getTaskById(taskId);
+    }
+
+    @Test
+    void countTaskByUserIdAndStatus() {
+        TaskStatus status = TaskStatus.TODO;
+        long expectedCount = 5L;
+
+        // Mock the behavior of taskService.countByUserEmailAndStatus
+        when(taskService.countByUserEmailAndStatus(anyString(), eq(status)))
+                .thenReturn(expectedCount);
+
+        // Set up a mock Authentication object
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", null);
+
+        // Set the mock Authentication object in the SecurityContextHolder
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Act
+        ResponseEntity<Long> result = taskController.countTaskByUserIdAndStatus(status.name());
+
+        // Assert
+        assertEquals(200, result.getStatusCodeValue(), "Should return OK status code");
+        assertEquals(expectedCount, result.getBody(), "Returned count should match the expected count");
+
+        // Verify that taskService.countByUserEmailAndStatus was called with the correct arguments
+        verify(taskService).countByUserEmailAndStatus("testUser", status);
+
     }
 }

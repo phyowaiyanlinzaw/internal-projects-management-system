@@ -286,6 +286,25 @@ class IssueControllerTest {
 
         verify(issueService, times(1)).getUnsolvedIssues(userId);
     }
+    @Test
+    void testCountIssuesByProjectManagerId() {
+        // Arrange
+        long projectManagerId = 1L;
+
+        long expectedCount = 10L; // Replace with the expected count
+
+        // Mock the behavior of issueService.countIssuesByProjectManagerId
+        when(issueService.countIssuesByProjectManagerId(projectManagerId)).thenReturn(expectedCount);
+
+        // Act
+        ResponseEntity<Long> result = issueController.countIssuesByProjectManagerId(projectManagerId);
+
+        // Assert
+        assertEquals(200, result.getStatusCodeValue()); // OK status code
+        assertEquals(expectedCount, result.getBody()); // Compare the count in the response with the expected count
+
+        // Optionally, you can add more assertions or verifications based on your specific requirements.
+    }
 
 
 
