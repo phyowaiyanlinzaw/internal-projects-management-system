@@ -658,15 +658,15 @@ document.getElementById("task-edit-btn").addEventListener("click", function () {
     }
     document.getElementById("pm-assigned-member-span").classList.add("d-none")
 
-    
-        tagify = new Tagify(assignedMemberTagify, {
-            enforceWhitelist: true,
-            mode: "select",
-            whitelist: membersList.map((member) => {
-                return { id: member.id, value: member.name + " | " + member.role };
-            }),
-            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
-        });
+
+    tagify = new Tagify(assignedMemberTagify, {
+        enforceWhitelist: true,
+        mode: "select",
+        whitelist: membersList.map((member) => {
+            return { id: member.id, value: member.name + " | " + member.role };
+        }),
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(', ')
+    });
 
     const currentAssignedUser = { id: currentTask.userDto.id, value: currentTask.userDto.name + " | " + currentTask.userDto.role }
 
@@ -807,7 +807,7 @@ saveBtn.addEventListener("click", function (event) {
             console.log(response)
             console.log(response.userDto.id)
             $(`#task-${response.id} > .modal-detail-title`).text(response.title)
-            $(`#assigned-member-span-${response.id}`).text(response.userDto.name) 
+            $(`#assigned-member-span-${response.id}`).text(response.userDto.name)
             title.textContent = response.title
             titleInput.value = response.title
             taskGroupSpan.innerText = response.tasksGroup
@@ -1055,7 +1055,34 @@ for (let i = 0; i < taskList.length; i++) {
             parseInt(currentTask.getAttribute("index"))
             ];
         if (currentZone.classList.contains("dummy-trash")) {
-            bModal.show();
+            // bModal.show();
+
+            Swal.fire({
+                title: "Are you sure want to delete this task?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/api/task/delete`,
+                        type: "DELETE",
+                        data: JSON.stringify(currentTaskData.id),
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log(response);
+
+                            document.querySelector('#task-' + currentTaskData.id).remove()
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        },
+                    });
+                }
+            })
+
         } else if (status.some(a => currentZone.getAttribute("id") === a)) {
             if (currentTaskData.status !== currentZone.getAttribute("id")) {
                 currentTaskData.status = currentZone.getAttribute("id")
@@ -1211,7 +1238,31 @@ todoForm.addEventListener("submit", (e) => {
         newTask.classList.remove("is-dragging");
         console.log(newTask);
         if (currentZone.classList.contains("dummy-trash")) {
-            bModal.show();
+            Swal.fire({
+                title: "Are you sure want to delete this task?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/api/task/delete`,
+                        type: "DELETE",
+                        data: JSON.stringify(currentTaskData.id),
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log(response);
+
+                            document.querySelector('#task-' + currentTaskData.id).remove()
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        },
+                    });
+                }
+            })
         }
         task.classList.remove("is-dragging");
     });
@@ -1724,10 +1775,11 @@ $("#task-add-btn").on("click", function () {
                 contentType: "application/json",
                 success: function (response) {
                     console.log(response);
-                    location.reload();
+                     location.reload();
+                    
                 },
                 error: function (response) {
-                    console.log(response);
+                    // console.log(response);
                 },
             });
         }

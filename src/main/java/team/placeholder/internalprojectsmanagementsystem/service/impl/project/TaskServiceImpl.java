@@ -49,6 +49,9 @@ public class TaskServiceImpl implements TasksService {
         Project project = projectRepository.findById(taskRequestDto.getProjectId());
         task.setUser(user);
         task.setProject(project);
+
+        TasksDto tasksDto = modelMapper.map(task, TasksDto.class);
+        tasksDto.setUserDto(modelMapper.map(task.getUser(), UserDto.class));
         try {
             log.info("Trying to save task");
             taskRepository.save(task);
@@ -63,7 +66,7 @@ public class TaskServiceImpl implements TasksService {
             log.error("Filled Stack Trace: ", e.fillInStackTrace());
         }
 
-        return modelMapper.map(task, TasksDto.class);
+        return tasksDto;
     }
 
     @Override
