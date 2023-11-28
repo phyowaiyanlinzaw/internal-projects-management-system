@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="sidebar">
+    <!-- Sidebar Start -->
+    <div class="sidebar pe-4 pb-3">
+        <nav class="navbar navbar-light">
+            <a th:href="@{/dashboard}" class="navbar-brand mx-4 mb-3">
+                <h5 style="color: #369; font-weight: bold;">
+                    DIR-Ace Technology
+                </h5>
+            </a>
+            <div class="navbar-nav w-100 gap-2">
+                <a th:href="@{/dashboard}" class="nav-item nav-link "><i
+                        class="bi bi-clipboard-data-fill me-1"></i>Dashboard</a>
+                <a th:href="@{/department}" class="nav-item nav-link" sec:authorize="hasAnyRole('PMO','SDQC')"><i
+                        class="fa-solid fa-building" ></i>Department</a>
+                <a th:href="@{/project/all}" class="nav-item nav-link"><i class="bi bi-collection-fill me-1"></i>All
+                    Projects</a>
+                <a th:href="@{/issue}" class="nav-item nav-link"><i class="fa-solid fa-triangle-exclamation"></i>Issues</a>
+                <a th:href="@{/employees}" class="nav-item nav-link" sec:authorize="hasAnyRole('PMO','SDQC')"><i class="fa-solid fa-users-rectangle"></i>Employees</a>
+            </div>
+        </nav>
+    </div>
+    <!-- Sidebar End -->
+</div>
+</body>
+</html>

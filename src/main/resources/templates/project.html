@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="layout/layout"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+</head>
+
+<body layout:fragment="content">
+
+<script type="module" src="/js/callDataForTask.js" async></script>
+<script type="module" src="/js/currentLoginUser.js" async></script>
+
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
+        <span class="sr-only"></span>
+    </div>
+</div>
+<!-- Spinner End -->
+
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<div class="container-fluid position-relative d-flex p-0">
+    <!-- Content Start -->
+    <div class="content" style="
+                    background-color: #e5e5f7;
+                    opacity: 1;
+                    background-image: radial-gradient(
+                        #444cf7 0.6000000000000001px,
+                        #e5e5f7 0.6000000000000001px
+                    ); background-size: 12px 12px;">
+        <div th:replace="fragments/navigation :: navigation-without-search"></div>
+
+        <div class="toast-container position-fixed p-3 end-0 bottom-0 " id="toasts-noti-container" style="z-index: 99;">
+            <!-- Then put toasts within -->
+            
+            
+        </div>
+
+        <div class="container-fluid mt-2">
+            <p style="display:none;" th:text="${projectId}" id="projectId"></p>
+            <nav class="py-1 px-2">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/project/all">Project List</a></li>
+                    <li class="breadcrumb-item active">
+
+                        <script type="module">
+
+                            import { getData } from "/js/api-function.js";
+
+                            const currentProject = await getData('/api/project/list/' + document.getElementById("projectId").innerText)
+
+                            document.querySelector(".breadcrumb-item.active").innerText = currentProject.name
+
+                        </script>
+
+                    </li>
+                </ol>
+            </nav>
+            <!-- nav for task and gantt chart start -->
+            <nav class="d-flex justify-content-between align-items-center" id="nav-container">
+                <ul class="nav nav-tabs d-flex  rounded-top" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active border-primary border border-bottom-0"
+                                id="tasks-tab" data-bs-toggle="tab" data-bs-target="#task"
+                                type="button" role="tab" aria-controls="task" aria-selected="false">
+                            <i class="fa-solid fa-list-check"></i>
+                            
+                            <p style="display:none;" th:text="${project.getStart_date()}" id="projectStartDate"></p>
+                            <p style="display:none;" th:text="${project.getEnd_date()}" id="projectEndDate"></p>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link border-primary border border-bottom-0 rounded-top"
+                                id="project-etails-tab" data-bs-toggle="tab" data-bs-target="#project-detials-view" type="button"
+                                role="tab" aria-controls="project-detials-view" aria-selected="false">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link border-primary border border-bottom-0 rounded-top"
+                                id="gantt-chart-tab" data-bs-toggle="tab" data-bs-target="#gantt-chart" type="button"
+                                role="tab" aria-controls="gantt-chart" aria-selected="false">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </button>
+                    </li>
+                    <script type="module">
+
+                        import {getCurrentLoginUser} from '/js/currentLoginUser.js'
+
+                        import {getData} from '/js/api-function.js'
+
+                        const dog = await getCurrentLoginUser();
+
+                        const lol = await getData('/api/project/list/' + document.getElementById("projectId").innerText)
+
+                        console.log("dog", dog.currentUser.role)
+
+                        if (dog.currentUser.role === 'PROJECT_MANAGER') {
+
+                            const li = document.createElement('li')
+                            li.classList = 'nav-item'
+                            li.role = 'presentation'
+                            li.id = 'add-employee-list-button-container'
+
+                            if(lol.closed) {
+                                li.classList.add('d-none')
+                            }
+
+                            const addEmpButton = document.createElement('button')
+                            addEmpButton.classList = 'nav-link border-primary border border-bottom-0 rounded-top'
+                            addEmpButton.id = 'add-employee-tab'
+                            addEmpButton.type = 'button'
+                            addEmpButton.setAttribute("data-bs-target", "#add-employee-modal")
+                            addEmpButton.setAttribute("data-bs-toggle", "modal")
+
+                            const i = document.createElement('i')
+                            i.classList = 'bi bi-person-plus-fill'
+
+                            addEmpButton.appendChild(i)
+                            li.appendChild(addEmpButton)
+
+                            document.querySelector("#myTab").appendChild(li)
+
+                        }
+
+                    </script>
+                </ul>
+                <script type="module">
+                    import { getCurrentLoginUser } from "/js/currentLoginUser.js";
+                    const loginUser = await getCurrentLoginUser();
+                    if (loginUser.currentUser.role === 'PROJECT_MANAGER') {
+                        const inputElement = document.createElement('input');
+                        inputElement.id = 'project-open-close';
+                        inputElement.type = 'checkbox';
+                        inputElement.checked = true;
+                        inputElement.setAttribute('data-toggle', 'toggle');
+                        inputElement.setAttribute('data-on', 'open');
+                        inputElement.setAttribute('data-off', 'closed');
+                        inputElement.setAttribute('data-size', 'sm');
+                        inputElement.setAttribute('data-onstyle', 'success');
+                        inputElement.setAttribute('data-offstyle', 'danger');
+                        const parentContainer = document.getElementById('nav-container');
+                        parentContainer.appendChild(inputElement);
+                    }
+                </script>
+            </nav>
+            <!-- nav for task and gantt chart end -->
+            <div class="tab-content pb-5" id="myTabContent">
+
+                <div class="tab-pane fade position-relative" id="project-detials-view" role="tabpanel" aria-labelledby="project-detail-tab">
+
+                    <div class="mx-auto mt-2" style=" background-color: white;">
+
+                        <div class="card" style="overflow-x: hidden;">
+                            <div class="card-header d-flex justify-content-between ">
+                                <div class="header-title">
+                                    <h4 class="card-title text-primary fw-bold fs-2">Project Details</h4>
+                                </div>
+                            </div>
+                            <div class="card-body bg-white " style="overflow-y: auto; max-height: 66vh;">
+                                
+                                <div class="d-flex gap-3 mb-2">
+                                    <div class="d-flex gap-1 align-items-center">
+                                        <p class="m-0 fw-bold text-primary">Name : </p>
+                                        <div id="project-detail-name"></div>
+                                    </div>
+                                    <div class="d-flex gap-1 align-items-center">
+                                        <p class="m-0 fw-bold text-primary">Start date : </p>
+                                        <div id="project-detail-start-date"></div>
+                                    </div>
+
+                                    <div class="d-flex gap-1 align-items-center">
+                                        <p class="m-0 fw-bold text-primary">End date : </p>
+                                        <div id="project-detail-end-date"></div>
+                                    </div>
+
+                                     <div class="d-flex gap-1 align-items-center">
+                                        <p class="m-0 fw-bold text-primary">Duration : </p>
+                                        <div id="project-detail-duration"></div>
+                                    </div>
+                                
+                                </div>
+                                <hr>
+                                
+                                <div>
+                                    <p class="d-flex gap-1 align-items-center fw-bold text-primary">Background</p>
+                                    <div id="project-detail-background"></div>
+                                </div>
+                                <hr>
+
+                                <div>
+                                    <h4 class="text-primary">Objective</h4>
+                                    <div id="project-detail-objective"></div>
+                                </div>
+
+                                <hr>
+
+                                <div class="row row-cols-2">
+                                    <div class="">
+                                        <div class="d-flex gap-2">
+                                            <h4 class="text-primary">Deliverable List</h4>
+                                            <button type="button" class="mb-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-deliverable-modal">
+
+                                                <i class="fa-solid fa-plus"></i>
+                                                Add deliverable
+                                            </button>
+                                        </div>
+                                        <div
+                                            id="project-detail-deliverable"
+                                            class="d-flex flex-column gap-2"
+                                        ></div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex gap-2">
+                                            <h4 class="text-primary">Architecture List</h4>
+                                            <button type="button" class="mb-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-architecture-modal">
+
+                                                <i class="fa-solid fa-plus"></i>
+                                                Add architecture
+                                            </button>
+                                        </div>
+                                        
+                                        <div
+                                            id="project-detial-architecture"
+                                            class="d-flex gap-2 flex-wrap"
+                                        ></div>
+                                        
+                                    </div>
+                                </div>
+
+                                
+                                
+                            </div>
+                            <div class="card-footer">
+
+                            </div>
+                        </div>
+
+                        
+
+                    </div>
+
+                </div>
+
+                <div class="tab-pane fade show active" id="task" role="tabpanel" aria-labelledby="tasks-tab">
+                    
+                    <!-- <div class="d-flex justify-content-end trash-can-container dummy-trash position-absolute" id="trash-bin" style="bottom: 100px; right: -100px; width: 60px">
+                            <span class="trash align-self-end dummy-trash"><span class="dummy-trash"></span></span>
+                    </div> -->
+                    <script type="module">
+                        import { getUser } from "/js/currentLoginUser.js";
+
+                        const user = await getUser();
+
+                        if(user.currentUser.role === 'PROJECT_MANAGER') {
+                            const trashCanContainer = document.createElement("div")
+                            trashCanContainer.classList = 'd-flex justify-content-end trash-can-container position-absolute dummy-trash'
+                            trashCanContainer.id = 'trash-bin'
+                            trashCanContainer.style = 'bottom: 100px; right: -10px; width: 60px'
+                            trashCanContainer.innerHTML = `
+                            <span class="trash align-self-end dummy-trash"><span class="dummy-trash"></span></span>
+                            `
+                            document.querySelector("#task").appendChild(trashCanContainer)
+                        }
+
+                    </script>
+                    <div class="board">
+                        <!-- add task form start -->
+                        <!-- add task form end -->
+
+                        <div class="lanes" id="sort-container">
+                            <div class="lane">
+                                <h3 class="heading bg-primary text-white rounded-top p-2 d-flex justify-content-between align-items-center">
+                                    TODO
+                                    <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#add-task"
+                                            id="add-task-btn"
+                                    >
+                                        <i
+                                                class="bi bi-plus-circle"
+                                        ></i>
+                                    </button>
+                                </h3>
+                                <div class="swim-lane p-3" id="TODO">
+                                </div>
+                                <div class="bg-primary rounded-bottom" style="height: 10px"></div>
+                            </div>
+                            <!-- doing start -->
+                            <div class="lane">
+                                <h3 class="heading bg-info text-white rounded-top py-hee">IN PROGRESS</h3>
+                                <div class="swim-lane p-3" id="IN_PROGRESS"></div>
+                                <div class="bg-info rounded-bottom" style="height: 10px"></div>
+                            </div>
+                            <!-- doing end -->
+                            <!-- done start -->
+                            <div class="lane">
+                                <h3 class="heading bg-success text-white rounded-top py-hee">FINISHED</h3>
+                                <div class="swim-lane p-3" id="FINISHED"></div>
+                                <div class="bg-success rounded-bottom" style="height: 10px"></div>
+                            </div>
+                            <!-- done end -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- calendar start -->
+                <div class="tab-pane fade mt-3" id="gantt-chart" role="tabpanel" aria-labelledby="gantt-chart-tab">
+                    <div id="calendar"></div>
+                </div>
+
+                <!-- calendar end -->
+            </div>
+        </div>
+    </div>
+    <!-- Content End -->
+
+    <div class="modal fade" id="add-employee-modal" tabindex="-1" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
+            <div class="modal-content ">
+                <div class="modal-body d-flex flex-column gap-2">
+                    <div class="row row-cols-3">
+                        <div>Name</div>
+                        <div>Role</div>
+                        <div class="text-end"><button type="button" class="btn btn-primary" id="add-new-employee-to-project">Select all</button></div>
+                    </div>
+                    <div class="d-flex flex-column gap-2" id="list-of-employee-to-add-in-project">
+                        
+                    </div>
+                    <div style="width: 100%;" class="d-flex justify-content-center align-items-center d-none" id="no-result-emp">
+                    <div class="d-flex justify-content-center align-items-center flex-column">
+                        <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                        <h3>Nothing to show!</h3>
+                    </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="save-new-employee-list">save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-bs-backdrop="static" id="add-deliverable-modal" tabindex="-1" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content ">
+                <div class="modal-header ">
+                    <input type="text" placeholder="Search" id="deli-search" class="form-control">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2" id="list-of-deliverable-to-add-in-project" style="max-height: 200px; overflow-y:auto;">
+                        
+                    </div>
+                </div>
+                <div style="width: 100%;" class="d-flex justify-content-center align-items-center d-none" id="no-result-deli">
+                    <div class="d-flex justify-content-center align-items-center flex-column">
+                        <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                        <h3>Nothing to show!</h3>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="save-new-deliverable">save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" data-bs-backdrop="static" id="add-architecture-modal" tabindex="-1" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content ">
+                <div class="modal-header ">
+                    <input type="text" placeholder="Search" id="arch-search" class="form-control">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2" id="list-of-architecture-to-add-in-project">
+                        
+                    </div>
+                </div>
+                <div style="width: 100%;" class="d-flex justify-content-center align-items-center d-none" id="no-result-arch">
+                    <div class="d-flex justify-content-center align-items-center flex-column">
+                        <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                        <h3>Nothing to show!</h3>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="save-new-architecture">save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- add task -->
+    <div class="modal fade" data-bs-keyboard="true" id="add-task">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content task-content">
+                <div class="modal-header">
+                    <h2 class="card-title" style="text-align: center"> Add Task </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3" id="todo-form">
+                        <div class="col-12">
+                            <label for="title" class="col-sm-12 col-form-label">Task Title <span style="color:red"> *</span></label>
+                            <input type="text" class="form-control border-task-title" id="title" name="title"></input>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="description" class="col-sm-12 col-form-label" >Description <span style="color:red"> *</span></label>
+                            <textarea class="form-control border-task-description"
+                                    id="description" name="description" rows="2"></textarea>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label for="select-member" class="col-sm-12 col-form-label">
+                                Assign Members<span style="color: red">*</span></label>
+                            <input type="text" name="member-tags" id="select-member" placeholder="Select An Employee"/>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="group" class="col-sm-12 col-form-label">
+                                Group <span style="color:red"> *</span></label>
+                            <select class="form-control" aria-label="Select Group" data-live-search="true"
+                                    id="group" name="group">
+                                <option value="" selected disabled>Select Group</option>
+                                 <option value="A">A - Related With Project Development</option>
+                                <option value="B">B - Training</option>
+                                <option value="C">C - Idling</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="start_date" class="col-sm-12 col-form-label">
+                                Start Date<span style="color: red">*</span></label>
+                            <input type="text" class="form-control border-task-description" id="start_date"/>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="end_date" class="col-sm-12 col-form-label">
+                                End Date<span style="color: red">*</span></label>
+                            <input type="text" class="form-control border-task-description" id="end_date"/>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="plan-hours" class="col-sm-12 col-form-label">
+                                Plan Hours<span style="color: red">*</span></label>
+                            <input type="number" class="form-control border-task-description" id="plan-hours" oninput="validity.valid||(value='');" min="1"/>
+                        </div>
+
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary col-2" data-dismiss="modal"
+                                    id="task-add-btn">Add</button>
+                            <button class="btn btn-secondary mr-3" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- add task -->
+
+    <!-- task's details for project manager start -->
+    <div class="modal fade" id="pm-task-details" data-bs-keyboard="true" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content task-content">
+                <div class="modal-header">
+                    <h2 class="card-title display-6 fw-bold" style="text-align: center;" id="pm-task-title">
+                    </h2>
+                    <!-- d-none that would be hidden and later on will be shown -->
+                    <input type="text" id="pm-task-title-input" class="d-none">
+                    <span class='ms-3 rounded-2 p-2 text-white' id="pm-status"></span>
+
+                    <button type="button" class="btn-close btn-close-task-details" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row row-cols-2">
+                        <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
+                                    <span><i class="fa-solid fa-bars-staggered"></i></span>
+                            <label class="editable-label" for="pm-description-editor">Description</label>
+                            <textarea id="pm-description-editor" class="form-control editable-input"
+                                    name="description" rows="4" disabled ></textarea>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <i class="fa-solid fa-thumbtack"></i>
+                            <label class="editable-label" >Type of Task</label>
+                            <div class="mt-2">
+                                <span class="bg-secondary text-white border-0 p-2 rounded-1"
+                                      id="pm-task-group-span"></span>
+                            </div>
+                            <select class="form-control d-none" aria-label="Select Group" data-live-search="true"
+                                    id="pm-task-group" name="group">
+                                <option value="A">A - Related With Project Development</option>
+                                <option value="B">B - Training</option>
+                                <option value="C">C - Idling</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <i class="fa-solid fa-users"></i>
+                            <label for="pm-assigned-member-tagify">Assigned Member </label>
+                            <input type="text"value=""  id="pm-assigned-member-tagify" class="editable-input d-none" name="member-tags" placeholder="Update Employee for Task"/>
+                            <div class="mt-2">
+                                <span class="bg-dark text-white border-0 p-2 rounded-1"
+                                      id="pm-assigned-member-span"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 mb-4">
+                            <span><i class="fa-solid fa-hourglass-start"></i></span>
+                            <label class="label">
+                                Duration</label>
+                            <div class="mt-2">
+                                <div class="badge rounded-3 bg-primary fs-6" id="pm-task-duration">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="editable-label" for="pm-task-detail-start-date">Start Date</label>
+                            <input type="text" id="pm-task-detail-start-date" class="form-control border-task editable-input"
+                                    dir="auto" data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled/>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="editable-label" for="pm-task-detail-due-date">Due Date</label>
+                            <input type="text" id="pm-task-detail-due-date" class="form-control border-task editable-input" dir="auto"
+                                    data-autosize="true" style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled/>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="editable-label" for="pm-plan-edit-hours">Plan Hours</label>
+                            <input type="number" class="form-control border-task-description" id="pm-plan-edit-hours" oninput="validity.valid||(value='');" min="0"/>
+                        </div>
+
+                        <div class="col-lg-3 mb-4">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="editable-label" for="pm-actual-edit-hours">Actual Hours</label>
+                            <input type="number" class="form-control" id="pm-actual-edit-hours"oninput="validity.valid||(value='');" min="1"/>
+                        </div>
+
+
+                    </div>
+
+                    <!--                    edit button and cancel button -->
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-primary col-2"  id="task-edit-btn">Edit</button>
+                        <button class="d-none col-1 rounded-2 border-2 border-success" id="save-edit-btn">
+                            <i class="fa-solid fa-circle-check text-success"></i>
+                        </button>
+                        <button class="d-none col-1 rounded-2 border-2 border-danger" id="cancel-edit-btn">
+                            <i class="fa-solid fa-circle-xmark text-danger"></i>
+                        </button>
+                        <button type="reset" class="btn btn-secondary mr-3 btn-close-task-details" data-bs-dismiss="modal" id="task-cancel-btn">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- task's details for project manager end -->
+
+    <!-- task's details for member start -->
+    <div class="modal fade" id="member-task-details" data-bs-keyboard="true" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content task-content">
+                <div class="modal-header">
+                    <h2 class="card-title display-6 fw-bold" style="text-align: center;" id="member-task-title">
+                    </h2>
+                    <span class='ms-3 rounded-2 p-2 text-white' id="member-task-status"></span>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row row-cols-2">
+                        <div class="col-lg-12 mb-4 col-md-12 col-sm-12">
+                                    <span><i class="fa-solid fa-bars-staggered"></i></span>
+                            <label class="label">Description</label>
+                            <textarea id="member-task-description" class="form-control" name="description" rows="4" disabled></textarea>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <i class="fa-solid fa-thumbtack"></i>
+                            <label class="label" >Type of Task</label>
+                            <div class="mt-2">
+                                <span class="bg-secondary text-white border-0 p-2 rounded-1" id="member-task-group-span"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <i class="fa-solid fa-users"></i>
+                            <label class="label">Assigned Member </label>
+                            <div class="mt-2">
+                                <span class="bg-dark text-white border-0 p-2 rounded-1" id="member-assigned-member-span"></span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-lg-2 mb-4">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <label class="label">Plan Hours</label>
+                            <div class="mt-2"><div class="badge rounded-3 bg-info fs-6" id="member-task-plan-hours"></div></div>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="label">Start Date</label>
+                            <input type="text" id="member-task-detail-start-date" class="form-control" dir="auto" data-autosize="true"
+                                    style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled />
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                                    <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <label class="label">Due Date</label>
+                            <input type="text" id="member-task-detail-due-date" class="form-control" dir="auto" data-autosize="true"
+                                    style="overflow: hidden; overflow-wrap: break-word; height: 37px;" disabled />
+                        </div>
+
+
+                        <div class="col-lg-2 mb-4">
+                            <span><i class="fa-solid fa-hourglass-start"></i></span>
+                            <label class="label">Duration</label>
+                            <div class="mt-2"><div class="badge rounded-3 bg-primary fs-6" id="member-task-duration"></div></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- task's details for member end -->
+
+
+    <!-- confrim box for delete -->
+    <div class="modal fade" id="confirm-box" data-bs-keyboard="false" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>Are you sure want to delete ?</span>
+                    <button class="btn btn-danger col me-1">YES</button>
+                    <button class="btn btn-primary col" data-bs-dismiss="modal" aria-label="Close">NO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- confirm box for delete -->
+
+    <!--    actual hours input modal -->
+    <div class="modal fade" id="actual-hours-input-modal" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">Enter Actual Working Hours</div>
+                <div class="modal-body">
+                    <label for="actual-hours-input" class="col-form-label"></label>
+                    <input type="number" class="form-control" id="actual-hours-input" oninput="validity.valid||(value='');" min="1" >
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="actual-hours-input-btn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    actual hours input modal -->
+
+    <div class="modal fade" id="alert-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="alert alert-success text-center" role="alert" id="alert-text">
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- fontawesome -->
+    <script src="/js/fontawesome.js"></script>
+
+    <!-- jquery -->
+    <script src="/js/jquery.3.7.1.min.js"></script>
+
+    <!-- datable table -->
+    <script src="/js/databales.min.js"></script>
+
+    <!-- bootstrap -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+    <!-- javascript libraries -->
+    <script src="/lib/quill/quill.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="/js/main.js"></script>
+
+    <!-- sort (department, project), form validation and search bar behavior are all here -->
+    <script src="/js/custome.js"></script>
+
+    <!-- jqeury date picker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"
+            integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--    for assign member-->
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/js/bootstrap5-toggle.min.js"></script>
+    <script src="/js/task.js" type="module"></script>
+    <script src="/js/notification.js" type="module"></script>
+    <script src="/js/ProjectDetail.js" type="module"></script>
+    
+</div>
+</body>
+</html>

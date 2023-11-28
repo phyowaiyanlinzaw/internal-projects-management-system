@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+<html
+        lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Internal Project Management</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta
+            name="keywords"
+            content="project, management, project management, teamplaceholder project management"
+    />
+    <meta content name="description"/>
+    <meta name="author" content="teamplaceholder's project"/>
+
+    <!-- Favicon -->
+    <!-- <link href="/images/favicon.ico" rel="icon"> -->
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- bootstrap icons -->
+    <link rel="stylesheet" href="/font/bootstrap-icons.min.css"/>
+
+    <link rel="stylesheet" href="/lib/quill/quill.bubble.css"/>
+    <link rel="stylesheet" href="/lib/quill/quill.snow.css"/>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/css/multi-select-tag.css"/>
+
+    <!-- Bootstrap Tables -->
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/bootstrap-table.min.css"
+    />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"> -->
+    <!-- Template Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/logout-modal.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
+    <script defer src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script type="module" defer>
+        $(document).ready(function () {
+            confirmLogout();
+        });
+        //department list ________________________________________________
+        //________________________________________________________________
+        import {getData} from "/js/api-function.js";
+
+        async function getAllDepartments() {
+            return await getData('/api/department/list')
+        }
+
+        const motherContainer = document.querySelector("#sort-container");
+
+        const fragment = document.createDocumentFragment();
+
+
+
+        let dpList = await getAllDepartments();
+
+        console.log(dpList)
+
+        // Call the function when
+        getAllDepartments()
+            .then(data => {
+                dpList = [...data];
+
+
+                    // let currentProject = dpList[i];
+                    // Do something with currentProject
+                    for (let i = 0; i < dpList.length; i++) {
+
+                        let currentDp = dpList[i];
+
+                        // Create the outermost <div> with class "col-lg-4 col-md-4" and style
+                        const outerDiv = document.createElement("div");
+                        outerDiv.classList.add("col-lg-4", "col-md-4");
+                        outerDiv.style.paddingBottom = "20px";
+
+// Create the first <div> with class "card card-block card-stretch card-height" and background color
+                        const cardDiv = document.createElement("div");
+                        cardDiv.classList.add("card", "card-block", "card-stretch", "card-height");
+                        cardDiv.style.backgroundColor = "rgb(242, 247, 248)";
+
+// Create the inner <div> with class "card-body"
+                        const cardBodyDiv = document.createElement("div");
+                        cardBodyDiv.classList.add("card-body");
+
+// Create the <div> for the image
+                        const imageDiv = document.createElement("div");
+                        imageDiv.classList.add("d-flex", "align-items-center", "justify-content-between", "mb-4");
+
+// Create the icon element with bootstrap icon from bootstrap-icons
+                        const image = document.createElement("i");
+                        image.classList.add("bi", "bi-building", "text-primary");
+                        image.style.fontSize = "50px";
+
+// Create the <h5> element with class "mb-1 card-title modal-detail-title"
+                        const title = document.createElement("h5");
+                        title.classList.add("mb-1", "card-title", "modal-detail-title", "card-text");
+                        title.setAttribute("id", `DH-id-${currentDp.id}`)
+                        title.textContent = currentDp.name;
+
+// Create the <div> for the group of avatar images
+                        const avatarGroupDiv = document.createElement("div");
+                        avatarGroupDiv.classList.add("d-flex", "align-items-center", "justify-content-between", "pt-3", "border-top");
+
+                        const mediaGroup = document.createElement("div");
+                        mediaGroup.classList.add("iq-media-group");
+
+// Create and append the avatar icons
+                        for (let i = 0; i < 1; i++) {
+                            const avatarLink = document.createElement("a");
+                            avatarLink.href = "#";
+                            avatarLink.classList.add("iq-media")
+
+                            const avatarIcon = document.createElement("i");
+                            avatarIcon.classList.add("bi", "bi-person-circle", "text-primary");
+                            avatarIcon.style.fontSize = "30px";
+                            avatarLink.appendChild(avatarIcon);
+                            mediaGroup.appendChild(avatarLink);
+                        }
+//department list end_________________________________________________________________________
+//____________________________________________________________________________________________
+// Create the "See More" button
+                        const seeMoreButton = document.createElement("a");
+                        seeMoreButton.href = "";
+                        seeMoreButton.classList.add("btn", "btn-white", "text-secondary", "link-shadow");
+                        seeMoreButton.setAttribute("dp-id", currentDp.id);
+                        console.log("Department Id : "+currentDp.id);
+                        seeMoreButton.dataset.bsToggle = "modal";
+                        seeMoreButton.dataset.bsTarget = "#department-details";
+                        seeMoreButton.textContent = "See More";
+                        //_______________________________________
+
+                        seeMoreButton.addEventListener("click", function (e) {
+
+                            getData(`/api/department/byId/${currentDp.id}`).then(data => {
+                                console.log("Department : " + data);
+                                    document.querySelector("#department-id").value = data.id;
+                                    document.querySelector("#edit-department-name").value = data.name;
+                                }
+                            ).catch(error => console.log(error))
+                            getData(`/api/user/count/department/${currentDp.id}`).then(data => {
+                                 console.log("Total Member : " + data);
+                                document.querySelector("#total-member").textContent = data
+                            }).catch(error => console.log(error))
+
+                            getData(`/api/project/count/department/${currentDp.id}`).then(data => {
+                                document.querySelector("#total-project").textContent = data
+                            }).catch(error => console.log(error))
+
+
+                            console.log("Current Department : " + currentDp.id)
+
+                            getData(`/api/user/role/DEPARTMENT_HEAD/departmentId/${currentDp.id}`).then(data => {
+                                console.log("Department Head : " + data);
+                                const departmentHeadElement = document.querySelector("#department-head");
+                                departmentHeadElement.textContent = data.name;
+                                console.log("DH for the current dp", data);
+                            }).catch(error => console.log(error))
+
+                        });
+// Append elements to construct the structure
+                        outerDiv.appendChild(cardDiv);
+                        cardDiv.appendChild(cardBodyDiv);
+                        cardBodyDiv.appendChild(imageDiv);
+                        imageDiv.appendChild(image);
+                        cardBodyDiv.appendChild(title);
+                        avatarGroupDiv.appendChild(mediaGroup);
+                        cardBodyDiv.appendChild(avatarGroupDiv);
+                        avatarGroupDiv.appendChild(seeMoreButton);
+
+// Append the container div to the document or the desired parent element
+
+                        fragment.appendChild(outerDiv)
+                    }
+                motherContainer.appendChild(fragment);
+            })
+            //.catch(error => {console.error('Error:', error);})
+
+        document.getElementById("edit-department").addEventListener("click", function () {
+            var departmentId = document.getElementById("department-id").value;
+            var departmentName = document.getElementById("edit-department-name").value;
+
+            if (departmentName === "") {
+                showError("Department Name Cannot Be Blank...");
+                return;
+            }
+
+            Swal.fire({
+                title: "Are you sure want to edit?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    console.log("Id : " + departmentId)
+                    console.log("name : ", departmentName);
+
+
+                    for (var i = 0; i < dpList.length; i++) {
+                        if (dpList[i].name === departmentName) {
+                            if (dpList[i].id.toString() === departmentId.toString()) {
+                            } else {
+                                showError("Department Name Already Exists...");
+                                return;
+                            }
+                        }
+                    }
+
+                    var data = {
+                        id: departmentId,
+                        name: departmentName,
+                    };
+
+                    $.ajax({
+                        type: "PUT", // Use PUT method to update data
+                        url: `api/department/update/${departmentId}`, // Replace with your server-side endpoint URL
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        success: function (response) {
+                            // Handle the success response from the server, e.g., display a success message
+                            $(`#DH-id-${response.id}`).text(response.name);
+                            $('#staticBackdropLabel').text(response.name);
+                            showSuccess("Update Successfully...");
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Ajax request failed: " + textStatus, errorThrown);
+                        }
+                    });
+
+                }
+            });
+        });
+
+        fragment.childNodes.forEach(node => {
+            console.log('fragment child',node);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        });
+
+        function showError(message) {
+            $("#errorText").text(message);
+            $("#errorAlert").show();
+
+            setTimeout(function () {
+                $("#errorAlert").hide();
+            }, 3000);
+
+            //close alert box
+            $(".btn-close").on("click", function () {
+                $("#errorAlert").hide();
+            });
+        }
+
+        function showSuccess(message) {
+            $("#successText").text(message);
+            $("#successAlert").show();
+
+            setTimeout(function () {
+                $("#successAlert").hide();
+            }, 3000);
+
+            //close alert box
+            $(".btn-close").on("click", function () {
+                $("#successAlert").hide();
+            });
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+
+<div th:replace="fragments/sidebar :: sidebar"></div>
+
+<div class="container-fluid position-relative bg-white d-flex p-0">
+    <!-- Content Start -->
+    <div class="content" style="
+                    background-color: #e5e5f7;
+                    opacity: 1;
+                    background-image: radial-gradient(
+                        #444cf7 0.6000000000000001px,
+                        #e5e5f7 0.6000000000000001px
+                    );
+                    background-size: 12px 12px;
+                ">
+        <!-- Navbar Start -->
+        <div th:replace="fragments/navigation :: navigation-without-search"></div>
+
+        <div class="toast-container position-fixed p-3 end-0 bottom-0 " id="toasts-noti-container" style="z-index: 99;">
+            <!-- Then put toasts within -->
+            
+            
+        </div>
+        <!-- Navbar End -->
+
+        <!-- Search Start -->
+        <div class="container-fluid d-md-block pt-2 ps-s pe-2" id="dropdrown-search-bar">
+            <div class="d-flex flex-row justify-content-between align-items-center">
+                <nav class="">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Departments</li>
+                    </ol>
+                </nav>
+                <div>
+                    <form class="d-inline-block">
+                        <input class="form-control border-0" type="search" placeholder="Search"/>
+                    </form>
+                    <!-- sortting button -->
+                    <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Search End -->
+
+        <!-- department start -->
+
+        <div id="grid" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
+            <div class="row" id="sort-container" style="margin: 10px">
+
+            </div>
+
+        </div>
+        <!-- department end -->
+    </div>
+    <!-- Content End -->
+
+    <!-- modal for department's details -->
+    <div class="modal fade" id="department-details" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #369; color: white">
+                    <h5 class="modal-title" id="staticBackdropLabel">Department Details</h5>
+                    <button type="button" class="btn-close text-white btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="container-fluid">
+                        <div class="row row-cols-1">
+                            <div class="card align-items-center" >
+                                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                                    <div class="profile-card-icon">
+                                        <img src="/images/avatars/departmenthead_avatar.svg" class="rounded-circle" style="height: 100px; width: 100px" alt="department head avatar"/>
+                                    </div>
+                                    <h4 style="margin-top: 10px">Department Head</h4>
+                                    <h5 id="department-head"></h5>
+                                </div>
+                            </div>
+                            <div class=" pt-3">
+                                <ul class="nav nav-tabs nav-tabs-bordered">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" data-bs-toggle="tab"
+                                                data-bs-target="#profile-overview">Overview
+                                        </button>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" >
+                                            Edit
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content pt-3">
+                                    <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                        <div class="row row-cols-lg-1 row-cols-lg-1 row-cols-md-1 row-cols-xl-2">
+
+<!--                                            <ul class="list-group row" style="padding: 0;">-->
+<!--                                                -->
+<!--                                            </ul>-->
+
+                                            <div class="list-group-item d-flex justify-content-between align-items-center col-6">
+                                                Total Project<span class="badge bg-primary rounded-pill text-sm" id="total-project"></span>
+                                            </div> <br/>
+                                            <div class="list-group-item d-flex justify-content-between align-items-center col-6">
+                                                Total Member<span class="badge bg-primary rounded-pill text-sm" id="total-member"></span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                                        <div class="alert alert-danger alert-dismissible" id="errorAlert" style="display: none;">
+                                            <strong>Error : </strong> <span id="errorText"></span>
+                                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="alert alert-success alert-dismissible" id="successAlert" style="display: none;">
+                                            <strong>Success : </strong> <span id="successText"></span>
+                                            <button type="button" class="btn-close btn-dark" aria-label="close" style="background: transparent; position: absolute; top: 0; right: 0;">
+                                                &times;
+                                            </button>
+                                        </div>
+                                            <div>
+                                                <input type="hidden" id="department-id" name="department-id">
+                                            </div>
+                                            <div>
+                                                <label >Department Name</label>
+                                                <br/><br/>
+                                                <input type="text" class="form-control" name="departmentname"
+                                                       placeholder="Department Name" id="edit-department-name"/>
+                                            </div> <br />
+
+                                            <button  style="background-color: #369;" class="btn btn-primary py-2 w-100 mb-3"
+                                                    id="edit-department">Edit
+                                            </button>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal for department's details -->
+
+</div>
+</div>
+
+<!-- fontawesome -->
+<script src="/js/fontawesome.js"></script>
+
+<!-- jquery -->
+<script src="/js/jquery.3.7.1.min.js"></script>
+
+<!-- datable table -->
+<script src="/js/databales.min.js"></script>
+
+<!-- bootstrap -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- javascript libraries -->
+<script src="/lib/chart/chart.min.js"></script>
+<script src="/lib/quill/quill.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+
+<!-- sort (department, project), form validation and search bar behavior are all here -->
+<script src="/js/custome.js"></script>
+<script type="module">
+    $(document).ready(function () {
+        confirmLogout();
+    });
+
+    
+</script>
+<script src="/js/notification.js" type="module"></script>
+</body>
+</html>

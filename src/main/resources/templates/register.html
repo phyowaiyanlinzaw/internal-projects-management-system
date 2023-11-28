@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout"
+      lang="en">
+
+<body layout:fragment="content">
+
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<div class="container-fluid position-relative d-flex p-0">
+
+    <!-- Content Start -->
+    <div class="content" style="
+                    background-color: #e5e5f7;
+                    opacity: 1;
+                    background-image: radial-gradient(
+                        #444cf7 0.6000000000000001px,
+                        #e5e5f7 0.6000000000000001px
+                    );
+                    background-size: 12px 12px;">
+
+        <div th:replace="fragments/navigation :: navigation-with-search"></div>
+
+
+    </div>
+    <!-- Content End -->
+
+    <div
+            class="modal fade"
+            id="issue-details"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+    >
+
+    </div>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
+    ><i class="bi bi-arrow-up"></i
+    ></a>
+</div>
+
+<!-- fontawesome -->
+<script src="/js/fontawesome.js"></script>
+
+<!-- jquery -->
+<script src="/js/jquery.3.7.1.min.js"></script>
+
+<!-- datable table -->
+<script src="/js/databales.min.js"></script>
+
+<!-- bootstrap -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<script src="/lib/quill/quill.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+
+<!-- sort (department, project), form validation and search bar behavior are all here -->
+<script src="/js/custome.js"></script>
+
+<script>
+
+</script>
+</body>
+</html>

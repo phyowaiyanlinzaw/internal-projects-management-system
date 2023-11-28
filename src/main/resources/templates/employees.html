@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<head>
+    <title>EMPLOYEES LIST</title>
+</head>
+<body layout:fragment="content">
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only"></span>
+    </div>
+</div>
+<!-- Spinner End -->
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<div class="container-fluid position-relative d-flex p-0">
+
+    <!-- Content Start -->
+    <div class="content" style="
+                    background-color: #e5e5f7;
+                    opacity: 1;
+                    background-image: radial-gradient(
+                        #444cf7 0.6000000000000001px,
+                        #e5e5f7 0.6000000000000001px
+                    );
+                    background-size: 12px 12px;
+                ">
+        <div th:replace="fragments/navigation :: navigation-without-search"></div>
+
+        <div class="toast-container position-fixed p-3 end-0 bottom-0 " id="toasts-noti-container" style="z-index: 99;">
+            <!-- Then put toasts within -->
+            
+            
+        </div>
+        <div class="container-fluid">
+            <div id="toolbar"
+                 class="ms-3">
+                <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add
+                    Employee</a>
+                <div class="btn-group" role="group">
+                    <select class="form-control btn btn-primary" name="dropdown" id="exportPdfSelect" style="width: 30%;">
+                        <option value="" selected disabled>Export PDF</option>
+                        <option value="all">Export All</option>
+                        <option value="selected">Export Selected</option>
+                    </select>
+                </div>
+                <div class="btn-group" role="group">
+                    <select class="form-control btn btn-primary" name="dropdown" id="exportExcelSelect" style="width: 30%;">
+                        <option value="" selected disabled>Export Excel</option>
+                        <option value="all">Export All</option>
+                        <option value="selected">Export Selected</option>
+                    </select>
+                </div>
+                <!--open modal to register employee account-->
+            </div>
+            <table
+                    class="border border-primary bg-white text-secondary"
+                    id="table"
+                    data-toggle="table"
+                    data-toolbar="#toolbar"
+                    data-toolbar-align="right"
+                    data-search="true"
+                    data-filter-control="true"
+                    data-export-types="['csv', 'excel', 'pdf']"
+                    data-click-to-select="true"
+                    data-header-style="headerStyle"
+                    data-url="/api/user/employee/list"
+                    data-pagination="true"
+                    data-page-size="10"
+                    data-page-list="[5, 10, 25, 50, 100, all]"
+            >
+                <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5 border-white">
+                <tr>
+                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-sortable="true" data-formatter="indexFormatter" data-align="left" data-valign="middle"
+                        data-width="100">No.
+                    </th>
+                    <th data-sortable="true" data-field="email" data-align="left" data-valign="middle" data-width="100">
+                        Email
+                    </th>
+                    <th data-sortable="true" data-field="name" data-align="left" data-valign="middle" data-width="200">
+                        Name
+                    </th>
+                    <th data-sortable="true" data-field="department" data-align="left" data-valign="middle"
+                        data-width="200" data-formatter="departmentNameFormatter">Department
+                    </th>
+                    <th data-sortable="true" data-field="role" data-align="left" data-valign="middle" data-width="70">
+                        Role
+                    </th>
+                    <th data-sortable="true" data-field="enabled" data-align="left" data-valign="middle" data-width="30" data-formatter="statusFormatter">
+                        Status
+                    </th>
+                    <th data-field="operate" data-align="middle" data-valign="middle" data-halign="middle" data-formatter="operateFormatter"
+                        data-width="100">Action
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody>
+                </tbody>
+
+
+            </table>
+        </div>
+        <!--        <div th:replace="fragments/footer :: aside"></div>-->
+
+        <!-- Register Employee Modal -->
+        <div class="modal fade" id="addEmployeeModal" data-bs-backdrop="static" data-bs-keyboard="false"
+             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Register Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><!-- Modal Header End -->
+                    <div class="modal-body">
+
+                        <!--alert message bootstrap-->
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-success"
+                             style="display: none">
+                            <strong>Success!</strong> <span id="success-message"></span>
+                            <button type="button" class="btn-close btn-dark" aria-label="close"
+                                    style="background: transparent; position: absolute; top: 0; right: 0;">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-danger"
+                             style="display: none">
+                            <strong>Error!</strong> <span id="error-message"></span>
+                            <button type="button" class="btn-close btn-dark" aria-label="close"
+                                    style="background: transparent; position: absolute; top: 0; right: 0;">
+                                &times;
+                            </button>
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingText" placeholder="jhondoe" required>
+                            <label for="floatingText">Username</label>
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"
+                                   required>
+                            <label for="floatingInput">Email address</label>
+                        </div>
+
+                        <div>
+                            <select id="memberSelect" class="form-select form-select-lg mb-3"
+                                    aria-label=".form-select-lg example" style="font-size: 16px;" required>
+                                <option value="" selected disabled>Select Role</option>
+                                <option value="PROJECT_MANAGER">Project Manager</option>
+                                <option value="EMPLOYEE">Member</option>
+                                <option value="FOC">FOC</option>
+                                <option value="CONTRACT">Contract</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <select id="departmentSelect" class="form-select form-select-lg mb-3"
+                                    aria-label=".form-select-lg example" style="font-size: 16px;">
+                            </select>
+                            <div class="error-container d-none">
+                                <p class="text-danger fs-6 error-message" style="margin-top: 0;">
+                                    please select a department
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <select id="projectManagerSelect" class="form-select form-select-lg mb-3"
+                                    aria-label=".form-select-lg example" style="font-size: 16px;display: none">
+                            </select>
+                            <div class="error-container d-none">
+                                <p class="text-danger fs-6 error-message" style="margin-top: 0;">
+                                    please select project manager
+                                </p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-2" style="background-color: #369;"
+                                id="register-employee-btn">Register
+                        </button>
+                    </div>  <!-- Modal Body End -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Edit Employee Modal -->
+        <div class="modal fade" id="edit-employee-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Employee</h5>
+                    </div>
+                    <div class="modal-body">
+                        <!--alert message bootstrap-->
+                        <input type="hidden" id="userId" />
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="editName" placeholder="jhondoe" required>
+                            <label for="floatingText">Username</label>
+                        </div>
+
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="editEmail" placeholder="name@example.com"
+                                   required>
+                            <label for="floatingInput">Email address</label>
+                        </div>
+
+
+                        <div class="form-group">
+                            <select id="editDepartment" class="form-select form-select-lg mb-3"
+                                    aria-label=".form-select-lg example" style="font-size: 16px;" >
+                            </select>
+                        </div>
+
+                        <button type="submit"  class="btn btn-primary py-3 w-100 mb-2" style="background-color: #369;" id="edit_btn">Edit </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div
+    class="modal fade"
+    id="alert-modal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="alert alert-success text-center" role="alert" id="alert-text"></div>
+    </div>
+</div>
+<!-- Content End -->
+<!-- fontawesome -->
+<script src="/js/fontawesome.js"></script>
+<!-- jquery -->
+<script src="/js/jquery.3.7.1.min.js"></script>
+<!-- bootstrap -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+
+<!-- sort (department, project), form validation and search bar behavior are all here -->
+<script src="/js/custome.js"></script>
+
+<!-- Include pdfmake library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script>
+    $(document).ready(function () {
+        setupLogoutConfirmation();
+    });
+
+    $("#table").bootstrapTable({
+        exportOptions: {
+            fileName: "employee-list",
+            ignoreColumn: ["operate"],
+            exportHiddenCells: true
+        },
+    })
+
+    $('.bootstrap-table').removeClass('bootstrap4').addClass('bootstrap5');
+
+    //change status of employee (active/inactive)
+    $('#table').on('change', '.status-switch', function () {
+        const checked = $(this).prop('checked');
+        const id = $(this).attr('id').split('_')[1];
+        const row = $('#table').bootstrapTable('getData')[id];
+        const url = '/api/user/update/employee/' + row.id + '/status/' + (checked ? 'true' : 'false');
+        $.ajax({
+            url: url,
+            type: 'PUT',
+            success: function (data) {
+                $('#table').bootstrapTable('refresh');
+            },
+            error: function (data, xhr) {
+                alert('Error updating employee status');
+            },
+            complete: function () {
+                $('#table').bootstrapTable('refresh');
+            }
+        });
+    });
+
+    function indexFormatter(value, row, index) {
+        return index + 1;
+    }
+
+    function statusFormatter(value,row,index){
+        return '<div class="form-check form-switch">' +
+            '<input class="form-check-input status-switch" type="checkbox" id="statusSwitch_' + index + '"' + (value ? 'checked' : '') + '>' +
+            '<label class="form-check-label" for="statusSwitch_' + index + '">' + (value ? 'Active' : 'Inactive') + '</label>' +
+            '</div>';
+    }
+
+    function operateFormatter(value,row,index){
+        return [
+            //edit button that opens edit modal
+            '<button class="btn btn-sm btn-primary edit-employee-btn" data-id="' + row.id + '" data-bs-toggle="modal" data-bs-target="#edit-employee-modal" title="Edit">Edit</button>',
+        ].join(' ');
+    }
+
+    function departmentNameFormatter(value, row, index) {
+        if (value === null) {
+            return '-';
+        }
+        return value.name;
+    }
+
+    const exportDropdown    = document.getElementById("exportPdfSelect");
+
+    exportDropdown.addEventListener("change", function () {
+        const exportOption = exportDropdown.value;
+        if (exportOption === "all") {
+            exportAllRows();
+        } else if (exportOption === "selected") {
+            const selectedRows = $("#table").bootstrapTable("getSelections");
+            exportSelectedRows(selectedRows);
+        }
+    });
+    function exportAllRows() {
+        const docDefinition = {
+            content: [
+                {
+                    text: "All Employees",
+                    style: "header"
+                },
+                {
+                    table: {
+                        widths: ["auto", "auto", "auto", "auto", "auto", "auto"],
+                        body: [
+                            [
+                                "No.",
+                                "Email",
+                                "Name",
+                                "Department",
+                                "Role",
+                                "Status"
+                            ],
+                            ...$("#table").bootstrapTable("getData").map((row,index) => [
+                                index + 1,
+                                row.email,
+                                row.name,
+                                row.department ? row.department.name : "-",
+                                row.role,
+                                row.enabled ? 'Active' : 'Inactive'
+                            ])
+                        ]
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 0, 0, 10]
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).open()
+    }
+
+    function exportSelectedRows(selectedRows) {
+        const docDefinition = {
+            content: [
+                {
+                    text: "Selected Employees",
+                    style: "header"
+                },
+                {
+                    table: {
+                        widths: ["auto", "auto", "auto", "auto", "auto", "auto"],
+                        body: [
+                            [
+                                "No.",
+                                "Email",
+                                "Name",
+                                "Department",
+                                "Role",
+                                "Status"
+                            ],
+                            ...selectedRows.map((row,index) => [
+                                index + 1,
+                                row.email,
+                                row.name,
+                                row.department ? row.department.name : "-",
+                                row.role,
+                                row.enabled ? 'Active' : 'Inactive'
+                            ])
+                        ]
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true,
+                    margin: [0, 0, 0, 10]
+                }
+            }
+        };
+        pdfMake.createPdf(docDefinition).open()
+    }
+
+    const exportExcelDropdown = document.getElementById("exportExcelSelect");
+
+    exportExcelDropdown.addEventListener("change", function () {
+        const exportOption = this.value;
+        if (exportOption === "all") {
+            exportAllRowsToExcel();
+        } else if (exportOption === "selected") {
+            const selectedRows = $("#table").bootstrapTable("getSelections");
+            exportSelectedRowsToExcel(selectedRows);
+        }
+    });
+
+    function exportAllRowsToExcel() {
+        const rows = $("#table").bootstrapTable("getData");
+        const data = rows.map(row => [
+            row.email,
+            row.name,
+            row.department ? row.department.name : "-",
+            row.role,
+            row.enabled ? 'Active' : 'Inactive'
+        ]);
+        const workSheet = XLSX.utils.aoa_to_sheet([["Email", "Name", "Department", "Role", "Status"], ...data]);
+        const workBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workBook, workSheet, "Employees");
+        XLSX.writeFile(workBook, "employees.xlsx");
+    }
+
+    function exportSelectedRowsToExcel(selectedRows) {
+        const data = selectedRows.map(row => [
+            row.email,
+            row.name,
+            row.department ? row.department.name : "-",
+            row.role,
+            row.enabled ? 'Active' : 'Inactive'
+        ]);
+        const workSheet = XLSX.utils.aoa_to_sheet([["Email", "Name", "Department", "Role", "Status"], ...data]);
+        const workBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workBook, workSheet, "Employees");
+        XLSX.writeFile(workBook, "employees.xlsx");
+    }
+
+    $(function () {
+
+        function getDepartmentNameList() {
+            var departmentNameList = [];
+            $.ajax({
+                url: '/api/department/list',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    $.each(data, function (index, department) {
+                        departmentNameList.push(department);
+                    });
+                }
+            });
+            return departmentNameList;
+        }
+
+        //initialize department list with department names
+        var departmentNameList = getDepartmentNameList();
+        $('#departmentSelect').empty();
+        $('#departmentSelect').append($('<option>', {
+                        text: 'Select Department',
+                    }));
+        $.each(departmentNameList, function (index, departmentName) {
+            $('#departmentSelect').append($('<option>', {
+                value: departmentName.id,
+                text: departmentName.name
+            }));
+        });
+
+
+        $('#memberSelect').change(function () {
+            var selectedValue = $(this).val();
+            var departmentSelect = $('#departmentSelect');
+            var projectManagerSelect = $('#projectManagerSelect');
+            validateMemberRole()
+            console.log(selectedValue)
+            if (selectedValue === 'PROJECT_MANAGER') {
+                // Show departmentSelect
+                departmentSelect.show();
+
+                // Hide projectManagerSelect and clear selected value
+                projectManagerSelect.val('');
+                projectManagerSelect.hide();
+
+
+                // Make an AJAX request to populate departmentSelect options
+                $.get('/api/department/list', function (data) {
+                    departmentSelect.empty();
+
+                    departmentSelect.append($('<option>', {
+                        text: 'Select Department',
+                    }));
+                    $.each(data, function (index, department) {
+                        departmentSelect.append($('<option>', {
+                            value: department.id,
+                            text: department.name
+                        }));
+                    });
+                });
+            } else {
+                // Show projectManagerSelect and hide departmentSelect
+                projectManagerSelect.show();
+
+                // Hide departmentSelect and clear selected value
+                departmentSelect.val('');
+                departmentSelect.hide();
+
+                // Make an AJAX request to populate projectManagerSelect options
+                $.get('/api/user/list/role/PROJECT_MANAGER', function (data) {
+                    projectManagerSelect.empty();
+                    projectManagerSelect.append($('<option>', {
+                        text: 'Select Project manager',
+                    }));
+                    $.each(data, function (index, user) {
+                        projectManagerSelect.append($('<option>', {
+                            value: user.id, // Adjust this based on your data
+                            text: user.name // Adjust this based on your data
+                        }));
+                    });
+                });
+            }
+        });
+
+        //function show error with parameter message
+
+
+
+        // For Employee Register
+
+        let validatedForm = $('#register-employee-btn');
+
+        function validateUsername() {
+            const username = $('#floatingText').val();
+            const errorContainer = $('#floatingText').siblings('.error-container');
+            if (username.length < 1) {
+                
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Username is required")
+                        .css("margin", "0")
+                        .addClass('error-message');
+
+                    $('#floatingText').after('<div class="error-container"></div>');
+                    $('#floatingText').siblings('.error-container').append(p);
+                }
+
+                $('#floatingText').addClass('is-invalid');
+                $('#floatingText').removeClass('is-valid');
+                return false;
+            } else {
+               
+                errorContainer.remove();
+                $('#floatingText').addClass('is-valid');
+                $('#floatingText').removeClass('is-invalid');
+                return true;
+            }
+        }
+
+        function validateEmail() {
+            const email = $('#floatingInput').val();
+            const emailRegex =
+                /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+            const errorContainer = $('#floatingInput').siblings('.error-container');
+            if (emailRegex.test(email) === false) {
+                
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Email is required")
+                        .css("margin", "0")
+                        .addClass('error-message');
+
+                    $('#floatingInput').after('<div class="error-container"></div>');
+                    $('#floatingInput').siblings('.error-container').append(p);
+                }
+
+                $('#floatingInput').addClass('is-invalid');
+                $('#floatingInput').removeClass('is-valid');
+                return false;
+            } else {
+                
+                errorContainer.remove();
+                $('#floatingInput').addClass('is-valid');
+                $('#floatingInput').removeClass('is-invalid');
+                return true;
+            }
+        }
+
+        function validateMemberRole() {
+            const role = $('#memberSelect').val();
+
+            console.log(role)
+
+            const errorContainer = $('#memberSelect').siblings('.error-container');
+            if (!role ||role.length === 0) {
+                
+                if (errorContainer.length === 0) {
+                    let p = $("<p>")
+                        .addClass("text-danger fs-6")
+                        .text("Role is required")
+                        .css("margin-top", "0")
+                        .addClass('error-message');
+
+                    $('#memberSelect').after('<div class="error-container"></div>');
+                    $('#memberSelect').siblings('.error-container').append(p);
+                }
+
+                $('#memberSelect').addClass('is-invalid');
+                $('#memberSelect').removeClass('is-valid');
+                return false;
+            } else {
+
+                if(role === 'PROJECT_MANAGER'){
+                    console.log("role is project manager so validate department")
+                    validateDepartment();
+                } else {
+                    console.log("role is not project manager so validate project manager")
+                    validateProjectManager();
+                }
+
+                
+                errorContainer.remove();
+                $('#memberSelect').addClass('is-valid');
+                $('#memberSelect').removeClass('is-invalid');
+                return true;
+            }
+        }
+
+        function validateProjectManager() {
+            const projectmanager = $('#projectManagerSelect').val();
+
+            const errorContainer = $('#projectManagerSelect').siblings('.error-container');
+
+            $('#departmentSelect').siblings('.error-container').addClass('d-none')
+
+            console.log("eror for department should dispear")
+            
+            console.log(projectmanager)
+            if (isNaN(parseInt(projectmanager)) || parseInt(projectmanager) < 1) {
+                
+                errorContainer.removeClass('d-none')
+
+                $('#projectManagerSelect').addClass('is-invalid');
+                $('#projectManagerSelect').removeClass('is-valid');
+                return false;
+            } else {
+                
+                errorContainer.addClass('d-none')
+                $('#projectManagerSelect').addClass('is-valid');
+                $('#projectManagerSelect').removeClass('is-invalid');
+                return true;
+            }
+        }
+
+        function validateDepartment() {
+            const department = $('#departmentSelect').val();
+
+            console.log(department)
+
+            $('#projectManagerSelect').siblings('.error-container').addClass('d-none')
+            console.log("error for project manager should dispear")
+
+            const errorContainer = $('#departmentSelect').siblings('.error-container');
+            
+            console.log(parseInt(department))
+            console.log(errorContainer)
+            if (isNaN(parseInt(department)) || parseInt(department) < 1) {
+                
+
+                errorContainer.removeClass('d-none')
+
+                $('#departmentSelect').addClass('is-invalid');
+                $('#departmentSelect').removeClass('is-valid');
+                return false;
+            } else {
+                
+                errorContainer.addClass('d-none')
+                $('#departmentSelect').addClass('is-valid');
+                $('#departmentSelect').removeClass('is-invalid');
+                return true;
+            }
+        }
+
+        $('#floatingText').on('input', function () {
+            validateUsername();
+        });
+
+        $('#floatingInput').on('input', function () {
+            validateEmail();
+        });
+
+        $('#departmentSelect').on('change', function () {
+            validateDepartment();
+        });
+        $('#projectManagerSelect').on('change', function () {
+            validateProjectManager();
+        });
+
+
+        $('#register-employee-btn').click(function () {
+            var username = $('#floatingText').val();
+            var email = $('#floatingInput').val();
+            var role = $('#memberSelect').val();
+            var departmentId = $('#departmentSelect').val();
+            var projectManagerId = $('#projectManagerSelect').val();
+
+            if(!validateUsername()) return;
+            if(!validateEmail()) return;
+            if(!validateMemberRole()) return;
+            if(role === 'PROJECT_MANAGER'){
+                if(!validateDepartment()) return;
+            } else {
+                if(!validateProjectManager()) return;
+            }
+
+            console.log("department id : ",departmentId)
+            console.log("pm id : ",projectManagerId)
+
+            // Show a confirmation dialog using Swal
+            Swal.fire({
+                title: "Are you sure want to register this employee?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show the loading spinner on the button
+                    $('#register-employee-btn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Registering...');
+                    $('#register-employee-btn').prop('disabled', true);
+
+                    $.ajax({
+                        url: '/api/user/register-employee',
+                        type: 'POST',
+                        data: JSON.stringify({
+                            name: username,
+                            email: email,
+                            role: role,
+                            departmentId: departmentId,
+                            projectManagerId: projectManagerId
+                        }),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#alert-text").text("Employee Registered Successfully...");
+                            $("#alert-modal").modal("show");
+                            //empty the input fields
+                            $('#floatingText').val('');
+                            $('#floatingInput').val('');
+                            $('#memberSelect').val('');
+                            $('#departmentSelect').val('');
+                            $('#projectManagerSelect').val('');
+
+                            $('#addEmployeeModal').modal('hide');
+                            $('#register-employee-btn').html('Register').prop('disabled', false);
+                            $('#table').bootstrapTable('refresh');
+                            showSuccess('Employee registered successfully');
+                        },
+                        error: function (data, xhr) {
+                            $("#alert-text").text("Employee Registration Failed...");
+                            $("#alert-modal").modal("show");
+                            $('#register-employee-btn').html('Register').prop('disabled', false);
+                            $('#alert-danger').show();
+                        },
+                        complete: function () {
+
+                        }
+                    });
+                }
+            });
+        });
+
+        // for edit employee
+        $(document).on('click', '.edit-employee-btn', function () {
+            const employeeId = $(this).data('id');
+            console.log('Edit button clicked');
+            console.log("employeeId", employeeId);
+
+            $.ajax({
+                url: '/api/user/list/byId/' + employeeId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Data received:', data);
+
+                    if (data && Object.keys(data).length > 0) {
+                        // Populate employee details in the modal
+                        $('#userId').val(data.id);
+                        $('#editName').val(data.name);
+                        $('#editEmail').val(data.email);
+                        if (data.hasOwnProperty('role') && data.role === 'PROJECT_MANAGER') {
+                            if (data.hasOwnProperty('department') && data.department !== null) {
+                                var departmentId = data.department.id;
+
+                                // Show the department select box
+                                $('#editDepartment').closest('.form-group').show();
+
+                                // Populate department options
+                                populateDepartmentOptions(departmentId);
+                            } else {
+                                console.log('No department information found for employeeId: ', employeeId);
+                            }
+                        } else {
+                            $('#editDepartment').closest('.form-group').hide();
+                        }
+
+                    } else {
+                        console.log('No or invalid data received for employeeId: ', employeeId);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                    // Handle AJAX error
+                }
+            });
+        });
+
+        function populateDepartmentOptions(selectedDepartmentId) {
+            $.ajax({
+                url: '/api/department/list',
+                type: 'GET',
+                success: function (data) {
+                    var departmentSelect = $('#editDepartment');
+                    departmentSelect.empty();
+
+                    departmentSelect.append($('<option>', {
+                        value: '',
+                        text: 'Select Department',
+                    }));
+
+                    $.each(data, function (index, department) {
+                        departmentSelect.append($('<option>', {
+                            value: department.id,
+                            text: department.name,
+                            selected: department.id === selectedDepartmentId // Set selected based on the employee's department
+                        }));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error fetching department list:', error);
+                }
+            });
+        }
+
+
+        $(document).on('click', '#edit_btn', function () {
+            const employeeId = $('#userId').val();
+            var username = $('#editName').val();
+            var email = $('#editEmail').val();
+            var departmentId = $('#editDepartment').val();
+
+            console.log("department id : ", departmentId);
+
+            if (username === "" || email === "" || departmentId === "") {
+                showError("Please enter Edit");
+                return;
+            }
+
+            console.log("employee id : ", employeeId);
+            console.log("department id : ", departmentId);
+
+            Swal.fire({
+                title: "Are you sure want to Edit this employee?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#edit_btn').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...');
+                    $('#edit_btn').prop('disabled', true);
+
+
+                    var apiUrl = '/api/user/update/' + employeeId;
+
+
+                    const payload = {
+                        id: employeeId,
+                        name: username,
+                        email: email,
+                        departmentId: departmentId,
+                    };
+
+                    console.log("payload", payload);
+
+
+                    $.ajax({
+                        url: apiUrl,
+                        type: 'PUT',
+                        data: JSON.stringify(payload),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log('Data received:', data);
+                            $('#edit-employee-modal').modal('hide');
+                            $('#edit_btn').html('Edit').prop('disabled', false);
+                            $('#table').bootstrapTable('refresh');
+                            showSuccess('Employee updated successfully');
+                        },
+                        error: function (xhr, status, error) {
+                            showError('Error updating employee');
+                            $('#edit_btn').html('Edit').prop('disabled', false);
+                            $('#alert-danger').show();
+                        },
+                        complete: function () {
+
+                        }
+                    });
+                }
+            });
+        });
+
+
+
+
+    });
+
+    function showError(message) {
+        $('#error-message').text(message);
+        $('#alert-danger').show();
+
+        setTimeout(function () {
+            $('#alert-danger').hide();
+        }, 3000);
+
+        //close alert box
+        $('.btn-close').click(function () {
+            $('#alert-danger').hide();
+        });
+    }
+
+    //function show success with parameter message
+    function showSuccess(message) {
+        $('#success-message').text(message);
+        $('#alert-success').show();
+
+        setTimeout(function () {
+            $('#alert-success').hide();
+        }, 3000);
+
+        //close alert box
+        $('.btn-close').click(function () {
+            $('#alert-success').hide();
+        });
+    }
+</script>
+<script src="/js/notification.js" type="module"></script>
+</body>
+</html>
