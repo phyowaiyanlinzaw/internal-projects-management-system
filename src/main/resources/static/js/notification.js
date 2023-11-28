@@ -294,6 +294,7 @@ function createPendingIssueCard(issue) {
 
 channel.bind("issue-noti-event", async function(response) {
 
+    document.querySelector("#no-new-issue").classList.add("d-none");
     
     const hiddenElement = document.createElement('div');
     hiddenElement.style.display = 'none';

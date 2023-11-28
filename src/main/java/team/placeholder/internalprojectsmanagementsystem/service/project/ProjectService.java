@@ -42,7 +42,7 @@ public interface ProjectService {
 
     public void updateProjectClosed(long id, boolean condition);
 
-    //get start and end month of the projects
+
     
     public void updateUserListInProject(long id , List<UserDto> users);
 

@@ -417,7 +417,6 @@ class ProjectControllerTest {
     @Test
     void testGetAllProjectsByRoleForMember() {
         List<ProjectDto> projects = new ArrayList<>();
-
         when(projectService.findAllByUserId(anyLong())).thenReturn(projects);
 
         String role = "MEMBER";
@@ -432,16 +431,12 @@ class ProjectControllerTest {
         ResponseEntity<List<ProjectDto>> responseEntity = projectController.getAllProjectsByRole(role, id);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
-        // Use isAssignableFrom to specify the expected type of the returned projects
         assertTrue(responseEntity.getBody() instanceof List<?>);
         assertEquals(projects, responseEntity.getBody());
     }
 
-
     @Test
     void testGetAllProjectsByRoleForDefault() {
-
         when(projectService.getAllProjects())
                 .thenReturn(Arrays.asList(new ProjectDto(), new ProjectDto()));
 
@@ -449,9 +444,22 @@ class ProjectControllerTest {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertTrue(responseEntity.getBody() instanceof List<?>);
-
     }
 
+    @Test
+    void testGetAllProjectsByRoleForProjectManager() {
+        // Setup mocks and test for PROJECT_MANAGER role
+        Long projectManagerId = 1L;
+        List<ProjectDto> projects = Arrays.asList(new ProjectDto(), new ProjectDto());
+        when(projectService.getAllProjectsByProjectManagerId(projectManagerId)).thenReturn(projects);
+
+        ResponseEntity<List<ProjectDto>> responseEntity = projectController.getAllProjectsByRole("PROJECT_MANAGER", projectManagerId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof List<?>);
+        assertEquals(projects, responseEntity.getBody());
+        // Add more assertions specific to the PROJECT_MANAGER role
+    }
 
     @Test
     public void testGetProjectWithDpId() {
@@ -550,6 +558,9 @@ class ProjectControllerTest {
 
         }
     }
+
+
+
 
     @Test
     public void testNewListView() {

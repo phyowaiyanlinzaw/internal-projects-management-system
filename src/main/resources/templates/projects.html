@@ -875,15 +875,13 @@
                                 ${task.title}
                             </div>
                             <div class="col p-1 text-center">
-                                ${formatDate(task.plan_start_time)}
+                                ${formatDate(task.planStartTime)}
                             </div>
                             <div class="col p-1 text-center">
-                                ${formatDate(task.plan_end_time)}
+                                ${formatDate(task.planEndTime)}
                             </div>
                             <div class="col p-1 text-center">${task.userDto.name}</div>
-                            <div class="col p-1 text-center">
-                                ${task.userDto.role}
-                            </div>
+
                         </div>
                         `
                           )
@@ -929,9 +927,7 @@
                                 <div class="col p-0 text-center card-text">
                                     ${project.user.name}
                                 </div>
-                                <div class="col p-0 text-center">
-                                    ${project.user.role}
-                                </div>
+
                             </div>
                             <div
                                 id="collapse-project-${project.id}"
