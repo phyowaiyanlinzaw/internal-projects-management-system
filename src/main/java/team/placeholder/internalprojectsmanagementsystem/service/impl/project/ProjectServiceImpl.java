@@ -95,10 +95,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         Set<User> users = new HashSet<>();
 
-//        if(projectDto.getMembersUserDto() == null) {
-            projectDto.setMembersUserDto(new ArrayList<>());
-//        }
-
        for(UserDto user : projectDto.getMembersUserDto()) {
             users.add(userRepository.getReferenceById(user.getId()));
         }
