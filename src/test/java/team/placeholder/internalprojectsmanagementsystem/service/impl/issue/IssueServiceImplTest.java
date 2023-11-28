@@ -28,9 +28,10 @@ import team.placeholder.internalprojectsmanagementsystem.repository.user.ClientR
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.noti.NotificationService;
 
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -67,6 +68,108 @@ class IssueServiceImplTest {
     // Existing test cases...
 
     // New test cases...
+
+    @Test
+    void testGetPendingIssueListWhenUserIdProvidedThenReturnPendingIssues() {
+        // Arrange
+        long userId = 1L;
+        Issue pendingIssue = createPendingIssue();
+        List<Issue> pendingIssueList = Collections.singletonList(pendingIssue);
+
+        // Mock repository behavior
+        when(issueRepository.findAllByIssueStatusAndPicId(IssueStatus.PENDING, userId)).thenReturn(pendingIssueList);
+
+        // Mock mappings
+        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
+        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
+        when(modelMapper.map(any(Project.class), eq(ProjectDto.class))).thenReturn(new ProjectDto());
+
+        // Act
+        List<IssueDto> issueDtos = issueService.getPendingIssueList(userId);
+
+        // Assert
+        assertEquals(1, issueDtos.size(), "Expected one pending issue in the result");
+
+        IssueDto resultIssueDto = issueDtos.get(0);
+        assertNotNull(resultIssueDto.getResponsible_party(), "Responsible party should not be null");
+        assertNotNull(resultIssueDto.getUser_pic(), "User pic should not be null");
+        assertNotNull(resultIssueDto.getUser_uploader(), "User uploader should not be null");
+        assertNotNull(resultIssueDto.getProjectDto(), "ProjectDto should not be null");
+        assertEquals(IssueStatus.PENDING.toString(), resultIssueDto.getStatus(), "IssueStatus should be PENDING");
+
+        // Verify interactions
+        verify(issueRepository, times(1)).findAllByIssueStatusAndPicId(IssueStatus.PENDING, userId);
+        verify(modelMapper, atLeastOnce()).map(any(Issue.class), eq(IssueDto.class));
+    }
+
+    @Test
+    void testGetPendingIssueListWhenNoPendingIssuesThenReturnEmptyList() {
+        // Arrange
+        long userId = 1L;
+        List<Issue> emptyIssueList = Collections.emptyList();
+
+        // Mock repository behavior
+        when(issueRepository.findAllByIssueStatusAndPicId(IssueStatus.PENDING, userId)).thenReturn(emptyIssueList);
+
+        // Act
+        List<IssueDto> issueDtos = issueService.getPendingIssueList(userId);
+
+        // Assert
+        assertTrue(issueDtos.isEmpty(), "Expected empty list when no pending issues");
+
+        // Verify interactions
+        verify(issueRepository, times(1)).findAllByIssueStatusAndPicId(IssueStatus.PENDING, userId);
+    }
+
+    // Helper methods...
+
+    private Issue createPendingIssue() {
+        Issue issue = new Issue();
+        issue.setId(1L);
+        issue.setTitle("Test");
+        issue.setDescription("Test");
+        issue.setPlace("Test");
+        issue.setImpact("Test");
+        issue.setRoot_cause("Test");
+        issue.setDirect_cause("Test");
+        issue.setCorrective_action("Test");
+        issue.setPreventive_action("Test");
+        issue.setIssueStatus(IssueStatus.PENDING);
+        issue.setSolved(true);
+        issue.setCreated_date(new Date().getTime());
+        issue.setUpdated_date(new Date().getTime());
+        issue.setIssueCategory(Category.TESTING);
+        issue.setProject(createSampleProject());
+        issue.setUser_uploader(createSampleUser());
+        issue.setPic(createSampleUser());
+        issue.setResponsible_party(createSampleUser().getId());
+        issue.setResponsible_type(ResponsibleType.CLIENT);
+        return issue;
+    }
+
+    private User createSampleUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("john.doe");
+        user.setEmail("john.doe@example.com");
+        user.setPassword("password");
+        user.setEnabled(true);
+        user.setRole(Role.EMPLOYEE);
+        return user;
+    }
+
+    private Project createSampleProject() {
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("Sample Project");
+        project.setBackground("Sample Background");
+        project.setDuration(1);
+        project.setStart_date(new Date().getTime());
+        project.setEnd_date(new Date().getTime());
+        project.setObjective("Sample Objective");
+        project.setClosed(false);
+        return project;
+    }
 
     @Test
     void testGetPendingIssueListWhenStatusIsPendingAndIdIsGivenThenReturnMatchingIssues() {
@@ -118,56 +221,6 @@ class IssueServiceImplTest {
 
         // Verify interactions
         verify(issueRepository, times(1)).findAllByIssueStatusAndPicId(IssueStatus.PENDING, picId);
-    }
-
-    // Helper methods...
-
-    private Issue createPendingIssue() {
-        Issue issue = new Issue();
-        issue.setId(1L);
-        issue.setTitle("Test");
-        issue.setDescription("Test");
-        issue.setPlace("Test");
-        issue.setImpact("Test");
-        issue.setRoot_cause("Test");
-        issue.setDirect_cause("Test");
-        issue.setCorrective_action("Test");
-        issue.setPreventive_action("Test");
-        issue.setIssueStatus(IssueStatus.PENDING);
-        issue.setSolved(true);
-        issue.setCreated_date(new Date().getTime());
-        issue.setUpdated_date(new Date().getTime());
-        issue.setIssueCategory(Category.TESTING);
-        issue.setProject(createSampleProject());
-        issue.setUser_uploader(createSampleUser());
-        issue.setPic(createSampleUser());
-        issue.setResponsible_party(createSampleUser().getId());
-        issue.setResponsible_type(ResponsibleType.CLIENT);
-        return issue;
-    }
-
-    private User createSampleUser() {
-        User user = new User();
-        user.setId(1L);
-        user.setName("john.doe");
-        user.setEmail("john.doe@example.com");
-        user.setPassword("password");
-        user.setEnabled(true);
-        user.setRole(Role.EMPLOYEE);
-        return user;
-    }
-
-    private Project createSampleProject() {
-        Project project = new Project();
-        project.setId(1L);
-        project.setName("Sample Project");
-        project.setBackground("Sample Background");
-        project.setDuration(1);
-        project.setStart_date(new Date().getTime());
-        project.setEnd_date(new Date().getTime());
-        project.setObjective("Sample Objective");
-        project.setClosed(false);
-        return project;
     }
 
     @Test
