@@ -875,15 +875,13 @@
                                 ${task.title}
                             </div>
                             <div class="col p-1 text-center">
-                                ${formatDate(task.plan_start_time)}
+                                ${formatDate(task.planStartTime)}
                             </div>
                             <div class="col p-1 text-center">
-                                ${formatDate(task.plan_end_time)}
+                                ${formatDate(task.planEndTime)}
                             </div>
                             <div class="col p-1 text-center">${task.userDto.name}</div>
-                            <div class="col p-1 text-center">
-                                ${task.userDto.role}
-                            </div>
+                            
                         </div>
                         `
                           )
@@ -929,9 +927,7 @@
                                 <div class="col p-0 text-center card-text">
                                     ${project.user.name}
                                 </div>
-                                <div class="col p-0 text-center">
-                                    ${project.user.role}
-                                </div>
+                                
                             </div>
                             <div
                                 id="collapse-project-${project.id}"
@@ -2639,14 +2635,13 @@
                 >
                     <div class="rounded-2 px-4">
                         <div
-                            class="row col-rols-6 border-bottom border border-dark fs-5 fw-bold bg-primary text-white"
+                            class="row  border-bottom border border-dark fw-bold bg-primary text-white"
                         >
-                            <div class="col p-0 text-center">Status</div>
-                            <div class="col p-0 text-center">Title</div>
-                            <div class="col p-0 text-center">Start</div>
-                            <div class="col p-0 text-center">End</div>
-                            <div class="col p-0 text-center">Name</div>
-                            <div class="col p-0 text-center">Role</div>
+                            <div class="col p-0 text-center">progress</div>
+                            <div class="col p-0 text-center">title</div>
+                            <div class="col p-0 text-center">start</div>
+                            <div class="col p-0 text-center">end</div>
+                            <div class="col p-0 text-center">name</div>
                         </div>
                         <div class="text-end mt-2">
                             <div class="btn-group" role="group">
