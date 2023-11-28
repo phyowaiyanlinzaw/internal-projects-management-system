@@ -166,6 +166,10 @@ document.querySelector("#add-new-employee-to-project").addEventListener('click',
 
     console.log(e.target.innerText)
 
+    if(document.querySelector("#list-of-employee-to-add-in-project").children.length === 0 ) {
+        return;
+    }
+
     if (e.target.innerText === 'Select all') {
         e.target.innerText = 'Deselect all'
         console.log($('.pickme').prop('checked'))
@@ -411,8 +415,8 @@ document.querySelector('#member-task-details').addEventListener("shown.bs.modal"
 
 
     // Convert timestamp to Date objects
-    const startDate = new Date(currentTask.plan_start_time);
-    const endDate = new Date(currentTask.plan_end_time);
+    const startDate = new Date(currentTask.planStartTime);
+    const endDate = new Date(currentTask.planEndTime);
 
     // Get the date strings in 'yyyy-mm-dd' format
     const startDateString = startDate.toISOString().split('T')[0];
@@ -422,7 +426,7 @@ document.querySelector('#member-task-details').addEventListener("shown.bs.modal"
     document.getElementById("member-task-detail-due-date").value = endDateString
 
 
-    document.getElementById('member-task-plan-hours').innerText = currentTask.plan_hours.toString() + " hours"
+    document.getElementById('member-task-plan-hours').innerText = currentTask.planHours.toString() + " hours"
 
     const duration = calculateWeekdayDuration(startDate, endDate);
     document.getElementById("member-task-duration").innerText = duration.toString() + " days ";
