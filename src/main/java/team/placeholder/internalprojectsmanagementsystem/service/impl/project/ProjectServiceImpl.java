@@ -543,8 +543,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> getAllProjectsByDepartmentName(String name) {
-        List<Project> projectList = projectRepository.findByDepartmentName(name);
+    public List<ProjectDto> getAllProjectsByDepartmentNameAndClosed(String name, boolean closed){
+        List<Project> projectList = projectRepository.findByDepartmentNameAndClosed(name, closed);
 
         List<ProjectDto> projectDtoList = new ArrayList<>();
 
