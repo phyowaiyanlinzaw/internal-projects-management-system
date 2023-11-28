@@ -59,7 +59,15 @@ public class ProjectServiceImpl implements ProjectService {
 
         Set<Architecture> architecture = new HashSet<>();
 
+        if(projectDto.getDeliverableDto() == null) {
+            projectDto.setDeliverableDto(new ArrayList<>());
+        }
+
         projectDto.getDeliverableDto().forEach(System.out::println);
+
+        if(projectDto.getArchitectureDto() == null) {
+            projectDto.setArchitectureDto(new HashSet<>());
+        }
         for(ArchitectureDto architectureDto : projectDto.getArchitectureDto()) {
             if(architectureDto.getId() == null) {
                 log.info("Architecture is null : {}", architectureDto.getTech_name());
@@ -72,7 +80,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<Deliverable> deliverable = new ArrayList<>();
 
         for (DeliverableDto deliverableDto : projectDto.getDeliverableDto()) {
-            if (deliverableDto.getDeliverableType().getId() == null) {
+            if (deliverableDto.getDeliverableType() == null || deliverableDto.getDeliverableType().getId() == null) {
                 DeliverableType newDeliverableType = deliverableTypeService.save(deliverableDto.getDeliverableType());
                 System.out.print(newDeliverableType);
                 //Use ModelMapper for Model Mapping Stuffs
@@ -89,11 +97,17 @@ public class ProjectServiceImpl implements ProjectService {
 
         Set<User> users = new HashSet<>();
 
-        for(UserDto user : projectDto.getMembersUserDto()) {
+//        if(projectDto.getMembersUserDto() == null) {
+            projectDto.setMembersUserDto(new ArrayList<>());
+//        }
+
+       for(UserDto user : projectDto.getMembersUserDto()) {
             users.add(userRepository.getReferenceById(user.getId()));
         }
 
         Project project2 = modelMapper.map(projectDto, Project.class);
+
+
         project2.setDepartment(departmentRepository.getReferenceById(projectDto.getDepartmentDto().getId()));
         project2.setProjectManager(userRepository.getReferenceById(projectDto.getProjectManagerUserDto().getId()));
         project2.setArchitectures(architecture);
@@ -128,7 +142,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectDto.setDepartmentDto(modelMapper.map(project2.getDepartment(), DepartmentDto.class));
         projectDto.setArchitectureDto(project2.getArchitectures().stream().map(architecture1 -> modelMapper.map(architecture1, ArchitectureDto.class)).collect(Collectors.toSet()));
         projectDto.setProjectManagerUserDto(modelMapper.map(project2.getProjectManager(), UserDto.class));
-        
+
         List<DeliverableDto> deliverableDtos = new ArrayList<>();
 
         for(Deliverable deliverable1 : deliverable) {
