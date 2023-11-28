@@ -79,8 +79,8 @@ addEmployeeModal.addEventListener("show.bs.modal", async () => {
         // Append the employeeDiv to the container
         container.appendChild(employeeDiv);
         $('.pickme').bootstrapToggle({
-            on: 'dont pick me',
-            off: 'pick me',
+            on: 'no',
+            off: 'pick',
             onstyle: 'success',
             size: "sm"
         })
