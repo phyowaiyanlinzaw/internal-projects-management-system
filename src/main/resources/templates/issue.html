@@ -441,7 +441,7 @@
                         <label for="user_pic" class="col-sm-12 col-form-label" name="user_pic">Person In Charge <span
                                 style="color:red"> *</span></label>
                         <select class="form-select border-task-description" data-live-search="true"
-                                aria-label="Select PIC" id="user_pic" name="user_pic">
+                                aria-label="Select PIC" id="user_pic" name="user_pic" disabled>
 
                         </select>
                     </div>
@@ -934,13 +934,6 @@
                 data = userData; // Set the data array with the retrieved user data
                 console.log("User Data: " + JSON.stringify(data));
                 const user_pic = $('#user_pic');
-
-                user_pic.empty();
-                user_pic.append($('<option>', {
-                    value: '',
-                    text: 'Select a Member',
-                    data: {picUrl: ''},
-                }));
 
                 user_pic.append($('<option>', {
                     value: getLoginUser.currentUser.projectManager.id,

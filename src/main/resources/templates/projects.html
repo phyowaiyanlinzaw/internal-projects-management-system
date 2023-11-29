@@ -709,7 +709,12 @@
                                 document.querySelector("#client-name").value = "";
                                 document.querySelector("#client-email").value = "";
                                 document.querySelector("#client-phone").value = "";
-                                showSuccess("Client Edit Successfully...");
+                                $('alert-modal')
+                                $("#alert-text").text(
+                                    "Client updated successfully"
+                                );
+                                $("#alert-modal").modal("show");
+
                             },
                             error: function (error) {
                                 console.error("Error in Url : /api/client/save ", error);
@@ -2182,6 +2187,7 @@
                                     $("#alert-text").text("New Project Created Successfully...");
                                     $("#alert-modal").modal("show");
                                     $("#add-department-modal").modal("hide");
+                                    
                                 },
                                 error: function (data) {
                                     alert("Error registering project");
