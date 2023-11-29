@@ -8,7 +8,7 @@ const loginUser = await getData("/api/currentuser");
 
 
 // function for creating anchor element
-const createA = async ({id, description, time}) => {
+const createA = async ({id, description, time, object}) => {
     const currentlyWorkingProject = await getData(`/api/project/list/ID/${loginUser.currentUser.id}/false`);
     const anchor = document.createElement("a");
     if(loginUser.currentUser.role === "PROJECT_MANAGER") {
@@ -16,6 +16,8 @@ const createA = async ({id, description, time}) => {
     } else {
         if(currentlyWorkingProject !== null) {
             anchor.href = "/project/" + currentlyWorkingProject.projectId;
+        } else {
+            anchor.href = "/project/" + object.id;
         }
     }
     anchor.className = "dropdown-item";
@@ -416,7 +418,8 @@ channel.bind("project-save-event", async function (response) {
     const anchor = await createA({
         id: notification.id,
         description: notification.description,
-        time: notification.noti_time
+        time: notification.noti_time,
+        object: data.object
     })
 
     const hr = document.createElement("hr");
