@@ -2305,6 +2305,8 @@
 
             const exportPdfDropdown = document.querySelector("#exportPdfSelect");
 
+
+            if(exportPdfDropdown) {
             exportPdfDropdown.addEventListener("change", function () {
                 const exportOption = exportPdfDropdown.value;
                 if (exportOption === "all") {
@@ -2313,7 +2315,8 @@
 
                     exportSelectedRows();
                 }
-            }   );
+                });
+            }
 
             // export all projects from getAllProjectInfo function with pdfMake
             async function exportAllRows() {
@@ -2422,14 +2425,17 @@
 
             const exportExcelDropdown = document.querySelector("#exportExcelSelect");
 
-            exportExcelDropdown.addEventListener("change", function () {
-                const exportOption = exportExcelDropdown.value;
-                if (exportOption === "all") {
-                    exportAllRowsExcel();
-                } else if (exportOption === "selected") {
-                    exportSelectedRowsExcel();
-                }
-            }   );
+            if(exportExcelDropdown) {
+
+                exportExcelDropdown.addEventListener("change", function () {
+                    const exportOption = exportExcelDropdown.value;
+                    if (exportOption === "all") {
+                        exportAllRowsExcel();
+                    } else if (exportOption === "selected") {
+                        exportSelectedRowsExcel();
+                    }
+                }   );
+            }
 
             async function exportAllRowsExcel() {
                 try {
@@ -2643,8 +2649,21 @@
                             <div class="col p-0 text-center">end</div>
                             <div class="col p-0 text-center">name</div>
                         </div>
-                        <div class="text-end mt-2">
-                            <div class="btn-group" role="group">
+
+                        <div class="text-end mt-2" id="export-button-container">
+                            <script type="module">
+
+                                import {getUser} from "/js/currentLoginUser.js";
+
+                                const bird = await getUser();
+
+                                console.log(bird.currentUser.role)
+
+                                if(bird.currentUser.role !== 'FOC' && bird.currentUser.role !== 'EMPLOYEE' && bird.currentUser.role !== 'CONTRACT') {
+
+                                    console.log("heheheheheheh")
+
+                                    document.querySelector("#export-button-container").innerHTML += `<div class="btn-group" role="group">
                                 <select class="form-control btn btn-primary" name="dropdown" id="exportPdfSelect" style="width: 30%;">
                                     <option value="" selected disabled>Export PDF</option>
                                     <option value="all">Export All</option>
@@ -2657,7 +2676,11 @@
                                     <option value="all">Export All</option>
                                     <option value="selected">Export Selected</option>
                                 </select>
-                            </div>
+                            </div>`
+                                }
+
+                            </script>
+                            
                         </div>
                         <div
                             class="d-flex pt-2 flex-column gap-2"
