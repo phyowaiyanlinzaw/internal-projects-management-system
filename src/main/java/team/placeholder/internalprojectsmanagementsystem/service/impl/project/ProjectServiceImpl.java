@@ -47,7 +47,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final DepartmentRepository departmentRepository;
     private final DeliverableRepository deliverableRepository;
     private final ReviewRepo reviewRepo;
-    private final ModelMapper  modelMapper;
+    private final ModelMapper modelMapper;
     private final TaskRepository taskRepository;
     private final AESImpl aes;
     private final UserService userService;
@@ -60,14 +60,13 @@ public class ProjectServiceImpl implements ProjectService {
         Set<Architecture> architecture = new HashSet<>();
 
 
-
         projectDto.getDeliverableDto().forEach(System.out::println);
 
-        if(projectDto.getArchitectureDto() == null) {
+        if (projectDto.getArchitectureDto() == null) {
             projectDto.setArchitectureDto(new HashSet<>());
         }
-        for(ArchitectureDto architectureDto : projectDto.getArchitectureDto()) {
-            if(architectureDto.getId() == null) {
+        for (ArchitectureDto architectureDto : projectDto.getArchitectureDto()) {
+            if (architectureDto.getId() == null) {
                 log.info("Architecture is null : {}", architectureDto.getTech_name());
                 architecture.add(architectureService.save(architectureDto));
             } else {
@@ -95,7 +94,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         Set<User> users = new HashSet<>();
 
-       for(UserDto user : projectDto.getMembersUserDto()) {
+        for (UserDto user : projectDto.getMembersUserDto()) {
             users.add(userRepository.getReferenceById(user.getId()));
         }
 
@@ -120,7 +119,7 @@ public class ProjectServiceImpl implements ProjectService {
             aes.save(availableUser);
         }
 
-        for(User user : users) {
+        for (User user : users) {
             user.setEnabled(true);
             userRepository.save(user);
         }
@@ -139,7 +138,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<DeliverableDto> deliverableDtos = new ArrayList<>();
 
-        for(Deliverable deliverable1 : deliverable) {
+        for (Deliverable deliverable1 : deliverable) {
             DeliverableDto deliverableDto = modelMapper.map(deliverable1, DeliverableDto.class);
             deliverableDto.setDeliverableType(modelMapper.map(deliverable1.getDeliverableTypes(), DeliverableTypeDto.class));
             deliverableDtos.add(deliverableDto);
@@ -147,7 +146,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectDto.setDeliverableDto(deliverableDtos);
 
-        for(User user : users) {
+        for (User user : users) {
             notificationService.save("You have been assigned to new project", user.getId(), "project-save-event");
         }
 
@@ -167,7 +166,7 @@ public class ProjectServiceImpl implements ProjectService {
         for (Project project : projectList) {
             if (project != null) {
                 ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
-                if(project.getSystemOutLine()!=null){
+                if (project.getSystemOutLine() != null) {
                     SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
                     projectDto.setSystemOutLineDto(systemOutLineDto);
                 }
@@ -210,7 +209,8 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto getProjectById(long id) {
         Project project = projectRepository.findById(id);
         if (project != null) {
-                ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+            ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
+            if (projectDto != null) {
                 SystemOutLineDto systemOutLineDto = modelMapper.map(project.getSystemOutLine(), SystemOutLineDto.class);
                 projectDto.setSystemOutLineDto(systemOutLineDto);
                 projectDto.setClientDto(modelMapper.map(project.getClient(), ClientDto.class));
@@ -222,15 +222,15 @@ public class ProjectServiceImpl implements ProjectService {
 
                 projectDto.getDepartmentDto().getUsers().clear();
                 projectDto.setCompleteTaskCount(
-                    project.getTasks().stream()
-                            .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
-                            .count()
+                        project.getTasks().stream()
+                                .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                                .count()
                 );
                 projectDto.setTotalTaskCount(taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
                 log.info("total task count : " + taskRepository.countByProjectIdAndDeletedFalse(project.getId()));
                 log.info("complete task count : " + project.getTasks().stream()
-                    .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
-                    .count());
+                        .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
+                        .count());
                 projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
 
                 List<UserDto> userDtos = new ArrayList<>();
@@ -242,12 +242,18 @@ public class ProjectServiceImpl implements ProjectService {
                 projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
                 projectDto.setArchitectureDto(project.getArchitectures().stream().map(architecture -> modelMapper.map(architecture, ArchitectureDto.class)).collect(Collectors.toSet()));
                 projectDto.setDeliverableDto(project.getDeliverables().stream().map(deliverable -> modelMapper.map(deliverable, DeliverableDto.class)).collect(Collectors.toList()));
-
-            return projectDto;
+                return projectDto;
+            } else {
+                // Log an error or handle the situation where the mapping was unsuccessful
+                log.error("Mapping from Project to ProjectDto failed for project with id: " + id);
+            }
         } else {
             return null;
         }
+        return null;
     }
+
+
 
     @Override
     public ProjectDto getProjectByName(String name) {
@@ -625,16 +631,6 @@ public class ProjectServiceImpl implements ProjectService {
 
 
 
-    public List<UserDto> getAllPM() {
-        List<Project> projectsWithPm = projectRepository.findAllByProjectManagerIsNotNull();
-        List<UserDto> userDtos = projectsWithPm.stream()
-                .map(project -> modelMapper.map(project.getProjectManager(), UserDto.class))
-                .collect(Collectors.toList());
-        return userDtos;
-    }
-
-
-
     public List<ProListDto> newProjectLook(Role role, long id) {
 
         List<ProListDto> ProListDto = new ArrayList<>();
@@ -687,12 +683,12 @@ public class ProjectServiceImpl implements ProjectService {
                 long totalTaskCount = project.getTasks().stream().filter(task -> !task.isDeleted()).count();
                 long completeTaskCount = project.getTasks().stream().filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted()).count();
 
-                log.info('"' + project.getId() + '"' + " total task count : " + totalTaskCount);
-                log.info('"' + project.getId() + '"' + " complete task count : " + completeTaskCount);
+//                log.info('"' + project.getId() + '"' + " total task count : " + totalTaskCount);
+//                log.info('"' + project.getId() + '"' + " complete task count : " + completeTaskCount);
 
                 proListDto.setPercentage(totalTaskCount == 0 ? 0 : (long) (((double)completeTaskCount / totalTaskCount) * 100.0));
 
-                log.info('"' + project.getId() + '"' + " percentage : " + proListDto.getPercentage() + "%" );
+//                log.info('"' + project.getId() + '"' + " percentage : " + proListDto.getPercentage() + "%" );
 
                 List<TasksDto> tasksDtoList = new ArrayList<>();
 
