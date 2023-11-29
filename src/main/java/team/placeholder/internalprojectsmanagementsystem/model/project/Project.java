@@ -24,7 +24,9 @@ public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     @Column(columnDefinition = "TEXT")
     private String background;
     private int duration;
@@ -78,7 +80,7 @@ public class Project implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Project other = (Project) o;
-        return id == other.id;
+        return Objects.equals(id, other.id);
     }
 
     @Override
