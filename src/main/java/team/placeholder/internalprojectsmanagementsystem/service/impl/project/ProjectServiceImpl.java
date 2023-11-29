@@ -147,7 +147,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectDto.setDeliverableDto(deliverableDtos);
 
         for (User user : users) {
-            notificationService.save("You have been assigned to new project", user.getId(), "project-save-event");
+            notificationService.save("You have been assigned to new project", user.getId(), "project-save-event", projectDto);
         }
 
         return projectDto;
