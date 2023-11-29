@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.scheduling.config.Task;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.ui.Model;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
@@ -22,6 +23,8 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserS
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -78,7 +81,7 @@ class ViewControllerTest {
         // Add more assertions based on your specific logic and expectations
 
         // Example assertion for demonstration
-        assert(result.equals("dashboard"));
+        assert (result.equals("dashboard"));
     }
 
     @Test
@@ -91,7 +94,7 @@ class ViewControllerTest {
 
         // Assert
         Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
-        assert(result.equals("profile"));
+        assert (result.equals("profile"));
     }
 
 
@@ -118,8 +121,50 @@ class ViewControllerTest {
 //        Mockito.verify(model).addAttribute("project", mockProject);
 //        assert(result.equals("project"));
     }
+    @Test
+    void testProject() {
+        // Arrange
+        Model model = Mockito.mock(Model.class);
+
+        // Act
+        String result = viewController.project();
+
+        // Assert
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+        assert(result.equals("projects"));
+    }
+    @Test
+    void testDashboard() {
+        // Act
+        String result = viewController.dashboard();
+
+        // Assert
+        assertEquals("redirect:/dashboard", result);
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+    }
+
+    @Test
+    @WithMockUser(roles = {"SDQC"})
+    void testDepartmentWithSDQCRole() {
+        // Act
+        String result = viewController.department();
+
+        // Assert
+        assertEquals("department", result);
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+    }
+
+    @Test
+    @WithMockUser(roles = {"SOME_OTHER_ROLE"})
+    void testDepartmentWithoutRequiredRole() {
+        // Act
+        String result = viewController.department();
+
+        // Assert
+        assertEquals("accessDenied", result); // Assuming you have an accessDenied view for unauthorized access
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+    }
 
 
 
-    // Add more test methods for other controller methods as needed
 }
