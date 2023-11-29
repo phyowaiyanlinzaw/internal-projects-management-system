@@ -232,6 +232,7 @@ public class ProjectServiceImpl implements ProjectService {
                         .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
                         .count());
                 projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+                projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
 
                 List<UserDto> userDtos = new ArrayList<>();
                 for (User user : project.getUsers()) {

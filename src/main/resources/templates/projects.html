@@ -1004,13 +1004,15 @@
 
                     console.log("target id", id);
 
-                    const currentProejctDetail = await getData(`/api/project/list/${id}`);
+                    const currentProjectDetail = await getData(`/api/project/list/${id}`);
+
+                    console.log("current project detail", currentProjectDetail);
                     
                     const showDeliContainer = document.querySelector('#show-project-deliverable')
                     
                     showDeliContainer.innerHTML = ''
                     
-                    currentProejctDetail.deliverableDto.forEach(a => {
+                    currentProjectDetail.deliverableDto.forEach(a => {
 
                         console.log(a)
 
@@ -1029,10 +1031,10 @@
 
                     showAmountContainer.innerHTML = ''
 
-                    for (const key in currentProejctDetail.amountDto) {
+                    for (const key in currentProjectDetail.amountDto) {
                         if (key === 'id') continue
-                        if (currentProejctDetail.amountDto.hasOwnProperty(key)) {
-                            const value = currentProejctDetail.amountDto[key];
+                        if (currentProjectDetail.amountDto.hasOwnProperty(key)) {
+                            const value = currentProjectDetail.amountDto[key];
                             showAmountContainer.innerHTML += `
                             <li
                                 class="list-group-item d-flex justify-content-between"
@@ -1066,7 +1068,7 @@
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         fetch(
-                                            "/api/review/update-review/" + currentProejctDetail.id,
+                                            "/api/review/update-review/" + currentProjectDetail.reviewDto.id,
                                             {
                                                 method: "PUT",
                                                 headers: {
@@ -1096,46 +1098,45 @@
                                 });
                             });
                     }
-                    console.log(currentProejctDetail);
 
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
                         document.querySelector("#project-detail-background").innerText =
-                            currentProejctDetail.background;
+                            currentProjectDetail.background;
 
                         document.querySelector("#project-detail-name").value =
-                            currentProejctDetail.name;
+                            currentProjectDetail.name;
 
                         document.querySelector("#current-edditing-projetc-id").value =
-                            currentProejctDetail.id;
+                            currentProjectDetail.id;
 
                         document.querySelector("#project-edit-duration").value =
-                            currentProejctDetail.duration;
+                            currentProjectDetail.duration;
 
                         document.querySelector("#start-date").value =
-                            formmatDateFromMillisecondForEdit(currentProejctDetail.start_date);
+                            formmatDateFromMillisecondForEdit(currentProjectDetail.start_date);
 
                         document.querySelector("#end-date-in-edit").value =
-                            formatDateFromMilliseconds(currentProejctDetail.end_date);
+                            formatDateFromMilliseconds(currentProjectDetail.end_date);
 
                         detailMoal.querySelector("#edit-basic-design-count").value =
-                            currentProejctDetail.amountDto.basic_design;
+                            currentProjectDetail.amountDto.basic_design;
 
                         detailMoal.querySelector("#edit-detail-design-count").value =
-                            currentProejctDetail.amountDto.detail_design;
+                            currentProjectDetail.amountDto.detail_design;
 
                         detailMoal.querySelector("#edit-coding-count").value =
-                            currentProejctDetail.amountDto.coding;
+                            currentProjectDetail.amountDto.coding;
 
                         detailMoal.querySelector("#edit-unit-testing-count").value =
-                            currentProejctDetail.amountDto.unit_testing;
+                            currentProjectDetail.amountDto.unit_testing;
 
                         detailMoal.querySelector("#edit-integrated-testing-count").value =
-                            currentProejctDetail.amountDto.integrated_testing;
+                            currentProjectDetail.amountDto.integrated_testing;
                     }
 
                     document.querySelector("#architectures-list-in-edit").textContent = "";
 
-                    currentProejctDetail.architectureDto.forEach((a) => {
+                    currentProjectDetail.architectureDto.forEach((a) => {
                         const div = document.createElement("div");
 
                         div.classList.add(
@@ -1173,13 +1174,13 @@
                     if(document.querySelector("#project-edit")) {
                         
                         detailMoal.querySelector("#project-internal-review-count").value =
-                            currentProejctDetail.reviewDto.internal_review_count;
+                            currentProjectDetail.reviewDto.internal_review_count;
                         detailMoal.querySelector("#project-external-review-count").value =
-                            currentProejctDetail.reviewDto.external_review_count;
+                            currentProjectDetail.reviewDto.external_review_count;
                         let count = 1
                         document.querySelector("#edit-deliverable-list").textContent = "";
                         let deliverableId;
-                        currentProejctDetail.deliverableDto.forEach((a) => {
+                        currentProjectDetail.deliverableDto.forEach((a) => {
                             const outerDiv = document.createElement("div");
                             outerDiv.className = "d-flex justify-content-start";
 
@@ -1257,7 +1258,7 @@
                     ) {
                         document.querySelector(
                             "#navigate-task"
-                        ).href = `/project/${currentProejctDetail.id}`;
+                        ).href = `/project/${currentProjectDetail.id}`;
                         document.querySelectorAll('.optional-view').forEach(a => {
                             console.log(a)
                             a.style.display = 'none'
@@ -1270,7 +1271,7 @@
 
                     objectiveQuill.clipboard.dangerouslyPasteHTML(
                         0,
-                        currentProejctDetail.objective
+                        currentProjectDetail.objective
                     );
 
                     const phaseOptionList = document.querySelectorAll("#edit-project-phase option");
@@ -1278,7 +1279,7 @@
                     console.log(phaseOptionList);
 
                     phaseOptionList.forEach((a) => {
-                        if (a.value === currentProejctDetail.current_phase) {
+                        if (a.value === currentProjectDetail.current_phase) {
                             a.selected = true;
                         }
                     });
@@ -1287,49 +1288,49 @@
 
                     editObjectiveEditor.clipboard.dangerouslyPasteHTML(
                         0,
-                        currentProejctDetail.objective
+                        currentProjectDetail.objective
                     );
 
-                    console.log(currentProejctDetail);
+                    console.log(currentProjectDetail);
 
-                    updateListItems(currentProejctDetail.systemOutLineDto);
+                    updateListItems(currentProjectDetail.systemOutLineDto);
 
-                    updateSpanValues(currentProejctDetail.amountDto);
+                    updateSpanValues(currentProjectDetail.amountDto);
 
                     let duration = calculateDuration(
-                        currentProejctDetail.start_date,
-                        currentProejctDetail.end_date
+                        currentProjectDetail.start_date,
+                        currentProjectDetail.end_date
                     );
 
                     detailMoal.querySelector("#project-background").innerText =
-                        currentProejctDetail.background;
-                    detailMoal.querySelector("#project-name").innerText = currentProejctDetail.name;
+                        currentProjectDetail.background;
+                    detailMoal.querySelector("#project-name").innerText = currentProjectDetail.name;
                     detailMoal.querySelector("#project-department-name").innerHTML =
-                        currentProejctDetail.departmentDto.name;
+                        currentProjectDetail.departmentDto.name;
                     //______________________________________________
 
                     //_______________review update
 
                     //____________________________________reveiw update end
                     detailMoal.querySelector("#project-duration").innerText = `${
-                        currentProejctDetail.duration
-                    } ${currentProejctDetail.duration < 1 ? " month" : " months"}`;
+                        currentProjectDetail.duration
+                    } ${currentProjectDetail.duration < 1 ? " month" : " months"}`;
                     detailMoal.querySelector("#project-start-date").innerText =
-                        formatDateFromMilliseconds(currentProejctDetail.start_date);
+                        formatDateFromMilliseconds(currentProjectDetail.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =
-                        formatDateFromMilliseconds(currentProejctDetail.end_date);
+                        formatDateFromMilliseconds(currentProjectDetail.end_date);
                     detailMoal.querySelector("#project-current-phase").innerText =
-                        currentProejctDetail.current_phase;
+                        currentProjectDetail.current_phase;
                     detailMoal.querySelector("#project-current-external-review-count").innerText =
-                        currentProejctDetail.reviewDto.external_review_count;
+                        currentProjectDetail.reviewDto.external_review_count;
                     detailMoal.querySelector("#project-current-internal-review-count").innerText =
-                        currentProejctDetail.reviewDto.internal_review_count;
+                        currentProjectDetail.reviewDto.internal_review_count;
                     detailMoal.querySelector("#client-email-address").innerHTML =
-                        currentProejctDetail.clientDto.email;
+                        currentProjectDetail.clientDto.email;
                     detailMoal.querySelector("#client-phone-contect").innerHTML =
-                        currentProejctDetail.clientDto.phone;
+                        currentProjectDetail.clientDto.phone;
                     detailMoal.querySelector("#my-dear-customer-name").innerHTML =
-                        currentProejctDetail.clientDto.name;
+                        currentProjectDetail.clientDto.name;
                 }
 
                 //_____________________________________________
