@@ -34,7 +34,7 @@ public interface ProjectService {
 
     List<ProjectDto> findAllByUserId(long id);
 
-    List<ProjectDto> getAllProjectsByDepartmentName(String name);
+    List<ProjectDto> getAllProjectsByDepartmentNameAndClosed(String name, boolean closed);
 
 
 

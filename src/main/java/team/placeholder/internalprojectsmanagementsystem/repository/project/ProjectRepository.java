@@ -31,7 +31,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     List<Project> findByDepartmentId(long id);
 
-    List<Project> findByDepartmentName(String name);
+    List<Project> findByDepartmentNameAndClosed(String name, boolean closed);
 
     Project findByUsersId(long id);
 

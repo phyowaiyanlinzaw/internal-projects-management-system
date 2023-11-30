@@ -22,7 +22,9 @@ public class Tasks implements Serializable {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     private String title;
 
     private long planStartTime;

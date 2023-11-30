@@ -327,11 +327,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUsername(UserDto userDto) {
-        User user = userRepository.findByEmail(userDto.getEmail());
+    public UserDto changeUsername(UserDto userDto) {
+        User user = userRepository.findById(userDto.getId());
         if (user != null) {
             user.setName(userDto.getName());
-            userRepository.save(user);
+            user.setEmail(userDto.getEmail());
+            try {
+                userRepository.save(user);
+            } catch (DataIntegrityViolationException e) {
+                return null;
+            }
+            return modelmapper.map(user, UserDto.class);
+        } else {
+            return null;
         }
     }
 

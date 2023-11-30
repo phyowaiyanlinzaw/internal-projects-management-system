@@ -172,7 +172,7 @@ public class ProjectController {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/count/project-manager/{id}/status/{status}")
+    @GetMapping(value = "/count/project-manager/{id}/closed/{status}")
     public ResponseEntity<Long> countByProjectManagerIdAndStatus(@PathVariable long id, @PathVariable String status){
         Long count = projectService.countAllProjectsByProjectManagerIdAndClosed(id, Boolean.parseBoolean(status));
         return new ResponseEntity<>(count, HttpStatus.OK);
@@ -246,9 +246,9 @@ public class ProjectController {
 
     }
 
-    @GetMapping("/list/department-name/{name}")
-    public ResponseEntity<List<ProjectDto>> getAllProjectsByDepartmentName(@PathVariable String name){
-        List<ProjectDto> projects = projectService.getAllProjectsByDepartmentName(name);
+    @GetMapping("/list/department-name/{name}/closed/{status}")
+    public ResponseEntity<List<ProjectDto>> getAllProjectsByDepartmentName(@PathVariable String name, @PathVariable String status){
+        List<ProjectDto> projects = projectService.getAllProjectsByDepartmentNameAndClosed(name, Boolean.parseBoolean(status));
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
