@@ -498,50 +498,6 @@
                 }
             });
 
-            // document.addEventListener('DOMContentLoaded', async () => {
-            //     try {
-            //         const arcccList = await getArchitecturelist();
-            //         const inputElement = document.querySelector('input[name="architectures"]');
-            //         const tagifyInstance = initializeTagify(inputElement, arcccList);
-            //
-            //
-            //         function isTagifyEmpty(tagifyInstance) {
-            //             return tagifyInstance.value.length === 0;
-            //         }
-            //
-            //         $("#validation-form").submit(function (event) {
-            //
-            //             if (isTagifyEmpty(tagifyInstance)) {
-            //                 event.preventDefault();
-            //                 alert("Tagify is empty. Please add at least one tag.");
-            //                 return;
-            //             }
-            //
-            //             const archHtml = inputElement.value;
-            //             const archText = (new DOMParser()).parseFromString(archHtml, 'text/html').body.innerText;
-            //
-            //
-            //             const arch = archText === "" ? [] : JSON.parse(archText);
-            //
-            //             const a = initializeTagify(inputElement, arch);
-            //
-            //             if (arch.length !== 0) {
-            //                 const whitelist = a.settings.whitelist;
-            //                 arch.forEach((item) => {
-            //                     if (!whitelist.includes(item.value)) {
-            //                         whitelist.push(item.value);
-            //                     }
-            //                 });
-            //             }
-            //
-            //
-            //             console.log(tagifyInstance.settings.whitelist);
-            //         });
-            //     } catch (error) {
-            //         console.log("Error:", error);
-            //     }
-            // });
-
             const toolbaroptions = [
                 // Test-style
                 ["bold", "italic", "underline"],
@@ -706,6 +662,7 @@
                                 option.value = JSON.stringify(response);
                                 option.textContent = response.name;
                                 clientSelect.append(option);
+                                option.selected = true;
                                 document.querySelector("#client-name").value = "";
                                 document.querySelector("#client-email").value = "";
                                 document.querySelector("#client-phone").value = "";
@@ -715,6 +672,8 @@
                                 );
                                 $("#alert-modal").modal("show");
 
+                                //go back to the #project-create tab
+                                $("[data-bs-target='#project-create']").tab("show");
                             },
                             error: function (error) {
                                 console.error("Error in Url : /api/client/save ", error);
