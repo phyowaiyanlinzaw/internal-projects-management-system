@@ -27,10 +27,19 @@ public class Issue{
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+
     private String place;
+
+    @Column(columnDefinition = "TEXT")
     private String impact;
+
+    @Column(columnDefinition = "TEXT")
     private String root_cause;
+
+    @Column(columnDefinition = "TEXT")
     private String direct_cause;
+
     @Column(columnDefinition = "TEXT")
     private String corrective_action;
     @Column(columnDefinition = "TEXT")
