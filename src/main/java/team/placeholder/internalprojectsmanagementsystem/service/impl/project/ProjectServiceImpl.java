@@ -232,6 +232,7 @@ public class ProjectServiceImpl implements ProjectService {
                         .filter(task -> task.getStatus().equals(TaskStatus.FINISHED) && !task.isDeleted())
                         .count());
                 projectDto.setAmountDto(modelMapper.map(project.getAmount(), AmountDto.class));
+                projectDto.setReviewDto(modelMapper.map(project.getReviews(), ReviewDto.class));
 
                 List<UserDto> userDtos = new ArrayList<>();
                 for (User user : project.getUsers()) {
@@ -545,8 +546,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> getAllProjectsByDepartmentName(String name) {
-        List<Project> projectList = projectRepository.findByDepartmentName(name);
+    public List<ProjectDto> getAllProjectsByDepartmentNameAndClosed(String name, boolean closed){
+        List<Project> projectList = projectRepository.findByDepartmentNameAndClosed(name, closed);
 
         List<ProjectDto> projectDtoList = new ArrayList<>();
 

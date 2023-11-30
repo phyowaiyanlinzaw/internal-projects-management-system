@@ -577,7 +577,7 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            max: 250,
+                            max: 50,
                             ticks: {
                                 stepSize: 5
 
@@ -665,7 +665,7 @@
             // Make an AJAX request to fetch the project list with the name of the department with api/project/list/department-name/{departmentName}
             function getProjectList(departmentName) {
                 $.ajax({
-                    url: `/api/project/list/department-name/${departmentName}`, // Replace with your API endpoint
+                    url: `/api/project/list/department-name/${departmentName}/closed/`+true, // Replace with your API endpoint
                     method: 'GET',
                     success: function (data) {
                         const projectDropdown = $('#projectDropDown'); // Corrected the ID here
@@ -848,7 +848,7 @@
 
                         // Update the chart options
                         barChart2.options.scales.y.min = 0;
-                        barChart2.options.scales.y.max = 250;
+                        barChart2.options.scales.y.max = 10;
 
                         // Update the chart
                         barChart2.update();
@@ -1016,7 +1016,7 @@
         })
 
         $.ajax({
-            url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/status/" + false,
+            url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/closed/" + false,
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -1025,7 +1025,7 @@
         })
 
         $.ajax({
-            url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/status/Finished",
+            url: "api/project/count/project-manager/" + currentUser.currentUser.id + "/closed/" + true,
             type: "GET",
             dataType: "json",
             success: function (data) {

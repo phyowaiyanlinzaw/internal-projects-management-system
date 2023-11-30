@@ -28,7 +28,7 @@ public class Issue{
     @Column(columnDefinition = "TEXT")
     private String description;
 
-
+    @Column(columnDefinition = "TEXT")
     private String place;
 
     @Column(columnDefinition = "TEXT")

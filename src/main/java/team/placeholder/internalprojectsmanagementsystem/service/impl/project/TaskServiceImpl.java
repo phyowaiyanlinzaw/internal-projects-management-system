@@ -52,6 +52,8 @@ public class TaskServiceImpl implements TasksService {
 
         TasksDto tasksDto = modelMapper.map(task, TasksDto.class);
         tasksDto.setUserDto(modelMapper.map(task.getUser(), UserDto.class));
+
+
         try {
             log.info("Trying to save task");
             taskRepository.save(task);
