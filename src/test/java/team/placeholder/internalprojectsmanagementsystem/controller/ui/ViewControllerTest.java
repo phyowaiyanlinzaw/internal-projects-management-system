@@ -164,7 +164,26 @@ class ViewControllerTest {
         assertEquals("accessDenied", result); // Assuming you have an accessDenied view for unauthorized access
         Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
     }
+    @Test
+    void testResetPassword() {
+        // Act
+        String result = viewController.resetPassword();
 
+        // Assert
+        assertEquals("password-reset", result);
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+    }
+
+
+    @Test
+    void testIssue() {
+        // Act
+        String result = viewController.issue();
+
+        // Assert
+        assertEquals("issue", result);
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+    }
 
 
 }
