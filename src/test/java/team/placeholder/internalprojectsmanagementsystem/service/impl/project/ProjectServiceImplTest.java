@@ -585,11 +585,11 @@ class ProjectServiceImplTest {
 //        // Assert
 //        assertNotNull(result);
 //        assertEquals(mockProjectList.size(), result.size());
-//tion for troubleshooting
+//
+//        // Log additional information for troubleshooting
 //        for (Project project : mockProjectList) {
 //            System.out.println("Project: " + (project != null ? project.getName() : "null"));
 //
-//            // Log additional informa
 //            if (project != null && project.getProjectManager() != null) {
 //                System.out.println("Project manager: " + project.getProjectManager().getName());
 //            } else {
@@ -606,7 +606,7 @@ class ProjectServiceImplTest {
 //    void testGetAllProjectsByDepartmentNameWhenNoProjectsThenReturnEmptyList() {
 //        // Arrange
 //        String departmentName = "TestDepartment";
-//        when(projectRepository.findByD(departmentName)).thenReturn(Collections.emptyList());
+//        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(Collections.emptyList());
 //
 //        // Act
 //        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);

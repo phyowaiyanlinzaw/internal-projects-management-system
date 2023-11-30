@@ -37,6 +37,11 @@ public class Tasks implements Serializable {
 
     private boolean due;
 
+    public Tasks(Long id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")
     private Project project;

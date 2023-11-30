@@ -297,7 +297,7 @@ class ProjectServiceTest {
 //
 //        // When
 //        List<ProjectDto> result = projectServiceMock.getAllProjectsByDepartmentName(departmentName);
-//department
+//
 //        // Then
 //        // Verify that the getAllProjectsByDepartmentName method was called with the correct parameter
 //        verify(projectServiceMock, times(1)).getAllProjectsByDepartmentName(departmentName);
@@ -305,7 +305,7 @@ class ProjectServiceTest {
 //        // Verify that the returned list of projects is the same as the expected list
 //        assertEquals(expectedProjects, result);
 //    }
-//
+
 
     @Test
     void updateProjectClosed() {

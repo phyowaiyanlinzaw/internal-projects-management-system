@@ -17,6 +17,8 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.ProListDto;
 import team.placeholder.internalprojectsmanagementsystem.model.department.Department;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Amount;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Architecture;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Deliverable;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 
@@ -29,6 +31,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.project.Pr
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 
+import team.placeholder.internalprojectsmanagementsystem.service.project.ProjectService;
 import team.placeholder.internalprojectsmanagementsystem.service.project.TasksService;
 
 import java.time.LocalDate;
@@ -793,6 +796,129 @@ class ProjectControllerTest {
         verify(projectService, times(1)).getAllProjects();
         assertEquals(projects, response.getBody());
     }
+
+    @Test
+    void testUpdateDeliverableList() {
+
+    }
+
+    @Test
+    void testSaveDeliverableList(){
+
+    }
+
+
+    @Test
+    void testUpdateArchitectureList() {
+        // Create test data
+        long projectId = 1L;
+        long architectureId = 2L;
+
+        Map<String, Long> requestBody = new HashMap<>();
+        requestBody.put("arcid", architectureId);
+
+        Architecture architecture = new Architecture();
+        architecture.setId(architectureId);
+
+        Project project = new Project();
+        project.setId(projectId);
+        project.setArchitectures(new HashSet<>(Collections.singletonList(architecture)));
+
+
+        // Mock behavior of your service/repository methods
+        when(projectRepository.getReferenceById(projectId)).thenReturn(project);
+        when(architectureService.findById(architectureId)).thenReturn(architecture);
+
+        // Execute the method
+        ResponseEntity<List<ArchitectureDto>> response = projectController.updateArchitectureList(projectId, requestBody);
+
+        // Assert the results
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(0, response.getBody().size()); // Assuming the architecture is removed
+
+        // Verify that the methods were called with the expected arguments
+        verify(projectRepository).getReferenceById(projectId);
+        verify(architectureService).findById(architectureId);
+        verify(projectRepository).save(project);
+    }
+
+    @Test
+    void testGetArchitectureList() {
+        // Create test data
+        long projectId = 1L;
+
+        Project project = new Project();
+        project.setId(projectId);
+
+        ArchitectureDto architectureDto1 = new ArchitectureDto();
+        architectureDto1.setId(2L);
+        ArchitectureDto architectureDto2 = new ArchitectureDto();
+        architectureDto2.setId(3L);
+
+        List<ArchitectureDto> architectureDtos = new ArrayList<>(List.of(architectureDto1, architectureDto2));
+
+        // Mock behavior of your service/repository methods
+        when(projectRepository.getReferenceById(projectId)).thenReturn(project);
+        when(architectureService.getAllArchitecture()).thenReturn(architectureDtos);
+        when(architectureService.findById(architectureDto1.getId())).thenReturn(new Architecture());
+        when(architectureService.findById(architectureDto2.getId())).thenReturn(new Architecture());
+
+        // Execute the method
+        ResponseEntity<List<ArchitectureDto>> response = projectController.getArchitectureList(projectId);
+
+        // Assert the results
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(2, response.getBody().size()); // Assuming both architectureDto1 and architectureDto2 are not in project
+
+        // Verify that the methods were called with the expected arguments
+        verify(projectRepository).getReferenceById(projectId);
+        verify(architectureService).getAllArchitecture();
+        verify(architectureService, times(2)).findById(anyLong()); // It's called for each ArchitectureDto
+    }
+
+    @Test
+    void testSaveArchitectureList() {
+        // Create test data
+        long projectId = 1L;
+
+        Project project = new Project();
+        project.setId(projectId);
+
+        ArchitectureDto architectureDto1 = new ArchitectureDto();
+        architectureDto1.setId(2L);
+        ArchitectureDto architectureDto2 = new ArchitectureDto();
+        architectureDto2.setId(3L);
+
+        Set<ArchitectureDto> requestBody = new HashSet<>(Set.of(architectureDto1, architectureDto2));
+
+        Architecture architecture1 = new Architecture();
+        architecture1.setId(architectureDto1.getId());
+        Architecture architecture2 = new Architecture();
+        architecture2.setId(architectureDto2.getId());
+
+        // Mock behavior of your service/repository methods
+        when(projectRepository.getReferenceById(projectId)).thenReturn(project);
+        when(architectureService.findById(architectureDto1.getId())).thenReturn(architecture1);
+        when(architectureService.findById(architectureDto2.getId())).thenReturn(architecture2);
+        when(projectService.getProjectById(projectId)).thenReturn(new ProjectDto(project));
+
+        // Execute the method
+        ResponseEntity<Set<ArchitectureDto>> response = projectController.saveArchitectureList(projectId, requestBody);
+
+        // Assert the results
+        assertNotNull(response.getBody());
+        assertEquals(2, response.getBody().size()); // Assuming both architectureDto1 and architectureDto2 are added
+
+        // Verify that the methods were called with the expected arguments
+        verify(projectRepository).getReferenceById(projectId);
+        verify(architectureService).findById(architectureDto1.getId());
+        verify(architectureService).findById(architectureDto2.getId());
+        verify(projectRepository).save(project);
+        verify(projectService).getProjectById(projectId);
+    }
+
 
 
 

@@ -740,7 +740,7 @@ public class ProjectServiceImpl implements ProjectService {
             aes.save(avu);
         }
 
-        project.setUsers(users2);
+        project.getUsers().addAll(users2);
 
         projectRepository.save(project);
     }

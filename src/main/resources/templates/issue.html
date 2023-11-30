@@ -745,7 +745,6 @@
         const saveButton = issueDetialEdit.querySelector("#issue-detail-save-btn-container")
 
         saveButton.addEventListener("click", function (e) {
-            console.log("this suck")
 
             const issueId = issueDetialEdit.getAttribute("data-currentEditingIssueId")
             const issueTitle = issueDetialEdit.querySelector("#issueTitleDetails").value
@@ -766,8 +765,6 @@
                 updated_date: Date.now()
             }
 
-            console.log(issueTitle, issueCategory, directCause, rootCause, place, impact, issueId)
-
             $.ajax({
                 url: `/api/issue/update/${issueId}`, // Replace with your actual URL
                 type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
@@ -775,7 +772,6 @@
                 contentType: 'application/json',
                 data: JSON.stringify(issue),
                 success: function (response) {
-                    console.log('Ajax request successful:', response);
                     // Handle success response
                     saveButton.classList.add('d-none')
 
@@ -800,7 +796,6 @@
         })
 
         issueDetialEdit.addEventListener("input", function (e) {
-            console.log("this suck")
 
 
             if (saveButton.classList.contains("d-none")) {
@@ -840,7 +835,11 @@
 
             const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
 
+            unsolvedIssueListContainer.innerHTML = ''
+
             const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
+
+            console.log("unsolved issue list",unsolvedIssueList)
 
             for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
@@ -852,39 +851,13 @@
 
         // Author: Habib Mhamadi
         // Email: habibmhamadi@gmail.comd
-        function getTimeAgo(timestamp) {
-            const date = new Date(timestamp);
-            const currentDate = new Date();
-            const timeDifference = currentDate - date;
-            const seconds = Math.floor(timeDifference / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const hours = Math.floor(minutes / 60);
-            const days = Math.floor(hours / 24);
-
-            if (days < 1) {
-                if (hours < 1) {
-                    if (minutes < 1) {
-                        return "Just now";
-                    } else {
-                        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-                    }
-                } else {
-                    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-                }
-            } else if (days < 30) {
-                return `${days} day${days > 1 ? 's' : ''} ago`;
-            } else {
-                const months = Math.floor(days / 30);
-                return `${months} month${months > 1 ? 's' : ''} ago`;
-            }
-        }
+        
     }
 
     import {getUser} from "/js/currentLoginUser.js";
     import {formatDate,getTimeElapsed} from "/js/time.js";
     import {getData} from "/js/api-function.js";
 
-    console.log(await getUser());
     let quillEditors = document.querySelectorAll(
         ".quill-editor-bubble"
     );
@@ -915,12 +888,8 @@
     ];
     // If you want to initialize Quill for a specific element, you can do it like this:
     let getLoginUser = await getUser();
-    console.log("current login user ", getLoginUser)
     let data = [];
     const currentLoginUserRole = getLoginUser.currentUser.role;
-
-    console.log(currentLoginUserRole)
-    console.log(currentLoginUserRole === "FOC")
 
     if (currentLoginUserRole === 'PROJECT_MANAGER' || currentLoginUserRole === 'SDQC' || currentLoginUserRole === 'PMO') {
         document.querySelector("#issue-link").classList.remove("d-none")
@@ -928,14 +897,12 @@
 
     // const currentUser = await getUser();
     const dataForIssue = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/false`)
-    console.log("dataForIssue", dataForIssue);
     $(document).ready(async function () {
 
 
         if (currentLoginUserRole === 'EMPLOYEE' || currentLoginUserRole === 'FOC' || currentLoginUserRole === 'CONTRACT') {
             $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`, function (userData) {
                 data = userData; // Set the data array with the retrieved user data
-                console.log("User Data: " + JSON.stringify(data));
                 const user_pic = $('#user_pic');
 
                 user_pic.append($('<option>', {
@@ -948,9 +915,6 @@
             });
 
             let clientData = await getData(`/api/project/list/ID/${getLoginUser.currentUser.id}/IN_PROGRESS`);
-
-            console.log(clientData)
-
 
             function populateClientName() {
                 const responsiblePartySelect = $('#responsible_party');
@@ -985,7 +949,6 @@
 // Fetch client data and populate the select box initially
             $.get(`api/project/list/ID/${getLoginUser.currentUser.id}/false`, function (data) {
                 clientData = data;
-                console.log("Client Data: " + JSON.stringify(clientData));
                 // Check the "Client" checkbox initially
                 if(typeof clientData === 'object' && clientData !== null) {
                     $('#responsible_type').prop('checked', true);
@@ -1067,7 +1030,6 @@
 
                 if (!description || description.length === 0) {
                     validatedForm = false;
-                    console.log("Objective error");
 
                     if (errorContainer.length === 0) {
                         let p = $("<p>")
@@ -1084,7 +1046,6 @@
                     $('.quill-editor-bubble').addClass('is-invalid');
                     $('.quill-editor-bubble').removeClass('is-valid');
                 } else {
-                    console.log("Objective success");
                     validatedForm = true;
 
                     if (errorContainer.length > 0) {
@@ -1350,7 +1311,6 @@
                 const direct_cause = $('#direct_cause').val();
                 const responsible_party = $('#responsible_party').val();
                 const issue_category = $('#issue_category').val();
-                console.log(issue_category)
                 const responsible_type = actual_responsible_type;
                 const selectedUserId = $('#user_pic').val();
                 const issueId = $('#issue-edit-btn').data('issueId');
@@ -1362,7 +1322,6 @@
 
                 const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
                 const uploaderId = getLoginUser.currentUser.id;
-                console.log("Uploader Id", uploaderId);
 
                 const requestData = {
                     title: title,
@@ -1383,8 +1342,6 @@
 
                 };
 
-                console.log('Request Data:', requestData);
-
                 $.ajax({
                     url: '/api/issue/save',
                     type: 'POST',
@@ -1392,7 +1349,6 @@
                     data: JSON.stringify(requestData),
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
                         $("#alert-text").text(
                             "Issue Created Successfully"
                         );
@@ -1423,24 +1379,17 @@
 
                     },
                     error: function (xhr, status, error) {
-                        console.log('Status:', status);
-                        console.log('Error:', error);
-                        console.log('Server response:', xhr.responseText);
 
                         if (xhr.getResponseHeader('Content-Type') === 'application/json') {
                             // Handle JSON response
                             try {
                                 const response = JSON.parse(xhr.responseText);
-                                console.log('JSON Response:', response);
                             } catch (e) {
-                                console.log('JSON parsing error:', e);
                             }
                         } else {
                             // Handle non-JSON response
-                            console.log('Non-JSON Response:', xhr.responseText);
                         }
                         showError('Error creating issue: ' + xhr.responseText);
-                        console.log('Error creating issue');
                     },
                 });
             });
@@ -1536,6 +1485,8 @@
                     },
                     theme: "snow",
                 });
+
+                console.log(issue.description)
 
                 quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                 quill.enable(false);
@@ -1763,8 +1714,8 @@
                 dataType: 'json',
                 success: function (data) {
                     const sortContainer = document.querySelector('#sort-container');
-
-                    for(let i = data.length - 1; i > 0; i--) {
+                    console.log('all issue data', data)
+                    for(let i = data.length - 1; i >= 0; i--) {
                         const issueDiv = createIssueCard(data[i]);
                         sortContainer.appendChild(issueDiv)
                     }
@@ -1780,6 +1731,7 @@
             $("#solved-filter").val('');
             $("#category-filter").val('');
             document.querySelector("#sort-container").innerHTML = ''
+            document.querySelector('#no-result').classList.add('d-none')
             loadData();
         });
 
@@ -1788,14 +1740,12 @@
         $('.tab-content').on('click', '.see-more-button', function () {
             // Get the issue ID directly from the button's data-id attribute
             const issueId = $(this).attr('data-id'); // Use $(this) instead of $('#issue-edit-btn')
-            console.log('Clicked button with data-iD:', issueId);
 
             $.ajax({
                 url: '/api/issue/list/byId/' + issueId,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    console.log('Data received:', data);
                     if (data) {
                         $('#corrective_actionInput').val(data.corrective_action);
                         $('#preventive_actionInput').val(data.preventive_action);
@@ -1824,20 +1774,15 @@
 
         $('.tab-content').on('click', '.issueDetails', function () {
 
-            console.log("click on issueDetails ")
-
             // Get the issue ID directly from the button's data-id attribute
             const issueId = $(this).data('id'); // Use $(this) instead of $('#issue-edit-btn')
-            console.log('Clicked button with data-iD:', issueId);
 
             $.ajax({
                 url: 'api/issue/list/byId/' + issueId,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    console.log('Data received:', data);
                     if (data) {
-                        console.log("i have no idea help")
                         $("#details").attr("data-currentEditingIssueId", data.id);
                         $('#issueTitleDetails').val(data.title);
                         $('#issue_categoryDetails').val(data.issueCategory);
@@ -1855,7 +1800,6 @@
                             data.description
                         );
                         issueDetail.on('text-change', function (delta, source) {
-                            console.log("text change", issueDetail.root.innerHTML)
                             $("#issue-description-save-btn-container").removeClass("d-none")
                         });
                         $("#issue-description-save-btn").on('click', function () {
@@ -1866,8 +1810,6 @@
                                 updated_date: Date.now()
                             }
 
-                            console.log("issue", issue)
-
                             $.ajax({
                                 url: `/api/issue/update/${data.id}`, // Replace with your actual URL
                                 type: 'PUT', // Change to 'PUT' or 'PATCH' if needed
@@ -1875,7 +1817,6 @@
                                 contentType: 'application/json',
                                 data: JSON.stringify(issue),
                                 success: function (response) {
-                                    console.log('Ajax request successful:', response);
                                     // Handle success response
                                     $("#issue-description-save-btn-container").addClass('d-none')
 
@@ -1892,7 +1833,6 @@
 
                                 },
                                 error: function (xhr, status, error) {
-                                    console.log('Ajax request error:', error);
                                     // Handle error response
                                 }
                             });
@@ -1910,10 +1850,6 @@
                         const notSamePerson = getLoginUser.currentUser.id !== data.user_uploader.id
 
                         if (notSamePerson) {
-                            console.log(getLoginUser.currentUser.id)
-                            console.log(data.user_uploader.id)
-                            console.log(getLoginUser.currentUser.id !== data.user_uploader.id)
-                            console.log("solved", data.solved)
                             $('#issueTitleDetails').prop('disabled', true);
                             $('#issue_categoryDetails').prop('disabled', true);
                             $('#descriptionDetails').prop('disabled', true);
@@ -2093,8 +2029,6 @@
 
         const pendingIssueList = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
 
-        console.log("pending issue list", pendingIssueList)
-
         if (pendingIssueList.length !== 0) {
             document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
         }
@@ -2123,14 +2057,11 @@
 
         const allApprovalRadios = document.querySelectorAll('.all-approval-input');
 
-        console.log("all radiio button", allApprovalRadios)
-
         // Attach a click event listener to each radio button in #all-approval
         allApprovalRadios.forEach(allApprovalRadio => {
             allApprovalRadio.addEventListener('click', function () {
                 // Get the value of the clicked radio button
                 const selectedValue = this.value;
-                console.log(selectedValue)
 
                 // Set the corresponding radio buttons in .item sections to the same value
                 document.querySelectorAll('.issue-approval input[value="' + selectedValue + '"]').forEach(itemRadio => {
@@ -2145,14 +2076,9 @@
 
             const issueList = document.querySelectorAll(".item-issue-approval");
 
-            console.log(issueList)
-
             issueList.forEach((item, index) => {
                 // Get the value of the selected radio button in the corresponding .item section
-                console.log("Before radio button selection");
                 const selectedRadio = item.querySelector(".issue-approval input[type='radio']:checked");
-                console.log(selectedRadio);
-                console.log("After radio button selection");
                 // Check if a radio button is selected
                 if (selectedRadio) {
                     // Add data to the array
@@ -2165,7 +2091,6 @@
                     console.log(`No radio button selected for item ${index + 1}`);
                 }
             });
-            console.log(updateIssueList)
 
             if (updateIssueList.length != 0) {
                 $.ajax({
@@ -2175,15 +2100,12 @@
                     data: JSON.stringify(updateIssueList),
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
-                        console.log("Issue Updated Successfully");
                         // alert("Issue Updated Successfully");
                         showSuccess("Issue Updated Successfuly.");
                         $.ajax({
                             url: `/api/issue/list/pending/${getLoginUser.currentUser.id}`, // Update the URL to include the issue ID
                             type: 'GET',
                             success: function (data) {
-                                console.log(data);
                                 const newIssueList = document.getElementById("new-issue-list")
                                 newIssueList.innerHTML = ''
                                 for (let i = data.length - 1; i >= 0; i--) {
@@ -2208,13 +2130,10 @@
 
     solveBtn.addEventListener('click', function (e) {
         //alert("Your issue solved");
-        console.log($(this).data('issueId'))
 
         const corrective_action = $('#corrective_actionInput').val();
         const preventive_action = $('#preventive_actionInput').val();
         const issueId = $(this).data('issueId');
-        console.log(issueId)
-        console.log(solved + " solveddddddd");
         if (corrective_action === "" || preventive_action === "") {
             // alert('Please fill in all the required fields.');
             showError('Please fill in all the required fields.');
@@ -2226,7 +2145,6 @@
             preventive_action: preventive_action,
             updated_date: new Date().getTime(),
         };
-        console.log("UpdateDetails", updatedDetails);
         $.ajax({
             url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
             type: 'PUT',
@@ -2234,15 +2152,12 @@
             data: JSON.stringify(updatedDetails),
             dataType: 'json',
             success: function (data) {
-                console.log(data);
-                console.log("Issue Updated Successfully");
                 // Update 'solved' to true after a successful AJAX request
                 Swal.fire({
                     title: "Success!",
                     text: "You have successfully solved the issue.",
                     icon: "success"
                 });
-                console.log("Success")
                 $("#issue-edit-btn").hide();
                 $("#solve-btn").show();
             },
@@ -2263,7 +2178,6 @@
                     console.log('Non-JSON Response:', xhr.responseText);
                 }
                 alert("Error updating issue: " + xhr.responseText);
-                console.log("Error updating issue");
             },
             complete: function () {
                 // Optionally, close the modal or perform other actions upon completion
@@ -2277,8 +2191,6 @@
         const preventive_action = $('#preventive_actionInput').val();
         const solved = $('#solve-btn').val();
         const issueId = $(this).data('issueId');
-        console.log(issueId)
-        console.log(solved + " solveddddddd");
         if (corrective_action === "" || preventive_action === "") {
             // alert('Please fill in all the required fields.');
             showError('Please fill in all the required fields.');
@@ -2308,7 +2220,6 @@
                         solved_date: new Date().getTime(),
                         solved: solved,
                     };
-                    console.log("UpdateDetails", updatedDetails);
 
                     $.ajax({
                         url: `/api/issue/update/${issueId}`, // Update the URL to include the issue ID
@@ -2317,8 +2228,6 @@
                         data: JSON.stringify(updatedDetails),
                         dataType: 'json',
                         success: function (data) {
-                            console.log(data);
-                            console.log("Issue Updated Successfully");
                             // Update 'solved' to true after a successful AJAX request
 
                             Swal.fire({
@@ -2326,7 +2235,6 @@
                                 text: "You have successfully solved the issue.",
                                 icon: "success"
                             });
-                            console.log("Success")
                             $("#issue-edit-btn").hide();
                             $("#solve-btn").show();
 
@@ -2386,13 +2294,11 @@
 
     function filterIssues() {
         var status = $('#status-filter').val();
-        console.log("status", status);
 
         $.ajax({
             url: '/api/issue/list/status/' + status,
             type: 'GET',
             success: function (data) {
-                console.log('Success. Received data:', data);
 
                 const sortContainer = $('#sort-container');
                 sortContainer.empty();
@@ -2432,13 +2338,11 @@
     // for solved
     function filterSolvedIssues() {
         var solved = $('#solved-filter').val();
-        console.log("solved", solved);
 
         $.ajax({
             url: '/api/issue/list/solved/' + solved,
             type: 'GET',
             success: function (data) {
-                console.log('Success. Received data:', data);
 
                 const sortContainer = $('#sort-container');
                 sortContainer.empty(); // Clear previous content
@@ -2480,13 +2384,11 @@
     // for Category filter
     function filterCategory() {
         var category = $('#category-filter').val();
-        console.log("category", category);
 
         $.ajax({
             url: '/api/issue/list/category/' + category,
             type: 'GET',
             success: function (data) {
-                console.log('Success. Received data:', data);
 
                 const sortContainer = $('#sort-container');
                 sortContainer.empty(); // Clear previous content

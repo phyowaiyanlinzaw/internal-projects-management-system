@@ -737,8 +737,8 @@
                             </div>
                             <div
                             class="d-flex justify-content-end rounded-1 text-white gap-2"
-                            >
-                            <input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>
+                            >${loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO' ? `<input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>` : ''}
+                            
                                 <i class="fa-solid fa-angle-down bg-primary p-1 rounded-bottom" data-bs-toggle="collapse"
                             data-bs-target="#collapse-project-${project.id}"
                             aria-expanded="true"
@@ -2335,7 +2335,7 @@
                 $("#project-internal-review-count").attr("disabled", true);
                 // hide the manage task button if the role is pmo or sdqc and
             }
-            if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO") {
+            if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO" || loginUser.currentUser.role==='DEPARTMENT_HEAD') {
                 $("#navigate-task").remove();
             }
             
@@ -3545,39 +3545,51 @@
                                 class="tab-pane fade profile-edit pb-3"
                                 id="client-info"
                             >
+                                <div class="container-fluid">
                                 <div class="row">
-                                    <div
-                                        class="fs-2 text-center"
-                                        id="my-dear-customer-name"
-                                    >
-                                        DAT
-                                    </div>
+                                    <div><h4 class="d-flex justify-content-center mt-2">Client Information</h4></div>
+
                                     <div class="row row-cols-1">
                                         <div
-                                            class="d-flex justify-content-center align-items-center gap-2"
+                                                class="d-flex  align-items-center gap-2"
                                         >
                                             <div
-                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                    class="p-2 d-inline-block fs-5 text-primary"
+                                            >
+                                                <i class="fa-regular fa-user"></i>
+                                            </div>
+                                            <div
+                                                    class=""
+                                                    id="my-dear-customer-name"
+                                            >
+                                                09 77558822
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="d-flex gap-2 align-items-center"
+                                        >
+                                            <div
+                                                class="p-2 d-inline-block  fs-5 text-primary"
                                             >
                                                 <i class="bi bi-telephone"></i>
                                             </div>
                                             <div
-                                                class="align-self-center"
+                                                class=""
                                                 id="client-phone-contect"
                                             >
                                                 09 77558822
                                             </div>
                                         </div>
                                         <div
-                                            class="d-flex justify-content-center align-items-center gap-2"
+                                            class="d-flex gap-2 align-items-center"
                                         >
                                             <div
-                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                class="p-2 d-inline-block  fs-5 text-primary"
                                             >
                                                 <i class="bi bi-envelope-at"></i>
                                             </div>
                                             <div
-                                                class="align-self-center"
+                                                class=""
                                                 id="client-email-address"
                                             >
                                                 suckmyfingure@gmail.com
@@ -3586,7 +3598,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -949,7 +949,8 @@ function createTaskDiv(task) {
         "task",
         "row",
         "rounded-2",
-        "text-white"
+        "text-white",
+        'prevent-select'
     );
     if (!task.due) {
         switch (task.status) {

@@ -7,6 +7,7 @@ import team.placeholder.internalprojectsmanagementsystem.dto.model.department.De
 import team.placeholder.internalprojectsmanagementsystem.dto.model.issue.IssueDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.ClientDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
+import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.DevelopmentPhase;
 import java.io.Serializable;
 import java.util.List;
@@ -47,6 +48,11 @@ public class ProjectDto implements Serializable {
         this.departmentDto = departmentDto;
         this.name = name;
     }
+
+    public ProjectDto(Project project) {
+
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
