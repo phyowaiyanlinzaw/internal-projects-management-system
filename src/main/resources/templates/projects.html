@@ -948,8 +948,8 @@
                             </div>
                             <div
                             class="d-flex justify-content-end rounded-1 text-white gap-2"
-                            >
-                            <input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>
+                            >${loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO' ? `<input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>` : ''}
+                            
                                 <i class="fa-solid fa-angle-down bg-primary p-1 rounded-bottom" data-bs-toggle="collapse"
                             data-bs-target="#collapse-project-${project.id}"
                             aria-expanded="true"
@@ -2506,7 +2506,7 @@
                 $("#project-internal-review-count").attr("disabled", true);
                 // hide the manage task button if the role is pmo or sdqc and
             }
-            if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO") {
+            if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO" || loginUser.currentUser.role==='DEPARTMENT_HEAD') {
                 $("#navigate-task").remove();
             }
             
