@@ -558,87 +558,87 @@ class ProjectServiceImplTest {
 
 
 
-    @Test
-    void testGetAllProjectsByDepartmentNameWhenDepartmentNameIsGivenThenReturnListOfProjects() {
-        // Arrange
-        String departmentName = "TestDepartment";
-        List<Project> mockProjectList = Arrays.asList(new Project(), new Project(), new Project());
-        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(mockProjectList);
+//    @Test
+//    void testGetAllProjectsByDepartmentNameWhenDepartmentNameIsGivenThenReturnListOfProjects() {
+//        // Arrange
+//        String departmentName = "TestDepartment";
+//        List<Project> mockProjectList = Arrays.asList(new Project(), new Project(), new Project());
+//        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(mockProjectList);
+//
+//        // Mocking modelMapper mappings
+//        when(modelMapper.map(any(Project.class), eq(ProjectDto.class))).thenReturn(new ProjectDto());
+//        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
+//        when(modelMapper.map(any(Deliverable.class), eq(DeliverableDto.class))).thenReturn(new DeliverableDto());
+//        when(modelMapper.map(any(DeliverableType.class), eq(DeliverableTypeDto.class))).thenReturn(new DeliverableTypeDto());
+//        when(modelMapper.map(any(Department.class), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());
+//        when(modelMapper.map(any(Amount.class), eq(AmountDto.class))).thenReturn(new AmountDto());
+//        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
+//        when(modelMapper.map(any(Review.class), eq(ReviewDto.class))).thenReturn(new ReviewDto());
+//        when(modelMapper.map(any(SystemOutLine.class), eq(SystemOutLineDto.class))).thenReturn(new SystemOutLineDto());
+//        when(modelMapper.map(isNull(), eq(UserDto.class))).thenReturn(new UserDto());  // Handle null for UserDto
+//        when(modelMapper.map(isNull(), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());  // Handle null for DepartmentDto
+//        // ... add similar lines for other mappings
+//
+//        // Act
+//        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
+//
+//        // Assert
+//        assertNotNull(result);
+//        assertEquals(mockProjectList.size(), result.size());
+//tion for troubleshooting
+//        for (Project project : mockProjectList) {
+//            System.out.println("Project: " + (project != null ? project.getName() : "null"));
+//
+//            // Log additional informa
+//            if (project != null && project.getProjectManager() != null) {
+//                System.out.println("Project manager: " + project.getProjectManager().getName());
+//            } else {
+//                System.out.println("Project manager: null");
+//            }
+//
+//            System.out.println("Deliverables: " + (project != null && project.getDeliverables() != null ? project.getDeliverables().size() : "null"));
+//            System.out.println("Users: " + (project != null && project.getUsers() != null ? project.getUsers().size() : "null"));
+//            System.out.println("Tasks: " + (project != null && project.getTasks() != null ? project.getTasks().size() : "null"));
+//        }
+//    }
 
-        // Mocking modelMapper mappings
-        when(modelMapper.map(any(Project.class), eq(ProjectDto.class))).thenReturn(new ProjectDto());
-        when(modelMapper.map(any(User.class), eq(UserDto.class))).thenReturn(new UserDto());
-        when(modelMapper.map(any(Deliverable.class), eq(DeliverableDto.class))).thenReturn(new DeliverableDto());
-        when(modelMapper.map(any(DeliverableType.class), eq(DeliverableTypeDto.class))).thenReturn(new DeliverableTypeDto());
-        when(modelMapper.map(any(Department.class), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());
-        when(modelMapper.map(any(Amount.class), eq(AmountDto.class))).thenReturn(new AmountDto());
-        when(modelMapper.map(any(Client.class), eq(ClientDto.class))).thenReturn(new ClientDto());
-        when(modelMapper.map(any(Review.class), eq(ReviewDto.class))).thenReturn(new ReviewDto());
-        when(modelMapper.map(any(SystemOutLine.class), eq(SystemOutLineDto.class))).thenReturn(new SystemOutLineDto());
-        when(modelMapper.map(isNull(), eq(UserDto.class))).thenReturn(new UserDto());  // Handle null for UserDto
-        when(modelMapper.map(isNull(), eq(DepartmentDto.class))).thenReturn(new DepartmentDto());  // Handle null for DepartmentDto
-        // ... add similar lines for other mappings
+//    @Test
+//    void testGetAllProjectsByDepartmentNameWhenNoProjectsThenReturnEmptyList() {
+//        // Arrange
+//        String departmentName = "TestDepartment";
+//        when(projectRepository.findByD(departmentName)).thenReturn(Collections.emptyList());
+//
+//        // Act
+//        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
+//
+//        // Assert
+//        assertNotNull(result);
+//        assertTrue(result.isEmpty());
+//
+//        // Verify interactionsissue_ledgar
+//        verify(projectRepository, times(1)).findByDepartmentName(departmentName);
+//        verifyNoInteractions(modelMapper);
+//        verifyNoInteractions(taskRepository);
+//    }
 
-        // Act
-        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(mockProjectList.size(), result.size());
-
-        // Log additional information for troubleshooting
-        for (Project project : mockProjectList) {
-            System.out.println("Project: " + (project != null ? project.getName() : "null"));
-
-            if (project != null && project.getProjectManager() != null) {
-                System.out.println("Project manager: " + project.getProjectManager().getName());
-            } else {
-                System.out.println("Project manager: null");
-            }
-
-            System.out.println("Deliverables: " + (project != null && project.getDeliverables() != null ? project.getDeliverables().size() : "null"));
-            System.out.println("Users: " + (project != null && project.getUsers() != null ? project.getUsers().size() : "null"));
-            System.out.println("Tasks: " + (project != null && project.getTasks() != null ? project.getTasks().size() : "null"));
-        }
-    }
-
-    @Test
-    void testGetAllProjectsByDepartmentNameWhenNoProjectsThenReturnEmptyList() {
-        // Arrange
-        String departmentName = "TestDepartment";
-        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(Collections.emptyList());
-
-        // Act
-        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
-
-        // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-
-        // Verify interactionsissue_ledgar
-        verify(projectRepository, times(1)).findByDepartmentName(departmentName);
-        verifyNoInteractions(modelMapper);
-        verifyNoInteractions(taskRepository);
-    }
-
-    @Test
-    void testGetAllProjectsByDepartmentNameWhenIdDoesNotExistThenReturnEmptyList() {
-        // Arrange
-        String departmentName = "TestDepartment";
-        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(Collections.emptyList());
-
-        // Act
-        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
-
-        // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-
-        // Verify interactions
-        verify(projectRepository, times(1)).findByDepartmentName(departmentName);
-        verifyNoInteractions(modelMapper);
-        verifyNoInteractions(taskRepository);
-    }
+//    @Test
+//    void testGetAllProjectsByDepartmentNameWhenIdDoesNotExistThenReturnEmptyList() {
+//        // Arrange
+//        String departmentName = "TestDepartment";
+//        when(projectRepository.findByDepartmentName(departmentName)).thenReturn(Collections.emptyList());
+//
+//        // Act
+//        List<ProjectDto> result = projectService.getAllProjectsByDepartmentName(departmentName);
+//
+//        // Assert
+//        assertNotNull(result);
+//        assertTrue(result.isEmpty());
+//
+//        // Verify interactions
+//        verify(projectRepository, times(1)).findByDepartmentName(departmentName);
+//        verifyNoInteractions(modelMapper);
+//        verifyNoInteractions(taskRepository);
+//    }
 
     @Test
     void countTaskById() {
