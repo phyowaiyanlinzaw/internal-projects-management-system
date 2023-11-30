@@ -1622,7 +1622,17 @@
                         headerRows: 1,
                         widths: "auto",
                         body: [
-                            ["ID", "Title", "Category", "Project Name", "Status", "Personal In Charge", "Responsible Party", "Solved", "Created Date"],
+                            [
+                                { text: 'ID', style: 'tableHeader'},
+                                { text: 'Title', style: 'tableHeader', },
+                                { text: 'Category', style: 'tableHeader',},
+                                { text: 'Project Name', style: 'tableHeader'},
+                                { text: 'Status', style: 'tableHeader'},
+                                { text: 'Personal In Charge', style: 'tableHeader'},
+                                { text: 'Responsible Party', style: 'tableHeader'},
+                                { text: 'Solved', style: 'tableHeader',},
+                                { text: 'Created Date', style: 'tableHeader'}
+                            ],
                             ...$("#table").bootstrapTable("getData").map((row) => [
                                 row.id,
                                 row.title,
@@ -1643,6 +1653,12 @@
                     fontSize: 18,
                     bold: true,
                     margin: [0, 0, 0, 10]
+                },
+                tableHeader: {
+                    fillColor: '#000000',
+                    bold: true,
+                    fontSize: 13,
+                    color: 'white'
                 }
             }
         };
@@ -1666,15 +1682,15 @@
 
                         body: [
                             [
-                                "ID",
-                                "Title",
-                                "Category",
-                                "Project Name",
-                                "Status",
-                                "Personal In Charge",
-                                "Responsible Party",
-                                "Solved",
-                                "Created Date"
+                                { text: 'ID', style: 'tableHeader'},
+                                { text: 'Title', style: 'tableHeader'},
+                                { text: 'Category', style: 'tableHeader'},
+                                { text: 'Project Name', style: 'tableHeader'},
+                                { text: 'Status', style: 'tableHeader'},
+                                { text: 'Personal In Charge', style: 'tableHeader'},
+                                { text: 'Responsible Party', style: 'tableHeader'},
+                                { text: 'Solved', style: 'tableHeader'},
+                                { text: 'Created Date', style: 'tableHeader'}
                             ],
                             ...selectedRows.map((row) => [
                                 row.id,
@@ -1697,6 +1713,12 @@
                     fontSize: 18,
                     bold: true,
                     margin: [0, 0, 0, 10]
+                },
+                tableHeader: {
+                    fillColor: '#000000',
+                    bold: true,
+                    fontSize: 13,
+                    color: 'white'
                 }
             }
         };

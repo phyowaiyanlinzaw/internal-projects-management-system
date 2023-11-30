@@ -343,12 +343,12 @@
                         widths: ["auto", "auto", "auto", "auto", "auto", "auto"],
                         body: [
                             [
-                                "No.",
-                                "Email",
-                                "Name",
-                                "Department",
-                                "Role",
-                                "Status"
+                                { text: 'No.', style: 'tableHeader' },
+                                { text: 'Email', style: 'tableHeader' },
+                                { text: 'Name', style: 'tableHeader' },
+                                { text: 'Department', style: 'tableHeader' },
+                                { text: 'Role', style: 'tableHeader' },
+                                { text: 'Status', style: 'tableHeader' }
                             ],
                             ...$("#table").bootstrapTable("getData").map((row,index) => [
                                 index + 1,
@@ -367,6 +367,12 @@
                     fontSize: 18,
                     bold: true,
                     margin: [0, 0, 0, 10]
+                },
+                tableHeader: {
+                    fillColor: '#000000',
+                    bold: true,
+                    fontSize: 13,
+                    color: 'white'
                 }
             }
         };
@@ -386,12 +392,12 @@
                         widths: ["auto", "auto", "auto", "auto", "auto", "auto"],
                         body: [
                             [
-                                "No.",
-                                "Email",
-                                "Name",
-                                "Department",
-                                "Role",
-                                "Status"
+                                { text: 'No.', style: 'tableHeader' },
+                                { text: 'Email', style: 'tableHeader' },
+                                { text: 'Name', style: 'tableHeader' },
+                                { text: 'Department', style: 'tableHeader' },
+                                { text: 'Role', style: 'tableHeader' },
+                                { text: 'Status', style: 'tableHeader' }
                             ],
                             ...selectedRows.map((row,index) => [
                                 index + 1,
@@ -410,6 +416,12 @@
                     fontSize: 18,
                     bold: true,
                     margin: [0, 0, 0, 10]
+                },
+                tableHeader: {
+                    fillColor: '#000000',
+                    bold: true,
+                    fontSize: 13,
+                    color: 'white'
                 }
             }
         };
