@@ -185,5 +185,38 @@ class ViewControllerTest {
         Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
     }
 
+    @Test
+    @WithMockUser(roles = {"PMO"})
+    void testEmployeesWithPMORole() {
+        // Act
+        String result = viewController.employees();
+
+        // Assert
+        assertEquals("employees", result);
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+    }
+
+    @Test
+    @WithMockUser(roles = {"SOME_OTHER_ROLE"})
+    void testEmployeesWithoutRequiredRole() {
+        // Act
+        String result = viewController.employees();
+
+        // Assert
+        assertEquals("accessDenied", result); // Assuming you have an accessDenied view for unauthorized access
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+    }
+
+    @Test
+    void testReportDepartment() {
+        // Act
+        String result = viewController.reportDepartment();
+
+        // Assert
+        assertEquals("issueTable", result);
+        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+    }
+
+
 
 }
