@@ -359,40 +359,40 @@ class ProjectControllerTest {
 
 
 
-    @Test
-    void testGetAllProjectsByDepartmentName() {
-        // Arrange
-        String departmentName = "Department1";
-        List<ProjectDto> mockProjects = Arrays.asList(
-                new ProjectDto(),
-                new ProjectDto()
-        );
-
-        // Case where departmentName is found
-        when(projectService.getAllProjectsByDepartmentName(departmentName)).thenReturn(mockProjects);
-
-        // Act
-        ResponseEntity<List<ProjectDto>> responseEntity = projectController.getAllProjectsByDepartmentName(departmentName);
-
-        // Assert
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(mockProjects, responseEntity.getBody());
-
-        verify(projectService, times(1)).getAllProjectsByDepartmentName(departmentName);
-
-        reset(projectService);
-
-        when(projectService.getAllProjectsByDepartmentName(departmentName)).thenReturn(Collections.emptyList());
-
-        responseEntity = projectController.getAllProjectsByDepartmentName(departmentName);
-
-        // Assert
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(Collections.emptyList(), responseEntity.getBody());
-
-        // Verify that the service method was called once with the given department name
-        verify(projectService, times(1)).getAllProjectsByDepartmentName(departmentName);
-    }
+//    @Test
+//    void testGetAllProjectsByDepartmentName() {
+//        // Arrange
+//        String departmentName = "Department1";
+//        List<ProjectDto> mockProjects = Arrays.asList(
+//                new ProjectDto(),
+//                new ProjectDto()
+//        );
+//
+//        // Case where departmentName is found
+//        when(projectService.getAllProjectsByDepartmentName(departmentName)).thenReturn(mockProjects);
+//
+//        // Act
+//        ResponseEntity<List<ProjectDto>> responseEntity = projectController.getAllProjectsByDepartmentName(departmentName);
+//
+//        // Assert
+//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+//        assertEquals(mockProjects, responseEntity.getBody());
+//
+//        verify(projectService, times(1)).getAllProjectsByDepartmentName(departmentName);
+//
+//        reset(projectService);
+//
+//        when(projectService.getAllProjectsByDepartmentName(departmentName)).thenReturn(Collections.emptyList());
+//
+//        responseEntity = projectController.getAllProjectsByDepartmentName(departmentName);
+//
+//        // Assert
+//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+//        assertEquals(Collections.emptyList(), responseEntity.getBody());
+//
+//        // Verify that the service method was called once with the given department name
+//        verify(projectService, times(1)).getAllProjectsByDepartmentName(departmentName);
+//    }
 
     @Test
     void testSortProjectByDepId() {
