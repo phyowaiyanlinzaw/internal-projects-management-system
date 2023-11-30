@@ -1063,6 +1063,35 @@ function calculateWeekdayDuration(startDate, endDate) {
     return totalWeekdays;
 }
 
+let limiter = 24 * 30 * project.duration;
+
+console.log(limiter);
+
+const poop = document.getElementById('actual-hours-input');
+
+poop.setAttribute('placeholder', `Max hours ${limiter} hours`)
+poop.max = limiter
+
+poop.addEventListener("input", function () {
+
+    console.log(validateActualWorkingHour(parseInt(this.value)))
+
+    if (validateActualWorkingHour(parseInt(this.value))) {
+
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+    } else if (this.value > limiter) {
+        this.classList.add('is-invalid');
+    } else {
+        this.classList.add('is-invalid');
+    }
+
+})
+
+function validateActualWorkingHour(x) {
+    return !isNaN(x)
+}
+
 for (let i = 0; i < taskList.length; i++) {
     const task = taskList[i];
 
@@ -1101,24 +1130,6 @@ for (let i = 0; i < taskList.length; i++) {
 
     });
 
-    document.getElementById('actual-hours-input').addEventListener("input", function () {
-
-        console.log(this.value)
-
-        console.log(validateActualWorkingHour(parseInt(this.value)))
-
-        if (validateActualWorkingHour(parseInt(this.value))) {
-            this.classList.remove('is-invalid');
-            this.classList.add('is-valid');
-        } else {
-            this.classList.add('is-invalid');
-        }
-
-    })
-
-    function validateActualWorkingHour(x) {
-        return !isNaN(x)
-    }
     taskDiv.addEventListener("dragend", async () => {
         taskDiv.classList.remove("is-dragging");
         currentTaskData =
@@ -1172,12 +1183,21 @@ for (let i = 0; i < taskList.length; i++) {
 
                         const clickHandler = function () {
                             currentTaskData.actualHours = actualHoursInput.value;
+
+                            let limiter = 24 * 30 * project.duration;
+                            actualHoursInput.max = limiter
+
+                            console.log(limiter);
+
                             if (validateActualWorkingHour(parseInt(actualHoursInput.value))) {
                                 $('#actual-hours-input-modal').modal('hide');
                                 actualHoursInput.value = '';
                                 actualHoursInput.classList.remove('is-valid');
                                 actualHoursSubmitBtn.removeEventListener('click', clickHandler); // Remove the event listener
                                 resolve();
+                            } else if (actualHoursInput.value > limiter) {
+                                actualHoursInput.classList.add('is-invalid');
+                                
                             } else {
                                 actualHoursInput.classList.add('is-invalid');
                             }
