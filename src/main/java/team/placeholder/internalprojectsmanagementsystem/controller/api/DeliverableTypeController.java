@@ -48,8 +48,29 @@ public class DeliverableTypeController {
 
         Project project = projectRepository.findById(id);
 
+        if (project == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<Deliverable> deliverables = project.getDeliverables();
+
+        if (deliverables == null) {
+            // Log or handle the case where deliverables is null
+            // You might want to investigate why getDeliverables() returns null
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         Set<Long> deliverableTypeIds = project.getDeliverables().stream()
-                .map(deliverable -> deliverable.getDeliverableTypes().getId())
+                .map(deliverable -> {
+                    DeliverableType deliverableTypes = deliverable.getDeliverableTypes();
+                    if (deliverableTypes != null) {
+                        return deliverableTypes.getId();
+                    } else {
+                        // Log or handle the case where deliverableTypes is null
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
         Set<DeliverableTypeDto> deliverableTypeDtos = deliverableTypeService.getAll().stream()

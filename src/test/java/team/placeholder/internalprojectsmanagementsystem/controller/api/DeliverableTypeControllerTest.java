@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,24 +70,23 @@ class DeliverableTypeControllerTest {
     @Test
     void testGetAllByProject(){
         long projectId = 1L;
-        Project project = new Project();
-        when(projectRepository.findById(projectId)).thenReturn(project);
 
+        // Mock the behavior of projectRepository
+        Project project = new Project();
+        Mockito.when(projectRepository.findById(projectId)).thenReturn(project);
+
+        // Mock the behavior of deliverableTypeService
         Set<DeliverableTypeDto> allDeliverableTypes = new HashSet<>();
         allDeliverableTypes.add(new DeliverableTypeDto());
         allDeliverableTypes.add(new DeliverableTypeDto());
-        when(deliverableTypeService.getAll()).thenReturn(allDeliverableTypes);
+        Mockito.when(deliverableTypeService.getAll()).thenReturn(allDeliverableTypes);
 
+        // Call the controller method
         ResponseEntity<Set<DeliverableTypeDto>> responseEntity = deliverableTypeController.getAllByProject(projectId);
 
+        // Assert the response
         assertNotNull(responseEntity, "Response entity should not be null");
-
-        // Print information for debugging
-        System.out.println("Response Status Code: " + responseEntity.getStatusCodeValue());
-        System.out.println("Response Body: " + responseEntity.getBody());
-
-        // Use assertSame to compare HttpStatus instances
-        assertSame(HttpStatus.OK, responseEntity.getStatusCode(), "Unexpected status code");
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode(), "Unexpected status code");
 
         Set<DeliverableTypeDto> result = responseEntity.getBody();
         assertNotNull(result, "Response body should not be null");
