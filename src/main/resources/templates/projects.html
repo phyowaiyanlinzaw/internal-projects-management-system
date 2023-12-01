@@ -911,8 +911,8 @@
                             </div>
                             <div
                             class="d-flex justify-content-end rounded-1 text-white gap-2"
-                            >
-                            <input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>
+                            >${loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO' ? `<input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>` : ''}
+
                                 <i class="fa-solid fa-angle-down bg-primary p-1 rounded-bottom" data-bs-toggle="collapse"
                             data-bs-target="#collapse-project-${project.id}"
                             aria-expanded="true"
@@ -969,13 +969,13 @@
 
                 const currentProjectDetail = await getData(`/api/project/list/${id}`);
 
-                console.log("current project detail", currentProjectDetail);
+                    console.log("current project detail", currentProjectDetail);
 
-                const showDeliContainer = document.querySelector('#show-project-deliverable')
+                    const showDeliContainer = document.querySelector('#show-project-deliverable')
 
-                showDeliContainer.innerHTML = ''
+                    showDeliContainer.innerHTML = ''
 
-                currentProjectDetail.deliverableDto.forEach(a => {
+                    currentProjectDetail.deliverableDto.forEach(a => {
 
                     console.log(a)
 
@@ -1133,19 +1133,19 @@
 
                 //------------------------ architecture list end
 
-                //------------------------ deliverable list start
-                if (document.querySelector("#project-edit")) {
+                    //------------------------ deliverable list start
+                    if(document.querySelector("#project-edit")) {
 
-                    detailMoal.querySelector("#project-internal-review-count").value =
-                        currentProjectDetail.reviewDto.internal_review_count;
-                    detailMoal.querySelector("#project-external-review-count").value =
-                        currentProjectDetail.reviewDto.external_review_count;
-                    let count = 1
-                    document.querySelector("#edit-deliverable-list").textContent = "";
-                    let deliverableId;
-                    currentProjectDetail.deliverableDto.forEach((a) => {
-                        const outerDiv = document.createElement("div");
-                        outerDiv.className = "d-flex justify-content-start";
+                        detailMoal.querySelector("#project-internal-review-count").value =
+                            currentProjectDetail.reviewDto.internal_review_count;
+                        detailMoal.querySelector("#project-external-review-count").value =
+                            currentProjectDetail.reviewDto.external_review_count;
+                        let count = 1
+                        document.querySelector("#edit-deliverable-list").textContent = "";
+                        let deliverableId;
+                        currentProjectDetail.deliverableDto.forEach((a) => {
+                            const outerDiv = document.createElement("div");
+                            outerDiv.className = "d-flex justify-content-start";
 
                         const p = document.createElement('p')
                         p.textContent = count++
@@ -1274,27 +1274,27 @@
 
                 //_______________review update
 
-                //____________________________________reveiw update end
-                detailMoal.querySelector("#project-duration").innerText = `${
-                    currentProjectDetail.duration
-                } ${currentProjectDetail.duration < 1 ? " month" : " months"}`;
-                detailMoal.querySelector("#project-start-date").innerText =
-                    formatDateFromMilliseconds(currentProjectDetail.start_date);
-                detailMoal.querySelector("#project-end-date").innerText =
-                    formatDateFromMilliseconds(currentProjectDetail.end_date);
-                detailMoal.querySelector("#project-current-phase").innerText =
-                    currentProjectDetail.current_phase;
-                detailMoal.querySelector("#project-current-external-review-count").innerText =
-                    currentProjectDetail.reviewDto.external_review_count;
-                detailMoal.querySelector("#project-current-internal-review-count").innerText =
-                    currentProjectDetail.reviewDto.internal_review_count;
-                detailMoal.querySelector("#client-email-address").innerHTML =
-                    currentProjectDetail.clientDto.email;
-                detailMoal.querySelector("#client-phone-contect").innerHTML =
-                    currentProjectDetail.clientDto.phone;
-                detailMoal.querySelector("#my-dear-customer-name").innerHTML =
-                    currentProjectDetail.clientDto.name;
-            }
+                    //____________________________________reveiw update end
+                    detailMoal.querySelector("#project-duration").innerText = `${
+                        currentProjectDetail.duration
+                    } ${currentProjectDetail.duration <= 1 ? " month" : " months"}`;
+                    detailMoal.querySelector("#project-start-date").innerText =
+                        formatDateFromMilliseconds(currentProjectDetail.start_date);
+                    detailMoal.querySelector("#project-end-date").innerText =
+                        formatDateFromMilliseconds(currentProjectDetail.end_date);
+                    detailMoal.querySelector("#project-current-phase").innerText =
+                        currentProjectDetail.current_phase;
+                    detailMoal.querySelector("#project-current-external-review-count").innerText =
+                        currentProjectDetail.reviewDto.external_review_count;
+                    detailMoal.querySelector("#project-current-internal-review-count").innerText =
+                        currentProjectDetail.reviewDto.internal_review_count;
+                    detailMoal.querySelector("#client-email-address").innerHTML =
+                        currentProjectDetail.clientDto.email;
+                    detailMoal.querySelector("#client-phone-contect").innerHTML =
+                        currentProjectDetail.clientDto.phone;
+                    detailMoal.querySelector("#my-dear-customer-name").innerHTML =
+                        currentProjectDetail.clientDto.name;
+                }
 
             //_____________________________________________
         });
@@ -2270,7 +2270,7 @@
             return selectedProject;
         }
 
-        window.getAllSelectedProjectInfo = getAllSelectedProjectInfo // don't delete this
+            window.getAllSelectedProjectInfo = getAllSelectedProjectInfo // don't delete this
 
         window.getAllProjectInfo = getAllProjectInfo; // don't delete this
 
@@ -2476,20 +2476,20 @@
             }
         }
 
-        //list project end
-        if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
-            $('button[data-bs-target="#project-edit"]').remove();
-            $('button[data-bs-target="#amount"]').remove();
-            $("#project-edit").remove();
-            $("#amount").remove();
-            $("#project-external-review-count").attr("disabled", true);
-            $("#project-internal-review-count").attr("disabled", true);
-            // hide the manage task button if the role is pmo or sdqc and
-        }
-        if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO") {
-            $("#navigate-task").remove();
-        }
-
+            //list project end
+            if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
+                $('button[data-bs-target="#project-edit"]').remove();
+                $('button[data-bs-target="#amount"]').remove();
+                $("#project-edit").remove();
+                $("#amount").remove();
+                $("#project-external-review-count").attr("disabled", true);
+                $("#project-internal-review-count").attr("disabled", true);
+                // hide the manage task button if the role is pmo or sdqc and
+            }
+            if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO" || loginUser.currentUser.role==='DEPARTMENT_HEAD') {
+                $("#navigate-task").remove();
+            }
+            
 
     </script>
 </head>
