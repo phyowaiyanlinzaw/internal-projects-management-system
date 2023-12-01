@@ -1314,7 +1314,7 @@
                     //____________________________________reveiw update end
                     detailMoal.querySelector("#project-duration").innerText = `${
                         currentProjectDetail.duration
-                    } ${currentProjectDetail.duration < 1 ? " month" : " months"}`;
+                    } ${currentProjectDetail.duration <= 1 ? " month" : " months"}`;
                     detailMoal.querySelector("#project-start-date").innerText =
                         formatDateFromMilliseconds(currentProjectDetail.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =

@@ -292,6 +292,7 @@ let tagify = new Tagify(assignedMemberTagify, {
 
 
 //initialize jqeury ui datepicker
+
 $(
 
     function () {
@@ -334,7 +335,9 @@ $(
 
                 const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
 
-                $("#plan-hours").val(duration * 7)
+                $("#pm-actual-edit-hours").val(duration * 7)
+
+                console.log(startDate, endDate, duration)
 
                 validatePlanEndTime();
 
@@ -356,6 +359,14 @@ $(
             minDate: new Date(parseInt(projectStartDateElement.innerText)),
             maxDate: new Date(parseInt(projectEndDateElement.innerText)),
             dateFormat: 'yy-mm-dd',
+            onSelect: function (dateText, inst) {
+
+                const startDate = $('#pm-task-detail-start-date').val();
+                const endDate = $("#pm-task-detail-due-date").val();
+
+                const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
+                $("#pm-actual-edit-hours").val(duration * 7)
+            }
         })
 
     }
@@ -1068,6 +1079,28 @@ let limiter = 24 * 30 * project.duration;
 console.log(limiter);
 
 const poop = document.getElementById('actual-hours-input');
+
+const mountaion = document.getElementById('pm-actual-edit-hours')
+
+mountaion.max = limiter
+mountaion.setAttribute('placeholder', `Max hours ${limiter} hours`)
+
+mountaion.addEventListener("input", function () {
+
+    console.log(validateActualWorkingHour(parseInt(this.value)))
+
+    if (validateActualWorkingHour(parseInt(this.value))) {
+
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+    } else if (this.value > limiter) {
+        this.classList.add('is-invalid');
+    } else {
+        this.classList.add('is-invalid');
+    }
+
+})
+
 
 poop.setAttribute('placeholder', `Max hours ${limiter} hours`)
 poop.max = limiter
