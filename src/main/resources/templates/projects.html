@@ -318,7 +318,7 @@
                 const errorContainer = $("#architectures").siblings(".error-container");
 
                 if (!architectures || architectures.trim().length === 0) {
-                    validatedProjectForm = false;
+                    
                     if (errorContainer.length === 0) {
                         let p = $("<p>")
                             .addClass("text-danger fs-6")
@@ -332,11 +332,13 @@
 
                     $("#architectures").addClass("is-invalid");
                     $("#architectures").removeClass("is-valid");
+                    return false;
                 } else {
-                    validatedProjectForm = true;
+                    
                     errorContainer.remove();
                     $("#architectures").addClass("is-valid");
                     $("#architectures").removeClass("is-invalid");
+                    return true;
                 }
             }
 
@@ -1627,7 +1629,7 @@
                     const errorContainer = $("#name").siblings(".error-container");
 
                     if (prjName.trim().length < 1) {
-                        validatedProjectForm = false;
+                        
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1638,11 +1640,12 @@
                         }
                         $("#name").addClass("is-invalid");
                         $("#name").removeClass("is-valid");
+                        return false;
                     } else {
-                        validatedProjectForm = true;
                         errorContainer.remove();
                         $("#name").addClass("is-valid");
                         $("#name").removeClass("is-invalid");
+                        return true;
                     }
                     console.log("project name validaiont : ", validatedProjectForm);
                 }
@@ -1651,7 +1654,7 @@
                     const prjclient = $("#client").val();
                     const errorContainer = $("#client").siblings(".error-container");
                     if (!prjclient || prjclient.length === 0) {
-                        validatedProjectForm = false;
+                        
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1665,11 +1668,12 @@
 
                         $("#client").addClass("is-invalid");
                         $("#client").removeClass("is-valid");
+                        return false;
                     } else {
-                        validatedProjectForm = true;
                         errorContainer.remove();
                         $("#client").addClass("is-valid");
                         $("#client").removeClass("is-invalid");
+                        return true;
                     }
                     console.log("project client validaiont : ", validatedProjectForm);
                 }
@@ -1678,7 +1682,6 @@
                     const empToAddProject = $("#employee-list").val();
                     const errorContainer = $("#employee-list").siblings(".error-container");
                     if (!empToAddProject || empToAddProject.length === 0) {
-                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1691,19 +1694,19 @@
                         }
 
                         $("#employee-list").css("border", "1px solid #dc3545");
+                        return false;
                     } else {
-                        validatedProjectForm = true;
                         errorContainer.remove();
                         $("#employee-list").css("border", "1px solid #28a745");
+                        return true;
                     }
-                    console.log("project employee validaiont : ", validatedProjectForm);
                 }
 
                 function validatePrjDuration() {
                     const prjduration = $("#project-add-duration").val();
                     const errorContainer = $("#project-add-duration").siblings(".error-container");
                     if (prjduration.length < 1) {
-                        validatedProjectForm = false;
+                        
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1717,20 +1720,19 @@
 
                         $("#project-add-duration").addClass("is-invalid");
                         $("#project-add-duration").removeClass("is-valid");
+                        return false;
                     } else {
-                        validatedProjectForm = true;
                         errorContainer.remove();
                         $("#project-add-duration").addClass("is-valid");
                         $("#project-add-duration").removeClass("is-invalid");
+                        return true;
                     }
-                    console.log("project duration validaiont : ", validatedProjectForm);
                 }
 
                 function validatePrjBackground() {
                     const background = $("#background").val();
                     const errorContainer = $("#background").siblings(".error-container");
                     if (background.length < 1) {
-                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1744,22 +1746,22 @@
 
                         $("#background").addClass("is-invalid");
                         $("#background").removeClass("is-valid");
+                        return false;
                     } else {
-                        validatedProjectForm = true;
                         errorContainer.remove();
                         $("#background").addClass("is-valid");
                         $("#background").removeClass("is-invalid");
+                        return true;
                     }
                     console.log("project background validaiont : ", validatedProjectForm);
                 }
 
                 // Function to validate systemOutlines
                 function validatePrjSystemOutline() {
-                    const systemOutlines = $("#systemOutlines").text().trim();
+                    const systemOutlines = $("#systemOutlines").val()
                     const errorContainer = $("#systemOutlines").siblings(".error-container");
 
                     if (systemOutlines.length === 0) {
-                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1771,23 +1773,20 @@
                             $("#systemOutlines").siblings(".error-container").append(p);
                         }
 
-                        $("#systemOutlines").css("border", "1px solid #dc3545"); // Red border color for invalid state
+                        $("#systemOutlines").css("border", "1px solid #dc3545");
+                        return false; // Red border color for invalid state
                     } else {
-                        validatedProjectForm = true;
                         errorContainer.remove();
-                        $("#systemOutlines").css("border", "1px solid #28a745"); // Green border color for valid state
+                        $("#systemOutlines").css("border", "1px solid #28a745");
+                        return true; // Green border color for valid state
                     }
-                    console.log("project systemoutline validaiont : ", validatedProjectForm);
                 }
-
-                console.log("project system outline validaiont : ", validatedProjectForm);
 
                 function validatePrjObjective() {
                     const objective = $("#objective").val();
                     const errorContainer = $("#objective").siblings(".error-container");
 
                     if (!objective || objective.trim().length === 0) {
-                        validatedProjectForm = false;
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1801,20 +1800,21 @@
 
                         $("#objective").addClass("is-invalid");
                         $("#objective").removeClass("is-valid");
+                        return false;
                     } else {
-                        validatedProjectForm = true;
                         errorContainer.remove();
                         $("#objective").addClass("is-valid");
                         $("#objective").removeClass("is-invalid");
+                        return true;
+
                     }
-                    console.log("project objective validaiont : ", validatedProjectForm);
                 }
 
                 function validateStartDate() {
                     const start_date = $("#start_date").val();
                     const errorContainer = $("#start_date ").siblings(".error-container");
                     if (start_date.length === 0) {
-                        validatedProjectForm = true;
+                        
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
                                 .addClass("text-danger fs-6")
@@ -1828,13 +1828,14 @@
 
                         $("#start_date ").addClass("is-invalid");
                         $("#start_date ").removeClass("is-valid");
+                        return false;
                     } else {
-                        validatedProjectForm = true;
                         errorContainer.remove();
                         $("#start_date").addClass("is-valid");
                         $("#start_date").removeClass("is-invalid");
+                        return true;
+
                     }
-                    console.log("project start date validaiont : ", validatedProjectForm);
                 }
 
                 let projectObjectiveEditor;
@@ -1858,8 +1859,6 @@
                     const errorContainer = $(".quill-editor-full").siblings(".error-container");
 
                     if (!description || description.length === 0) {
-                        validatedProjectForm = false;
-                        console.log("Objective error");
 
                         if (errorContainer.length === 0) {
                             let p = $("<p>")
@@ -1878,9 +1877,9 @@
 
                         $(".quill-editor-full").addClass("is-invalid");
                         $(".quill-editor-full").removeClass("is-valid");
+                        return false;
                     } else {
                         console.log("Objective success");
-                        validatedProjectForm = true;
 
                         if (errorContainer.length > 0) {
                             errorContainer.hide(); // Hide the error container
@@ -1888,8 +1887,9 @@
 
                         $(".quill-editor-full").addClass("is-valid");
                         $(".quill-editor-full").removeClass("is-invalid");
+                        return true;
+
                     }
-                    console.log("project objective validaiont : ", validatedProjectForm);
                 }
 
                 if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -1937,56 +1937,11 @@
                 });
 
                 function validateProject() {
-                    validateProjectName();
-                    validateProjectClient();
-                    validateProjectEmployee();
-                    validatePrjDuration();
-                    validatePrjBackground();
-                    validatePrjSystemOutline();
-                    validatePrjObjective();
-                    validateStartDate();
+                    
                     return validatedProjectForm;
                 }
 
-                $("#project-add-btn").on("click", function (event) {
-                    console.log("submitted");
-                    event.preventDefault();
-
-                    validateProject();
-
-                    if (!validatedProjectForm) {
-                        return;
-                    }
-
-                    const projectName = $("#name").val();
-                    const client = JSON.parse($("#client").val());
-                    const startDate = new Date($("#start_date").val()).getTime();
-                    const duration = +$("#project-add-duration").val();
-
-                    const background = $("#background").val();
-                    const architectures = document.querySelector("#architectures").value;
-                    const empList = empTagifyList.selectedValues;
-                    console.log("architectures list : ", architectures);
-                    const systemOutlines = sysSelect.selectedValues;
-                    const deliverable = $("#deliverable").val();
-                    const objective = projectObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
-                    console.log(
-                        projectName,
-                        client,
-                        startDate,
-                        duration,
-                        background,
-                        architectures,
-                        empList,
-                        systemOutlines,
-                        deliverable,
-                        objective
-                    );
-
-                    console.log("architectures list", architectures);
-                    console.log(architectures === "");
-                    let arcList;
-                    tagifyInstance
+                tagifyInstance
                         .on("input", (a) => {
                             $("#architectures").siblings(".error-container").addClass("d-none");
                             tagifyInstance.DOM.scope.classList.add(
@@ -2003,33 +1958,8 @@
                             );
                             $("#architectures").siblings(".error-container").addClass("d-none");
                         });
-                    // replace with your actual JSON data
 
-                    if (architectures !== "") {
-                        try {
-                            const a = JSON.parse(architectures);
-                            // Continue processing parsedData
-                            arcList = a.map((ar) => {
-                                const matchingObj = arcccList.find(
-                                    (arccObj) => arccObj.tech_name === ar.value
-                                );
-                                console.log(matchingObj);
-                                return matchingObj ? matchingObj : { tech_name: ar.value };
-                            });
-                        } catch (error) {
-                            console.error("Error parsing JSON:", error);
-                        }
-                    } else {
-                        tagifyInstance.DOM.scope.classList.add("is-invalid");
-                        console.warn("JSON data is empty.");
-                        $("#architectures").siblings(".error-container").removeClass("d-none");
-                    }
-                    console.log("architectures : ", architectures);
-                    console.log("arcList : ", arcList);
-
-                    let deliverableList;
-
-                    deliTagfy
+                deliTagfy
                         .on("input", (b) => {
                             $("#deliverable").siblings(".error-container").addClass("d-none");
                             deliTagfy.DOM.scope.classList.add(
@@ -2047,6 +1977,47 @@
                             $("#deliverable").siblings(".error-container").addClass("d-none");
                         });
 
+                $("#project-add-btn").on("click", function (event) {
+                    console.log("submitted");
+                    event.preventDefault();
+
+                    if(!validateProjectName()) return
+                    if(!validateProjectClient()) return
+                    if(!validateStartDate()) return
+                    if(!validatePrjDuration()) return
+                    if(!validatePrjBackground()) return
+
+                    let arcList;
+
+                    const architectures = document.querySelector("#architectures").value;
+
+                    if (architectures !== "") {
+                        try {
+                            const a = JSON.parse(architectures);
+                            // Continue processing parsedData
+                            arcList = a.map((ar) => {
+                                const matchingObj = arcccList.find(
+                                    (arccObj) => arccObj.tech_name === ar.value
+                                );
+                                return matchingObj ? matchingObj : { tech_name: ar.value };
+                            });
+                        } catch (error) {
+                            console.log("Error parsing JSON:", error);
+                        }
+                    } else {
+                        tagifyInstance.DOM.scope.classList.add("is-invalid");
+                        
+                        $("#architectures").siblings(".error-container").removeClass("d-none");
+                        return;
+                    }
+
+                    if(!validatePrjSystemOutline()) return
+                    if(!validateProjectEmployee()) return
+
+                    const deliverable = $("#deliverable").val();
+                    
+                    let deliverableList;
+
                     if (deliverable !== "") {
                         const oldDeliTypeList = JSON.parse(deliverable);
 
@@ -2054,7 +2025,7 @@
                             const matchingObj = deliTypeList.find(
                                 (deliObj) => deliObj.type === deli.value
                             );
-                            console.log(matchingObj);
+                            
                             return matchingObj ? matchingObj : { type: deli.value };
                         });
 
@@ -2068,12 +2039,39 @@
                         deliTagfy.DOM.scope.classList.add("is-invalid");
                         console.warn("JSON data is empty.");
                         $("#deliverable").siblings(".error-container").removeClass("d-none");
+                        return
                     }
 
-                    // You may want to add some form validation here before sending the data
-                    console.log(objective);
-                    console.log(architectures);
-                    console.log(empList);
+                    if(!validatePrjObjective()) return
+
+                    console.log('passed all the validation')
+
+                    return
+
+                    const projectName = $("#name").val();
+                    const client = JSON.parse($("#client").val());
+                    const startDate = new Date($("#start_date").val()).getTime();
+                    const duration = +$("#project-add-duration").val();
+
+                    const background = $("#background").val();
+                    
+                    const empList = empTagifyList.selectedValues;
+                    console.log("architectures list : ", architectures);
+                    const systemOutlines = sysSelect.selectedValues;
+                    
+                    const objective = projectObjectiveEditor.root.innerHTML; // Assuming you're using a WYSIWYG editor like Quill
+                    console.log(
+                        projectName,
+                        client,
+                        startDate,
+                        duration,
+                        background,
+                        architectures,
+                        empList,
+                        systemOutlines,
+                        deliverable,
+                        objective
+                    );
 
                     const project = {
                         name: projectName,
