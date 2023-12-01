@@ -94,6 +94,8 @@
                                 <option value="0">Unsolved</option>
                             </select>
                         </div>
+
+
                         <div class="d-inline-block">
                             <select id="category-filter" class="form-control">
                                 <option value="" selected disabled>Category</option>
@@ -2283,9 +2285,11 @@
         filterIssues();
     });
 
-    $("#solved-filter").on("change", function () {
-        filterSolvedIssues();
-    });
+
+        $("#solved-filter").on("change", function () {
+            filterSolvedIssues();
+        });
+
 
     $("#category-filter").on("change", function () {
         filterCategory();
