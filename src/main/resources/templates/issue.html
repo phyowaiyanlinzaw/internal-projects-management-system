@@ -72,12 +72,10 @@
                 </nav>
 
                 <div>
-
-                    <button class="btn btn-info" id="reset-btn" style="color: #ffffff !important;">
-                    reset
-                    </button>
-
-                    <div class="d-inline-block">
+                    <div class="d-inline-block" id="filter-div">
+                        <button class="btn btn-info" id="reset-btn" style="color: #ffffff !important;">
+                            reset
+                        </button>
                         <div class="d-inline-block">
                             <select id="status-filter" class="form-control">
                                 <option value="" selected disabled>Status</option>
@@ -94,8 +92,6 @@
                                 <option value="0">Unsolved</option>
                             </select>
                         </div>
-
-
                         <div class="d-inline-block">
                             <select id="category-filter" class="form-control">
                                 <option value="" selected disabled>Category</option>
@@ -123,12 +119,21 @@
                     <!-- sortting button -->
                         <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
 
+
+                    </div>
+                    <div class="d-inline-block">
+                        <span class="d-inline-block">
+                            <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="btn-check-outlined">
+                                    <i class="fa-solid fa-table"></i>
+                                </label><br>
+                        </span>
                     </div>
                 </div>
                 <!-- Modal -->
                 
             </div>
-            <div class="mt-2">
+            <div class="mt-2" id="search-bar">
                 <form class="">
                     <input
                         class="form-control border-0"
@@ -189,28 +194,6 @@
 
                 </script>
             </ul>
-            <ul class="nav nav-tabs nav-tabs-bordered" id="issueTableNav" sec:authorize="hasAnyRole('PMO','SDQC')">
-                <li class="nav-item">
-                    <button
-                            class="nav-link position-relative btn-light active"
-                            data-bs-toggle="tab"
-                            data-bs-target="#all-issue-list"
-                    >
-                        Feeds View
-                        <i class="bi bi-rss"></i>
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button
-                            class="nav-link position-relative btn-light"
-                            data-bs-toggle="tab"
-                            data-bs-target="#issue-table"
-                    >
-                        Table View
-                        <i class="bi bi-table"></i>
-                    </button>
-                </li>
-            </ul>
 
 
                 <div class="tab-content pt-2">
@@ -266,7 +249,6 @@
                                     data-export-types="['csv', 'excel', 'pdf']"
                                     data-click-to-select="true"
                                     data-header-style="headerStyle"
-                                    data-url="users"
 
                             >
                                 <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5 border-white">
@@ -827,8 +809,26 @@
         })
     })
 
-    $("button[data-bs-target=\"#issue-table\"]").on("show.bs.tab",function (e) {
-        $("#issue-table-container").removeClass("d-none");
+    document.getElementById("btn-check-outlined").addEventListener("click",()=>{
+        if (document.getElementById("btn-check-outlined").checked) {
+            //remove all issues and show table
+            document.getElementById("all-issue-list").classList.add("d-none")
+            document.getElementById("issue-table-container").classList.remove("d-none")
+            document.getElementById("issue-table").classList.add("show")
+            document.getElementById("issue-table").classList.add("active")
+            document.getElementById("filter-div").classList.add("d-none")
+            document.getElementById("search-bar").classList.add("d-none")
+        } else {
+            //show all issues and remove table
+            document.getElementById("all-issue-list").classList.remove("d-none")
+            document.getElementById("issue-table-container").classList.add("d-none")
+            document.getElementById("issue-table").classList.remove("show")
+            document.getElementById("issue-table").classList.remove("active")
+            document.getElementById("filter-div").classList.remove("d-none")
+            document.getElementById("search-bar").classList.remove("d-none")
+        }
+
+
     })
 
     if(document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
@@ -1525,12 +1525,12 @@
                         title: issue.title,
                         issue_category: issue.issueCategory,
                         project_name: issue.projectDto.name,
-                        // place: issue.place,
-                        // impact: issue.impact,
-                        // root_cause: issue.root_cause,
-                        // direct_cause: issue.direct_cause,
-                        // corrective_action: issue.corrective_action,
-                        // preventive_action: issue.preventive_action,
+                        place: issue.place,
+                        impact: issue.impact,
+                        root_cause: issue.root_cause,
+                        direct_cause: issue.direct_cause,
+                        corrective_action: issue.corrective_action,
+                        preventive_action: issue.preventive_action,
                         responsible_party: issue.responsible_party.name,
                         user_pic: issue.user_pic.name,
                         status: issue.status,
