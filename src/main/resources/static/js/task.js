@@ -1932,7 +1932,7 @@ $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
                 title: task.title,
                 start: new Date(task.planStartTime),
                 end: new Date(task.planEndTime + 86400000),
-                color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#f74444",
+                color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#288f0b",
                 textColor: "white",
                 allDay: true,
 
