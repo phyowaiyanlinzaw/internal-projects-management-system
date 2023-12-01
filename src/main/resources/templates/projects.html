@@ -116,7 +116,8 @@
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
         <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css" integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js" integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
         <script
             defer
             src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/js/bootstrap5-toggle.min.js"
@@ -766,6 +767,36 @@
 
             let pList = await getAllProjects();
 
+            function template(a) {
+                const container = document.createElement('div');
+
+                for (let i = 0; i < a.length; i++) {
+                    const projectElement = createProjectList(a[i]);
+                    container.appendChild(projectElement);
+                }
+            
+                return container.outerHTML;
+            }
+
+            $('#pagination-container').pagination({
+                dataSource: async function (done) {
+                    const projects = []
+
+                    for(let i = pList.length - 1; i >= 0; i--) {
+                        projects.push(pList[i]);
+                    }
+
+                    done(projects);
+                },
+                callback: function (data, pagination) {
+                    // template method of yourself
+                    var html = template(data);
+                
+                    $('#sort-container').html(html);
+                },
+                pageSize: 9, // Number of items per page
+            });
+
             let departmentProjectId;
 
             if (loginUser.currentUser.role == "PMO" || loginUser.currentUser.role == "SDQC") {
@@ -961,13 +992,13 @@
                 return newProject;
             }
 
-            for (let i = pList.length - 1; i >= 0; i--) {
-                let currentProject = pList[i];
-
-                fragment.appendChild(createProjectList(currentProject));
-            }
-            motherContainer.innerHTML = "";
-            motherContainer.appendChild(fragment);
+            //for (let i = pList.length - 1; i >= 0; i--) {
+            //    let currentProject = pList[i];
+//
+            //    fragment.appendChild(createProjectList(currentProject));
+            //}
+            //motherContainer.innerHTML = "";
+            //motherContainer.appendChild(fragment);
 
             const detailMoal = document.querySelector("#project-details");
 
@@ -2179,11 +2210,29 @@
                                 dataType: "json",
                                 contentType: "application/json; charset=utf-8",
                                 success: async function (data) {
-                                    const newProject = createProjectList(data);
-                                    motherContainer.insertBefore(
-                                        newProject,
-                                        motherContainer.childNodes[0]
-                                    );
+                                    $('#pagination-container').pagination('destroy');
+                                    $('#pagination-container').pagination({
+                                        dataSource: async function (done) {
+                                            const projects = await getAllProjects();
+                                            const reverseProject = [];
+
+                                            for (let i = projects.length - 1; i >= 0; i--) {
+                                                reverseProject.push(projects[i]);
+                                            }
+
+                                            done(reverseProject);
+                                        },
+                                        callback: function (data, pagination) {
+                                            var html = template(data);
+                                            $('#sort-container').html(html);
+                                        },
+                                        pageSize: 9,
+                                    });
+                                    //const newProject = createProjectList(data);
+                                    //motherContainer.insertBefore(
+                                    //    newProject,
+                                    //    motherContainer.childNodes[0]
+                                    //);
                                     $("#alert-text").text("New Project Created Successfully...");
                                     $("#alert-modal").modal("show");
                                     $("#add-department-modal").modal("hide");
@@ -2690,13 +2739,15 @@
                         </div>
                         <div
                             class="d-flex pt-2 flex-column gap-2"
-                            style="background-color: #e5e5f7"
+                            style="background-color: #e5e5f7; min-height: 530px;"
                             id="sort-container"
                         >
                             <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
                             <div class="loader"></div>
                             <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
                         </div>
+                        <div id="pagination-container"></div>
+
                         <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-result">
                             <div class="d-flex justify-content-center align-items-center flex-column">
                                 <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
