@@ -1531,29 +1531,33 @@
                             // Create the error container if it doesn't exist
                             const errorMessage = $("<p>")
                                 .addClass("text-danger fs-6 error-message")
-                                .text("Employee list is required")
+                                // .text("Employee list is required")
                                 .css("margin", "0");
 
                             $("#employee-list").after('<div class="error-container"></div>');
                             $("#employee-list").siblings(".error-container").append(errorMessage);
+
+
                         } else {
-                            validatedProjectForm = true;
+                            validatedProjectForm = false;
                             // Update the error message if the container already exists
                             errorContainer.removeClass("d-none");
-                            errorContainer.find(".error-message").text("Employee list is required");
+                             // errorContainer.find(".error-message").text("Employee list is required");
                         }
 
                         // You can also add styling or other actions for the invalid state
-                        $("#employee-list").css("border", "1px solid #dc3545"); // Red border color for invalid state
+                        // $("#employee-list").css("border", "1px solid #dc3545"); // Red border color for invalid state
                     } else {
-                        // Employee list is not empty
+
+                        validatedProjectForm = true;
+                        // Employee list is not empt
                         if (errorContainer.length > 0) {
                             // Hide the error container if it exists
                             errorContainer.addClass("d-none");
                         }
 
                         // You can add styling or other actions for the valid state
-                        $("#employee-list").css("border", "1px solid #28a745"); // Green border color for valid state
+                         $("#employee-list").css("border", "1px solid #28a745"); // Green border color for valid state
                     }
 
                     console.log("Employee list validation: ", empToAddProject);
@@ -1812,6 +1816,9 @@
                 });
 
                 function validateProject() {
+
+                    validatedProjectForm = true;
+
                     validateProjectName();
                     validateProjectClient();
                     validateProjectEmployee();
@@ -1825,22 +1832,17 @@
 
                 $("#project-add-btn").on("click", function (event) {
 
-                    if(!validateProjectEmployee()) {
-                        return;
-                    }
-
-                    validateProjectEmployee();
 
 
                     console.log("submitted");
                     event.preventDefault();
 
 
-                    validateProject();
-
-                    if (!validatedProjectForm) {
+                    if(!validateProject()){
                         return;
-                    }
+
+                    };
+
 
                     const projectName = $("#name").val();
                     const client = JSON.parse($("#client").val());
@@ -2697,7 +2699,7 @@
                                         <div id="employee-list"></div>
 
                                         <div class="error-container d-none">
-                                            <p class="text-danger fs-6 error-message" style="margin-top: 0">
+                                            <p class="text-danger fs-6 error-message d-none" style="margin-top: 0">
                                                 Employee is required
                                             </p>
                                         </div>
