@@ -4,8 +4,12 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.AvailableUserDto;
@@ -21,6 +25,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserS
 import team.placeholder.internalprojectsmanagementsystem.service.project.AvailableEmployeeService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -203,8 +208,19 @@ public class UserController {
 
     @PostMapping("change-username")
     public ResponseEntity<String> changeUsername(@RequestBody UserDto userDto) {
-        userService.changeUsername(userDto);
+        UserDto user = userService.changeUsername(userDto);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User with this email already exists");
+        }
+        updateAuthentication(user, SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         return ResponseEntity.ok("Username changed successfully");
+    }
+
+    // Helper method to update the Authentication object
+    private void updateAuthentication(UserDto userDto, Collection<? extends GrantedAuthority> authorities) {
+        UserDetails userDetails = new User(userDto.getEmail(), userDto.getPassword(), authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 

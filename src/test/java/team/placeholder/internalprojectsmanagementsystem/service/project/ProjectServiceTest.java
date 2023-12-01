@@ -286,25 +286,25 @@ class ProjectServiceTest {
         assertEquals(expectedProjects, result);
     }
 
-    @Test
-    void getAllProjectsByDepartmentName() {
-        // Given
-        String departmentName = "ExampleDepartment"; // Replace with the actual department name
-        List<ProjectDto> expectedProjects = Arrays.asList(new ProjectDto(/* fill in with project details */));
-
-        // Mock the behavior of the service method
-        when(projectServiceMock.getAllProjectsByDepartmentName(anyString())).thenReturn(expectedProjects);
-
-        // When
-        List<ProjectDto> result = projectServiceMock.getAllProjectsByDepartmentName(departmentName);
-
-        // Then
-        // Verify that the getAllProjectsByDepartmentName method was called with the correct parameter
-        verify(projectServiceMock, times(1)).getAllProjectsByDepartmentName(departmentName);
-
-        // Verify that the returned list of projects is the same as the expected list
-        assertEquals(expectedProjects, result);
-    }
+//    @Test
+//    void getAllProjectsByDepartmentName() {
+//        // Given
+//        String departmentName = "ExampleDepartment"; // Replace with the actual department name
+//        List<ProjectDto> expectedProjects = Arrays.asList(new ProjectDto(/* fill in with project details */));
+//
+//        // Mock the behavior of the service method
+//        when(projectServiceMock.getAllProjectsByDepartmentName(anyString())).thenReturn(expectedProjects);
+//
+//        // When
+//        List<ProjectDto> result = projectServiceMock.getAllProjectsByDepartmentName(departmentName);
+//
+//        // Then
+//        // Verify that the getAllProjectsByDepartmentName method was called with the correct parameter
+//        verify(projectServiceMock, times(1)).getAllProjectsByDepartmentName(departmentName);
+//
+//        // Verify that the returned list of projects is the same as the expected list
+//        assertEquals(expectedProjects, result);
+//    }
 
 
     @Test

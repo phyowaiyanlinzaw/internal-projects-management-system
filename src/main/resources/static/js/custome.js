@@ -281,39 +281,39 @@ $(document).ready(function () {
 
         return null
     }
-    if (sortableContainer != null) {
-        sortableContainer.addEventListener('click', function (e) {
+    // if (sortableContainer != null) {
+    //     sortableContainer.addEventListener('click', function (e) {
 
-            let target = e.target
+    //         let target = e.target
 
-            if (e.target === this || target.classList.contains('swim-lane') || target.classList.contains('lane')) return
+    //         if (e.target === this || target.classList.contains('swim-lane') || target.classList.contains('lane')) return
 
-            if (e.target.tagName === 'button') return
+    //         if (e.target.tagName === 'button') return
 
-            console.log('i don\'t know')
+    //         console.log('i don\'t know')
 
-            const grandpaDiv = hasDataBsToggleAttribute(target)
+    //         const grandpaDiv = hasDataBsToggleAttribute(target)
 
-            console.log('grandpadiv', grandpaDiv)
+    //         console.log('grandpadiv', grandpaDiv)
 
-            if (grandpaDiv === null) return
+    //         if (grandpaDiv === null) return
 
-            console.log('grandpadiv', grandpaDiv)
+    //         console.log('grandpadiv', grandpaDiv)
 
-            const targetModal = document.querySelector(target.getAttribute('data-bs-target'))
-            console.log(target.getAttribute('data-bs-target'))
+    //         const targetModal = document.querySelector(target.getAttribute('data-bs-target'))
+    //         console.log(target.getAttribute('data-bs-target'))
 
-            console.log(targetModal)
+    //         console.log(targetModal)
 
-            if (targetModal === null) return
+    //         if (targetModal === null) return
 
-            console.log(grandpaDiv.querySelector('.modal-detail-title').innerText)
+    //         console.log(grandpaDiv.querySelector('.modal-detail-title').innerText)
 
-            targetModal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
+    //         targetModal.querySelector('.modal-title').innerText = grandpaDiv.querySelector('.modal-detail-title').innerText
 
-        }, false)
-    }
-    // ======================== change modal title automatic =======================
+    //     }, false)
+    // }
+    // // ======================== change modal title automatic =======================
 
 
     // Get all date input elements using a common class name or another method

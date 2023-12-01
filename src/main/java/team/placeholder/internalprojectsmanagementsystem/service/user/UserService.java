@@ -32,7 +32,7 @@ public interface UserService {
     Long countAllByDepartmentId(Long departmentId);
     List<UserDto> getAllEmployeesExceptPMOAndSDQC();
     List<UserDto> getEmployeeByProjectId(Long projectId);
-    void changeUsername(UserDto userDto);
+    UserDto changeUsername(UserDto userDto);
     UserDto changeStatus(long id, boolean status);
     UserDto updateUser(UserUIDto userDto);
 }

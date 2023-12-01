@@ -22,7 +22,9 @@ public class Tasks implements Serializable {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     private String title;
 
     private long planStartTime;
@@ -34,6 +36,11 @@ public class Tasks implements Serializable {
     private Double actualHours;
 
     private boolean due;
+
+    public Tasks(Long id, String description) {
+        this.id = id;
+        this.description = description;
+    }
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")

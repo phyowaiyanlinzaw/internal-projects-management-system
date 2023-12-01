@@ -18,11 +18,11 @@
                 <a th:href="@{/dashboard}" class="nav-item nav-link "><i
                         class="bi bi-clipboard-data-fill me-1"></i>Dashboard</a>
                 <a th:href="@{/department}" class="nav-item nav-link" sec:authorize="hasAnyRole('PMO','SDQC')"><i
-                        class="fa-solid fa-building" ></i>Department</a>
+                        class="fa-solid fa-building me-1" ></i>Department</a>
                 <a th:href="@{/project/all}" class="nav-item nav-link"><i class="bi bi-collection-fill me-1"></i>All
                     Projects</a>
-                <a th:href="@{/issue}" class="nav-item nav-link"><i class="fa-solid fa-triangle-exclamation"></i>Issues</a>
-                <a th:href="@{/employees}" class="nav-item nav-link" sec:authorize="hasAnyRole('PMO','SDQC')"><i class="fa-solid fa-users-rectangle"></i>Employees</a>
+                <a th:href="@{/issue}" class="nav-item nav-link"><i class="fa-solid fa-triangle-exclamation me-1"></i>Issues</a>
+                <a th:href="@{/employees}" class="nav-item nav-link" sec:authorize="hasAnyRole('PMO','SDQC')"><i class="fa-solid fa-users-rectangle me-1"></i>Employees</a>
             </div>
         </nav>
     </div>

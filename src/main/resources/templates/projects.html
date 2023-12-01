@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="UTF-8" />
         <title>Internal Project Management</title>
@@ -917,7 +917,7 @@
                                 ${formatDate(task.planEndTime)}
                             </div>
                             <div class="col p-1 text-center">${task.userDto.name}</div>
-                            
+
                         </div>
                         `
                           )
@@ -963,7 +963,7 @@
                                 <div class="col p-0 text-center card-text">
                                     ${project.user.name}
                                 </div>
-                                
+
                             </div>
                             <div
                                 id="collapse-project-${project.id}"
@@ -979,8 +979,8 @@
                             </div>
                             <div
                             class="d-flex justify-content-end rounded-1 text-white gap-2"
-                            >
-                            <input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>
+                            >${loginUser.currentUser.role === 'SDQC' || loginUser.currentUser.role === 'PMO' ? `<input type="checkbox" value="export-project-${project.id}" class="form-check-input"/>` : ''}
+                            
                                 <i class="fa-solid fa-angle-down bg-primary p-1 rounded-bottom" data-bs-toggle="collapse"
                             data-bs-target="#collapse-project-${project.id}"
                             aria-expanded="true"
@@ -1035,13 +1035,15 @@
 
                     console.log("target id", id);
 
-                    const currentProejctDetail = await getData(`/api/project/list/${id}`);
+                    const currentProjectDetail = await getData(`/api/project/list/${id}`);
+
+                    console.log("current project detail", currentProjectDetail);
                     
                     const showDeliContainer = document.querySelector('#show-project-deliverable')
                     
                     showDeliContainer.innerHTML = ''
                     
-                    currentProejctDetail.deliverableDto.forEach(a => {
+                    currentProjectDetail.deliverableDto.forEach(a => {
 
                         console.log(a)
 
@@ -1060,10 +1062,10 @@
 
                     showAmountContainer.innerHTML = ''
 
-                    for (const key in currentProejctDetail.amountDto) {
+                    for (const key in currentProjectDetail.amountDto) {
                         if (key === 'id') continue
-                        if (currentProejctDetail.amountDto.hasOwnProperty(key)) {
-                            const value = currentProejctDetail.amountDto[key];
+                        if (currentProjectDetail.amountDto.hasOwnProperty(key)) {
+                            const value = currentProjectDetail.amountDto[key];
                             showAmountContainer.innerHTML += `
                             <li
                                 class="list-group-item d-flex justify-content-between"
@@ -1097,7 +1099,7 @@
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         fetch(
-                                            "/api/review/update-review/" + currentProejctDetail.id,
+                                            "/api/review/update-review/" + currentProjectDetail.reviewDto.id,
                                             {
                                                 method: "PUT",
                                                 headers: {
@@ -1127,46 +1129,45 @@
                                 });
                             });
                     }
-                    console.log(currentProejctDetail);
 
                     if (loginUser.currentUser.role === "PROJECT_MANAGER") {
                         document.querySelector("#project-detail-background").innerText =
-                            currentProejctDetail.background;
+                            currentProjectDetail.background;
 
                         document.querySelector("#project-detail-name").value =
-                            currentProejctDetail.name;
+                            currentProjectDetail.name;
 
                         document.querySelector("#current-edditing-projetc-id").value =
-                            currentProejctDetail.id;
+                            currentProjectDetail.id;
 
                         document.querySelector("#project-edit-duration").value =
-                            currentProejctDetail.duration;
+                            currentProjectDetail.duration;
 
                         document.querySelector("#start-date").value =
-                            formmatDateFromMillisecondForEdit(currentProejctDetail.start_date);
+                            formmatDateFromMillisecondForEdit(currentProjectDetail.start_date);
 
                         document.querySelector("#end-date-in-edit").value =
-                            formatDateFromMilliseconds(currentProejctDetail.end_date);
+                            formatDateFromMilliseconds(currentProjectDetail.end_date);
 
                         detailMoal.querySelector("#edit-basic-design-count").value =
-                            currentProejctDetail.amountDto.basic_design;
+                            currentProjectDetail.amountDto.basic_design;
 
                         detailMoal.querySelector("#edit-detail-design-count").value =
-                            currentProejctDetail.amountDto.detail_design;
+                            currentProjectDetail.amountDto.detail_design;
 
                         detailMoal.querySelector("#edit-coding-count").value =
-                            currentProejctDetail.amountDto.coding;
+                            currentProjectDetail.amountDto.coding;
 
                         detailMoal.querySelector("#edit-unit-testing-count").value =
-                            currentProejctDetail.amountDto.unit_testing;
+                            currentProjectDetail.amountDto.unit_testing;
 
                         detailMoal.querySelector("#edit-integrated-testing-count").value =
-                            currentProejctDetail.amountDto.integrated_testing;
+                            currentProjectDetail.amountDto.integrated_testing;
                     }
 
                     document.querySelector("#architectures-list-in-edit").textContent = "";
 
-                    currentProejctDetail.architectureDto.forEach((a) => {
+                    currentProjectDetail.architectureDto.forEach((a) => {
                         const div = document.createElement("div");
 
                         div.classList.add(
@@ -1204,13 +1205,13 @@
                     if(document.querySelector("#project-edit")) {
                         
                         detailMoal.querySelector("#project-internal-review-count").value =
-                            currentProejctDetail.reviewDto.internal_review_count;
+                            currentProjectDetail.reviewDto.internal_review_count;
                         detailMoal.querySelector("#project-external-review-count").value =
-                            currentProejctDetail.reviewDto.external_review_count;
+                            currentProjectDetail.reviewDto.external_review_count;
                         let count = 1
                         document.querySelector("#edit-deliverable-list").textContent = "";
                         let deliverableId;
-                        currentProejctDetail.deliverableDto.forEach((a) => {
+                        currentProjectDetail.deliverableDto.forEach((a) => {
                             const outerDiv = document.createElement("div");
                             outerDiv.className = "d-flex justify-content-start";
 
@@ -1288,7 +1289,7 @@
                     ) {
                         document.querySelector(
                             "#navigate-task"
-                        ).href = `/project/${currentProejctDetail.id}`;
+                        ).href = `/project/${currentProjectDetail.id}`;
                         document.querySelectorAll('.optional-view').forEach(a => {
                             console.log(a)
                             a.style.display = 'none'
@@ -1301,7 +1302,7 @@
 
                     objectiveQuill.clipboard.dangerouslyPasteHTML(
                         0,
-                        currentProejctDetail.objective
+                        currentProjectDetail.objective
                     );
 
                     const phaseOptionList = document.querySelectorAll("#edit-project-phase option");
@@ -1309,7 +1310,7 @@
                     console.log(phaseOptionList);
 
                     phaseOptionList.forEach((a) => {
-                        if (a.value === currentProejctDetail.current_phase) {
+                        if (a.value === currentProjectDetail.current_phase) {
                             a.selected = true;
                         }
                     });
@@ -1318,49 +1319,49 @@
 
                     editObjectiveEditor.clipboard.dangerouslyPasteHTML(
                         0,
-                        currentProejctDetail.objective
+                        currentProjectDetail.objective
                     );
 
-                    console.log(currentProejctDetail);
+                    console.log(currentProjectDetail);
 
-                    updateListItems(currentProejctDetail.systemOutLineDto);
+                    updateListItems(currentProjectDetail.systemOutLineDto);
 
-                    updateSpanValues(currentProejctDetail.amountDto);
+                    updateSpanValues(currentProjectDetail.amountDto);
 
                     let duration = calculateDuration(
-                        currentProejctDetail.start_date,
-                        currentProejctDetail.end_date
+                        currentProjectDetail.start_date,
+                        currentProjectDetail.end_date
                     );
 
                     detailMoal.querySelector("#project-background").innerText =
-                        currentProejctDetail.background;
-                    detailMoal.querySelector("#project-name").innerText = currentProejctDetail.name;
+                        currentProjectDetail.background;
+                    detailMoal.querySelector("#project-name").innerText = currentProjectDetail.name;
                     detailMoal.querySelector("#project-department-name").innerHTML =
-                        currentProejctDetail.departmentDto.name;
+                        currentProjectDetail.departmentDto.name;
                     //______________________________________________
 
                     //_______________review update
 
                     //____________________________________reveiw update end
                     detailMoal.querySelector("#project-duration").innerText = `${
-                        currentProejctDetail.duration
-                    } ${currentProejctDetail.duration < 1 ? " month" : " months"}`;
+                        currentProjectDetail.duration
+                    } ${currentProjectDetail.duration <= 1 ? " month" : " months"}`;
                     detailMoal.querySelector("#project-start-date").innerText =
-                        formatDateFromMilliseconds(currentProejctDetail.start_date);
+                        formatDateFromMilliseconds(currentProjectDetail.start_date);
                     detailMoal.querySelector("#project-end-date").innerText =
-                        formatDateFromMilliseconds(currentProejctDetail.end_date);
+                        formatDateFromMilliseconds(currentProjectDetail.end_date);
                     detailMoal.querySelector("#project-current-phase").innerText =
-                        currentProejctDetail.current_phase;
+                        currentProjectDetail.current_phase;
                     detailMoal.querySelector("#project-current-external-review-count").innerText =
-                        currentProejctDetail.reviewDto.external_review_count;
+                        currentProjectDetail.reviewDto.external_review_count;
                     detailMoal.querySelector("#project-current-internal-review-count").innerText =
-                        currentProejctDetail.reviewDto.internal_review_count;
+                        currentProjectDetail.reviewDto.internal_review_count;
                     detailMoal.querySelector("#client-email-address").innerHTML =
-                        currentProejctDetail.clientDto.email;
+                        currentProjectDetail.clientDto.email;
                     detailMoal.querySelector("#client-phone-contect").innerHTML =
-                        currentProejctDetail.clientDto.phone;
+                        currentProjectDetail.clientDto.phone;
                     detailMoal.querySelector("#my-dear-customer-name").innerHTML =
-                        currentProejctDetail.clientDto.name;
+                        currentProjectDetail.clientDto.name;
                 }
 
                 //_____________________________________________
@@ -2238,7 +2239,7 @@
                                     $("#alert-text").text("New Project Created Successfully...");
                                     $("#alert-modal").modal("show");
                                     $("#add-department-modal").modal("hide");
-                                    
+
                                 },
                                 error: function (data) {
                                     alert("Error registering project");
@@ -2380,6 +2381,7 @@
                 try {
                     const allProjects = await getAllProjectInfo()
                     const docDefinition = {
+                        pageOrientation: 'landscape',
                         content: [
                             {
                                 text: 'Project List',
@@ -2432,6 +2434,7 @@
                 try {
                     const selectedRows = await getAllSelectedProjectInfo()
                     const docDefinition = {
+                        pageOrientation: 'landscape',
                         content: [
                             {
                                 text: 'Project List',
@@ -2554,7 +2557,7 @@
                 $("#project-internal-review-count").attr("disabled", true);
                 // hide the manage task button if the role is pmo or sdqc and
             }
-            if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO") {
+            if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO" || loginUser.currentUser.role==='DEPARTMENT_HEAD') {
                 $("#navigate-task").remove();
             }
             
@@ -2697,30 +2700,8 @@
                     data-toggle-extra="tab-content"
                 >
                     <div class="rounded-2 px-4">
-                        <div
-                            class="row  border-bottom border border-dark fw-bold bg-primary text-white"
-                        >
-                            <div class="col p-0 text-center">progress</div>
-                            <div class="col p-0 text-center">title</div>
-                            <div class="col p-0 text-center">start</div>
-                            <div class="col p-0 text-center">end</div>
-                            <div class="col p-0 text-center">name</div>
-                        </div>
-
-                        <div class="text-end mt-2" id="export-button-container">
-                            <script type="module">
-
-                                import {getUser} from "/js/currentLoginUser.js";
-
-                                const bird = await getUser();
-
-                                console.log(bird.currentUser.role)
-
-                                if(bird.currentUser.role !== 'FOC' && bird.currentUser.role !== 'EMPLOYEE' && bird.currentUser.role !== 'CONTRACT') {
-
-                                    console.log("heheheheheheh")
-
-                                    document.querySelector("#export-button-container").innerHTML += `<div class="btn-group" role="group">
+                        <div class="text-end mt-2 mb-2" sec:authorize="hasAnyRole('SDQC','PMO')">
+                            <div class="btn-group" role="group">
                                 <select class="form-control btn btn-primary" name="dropdown" id="exportPdfSelect" style="width: 30%;">
                                     <option value="" selected disabled>Export PDF</option>
                                     <option value="all">Export All</option>
@@ -2733,20 +2714,23 @@
                                     <option value="all">Export All</option>
                                     <option value="selected">Export Selected</option>
                                 </select>
-                            </div>`
-                                }
-
-                            </script>
-                            
+                            </div>
                         </div>
                         <div
-                            class="d-flex pt-2 flex-column gap-2"
-                            style="background-color: #e5e5f7; "
-                            id="sort-container"
+                            class="row col-rols-6 border-bottom border border-dark mt-2 fs-5 fw-bold bg-primary text-white"
                         >
-                            <!-- TODO :: SHOW ALL PROJECTS LIST START FROM HERE -->
+                            <div class="col p-0 text-center">Status</div>
+                            <div class="col p-0 text-center">Title</div>
+                            <div class="col p-0 text-center">Start</div>
+                            <div class="col p-0 text-center">End</div>
+                            <div class="col p-0 text-center">Name</div>
+                        </div>
+
+                        <div
+                            class="d-flex pt-2 flex-column gap-2"
+                            style="background-color: #e5e5f7"
+                            id="sort-container">
                             <div class="loader"></div>
-                            <!-- TODO :: SHOW ALL PROJECTS LIST END HERE -->
                         </div>
                         
 
@@ -3766,39 +3750,51 @@
                                 class="tab-pane fade profile-edit pb-3"
                                 id="client-info"
                             >
+                                <div class="container-fluid">
                                 <div class="row">
-                                    <div
-                                        class="fs-2 text-center"
-                                        id="my-dear-customer-name"
-                                    >
-                                        DAT
-                                    </div>
+                                    <div><h4 class="d-flex justify-content-center mt-2">Client Information</h4></div>
+
                                     <div class="row row-cols-1">
                                         <div
-                                            class="d-flex justify-content-center align-items-center gap-2"
+                                                class="d-flex  align-items-center gap-2"
                                         >
                                             <div
-                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                    class="p-2 d-inline-block fs-5 text-primary"
+                                            >
+                                                <i class="fa-regular fa-user"></i>
+                                            </div>
+                                            <div
+                                                    class=""
+                                                    id="my-dear-customer-name"
+                                            >
+                                                09 77558822
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="d-flex gap-2 align-items-center"
+                                        >
+                                            <div
+                                                class="p-2 d-inline-block  fs-5 text-primary"
                                             >
                                                 <i class="bi bi-telephone"></i>
                                             </div>
                                             <div
-                                                class="align-self-center"
+                                                class=""
                                                 id="client-phone-contect"
                                             >
                                                 09 77558822
                                             </div>
                                         </div>
                                         <div
-                                            class="d-flex justify-content-center align-items-center gap-2"
+                                            class="d-flex gap-2 align-items-center"
                                         >
                                             <div
-                                                class="p-2 d-inline-block justify-content-center align-items-center rounded-circle bg-primary fs-5 text-white"
+                                                class="p-2 d-inline-block  fs-5 text-primary"
                                             >
                                                 <i class="bi bi-envelope-at"></i>
                                             </div>
                                             <div
-                                                class="align-self-center"
+                                                class=""
                                                 id="client-email-address"
                                             >
                                                 suckmyfingure@gmail.com
@@ -3807,7 +3803,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            </div>
                         </div>
                     </div>
                 </div>
