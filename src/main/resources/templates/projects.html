@@ -116,8 +116,7 @@
         <script src="/js/custome.js" defer></script>
         <script src="/js/getDataForProject.js" type="module" async></script>
         <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css" integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js" integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+
         <script
             defer
             src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/js/bootstrap5-toggle.min.js"
@@ -221,39 +220,6 @@
 
             let arcccList = await getArchitecturelist();
 
-            // getArchitecturelist()
-            //     .then((architectureList) => {
-            //         const inputElement = document.querySelector(
-            //             'input[name="architectures"]',
-            //             {
-            //                 texts: {
-            //                     duplicate: "Duplicates are not allowed",
-            //                     empty: "Architecture is required",
-            //                 }
-            //             }
-            //
-            //         );
-            //         const a = initializeTagify(inputElement, architectureList);
-            //         $("#validation-form").submit(function (event) {
-            //             const arch =
-            //                 inputElement.value === ""
-            //                     ? []
-            //                     : JSON.parse(inputElement.value);
-            //
-            //             if (arch.length !== 0) {
-            //                 const whitelist = a.settings.whitelist;
-            //                 arch.forEach((item) => {
-            //                     if (!whitelist.includes(item.value)) {
-            //                         whitelist.push(item.value);
-            //                     }
-            //                 });
-            //             }
-            //             console.log(a.settings.whitelist);
-            //         });
-            //     })
-            //     .catch((error) => {
-            //         console.log("Error:", error);
-            //     });
 
             let tagifyInstance;
 
@@ -340,143 +306,7 @@
                 }
             }
 
-            // document.addEventListener('DOMContentLoaded', async () => {
-            //     try {
-            //         const arcccList = await getArchitecturelist();
-            //         const inputElement = document.querySelector('input[name="architectures"]');
-            //
-            //         // Check if Tagify is defined and initialize it
-            //         if (typeof Tagify !== 'undefined') {
-            //             const tagifyInstance = new Tagify(inputElement, {
-            //                 whitelist: arcccList.map(item => item.value), // Assuming arcccList is an array of objects with a 'value' property
-            //                 enforceWhitelist: true,
-            //                 duplicates: false,
-            //                 originalInputValueFormat: valuesArr => valuesArr.map(item => item.value),
-            //             });
-            //
-            //             // Set custom texts for validation messages
-            //             tagifyInstance.settings.templates = {
-            //                 dropdownItem: item => item.value,
-            //             };
-            //
-            //             // Implement custom validation using the validate setting
-            //             tagifyInstance.settings.validate = function(tagData) {
-            //                 if (tagData.value.trim() === "") {
-            //                     return "Architecture is required";
-            //                 }
-            //
-            //                 const isDuplicate = tagifyInstance.value.some(tag => tag.value === tagData.value);
-            //                 if (isDuplicate) {
-            //                     return "Duplicates are not allowed";
-            //                 }
-            //
-            //                 return true;
-            //             };
-            //
-            //             // Rest of your code remains unchanged
-            //             // ...
-            //         } else {
-            //             console.error("Tagify is not defined. Please make sure the library is loaded.");
-            //         }
-            //     } catch (error) {
-            //         console.log("Error:", error);
-            //     }
-            // });
-            //
 
-            // document.addEventListener('DOMContentLoaded', async () => {
-            //     try {
-            //         const inputElement = document.querySelector('input[name="architectures"]');
-            //
-            //         inputElement.addEventListener('input', function() {
-            //             const archHtml = inputElement.value.trim();
-            //
-            //             // Check if the input is not empty
-            //             if (archHtml === "") {
-            //                 alert("Architecture is required");
-            //             } else {
-            //                 console.log("Input value:", archHtml);
-            //             }
-            //         });
-            //
-            //         $("#validation-form").submit(function (event) {
-            //             event.preventDefault();
-            //
-            //             // Implement your form submission logic here
-            //             // For example, you can fetch the input value
-            //             const archHtml = inputElement.value.trim();
-            //
-            //             // Perform any further processing or validation
-            //
-            //             // Log the value or perform other actions
-            //             console.log("Input value on form submit:", archHtml);
-            //         });
-            //     } catch (error) {
-            //         console.log("Error:", error);
-            //     }
-            // });
-
-            // document.addEventListener('DOMContentLoaded', async () => {
-            //     try {
-            //         const arcccList = await getArchitecturelist();
-            //         const inputElement = document.querySelector('input[name="architectures"]');
-            //         const tagifyInstance = initializeTagify(inputElement, arcccList);
-            //
-            //         const selectElement = document.querySelector('select[name="yourSelectName"]'); // Replace with the actual name of your select element
-            //
-            //         function isTagifyEmpty(tagifyInstance) {
-            //             return tagifyInstance.value.length === 0;
-            //         }
-            //
-            //         function isSelectEmpty(selectElement) {
-            //             return selectElement.value === ""; // Adjust this check based on your select element's requirements
-            //         }
-            //
-            //         $("#validation-form").submit(function (event) {
-            //             if (isTagifyEmpty(tagifyInstance) && isSelectEmpty(selectElement)) {
-            //                 event.preventDefault();
-            //                 alert("Please fill in at least one field.");
-            //                 return;
-            //             }
-            //
-            //             // Handle the architectures input
-            //             const archHtml = inputElement.value;
-            //
-            //             if (archHtml.trim() !== "") {
-            //                 try {
-            //                     const arch = JSON.parse(archHtml);
-            //
-            //                     if (Array.isArray(arch) && arch.length !== 0) {
-            //                         const whitelist = tagifyInstance.settings.whitelist;
-            //                         arch.forEach((item) => {
-            //                             if (!whitelist.includes(item.value)) {
-            //                                 whitelist.push(item.value);
-            //                             }
-            //                         });
-            //                     } else {
-            //                         event.preventDefault();
-            //                         alert("Invalid input for Architectures. Please provide a valid JSON array.");
-            //                     }
-            //                 } catch (error) {
-            //                     event.preventDefault();
-            //                     alert("Error parsing JSON input for Architectures. Please provide a valid JSON array.");
-            //                     console.error("JSON Parsing Error:", error);
-            //                 }
-            //             }
-            //
-            //             // Handle the select input
-            //             if (isSelectEmpty(selectElement)) {
-            //                 event.preventDefault();
-            //                 alert("Please select a value for your select field.");
-            //             }
-            //
-            //             console.log(tagifyInstance.settings.whitelist);
-            //             console.log("Selected value from the select:", selectElement.value);
-            //         });
-            //     } catch (error) {
-            //         console.log("Error:", error);
-            //     }
-            // });
 
             function initializeTagifyAndValidation() {
                 let validatedProjectForm = false;
@@ -499,49 +329,7 @@
                 }
             });
 
-            // document.addEventListener('DOMContentLoaded', async () => {
-            //     try {
-            //         const arcccList = await getArchitecturelist();
-            //         const inputElement = document.querySelector('input[name="architectures"]');
-            //         const tagifyInstance = initializeTagify(inputElement, arcccList);
-            //
-            //
-            //         function isTagifyEmpty(tagifyInstance) {
-            //             return tagifyInstance.value.length === 0;
-            //         }
-            //
-            //         $("#validation-form").submit(function (event) {
-            //
-            //             if (isTagifyEmpty(tagifyInstance)) {
-            //                 event.preventDefault();
-            //                 alert("Tagify is empty. Please add at least one tag.");
-            //                 return;
-            //             }
-            //
-            //             const archHtml = inputElement.value;
-            //             const archText = (new DOMParser()).parseFromString(archHtml, 'text/html').body.innerText;
-            //
-            //
-            //             const arch = archText === "" ? [] : JSON.parse(archText);
-            //
-            //             const a = initializeTagify(inputElement, arch);
-            //
-            //             if (arch.length !== 0) {
-            //                 const whitelist = a.settings.whitelist;
-            //                 arch.forEach((item) => {
-            //                     if (!whitelist.includes(item.value)) {
-            //                         whitelist.push(item.value);
-            //                     }
-            //                 });
-            //             }
-            //
-            //
-            //             console.log(tagifyInstance.settings.whitelist);
-            //         });
-            //     } catch (error) {
-            //         console.log("Error:", error);
-            //     }
-            // });
+
 
             const toolbaroptions = [
                 // Test-style
@@ -565,7 +353,7 @@
 
             // Validation For Client
 
-            let validatedForm = $("#client-form");
+            let validatedForm = false;
             function validateName() {
                 const name = $("#client-name").val();
                 const errorContainer = $("#client-name").siblings(".error-container");
@@ -767,36 +555,6 @@
 
             let pList = await getAllProjects();
 
-            function template(a) {
-                const container = document.createElement('div');
-
-                for (let i = 0; i < a.length; i++) {
-                    const projectElement = createProjectList(a[i]);
-                    container.appendChild(projectElement);
-                }
-            
-                return container.innerHTML;
-            }
-
-            $('#pagination-container').pagination({
-                dataSource: async function (done) {
-                    const projects = []
-
-                    for(let i = pList.length - 1; i >= 0; i--) {
-                        projects.push(pList[i]);
-                    }
-
-                    done(projects);
-                },
-                callback: function (data, pagination) {
-                    // template method of yourself
-                    var html = template(data);
-                
-                    $('#sort-container').html(html);
-                },
-                pageSize: 8, // Number of items per page
-            });
-
             let departmentProjectId;
 
             if (loginUser.currentUser.role == "PMO" || loginUser.currentUser.role == "SDQC") {
@@ -992,13 +750,13 @@
                 return newProject;
             }
 
-            //for (let i = pList.length - 1; i >= 0; i--) {
-            //    let currentProject = pList[i];
-//
-            //    fragment.appendChild(createProjectList(currentProject));
-            //}
-            //motherContainer.innerHTML = "";
-            //motherContainer.appendChild(fragment);
+            for (let i = pList.length - 1; i >= 0; i--) {
+                let currentProject = pList[i];
+
+                fragment.appendChild(createProjectList(currentProject));
+            }
+            motherContainer.innerHTML = "";
+            motherContainer.appendChild(fragment);
 
             const detailMoal = document.querySelector("#project-details");
 
@@ -1517,8 +1275,6 @@
                     const currentTime = monthFilter.value;
                     const yearValue = parseInt(yearFilterSelect.value);
 
-                    console.log(allData)
-
                     const matchingProjects = pList.filter((a) => {
                         const projectDate = new Date(a.startDate);
                         const projectMonth = projectDate.getMonth();
@@ -1707,7 +1463,7 @@
                 }
 
                 // Validation for project
-                // let validatedProjectForm = false;
+                 let validatedProjectForm = false;
 
                 console.log("validation eeee");
                 function validateProjectName() {
@@ -1762,30 +1518,53 @@
                     console.log("project client validaiont : ", validatedProjectForm);
                 }
 
+
+
                 function validateProjectEmployee() {
-                    const empToAddProject = $("#employee-list").val();
+                    const empToAddProject = $("#employee-list").val();  // Assuming empTagifyList is your tagify instance
                     const errorContainer = $("#employee-list").siblings(".error-container");
+
                     if (!empToAddProject || empToAddProject.length === 0) {
+
                         validatedProjectForm = false;
                         if (errorContainer.length === 0) {
-                            let p = $("<p>")
-                                .addClass("text-danger fs-6")
-                                .text("Employee is required")
-                                .css("margin", "0")
-                                .addClass("error-message");
+                            // Create the error container if it doesn't exist
+                            const errorMessage = $("<p>")
+                                .addClass("text-danger fs-6 error-message")
+                                // .text("Employee list is required")
+                                .css("margin", "0");
 
                             $("#employee-list").after('<div class="error-container"></div>');
-                            $("#employee-list").siblings(".error-container").append(p);
+                            $("#employee-list").siblings(".error-container").append(errorMessage);
+
+
+                        } else {
+                            validatedProjectForm = false;
+                            // Update the error message if the container already exists
+                            errorContainer.removeClass("d-none");
+                             // errorContainer.find(".error-message").text("Employee list is required");
                         }
 
-                        $("#employee-list").css("border", "1px solid #dc3545");
+                        // You can also add styling or other actions for the invalid state
+                        // $("#employee-list").css("border", "1px solid #dc3545"); // Red border color for invalid state
                     } else {
+
                         validatedProjectForm = true;
-                        errorContainer.remove();
-                        $("#employee-list").css("border", "1px solid #28a745");
+                        // Employee list is not empt
+                        if (errorContainer.length > 0) {
+                            // Hide the error container if it exists
+                            errorContainer.addClass("d-none");
+                        }
+
+                        // You can add styling or other actions for the valid state
+                         $("#employee-list").css("border", "1px solid #28a745"); // Green border color for valid state
                     }
-                    console.log("project employee validaiont : ", validatedProjectForm);
+
+                    console.log("Employee list validation: ", empToAddProject);
                 }
+
+
+
 
                 function validatePrjDuration() {
                     const prjduration = $("#project-add-duration").val();
@@ -1841,36 +1620,48 @@
                     console.log("project background validaiont : ", validatedProjectForm);
                 }
 
-                // Function to validate systemOutlines
+
                 function validatePrjSystemOutline() {
-                    const systemOutlines = $("#systemOutlines").text().trim();
+                    const systemOutlines = $("#systemOutlines").val();
                     const errorContainer = $("#systemOutlines").siblings(".error-container");
 
-                    if (systemOutlines.length === 0) {
+                    if (!systemOutlines || systemOutlines.length === 0) {
                         validatedProjectForm = false;
+
                         if (errorContainer.length === 0) {
-                            let p = $("<p>")
-                                .addClass("text-danger fs-6")
+                            // Create the error container if it doesn't exist
+                            const errorMessage = $("<p>")
+                                .addClass("text-danger fs-6 error-message")
                                 .text("System Outlines is required")
-                                .css("margin", "0")
-                                .addClass("error-message");
+                                .css("margin", "0");
 
                             $("#systemOutlines").after('<div class="error-container"></div>');
-                            $("#systemOutlines").siblings(".error-container").append(p);
+                            $("#systemOutlines").siblings(".error-container").append(errorMessage);
+                        } else {
+                            // Update the error message if the container already exists
+                            errorContainer.removeClass("d-none");
+                            errorContainer.find(".error-message").text("System Outlines is required");
                         }
 
                         $("#systemOutlines").css("border", "1px solid #dc3545"); // Red border color for invalid state
                     } else {
                         validatedProjectForm = true;
-                        errorContainer.remove();
+
+                        if (errorContainer.length > 0) {
+                            // Hide the error container if it exists
+                            errorContainer.addClass("d-none");
+                        }
+
                         $("#systemOutlines").css("border", "1px solid #28a745"); // Green border color for valid state
                     }
-                    console.log("project systemoutline validaiont : ", validatedProjectForm);
+
+                    console.log("project system outline validation: ", validatedProjectForm);
                 }
 
-                console.log("project system outline validaiont : ", validatedProjectForm);
 
+                console.log("project system outline validaiont : ", validatedProjectForm);
                 function validatePrjObjective() {
+
                     const objective = $("#objective").val();
                     const errorContainer = $("#objective").siblings(".error-container");
 
@@ -2012,7 +1803,7 @@
                     validatePrjBackground();
                 });
 
-                $("#systemOutlines").on("content-updated", function () {
+                $("#systemOutlines").on("change", function () {
                     validatePrjSystemOutline();
                 });
 
@@ -2025,6 +1816,9 @@
                 });
 
                 function validateProject() {
+
+                    validatedProjectForm = true;
+
                     validateProjectName();
                     validateProjectClient();
                     validateProjectEmployee();
@@ -2037,14 +1831,18 @@
                 }
 
                 $("#project-add-btn").on("click", function (event) {
+
+
+
                     console.log("submitted");
                     event.preventDefault();
 
-                    validateProject();
 
-                    if (!validatedProjectForm) {
+                    if(!validateProject()){
                         return;
-                    }
+
+                    };
+
 
                     const projectName = $("#name").val();
                     const client = JSON.parse($("#client").val());
@@ -2213,29 +2011,11 @@
                                 dataType: "json",
                                 contentType: "application/json; charset=utf-8",
                                 success: async function (data) {
-                                    $('#pagination-container').pagination('destroy');
-                                    $('#pagination-container').pagination({
-                                        dataSource: async function (done) {
-                                            const projects = await getAllProjects();
-                                            const reverseProject = [];
-
-                                            for (let i = projects.length - 1; i >= 0; i--) {
-                                                reverseProject.push(projects[i]);
-                                            }
-
-                                            done(reverseProject);
-                                        },
-                                        callback: function (data, pagination) {
-                                            var html = template(data);
-                                            $('#sort-container').html(html);
-                                        },
-                                        pageSize: 8,
-                                    });
-                                    //const newProject = createProjectList(data);
-                                    //motherContainer.insertBefore(
-                                    //    newProject,
-                                    //    motherContainer.childNodes[0]
-                                    //);
+                                    const newProject = createProjectList(data);
+                                    motherContainer.insertBefore(
+                                        newProject,
+                                        motherContainer.childNodes[0]
+                                    );
                                     $("#alert-text").text("New Project Created Successfully...");
                                     $("#alert-modal").modal("show");
                                     $("#add-department-modal").modal("hide");
@@ -2732,15 +2512,12 @@
                             id="sort-container">
                             <div class="loader"></div>
                         </div>
-                        
-
                         <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-result">
                             <div class="d-flex justify-content-center align-items-center flex-column">
                                 <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
                                 <h1 class="text-white">No Project Found!</h1>
                             </div>
                         </div>
-                        <div id="pagination-container" style="position: absolute; bottom:10px; left:10px;"></div>
                     </div>
                 </div>
                 <!-- project end -->
@@ -2895,32 +2672,6 @@
                                         ></textarea>
                                     </div>
 
-                                    <!--                                architectures add-->
-                                    <div class="col-lg-6">
-                                        <label
-                                            for="architectures"
-                                            class="col-sm-12 col-form-label"
-                                            name="architectures"
-                                            >Architecture<span style="color: red"> *</span></label
-                                        >
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="architectures"
-                                            name="architectures"
-                                            placeholder="add some value"
-                                            required
-                                        />
-
-                                        <div class="error-container d-none">
-                                            <p
-                                                class="text-danger fs-6 error-message"
-                                                style="margin-top: 0"
-                                            >
-                                                please select aleast one architecture
-                                            </p>
-                                        </div>
-                                    </div>
 
                                     <!--                                systemoutline add-->
                                     <div class="col-lg-6">
@@ -2932,18 +2683,56 @@
                                             <span style="color: red"> *</span>
                                         </label>
                                         <div id="systemOutlines"></div>
+
+                                        <div class="error-container d-none">
+                                            <p class="text-danger fs-6 error-message" style="margin-top: 0">
+                                                System Outlines is required
+                                            </p>
+                                        </div>
                                     </div>
 
                                     <div class="col-lg-6">
-                                        <label
-                                            for="employee-list"
-                                            class="col-sm-12 col-form-label"
-                                            name="systemOutlines"
-                                            >Choose employee
+                                        <label for="employee-list" class="col-sm-12 col-form-label" name="employee-list">
+                                            Choose employee
                                             <span style="color: red"> *</span>
                                         </label>
                                         <div id="employee-list"></div>
+
+                                        <div class="error-container d-none">
+                                            <p class="text-danger fs-6 error-message d-none" style="margin-top: 0">
+                                                Employee is required
+                                            </p>
+                                        </div>
                                     </div>
+
+
+                                    <!--                                architectures add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                                for="architectures"
+                                                class="col-sm-12 col-form-label"
+                                                name="architectures"
+                                        >Architecture<span style="color: red"> *</span></label
+                                        >
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="architectures"
+                                                name="architectures"
+                                                placeholder="add some value"
+                                                required
+                                        />
+
+                                        <div class="error-container d-none">
+                                            <p
+                                                    class="text-danger fs-6 error-message"
+                                                    style="margin-top: 0"
+                                            >
+                                                please select aleast one architecture
+                                            </p>
+                                        </div>
+                                    </div>
+
 
                                     <!--                                deliverable add-->
                                     <div class="col-lg-6">
@@ -2961,6 +2750,14 @@
                                             placeholder="add value"
                                             required
                                         />
+                                        <div class="error-container d-none">
+                                            <p
+                                                    class="text-danger fs-6 error-message"
+                                                    style="margin-top: 0"
+                                            >
+                                                please select aleast one deliverable
+                                            </p>
+                                        </div>
                                     </div>
 
                                     <div class="col-lg-12" style="margin-bottom: 80px">
