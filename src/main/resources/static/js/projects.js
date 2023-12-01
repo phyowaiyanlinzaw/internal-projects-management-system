@@ -715,7 +715,7 @@ motherContainer.addEventListener("click", async function (e) {
 
         console.log("target id", id);
 
-        const currentProjectDetail = await getData(`/ api / project / list / ${id} `);
+        const currentProjectDetail = await getData(`/api/project/list/${id}`);
 
         console.log("current project detail", currentProjectDetail);
 
@@ -969,7 +969,7 @@ class="list-group-item d-flex justify-content-between"
         ) {
             document.querySelector(
                 "#navigate-task"
-            ).href = `/ project / ${currentProjectDetail.id} `;
+            ).href = `/project/${currentProjectDetail.id}`;
             document.querySelectorAll('.optional-view').forEach(a => {
                 console.log(a)
                 a.style.display = 'none'
@@ -1084,7 +1084,7 @@ document
                 console.log(project);
 
                 $.ajax({
-                    url: `/ api / project / update`, // Replace with the actual URL for your project registration endpoint
+                    url: `/api/project/update`, // Replace with the actual URL for your project registration endpoint
                     type: "PUT",
                     data: JSON.stringify(project),
                     dataType: "json",
@@ -1140,7 +1140,7 @@ if (loginUser.currentUser.role === "PROJECT_MANAGER") {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/ api / project / update / amount / ${projectId} `, // Replace with the actual URL for your project registration endpoint
+                    url: `/api/project/update/amount/${projectId}`, // Replace with the actual URL for your project registration endpoint
                     type: "PUT",
                     data: JSON.stringify(amountDto),
                     dataType: "json",
@@ -1828,8 +1828,6 @@ $(document).ready(function () {
 
         console.log('passed all the validation')
 
-        return
-
         const projectName = $("#name").val();
         const client = JSON.parse($("#client").val());
         const startDate = new Date($("#start_date").val()).getTime();
@@ -2020,7 +2018,7 @@ async function getAllSelectedProjectInfo() {
         const id = checkbox.value.split("-").pop()
 
         try {
-            const projectData = await getData(`/ api / project / list / ${id} `);
+            const projectData = await getData(`/api/project/list/${id}`);
             selectedProject.push(projectData);
         } catch (error) {
             console.log(`Error fetching data for project with id ${id}: `, error);
