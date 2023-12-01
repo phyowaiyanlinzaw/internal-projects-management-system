@@ -78,7 +78,7 @@
                     </button>
 
                     <div class="d-inline-block">
-                        <div class="d-inline-block">
+                        <div class="d-inline-block" >
                             <select id="status-filter" class="form-control">
                                 <option value="" selected disabled>Status</option>
                                 <option value="PENDING">PENDING</option>
@@ -87,7 +87,7 @@
                                 <option value="DUPLICATE">DUPLICATE</option>
                             </select>
                         </div>
-                        <div class="d-inline-block">
+                        <div class="d-inline-block" id="solved-filter-container">
                             <select id="solved-filter" class="form-control">
                                 <option value="" selected disabled>Choose</option>
                                 <option value="1">Solved</option>
@@ -1365,17 +1365,6 @@
 
                         $("#add-issue").modal("hide")
 
-                        // $('#title').val('');
-                        // $('#description').val('');
-                        // $('#place').val('');
-                        // $('#impact').val('');
-                        // $('#root_cause').val('');
-                        // $('#direct_cause').val('');
-                        // $('#responsible_party').val('');
-                        // $('#issue_category').val('');
-                        // $('#user_pic').val('');
-                        // $('#responsible_type').val('');
-
 
 
 
@@ -1525,12 +1514,7 @@
                         title: issue.title,
                         issue_category: issue.issueCategory,
                         project_name: issue.projectDto.name,
-                        // place: issue.place,
-                        // impact: issue.impact,
-                        // root_cause: issue.root_cause,
-                        // direct_cause: issue.direct_cause,
-                        // corrective_action: issue.corrective_action,
-                        // preventive_action: issue.preventive_action,
+
                         responsible_party: issue.responsible_party.name,
                         user_pic: issue.user_pic.name,
                         status: issue.status,
@@ -2284,6 +2268,16 @@
     $("#status-filter").on("change", function () {
         filterIssues();
     });
+
+    var userRole = getLoginUser.currentUser.role;
+
+    console.log("UserRole ",userRole);
+
+    // Check if the user role is not equal to "Project-Manager"
+    if (userRole !== "PROJECT_MANAGER") {
+        // Hide the status filter container
+        $("#solved-filter-container").hide();
+    }
 
 
         $("#solved-filter").on("change", function () {
