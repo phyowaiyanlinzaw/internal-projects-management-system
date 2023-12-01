@@ -835,6 +835,8 @@
 
         document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function (e) {
 
+            document.querySelector('#sort-container').innerHTML = ''
+
             const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
 
             unsolvedIssueListContainer.innerHTML = ''
