@@ -16,7 +16,8 @@ const createA = async ({id, description, time, object}) => {
     } else {
         if(currentlyWorkingProject !== null) {
             anchor.href = "/project/" + currentlyWorkingProject.projectId;
-        } else {
+        } 
+        if(object) {
             anchor.href = "/project/" + object.id;
         }
     }
