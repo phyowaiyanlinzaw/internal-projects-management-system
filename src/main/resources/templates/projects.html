@@ -220,39 +220,6 @@
 
         let arcccList = await getArchitecturelist();
 
-        // getArchitecturelist()
-        //     .then((architectureList) => {
-        //         const inputElement = document.querySelector(
-        //             'input[name="architectures"]',
-        //             {
-        //                 texts: {
-        //                     duplicate: "Duplicates are not allowed",
-        //                     empty: "Architecture is required",
-        //                 }
-        //             }
-        //
-        //         );
-        //         const a = initializeTagify(inputElement, architectureList);
-        //         $("#validation-form").submit(function (event) {
-        //             const arch =
-        //                 inputElement.value === ""
-        //                     ? []
-        //                     : JSON.parse(inputElement.value);
-        //
-        //             if (arch.length !== 0) {
-        //                 const whitelist = a.settings.whitelist;
-        //                 arch.forEach((item) => {
-        //                     if (!whitelist.includes(item.value)) {
-        //                         whitelist.push(item.value);
-        //                     }
-        //                 });
-        //             }
-        //             console.log(a.settings.whitelist);
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         console.log("Error:", error);
-        //     });
 
         let tagifyInstance;
 
@@ -339,143 +306,7 @@
             }
         }
 
-        // document.addEventListener('DOMContentLoaded', async () => {
-        //     try {
-        //         const arcccList = await getArchitecturelist();
-        //         const inputElement = document.querySelector('input[name="architectures"]');
-        //
-        //         // Check if Tagify is defined and initialize it
-        //         if (typeof Tagify !== 'undefined') {
-        //             const tagifyInstance = new Tagify(inputElement, {
-        //                 whitelist: arcccList.map(item => item.value), // Assuming arcccList is an array of objects with a 'value' property
-        //                 enforceWhitelist: true,
-        //                 duplicates: false,
-        //                 originalInputValueFormat: valuesArr => valuesArr.map(item => item.value),
-        //             });
-        //
-        //             // Set custom texts for validation messages
-        //             tagifyInstance.settings.templates = {
-        //                 dropdownItem: item => item.value,
-        //             };
-        //
-        //             // Implement custom validation using the validate setting
-        //             tagifyInstance.settings.validate = function(tagData) {
-        //                 if (tagData.value.trim() === "") {
-        //                     return "Architecture is required";
-        //                 }
-        //
-        //                 const isDuplicate = tagifyInstance.value.some(tag => tag.value === tagData.value);
-        //                 if (isDuplicate) {
-        //                     return "Duplicates are not allowed";
-        //                 }
-        //
-        //                 return true;
-        //             };
-        //
-        //             // Rest of your code remains unchanged
-        //             // ...
-        //         } else {
-        //             console.error("Tagify is not defined. Please make sure the library is loaded.");
-        //         }
-        //     } catch (error) {
-        //         console.log("Error:", error);
-        //     }
-        // });
-        //
 
-        // document.addEventListener('DOMContentLoaded', async () => {
-        //     try {
-        //         const inputElement = document.querySelector('input[name="architectures"]');
-        //
-        //         inputElement.addEventListener('input', function() {
-        //             const archHtml = inputElement.value.trim();
-        //
-        //             // Check if the input is not empty
-        //             if (archHtml === "") {
-        //                 alert("Architecture is required");
-        //             } else {
-        //                 console.log("Input value:", archHtml);
-        //             }
-        //         });
-        //
-        //         $("#validation-form").submit(function (event) {
-        //             event.preventDefault();
-        //
-        //             // Implement your form submission logic here
-        //             // For example, you can fetch the input value
-        //             const archHtml = inputElement.value.trim();
-        //
-        //             // Perform any further processing or validation
-        //
-        //             // Log the value or perform other actions
-        //             console.log("Input value on form submit:", archHtml);
-        //         });
-        //     } catch (error) {
-        //         console.log("Error:", error);
-        //     }
-        // });
-
-        // document.addEventListener('DOMContentLoaded', async () => {
-        //     try {
-        //         const arcccList = await getArchitecturelist();
-        //         const inputElement = document.querySelector('input[name="architectures"]');
-        //         const tagifyInstance = initializeTagify(inputElement, arcccList);
-        //
-        //         const selectElement = document.querySelector('select[name="yourSelectName"]'); // Replace with the actual name of your select element
-        //
-        //         function isTagifyEmpty(tagifyInstance) {
-        //             return tagifyInstance.value.length === 0;
-        //         }
-        //
-        //         function isSelectEmpty(selectElement) {
-        //             return selectElement.value === ""; // Adjust this check based on your select element's requirements
-        //         }
-        //
-        //         $("#validation-form").submit(function (event) {
-        //             if (isTagifyEmpty(tagifyInstance) && isSelectEmpty(selectElement)) {
-        //                 event.preventDefault();
-        //                 alert("Please fill in at least one field.");
-        //                 return;
-        //             }
-        //
-        //             // Handle the architectures input
-        //             const archHtml = inputElement.value;
-        //
-        //             if (archHtml.trim() !== "") {
-        //                 try {
-        //                     const arch = JSON.parse(archHtml);
-        //
-        //                     if (Array.isArray(arch) && arch.length !== 0) {
-        //                         const whitelist = tagifyInstance.settings.whitelist;
-        //                         arch.forEach((item) => {
-        //                             if (!whitelist.includes(item.value)) {
-        //                                 whitelist.push(item.value);
-        //                             }
-        //                         });
-        //                     } else {
-        //                         event.preventDefault();
-        //                         alert("Invalid input for Architectures. Please provide a valid JSON array.");
-        //                     }
-        //                 } catch (error) {
-        //                     event.preventDefault();
-        //                     alert("Error parsing JSON input for Architectures. Please provide a valid JSON array.");
-        //                     console.error("JSON Parsing Error:", error);
-        //                 }
-        //             }
-        //
-        //             // Handle the select input
-        //             if (isSelectEmpty(selectElement)) {
-        //                 event.preventDefault();
-        //                 alert("Please select a value for your select field.");
-        //             }
-        //
-        //             console.log(tagifyInstance.settings.whitelist);
-        //             console.log("Selected value from the select:", selectElement.value);
-        //         });
-        //     } catch (error) {
-        //         console.log("Error:", error);
-        //     }
-        // });
 
         function initializeTagifyAndValidation() {
             let validatedProjectForm = false;
@@ -498,9 +329,11 @@
             }
         });
 
-        const toolbaroptions = [
-            // Test-style
-            ["bold", "italic", "underline"],
+
+
+            const toolbaroptions = [
+                // Test-style
+                ["bold", "italic", "underline"],
 
             // Bullet points style...
             [{list: "ordered"}, {list: "bullet"}],
@@ -520,19 +353,18 @@
 
         // Validation For Client
 
-        let validatedForm = $("#client-form");
-
-        function validateName() {
-            const name = $("#client-name").val();
-            const errorContainer = $("#client-name").siblings(".error-container");
-            if (name.length < 1) {
-                validatedForm = false;
-                if (errorContainer.length === 0) {
-                    let p = $("<p>")
-                        .addClass("text-danger fs-6")
-                        .text("Name is required")
-                        .css("margin", "0")
-                        .addClass("error-message");
+            let validatedForm = false;
+            function validateName() {
+                const name = $("#client-name").val();
+                const errorContainer = $("#client-name").siblings(".error-container");
+                if (name.length < 1) {
+                    validatedForm = false;
+                    if (errorContainer.length === 0) {
+                        let p = $("<p>")
+                            .addClass("text-danger fs-6")
+                            .text("Name is required")
+                            .css("margin", "0")
+                            .addClass("error-message");
 
                     $("#client-name").after('<div class="error-container"></div>');
                     $("#client-name").siblings(".error-container").append(p);
@@ -1636,8 +1468,8 @@
                     });
             }
 
-            // Validation for project
-            // let validatedProjectForm = false;
+                // Validation for project
+                 let validatedProjectForm = false;
 
             console.log("validation eeee");
 
@@ -1693,30 +1525,49 @@
                 console.log("project client validaiont : ", validatedProjectForm);
             }
 
-            function validateProjectEmployee() {
-                const empToAddProject = $("#employee-list").val();
-                const errorContainer = $("#employee-list").siblings(".error-container");
-                if (!empToAddProject || empToAddProject.length === 0) {
-                    validatedProjectForm = false;
-                    if (errorContainer.length === 0) {
-                        let p = $("<p>")
-                            .addClass("text-danger fs-6")
-                            .text("Employee is required")
-                            .css("margin", "0")
-                            .addClass("error-message");
 
-                        $("#employee-list").after('<div class="error-container"></div>');
-                        $("#employee-list").siblings(".error-container").append(p);
+
+                function validateProjectEmployee() {
+                    const empToAddProject = $("#employee-list").val();  // Assuming empTagifyList is your tagify instance
+                    const errorContainer = $("#employee-list").siblings(".error-container");
+
+                    if (!empToAddProject || empToAddProject.length === 0) {
+
+                        validatedProjectForm = false;
+                        if (errorContainer.length === 0) {
+                            // Create the error container if it doesn't exist
+                            const errorMessage = $("<p>")
+                                .addClass("text-danger fs-6 error-message")
+                                .text("Employee list is required")
+                                .css("margin", "0");
+
+                            $("#employee-list").after('<div class="error-container"></div>');
+                            $("#employee-list").siblings(".error-container").append(errorMessage);
+                        } else {
+                            validatedProjectForm = true;
+                            // Update the error message if the container already exists
+                            errorContainer.removeClass("d-none");
+                            errorContainer.find(".error-message").text("Employee list is required");
+                        }
+
+                        // You can also add styling or other actions for the invalid state
+                        $("#employee-list").css("border", "1px solid #dc3545"); // Red border color for invalid state
+                    } else {
+                        // Employee list is not empty
+                        if (errorContainer.length > 0) {
+                            // Hide the error container if it exists
+                            errorContainer.addClass("d-none");
+                        }
+
+                        // You can add styling or other actions for the valid state
+                        $("#employee-list").css("border", "1px solid #28a745"); // Green border color for valid state
                     }
 
-                    $("#employee-list").css("border", "1px solid #dc3545");
-                } else {
-                    validatedProjectForm = true;
-                    errorContainer.remove();
-                    $("#employee-list").css("border", "1px solid #28a745");
+                    console.log("Employee list validation: ", empToAddProject);
                 }
-                console.log("project employee validaiont : ", validatedProjectForm);
-            }
+
+
+
 
             function validatePrjDuration() {
                 const prjduration = $("#project-add-duration").val();
@@ -1772,38 +1623,50 @@
                 console.log("project background validaiont : ", validatedProjectForm);
             }
 
-            // Function to validate systemOutlines
-            function validatePrjSystemOutline() {
-                const systemOutlines = $("#systemOutlines").text().trim();
-                const errorContainer = $("#systemOutlines").siblings(".error-container");
 
-                if (systemOutlines.length === 0) {
-                    validatedProjectForm = false;
-                    if (errorContainer.length === 0) {
-                        let p = $("<p>")
-                            .addClass("text-danger fs-6")
-                            .text("System Outlines is required")
-                            .css("margin", "0")
-                            .addClass("error-message");
+                function validatePrjSystemOutline() {
+                    const systemOutlines = $("#systemOutlines").val();
+                    const errorContainer = $("#systemOutlines").siblings(".error-container");
 
-                        $("#systemOutlines").after('<div class="error-container"></div>');
-                        $("#systemOutlines").siblings(".error-container").append(p);
+                    if (!systemOutlines || systemOutlines.length === 0) {
+                        validatedProjectForm = false;
+
+                        if (errorContainer.length === 0) {
+                            // Create the error container if it doesn't exist
+                            const errorMessage = $("<p>")
+                                .addClass("text-danger fs-6 error-message")
+                                .text("System Outlines is required")
+                                .css("margin", "0");
+
+                            $("#systemOutlines").after('<div class="error-container"></div>');
+                            $("#systemOutlines").siblings(".error-container").append(errorMessage);
+                        } else {
+                            // Update the error message if the container already exists
+                            errorContainer.removeClass("d-none");
+                            errorContainer.find(".error-message").text("System Outlines is required");
+                        }
+
+                        $("#systemOutlines").css("border", "1px solid #dc3545"); // Red border color for invalid state
+                    } else {
+                        validatedProjectForm = true;
+
+                        if (errorContainer.length > 0) {
+                            // Hide the error container if it exists
+                            errorContainer.addClass("d-none");
+                        }
+
+                        $("#systemOutlines").css("border", "1px solid #28a745"); // Green border color for valid state
                     }
 
-                    $("#systemOutlines").css("border", "1px solid #dc3545"); // Red border color for invalid state
-                } else {
-                    validatedProjectForm = true;
-                    errorContainer.remove();
-                    $("#systemOutlines").css("border", "1px solid #28a745"); // Green border color for valid state
+                    console.log("project system outline validation: ", validatedProjectForm);
                 }
-                console.log("project systemoutline validaiont : ", validatedProjectForm);
-            }
 
-            console.log("project system outline validaiont : ", validatedProjectForm);
 
-            function validatePrjObjective() {
-                const objective = $("#objective").val();
-                const errorContainer = $("#objective").siblings(".error-container");
+                console.log("project system outline validaiont : ", validatedProjectForm);
+                function validatePrjObjective() {
+
+                    const objective = $("#objective").val();
+                    const errorContainer = $("#objective").siblings(".error-container");
 
                 if (!objective || objective.trim().length === 0) {
                     validatedProjectForm = false;
@@ -1943,9 +1806,9 @@
                 validatePrjBackground();
             });
 
-            $("#systemOutlines").on("content-updated", function () {
-                validatePrjSystemOutline();
-            });
+                $("#systemOutlines").on("change", function () {
+                    validatePrjSystemOutline();
+                });
 
             $("#start_date").on("input", function () {
                 validateStartDate();
@@ -1967,11 +1830,20 @@
                 return validatedProjectForm;
             }
 
-            $("#project-add-btn").on("click", function (event) {
-                console.log("submitted");
-                event.preventDefault();
+                $("#project-add-btn").on("click", function (event) {
 
-                validateProject();
+                    if(!validateProjectEmployee()) {
+                        return;
+                    }
+
+                    validateProjectEmployee();
+
+
+                    console.log("submitted");
+                    event.preventDefault();
+
+
+                    validateProject();
 
                 if (!validatedProjectForm) {
                     return;
@@ -2824,73 +2696,93 @@
                                 ></textarea>
                             </div>
 
-                            <!--                                architectures add-->
-                            <div class="col-lg-6">
-                                <label
-                                        for="architectures"
-                                        class="col-sm-12 col-form-label"
-                                        name="architectures"
-                                >Architecture<span style="color: red"> *</span></label
-                                >
-                                <input
-                                        type="text"
-                                        class="form-control"
-                                        id="architectures"
-                                        name="architectures"
-                                        placeholder="add some value"
-                                        required
-                                />
 
-                                <div class="error-container d-none">
-                                    <p
-                                            class="text-danger fs-6 error-message"
-                                            style="margin-top: 0"
-                                    >
-                                        please select aleast one architecture
-                                    </p>
-                                </div>
-                            </div>
+                                    <!--                                systemoutline add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="systemOutlines"
+                                            class="col-sm-12 col-form-label"
+                                            name="systemOutlines"
+                                            >System Outlines
+                                            <span style="color: red"> *</span>
+                                        </label>
+                                        <div id="systemOutlines"></div>
 
-                            <!--                                systemoutline add-->
-                            <div class="col-lg-6">
-                                <label
-                                        for="systemOutlines"
-                                        class="col-sm-12 col-form-label"
-                                        name="systemOutlines"
-                                >System Outlines
-                                    <span style="color: red"> *</span>
-                                </label>
-                                <div id="systemOutlines"></div>
-                            </div>
+                                        <div class="error-container d-none">
+                                            <p class="text-danger fs-6 error-message" style="margin-top: 0">
+                                                System Outlines is required
+                                            </p>
+                                        </div>
+                                    </div>
 
-                            <div class="col-lg-6">
-                                <label
-                                        for="employee-list"
-                                        class="col-sm-12 col-form-label"
-                                        name="systemOutlines"
-                                >Choose employee
-                                    <span style="color: red"> *</span>
-                                </label>
-                                <div id="employee-list"></div>
-                            </div>
+                                    <div class="col-lg-6">
+                                        <label for="employee-list" class="col-sm-12 col-form-label" name="employee-list">
+                                            Choose employee
+                                            <span style="color: red"> *</span>
+                                        </label>
+                                        <div id="employee-list"></div>
 
-                            <!--                                deliverable add-->
-                            <div class="col-lg-6">
-                                <label
-                                        for="deliverable"
-                                        class="col-sm-12 col-form-label"
-                                        name="deliverable"
-                                >Deliverable<span style="color: red"> *</span></label
-                                >
-                                <input
-                                        type="text"
-                                        class="form-control"
-                                        id="deliverable"
-                                        name="enter to add your own deliverable type"
-                                        placeholder="add value"
-                                        required
-                                />
-                            </div>
+                                        <div class="error-container d-none">
+                                            <p class="text-danger fs-6 error-message" style="margin-top: 0">
+                                                Employee is required
+                                            </p>
+                                        </div>
+                                    </div>
+
+
+                                    <!--                                architectures add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                                for="architectures"
+                                                class="col-sm-12 col-form-label"
+                                                name="architectures"
+                                        >Architecture<span style="color: red"> *</span></label
+                                        >
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="architectures"
+                                                name="architectures"
+                                                placeholder="add some value"
+                                                required
+                                        />
+
+                                        <div class="error-container d-none">
+                                            <p
+                                                    class="text-danger fs-6 error-message"
+                                                    style="margin-top: 0"
+                                            >
+                                                please select aleast one architecture
+                                            </p>
+                                        </div>
+                                    </div>
+
+
+                                    <!--                                deliverable add-->
+                                    <div class="col-lg-6">
+                                        <label
+                                            for="deliverable"
+                                            class="col-sm-12 col-form-label"
+                                            name="deliverable"
+                                            >Deliverable<span style="color: red"> *</span></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="deliverable"
+                                            name="enter to add your own deliverable type"
+                                            placeholder="add value"
+                                            required
+                                        />
+                                        <div class="error-container d-none">
+                                            <p
+                                                    class="text-danger fs-6 error-message"
+                                                    style="margin-top: 0"
+                                            >
+                                                please select aleast one deliverable
+                                            </p>
+                                        </div>
+                                    </div>
 
                             <div class="col-lg-12" style="margin-bottom: 80px">
                                 <label for="objective"
