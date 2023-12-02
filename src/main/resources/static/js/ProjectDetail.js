@@ -25,7 +25,7 @@ const toolbaroptions = [
 
 const currentUser = await getUser();
 
-if(currentUser.currentUser.role !== 'PROJECT_MANAGER'){
+if (currentUser.currentUser.role !== 'PROJECT_MANAGER') {
     document.querySelector("button[data-bs-target='#add-deliverable-modal']").classList.add('d-none')
     document.querySelector("button[data-bs-target='#add-architecture-modal']").classList.add('d-none')
 }
@@ -92,7 +92,7 @@ projectDetail.addEventListener('show.bs.tab', async function (e) {
         const arch = createArchitecture(a)
         archContainer.appendChild(arch)
     });
-    
+
     $('input[data-lol="deli"]').bootstrapToggle({
         on: 'ready',
         off: "no",
@@ -134,7 +134,7 @@ function createDeliverable(a) {
 
     const outerDiv = document.createElement("div");
     outerDiv.className = "d-flex";
-    outerDiv.classList.add('bg-light','rounded')
+    outerDiv.classList.add('bg-light', 'rounded')
 
     if (currentUser.currentUser.role === 'PROJECT_MANAGER') {
         const delitype = document.createElement('div');
@@ -174,7 +174,7 @@ function createDeliverable(a) {
     // Create the inner div for the text
     const typeDiv = document.createElement("div");
     typeDiv.textContent = a.deliverableType.type;
-    typeDiv.classList.add('text-center', 'fw-bold', 'ms-3' ,'me-3', 'text-primary')
+    typeDiv.classList.add('text-center', 'fw-bold', 'ms-3', 'me-3', 'text-primary')
     innerDIv.appendChild(typeDiv);
 
     const inputDiv = document.createElement("div");
@@ -609,10 +609,32 @@ archSearchBtn.addEventListener('input', function () {
 
 const changePhase = document.querySelector("#development-phase");
 
-changePhase.value = project.phase;
+for (let i = 0; i < changePhase.options.length; i++) {
+    if (changePhase.options[i].value === project.current_phase) {
+        changePhase.options[i].selected = true;
+        break;  // Stop the loop once the matching option is found
+    }
+}
+
+
+function createToast(a) {
+    const toast = document.createElement('div')
+
+    toast.classList = 'toast show bg-success text-white'
+    toast.setAttribute('role', 'alert')
+    toast.setAttribute('aria-live', 'assertive')
+    toast.setAttribute('aria-atomic', 'true')
+
+    toast.innerHTML = `<div class="toast-header">
+                <strong class="me-auto"><i class="fa-solid fa-bell fs-3" style="transform: rotate(45deg);"></i></strong>
+                <small class="text-muted">${a}</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>`
+    return toast
+}
 
 changePhase.addEventListener("change", function () {
-    
+
     $.ajax({
         method: "PUT",
         url: "/api/project/update/" + projectId.textContent + "/phase",
@@ -622,6 +644,10 @@ changePhase.addEventListener("change", function () {
         success: function (response) {
             console.log(response);
             console.log("Phase Updated Successfully...");
+            const toast = createToast("Phase Updated Successfully...")
+            const btoawe = new bootstrap.Toast(toast)
+            document.querySelector("#toasts-noti-container").appendChild(toast)
+            btoawe.show();
         },
         error: function (error) {
             console.log("Error in Url : /api/client/save ", error);
