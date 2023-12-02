@@ -732,6 +732,12 @@
         }
 
 
+        function clearEmployeeValidationStylesAndMessages(fieldSelector) {
+            $(fieldSelector).removeClass("is-valid is-invalid");
+            $(fieldSelector).siblings(".error-container").remove();
+        }
+
+
         $('#register-employee-btn').click(function () {
             var username = $('#floatingText').val();
             var email = $('#floatingInput').val();
@@ -739,14 +745,7 @@
             var departmentId = $('#departmentSelect').val();
             var projectManagerId = $('#projectManagerSelect').val();
 
-            // if(!validateUsername()) return;
-            // if(!validateEmail()) return;
-            // if(!validateMemberRole()) return;
-            // if(role === 'PROJECT_MANAGER'){
-            //     if(!validateDepartment()) return;
-            // } else {
-            //     if(!validateProjectManager()) return;
-            // }
+
 
             if(!validateRegisterForm()) return;
 
@@ -791,6 +790,12 @@
                             $('#addEmployeeModal').modal('hide');
                             $('#register-employee-btn').html('Register').prop('disabled', false);
                             $('#table').bootstrapTable('refresh');
+                            clearEmployeeValidationStylesAndMessages('#floatingText');
+                            clearEmployeeValidationStylesAndMessages('#floatingInput');
+                            clearEmployeeValidationStylesAndMessages('#memberSelect');
+                            clearEmployeeValidationStylesAndMessages('#departmentSelect');
+                            clearEmployeeValidationStylesAndMessages('#projectManagerSelect');
+
                             showSuccess('Employee registered successfully');
                         },
                         error: function (data, xhr) {

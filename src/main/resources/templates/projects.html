@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="UTF-8" />
-        <title>Internal Project Management</title>
+        <title>
+            Internal Project Management</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <meta
             name="keywords"
@@ -10,6 +11,8 @@
         />
         <meta content name="description" />
         <meta name="author" content="teamplaceholder's project" />
+
+        <link rel="icon" href="/images/dat.png" type="image/x-icon">
 
         <!-- Favicon -->
         <!-- <link href="/images/favicon.ico" rel="icon"> -->
@@ -89,6 +92,14 @@
             .invalid-feedback {
                 color: red;
             }
+
+            .valid-border {
+                border: 1px solid #28a745 !important; /* Green border color for valid state */
+            }
+
+            .invalid-border {
+                border: 1px solid #dc3545 !important; /* Red border color for invalid state */
+            }
         </style>
         <script src="/js/fontawesome.js" defer></script>
 
@@ -117,12 +128,12 @@
         <script src="/js/getDataForProject.js" type="module" async></script>
         <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css" integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js" integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js" integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script
             defer
             src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/js/bootstrap5-toggle.min.js"
         ></script>
-        
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/redmond/jquery-ui.min.css" integrity="sha512-pL3uvb0iajriFzWcsjvmztg0ViN8MGpl4ajmiCb+xC5vnLUES2mkdp+7YAUjlcK/T+htiZH9HNkxAO+P3TbUmA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/redmond/theme.min.css" integrity="sha512-0bcqtDVki4GAD6rxlpngwNROUwKg5Nf+ARCueSCa1gk1DB5V9QxsChj2G+dGNOQzN8tpbJidotfAhPZnQjsJ/w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"
@@ -252,7 +263,7 @@
 
                         <!-- add department modal end -->
                         <!-- sortting button -->
-                        
+
                         </div>
                         <!-- Modal -->
                     </div>
@@ -298,7 +309,7 @@
                             id="sort-container">
                             <div class="loader"></div>
                         </div>
-                        
+
 
                         <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-result">
                             <div class="d-flex justify-content-center align-items-center flex-column">
@@ -480,36 +491,14 @@
 
                                         <div class="error-container d-none">
                                             <p
-                                                class="text-danger fs-6 error-message"
-                                                style="margin-top: 0"
+                                                    class="text-danger fs-6 error-message"
+                                                    style="margin-top: 0"
                                             >
                                                 please select aleast one architecture
                                             </p>
                                         </div>
                                     </div>
 
-                                    <!--                                systemoutline add-->
-                                    <div class="col-lg-6">
-                                        <label
-                                            for="systemOutlines"
-                                            class="col-sm-12 col-form-label"
-                                            name="systemOutlines"
-                                            >System Outlines
-                                            <span style="color: red"> *</span>
-                                        </label>
-                                        <div id="systemOutlines"></div>
-                                    </div>
-
-                                    <div class="col-lg-6">
-                                        <label
-                                            for="employee-list"
-                                            class="col-sm-12 col-form-label"
-                                            name="systemOutlines"
-                                            >Choose employee
-                                            <span style="color: red"> *</span>
-                                        </label>
-                                        <div id="employee-list"></div>
-                                    </div>
 
                                     <!--                                deliverable add-->
                                     <div class="col-lg-6">
@@ -717,6 +706,7 @@
                                 >
                                     Edit
                                 </button>
+
                             </li>
                             <li class="nav-item">
                                 <button

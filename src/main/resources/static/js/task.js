@@ -1904,6 +1904,7 @@ $("#task-add-btn").on("click", function () {
                 success: function (response) {
                     console.log(response);
                      location.reload();
+
                     
                 },
                 error: function (response) {
