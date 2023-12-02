@@ -121,7 +121,7 @@
 
 
                     </div>
-                    <div class="d-inline-block">
+                    <div class="d-inline-block" sec:authorize="hasAnyRole('PMO','SDQC')">
                         <span class="d-inline-block">
                             <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
                                 <label class="btn btn-outline-primary" for="btn-check-outlined">
@@ -134,13 +134,12 @@
                 
             </div>
             <div class="mt-2" id="search-bar">
-                <form class="">
                     <input
                         class="form-control border-0"
                         type="search"
-                        placeholder="Search issue"
+                        placeholder="&#xF002; Search Issue"
+                        style="font-family:Arial, FontAwesome"
                     />
-                </form>
             </div>
             
 
@@ -261,17 +260,6 @@
                                     <th data-field="place" data-sortable="true">Place
                                         <span style="visibility: hidden;">In this modification,</span>
                                     </th>
-                                    <th data-field="impact" data-sortable="true">Impact
-                                        <span style="visibility: hidden;">In this modification, </span>
-                                    </th>
-                                    <th data-field="root_cause" data-sortable="true">Root Cause
-                                        <span style="visibility: hidden;">In this modification,</span></th>
-                                    <th data-field="direct_cause" data-sortable="true">Direct Cause
-                                        <span style="visibility: hidden;">In this modification,</span></th>
-                                    <th data-field="corrective_action" data-sortable="true">Corrective Action
-                                        <span style="visibility: hidden;">In this modification, </span></th>
-                                    <th data-field="preventive_action" data-sortable="true">Preventive Action
-                                        <span style="visibility: hidden;">In this modification, </span></th>
                                     <th data-field="responsible_party" data-sortable="true">Responsible Party</th>
                                     <th data-field="user_pic" data-sortable="true">Personal In Charge</th>
                                     <th data-field="status" data-sortable="true">Status</th>
@@ -724,19 +712,20 @@
 
     $(document).ready(function () {
 
-        const issueDetialEdit = document.querySelector("#details")
+        const issueDetailEdit = document.querySelector("#details")
 
-        const saveButton = issueDetialEdit.querySelector("#issue-detail-save-btn-container")
+        const saveButton = issueDetailEdit.querySelector("#issue-detail-save-btn-container")
 
         saveButton.addEventListener("click", function (e) {
 
-            const issueId = issueDetialEdit.getAttribute("data-currentEditingIssueId")
-            const issueTitle = issueDetialEdit.querySelector("#issueTitleDetails").value
-            const issueCategory = issueDetialEdit.querySelector("#issue_categoryDetails").value
-            const directCause = issueDetialEdit.querySelector("#direct_causeDetails").value
-            const rootCause = issueDetialEdit.querySelector("#root_causeDetails").value
-            const place = issueDetialEdit.querySelector("#placeDetails").value
-            const impact = issueDetialEdit.querySelector("#impactDetails").value
+
+            const issueId = issueDetailEdit.getAttribute("data-currentEditingIssueId")
+            const issueTitle = issueDetailEdit.querySelector("#issueTitleDetails").value
+            const issueCategory = issueDetailEdit.querySelector("#issue_categoryDetails").value
+            const directCause = issueDetailEdit.querySelector("#direct_causeDetails").value
+            const rootCause = issueDetailEdit.querySelector("#root_causeDetails").value
+            const place = issueDetailEdit.querySelector("#placeDetails").value
+            const impact = issueDetailEdit.querySelector("#impactDetails").value
 
             const issue = {
                 id: issueId,
@@ -766,7 +755,7 @@
                     oldIssue.replaceWith(issue)
 
                     $("#alert-text").text(
-                        "Issue Updaed Successfully"
+                        "Issue Updated Successfully"
                     );
                     $("#alert-modal").modal("show");
 
@@ -779,7 +768,7 @@
 
         })
 
-        issueDetialEdit.addEventListener("input", function (e) {
+        issueDetailEdit.addEventListener("input", function (e) {
 
 
             if (saveButton.classList.contains("d-none")) {
@@ -809,27 +798,29 @@
         })
     })
 
-    document.getElementById("btn-check-outlined").addEventListener("click",()=>{
-        if (document.getElementById("btn-check-outlined").checked) {
-            //remove all issues and show table
-            document.getElementById("all-issue-list").classList.add("d-none")
-            document.getElementById("issue-table-container").classList.remove("d-none")
-            document.getElementById("issue-table").classList.add("show")
-            document.getElementById("issue-table").classList.add("active")
-            document.getElementById("filter-div").classList.add("d-none")
-            document.getElementById("search-bar").classList.add("d-none")
-        } else {
-            //show all issues and remove table
-            document.getElementById("all-issue-list").classList.remove("d-none")
-            document.getElementById("issue-table-container").classList.add("d-none")
-            document.getElementById("issue-table").classList.remove("show")
-            document.getElementById("issue-table").classList.remove("active")
-            document.getElementById("filter-div").classList.remove("d-none")
-            document.getElementById("search-bar").classList.remove("d-none")
-        }
+    if(document.getElementById("btn-check-outlined")){
+        document.getElementById("btn-check-outlined").addEventListener("click",()=>{
+            if (document.getElementById("btn-check-outlined").checked) {
+                //remove all issues and show table
+                document.getElementById("all-issue-list").classList.add("d-none")
+                document.getElementById("issue-table-container").classList.remove("d-none")
+                document.getElementById("issue-table").classList.add("show")
+                document.getElementById("issue-table").classList.add("active")
+                document.getElementById("filter-div").classList.add("d-none")
+                document.getElementById("search-bar").classList.add("d-none")
+            } else {
+                //show all issues and remove table
+                document.getElementById("all-issue-list").classList.remove("d-none")
+                document.getElementById("issue-table-container").classList.add("d-none")
+                document.getElementById("issue-table").classList.remove("show")
+                document.getElementById("issue-table").classList.remove("active")
+                document.getElementById("filter-div").classList.remove("d-none")
+                document.getElementById("search-bar").classList.remove("d-none")
+            }
 
 
-    })
+        })
+    }
 
     if(document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
 
@@ -853,8 +844,6 @@
 
         })
 
-        // Author: Habib Mhamadi
-        // Email: habibmhamadi@gmail.comd
         
     }
 
@@ -1320,7 +1309,7 @@
                 const issueId = $('#issue-edit-btn').data('issueId');
 
                 if (!validateIssue()) {
-                    showerror('Please fill in all the required fields.');
+                    showError('Please fill all required fields')
                     return;
                 }
 
@@ -1516,7 +1505,7 @@
                         title: issue.title,
                         issue_category: issue.issueCategory,
                         project_name: issue.projectDto.name,
-
+                        place : issue.place,
                         responsible_party: issue.responsible_party.name,
                         user_pic: issue.user_pic.name,
                         status: issue.status,
@@ -2111,7 +2100,7 @@
                     dataType: 'json',
                     success: function (data) {
                         // alert("Issue Updated Successfully");
-                        showSuccess("Issue Updated Successfuly.");
+                        showSuccess("Issue Updated Successfully.");
                         $.ajax({
                             url: `/api/issue/list/pending/${getLoginUser.currentUser.id}`, // Update the URL to include the issue ID
                             type: 'GET',
@@ -2477,33 +2466,6 @@
         });
     }
 
-    function showerror(message) {
-        $("#error-text").text(message);
-        $("#error-alert").show();
-
-        setTimeout(function () {
-            $("#error-alert").hide();
-        }, 3000);
-
-        //close alert box
-        $(".btn-close").on("click", function () {
-            $("#error-alert").hide();
-        });
-    }
-
-    function showsuccess(message) {
-        $("#success-text").text(message);
-        $("#success-alert").show();
-
-        setTimeout(function () {
-            $("#success-alert").hide();
-        }, 3000);
-
-        //close alert box
-        $(".btn-close").on("click", function () {
-            $("#success-alert").hide();
-        });
-    }
 
 
 </script>
