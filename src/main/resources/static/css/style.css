@@ -1335,3 +1335,10 @@
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
+.title{
+    font-weight: bold;
+    color: #369;
+    font-family:  Georgia, serif;
+    margin-bottom: 10px;
+}
