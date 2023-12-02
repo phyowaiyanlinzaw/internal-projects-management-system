@@ -81,8 +81,6 @@
                         <div class="d-inline-block" >
                             <select id="status-filter" class="form-control">
                                 <option value="" selected disabled>Status</option>
-                                <option value="PENDING">PENDING</option>
-                                <option value="APPROVE">APPROVE</option>
                                 <option value="DECLINE">DECLINE</option>
                                 <option value="DUPLICATE">DUPLICATE</option>
                             </select>
@@ -657,12 +655,12 @@
                                     <h3 >Solution</h3>
                                 </div>
                             </div>
-                            <div class="col mb-3 mt-4">
+                            <div class="col mb-3 mt-4 text-wrap">
                                 <div>
                                     <i class="fa-solid fa-screwdriver-wrench text-success"></i>
                                     <span>Corrective Action</span>
                                 </div>
-                                <p class="mt-3" id="correctiveDetails"></p>
+                                <div class="mt-3 " style="word-wrap: break-word;  " id="correctiveDetails"></div>
 
                             </div>
                             <hr>
@@ -671,7 +669,7 @@
                                     <i class="fa-solid fa-shield text-success"></i>
                                     <span>Preventive Action</span>
                                 </div>
-                                <p class="mt-3" id="preventiveDetails"></p>
+                                <p class="mt-3" style="word-wrap: break-word;  " id="preventiveDetails"></p>
 
                             </div>
                         </div>
@@ -733,6 +731,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css" rel="stylesheet">
 
+<script type="module" src="/js/issue.js"></script>
 <script type="module">
 
 
@@ -809,7 +808,7 @@
     });
 
     document.querySelectorAll("button[data-bs-target=\"#all-issue-list\"]").forEach(button =>
-        
+
         {
             button.addEventListener("show.bs.tab", async function (e) {
 
@@ -853,7 +852,7 @@
 
         // Author: Habib Mhamadi
         // Email: habibmhamadi@gmail.comd
-        
+
     }
 
     import {getUser} from "/js/currentLoginUser.js";
@@ -1760,7 +1759,7 @@
                             $('#issue-edit-btn').hide();
                         }
 
-                        $('#issue-edit-btn').data('issueId', issueId); 
+                        $('#issue-edit-btn').data('issueId', issueId);
                         $('#solve-btn').data('issueId', issueId);// Set the issueId
 
                         $('#issueEditModal').modal('show');
@@ -2142,7 +2141,7 @@
             showError('Please fill in all the required fields.');
             return;
         }
-        
+
         const updatedDetails = {
             corrective_action: corrective_action,
             preventive_action: preventive_action,
@@ -2361,7 +2360,7 @@
                         const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
                     });
-                    
+
                 } else {
                     // Handle case when data is empty
                     document.querySelector('#no-result').classList.remove('d-none')
@@ -2407,7 +2406,7 @@
                         const issueDiv = createIssueCard(item);
                         sortContainer.append(issueDiv);
                     });
-                    
+
                 } else {
                     // Handle case when data is empty
                     document.querySelector('#no-result').classList.remove('d-none')

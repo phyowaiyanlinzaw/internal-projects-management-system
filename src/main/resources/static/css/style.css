@@ -1322,6 +1322,10 @@
     opacity: .8;
 }
 
+.delitype:hover ~ div .text-center {
+    transform: scale(1.2, 1.2);
+}
+
 .delitype:active {
     transform: scale(.7, 0.7);
 }
@@ -1334,4 +1338,13 @@
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+}
+
+.title{
+    font-weight: bold;
+    color: #369;
+    font-family:  Georgia, serif;
+
+    margin-top: 10px;
+    margin-left: 20px;
 }

@@ -302,6 +302,7 @@ $(
             minDate: new Date(parseInt(projectStartDateElement.innerText)),
             maxDate: new Date(parseInt(projectEndDateElement.innerText)),
             dateFormat: 'yy-mm-dd',
+            beforeShowDay: $.datepicker.noWeekends,
             onSelect: function (dateText, inst) {
 
 
@@ -327,6 +328,7 @@ $(
             minDate: new Date(parseInt(projectStartDateElement.innerText)),
             maxDate: new Date(parseInt(projectEndDateElement.innerText)),
             dateFormat: 'yy-mm-dd',
+            beforeShowDay: $.datepicker.noWeekends,
             onSelect: function (dateText, inst) {
 
 
@@ -353,19 +355,21 @@ $(
         $("#end_date").datepicker({
             maxDate: new Date(parseInt(projectEndDateElement.innerText)),
             dateFormat: 'yy-mm-dd',
+            beforeShowDay: $.datepicker.noWeekends
         });
 
         $("#pm-task-detail-due-date").datepicker({
             minDate: new Date(parseInt(projectStartDateElement.innerText)),
             maxDate: new Date(parseInt(projectEndDateElement.innerText)),
             dateFormat: 'yy-mm-dd',
+            beforeShowDay: $.datepicker.noWeekends,
             onSelect: function (dateText, inst) {
 
                 const startDate = $('#pm-task-detail-start-date').val();
                 const endDate = $("#pm-task-detail-due-date").val();
 
                 const duration = calculateWeekdayDuration(new Date(startDate).getTime(), new Date(endDate).getTime())
-                $("#pm-actual-edit-hours").val(duration * 7)
+                $("#pm-plan-edit-hours").val(duration * 7)
             }
         })
 
