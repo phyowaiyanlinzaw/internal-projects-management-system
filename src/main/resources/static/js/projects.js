@@ -483,6 +483,37 @@ const fragment = document.createDocumentFragment();
 
 let pList = await getAllProjects();
 
+function template(a) {
+    const container = document.createElement('div');
+
+    for (let i = 0; i < a.length; i++) {
+        const projectElement = createProjectList(a[i]);
+        container.appendChild(projectElement);
+    }
+
+    return container.innerHTML;
+}
+
+$('#pagination-container').pagination({
+    dataSource: function (done) {
+        const projects = []
+
+        for (let i = pList.length - 1; i >= 0; i--) {
+            projects.push(pList[i]);
+        }
+
+        done(projects);
+    },
+    callback: function (data, pagination) {
+        // template method of yourself
+        var html = template(data);
+
+        $('#sort-container').html(html);
+    },
+    pageSize: 8, // Number of items per page
+    className: 'paginationjs-theme-blue paginationjs-big',
+});
+
 let departmentProjectId;
 
 if (loginUser.currentUser.role == "PMO" || loginUser.currentUser.role == "SDQC") {
@@ -671,14 +702,6 @@ function createProjectList(project) {
 
     return newProject;
 }
-
-for (let i = pList.length - 1; i >= 0; i--) {
-    let currentProject = pList[i];
-
-    fragment.appendChild(createProjectList(currentProject));
-}
-motherContainer.innerHTML = "";
-motherContainer.appendChild(fragment);
 
 const detailMoal = document.querySelector("#project-details");
 
@@ -1162,29 +1185,52 @@ if (loginUser.currentUser.role === "PROJECT_MANAGER") {
 const sortProjectByDepartment = await getData("/api/project/list/sort/by/department");
 
 document.getElementById("department-filter").addEventListener("change", function () {
-    const allDiv = motherContainer.children;
+    
     const selectedDepartmentId = this.value;
     console.log(sortProjectByDepartment);
     console.log(selectedDepartmentId);
     console.log(sortProjectByDepartment[parseInt(selectedDepartmentId)]);
+
+    let dpFilterResult = []
+
     if (sortProjectByDepartment.hasOwnProperty(parseInt(selectedDepartmentId))) {
-        for (let i = 0; i < allDiv.length; i++) {
+        for (let i = 0; i < pList.length; i++) {
             if (
                 sortProjectByDepartment[selectedDepartmentId].includes(
-                    parseInt(allDiv[i].id.split("-").pop())
+                    parseInt(pList[i].id)
                 )
             ) {
-                allDiv[i].style.display = "block";
-            } else {
-                allDiv[i].style.display = "none";
+                dpFilterResult.push(pList[i]);
             }
         }
+    } 
+
+    $('#pagination-container').pagination({
+        dataSource: function (done) {
+            const projects = []
+
+            for (let i = dpFilterResult.length - 1; i >= 0; i--) {
+                projects.push(dpFilterResult[i]);
+            }
+
+            done(projects);
+        },
+        callback: function (data, pagination) {
+            // template method of yourself
+            var html = template(data);
+
+            $('#sort-container').html(html);
+        },
+        pageSize: 8, // Number of items per page
+        className: 'paginationjs-theme-blue paginationjs-big',
+    });
+
+    if(dpFilterResult.length === 0) {
+        document.querySelector('#no-result').classList.remove('d-none')
     } else {
-        // If selected department has no projects, set all divs to display: none
-        for (let i = 0; i < allDiv.length; i++) {
-            allDiv[i].style.display = "none";
-        }
+        document.querySelector('#no-result').classList.add('d-none')
     }
+    
 });
 
 const monthFilter = document.querySelector("#month-filter");
@@ -1192,7 +1238,7 @@ const yearFilterSelect = document.getElementById("year-filter");
 
 document.querySelectorAll("select[action='filter']").forEach((a) =>
     a.addEventListener("input", function (e) {
-        const allData = document.getElementById("sort-container").children;
+
         const currentTime = monthFilter.value;
         const yearValue = parseInt(yearFilterSelect.value);
 
@@ -1205,28 +1251,67 @@ document.querySelectorAll("select[action='filter']").forEach((a) =>
             );
         });
 
-        for (let i = 0; i < allData.length; i++) {
-            console.log(allData[i]);
-            const divId = parseInt(allData[i].getAttribute("id").split("-").pop());
-
-            if (matchingProjects.some((project) => project.id === divId)) {
-                allData[i].style.display = "block";
-            } else {
-                allData[i].style.display = "none";
-            }
+        if (matchingProjects.length === 0) {
+            console.log('no result')
+            console.log(document.querySelector('#no-result'))
+            document.querySelector("#no-result").classList.remove("d-none")
+        } else {
+            console.log('some result')
+            document.querySelector('#no-result').classList.add('d-none')
         }
+                $('#pagination-container').pagination({
+                dataSource: async function (done) {
+                    const projects = []
+
+                    for (let i = matchingProjects.length - 1; i >= 0; i--) {
+                        projects.push(matchingProjects[i]);
+                    }
+
+                    done(projects);
+                },
+                callback: function (data, pagination) {
+                    // template method of yourself
+                    var html = template(data);
+
+                    $('#sort-container').html(html);
+                },
+                pageSize: 8, // Number of items per page
+                className: 'paginationjs-theme-blue paginationjs-big',
+            });
+        
+
+
+        console.log(matchingProjects)
     })
 );
 
 const currentYear = new Date().getFullYear();
 
 document.querySelector("#reset-btn").addEventListener("click", function (e) {
-    let allData = document.getElementById("sort-container").children;
 
-    for (let i = 0; i < allData.length; i++) {
-        allData[i].style.display = "block";
-    }
     monthFilter.value = MONTH_NAMES[0];
+
+    $('#pagination-container').pagination({
+        dataSource: function (done) {
+            const projects = []
+
+            for (let i = pList.length - 1; i >= 0; i--) {
+                projects.push(pList[i]);
+            }
+
+            done(projects);
+        },
+        callback: function (data, pagination) {
+            // template method of yourself
+            var html = template(data);
+
+            $('#sort-container').html(html);
+        },
+        pageSize: 8, // Number of items per page
+        className: 'paginationjs-theme-blue paginationjs-big',
+    });
+
+    document.querySelector('#no-result').classList.add('d-none')
 });
 
 console.log("error");
@@ -1302,6 +1387,7 @@ if (loginUser.currentUser.role === "PROJECT_MANAGER") {
                 console.log("showEmpList : ", showEmpList);
                 document.querySelector("#employee-list").setOptions(showEmpList);
                 console.log(empTagifyList);
+                console.log(showEmpList)
             }
         });
 }
@@ -1903,15 +1989,28 @@ $(document).ready(function () {
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: async function (data) {
-                        const newProject = createProjectList(data);
-                        motherContainer.insertBefore(
-                            newProject,
-                            motherContainer.childNodes[0]
-                        );
+                        $('#pagination-container').pagination('destroy');
+                        $('#pagination-container').pagination({
+                            dataSource: async function (done) {
+                                const projects = await getAllProjects();
+                                const reverseProject = [];
+
+                                for (let i = projects.length - 1; i >= 0; i--) {
+                                    reverseProject.push(projects[i]);
+                                }
+
+                                done(reverseProject);
+                            },
+                            callback: function (data, pagination) {
+                                var html = template(data);
+                                $('#sort-container').html(html);
+                            },
+                            pageSize: 8,
+                            className: 'paginationjs-theme-blue paginationjs-big',
+                        });
                         $("#alert-text").text("New Project Created Successfully...");
                         $("#alert-modal").modal("show");
                         $("#add-department-modal").modal("hide");
-
                     },
                     error: function (data) {
                         alert("Error registering project");
