@@ -1322,6 +1322,10 @@
     opacity: .8;
 }
 
+.delitype:hover ~ div .text-center {
+    transform: scale(1.2, 1.2);
+}
+
 .delitype:active {
     transform: scale(.7, 0.7);
 }
