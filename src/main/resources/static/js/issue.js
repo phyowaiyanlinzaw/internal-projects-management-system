@@ -625,11 +625,16 @@ $(document).ready(async function () {
                             $("#alert-modal").modal("show");
 
                             const title = $('#title').val('');
+                            const category= $('#issue_category').val('');
+                            const user_pic = $('#user_pic').val('');
+                            const responsible_party = $('#responsible_party').val('');
                             const description = descriptionEditor.root.innerHTML = '';
                             const place = $('#place').val('');
                             const impact = $('#impact').val('');
                             const root_cause = $('#root_cause').val('');
                             const direct_cause = $('#direct_cause').val('');
+
+
 
                             clearIssueValidationStylesAndMessages('#title');
                             clearIssueValidationStylesAndMessages('.quill-editor-bubble');
