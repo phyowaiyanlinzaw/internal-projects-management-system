@@ -20,6 +20,7 @@ import team.placeholder.internalprojectsmanagementsystem.model.project.Architect
 import team.placeholder.internalprojectsmanagementsystem.model.project.Deliverable;
 import team.placeholder.internalprojectsmanagementsystem.model.project.DeliverableType;
 import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
+import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.DevelopmentPhase;
 import team.placeholder.internalprojectsmanagementsystem.model.project.projectenums.TaskStatus;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.repository.project.DeliverableRepository;
@@ -430,6 +431,18 @@ public class ProjectController {
 
         return new ResponseEntity<>(architectureDtos, HttpStatus.OK);
         
+    }
+
+    @PutMapping("/update/{id}/phase")
+    public ResponseEntity<ProjectDto> updateProjectPhase(@PathVariable long id, @RequestBody Map<String, String> requestBody) {
+
+        Project project = projectRepository.getReferenceById(id);
+
+        project.setCurrent_phase(DevelopmentPhase.valueOf(requestBody.get("phase")));
+
+        projectRepository.save(project);
+
+        return ResponseEntity.ok(projectService.getProjectById(id));
     }
 
     @GetMapping("/architecturelist/{id}")

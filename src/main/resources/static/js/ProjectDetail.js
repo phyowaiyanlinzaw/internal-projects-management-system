@@ -606,3 +606,26 @@ archSearchBtn.addEventListener('input', function () {
     }
 
 })
+
+const changePhase = document.querySelector("#development-phase");
+
+changePhase.value = project.phase;
+
+changePhase.addEventListener("change", function () {
+    
+    $.ajax({
+        method: "PUT",
+        url: "/api/project/update/" + projectId.textContent + "/phase",
+        data: JSON.stringify({ phase: changePhase.value }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            console.log("Phase Updated Successfully...");
+        },
+        error: function (error) {
+            console.log("Error in Url : /api/client/save ", error);
+        },
+    });
+
+})

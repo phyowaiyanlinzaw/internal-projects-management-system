@@ -1100,7 +1100,6 @@ document
                     end_date: new Date(
                         document.querySelector("#end-date-in-edit").value
                     ).getTime(),
-                    current_phase: document.querySelector("#edit-project-phase").value,
                     objective: editObjectiveEditor.root.innerHTML,
                 };
 
