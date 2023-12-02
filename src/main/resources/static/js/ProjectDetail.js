@@ -94,8 +94,8 @@ projectDetail.addEventListener('show.bs.tab', async function (e) {
     });
     
     $('input[data-lol="deli"]').bootstrapToggle({
-        on: 'Yes',
-        off: "No",
+        on: 'ready',
+        off: "no",
         onStyle: 'success',
         size: 'sm'
     })
@@ -134,6 +134,7 @@ function createDeliverable(a) {
 
     const outerDiv = document.createElement("div");
     outerDiv.className = "d-flex";
+    outerDiv.classList.add('bg-light','rounded')
 
     if (currentUser.currentUser.role === 'PROJECT_MANAGER') {
         const delitype = document.createElement('div');
@@ -168,12 +169,12 @@ function createDeliverable(a) {
     }
 
     const innerDIv = document.createElement('div')
-    innerDIv.className = 'd-flex justify-content-between flex-grow-1 align-items-center px-5 '
+    innerDIv.className = 'd-flex justify-content-between align-items-center'
 
     // Create the inner div for the text
     const typeDiv = document.createElement("div");
     typeDiv.textContent = a.deliverableType.type;
-    typeDiv.classList.add('text-center', 'badge', 'bg-success', 'fw-bold')
+    typeDiv.classList.add('text-center', 'fw-bold', 'ms-3' ,'me-3', 'text-primary')
     innerDIv.appendChild(typeDiv);
 
     const inputDiv = document.createElement("div");
@@ -288,8 +289,8 @@ addDeliverableBtn.addEventListener('click', function () {
 
                 deliListContainer.appendChild(b);
                 $('input[data-lol="deli"]').bootstrapToggle({
-                    on: 'Yes',
-                    off: "No",
+                    on: 'ready',
+                    off: "no",
                     onStyle: 'success',
                     size: 'sm'
                 })
@@ -364,11 +365,11 @@ function createDeli(a) {
 function createArchitecture(a) {
 
     const outerDiv = document.createElement("div");
-    outerDiv.className = "d-flex";
+    outerDiv.className = "d-flex me-3 bg-light rounded";
 
     if (currentUser.currentUser.role === 'PROJECT_MANAGER') {
         const delitype = document.createElement('div');
-        delitype.className = 'delitype'
+        delitype.className = 'delitype bg-light '
         delitype.innerHTML = `<i class="fa-solid  p-2 bg-danger text-white rounded fa-xmark" title="delete" style="cursor:pointer;"></i>`
 
         outerDiv.appendChild(delitype)
@@ -403,14 +404,10 @@ function createArchitecture(a) {
     const innerDIv = document.createElement('div')
     innerDIv.className = 'd-flex justify-content-between flex-grow-1 align-items-center'
 
-    if (currentUser.currentUser.role === 'PROJECT_MANAGER') {
-        innerDIv.classList.add('px-5')
-    }
-
     // Create the inner div for the text
     const typeDiv = document.createElement("div");
     typeDiv.textContent = a.tech_name;
-    typeDiv.classList.add('text-center', 'badge', 'bg-success', 'fw-bold')
+    typeDiv.classList.add('text-center', 'fw-bold', 'text-primary', 'ms-3')
     innerDIv.appendChild(typeDiv);
 
     outerDiv.appendChild(innerDIv)
