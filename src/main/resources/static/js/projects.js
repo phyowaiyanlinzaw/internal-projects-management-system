@@ -1369,6 +1369,31 @@ empTagifyList = VirtualSelect.init({
 });
 
 if (loginUser.currentUser.role === "PROJECT_MANAGER") {
+
+    $("#start_date").datepicker({
+        dateFormat: 'yy-mm-dd',
+        beforeShowDay: $.datepicker.noWeekends,
+        onSelect: function (dateText, inst) {
+
+            const projectDruation = document.querySelector("#project-add-duration").value;
+
+            const startDate = $('#start_date').val();
+
+            const projectEndDate = document.querySelector("#project-add-end-date");
+
+            console.log(new Date(this.value))
+
+            const endDate = calculateEndDate(
+                new Date(startDate).getTime(),
+                projectDruation
+            );
+
+            projectEndDate.value = formatDateFromMilliseconds(endDate.getTime());
+            
+        }
+
+    });
+
     document
         .querySelector("#add-department-modal")
         .addEventListener("show.bs.modal", async function () {
@@ -1397,10 +1422,12 @@ if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO
 }
 
 $(document).ready(function () {
-    document.querySelector("#start_date").addEventListener("change", function () {
+    document.querySelector("#start_date").addEventListener("input", function () {
         const projectDruation = document.querySelector("#project-add-duration").value;
 
         const projectEndDate = document.querySelector("#project-add-end-date");
+
+        console.log(new Date(this.value))
 
         const endDate = calculateEndDate(
             new Date(this.value).getTime(),
