@@ -48,8 +48,7 @@ class ViewControllerTest {
     @InjectMocks
     private ViewController viewController;
 
-    @Autowired
-    private MockMvc mockMvc;
+
 
 
 
