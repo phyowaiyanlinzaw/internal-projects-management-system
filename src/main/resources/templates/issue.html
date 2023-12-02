@@ -81,8 +81,6 @@
                         <div class="d-inline-block" >
                             <select id="status-filter" class="form-control">
                                 <option value="" selected disabled>Status</option>
-                                <option value="PENDING">PENDING</option>
-                                <option value="APPROVE">APPROVE</option>
                                 <option value="DECLINE">DECLINE</option>
                                 <option value="DUPLICATE">DUPLICATE</option>
                             </select>
@@ -843,8 +841,6 @@
 
             const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
 
-            console.log("unsolved issue list",unsolvedIssueList)
-
             for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
                 unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
@@ -1407,11 +1403,13 @@
 
                     <div class="d-flex justify-content-between gap-2">
                         <div>
+                            ${issue.status === 'DECLINE' ? '<span class="badge bg-danger">Declined</span>' : ''}
                             ${issue.status === 'DUPLICATE' ? '<span class="badge bg-warning">Duplicate</span>' : ''}
                             <span class="badge bg-success">${issue.issueCategory}</span>
                             <span class="badge bg-primary bg-${issue.solved === true ? 'danger' : 'primary'}">
                                 ${issue.solved === true ? 'Closed' : 'Open'}
                             </span>
+                            
                         </div>
                         ${getLoginUser.currentUser.id === issue.user_pic.id ?
                         `<button type="button" class="btn btn-info see-more-button text-white" data-id="${issue.id}">` +
@@ -1478,8 +1476,6 @@
                     },
                     theme: "snow",
                 });
-
-                console.log(issue.description)
 
                 quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                 quill.enable(false);
@@ -1702,7 +1698,6 @@
                 dataType: 'json',
                 success: function (data) {
                     const sortContainer = document.querySelector('#sort-container');
-                    console.log('all issue data', data)
                     for(let i = data.length - 1; i >= 0; i--) {
                         const issueDiv = createIssueCard(data[i]);
                         sortContainer.appendChild(issueDiv)
@@ -2272,8 +2267,6 @@
     });
 
     var userRole = getLoginUser.currentUser.role;
-
-    console.log("UserRole ",userRole);
 
     // Check if the user role is not equal to "Project-Manager"
     if (userRole !== "PROJECT_MANAGER") {
