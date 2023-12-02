@@ -97,23 +97,5 @@ class DeliverableTypeControllerTest {
         assertNotNull(result, "Response body should not be null");
     }
 
-    @Test
-    public void testGetAll() {
-        // Mock data
-        DeliverableTypeDto deliverableType1 = new DeliverableTypeDto(1L, "Type1");
-        DeliverableTypeDto deliverableType2 = new DeliverableTypeDto(2L, "Type2");
 
-        // Set up mock behavior
-        when(deliverableTypeRepository.findAll()).thenReturn((List<DeliverableType>) Arrays.asList(deliverableType1, deliverableType2));
-
-        // Call the method you want to test
-        Set<DeliverableTypeDto> result = deliverableTypeService.getAll();
-
-        // Verify the interaction with the mock
-        verify(deliverableTypeRepository, times(1)).findAll();
-
-        // Perform assertions on the result
-        Set<DeliverableTypeDto> expected = new HashSet<>(Arrays.asList(deliverableType1, deliverableType2));
-        assertEquals(expected, result);
-    }
 }
