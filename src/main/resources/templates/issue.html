@@ -78,33 +78,37 @@
                     </button>
 
                     <div class="d-inline-block">
-                        <div class="d-inline-block">
+                        <div class="d-inline-block" >
                             <select id="status-filter" class="form-control">
                                 <option value="" selected disabled>Status</option>
-                                <option value="PENDING">PENDING</option>
-                                <option value="APPROVE">APPROVE</option>
                                 <option value="DECLINE">DECLINE</option>
                                 <option value="DUPLICATE">DUPLICATE</option>
                             </select>
                         </div>
-                        <div class="d-inline-block">
+                        <div class="d-inline-block" id="solved-filter-container">
                             <select id="solved-filter" class="form-control">
                                 <option value="" selected disabled>Choose</option>
                                 <option value="1">Solved</option>
                                 <option value="0">Unsolved</option>
                             </select>
                         </div>
+
+
                         <div class="d-inline-block">
                             <select id="category-filter" class="form-control">
                                 <option value="" selected disabled>Category</option>
-                                <option value="ERROR">ERROR</option>
-                                <option value="BUG">BUG</option>
-                                <option value="COMMUNICATION">COMMUNICATION</option>
-                                <option value="TECHNICAL">TECHNICAL</option>
-                                <option value="BUDGET">BUDGET</option>
-                                <option value="DESIGN">DESIGN</option>
-                                <option value="TESTING">TESTING</option>
-                                <option value="OTHER">OTHER</option>
+                                <option value="" disabled selected>Select Issue Category</option>
+                                <option value="ERROR">Error</option>
+                                <option value="BUG">Bug</option>
+                                <option value="COMMUNICATION">Communication</option>
+                                <option value="TECHNICAL">Technical</option>
+                                <option value="BUDGET">Budget</option>
+                                <option value="DESIGN">Design</option>
+                                <option value="TESTING">Testing</option>
+                                <option value="SCHEDULE_DELAYS">Schedule Delays</option>
+                                <option value="DOCUMENTATION">Documentation</option>
+                                <option value="SECURITY">Security</option>
+                                <option value="OTHER">Other</option>
                             </select>
                         </div>
                         
@@ -651,12 +655,12 @@
                                     <h3 >Solution</h3>
                                 </div>
                             </div>
-                            <div class="col mb-3 mt-4">
+                            <div class="col mb-3 mt-4 text-wrap">
                                 <div>
                                     <i class="fa-solid fa-screwdriver-wrench text-success"></i>
                                     <span>Corrective Action</span>
                                 </div>
-                                <p class="mt-3" id="correctiveDetails"></p>
+                                <div class="mt-3 " style="word-wrap: break-word;  " id="correctiveDetails"></div>
 
                             </div>
                             <hr>
@@ -665,7 +669,7 @@
                                     <i class="fa-solid fa-shield text-success"></i>
                                     <span>Preventive Action</span>
                                 </div>
-                                <p class="mt-3" id="preventiveDetails"></p>
+                                <p class="mt-3" style="word-wrap: break-word;  " id="preventiveDetails"></p>
 
                             </div>
                         </div>
@@ -829,13 +833,13 @@
 
         document.querySelector("button[data-bs-target=\"#unsolved-issues\"]").addEventListener("show.bs.tab", async function (e) {
 
+            document.querySelector('#sort-container').innerHTML = ''
+
             const unsolvedIssueListContainer = document.querySelector("#unsolved-issues-container")
 
             unsolvedIssueListContainer.innerHTML = ''
 
             const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
-
-            console.log("unsolved issue list",unsolvedIssueList)
 
             for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
 
@@ -1359,17 +1363,6 @@
 
                         $("#add-issue").modal("hide")
 
-                        // $('#title').val('');
-                        // $('#description').val('');
-                        // $('#place').val('');
-                        // $('#impact').val('');
-                        // $('#root_cause').val('');
-                        // $('#direct_cause').val('');
-                        // $('#responsible_party').val('');
-                        // $('#issue_category').val('');
-                        // $('#user_pic').val('');
-                        // $('#responsible_type').val('');
-
 
 
 
@@ -1410,11 +1403,13 @@
 
                     <div class="d-flex justify-content-between gap-2">
                         <div>
+                            ${issue.status === 'DECLINE' ? '<span class="badge bg-danger">Declined</span>' : ''}
                             ${issue.status === 'DUPLICATE' ? '<span class="badge bg-warning">Duplicate</span>' : ''}
                             <span class="badge bg-success">${issue.issueCategory}</span>
                             <span class="badge bg-primary bg-${issue.solved === true ? 'danger' : 'primary'}">
                                 ${issue.solved === true ? 'Closed' : 'Open'}
                             </span>
+                            
                         </div>
                         ${getLoginUser.currentUser.id === issue.user_pic.id ?
                         `<button type="button" class="btn btn-info see-more-button text-white" data-id="${issue.id}">` +
@@ -1482,8 +1477,6 @@
                     theme: "snow",
                 });
 
-                console.log(issue.description)
-
                 quill.clipboard.dangerouslyPasteHTML(0, issue.description);
                 quill.enable(false);
             }
@@ -1519,12 +1512,7 @@
                         title: issue.title,
                         issue_category: issue.issueCategory,
                         project_name: issue.projectDto.name,
-                        // place: issue.place,
-                        // impact: issue.impact,
-                        // root_cause: issue.root_cause,
-                        // direct_cause: issue.direct_cause,
-                        // corrective_action: issue.corrective_action,
-                        // preventive_action: issue.preventive_action,
+
                         responsible_party: issue.responsible_party.name,
                         user_pic: issue.user_pic.name,
                         status: issue.status,
@@ -1710,7 +1698,6 @@
                 dataType: 'json',
                 success: function (data) {
                     const sortContainer = document.querySelector('#sort-container');
-                    console.log('all issue data', data)
                     for(let i = data.length - 1; i >= 0; i--) {
                         const issueDiv = createIssueCard(data[i]);
                         sortContainer.appendChild(issueDiv)
@@ -2279,9 +2266,19 @@
         filterIssues();
     });
 
-    $("#solved-filter").on("change", function () {
-        filterSolvedIssues();
-    });
+    var userRole = getLoginUser.currentUser.role;
+
+    // Check if the user role is not equal to "Project-Manager"
+    if (userRole !== "PROJECT_MANAGER") {
+        // Hide the status filter container
+        $("#solved-filter-container").hide();
+    }
+
+
+        $("#solved-filter").on("change", function () {
+            filterSolvedIssues();
+        });
+
 
     $("#category-filter").on("change", function () {
         filterCategory();
