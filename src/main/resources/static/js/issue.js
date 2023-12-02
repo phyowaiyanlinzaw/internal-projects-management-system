@@ -565,6 +565,11 @@ $(document).ready(async function () {
             validateUserPic();
         });
 
+        function clearIssueValidationStylesAndMessages(fieldSelector) {
+            $(fieldSelector).removeClass("is-valid is-invalid");
+            $(fieldSelector).siblings(".error-container").remove();
+        }
+
         if (dataForIssue !== null) {
             //for add issue
             $('#addIssue').on('click', async function () {
@@ -608,27 +613,36 @@ $(document).ready(async function () {
                 };
 
                 $.ajax({
-                    url: '/api/issue/save',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(requestData),
-                    dataType: 'json',
-                    success: function (data) {
-                        $("#alert-text").text(
-                            "Issue Created Successfully"
-                        );
-                        $("#alert-modal").modal("show");
+                        url: '/api/issue/save',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(requestData),
+                        dataType: 'json',
+                        success: function (data) {
+                            $("#alert-text").text(
+                                "Issue Created Successfully"
+                            );
+                            $("#alert-modal").modal("show");
 
-                        const title = $('#title').val('');
-                        const description = descriptionEditor.root.innerHTML = '';
-                        const place = $('#place').val('');
-                        const impact = $('#impact').val('');
-                        const root_cause = $('#root_cause').val('');
-                        const direct_cause = $('#direct_cause').val('');
+                            const title = $('#title').val('');
+                            const description = descriptionEditor.root.innerHTML = '';
+                            const place = $('#place').val('');
+                            const impact = $('#impact').val('');
+                            const root_cause = $('#root_cause').val('');
+                            const direct_cause = $('#direct_cause').val('');
 
-                        $("#add-issue").modal("hide")
+                            clearIssueValidationStylesAndMessages('#title');
+                            clearIssueValidationStylesAndMessages('.quill-editor-bubble');
+                            clearIssueValidationStylesAndMessages('#place');
+                            clearIssueValidationStylesAndMessages('#impact');
+                            clearIssueValidationStylesAndMessages('#root_cause');
+                            clearIssueValidationStylesAndMessages('#direct_cause');
+                            clearIssueValidationStylesAndMessages('#issue_category');
+                            clearIssueValidationStylesAndMessages('#responsible_party');
+                            clearIssueValidationStylesAndMessages('#user_pic');
 
 
+                            $("#add-issue").modal("hide")
 
 
                     },

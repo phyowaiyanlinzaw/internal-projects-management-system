@@ -382,6 +382,11 @@ $("#client-phone").on("input", function () {
     ValidateClient.validatePhone();
 });
 
+function clearClientValidationStylesAndMessages(fieldSelector) {
+    $(fieldSelector).removeClass("is-valid is-invalid");
+    $(fieldSelector).siblings(".error-container").remove();
+}
+
 document.querySelector("#client-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -430,7 +435,13 @@ document.querySelector("#client-form").addEventListener("submit", function (e) {
                     $("#alert-text").text(
                         "Client updated successfully"
                     );
+
+
+                    clearClientValidationStylesAndMessages("#client-name");
+                    clearClientValidationStylesAndMessages("#client-email");
+                    clearClientValidationStylesAndMessages("#client-phone");
                     $("#alert-modal").modal("show");
+
 
                 },
                 error: function (error) {
