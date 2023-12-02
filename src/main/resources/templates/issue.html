@@ -1302,6 +1302,12 @@
                 validateUserPic();
             });
 
+
+            function clearIssueValidationStylesAndMessages(fieldSelector) {
+                $(fieldSelector).removeClass("is-valid is-invalid");
+                $(fieldSelector).siblings(".error-container").remove();
+            }
+
             if(dataForIssue !== null) {
             //for add issue
             $('#addIssue').on('click', async function () {
@@ -1317,13 +1323,13 @@
                 const selectedUserId = $('#user_pic').val();
                 const issueId = $('#issue-edit-btn').data('issueId');
 
+                const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
+                const uploaderId = getLoginUser.currentUser.id;
+
                 if (!validateIssue()) {
                     showerror('Please fill in all the required fields.');
                     return;
                 }
-
-                const selectedResponsibleParty = parseInt(responsible_party.split("_")[1])
-                const uploaderId = getLoginUser.currentUser.id;
 
                 const requestData = {
                     title: title,
@@ -1362,6 +1368,17 @@
                         const impact = $('#impact').val('');
                         const root_cause = $('#root_cause').val('');
                         const direct_cause = $('#direct_cause').val('');
+
+                        clearIssueValidationStylesAndMessages('#title');
+                        clearIssueValidationStylesAndMessages('.quill-editor-bubble');
+                        clearIssueValidationStylesAndMessages('#place');
+                        clearIssueValidationStylesAndMessages('#impact');
+                        clearIssueValidationStylesAndMessages('#root_cause');
+                        clearIssueValidationStylesAndMessages('#direct_cause');
+                        clearIssueValidationStylesAndMessages('#issue_category');
+                        clearIssueValidationStylesAndMessages('#responsible_party');
+                        clearIssueValidationStylesAndMessages('#user_pic');
+
 
                         $("#add-issue").modal("hide")
 
@@ -2269,15 +2286,6 @@
         filterIssues();
     });
 
-    var userRole = getLoginUser.currentUser.role;
-
-    console.log("UserRole ",userRole);
-
-    // Check if the user role is not equal to "Project-Manager"
-    if (userRole !== "PROJECT_MANAGER") {
-        // Hide the status filter container
-        $("#solved-filter-container").hide();
-    }
 
 
         $("#solved-filter").on("change", function () {

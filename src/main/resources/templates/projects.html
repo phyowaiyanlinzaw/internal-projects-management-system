@@ -89,6 +89,14 @@
             .invalid-feedback {
                 color: red;
             }
+
+            .valid-border {
+                border: 1px solid #28a745 !important; /* Green border color for valid state */
+            }
+
+            .invalid-border {
+                border: 1px solid #dc3545 !important; /* Red border color for invalid state */
+            }
         </style>
         <script src="/js/fontawesome.js" defer></script>
 
@@ -354,6 +362,8 @@
             // Validation For Client
 
             let validatedForm = false;
+
+
             function validateName() {
                 const name = $("#client-name").val();
                 const errorContainer = $("#client-name").siblings(".error-container");
@@ -374,6 +384,7 @@
                     $("#client-name").removeClass("is-valid");
                 } else {
                     validatedForm = true;
+
                     errorContainer.remove();
                     $("#client-name").addClass("is-valid");
                     $("#client-name").removeClass("is-invalid");
@@ -416,6 +427,7 @@
                 const isValidPhone = /^[0-9]{11}$/.test(phone);
                 if (!isValidPhone) {
                     validatedForm = false;
+
                     if (errorContainer.length === 0) {
                         let p = $("<p>")
                             .addClass("text-danger fs-6")
@@ -431,6 +443,7 @@
                     $("#client-phone").removeClass("is-valid");
                 } else {
                     validatedForm = true;
+
                     errorContainer.remove();
                     $("#client-phone").addClass("is-valid");
                     $("#client-phone").removeClass("is-invalid");
@@ -440,7 +453,12 @@
                 validateName();
                 validateEmail();
                 validatePhone();
-                return validatedForm;
+               return validatedForm;
+            }
+
+            function clearValidationStylesAndMessages(fieldSelector) {
+                $(fieldSelector).removeClass("is-valid is-invalid");
+                $(fieldSelector).siblings(".error-container").remove();
             }
 
             $("#client-name").on("input", function () {
@@ -503,6 +521,9 @@
                                     "Client updated successfully"
                                 );
                                 $("#alert-modal").modal("show");
+                                clearValidationStylesAndMessages("#client-name");
+                                clearValidationStylesAndMessages("#client-email");
+                                clearValidationStylesAndMessages("#client-phone");
 
                             },
                             error: function (error) {
@@ -1540,24 +1561,23 @@
 
                         } else {
                             validatedProjectForm = false;
-                            // Update the error message if the container already exists
+
                             errorContainer.removeClass("d-none");
-                             // errorContainer.find(".error-message").text("Employee list is required");
+                            errorContainer.find(".error-message").text("Employee list is required");
+
                         }
 
-                        // You can also add styling or other actions for the invalid state
-                        // $("#employee-list").css("border", "1px solid #dc3545"); // Red border color for invalid state
+
                     } else {
 
                         validatedProjectForm = true;
-                        // Employee list is not empt
                         if (errorContainer.length > 0) {
                             // Hide the error container if it exists
                             errorContainer.addClass("d-none");
                         }
 
                         // You can add styling or other actions for the valid state
-                         $("#employee-list").css("border", "1px solid #28a745"); // Green border color for valid state
+                        $("#employee-list").addClass("valid-border").removeClass("invalid-border");
                     }
 
                     console.log("Employee list validation: ", empToAddProject);
@@ -1643,7 +1663,7 @@
                             errorContainer.find(".error-message").text("System Outlines is required");
                         }
 
-                        $("#systemOutlines").css("border", "1px solid #dc3545"); // Red border color for invalid state
+                        $("#systemOutlines").addClass("invalid-border").removeClass("valid-border");
                     } else {
                         validatedProjectForm = true;
 
@@ -1652,7 +1672,7 @@
                             errorContainer.addClass("d-none");
                         }
 
-                        $("#systemOutlines").css("border", "1px solid #28a745"); // Green border color for valid state
+                        $("#systemOutlines").addClass("valid-border").removeClass("invalid-border");
                     }
 
                     console.log("project system outline validation: ", validatedProjectForm);
@@ -1817,8 +1837,6 @@
 
                 function validateProject() {
 
-                    validatedProjectForm = true;
-
                     validateProjectName();
                     validateProjectClient();
                     validateProjectEmployee();
@@ -1830,6 +1848,12 @@
                     return validatedProjectForm;
                 }
 
+                function clearProjectValidationStylesAndMessages(fieldSelector) {
+                    $(fieldSelector).removeClass("is-valid is-invalid");
+                    $(fieldSelector).removeClass("valid-border invalid-border");
+                    $(fieldSelector).siblings(".error-container").remove();
+                }
+
                 $("#project-add-btn").on("click", function (event) {
 
 
@@ -1837,11 +1861,11 @@
                     console.log("submitted");
                     event.preventDefault();
 
-
-                    if(!validateProject()){
-                        return;
-
-                    };
+                    //
+                    // if(!validateProject()){
+                    //     return;
+                    //
+                    // };
 
 
                     const projectName = $("#name").val();
@@ -1994,6 +2018,10 @@
                         })),
                     };
 
+                    if(!validateProject()) {
+                        return;
+                    }
+
                     console.log(project);
                     Swal.fire({
                         title: "Are you sure want to add?",
@@ -2015,10 +2043,34 @@
                                     motherContainer.insertBefore(
                                         newProject,
                                         motherContainer.childNodes[0]
-                                    );
+                                    )
+
+
                                     $("#alert-text").text("New Project Created Successfully...");
                                     $("#alert-modal").modal("show");
-                                    $("#add-department-modal").modal("hide");
+
+                                    $('#name, #client, #start_date, #project-add-duration, #background, #architectures, #systemOutlines, #deliverable,#objective, #employee-list, #end_date')
+                                        .val('')
+                                        .prop('selectedIndex', 0);
+                                    $("#architectures").val('');
+                                    $("#systemOutlines").val('');
+                                    $("#deliverable").val('');
+                                    $("#objective").val('');
+                                    $("#employee-list").val('');
+
+
+                                    clearProjectValidationStylesAndMessages("#name");
+                                    clearProjectValidationStylesAndMessages("#client");
+                                    clearProjectValidationStylesAndMessages("#start_date");
+                                    clearProjectValidationStylesAndMessages("#project-add-duration");
+                                    clearProjectValidationStylesAndMessages("#background");
+                                    clearProjectValidationStylesAndMessages("#architectures");
+                                    clearProjectValidationStylesAndMessages("#systemOutlines");
+                                    clearProjectValidationStylesAndMessages("#deliverable");
+                                    clearProjectValidationStylesAndMessages("#objective");
+
+
+
 
                                 },
                                 error: function (data) {
@@ -2029,6 +2081,7 @@
                     });
                 });
             });
+
 
             let myOptions = [
                 {
@@ -2694,7 +2747,7 @@
                                     <div class="col-lg-6">
                                         <label for="employee-list" class="col-sm-12 col-form-label" name="employee-list">
                                             Choose employee
-                                            <span style="color: red"> *</span>
+
                                         </label>
                                         <div id="employee-list"></div>
 
