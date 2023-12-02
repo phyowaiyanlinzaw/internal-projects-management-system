@@ -93,7 +93,6 @@
                         <div class="d-inline-block">
                             <select id="category-filter" class="form-control">
                                 <option value="" selected disabled>Category</option>
-                                <option value="" disabled selected>Select Issue Category</option>
                                 <option value="ERROR">Error</option>
                                 <option value="BUG">Bug</option>
                                 <option value="COMMUNICATION">Communication</option>
@@ -199,8 +198,8 @@
                         <div class="d-flex flex-column gap-2" id="sort-container"></div>
                         <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-result">
                             <div class="d-flex justify-content-center align-items-center flex-column">
-                                <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
-                                <h1 class="text-white">No Issue Found!</h1>
+                                <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                                <h1 class="text-dark">No Issue Found!</h1>
                             </div>
                         </div>
                     </div>
@@ -295,8 +294,8 @@
                         </div>
                         <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-new-issue">
                             <div class="d-flex justify-content-center align-items-center flex-column">
-                                <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
-                                <h1 class="text-white">No New Issue</h1>
+                                <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                                <h1 class="text-dark">No New Issue</h1>
                             </div>
                         </div>
                     </div>
@@ -703,6 +702,37 @@
 
 <script type="module">
 
+    $("#table").bootstrapTable()
+
+    // Function to load data into the Bootstrap Table
+    function loadTable() {
+        $.ajax({
+            url: '/api/issue/list',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                data.forEach(function (issue) {
+                    const formattedCreatedDate = formatDate(issue.created_date);
+                    const formattedSolvedStatus = issue.solved ? 'Solved' : 'Unsolved';
+
+                    $('#table').bootstrapTable('append', {
+                        id: issue.id,
+                        title: issue.title,
+                        issue_category: issue.issueCategory,
+                        project_name: issue.projectDto.name,
+                        place : issue.place,
+                        responsible_party: issue.responsible_party.name,
+                        user_pic: issue.user_pic.name,
+                        status: issue.status,
+                        solved: formattedSolvedStatus,
+                        created_date: formattedCreatedDate,
+                    });
+                });
+            }
+        });
+    }
+
+    loadTable()
 
     $(document).ready(function () {
         setupLogoutConfirmation();
@@ -1485,35 +1515,8 @@
 
     }
 
-    $("#table").bootstrapTable()
-    // Function to load data into the Bootstrap Table
-    function loadTable() {
-        $.ajax({
-            url: '/api/issue/list',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                data.forEach(function (issue) {
-                    const formattedCreatedDate = formatDate(issue.created_date);
 
-                    $('#table').bootstrapTable('append', {
-                        id: issue.id,
-                        title: issue.title,
-                        issue_category: issue.issueCategory,
-                        project_name: issue.projectDto.name,
-                        place : issue.place,
-                        responsible_party: issue.responsible_party.name,
-                        user_pic: issue.user_pic.name,
-                        status: issue.status,
-                        solved: issue.solved,
-                        created_date: formattedCreatedDate,
-                    });
-                });
-            }
-        });
-    }
 
-    loadTable()
 
     const exportDropdown = document.getElementById("exportSelect");
 
