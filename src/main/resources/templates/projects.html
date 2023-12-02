@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Internal Project Management</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta
+    <head>
+        <meta charset="UTF-8" />
+        <title>
+            Internal Project Management</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta
             name="keywords"
             content="project, management, project management, teamplaceholder project management"
     />
     <meta content name="description"/>
     <meta name="author" content="teamplaceholder's project"/>
 
-    <!-- Favicon -->
-    <!-- <link href="/images/favicon.ico" rel="icon"> -->
+        <link rel="icon" href="/images/dat.png" type="image/x-icon">
+
+        <!-- Favicon -->
+        <!-- <link href="/images/favicon.ico" rel="icon"> -->
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -40,76 +43,84 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/bootstrap-table.min.css"
     />
 
-    <link
+        <link
             href="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/css/bootstrap5-toggle.min.css"
             rel="stylesheet"
-    />
-    <!-- Template Stylesheet -->
-    <link href="/css/style.css" rel="stylesheet"/>
+        />
+        <!-- Template Stylesheet -->
+        <link href="/css/style.css" rel="stylesheet" />
 
-    <link
+        <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.css"
-    />
-    <link href="/css/virtual-select/virtual-select.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+        />
+        <link href="/css/virtual-select/virtual-select.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
 
-    <link
+        <link
             href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"
             rel="stylesheet"
-    />
-    <script
+        />
+        <script
             src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"
             defer
-    ></script>
-    <link
+        ></script>
+        <link
             href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css"
             rel="stylesheet"
-    />
-    <style>
-        #deliverable-list table {
-            width: 30%;
-            border: 1px solid #369; /* Add border to the table */
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        />
+        <style>
+            #deliverable-list table {
+                width: 30%;
+                border: 1px solid #369; /* Add border to the table */
+                border-collapse: collapse;
+                margin-bottom: 20px;
+                text-align: center;
+            }
 
-        #deliverable-list th,
-        #deliverable-list td {
-            border: 1px solid #369;
-            padding: 8px;
-            text-align: center;
-        }
+            #deliverable-list th,
+            #deliverable-list td {
+                border: 1px solid #369;
+                padding: 8px;
+                text-align: center;
+            }
 
-        #deliverable-list th {
-            background-color: #6ea8fe;
-        }
+            #deliverable-list th {
+                background-color: #6ea8fe;
+            }
 
-        .invalid-feedback {
-            color: red;
-        }
-    </style>
-    <script src="/js/fontawesome.js" defer></script>
+            .invalid-feedback {
+                color: red;
+            }
 
-    <!-- jquery -->
-    <script src="/js/jquery.3.7.1.min.js" defer></script>
+            .valid-border {
+                border: 1px solid #28a745 !important; /* Green border color for valid state */
+            }
 
-    <!-- datable table -->
-    <script src="/js/databales.min.js" defer></script>
-    <script src="/js/logout-modal.js" defer></script>
+            .invalid-border {
+                border: 1px solid #dc3545 !important; /* Red border color for invalid state */
+            }
+        </style>
+        <script src="/js/fontawesome.js" defer></script>
 
-    <!-- bootstrap -->
-    <script src="/js/bootstrap.bundle.min.js" defer></script>
-    <script src="/lib/quill/quill.min.js" defer></script>
-    <script src="/js/virtual-select/virtual-select.min.js" defer></script>
+        <!-- jquery -->
+        <script src="/js/jquery.3.7.1.min.js" defer></script>
 
-    <!-- Template Javascript -->
-    <script src="/js/main.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
-    <script
+        <!-- datable table -->
+        <script src="/js/databales.min.js" defer></script>
+        <script src="/js/logout-modal.js" defer></script>
+
+        <!-- bootstrap -->
+        <script src="/js/bootstrap.bundle.min.js" defer></script>
+        <script src="/lib/quill/quill.min.js" defer></script>
+        <script src="/js/virtual-select/virtual-select.min.js" defer></script>
+
+        <!-- Template Javascript -->
+        <script src="/js/main.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+        <script
             src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.2.0/tagify.min.js"
             defer
         ></script>
@@ -117,7 +128,7 @@
         <script src="/js/getDataForProject.js" type="module" async></script>
         <!--        <script src="/js/currentLoginUser.js" type="module" async></script>-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css" integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js" integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js" integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
         <script
             defer
             src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@3.7.4/js/bootstrap5-toggle.min.js"
@@ -192,7 +203,7 @@
                             id="reset-btn"
                             style="color: #ffffff !important"
                         >
-                            Reset
+                            reset
                         </button>
                         <div class="d-inline-block">
                             <select id="month-filter" class="form-control" action="filter">
@@ -203,7 +214,7 @@
                                 <option value="May">May</option>
                                 <option value="June">June</option>
                                 <option value="July">July</option>
-                                <option value="August">August</option>
+                                <option value="Auguest">Auguest</option>
                                 <option value="September">September</option>
                                 <option value="October">October</option>
                                 <option value="November">November</option>
@@ -235,8 +246,7 @@
                             <input
                                 class="form-control border-0"
                                 type="search"
-                                placeholder="&#xF002; Search Project"
-                                style="font-family:Arial, FontAwesome"
+                                placeholder="Search project "
                             />
                         </form>
                         <!-- modal toggle button start -->
@@ -253,7 +263,7 @@
 
                         <!-- add department modal end -->
                         <!-- sortting button -->
-                        <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
+
                         </div>
                         <!-- Modal -->
                     </div>
@@ -299,7 +309,7 @@
                             id="sort-container">
                             <div class="loader"></div>
                         </div>
-
+                        
 
                         <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-result">
                             <div class="d-flex justify-content-center align-items-center flex-column">
@@ -405,7 +415,7 @@
                                             >Start Date<span style="color: red"> *</span></label
                                         >
                                         <input
-                                            type="date"
+                                            type="text"
                                             class="form-control border-task-description"
                                             id="start_date"
                                             name="start_date"
@@ -465,10 +475,10 @@
                                     <!--                                architectures add-->
                                     <div class="col-lg-6">
                                         <label
-                                                for="architectures"
-                                                class="col-sm-12 col-form-label"
-                                                name="architectures"
-                                        >Architecture<span style="color: red"> *</span></label
+                                            for="architectures"
+                                            class="col-sm-12 col-form-label"
+                                            name="architectures"
+                                            >Architecture<span style="color: red"> *</span></label
                                         >
                                         <input
                                             type="text"
@@ -489,7 +499,6 @@
                                         </div>
                                     </div>
 
-                                    <!--                                systemoutline add-->
                                     <div class="col-lg-6">
                                         <label
                                             for="systemOutlines"
@@ -511,6 +520,7 @@
                                         </label>
                                         <div id="employee-list"></div>
                                     </div>
+
 
                                     <!--                                deliverable add-->
                                     <div class="col-lg-6">
@@ -718,6 +728,7 @@
                                 >
                                     Edit
                                 </button>
+
                             </li>
                             <li class="nav-item">
                                 <button
@@ -734,31 +745,33 @@
                                 class="tab-pane fade show active profile-overview"
                                 id="project-overview"
                             >
+
+                                <div><h4  class="title">Overview Detail</h4></div>
                                 <div class="row row-cols-1 gap-2 p-3">
                                     <div class="row row-cols-2" id="detail-view">
                                         <div class="row row-cols-1 gap-2">
                                             <div class="">
-                                                <div class="col fs-6 fw-bold" style="color: #369;">
-                                                    <i class="fa-solid fa-building-user"></i>: Department Name</div>
+                                                <div class="col fs-6 fw-bold">
+                                                    <i class="fa-solid fa-building-user"></i>Department</div>
                                                 <div class="col" id="project-department-name">
                                                     dance club
                                                 </div>
                                             </div>
                                             <div class="">
-                                                <div class="col fs-6 fw-bold" style="color: #369">
-                                                    <i class="fa-solid fa-file"></i>: Project Name</div>
+                                                <div class="col fs-6 fw-bold">
+                                                    <i class="fa-solid fa-clipboard"></i>Project name</div>
                                                 <div class="col" id="project-name">find nemo</div>
                                             </div>
                                             <div class="">
-                                                <div class="col fs-6 fw-bold" style="color: #369">
-                                                    <i class="fa-solid fa-business-time"></i>: Duration</div>
+                                                <div class="col fs-6 fw-bold">
+                                                    <i class="fa-solid fa-business-time"></i>Duration</div>
                                                 <div class="col" id="project-duration">
                                                     3 Months
                                                 </div>
                                             </div>
-                                             <div class="optional-view" style="color: #369">
+                                             <div class="optional-view">
                                                 <div class="col fs-6 fw-bold">
-                                                    <i class="fa-solid fa-registered"></i>: Internal review</div>
+                                                    <i class="fa-solid fa-business-time"></i>Internal review</div>
                                                 <div class="col" id="project-current-internal-review-count">
                                                     Basic design
                                                 </div>
@@ -789,14 +802,14 @@
                                                     Basic design
                                                 </div>
                                             </div>
-
+                                           
                                         </div>
                                     </div>
                                     <div>
                                         <div>
-                                            <p class="card-title m-0 fs-6 fw-bold" style="color: #369;">
-                                                <i class="fa-solid fa-clipboard"></i>: Background</p>
-                                            <p class="" id="project-background"></p>
+                                            <p class="card-title m-0 fs-6 fw-bold">
+                                                <i class="fa-solid fa-folder-open"></i>Background</p>
+                                            <p class="" id="project-background" style="word-break: break-all;"></p>
                                         </div>
                                     </div>
 
@@ -1149,173 +1162,146 @@
                                             </div>
                                         </div>
 
+                                        
 
-                                <div
-                                        class="tab-pane fade flex-column gap-2 border border-dark"
-                                        id="deliverable-list"
-                                >
-                                    <div class="d-flex px-5 border-bottom py-2 mb-2">
-                                        <div>No</div>
-                                        <div class="flex-grow-1 text-center">Type</div>
-                                        <div>Ready</div>
-                                    </div>
-                                    <div
-                                            id="edit-deliverable-list"
-                                            class="d-flex flex-column gap-2 px-5"
-                                    ></div>
-                                </div>
-
-                                <div
-                                        class="tab-pane fade show active"
-                                        id="nav-tab-for-project-edit"
-                                >
-                                    <form id="project-detail-edit-form">
-                                        <input
-                                                type="number"
-                                                hidden
-                                                id="current-edditing-projetc-id"
-                                        />
-                                        <div class="row mb-3">
-                                            <label
-                                                    for="edit-project-phase"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Current Phase</label
-                                            >
-                                            <div class="col-md-8 col-lg-9">
-                                                <select
-                                                        type="text"
-                                                        class="form-control border-task-description"
-                                                        name=""
-                                                        id="edit-project-phase"
-                                                >
-                                                    <option value="PLANNING">
-                                                        Planning
-                                                    </option>
-                                                    <option value="DESIGN">Design</option>
-                                                    <option value="CODING">Coding</option>
-                                                    <option value="TESTING">Testing</option>
-                                                    <option value="REVIEW">Review</option>
-                                                    <option value="DEPLOYMENT">
-                                                        Deployment
-                                                    </option>
-                                                    <option value="MAINTENANCE">
-                                                        Maintenance
-                                                    </option>
-                                                </select>
+                                        <div
+                                            class="tab-pane fade flex-column gap-2 border border-dark"
+                                            id="deliverable-list"
+                                        >
+                                            <div class="d-flex px-5 border-bottom py-2 mb-2">
+                                                <div>No</div>
+                                                <div class="flex-grow-1 text-center">Type</div>
+                                                <div>Ready</div>
                                             </div>
+                                            <div
+                                                id="edit-deliverable-list"
+                                                class="d-flex flex-column gap-2 px-5"
+                                            ></div>
                                         </div>
-                                        <div class="row mb-3">
-                                            <label
-                                                    for="background"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Background</label
-                                            >
-                                            <div class="col-md-8 col-lg-9">
+
+                                        <div
+                                            class="tab-pane fade show active"
+                                            id="nav-tab-for-project-edit"
+                                        >
+                                            <form id="project-detail-edit-form">
+                                                <input
+                                                    type="number"
+                                                    hidden
+                                                    id="current-edditing-projetc-id"
+                                                />
+
+                                                <div class="row mb-3">
+                                                    <label
+                                                        for="project-detail-name"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >Project name</label
+                                                    >
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input
+                                                            name="project_name"
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="project-detail-name"
+                                                            required
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-3">
+                                                    <label
+                                                        for="background"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >Background</label
+                                                    >
+                                                    <div class="col-md-8 col-lg-9">
                                                         <textarea
-                                                                type="text"
-                                                                class="form-control border-task-description"
-                                                                name="background"
-                                                                id="project-detail-background"
+                                                            type="text"
+                                                            class="form-control p-0"
+                                                            name="background"
+                                                            id="project-detail-background"
                                                         ></textarea>
-                                            </div>
-                                        </div>
+                                                    </div>
+                                                </div>
 
-                                        <div class="row mb-3">
-                                            <label
-                                                    for="project-detail-name"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Project name</label
-                                            >
-                                            <div class="col-md-8 col-lg-9">
-                                                <input
-                                                        name="project_name"
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="project-detail-name"
-                                                        required
-                                                />
-                                            </div>
-                                        </div>
+                                                <div class="row mb-3">
+                                                    <label
+                                                        for="start-date"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >start date</label
+                                                    >
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input
+                                                            name="start_date"
+                                                            type="date"
+                                                            class="form-control"
+                                                            id="start-date"
+                                                            required
+                                                            disabled
+                                                        />
+                                                    </div>
+                                                </div>
 
-                                        <div class="row mb-3">
-                                            <label
-                                                    for="start-date"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >start date</label
-                                            >
-                                            <div class="col-md-8 col-lg-9">
-                                                <input
-                                                        name="start_date"
-                                                        type="date"
-                                                        class="form-control"
-                                                        id="start-date"
-                                                        required
-                                                        disabled
-                                                />
-                                            </div>
-                                        </div>
+                                                <div class="row mb-3">
+                                                    <label
+                                                        for="project-edit-duration"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >Duration</label
+                                                    >
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input
+                                                            name="end_date"
+                                                            type="number"
+                                                            min="1"
+                                                            value="1"
+                                                            required
+                                                            class="form-control"
+                                                            id="project-edit-duration"
+                                                            oninput="validity.valid||(value='');"
+                                                        />
+                                                    </div>
+                                                </div>
 
-                                        <div class="row mb-3">
-                                            <label
-                                                    for="project-edit-duration"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Duration</label
-                                            >
-                                            <div class="col-md-8 col-lg-9">
-                                                <input
-                                                        name="end_date"
-                                                        type="number"
-                                                        min="1"
-                                                        value="1"
-                                                        required
-                                                        class="form-control"
-                                                        id="project-edit-duration"
-                                                        oninput="validity.valid||(value='');"
-                                                />
-                                            </div>
-                                        </div>
+                                                <div class="row mb-3">
+                                                    <label
+                                                        for="end-date-in-edit"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >end date</label
+                                                    >
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input
+                                                            name="start_date"
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="end-date-in-edit"
+                                                            disabled
+                                                        />
+                                                    </div>
+                                                </div>
 
-                                        <div class="row mb-3">
-                                            <label
-                                                    for="end-date-in-edit"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >end date</label
-                                            >
-                                            <div class="col-md-8 col-lg-9">
-                                                <input
-                                                        name="start_date"
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="end-date-in-edit"
-                                                        disabled
-                                                />
-                                            </div>
-                                        </div>
+                                                <div class="row mb-3">
+                                                    <label
+                                                        for="objective"
+                                                        class="col-md-4 col-lg-3 col-form-label"
+                                                        >Objective</label
+                                                    >
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <div id="edit-project-objective"></div>
+                                                    </div>
+                                                </div>
 
-                                        <div class="row mb-3">
-                                            <label
-                                                    for="objective"
-                                                    class="col-md-4 col-lg-3 col-form-label"
-                                            >Objective</label
-                                            >
-                                            <div class="col-md-8 col-lg-9">
-                                                <div id="edit-project-objective"></div>
-                                            </div>
+                                                <div class="mt-lg-5">
+                                                    <button
+                                                        type="submit"
+                                                        class="btn-sm btn-primary"
+                                                    >
+                                                        Save Changes
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
-
-                                        <div class="mt-lg-5">
-                                            <button
-                                                    type="submit"
-                                                    class="btn-sm btn-primary"
-                                            >
-                                                Save Changes
-                                            </button>
-                                        </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
                             <div
                                 class="tab-pane fade profile-edit pb-3"
@@ -1323,88 +1309,88 @@
                             >
                                 <div class="container-fluid">
                                 <div class="row">
-                                    <div ><h4 class="d-flex justify-content-center mt-2 title" >Client Information</h4></div>
+                                    <div><h4 class="d-flex justify-content-center mt-2 title">Client Information</h4></div>
 
-                                <div class="row row-cols-1">
-                                    <div
-                                            class="d-flex  align-items-center gap-2"
-                                    >
+                                    <div class="row row-cols-1">
                                         <div
-                                                class="p-2 d-inline-block fs-5 text-primary"
+                                                class="d-flex  align-items-center gap-2"
                                         >
-                                            <i class="fa-regular fa-user"></i>
+                                            <div
+                                                    class="p-2 d-inline-block fs-5 text-primary"
+                                            >
+                                                <i class="fa-regular fa-user"></i>
+                                            </div>
+                                            <div
+                                                    class=""
+                                                    id="my-dear-customer-name"
+                                            >
+                                                09 77558822
+                                            </div>
                                         </div>
                                         <div
-                                                class=""
-                                                id="my-dear-customer-name"
-                                        >
-                                            09 77558822
-                                        </div>
-                                    </div>
-                                    <div
                                             class="d-flex gap-2 align-items-center"
-                                    >
-                                        <div
-                                                class="p-2 d-inline-block  fs-5 text-primary"
                                         >
-                                            <i class="bi bi-telephone"></i>
-                                        </div>
-                                        <div
+                                            <div
+                                                class="p-2 d-inline-block  fs-5 text-primary"
+                                            >
+                                                <i class="bi bi-telephone"></i>
+                                            </div>
+                                            <div
                                                 class=""
                                                 id="client-phone-contect"
-                                        >
-                                            09 77558822
+                                            >
+                                                09 77558822
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div
+                                        <div
                                             class="d-flex gap-2 align-items-center"
-                                    >
-                                        <div
-                                                class="p-2 d-inline-block  fs-5 text-primary"
                                         >
-                                            <i class="bi bi-envelope-at"></i>
-                                        </div>
-                                        <div
+                                            <div
+                                                class="p-2 d-inline-block  fs-5 text-primary"
+                                            >
+                                                <i class="bi bi-envelope-at"></i>
+                                            </div>
+                                            <div
                                                 class=""
                                                 id="client-email-address"
-                                        >
-                                            suckmyfingure@gmail.com
+                                            >
+                                                suckmyfingure@gmail.com
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div
-        class="modal fade"
-        id="alert-modal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="alert alert-success text-center" role="alert" id="alert-text"></div>
-    </div>
-</div>
+        <div
+            class="modal fade"
+            id="alert-modal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="alert alert-success text-center" role="alert" id="alert-text"></div>
+            </div>
+        </div>
 
-<!-- modal for project's details -->
+        <!-- modal for project's details -->
 
-<!-- Scripts -->
+        <!-- Scripts -->
 
-<!-- fontawesome -->
+        <!-- fontawesome -->
 
-<!-- sort (department, project), form validation and search bar behavior are all here -->
+        <!-- sort (department, project), form validation and search bar behavior are all here -->
 
-<!-- <script src="/js/bootstrap-select2.min.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
-</body>
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script src="/js/notification.js" type="module"></script>
+        <!-- <script src="/js/bootstrap-select2.min.js"></script> -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0/js/bootstrap-select.min.js"></script> -->
+    </body>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="/js/notification.js" type="module"></script>
 </html>

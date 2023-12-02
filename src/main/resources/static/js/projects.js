@@ -12,7 +12,7 @@ import { getArchitecturelist, getClientList, getDeliverableTypeList, } from "/js
 import { getUser } from "/js/currentLoginUser.js";
 
 const languageList = {
-    "c#": "/images/languages/c#-min.png",
+    "c#": "/images/languages/cshift.png",
     "c++": "/images/languages/c++-min.png",
     html: "/images/languages/html-min.png",
     java: "/images/languages/java-min.png",
@@ -382,6 +382,11 @@ $("#client-phone").on("input", function () {
     ValidateClient.validatePhone();
 });
 
+function clearClientValidationStylesAndMessages(fieldSelector) {
+    $(fieldSelector).removeClass("is-valid is-invalid");
+    $(fieldSelector).siblings(".error-container").remove();
+}
+
 document.querySelector("#client-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -430,6 +435,11 @@ document.querySelector("#client-form").addEventListener("submit", function (e) {
                     $("#alert-text").text(
                         "Client updated successfully"
                     );
+
+
+                    clearClientValidationStylesAndMessages("#client-name");
+                    clearClientValidationStylesAndMessages("#client-email");
+                    clearClientValidationStylesAndMessages("#client-phone");
                     $("#alert-modal").modal("show");
 
                     //go back to the #project-create tab
@@ -1103,7 +1113,6 @@ document
                     end_date: new Date(
                         document.querySelector("#end-date-in-edit").value
                     ).getTime(),
-                    current_phase: document.querySelector("#edit-project-phase").value,
                     objective: editObjectiveEditor.root.innerHTML,
                 };
 
