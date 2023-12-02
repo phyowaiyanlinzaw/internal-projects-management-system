@@ -12,7 +12,7 @@ import { getArchitecturelist, getClientList, getDeliverableTypeList, } from "/js
 import { getUser } from "/js/currentLoginUser.js";
 
 const languageList = {
-    "c#": "/images/languages/c#-min.png",
+    "c#": "/images/languages/cshift.png",
     "c++": "/images/languages/c++-min.png",
     html: "/images/languages/html-min.png",
     java: "/images/languages/java-min.png",
