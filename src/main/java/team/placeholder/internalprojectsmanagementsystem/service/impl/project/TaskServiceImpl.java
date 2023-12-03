@@ -43,7 +43,7 @@ public class TaskServiceImpl implements TasksService {
         task.setPlanStartTime(taskRequestDto.getPlanStartTime());
         task.setPlanEndTime(taskRequestDto.getPlanEndTime());
         task.setPlanHours(taskRequestDto.getPlanHours());
-        task.setDue(false);
+        task.setDue(System.currentTimeMillis() > task.getPlanEndTime());
         task.setStatus(TaskStatus.TODO);
         User user = userRepository.findById(taskRequestDto.getUserId());
         Project project = projectRepository.findById(taskRequestDto.getProjectId());
@@ -151,8 +151,8 @@ public class TaskServiceImpl implements TasksService {
     }
 
     @Override
-    public List<TasksDto> getTasksByUserId(long id) {
-        List<Tasks> taskList = taskRepository.findByUserId(id);
+    public List<TasksDto> getTasksByUserIdAndStatus(long id, TaskStatus status) {
+        List<Tasks> taskList = taskRepository.findByUserIdAndStatus(id, status);
         List<TasksDto> taskDtoList = new ArrayList<>();
 
         for (Tasks task : taskList) {

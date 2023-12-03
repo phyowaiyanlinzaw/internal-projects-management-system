@@ -20,7 +20,7 @@ const languageList = {
     php: "/images/languages/php-min.png",
     python: "/images/languages/python-min.png",
     ruby: "/images/languages/ruby-min.png",
-    SQL: "/images/languages/SQL-min.png",
+    sql: "/images/languages/SQL-min.png",
     css: "/images/languages/css-min.png",
     typescript: "/images/languages/typescript-min.png",
 };
@@ -442,6 +442,8 @@ document.querySelector("#client-form").addEventListener("submit", function (e) {
                     clearClientValidationStylesAndMessages("#client-phone");
                     $("#alert-modal").modal("show");
 
+                    //go back to the #project-create tab
+                    $("[data-bs-target='#project-create']").tab("show");
 
                 },
                 error: function (error) {
@@ -493,6 +495,65 @@ const motherContainer = document.querySelector("#sort-container");
 const fragment = document.createDocumentFragment();
 
 let pList = await getAllProjects();
+
+if (pList.length == 0) {
+    document.querySelector('#no-result').classList.remove('d-none')
+}
+
+const searchBtn = document.querySelector('#search-project');
+
+searchBtn.addEventListener('input', function () {
+
+    const inputText = this.value;
+
+    let searchProjectList = []
+
+    for (let i = 0; i < pList.length; i++) {
+        let proectTitle = pList[i].projectName;
+        let users = pList[i].user.name;
+        if (isMatch(inputText.trim(), proectTitle, users)) {
+            searchProjectList.push(pList[i]);
+        }
+    }
+    if (searchProjectList.length === 0) {
+        document.querySelector('#no-result').classList.remove('d-none')
+    } else {
+        document.querySelector('#no-result').classList.add('d-none')
+    }
+
+    $('#pagination-container').pagination({
+        dataSource: function (done) {
+            const projects = []
+
+            for (let i = searchProjectList.length - 1; i >= 0; i--) {
+                projects.push(searchProjectList[i]);
+            }
+
+            done(projects);
+        },
+        callback: function (data, pagination) {
+            // template method of yourself
+            var html = template(data);
+
+            $('#sort-container').html(html);
+        },
+        pageSize: 5, // Number of items per page
+        className: 'paginationjs-theme-blue',
+    });
+
+})
+
+function isMatch(input, title, card) {
+    // Escape special characters in the input
+    const escapedInput = input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Create a regular expression pattern
+    const pattern = new RegExp(`^.*${escapedInput.split('').join('.*')}.*$`, 'i');
+
+    // Check if the input matches either the title or card
+    return pattern.test(title) || pattern.test(card);
+}
+
 
 function template(a) {
     const container = document.createElement('div');
@@ -730,6 +791,20 @@ function formmatDateFromMillisecondForEdit(milliseconds) {
     return formattedDate;
 }
 
+function createToast(a) {
+    const toast = document.createElement('div')
+
+    toast.classList = 'toast show bg-success text-white'
+    toast.setAttribute('role', 'alert')
+    toast.setAttribute('aria-live', 'assertive')
+    toast.setAttribute('aria-atomic', 'true')
+
+    toast.innerHTML = `<div class="toast-body">
+                <strong class="text-white">${a}</strong>
+            </div>`
+    return toast
+}
+
 motherContainer.addEventListener("click", async function (e) {
     let target = e.target;
 
@@ -885,11 +960,15 @@ class="list-group-item d-flex justify-content-between"
             const div = document.createElement("div");
 
             div.classList.add(
-                "d-flex",
-                "gap-2",
-                "align-items-center",
-                "justify-content-center"
+                'rounded',
+                'bg-light',
+                'p-1'
             );
+
+            div.style.cursor = 'pointer'
+
+            const innerDiv = document.createElement('div')
+            innerDiv.className = 'd-flex justify-content-center align-items-center flex-column text-primary'
 
             const image = document.createElement("img");
 
@@ -903,12 +982,14 @@ class="list-group-item d-flex justify-content-between"
                 image.setAttribute("src", "/images/languages/default-min.png");
             }
 
-            div.appendChild(image);
+            innerDiv.appendChild(image);
 
             const p = document.createElement("p");
             p.textContent = a.tech_name;
-            p.classList.add("fs-6", "fw-bold");
-            div.appendChild(p);
+            p.classList.add("fs-6", "fw-bold", 'm-0');
+            innerDiv.appendChild(p);
+
+            div.appendChild(innerDiv);
 
             document.querySelector("#architectures-list-in-edit").appendChild(div);
         });
@@ -983,6 +1064,10 @@ class="list-group-item d-flex justify-content-between"
                 success: function (response) {
                     console.log(response);
                     console.log("Deliverable Status Updated Successfully...");
+                    const toast = createToast("Deliverable Updated Successfully...")
+                    const btoawe = new bootstrap.Toast(toast)
+                    document.querySelector("#toasts-noti-container").appendChild(toast)
+                    btoawe.show();
                 },
             });
         });
@@ -1195,7 +1280,7 @@ if (loginUser.currentUser.role === "PROJECT_MANAGER") {
 const sortProjectByDepartment = await getData("/api/project/list/sort/by/department");
 
 document.getElementById("department-filter").addEventListener("change", function () {
-    
+
     const selectedDepartmentId = this.value;
     console.log(sortProjectByDepartment);
     console.log(selectedDepartmentId);
@@ -1213,7 +1298,7 @@ document.getElementById("department-filter").addEventListener("change", function
                 dpFilterResult.push(pList[i]);
             }
         }
-    } 
+    }
 
     $('#pagination-container').pagination({
         dataSource: function (done) {
@@ -1235,12 +1320,12 @@ document.getElementById("department-filter").addEventListener("change", function
         className: 'paginationjs-theme-blue paginationjs-big',
     });
 
-    if(dpFilterResult.length === 0) {
+    if (dpFilterResult.length === 0) {
         document.querySelector('#no-result').classList.remove('d-none')
     } else {
         document.querySelector('#no-result').classList.add('d-none')
     }
-    
+
 });
 
 const monthFilter = document.querySelector("#month-filter");
@@ -1254,7 +1339,9 @@ document.querySelectorAll("select[action='filter']").forEach((a) =>
 
         const matchingProjects = pList.filter((a) => {
             const projectDate = new Date(a.startDate);
+            console.log(projectDate)
             const projectMonth = projectDate.getMonth();
+            console.log(projectMonth)
             const projectYear = projectDate.getFullYear();
             return (
                 projectYear === yearValue && MONTH_NAMES[projectMonth] === currentTime
@@ -1269,33 +1356,32 @@ document.querySelectorAll("select[action='filter']").forEach((a) =>
             console.log('some result')
             document.querySelector('#no-result').classList.add('d-none')
         }
-                $('#pagination-container').pagination({
-                dataSource: async function (done) {
-                    const projects = []
+        $('#pagination-container').pagination({
+            dataSource: async function (done) {
+                const projects = []
 
-                    for (let i = matchingProjects.length - 1; i >= 0; i--) {
-                        projects.push(matchingProjects[i]);
-                    }
+                for (let i = matchingProjects.length - 1; i >= 0; i--) {
+                    projects.push(matchingProjects[i]);
+                }
 
-                    done(projects);
-                },
-                callback: function (data, pagination) {
-                    // template method of yourself
-                    var html = template(data);
+                done(projects);
+            },
+            callback: function (data, pagination) {
+                // template method of yourself
+                var html = template(data);
 
-                    $('#sort-container').html(html);
-                },
-                pageSize: 8, // Number of items per page
-                className: 'paginationjs-theme-blue paginationjs-big',
-            });
-        
+                $('#sort-container').html(html);
+            },
+            pageSize: 8, // Number of items per page
+            className: 'paginationjs-theme-blue paginationjs-big',
+        });
+
 
 
         console.log(matchingProjects)
     })
 );
 
-const currentYear = new Date().getFullYear();
 
 document.querySelector("#reset-btn").addEventListener("click", function (e) {
 
@@ -1399,7 +1485,7 @@ if (loginUser.currentUser.role === "PROJECT_MANAGER") {
             );
 
             projectEndDate.value = formatDateFromMilliseconds(endDate.getTime());
-            
+
         }
 
     });

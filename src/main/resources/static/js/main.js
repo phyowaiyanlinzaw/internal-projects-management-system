@@ -35,8 +35,8 @@
             }else{
                 $('.avatar-nav').attr("src","/images/avatars/employee_avatar.svg");
             }
-            $('#navbar-username').text(data.name);
-            $('#navbar-username-without-search').text(data.name);
+            $('#navbar-username').text(data.role);
+            $('#navbar-username-without-search').text(data.name + " | " + data.role);
         },
         error: function (data,xhr) {
             console.log("error",data,xhr);

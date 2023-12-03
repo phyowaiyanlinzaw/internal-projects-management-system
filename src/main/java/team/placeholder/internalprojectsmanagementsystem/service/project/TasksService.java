@@ -20,7 +20,7 @@ public interface TasksService {
 
     List<TasksDto> getTasksByProjectId(long id);
 
-    List<TasksDto> getTasksByUserId(long id);
+    List<TasksDto> getTasksByUserIdAndStatus(long id, TaskStatus status);
 
     List<TasksDto> getTasksByProjectAndUserId(long projectId, long userId);
 

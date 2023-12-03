@@ -76,22 +76,49 @@ $(document).ready(function () {
 document.querySelectorAll("button[data-bs-target=\"#all-issue-list\"]").forEach(button => {
     button.addEventListener("show.bs.tab", async function (e) {
 
-        const issueListContainer = document.querySelector("#sort-container")
-
         const issueList = await getData('/api/issue/list')
 
-        issueListContainer.innerHTML = ''
+        $('#pagination-container').pagination({
+            dataSource: function (done) {
+                const projects = []
 
-        for (let i = issueList.length - 1; i >= 0; i--) {
+                for (let i = issueList.length - 1; i >= 0; i--) {
+                    projects.push(issueList[i]);
+                }
 
-            issueListContainer.appendChild(createIssueCard(issueList[i]));
-        }
+                done(projects);
+            },
+            callback: function (data, pagination) {
+                // template method of yourself
+                var html = template(data);
+
+                $('#sort-container').html(html);
+            },
+            pageSize: 5, // Number of items per page
+            className: 'paginationjs-theme-blue',
+        });
 
     })
 })
 
-$("button[data-bs-target=\"#issue-table\"]").on("show.bs.tab", function (e) {
-    $("#issue-table-container").removeClass("d-none");
+document.getElementById("btn-check-outlined").addEventListener("click",()=>{
+    if (document.getElementById("btn-check-outlined").checked) {
+        //remove all issues and show table
+        document.getElementById("all-issue-list").classList.add("d-none")
+        document.getElementById("issue-table-container").classList.remove("d-none")
+        document.getElementById("issue-table").classList.add("show")
+        document.getElementById("issue-table").classList.add("active")
+        document.getElementById("filter-div").classList.add("d-none")
+        document.getElementById("search-bar").classList.add("d-none")
+    } else {
+        //show all issues and remove table
+        document.getElementById("all-issue-list").classList.remove("d-none")
+        document.getElementById("issue-table-container").classList.add("d-none")
+        document.getElementById("issue-table").classList.remove("show")
+        document.getElementById("issue-table").classList.remove("active")
+        document.getElementById("filter-div").classList.remove("d-none")
+        document.getElementById("search-bar").classList.remove("d-none")
+    }
 })
 
 if (document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
@@ -106,11 +133,25 @@ if (document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
 
         const unsolvedIssueList = await getData(`/api/issue/list/unsolved/${getLoginUser.currentUser.id}`)
 
-        for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+        $('#pagination-unsolved-container').pagination({
+            dataSource: function (done) {
+                const projects = []
 
-            unsolvedIssueListContainer.appendChild(createIssueCard(unsolvedIssueList[i]));
+                for (let i = unsolvedIssueList.length - 1; i >= 0; i--) {
+                    projects.push(unsolvedIssueList[i]);
+                }
 
-        }
+                done(projects);
+            },
+            callback: function (data, pagination) {
+                // template method of yourself
+                var html = template(data);
+
+                $('#unsolved-issues-container').html(html);
+            },
+            pageSize: 5, // Number of items per page
+            className: 'paginationjs-theme-blue',
+        });
 
     })
 
@@ -613,41 +654,39 @@ $(document).ready(async function () {
                 };
 
                 $.ajax({
-                        url: '/api/issue/save',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(requestData),
-                        dataType: 'json',
-                        success: function (data) {
-                            $("#alert-text").text(
-                                "Issue Created Successfully"
-                            );
-                            $("#alert-modal").modal("show");
+                    url: '/api/issue/save',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#alert-text").text(
+                            "Issue Created Successfully"
+                        );
+                        $("#alert-modal").modal("show");
 
-                            const title = $('#title').val('');
-                            const category= $('#issue_category').val('');
-                            const user_pic = $('#user_pic').val('');
-                            const responsible_party = $('#responsible_party').val('');
-                            const description = descriptionEditor.root.innerHTML = '';
-                            const place = $('#place').val('');
-                            const impact = $('#impact').val('');
-                            const root_cause = $('#root_cause').val('');
-                            const direct_cause = $('#direct_cause').val('');
+                        const title = $('#title').val('');
+                        const category = $('#issue_category').val('');
+                        const description = descriptionEditor.root.innerHTML = '';
+                        const place = $('#place').val('');
+                        const impact = $('#impact').val('');
+                        const root_cause = $('#root_cause').val('');
+                        const direct_cause = $('#direct_cause').val('');
 
 
 
-                            clearIssueValidationStylesAndMessages('#title');
-                            clearIssueValidationStylesAndMessages('.quill-editor-bubble');
-                            clearIssueValidationStylesAndMessages('#place');
-                            clearIssueValidationStylesAndMessages('#impact');
-                            clearIssueValidationStylesAndMessages('#root_cause');
-                            clearIssueValidationStylesAndMessages('#direct_cause');
-                            clearIssueValidationStylesAndMessages('#issue_category');
-                            clearIssueValidationStylesAndMessages('#responsible_party');
-                            clearIssueValidationStylesAndMessages('#user_pic');
+                        clearIssueValidationStylesAndMessages('#title');
+                        clearIssueValidationStylesAndMessages('.quill-editor-bubble');
+                        clearIssueValidationStylesAndMessages('#place');
+                        clearIssueValidationStylesAndMessages('#impact');
+                        clearIssueValidationStylesAndMessages('#root_cause');
+                        clearIssueValidationStylesAndMessages('#direct_cause');
+                        clearIssueValidationStylesAndMessages('#issue_category');
+                        clearIssueValidationStylesAndMessages('#responsible_party');
+                        clearIssueValidationStylesAndMessages('#user_pic');
 
 
-                            $("#add-issue").modal("hide")
+                        $("#add-issue").modal("hide")
 
 
                     },
@@ -972,8 +1011,32 @@ function exportSelectedRowsToExcel(selectedRows) {
     XLSX.writeFile(workbook, 'SelectedIssues.xlsx');
 }
 
+function template(a) {
+    const container = document.createElement('div');
+
+    for (let i = 0; i < a.length; i++) {
+        const projectElement = createIssueCard(a[i]);
+        container.appendChild(projectElement);
+    }
+
+    return container.innerHTML;
+}
+
+function isMatch(input, title, card) {
+    // Escape special characters in the input
+    const escapedInput = input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Create a regular expression pattern
+    const pattern = new RegExp(`^.*${escapedInput.split('').join('.*')}.*$`, 'i');
+
+    // Check if the input matches either the title or card
+    return pattern.test(title) || pattern.test(card);
+}
+
 let currentIssueId;
 $(document).ready(async function () {
+
+    const searchInput = document.querySelector('#search-issue');
 
     function loadData() {
         $.ajax({
@@ -982,15 +1045,75 @@ $(document).ready(async function () {
             dataType: 'json',
             success: function (data) {
                 const sortContainer = document.querySelector('#sort-container');
-                for (let i = data.length - 1; i >= 0; i--) {
-                    const issueDiv = createIssueCard(data[i]);
-                    sortContainer.appendChild(issueDiv)
-                }
+
+                $('#pagination-container').pagination({
+                    dataSource: function (done) {
+                        const projects = []
+
+                        for (let i = data.length - 1; i >= 0; i--) {
+                            projects.push(data[i]);
+                        }
+
+                        done(projects);
+                    },
+                    callback: function (data, pagination) {
+                        // template method of yourself
+                        var html = template(data);
+
+                        $('#sort-container').html(html);
+                    },
+                    pageSize: 5, // Number of items per page
+                    className: 'paginationjs-theme-blue',
+                });
+
+                searchInput.addEventListener('input', function() {
+
+                    const inputText = this.value;
+
+                    let issues = []
+
+                    for (let i = 0; i < data.length; i++) {
+                        let proectTitle = data[i].title;
+                        let users = data[i].user_uploader.name;
+                        if (isMatch(inputText.trim(), proectTitle, users)) {
+                            issues.push(data[i]);
+                        }
+                    }
+
+                    if(issues.length === 0) {
+                        document.querySelector('#no-result').classList.remove('d-none')
+                    } else {
+                        document.querySelector('#no-result').classList.add('d-none')
+                    }
+
+                    $('#pagination-container').pagination({
+                        dataSource: function (done) {
+                            const projects = []
+
+                            for (let i = issues.length - 1; i >= 0; i--) {
+                                projects.push(issues[i]);
+                            }
+
+                            done(projects);
+                        },
+                        callback: function (data, pagination) {
+                            // template method of yourself
+                            var html = template(data);
+
+                            $('#sort-container').html(html);
+                        },
+                        pageSize: 5, // Number of items per page
+                        className: 'paginationjs-theme-blue',
+                    });
+
+                })
             },
             error: function (error) {
                 console.log('Error fetching data:', error);
             }
         });
+
+
     }
 
     $("#reset-btn").on("click", function () {
@@ -1300,27 +1423,30 @@ $(document).ready(async function () {
         document.getElementById("notification-light-for-new-issue").classList.remove("d-none")
     }
 
-    document.querySelector("button[data-bs-target='#new-issue-list-container']").addEventListener('show.bs.tab', async () => {
+    const newIssueContainer = document.querySelector("button[data-bs-target='#new-issue-list-container']")
+    if (newIssueContainer) {
+        newIssueContainer.addEventListener('show.bs.tab', async () => {
 
-        document.querySelector("#notification-light-for-new-issue").classList.add('d-none')
+            document.querySelector("#notification-light-for-new-issue").classList.add('d-none')
 
-        const newIssueContainer = document.querySelector("#new-issue-list")
+            const newIssueContainer = document.querySelector("#new-issue-list")
 
-        newIssueContainer.innerHTML = ''
+            newIssueContainer.innerHTML = ''
 
-        const aaa = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
+            const aaa = await getData(`/api/issue/list/pending/${getLoginUser.currentUser.id}`)
 
-        if (aaa.length === 0) {
-            document.querySelector('#no-new-issue').classList.remove('d-none')
-        } else {
-            for (let i = aaa.length - 1; i >= 0; i--) {
+            if (aaa.length === 0) {
+                document.querySelector('#no-new-issue').classList.remove('d-none')
+            } else {
+                for (let i = aaa.length - 1; i >= 0; i--) {
 
-                const currentIssue = aaa[i];
+                    const currentIssue = aaa[i];
 
-                newIssueContainer.appendChild(createPendingIssueCard(currentIssue))
+                    newIssueContainer.appendChild(createPendingIssueCard(currentIssue))
+                }
             }
-        }
-    })
+        })
+    }
 
     const allApprovalRadios = document.querySelectorAll('.all-approval-input');
 
@@ -1553,9 +1679,9 @@ $("#status-filter").on("change", function () {
 var userRole = getLoginUser.currentUser.role;
 
 // Check if the user role is not equal to "Project-Manager"
-if (userRole !== "PROJECT_MANAGER") {
+if (userRole === "PROJECT_MANAGER") {
     // Hide the status filter container
-    $("#solved-filter-container").hide();
+    $("#solved-filter-container").addClass('d-none')
 }
 
 
@@ -1584,10 +1710,24 @@ function filterIssues() {
             if (data && data.length > 0) {
                 // Loop through the retrieved data and create content for each item
                 document.querySelector('#no-result').classList.add('d-none')
-                data.forEach(item => {
-                    const issueDiv = createIssueCard(item);
-                    sortContainer.append(issueDiv);
+                $('#pagination-container').pagination({
+                    dataSource: function (done) {
+                        const projects = []
 
+                        for (let i = data.length - 1; i >= 0; i--) {
+                            projects.push(data[i]);
+                        }
+
+                        done(projects);
+                    },
+                    callback: function (data, pagination) {
+                        // template method of yourself
+                        var html = template(data);
+
+                        $('#sort-container').html(html);
+                    },
+                    pageSize: 5, // Number of items per page
+                    className: 'paginationjs-theme-blue',
                 });
             } else {
                 document.querySelector('#no-result').classList.remove('d-none')
@@ -1628,11 +1768,25 @@ function filterSolvedIssues() {
             if (data && data.length > 0) {
                 // Loop through the retrieved data and create content for each item
                 document.querySelector('#no-result').classList.add('d-none')
-                data.forEach(item => {
-                    const issueDiv = createIssueCard(item);
-                    sortContainer.append(issueDiv);
-                });
+                $('#pagination-container').pagination({
+                    dataSource: function (done) {
+                        const projects = []
 
+                        for (let i = data.length - 1; i >= 0; i--) {
+                            projects.push(data[i]);
+                        }
+
+                        done(projects);
+                    },
+                    callback: function (data, pagination) {
+                        // template method of yourself
+                        var html = template(data);
+
+                        $('#sort-container').html(html);
+                    },
+                    pageSize: 5, // Number of items per page
+                    className: 'paginationjs-theme-blue',
+                });
             } else {
                 // Handle case when data is empty
                 document.querySelector('#no-result').classList.remove('d-none')
@@ -1674,9 +1828,24 @@ function filterCategory() {
             if (data && data.length > 0) {
                 // Loop through the retrieved data and create content for each item
                 document.querySelector('#no-result').classList.add('d-none')
-                data.forEach(item => {
-                    const issueDiv = createIssueCard(item);
-                    sortContainer.append(issueDiv);
+                $('#pagination-container').pagination({
+                    dataSource: function (done) {
+                        const projects = []
+
+                        for (let i = data.length - 1; i >= 0; i--) {
+                            projects.push(data[i]);
+                        }
+
+                        done(projects);
+                    },
+                    callback: function (data, pagination) {
+                        // template method of yourself
+                        var html = template(data);
+
+                        $('#sort-container').html(html);
+                    },
+                    pageSize: 5, // Number of items per page
+                    className: 'paginationjs-theme-blue',
                 });
 
             } else {

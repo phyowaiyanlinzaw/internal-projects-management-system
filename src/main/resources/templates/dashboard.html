@@ -328,7 +328,7 @@
             const tasks = []
 
             $.ajax({
-                url: "api/task/list/user/" + currentUser.currentUser.id,
+                url: "api/task/list/user/" + currentUser.currentUser.id+"/status/TODO",
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
@@ -341,6 +341,7 @@
             })
 
             function buildCalendar(tasks) {
+                console.log("IN BUILD CALENDAR FUNCTION")
                 const calendar = new FullCalendar.Calendar(calendarElement, {
                     initialView: 'dayGridMonth',
                     weekends: false,
@@ -359,12 +360,20 @@
                                 planHours: task.planHours,
                                 taskId: task.id,
                             },
-                            start: new Date(task.plan_start_time),
-                            end: new Date(task.plan_end_time + 86400000),
+                            start: new Date(task.planStartTime),
+                            end: new Date(task.planEndTime + 86400000),
                             color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#f74444",
                             textColor: "white",
                             allDay: true
                         }
+                        // return {
+                        //     title: "Hi",
+                        //     start: new Date (),
+                        //     end: new Date(1701923947000 + 86400000),
+                        //     color: "#444cf7",
+                        //     textColor: "white",
+                        //     allDay: true
+                        // }
                     }),
                     eventClick: function (info) {
                         const eventTitle = info.event.title;
@@ -381,7 +390,7 @@
 
                         const planHours = tasks.find((task) => {
                             return task.title === eventTitle;
-                        }).plan_hours;
+                        }).planHours;
 
                         let taskGroup = tasks.find((task) => {
                             return task.title === eventTitle;
@@ -398,7 +407,7 @@
                         //get plan_end_time and convert to date and do some math to show remaining days
                         const planEndTime = tasks.find((task) => {
                             return task.title === eventTitle;
-                        }).plan_end_time;
+                        }).planEndTime;
                         //only show date and month
                         const planEndTimeDate = new Date(planEndTime).toLocaleDateString('en-US', {
                             day: 'numeric',
@@ -837,37 +846,48 @@
             function updateKpiChart(selectedValue) {
                 $.ajax({
                     url: `api/dashboard/kpi/project/${selectedValue}`,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
+                    method: "GET",
+                    dataType: "json",
+                    success: function (response) {
 
-                        barChart2.data.datasets.forEach((dataset, index) => {
-                            const label = dataset.label.toLowerCase().replace(" ", "_");
-                            dataset.data.push(data[label]);
+                        const datasetData = [];
+
+                        Object.entries(response).forEach(([key, value]) => {
+                            datasetData.push(value);
                         });
 
-                        // Update the chart options
-                        barChart2.options.scales.y.min = 0;
-                        barChart2.options.scales.y.max = 10;
+                        // Update chart data to five datasets
+                        barChart2.data.datasets.forEach((dataset, index) => {
+                            dataset.data = [datasetData[index]];
+                        });
+                        barChart2.data.labels = ["KPI"];
 
-                        // Update the chart
+                        // Find highest value for dynamic scale adjustment
+                        const highestValue = Math.max(...datasetData);
+
+                        barChart2.options.scales.y.min = 0;
+                        barChart2.options.scales.y.max = highestValue + 5;
+
                         barChart2.update();
                     },
                     error: function (error) {
-                        console.error('Error fetching data:', error);
-                    }
+                        console.error("Error fetching data:", error);
+                    },
                 });
             }
 
 
             $('#chart-filter-reset-btn').on('click', function () {
+                //clear dropdowns
                 $('#departmentDropDown').text('Select Department');
                 $('#projectDropDown').text('Select Project');
-                //clear project dropdown
-                $('#projectDropDown').next('.dropdown-menu').empty();
 
+                if (currentUser.currentUser.role === "PROJECT_MANAGER") {
+                    $('#projectDropDown').empty()
+                    $('#projectDropDown').text('Select Project');
+                }
 
-                lineChart.data.datasets[0].data = [];
+            lineChart.data.datasets[0].data = [];
                 lineChart.data.datasets[1].data = [];
 
                 barChart.data.datasets[0].data = [];

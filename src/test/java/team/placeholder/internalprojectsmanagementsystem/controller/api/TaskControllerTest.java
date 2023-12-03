@@ -77,15 +77,16 @@ class TaskControllerTest {
 
 
     @Test
-    void taskListByUserId() {
+    void taskListByUserIdAndStatus() {
         long userId = 1L;
+        TaskStatus status = TaskStatus.TODO;
         List<TasksDto> tasksDtoList = Arrays.asList(
                 new TasksDto()
         );
-        when(taskService.getTasksByUserId(userId)).thenReturn(tasksDtoList);
+        when(taskService.getTasksByUserIdAndStatus(userId,status)).thenReturn(tasksDtoList);
 
         // Testing the taskListByUserId method
-        ResponseEntity<List<TasksDto>> responseEntity = taskController.taskListByUserId(userId);
+        ResponseEntity<List<TasksDto>> responseEntity = taskController.taskListByUserIdAndStatus(userId, String.valueOf(status));
 
         // Verifying the result and status code
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

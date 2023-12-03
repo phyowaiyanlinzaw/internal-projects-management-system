@@ -1,7 +1,5 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.ui;
 
-import javax.swing.text.View;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -11,11 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
@@ -47,11 +42,11 @@ public class ViewController {
     }
 
     @GetMapping("/dashboard")
-    public String home(HttpSession session){
+    public String home(Authentication authentication, HttpSession session){
 
-        if (authentication != null && authentication.isAuthenticated()) {
+        if (this.authentication != null && this.authentication.isAuthenticated()) {
 
-            String loginEmail = authentication.getName();
+            String loginEmail = this.authentication.getName();
 
             UserDto userDto = userServiceImpl.getUserByEmail(loginEmail);
 
@@ -105,13 +100,5 @@ public class ViewController {
     @PreAuthorize("hasAnyRole('PMO', 'DEPARTMENT_HEAD', 'SDQC')")
     @GetMapping("/employees")
     public String employees() {return "employees";}
-
-
-    @GetMapping("/issue-table")
-    public String reportDepartment() {
-        return "issueTable";
-    }
-
-
 
 }

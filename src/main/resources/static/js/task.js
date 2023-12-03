@@ -905,6 +905,12 @@ saveBtn.addEventListener("click", function (event) {
             document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
             document.getElementById("pm-plan-edit-hours").value = response.planHours
             document.getElementById("pm-actual-edit-hours").value = response.actualHours
+
+            $("#alert-text").text(
+                "Task updated successfully"
+            );
+            $('#alert-modal').modal('show');
+
             $('#task-details').modal('hide')
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -1928,8 +1934,8 @@ $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
         weekends: false,
         headerToolbar: {
             left: "",
-            center: "title prev,next today",
-            right: "",
+            center: "title",
+            right: 'today prev,next'
         },
         // loop through the taskList and add events to the calendar
         events: taskList.map((task) => {
@@ -1937,7 +1943,7 @@ $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
                 title: task.title,
                 start: new Date(task.planStartTime),
                 end: new Date(task.planEndTime + 86400000),
-                color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#f74444",
+                color: task.tasksGroup === 'A' ? "#444cf7" : task.tasksGroup === 'B' ? "#f7c744" : "#288f0b",
                 textColor: "white",
                 allDay: true,
 
@@ -2013,21 +2019,21 @@ $('#gantt-chart-tab').on('shown.bs.tab', function (e) {
 
     calendar.render();
 
-    //dynamically add bg-white class to this element .fc-view-harness
-    const fcViewHarness = document.querySelector(".fc-view-harness");
-    fcViewHarness.classList.add("bg-white");
-    fcViewHarness.style.height = "600px";
-
-    //dynamically change width of  .fc-col-header
-    const fcColHeader = document.querySelector(".fc-col-header");
-    fcColHeader.style.width = "1200px";
-
-    const fcDayGridBody = document.querySelector(".fc-daygrid-body");
-    fcDayGridBody.style.width = "1200px";
-
-    const fcScrollgridSyncTable = document.querySelector(".fc-scrollgrid-sync-table");
-    fcScrollgridSyncTable.style.width = "1200px";
-    fcScrollgridSyncTable.style.height = "600px";
+    // //dynamically add bg-white class to this element .fc-view-harness
+    // const fcViewHarness = document.querySelector(".fc-view-harness");
+    // fcViewHarness.classList.add("bg-white");
+    // fcViewHarness.style.height = "600px";
+    //
+    // //dynamically change width of  .fc-col-header
+    // const fcColHeader = document.querySelector(".fc-col-header");
+    // fcColHeader.style.width = "1200px";
+    //
+    // const fcDayGridBody = document.querySelector(".fc-daygrid-body");
+    // fcDayGridBody.style.width = "1200px";
+    //
+    // const fcScrollgridSyncTable = document.querySelector(".fc-scrollgrid-sync-table");
+    // fcScrollgridSyncTable.style.width = "1200px";
+    // fcScrollgridSyncTable.style.height = "600px";
 
 
 })
