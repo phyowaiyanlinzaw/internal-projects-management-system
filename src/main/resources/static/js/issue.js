@@ -101,13 +101,11 @@ document.querySelectorAll("button[data-bs-target=\"#all-issue-list\"]").forEach(
     })
 })
 
+const issueTableBtn = document.getElementById("btn-check-outlined")
 
+if(issueTableBtn) {
 
-const issueTableBtn = document.querySelector("#issue-table-btn");
-
-
-if(issueTableBtn){
-    issueTableBtn.addEventListener("click", async function (e) {
+    issueTableBtn.addEventListener("click", () => {
         if (document.getElementById("btn-check-outlined").checked) {
             //remove all issues and show table
             document.getElementById("all-issue-list").classList.add("d-none")
@@ -128,9 +126,6 @@ if(issueTableBtn){
     })
 }
 
-// document.getElementById("btn-check-outlined").addEventListener("click",()=>{
-//
-// })
 
 if (document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
 
