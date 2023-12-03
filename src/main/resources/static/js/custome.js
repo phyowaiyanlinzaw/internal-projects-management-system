@@ -333,3 +333,10 @@ $(document).ready(function () {
 
 });
 
+function autoResize(element) {
+    // Reference to the text area
+    console.log('resize the textarea')
+    // Set the height of the text area to its scrollHeight
+    element.style.height = "auto";
+    element.style.height = element.scrollHeight + "px";
+}

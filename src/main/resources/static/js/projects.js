@@ -923,6 +923,8 @@ class="list-group-item d-flex justify-content-between"
             document.querySelector("#project-detail-background").innerText =
                 currentProjectDetail.background;
 
+            autoResize(document.querySelector('#project-detail-background'));
+
             document.querySelector("#project-detail-name").value =
                 currentProjectDetail.name;
 
@@ -1134,6 +1136,7 @@ class="list-group-item d-flex justify-content-between"
 
         detailMoal.querySelector("#project-background").innerText =
             currentProjectDetail.background;
+            
         detailMoal.querySelector("#project-name").innerText = currentProjectDetail.name;
         detailMoal.querySelector("#project-department-name").innerHTML =
             currentProjectDetail.departmentDto.name;
@@ -2454,5 +2457,4 @@ if (loginUser.currentUser.role !== "PROJECT_MANAGER") {
 if (loginUser.currentUser.role === "SDQC" || loginUser.currentUser.role === "PMO" || loginUser.currentUser.role === 'DEPARTMENT_HEAD') {
     $("#navigate-task").remove();
 }
-
 

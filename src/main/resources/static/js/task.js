@@ -183,6 +183,20 @@ document.querySelector("#add-new-employee-to-project").addEventListener('click',
     }
 })
 
+function createToast(a) {
+    const toast = document.createElement('div')
+
+    toast.classList = 'toast show bg-success text-white'
+    toast.setAttribute('role', 'alert')
+    toast.setAttribute('aria-live', 'assertive')
+    toast.setAttribute('aria-atomic', 'true')
+
+    toast.innerHTML = `<div class="toast-body">
+                <strong class="text-white">${a}</strong>
+            </div>`
+    return toast
+}
+
 // to handle the project close and open
 $('#project-open-close').change(function () {
 
@@ -215,6 +229,12 @@ $('#project-open-close').change(function () {
                         success: function (response) {
                             // Handle the successful response here
                             console.log(response);
+
+                            const toast = createToast("Project closed successfully")
+                            const btoawe = new bootstrap.Toast(toast)
+                            document.querySelector("#toasts-noti-container").appendChild(toast)
+                            btoawe.show();   
+
                         },
                         error: function (xhr, status, error) {
                             // Handle the error here
@@ -236,6 +256,10 @@ $('#project-open-close').change(function () {
                 success: function (response) {
                     // Handle the successful response here
                     console.log(response);
+                    const toast = createToast("Project closed successfully")
+                    const btoawe = new bootstrap.Toast(toast)
+                    document.querySelector("#toasts-noti-container").appendChild(toast)
+                    btoawe.show();   
                 },
                 error: function (xhr, status, error) {
                     // Handle the error here
@@ -258,6 +282,10 @@ $('#project-open-close').change(function () {
             success: function (response) {
                 // Handle the successful response here
                 console.log(response);
+                const toast = createToast("Project open successfully")
+                const btoawe = new bootstrap.Toast(toast)
+                document.querySelector("#toasts-noti-container").appendChild(toast)
+                btoawe.show();   
             },
             error: function (xhr, status, error) {
                 // Handle the error here

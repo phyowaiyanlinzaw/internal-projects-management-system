@@ -1346,3 +1346,10 @@
     font-family:  Georgia, serif;
     margin-bottom: 10px;
 }
+
+textarea{  
+  /* box-sizing: padding-box; */
+  overflow:hidden;
+  /* demo only: */
+  padding:10px;
+}

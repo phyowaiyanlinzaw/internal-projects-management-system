@@ -469,6 +469,8 @@
                                             class="form-control border-task-description"
                                             id="background"
                                             name="background"
+
+                                            oninput="autoResize(this)"
                                         ></textarea>
                                     </div>
 
@@ -1216,9 +1218,10 @@
                                                     <div class="col-md-8 col-lg-9">
                                                         <textarea
                                                             type="text"
-                                                            class="form-control p-0"
+                                                            class="form-control "
                                                             name="background"
                                                             id="project-detail-background"
+                                                            oninput="autoResize(this)"
                                                         ></textarea>
                                                     </div>
                                                 </div>

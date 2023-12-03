@@ -299,30 +299,36 @@ addDeliverableBtn.addEventListener('click', function () {
                     size: 'sm'
                 })
 
-                $('input[data-lol="deli"]').change(function () {
-                    const isReady = $(this).prop("checked");
-                    const deliId = $(this).attr("id");
-
-                    const actualId = deliId.split("-").pop();
-
-                    const deliverable = {
-                        id: actualId,
-                        status: isReady,
-                    };
-
-                    $.ajax({
-                        url: "/api/deliverable/update-status",
-                        method: "PUT",
-                        data: JSON.stringify(deliverable),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (response) {
-                            console.log(response);
-                            console.log("Deliverable Status Updated Successfully...");
-                        },
-                    });
-                });
             })
+
+            $('input[data-lol="deli"]').change(function () {
+                const isReady = $(this).prop("checked");
+                const deliId = $(this).attr("id");
+
+                const actualId = deliId.split("-").pop();
+
+                const deliverable = {
+                    id: actualId,
+                    status: isReady,
+                };
+
+                $.ajax({
+                    url: "/api/deliverable/update-status",
+                    method: "PUT",
+                    data: JSON.stringify(deliverable),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        console.log("Deliverable Status Updated Successfully...");
+                        const toast = createToast("Deliverable Status Updated Successfully...")
+                        const btoawe = new bootstrap.Toast(toast)
+                        document.querySelector("#toasts-noti-container").appendChild(toast)
+                        btoawe.show();
+                    },
+                });
+            });
+
             if (deliverableAddContainer.children.length === 0) {
                 console.log('not result')
                 document.querySelector("#no-result-deli").classList.remove('d-none')
