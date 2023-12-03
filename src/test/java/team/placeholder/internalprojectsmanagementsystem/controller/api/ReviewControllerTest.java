@@ -19,11 +19,10 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.project.Re
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,23 +50,59 @@ class ReviewControllerTest {
     }
 
     @Test
-    void updateReview() throws Exception {
-        long reviewId = 1L;
-        ReviewDto updatedReviewDto = new ReviewDto();
-        updatedReviewDto.setId(reviewId);
+    void updateReviewSuccess() {
+        // Arrange
+        long id = 1L;
+        ReviewDto reviewDto = new ReviewDto();
+        reviewDto.setId(id);
+        when(reviewService.updateReview(any(ReviewDto.class))).thenReturn(reviewDto);
 
-        // Mocking the service call
-        when(reviewService.updateReview(eq(updatedReviewDto))).thenReturn(updatedReviewDto);
+        // Act
+        ResponseEntity<ReviewDto> responseEntity = reviewController.updateReview(id, reviewDto);
 
-        // Call the controller method directly
-        ResponseEntity<ReviewDto> response = reviewController.updateReview(reviewId, updatedReviewDto);
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(reviewDto, responseEntity.getBody());
 
-        // Verify that the service method was called with the correct parameters
-        verify(reviewService).updateReview(eq(updatedReviewDto));
+        // Verify that the updateReview method was called with the correct argument
+        verify(reviewService, times(1)).updateReview(reviewDto);
+    }
 
-        // Verify the response
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(updatedReviewDto, response.getBody());
+    @Test
+    void updateReviewFailure() {
+        // Arrange
+        long id = 2L;
+        ReviewDto reviewDto = new ReviewDto();
+        reviewDto.setId(id);
+        when(reviewService.updateReview(any(ReviewDto.class))).thenReturn(null);
+
+        // Act
+        ResponseEntity<ReviewDto> responseEntity = reviewController.updateReview(id, reviewDto);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+
+        // Verify that the updateReview method was called with the correct argument
+        verify(reviewService, times(1)).updateReview(reviewDto);
+    }
+
+    @Test
+    void updateReviewInvalidId() {
+        // Arrange
+        long invalidId = -1L;
+        ReviewDto reviewDto = new ReviewDto();
+        reviewDto.setId(invalidId);  // Setting an invalid ID
+
+        // Act
+        ResponseEntity<ReviewDto> responseEntity = reviewController.updateReview(invalidId, reviewDto);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+
+        // Verify that the updateReview method was not called (invalid ID case)
+        verify(reviewService, never()).updateReview(any(ReviewDto.class));
     }
 }
