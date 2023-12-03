@@ -609,6 +609,10 @@ archSearchBtn.addEventListener('input', function () {
 
 const changePhase = document.querySelector("#development-phase");
 
+if (currentUser.currentUser.role !== 'PROJECT_MANAGER') {
+    changePhase.disabled = true;
+}
+
 for (let i = 0; i < changePhase.options.length; i++) {
     if (changePhase.options[i].value === project.current_phase) {
         changePhase.options[i].selected = true;
