@@ -442,6 +442,8 @@ document.querySelector("#client-form").addEventListener("submit", function (e) {
                     clearClientValidationStylesAndMessages("#client-phone");
                     $("#alert-modal").modal("show");
 
+                    //go back to the #project-create tab
+                    $("[data-bs-target='#project-create']").tab("show");
 
                 },
                 error: function (error) {

@@ -144,8 +144,9 @@ class TaskServiceImplTest {
     }
 
     @Test
-    void getTasksByUserId() {
+    void getTasksByUserIdAndStatus() {
         long userId = 1L;
+        TaskStatus status = TaskStatus.IN_PROGRESS;
 
         List<Tasks> tasksList = new ArrayList<>();
         Tasks task1 = new Tasks(/* provide necessary details */);
@@ -153,7 +154,7 @@ class TaskServiceImplTest {
         tasksList.add(task1);
         tasksList.add(task2);
 
-        when(taskRepository.findByUserId(userId)).thenReturn(tasksList);
+        when(taskRepository.findByUserIdAndStatus(userId,status)).thenReturn(tasksList);
 
         User user = new User(/* provide necessary details */);
         when(modelMapper.map(user, UserDto.class)).thenReturn(new UserDto(/* provide necessary details */));
@@ -165,7 +166,7 @@ class TaskServiceImplTest {
         when(modelMapper.map(task2, TasksDto.class)).thenReturn(new TasksDto(/* provide necessary details */));
 
         // Act
-        List<TasksDto> result = taskService.getTasksByUserId(userId);
+        List<TasksDto> result = taskService.getTasksByUserIdAndStatus(userId, status);
 
         // Assert
         assertEquals(2, result.size());

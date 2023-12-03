@@ -36,15 +36,16 @@ class TaskRepositoryTest {
     }
 
     @Test
-    void findByUserId() {
+    void findByUserIdAndStatus() {
         long userId = 1L;
+        TaskStatus status = TaskStatus.IN_PROGRESS;
 
         List<Tasks> expectedTasks = new ArrayList<>();
         expectedTasks.add(new Tasks());
 
-        when(tasksRepository.findByUserId(userId)).thenReturn(expectedTasks);
+        when(tasksRepository.findByUserIdAndStatus(userId,status)).thenReturn(expectedTasks);
 
-        List<Tasks> result = tasksRepository.findByUserId(userId);
+        List<Tasks> result = tasksRepository.findByUserIdAndStatus(userId, status);
 
         assertEquals(expectedTasks.size(), result.size());
         for (int i = 0; i < expectedTasks.size(); i++) {

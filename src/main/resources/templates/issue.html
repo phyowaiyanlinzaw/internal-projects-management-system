@@ -72,13 +72,11 @@
                 </nav>
 
                 <div>
-
-                    <button class="btn btn-info" id="reset-btn" style="color: #ffffff !important;">
-                    reset
-                    </button>
-
-                    <div class="d-inline-block">
-                        <div class="d-inline-block" >
+                    <div class="d-inline-block" id="filter-div">
+                        <button class="btn btn-info" id="reset-btn" style="color: #ffffff !important;">
+                            reset
+                        </button>
+                        <div class="d-inline-block">
                             <select id="status-filter" class="form-control">
                                 <option value="" selected disabled>Status</option>
                                 <option value="DECLINE">DECLINE</option>
@@ -92,12 +90,9 @@
                                 <option value="0">Unsolved</option>
                             </select>
                         </div>
-
-
                         <div class="d-inline-block">
                             <select id="category-filter" class="form-control">
                                 <option value="" selected disabled>Category</option>
-                                <option value="" disabled selected>Select Issue Category</option>
                                 <option value="ERROR">Error</option>
                                 <option value="BUG">Bug</option>
                                 <option value="COMMUNICATION">Communication</option>
@@ -121,19 +116,27 @@
                     <!-- sortting button -->
                         <i class="bi bi-sort-alpha-down sort-btn text-dark"></i>
 
+
+                    </div>
+                    <div class="d-inline-block" sec:authorize="hasAnyRole('PMO','SDQC')">
+                        <span class="d-inline-block">
+                            <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="btn-check-outlined">
+                                    <i class="fa-solid fa-table"></i>
+                                </label><br>
+                        </span>
                     </div>
                 </div>
                 <!-- Modal -->
                 
             </div>
-            <div class="mt-2">
-                <form class="">
+            <div class="mt-2" id="search-bar">
                     <input
                         class="form-control border-0"
                         type="search"
-                        placeholder="Search issue"
+                        placeholder="&#xF002; Search Issue"
+                        style="font-family:Arial, FontAwesome"
                     />
-                </form>
             </div>
             
 
@@ -187,28 +190,6 @@
 
                 </script>
             </ul>
-            <ul class="nav nav-tabs nav-tabs-bordered" id="issueTableNav" sec:authorize="hasAnyRole('PMO','SDQC')">
-                <li class="nav-item">
-                    <button
-                            class="nav-link position-relative btn-light active"
-                            data-bs-toggle="tab"
-                            data-bs-target="#all-issue-list"
-                    >
-                        Feeds View
-                        <i class="bi bi-rss"></i>
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button
-                            class="nav-link position-relative btn-light"
-                            data-bs-toggle="tab"
-                            data-bs-target="#issue-table"
-                    >
-                        Table View
-                        <i class="bi bi-table"></i>
-                    </button>
-                </li>
-            </ul>
 
 
                 <div class="tab-content pt-2">
@@ -217,8 +198,8 @@
                         <div class="d-flex flex-column gap-2" id="sort-container"></div>
                         <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-result">
                             <div class="d-flex justify-content-center align-items-center flex-column">
-                                <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
-                                <h1 class="text-white">No Issue Found!</h1>
+                                <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                                <h1 class="text-dark">No Issue Found!</h1>
                             </div>
                         </div>
                     </div>
@@ -264,7 +245,6 @@
                                     data-export-types="['csv', 'excel', 'pdf']"
                                     data-click-to-select="true"
                                     data-header-style="headerStyle"
-                                    data-url="users"
 
                             >
                                 <thead class="thead-dark text-center text-white font-weight-bold text-uppercase bg-primary rounded shadow-sm p-3 mb-5 border-white">
@@ -277,17 +257,6 @@
                                     <th data-field="place" data-sortable="true">Place
                                         <span style="visibility: hidden;">In this modification,</span>
                                     </th>
-                                    <th data-field="impact" data-sortable="true">Impact
-                                        <span style="visibility: hidden;">In this modification, </span>
-                                    </th>
-                                    <th data-field="root_cause" data-sortable="true">Root Cause
-                                        <span style="visibility: hidden;">In this modification,</span></th>
-                                    <th data-field="direct_cause" data-sortable="true">Direct Cause
-                                        <span style="visibility: hidden;">In this modification,</span></th>
-                                    <th data-field="corrective_action" data-sortable="true">Corrective Action
-                                        <span style="visibility: hidden;">In this modification, </span></th>
-                                    <th data-field="preventive_action" data-sortable="true">Preventive Action
-                                        <span style="visibility: hidden;">In this modification, </span></th>
                                     <th data-field="responsible_party" data-sortable="true">Responsible Party</th>
                                     <th data-field="user_pic" data-sortable="true">Personal In Charge</th>
                                     <th data-field="status" data-sortable="true">Status</th>
@@ -325,8 +294,8 @@
                         </div>
                         <div style="width: 100%; height:50vh" class="d-flex justify-content-center align-items-center d-none" id="no-new-issue">
                             <div class="d-flex justify-content-center align-items-center flex-column">
-                                <i class="bi bi-journal-x text-white" style="font-size: 6rem;"></i>
-                                <h1 class="text-white">No New Issue</h1>
+                                <i class="bi bi-journal-x text-dark" style="font-size: 6rem;"></i>
+                                <h1 class="text-dark">No New Issue</h1>
                             </div>
                         </div>
                     </div>

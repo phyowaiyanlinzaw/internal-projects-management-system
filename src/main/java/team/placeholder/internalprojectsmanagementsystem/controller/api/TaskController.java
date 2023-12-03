@@ -49,10 +49,10 @@ public class TaskController {
 
     }
 
-    @GetMapping("/list/user/{id}")
-    public ResponseEntity<List<TasksDto>> taskListByUserId(@PathVariable long id) {
+    @GetMapping("/list/user/{id}/status/{status}")
+    public ResponseEntity<List<TasksDto>> taskListByUserIdAndStatus(@PathVariable long id, @PathVariable String status) {
 
-            return ResponseEntity.ok(taskService.getTasksByUserId(id));
+            return ResponseEntity.ok(taskService.getTasksByUserIdAndStatus(id, TaskStatus.valueOf(status)));
 
     }
 
