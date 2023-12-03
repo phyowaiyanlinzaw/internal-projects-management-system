@@ -878,15 +878,16 @@
 
 
             $('#chart-filter-reset-btn').on('click', function () {
+                //clear dropdowns
                 $('#departmentDropDown').text('Select Department');
                 $('#projectDropDown').text('Select Project');
-                //don;t clear project dropdown if user is PROJECT_MANAGER
-                if (currentUser.currentUser.role !== "PROJECT_MANAGER") {
-                    $('#projectDropDown').empty();
+
+                if (currentUser.currentUser.role === "PROJECT_MANAGER") {
+                    $('#projectDropDown').empty()
+                    $('#projectDropDown').text('Select Project');
                 }
 
-
-                lineChart.data.datasets[0].data = [];
+            lineChart.data.datasets[0].data = [];
                 lineChart.data.datasets[1].data = [];
 
                 barChart.data.datasets[0].data = [];
