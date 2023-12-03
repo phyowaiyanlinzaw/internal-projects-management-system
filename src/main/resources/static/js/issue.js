@@ -974,13 +974,13 @@ function exportAllRowsToExcel() {
             const rows = data.map(issue => [
                 issue.id,
                 issue.title,
-                issue.issue_category,
-                issue.project_name,
+                issue.issueCategory,
+                issue.projectDto.name,
                 issue.status,
-                issue.user_pic,
-                issue.responsible_party,
-                issue.solved,
-                issue.created_date
+                issue.user_pic.name,
+                issue.responsible_party.name,
+                issue.solved ? 'Solved' : 'Unsolved',
+                new Date(issue.created_date).toLocaleDateString()
             ]);
 
             const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
