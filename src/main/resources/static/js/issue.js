@@ -1040,6 +1040,13 @@ function isMatch(input, title, card) {
     return pattern.test(title) || pattern.test(card);
 }
 
+document.querySelector("#issueDetailsModal").addEventListener('hidden.bs.modal', function () {
+
+    document.querySelector('#issue-description-save-btn-container').classList.add('d-none')
+    document.querySelector('#issue-detail-save-btn-container').classList.add('d-none')
+
+})
+
 let currentIssueId;
 $(document).ready(async function () {
 
