@@ -83,11 +83,12 @@ class TasksServiceTest {
     }
 
     @Test
-    void getTasksByUserId() {
+    void getTasksByUserIdAndStatus() {
         long userId = 1L;
+        TaskStatus status = TaskStatus.TODO;
         List<TasksDto> tasksDtoList = new ArrayList<>();
-        Mockito.when(tasksService.getTasksByUserId(userId)).thenReturn(tasksDtoList);
-        List<TasksDto> tasksByUserId = tasksService.getTasksByUserId(userId);
+        Mockito.when(tasksService.getTasksByUserIdAndStatus(userId,status)).thenReturn(tasksDtoList);
+        List<TasksDto> tasksByUserId = tasksService.getTasksByUserIdAndStatus(userId,status);
         assertEquals(tasksDtoList,tasksByUserId);
     }
 
