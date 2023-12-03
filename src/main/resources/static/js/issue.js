@@ -101,25 +101,31 @@ document.querySelectorAll("button[data-bs-target=\"#all-issue-list\"]").forEach(
     })
 })
 
-document.getElementById("btn-check-outlined").addEventListener("click",()=>{
-    if (document.getElementById("btn-check-outlined").checked) {
-        //remove all issues and show table
-        document.getElementById("all-issue-list").classList.add("d-none")
-        document.getElementById("issue-table-container").classList.remove("d-none")
-        document.getElementById("issue-table").classList.add("show")
-        document.getElementById("issue-table").classList.add("active")
-        document.getElementById("filter-div").classList.add("d-none")
-        document.getElementById("search-bar").classList.add("d-none")
-    } else {
-        //show all issues and remove table
-        document.getElementById("all-issue-list").classList.remove("d-none")
-        document.getElementById("issue-table-container").classList.add("d-none")
-        document.getElementById("issue-table").classList.remove("show")
-        document.getElementById("issue-table").classList.remove("active")
-        document.getElementById("filter-div").classList.remove("d-none")
-        document.getElementById("search-bar").classList.remove("d-none")
-    }
-})
+const issueTableBtn = document.getElementById("btn-check-outlined")
+
+if(issueTableBtn) {
+
+    issueTableBtn.addEventListener("click", () => {
+        if (document.getElementById("btn-check-outlined").checked) {
+            //remove all issues and show table
+            document.getElementById("all-issue-list").classList.add("d-none")
+            document.getElementById("issue-table-container").classList.remove("d-none")
+            document.getElementById("issue-table").classList.add("show")
+            document.getElementById("issue-table").classList.add("active")
+            document.getElementById("filter-div").classList.add("d-none")
+            document.getElementById("search-bar").classList.add("d-none")
+        } else {
+            //show all issues and remove table
+            document.getElementById("all-issue-list").classList.remove("d-none")
+            document.getElementById("issue-table-container").classList.add("d-none")
+            document.getElementById("issue-table").classList.remove("show")
+            document.getElementById("issue-table").classList.remove("active")
+            document.getElementById("filter-div").classList.remove("d-none")
+            document.getElementById("search-bar").classList.remove("d-none")
+        }
+    })
+}
+
 
 if (document.querySelector("button[data-bs-target=\"#unsolved-issues\"]")) {
 

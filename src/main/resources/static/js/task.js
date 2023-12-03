@@ -905,6 +905,12 @@ saveBtn.addEventListener("click", function (event) {
             document.getElementById("pm-task-duration").innerText = duration.toString() + " days "
             document.getElementById("pm-plan-edit-hours").value = response.planHours
             document.getElementById("pm-actual-edit-hours").value = response.actualHours
+
+            $("#alert-text").text(
+                "Task updated successfully"
+            );
+            $('#alert-modal').modal('show');
+
             $('#task-details').modal('hide')
         },
         error: function (jqXHR, textStatus, errorThrown) {
