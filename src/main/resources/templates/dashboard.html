@@ -880,8 +880,10 @@
             $('#chart-filter-reset-btn').on('click', function () {
                 $('#departmentDropDown').text('Select Department');
                 $('#projectDropDown').text('Select Project');
-                //clear project dropdown
-                $('#projectDropDown').next('.dropdown-menu').empty();
+                //don;t clear project dropdown if user is PROJECT_MANAGER
+                if (currentUser.currentUser.role !== "PROJECT_MANAGER") {
+                    $('#projectDropDown').empty();
+                }
 
 
                 lineChart.data.datasets[0].data = [];
