@@ -295,9 +295,10 @@ function createPendingIssueCard(issue) {
 
 }
 
-channel.bind("issue-noti-event", async function(response) {
+const NO_NEW_ISSUE = document.querySelector("#no-new-issue")
 
-    document.querySelector("#no-new-issue").classList.add("d-none");
+channel.bind("issue-noti-event", async function(response) {
+    if (NO_NEW_ISSUE) NO_NEW_ISSUE.classList.add("d-none");
     
     const hiddenElement = document.createElement('div');
     hiddenElement.style.display = 'none';
@@ -453,10 +454,9 @@ function createToast ({notification}) {
     toast.setAttribute('aria-live', 'assertive')
     toast.setAttribute('aria-atomic', 'true')
 
-    toast.innerHTML = `<div class="toast-header">
-                <strong class="me-auto"><i class="fa-solid fa-bell fs-3" style="transform: rotate(45deg);"></i></strong>
+    toast.innerHTML = `<div class="toast-header bg-info text-white">
+                <strong class="me-auto "><i class="fa-solid fa-bell" style="transform: rotate(-45deg);"></i></strong>
                 <small class="text-muted">${getTimeElapsed(Date.now())}</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
                 ${notification.description}

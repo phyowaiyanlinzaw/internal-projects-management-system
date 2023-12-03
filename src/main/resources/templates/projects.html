@@ -179,7 +179,7 @@
 
                 <div th:replace="~{fragments/navigation :: navigation-without-search}"></div>
 
-                <div class="toast-container position-fixed p-3 end-0 bottom-0 " id="toasts-noti-container" style="z-index: 99;">
+                <div class="toast-container position-fixed p-3 end-0 bottom-0 " id="toasts-noti-container" style="z-index: 99999999999;">
                     <!-- Then put toasts within -->
                     
                     
@@ -245,8 +245,8 @@
                         <form class="d-inline-block">
                             <input
                                 class="form-control border-0"
-                                type="search"
                                 placeholder="Search project "
+                                id="search-project"
                             />
                         </form>
                         <!-- modal toggle button start -->
@@ -975,7 +975,7 @@
                             <div class="tab-pane fade p-3" id="edit-architecture">
                                 <div
                                     id="architectures-list-in-edit"
-                                    class="d-flex gap-2 flex-wrap"
+                                    class="d-flex gap-2 flex-wrap justify-content-center"
                                 ></div>
                             </div>
 
