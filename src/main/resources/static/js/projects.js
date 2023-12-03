@@ -837,13 +837,13 @@ motherContainer.addEventListener("click", async function (e) {
             console.log(a)
 
             showDeliContainer.innerHTML += `
-    < li
+    <li
 class="list-group-item d-flex justify-content-between"
     >
     ${a.deliverableType.type} <i
         class="bi fw-bold bi-check2-all text-${a.status ? 'success' : 'danger'} fs-4"
     ></i>
-                            </li > `
+                            </li> `
 
         })
 
@@ -856,11 +856,11 @@ class="list-group-item d-flex justify-content-between"
             if (currentProjectDetail.amountDto.hasOwnProperty(key)) {
                 const value = currentProjectDetail.amountDto[key];
                 showAmountContainer.innerHTML += `
-    < li
+    <li
 class="list-group-item d-flex justify-content-between"
     >
     ${key.replace(/_/g, ' ')} <span class="badge bg-primary rounded-pill">${value}</span>
-                            </li > `
+                            </li> `
             }
         }
 
