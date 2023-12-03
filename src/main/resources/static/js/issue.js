@@ -626,7 +626,6 @@ $(document).ready(async function () {
 
                             const title = $('#title').val('');
                             const category= $('#issue_category').val('');
-                            const user_pic = $('#user_pic').val('');
                             const responsible_party = $('#responsible_party').val('');
                             const description = descriptionEditor.root.innerHTML = '';
                             const place = $('#place').val('');

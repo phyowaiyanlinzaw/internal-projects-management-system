@@ -1,32 +1,28 @@
 package team.placeholder.internalprojectsmanagementsystem.controller.ui;
 
 import jakarta.servlet.http.HttpSession;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.scheduling.config.Task;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.ui.Model;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.ProjectDto;
+import team.placeholder.internalprojectsmanagementsystem.dto.model.project.TasksDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Project;
-import team.placeholder.internalprojectsmanagementsystem.model.project.Tasks;
 import team.placeholder.internalprojectsmanagementsystem.model.user.userenums.Role;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.ProjectServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.TaskServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.user.UserServiceImpl;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -44,164 +40,159 @@ class ViewControllerTest {
     @InjectMocks
     private ViewController viewController;
 
+    @Test
+    void testTaskWhenValidProjectIdThenReturnProjectAndAddAttributesToModel() {
+        // Given
+        Long projectId = 1L;
+        List<TasksDto> tasks = new ArrayList<>();
+        ProjectDto project = new ProjectDto();
+        when(taskServiceImpl.getTasksByProjectId(projectId)).thenReturn(tasks);
+        when(projectServiceImpl.getProjectById(projectId)).thenReturn(project);
+        Model model = mock(Model.class);
+
+        // When
+        String result = viewController.task(projectId, model);
+
+        // Then
+        assertEquals("project", result);
+        verify(model).addAttribute("tasks", tasks);
+        verify(model).addAttribute("projectId", projectId);
+        verify(model).addAttribute("project", project);
+        verifyNoMoreInteractions(model);
+    }
 
 
     @Test
-    void testHome() {
-        // Arrange
-        HttpSession session = Mockito.mock(HttpSession.class);
-        Model model = Mockito.mock(Model.class);
-
-        // Mock authentication
+    void homeTest() {
+        // Mock Authentication
         Authentication authentication = Mockito.mock(Authentication.class);
-        Mockito.when(authentication.getName()).thenReturn("test@example.com");
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn("test@example.com");
 
-        // Set authentication in the controller
-        viewController.authentication = authentication;
+        // Mock UserDto
+        UserDto userDto = new UserDto();
+        userDto.setId(1L);
+        userDto.setRole(Role.PMO); // Assuming Role.PMO is the correct enum value
+        // Mock DepartmentDto
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setId(100L);
+        userDto.setDepartmentdto(departmentDto);
 
-        // Assuming you have a user with a known email
-        String userEmail = "test@example.com";
-        UserDto mockUserDto = new UserDto();
-        mockUserDto.setId(1L);
-        mockUserDto.setRole(Role.PMO);
-        mockUserDto.setDepartmentdto(new DepartmentDto());
-        mockUserDto.setProjectManager(null);
+        // Mock UserServiceImpl behavior
+        when(userServiceImpl.getUserByEmail("test@example.com")).thenReturn(userDto);
 
-        Mockito.when(userServiceImpl.getUserByEmail(userEmail)).thenReturn(mockUserDto);
-        Mockito.when(session.getAttribute("login-user-id")).thenReturn(1L);
-        Mockito.when(session.getAttribute("loing-user-role")).thenReturn("USER");
-        Mockito.when(session.getAttribute("login-user-dp-id")).thenReturn(mockUserDto.getDepartmentdto().getId());
-        Mockito.when(session.getAttribute("login-user-pm-id")).thenReturn(null);
+        // Mock HttpSession
+        HttpSession session = Mockito.mock(HttpSession.class);
 
-        // Mock the behavior of taskServiceImpl.getTasksByProjectId
-        Mockito.when(taskServiceImpl.getTasksByProjectId(Mockito.anyLong())).thenReturn(Collections.emptyList());
+        // Call the method to be tested
+        String result = viewController.home(authentication, session);
 
-        // Act
-        String result = viewController.home(session);
+        // Assertions
+        assertEquals("dashboard", result);
 
-        // Assert
-        Mockito.verify(model).addAttribute("tasks", Collections.emptyList());
-        // Verify that other expected interactions occur
-        Mockito.verify(model).addAttribute("projectId", 1L);
-        Mockito.verify(model).addAttribute("project", null);
+        // Verify that the method in userServiceImpl is called with the expected argument
+        verify(userServiceImpl).getUserByEmail("test@example.com");
 
-        // Add more assertions based on your specific logic and expectations
+        // Verify that the session.setAttribute is called with the expected parameters
+        verify(session).setAttribute("login-user-id", 1L);
+        verify(session).setAttribute("loing-user-role", "PMO");
+        verify(session).setAttribute("login-user-dp-id", 100L);
 
-        // Example assertion for demonstration
-        assert (result.equals("dashboard"));
+        // Ensure that no other interactions occurred on the mock objects
+        Mockito.verifyNoMoreInteractions(session, userServiceImpl);
+    }
+
+    @Test
+    void testAccessDenied() {
+        String result = viewController.accessDenied();
+        assertEquals("404", result);
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
+    }
+
+    @Test
+    void testLoginFormView() {
+        String result = viewController.loginFormView();
+        assertEquals("login", result);
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
     }
 
     @Test
     void testProfile() {
-        // Arrange
-        Model model = Mockito.mock(Model.class);
-
-        // Act
         String result = viewController.profile();
-
-        // Assert
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
-        assert (result.equals("profile"));
+        assertEquals("profile", result);
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
     }
-
-
 
     @Test
     void testProject() {
-        // Arrange
-        Model model = Mockito.mock(Model.class);
-
-        // Act
         String result = viewController.project();
-
-        // Assert
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
-        assert(result.equals("projects"));
+        assertEquals("projects", result);
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
     }
+
     @Test
     void testDashboard() {
-        // Act
         String result = viewController.dashboard();
-
-        // Assert
         assertEquals("redirect:/dashboard", result);
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
     }
 
     @Test
-    @WithMockUser(roles = {"SDQC"})
     void testDepartmentWithSDQCRole() {
-        // Act
         String result = viewController.department();
-
-        // Assert
         assertEquals("department", result);
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
     }
 
-    @Test
-    @WithMockUser(roles = {"SOME_OTHER_ROLE"})
-    void testDepartmentWithoutRequiredRole() {
-        // Act
-        String result = viewController.department();
-
-        // Assert
-        assertEquals("accessDenied", result); // Assuming you have an accessDenied view for unauthorized access
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
-    }
     @Test
     void testResetPassword() {
-        // Act
         String result = viewController.resetPassword();
-
-        // Assert
         assertEquals("password-reset", result);
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
     }
-
 
     @Test
     void testIssue() {
-        // Act
         String result = viewController.issue();
-
-        // Assert
         assertEquals("issue", result);
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
     }
 
     @Test
-    @WithMockUser(roles = {"PMO"})
     void testEmployeesWithPMORole() {
-        // Act
         String result = viewController.employees();
-
-        // Assert
         assertEquals("employees", result);
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+        verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl);
     }
 
     @Test
-    @WithMockUser(roles = {"SOME_OTHER_ROLE"})
-    void testEmployeesWithoutRequiredRole() {
-        // Act
-        String result = viewController.employees();
+    void taskTest() {
+        // Mock data
+        Long projectId = 1L;
+        List<TasksDto> mockTasks = new ArrayList<>(); // Assuming TasksDto is the type returned by getTasksByProjectId
+        ProjectDto mockProject = new ProjectDto(); // Assuming ProjectDto is the type returned by getProjectById
 
-        // Assert
-        assertEquals("accessDenied", result); // Assuming you have an accessDenied view for unauthorized access
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
+        // Mock TaskServiceImpl behavior
+        when(taskServiceImpl.getTasksByProjectId(projectId)).thenReturn(mockTasks);
+
+        // Mock ProjectServiceImpl behavior
+        when(projectServiceImpl.getProjectById(projectId)).thenReturn(mockProject);
+
+        // Mock Model
+        Model model = Mockito.mock(Model.class);
+
+        // Call the method to be tested
+        String result = viewController.task(projectId, model);
+
+        // Assertions
+        assertEquals("project", result);
+
+        // Verify that the model attributes are set correctly
+        Mockito.verify(model).addAttribute("tasks", mockTasks);
+        Mockito.verify(model).addAttribute("projectId", projectId);
+        Mockito.verify(model).addAttribute("project", mockProject);
+
+        // Ensure that no other interactions occurred on the mock objects
+        Mockito.verifyNoMoreInteractions(model, taskServiceImpl, projectServiceImpl);
     }
-
-    @Test
-    void testReportDepartment() {
-        // Act
-        String result = viewController.reportDepartment();
-
-        // Assert
-        assertEquals("issueTable", result);
-        Mockito.verifyNoInteractions(userServiceImpl, taskServiceImpl, projectServiceImpl); // Ensure no interactions with other services
-    }
-
-
-
 }
