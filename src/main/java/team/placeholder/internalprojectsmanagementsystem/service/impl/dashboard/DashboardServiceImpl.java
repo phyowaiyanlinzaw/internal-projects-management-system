@@ -118,7 +118,6 @@ public class DashboardServiceImpl implements DashboardService {
                 kpiDto.setIntegratedtest_kpi(integrated_test_kpi);
             }
 
-
         return kpiDto;
     }
 

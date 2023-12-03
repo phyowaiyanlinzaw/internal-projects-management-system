@@ -35,15 +35,8 @@ public class DashboardController {
     @GetMapping(value="/kpi/project/{id}")
     public ResponseEntity<KPIDto> getKpi(@PathVariable long id){
         KPIDto kpiDto = dashboardService.getKPI(id);
-        log.info("review kpi " + kpiDto.getReview_kpi());
-        log.info("detail kpi " + kpiDto.getDetail_kpi());
-        log.info("coding kpi " + kpiDto.getCoding_kpi());
-        log.info("unit test kpi " + kpiDto.getUnittest_kpi());
-        log.info("integrated test kpi " + kpiDto.getIntegratedtest_kpi());
         return  ResponseEntity.ok(kpiDto) ;
     }
-
-
 
     @GetMapping("/productivity/project/{projectId}")
     public ResponseEntity<List<ProductivityDto>> getProductivity(
