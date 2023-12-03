@@ -1333,7 +1333,9 @@ document.querySelectorAll("select[action='filter']").forEach((a) =>
 
         const matchingProjects = pList.filter((a) => {
             const projectDate = new Date(a.startDate);
+            console.log(projectDate)
             const projectMonth = projectDate.getMonth();
+            console.log(projectMonth)
             const projectYear = projectDate.getFullYear();
             return (
                 projectYear === yearValue && MONTH_NAMES[projectMonth] === currentTime
@@ -1374,7 +1376,6 @@ document.querySelectorAll("select[action='filter']").forEach((a) =>
     })
 );
 
-const currentYear = new Date().getFullYear();
 
 document.querySelector("#reset-btn").addEventListener("click", function (e) {
 
