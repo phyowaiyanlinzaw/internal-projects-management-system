@@ -8,6 +8,7 @@ import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.OngoingStubbing;
 import org.modelmapper.ModelMapper;
+import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +23,7 @@ import team.placeholder.internalprojectsmanagementsystem.repository.department.D
 import team.placeholder.internalprojectsmanagementsystem.repository.user.UserRepository;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServiceImpl.NotificationServiceImpl;
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
+import team.placeholder.internalprojectsmanagementsystem.service.noti.NotificationService;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -43,7 +45,7 @@ class UserServiceImplTest {
     private JavaMailSender mailSender;
 
     @Mock
-    private ModelMapper modelMapper = mock(ModelMapper.class);
+    private ModelMapper modelMapper ;
 
     @Mock
     private AESImpl aes;
@@ -52,7 +54,7 @@ class UserServiceImplTest {
     private NotificationServiceImpl notificationService;
 
     @InjectMocks
-    private UserServiceImpl userService = mock(UserServiceImpl.class);
+    private UserServiceImpl userService;
 
     @Before
     public void setUp() {
@@ -61,17 +63,30 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testGetAllUsers() {
-        // Mock the UserRepository to return a list of users
-        when(userRepository.findAll()).thenReturn(List.of(new User(), new User()));
+    public void testGetAllUsers() {
+        // Create test data
+        User user = new User();
+        user.setId(1L);
+        user.setName("John Doe");
+        user.setEmail("john.doe@example.com");
+        user.setRole(Role.EMPLOYEE);
+
+        when(userRepository.findAll()).thenReturn(Collections.singletonList(user));
+
+        DepartmentDto departmentDto = new DepartmentDto(); // You need to create a DepartmentDto object
+        when(modelMapper.map(Mockito.any(Department.class), Mockito.eq(DepartmentDto.class))).thenReturn(departmentDto);
+
+        UserDto userDto = new UserDto(); // You need to create a UserDto object
+        when(modelMapper.map(Mockito.any(User.class), Mockito.eq(UserDto.class))).thenReturn(userDto);
 
         // Call the method to be tested
         List<UserDto> result = userService.getAllUsers();
 
-        // Assert that the result is not null and has the expected size
-        assertNotNull(result);
-        assertEquals(0, result.size());
+        // Verify the interactions and assertions
+        assertEquals(1, result.size());
+        assertEquals(userDto, result.get(0));
     }
+
     @Test
     void testUpdateProfile() {
         // Create a userDto for testing
@@ -90,7 +105,7 @@ class UserServiceImplTest {
 
         // Assert that the result is not null
         assertNull(result);
-        // You may want to add more specific assertions based on your requirements
+
     }
 
     @Test
