@@ -494,6 +494,65 @@ const fragment = document.createDocumentFragment();
 
 let pList = await getAllProjects();
 
+if(pList.length == 0) {
+    document.querySelector('#no-result').classList.remove('d-none')
+}
+
+const searchBtn = document.querySelector('#search-project');
+
+searchBtn.addEventListener('input', function () {
+
+    const inputText = this.value;
+
+    let projects = []
+
+    for (let i = 0; i < pList.length; i++) {
+        let proectTitle = pList[i].name;
+        let users = pList[i].user.name;
+        if (isMatch(inputText.trim(), proectTitle, users)) {
+            projects.push(pList[i]);
+        }
+    }
+    if (projects.length === 0) {
+        document.querySelector('#no-result').classList.remove('d-none')
+    } else {
+        document.querySelector('#no-result').classList.add('d-none')
+    }
+
+    $('#pagination-container').pagination({
+        dataSource: function (done) {
+            const projects = []
+
+            for (let i = projects.length - 1; i >= 0; i--) {
+                projects.push(projects[i]);
+            }
+
+            done(projects);
+        },
+        callback: function (data, pagination) {
+            // template method of yourself
+            var html = template(data);
+
+            $('#sort-container').html(html);
+        },
+        pageSize: 5, // Number of items per page
+        className: 'paginationjs-theme-blue',
+    });
+
+})
+
+function isMatch(input, title, card) {
+    // Escape special characters in the input
+    const escapedInput = input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Create a regular expression pattern
+    const pattern = new RegExp(`^.*${escapedInput.split('').join('.*')}.*$`, 'i');
+
+    // Check if the input matches either the title or card
+    return pattern.test(title) || pattern.test(card);
+}
+
+
 function template(a) {
     const container = document.createElement('div');
 

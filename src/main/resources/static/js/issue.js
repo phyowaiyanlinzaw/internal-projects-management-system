@@ -1006,8 +1006,21 @@ function template(a) {
     return container.innerHTML;
 }
 
+function isMatch(input, title, card) {
+    // Escape special characters in the input
+    const escapedInput = input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Create a regular expression pattern
+    const pattern = new RegExp(`^.*${escapedInput.split('').join('.*')}.*$`, 'i');
+
+    // Check if the input matches either the title or card
+    return pattern.test(title) || pattern.test(card);
+}
+
 let currentIssueId;
 $(document).ready(async function () {
+
+    const searchInput = document.querySelector('#search-issue');
 
     function loadData() {
         $.ajax({
@@ -1036,6 +1049,48 @@ $(document).ready(async function () {
                     pageSize: 5, // Number of items per page
                     className: 'paginationjs-theme-blue',
                 });
+
+                searchInput.addEventListener('input', function() {
+
+                    const inputText = this.value;
+
+                    let issues = []
+
+                    for (let i = 0; i < data.length; i++) {
+                        let proectTitle = data[i].title;
+                        let users = data[i].user_uploader.name;
+                        if (isMatch(inputText.trim(), proectTitle, users)) {
+                            issues.push(data[i]);
+                        }
+                    }
+
+                    if(issues.length === 0) {
+                        document.querySelector('#no-result').classList.remove('d-none')
+                    } else {
+                        document.querySelector('#no-result').classList.add('d-none')
+                    }
+
+                    $('#pagination-container').pagination({
+                        dataSource: function (done) {
+                            const projects = []
+
+                            for (let i = issues.length - 1; i >= 0; i--) {
+                                projects.push(issues[i]);
+                            }
+
+                            done(projects);
+                        },
+                        callback: function (data, pagination) {
+                            // template method of yourself
+                            var html = template(data);
+
+                            $('#sort-container').html(html);
+                        },
+                        pageSize: 5, // Number of items per page
+                        className: 'paginationjs-theme-blue',
+                    });
+
+                })
             },
             error: function (error) {
                 console.log('Error fetching data:', error);
