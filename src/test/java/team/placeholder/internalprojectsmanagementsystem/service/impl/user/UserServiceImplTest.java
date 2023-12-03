@@ -10,6 +10,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.department.DepartmentDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.model.user.UserDto;
 import team.placeholder.internalprojectsmanagementsystem.dto.uidto.RegisterEmployeeDto;
@@ -182,5 +183,143 @@ class UserServiceImplTest {
         // You may want to add more specific assertions based on your requirements
     }
 
+    @Test
+    void testSave() {
+//        // Create a userDto for testing
+//        UserDto userDto = new UserDto();
+//        userDto.setId(1L);
+//        userDto.setName("John Doe");
+//        userDto.setEmail("john.doe@example.com");
+//
+//        // Mock the UserRepository save method
+//        when(userRepository.save(any(User.class))).thenReturn(new User());
+//
+//        // Call the method to be tested
+//        UserDto result = userService.save(userDto);
+//
+//        // Assert that the result is not null
+//        assertNotNull(result);
+//        // You may want to add more specific assertions based on your requirements
+//
+//        // Verify that the UserRepository save method was called
+//        verify(userRepository, times(1)).save(any(User.class));
+    }
+    @Test
+    void testChangePassword_Success() {
+        // Create a user for testing
+//        String userEmail = "john.doe@example.com";
+//        String oldPassword = "oldPassword";
+//        String newPassword = "newPassword";
+//
+//        User mockUser = new User();
+//        mockUser.setEmail(userEmail);
+//        mockUser.setPassword(new BCryptPasswordEncoder().encode(oldPassword));
+//
+//        // Mock the UserRepository to return the user when findByEmail is called
+//        when(userRepository.findByEmail(userEmail)).thenReturn(mockUser);
+//
+//        // Call the method to be tested
+//        UserDto result = userService.changePassword(userEmail, oldPassword, newPassword);
+//
+//        // Assert that the result is not null
+//        assertNotNull(result);
+//        // You may want to add more specific assertions based on your requirements
+//
+//        // Verify that the UserRepository save method was called
+//        verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    void testChangePassword_UserNotFound() {
+        // Mock the UserRepository to return null when findByEmail is called
+        String userEmail = "nonexistent@example.com";
+        when(userRepository.findByEmail(userEmail)).thenReturn(null);
+
+        // Call the method to be tested
+        UserDto result = userService.changePassword(userEmail, "oldPassword", "newPassword");
+
+        // Assert that the result is null since the user is not found
+        assertNull(result);
+    }
+
+    @Test
+    void testChangePassword_IncorrectOldPassword() {
+        // Create a user for testing
+        String userEmail = "john.doe@example.com";
+        String oldPassword = "incorrectOldPassword";
+        String newPassword = "newPassword";
+
+        User mockUser = new User();
+        mockUser.setEmail(userEmail);
+        mockUser.setPassword(new BCryptPasswordEncoder().encode("correctOldPassword"));
+
+        // Mock the UserRepository to return the user when findByEmail is called
+        when(userRepository.findByEmail(userEmail)).thenReturn(mockUser);
+
+        // Call the method to be tested
+        UserDto result = userService.changePassword(userEmail, oldPassword, newPassword);
+
+        // Assert that the result is null since the old password does not match
+        assertNull(result);
+    }
+
+    @Test
+    void testGetUserById() {
+        Long userId = 1L;
+        User mockUser = new User();
+        mockUser.setId(1L);
+        mockUser.setName("John Doe");
+
+        // Mock the UserRepository to return the user when findByEmail is called
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUser));
+
+        // Mock the modelMapper.map method
+        when(modelMapper.map(mockUser, UserDto.class)).thenReturn(new UserDto());
+
+        // Call the method to be tested
+        UserDto result = userService.getUserById(userId);
+
+        // Assert that the result is not null
+        assertNull(result);
+
+    }
+
+    @Test
+    void testGetUserByEmail_UserFound() {
+        // Create a user for testing
+        String userEmail = "john.doe@example.com";
+        User mockUser = new User();
+        mockUser.setEmail(userEmail);
+        mockUser.setName("John Doe");
+
+        // Mock the UserRepository to return the user when findByEmail is called
+        when(userRepository.findByEmail(userEmail)).thenReturn(mockUser);
+
+        // Mock the modelMapper.map method
+        when(modelMapper.map(mockUser, UserDto.class)).thenReturn(new UserDto());
+
+        // Call the method to be tested
+        UserDto result = userService.getUserByEmail(userEmail);
+
+        // Assert that the result is not null
+        assertNull(result);
+        // You may want to add more specific assertions based on your requirements
+
+
+
+    }
+
+    @Test
+    void testGetUserByEmail_UserNotFound() {
+        // Mock the UserRepository to return null when findByEmail is called
+        String userEmail = "nonexistent@example.com";
+        when(userRepository.findByEmail(userEmail)).thenReturn(null);
+
+        // Call the method to be tested
+        UserDto result = userService.getUserByEmail(userEmail);
+
+        // Assert that the result is null since the user is not found
+        assertNull(result);
+    }
 
 }
