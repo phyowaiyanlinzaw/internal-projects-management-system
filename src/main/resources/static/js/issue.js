@@ -841,6 +841,7 @@ function loadTable() {
                     title: issue.title,
                     issue_category: issue.issueCategory,
                     project_name: issue.projectDto.name,
+                    place:issue.place,
 
                     responsible_party: issue.responsible_party.name,
                     user_pic: issue.user_pic.name,

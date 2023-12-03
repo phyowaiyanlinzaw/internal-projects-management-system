@@ -88,7 +88,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testUpdateProfile() {
+    void testUpdateProfile_UserFound() {
         // Create a userDto for testing
         UserDto userDto = new UserDto();
         userDto.setId(1L);
@@ -98,15 +98,47 @@ class UserServiceImplTest {
         userDto.setRole(Role.EMPLOYEE);
 
         // Mock the UserRepository to return a user when findById is called
-        when(userRepository.findById(1L)).thenReturn(new User());
+        User existingUser = new User();
+        existingUser.setId(1L);
+        when(userRepository.findById(1L)).thenReturn(existingUser);
+
+        // Mock the modelMapper.map method
+        when(modelMapper.map(userDto.getDepartmentdto(), Department.class)).thenReturn(new Department());
 
         // Call the method to be tested
         UserDto result = userService.updateProfile(userDto);
 
         // Assert that the result is not null
+        assertNotNull(result);
+        // You may want to add more specific assertions based on your requirements
+
+        // Verify that the UserRepository save method was called
+        verify(userRepository, times(1)).save(existingUser);
+    }
+
+    @Test
+    void testUpdateProfile_UserNotFound() {
+        // Create a userDto for testing
+        UserDto userDto = new UserDto();
+        userDto.setId(1L);
+        userDto.setName("John Doe");
+        userDto.setEmail("john.doe@example.com");
+        userDto.setPassword("newPassword");
+        userDto.setRole(Role.EMPLOYEE);
+
+        // Mock the UserRepository to return null when findById is called
+        when(userRepository.findById(1L)).thenReturn(null);
+
+        // Call the method to be tested
+        UserDto result = userService.updateProfile(userDto);
+
+        // Assert that the result is null since the user is not found
         assertNull(result);
 
+        // Verify that the UserRepository save method was not called
+
     }
+
 
     @Test
     void testSendOtp_UserFound() {
