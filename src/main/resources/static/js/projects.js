@@ -20,7 +20,7 @@ const languageList = {
     php: "/images/languages/php-min.png",
     python: "/images/languages/python-min.png",
     ruby: "/images/languages/ruby-min.png",
-    SQL: "/images/languages/SQL-min.png",
+    sql: "/images/languages/SQL-min.png",
     css: "/images/languages/css-min.png",
     typescript: "/images/languages/typescript-min.png",
 };
