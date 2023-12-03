@@ -496,7 +496,7 @@ const fragment = document.createDocumentFragment();
 
 let pList = await getAllProjects();
 
-if(pList.length == 0) {
+if (pList.length == 0) {
     document.querySelector('#no-result').classList.remove('d-none')
 }
 
@@ -960,11 +960,15 @@ class="list-group-item d-flex justify-content-between"
             const div = document.createElement("div");
 
             div.classList.add(
-                "d-flex",
-                "gap-2",
-                "align-items-center",
-                "justify-content-center"
+                'rounded',
+                'bg-light',
+                'p-1'
             );
+
+            div.style.cursor = 'pointer'
+
+            const innerDiv = document.createElement('div')
+            innerDiv.className = 'd-flex justify-content-center align-items-center flex-column text-primary'
 
             const image = document.createElement("img");
 
@@ -978,12 +982,14 @@ class="list-group-item d-flex justify-content-between"
                 image.setAttribute("src", "/images/languages/default-min.png");
             }
 
-            div.appendChild(image);
+            innerDiv.appendChild(image);
 
             const p = document.createElement("p");
             p.textContent = a.tech_name;
-            p.classList.add("fs-6", "fw-bold");
-            div.appendChild(p);
+            p.classList.add("fs-6", "fw-bold", 'm-0');
+            innerDiv.appendChild(p);
+
+            div.appendChild(innerDiv);
 
             document.querySelector("#architectures-list-in-edit").appendChild(div);
         });
@@ -1274,7 +1280,7 @@ if (loginUser.currentUser.role === "PROJECT_MANAGER") {
 const sortProjectByDepartment = await getData("/api/project/list/sort/by/department");
 
 document.getElementById("department-filter").addEventListener("change", function () {
-    
+
     const selectedDepartmentId = this.value;
     console.log(sortProjectByDepartment);
     console.log(selectedDepartmentId);
@@ -1292,7 +1298,7 @@ document.getElementById("department-filter").addEventListener("change", function
                 dpFilterResult.push(pList[i]);
             }
         }
-    } 
+    }
 
     $('#pagination-container').pagination({
         dataSource: function (done) {
@@ -1314,12 +1320,12 @@ document.getElementById("department-filter").addEventListener("change", function
         className: 'paginationjs-theme-blue paginationjs-big',
     });
 
-    if(dpFilterResult.length === 0) {
+    if (dpFilterResult.length === 0) {
         document.querySelector('#no-result').classList.remove('d-none')
     } else {
         document.querySelector('#no-result').classList.add('d-none')
     }
-    
+
 });
 
 const monthFilter = document.querySelector("#month-filter");
@@ -1350,26 +1356,26 @@ document.querySelectorAll("select[action='filter']").forEach((a) =>
             console.log('some result')
             document.querySelector('#no-result').classList.add('d-none')
         }
-                $('#pagination-container').pagination({
-                dataSource: async function (done) {
-                    const projects = []
+        $('#pagination-container').pagination({
+            dataSource: async function (done) {
+                const projects = []
 
-                    for (let i = matchingProjects.length - 1; i >= 0; i--) {
-                        projects.push(matchingProjects[i]);
-                    }
+                for (let i = matchingProjects.length - 1; i >= 0; i--) {
+                    projects.push(matchingProjects[i]);
+                }
 
-                    done(projects);
-                },
-                callback: function (data, pagination) {
-                    // template method of yourself
-                    var html = template(data);
+                done(projects);
+            },
+            callback: function (data, pagination) {
+                // template method of yourself
+                var html = template(data);
 
-                    $('#sort-container').html(html);
-                },
-                pageSize: 8, // Number of items per page
-                className: 'paginationjs-theme-blue paginationjs-big',
-            });
-        
+                $('#sort-container').html(html);
+            },
+            pageSize: 8, // Number of items per page
+            className: 'paginationjs-theme-blue paginationjs-big',
+        });
+
 
 
         console.log(matchingProjects)
@@ -1479,7 +1485,7 @@ if (loginUser.currentUser.role === "PROJECT_MANAGER") {
             );
 
             projectEndDate.value = formatDateFromMilliseconds(endDate.getTime());
-            
+
         }
 
     });
