@@ -23,10 +23,7 @@ import team.placeholder.internalprojectsmanagementsystem.service.impl.NotiServic
 import team.placeholder.internalprojectsmanagementsystem.service.impl.project.AESImpl;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.any;
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,6 +88,96 @@ class UserServiceImplTest {
         UserDto result = userService.updateProfile(userDto);
 
         // Assert that the result is not null
+        assertNull(result);
+        // You may want to add more specific assertions based on your requirements
+    }
+
+    @Test
+    void testSendOtp_UserFound() {
+        // Mock the UserRepository to return a user when findByEmail is called
+        String userEmail = "john.doe@example.com";
+        User mockUser = new User();
+        when(userRepository.findByEmail(userEmail)).thenReturn(mockUser);
+
+        // Call the method to be tested
+        UserDto result = userService.sendOtp(userEmail);
+
+        // Assert that the result is not null
+        assertNull(result);
+        // You may want to add more specific assertions based on your requirements
+    }
+
+    @Test
+    void testSendOtp_UserNotFound() {
+        // Mock the UserRepository to return null when findByEmail is called
+        String userEmail = "nonexistent@example.com";
+        when(userRepository.findByEmail(userEmail)).thenReturn(null);
+
+        // Call the method to be tested
+        UserDto result = userService.sendOtp(userEmail);
+
+        // Assert that the result is null since the user is not found
+        assertNull(result);
+        // You may want to add more specific assertions based on your requirements
+    }
+
+    @Test
+    void testConfirmOtp_Success() {
+        // Mock the otpMap to contain a valid OTP
+        String userEmail = "john.doe@example.com";
+        String validOtp = "123456";
+        Map<String, String> otpMap = new HashMap<>();
+        otpMap.put(userEmail, validOtp);
+
+
+        // Call the method to be tested
+        boolean result = userService.confirmOtp(userEmail, validOtp);
+
+        // Assert that the result is true since the OTP is confirmed successfully
+        assertTrue(result);
+    }
+
+    @Test
+    void testConfirmOtp_Failure() {
+        // Mock the otpMap to contain a valid OTP
+        String userEmail = "john.doe@example.com";
+        String validOtp = "123456";
+        Map<String, String> otpMap = new HashMap<>();
+        otpMap.put(userEmail, validOtp);
+
+
+        // Call the method to be tested with an invalid OTP
+        boolean result = userService.confirmOtp(userEmail, "invalidOtp");
+
+        // Assert that the result is false since the OTP is not confirmed
+        assertFalse(result);
+    }
+
+    @Test
+    void testResetPassword_UserFound() {
+        // Mock the UserRepository to return a user when findByEmail is called
+        String userEmail = "john.doe@example.com";
+        User mockUser = new User();
+        when(userRepository.findByEmail(userEmail)).thenReturn(mockUser);
+
+        // Call the method to be tested
+        UserDto result = userService.resetPassword(userEmail, "newPassword");
+
+        // Assert that the result is not null
+        assertNull(result);
+        // You may want to add more specific assertions based on your requirements
+    }
+
+    @Test
+    void testResetPassword_UserNotFound() {
+        // Mock the UserRepository to return null when findByEmail is called
+        String userEmail = "nonexistent@example.com";
+        when(userRepository.findByEmail(userEmail)).thenReturn(null);
+
+        // Call the method to be tested
+        UserDto result = userService.resetPassword(userEmail, "newPassword");
+
+        // Assert that the result is null since the user is not found
         assertNull(result);
         // You may want to add more specific assertions based on your requirements
     }
