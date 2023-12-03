@@ -124,6 +124,10 @@ projectDetail.addEventListener('show.bs.tab', async function (e) {
             success: function (response) {
                 console.log(response);
                 console.log("Deliverable Status Updated Successfully...");
+                const toast = createToast("Deliverable Status Updated Successfully...")
+                const btoawe = new bootstrap.Toast(toast)
+                document.querySelector("#toasts-noti-container").appendChild(toast)
+                btoawe.show();
             },
         });
     });
@@ -629,10 +633,8 @@ function createToast(a) {
     toast.setAttribute('aria-live', 'assertive')
     toast.setAttribute('aria-atomic', 'true')
 
-    toast.innerHTML = `<div class="toast-header">
-                <strong class="me-auto"><i class="fa-solid fa-bell fs-3" style="transform: rotate(45deg);"></i></strong>
-                <small class="text-muted">${a}</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    toast.innerHTML = `<div class="toast-body">
+                <strong class="text-white">${a}</strong>
             </div>`
     return toast
 }
@@ -647,7 +649,6 @@ changePhase.addEventListener("change", function () {
         dataType: "json",
         success: function (response) {
             console.log(response);
-            console.log("Phase Updated Successfully...");
             const toast = createToast("Phase Updated Successfully...")
             const btoawe = new bootstrap.Toast(toast)
             document.querySelector("#toasts-noti-container").appendChild(toast)

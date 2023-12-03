@@ -453,12 +453,9 @@ function createToast ({notification}) {
     toast.setAttribute('aria-live', 'assertive')
     toast.setAttribute('aria-atomic', 'true')
 
-    toast.innerHTML = `<div class="toast-header">
-                <strong class="me-auto"><i class="fa-solid fa-bell fs-3" style="transform: rotate(45deg);"></i></strong>
-                <small class="text-muted">${getTimeElapsed(Date.now())}</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
+    toast.innerHTML = `
+            <div class="toast-body fs-6 bg-warning text-white">
+            <i class="bi bi-exclamation-triangle"></i>
                 ${notification.description}
             </div>`
     return toast
