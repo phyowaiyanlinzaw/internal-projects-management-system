@@ -23,6 +23,8 @@ const languageList = {
     sql: "/images/languages/SQL-min.png",
     css: "/images/languages/css-min.png",
     typescript: "/images/languages/typescript-min.png",
+    bootstrap: "/images/languages/bootstrap-min.png",
+    vscode: "/images/languages/vscode-min.png",
 };
 
 console.log("await getUser ", await getUser());
