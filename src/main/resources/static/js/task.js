@@ -1254,7 +1254,8 @@ for (let i = 0; i < taskList.length; i++) {
                 if (currentTaskData.status === 'FINISHED') {
                     //show modal box to ask for actual hours input type=number
                     $('#actual-hours-input-modal').modal('show')
-                    // Wrap the modal code in a Promise to wait for actual hours input
+                    document.getElementById('actual-hours-input').value = currentTaskData.actualHours
+                    // Wrap the modal code in Promise to wait for actual hours input
                     const actualHoursInputPromise = new Promise((resolve) => {
                         const actualHoursInput = document.getElementById('actual-hours-input');
                         const actualHoursSubmitBtn = document.getElementById('actual-hours-input-btn');
