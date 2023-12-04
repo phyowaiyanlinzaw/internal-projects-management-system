@@ -583,7 +583,7 @@ $('#pagination-container').pagination({
         $('#sort-container').html(html);
     },
     pageSize: 8, // Number of items per page
-    className: 'paginationjs-theme-blue paginationjs-big',
+    className: 'paginationjs-theme-blue  ',
 });
 
 let departmentProjectId;
@@ -1320,7 +1320,7 @@ document.getElementById("department-filter").addEventListener("change", function
             $('#sort-container').html(html);
         },
         pageSize: 8, // Number of items per page
-        className: 'paginationjs-theme-blue paginationjs-big',
+        className: 'paginationjs-theme-blue  ',
     });
 
     if (dpFilterResult.length === 0) {
@@ -1376,7 +1376,7 @@ document.querySelectorAll("select[action='filter']").forEach((a) =>
                 $('#sort-container').html(html);
             },
             pageSize: 8, // Number of items per page
-            className: 'paginationjs-theme-blue paginationjs-big',
+            className: 'paginationjs-theme-blue  ',
         });
 
 
@@ -1407,7 +1407,7 @@ document.querySelector("#reset-btn").addEventListener("click", function (e) {
             $('#sort-container').html(html);
         },
         pageSize: 8, // Number of items per page
-        className: 'paginationjs-theme-blue paginationjs-big',
+        className: 'paginationjs-theme-blue  ',
     });
 
     document.querySelector('#no-result').classList.add('d-none')
@@ -2132,7 +2132,7 @@ $(document).ready(function () {
                                 $('#sort-container').html(html);
                             },
                             pageSize: 8,
-                            className: 'paginationjs-theme-blue paginationjs-big',
+                            className: 'paginationjs-theme-blue  ',
                         });
                         $("#alert-text").text("New Project Created Successfully...");
                         $("#alert-modal").modal("show");

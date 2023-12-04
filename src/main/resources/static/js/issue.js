@@ -1567,6 +1567,8 @@ solveBtn.addEventListener('click', function (e) {
             });
             $("#issue-edit-btn").hide();
             $("#solve-btn").show();
+            const oldIssue = $(`#issue-${issueId}`);
+            oldIssue.replaceWith(createIssueCard(data));
         },
         error: function (xhr, status, error) {
             console.log('Status:', status);

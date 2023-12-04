@@ -1219,6 +1219,9 @@ for (let i = 0; i < taskList.length; i++) {
                 confirmButtonText: "Yes"
             }).then((result) => {
                 if (result.isConfirmed) {
+                    document
+                        .querySelector(".trash")
+                        .classList.remove("drag-over");
                     $.ajax({
                         url: `/api/task/delete`,
                         type: "DELETE",
@@ -1233,6 +1236,10 @@ for (let i = 0; i < taskList.length; i++) {
                             console.log(response);
                         },
                     });
+                } else {
+                    document
+                        .querySelector(".trash")
+                        .classList.remove("drag-over");
                 }
             })
 
